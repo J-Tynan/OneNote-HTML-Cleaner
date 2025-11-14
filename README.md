@@ -16,7 +16,7 @@ This project began as a small script and has grown into a configurable processin
 
 ---
 
-## 📂 Project Layout
+## Project Layout
 
 - **`OneNoteHtmlCleaner.ps1`** — the only file you need.
   - Config section (edit directly to change behavior)
@@ -83,3 +83,4 @@ Contributions are welcome:
 - Make changes (preferably in the modular source)
 - Add/update tests
 - Open a pull request
+
