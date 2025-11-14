@@ -52,7 +52,7 @@ Adjust values and save — no external config files are needed.
 
 ---
 
-## 🧪 Testing (for contributors)
+## Testing (for contributors)
 
 - Pester tests validate function behavior against sample inputs.
 - Run all tests:
@@ -83,4 +83,5 @@ Contributions are welcome:
 - Make changes (preferably in the modular source)
 - Add/update tests
 - Open a pull request
+
 
