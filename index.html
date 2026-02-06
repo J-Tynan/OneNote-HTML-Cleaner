@@ -2,15 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>OneNote HTML Cleaner</title>
-  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main id="app">
-    <h1>OneNote HTML Cleaner</h1>
-    <p>Drop HTML to clean.</p>
+  <header><h1>OneNote HTML Cleaner</h1></header>
+  <main>
+    <section id="controls">
+      <input id="fileInput" type="file" multiple />
+      <div id="dropzone">Drop files here</div>
+    </section>
+    <section id="fileList"></section>
   </main>
   <script type="module" src="src/app.js"></script>
 </body>
