@@ -1,0 +1,5 @@
+# Node and build artifacts
+node_modules/
+dist/
+.cache/
+.DS_Store

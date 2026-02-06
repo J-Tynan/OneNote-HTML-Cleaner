@@ -1,0 +1,9 @@
+{
+  "name": "OneNote HTML Cleaner",
+  "short_name": "ON Cleaner",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f3e9",
+  "theme_color": "#2b2b2b",
+  "icons": []
+}
