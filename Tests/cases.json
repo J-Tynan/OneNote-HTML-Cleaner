@@ -61,5 +61,29 @@
         "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
       }
     }
+  },
+  {
+    "name": "mht-full-snippet",
+    "input": "./fixtures/mht-full-snippet.mht",
+    "expected": "./expected/mht-full-snippet.html",
+    "preprocess": "mht",
+    "config": {}
+  },
+  {
+    "name": "table-styles",
+    "input": "./fixtures/table-styles.html",
+    "expected": "./expected/table-styles.html",
+    "config": {}
+  },
+  {
+    "name": "cid-image",
+    "input": "./fixtures/cid-image.html",
+    "expected": "./expected/cid-image.html",
+    "config": {
+      "imageMap": {
+        "cid:image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII=",
+        "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
+      }
+    }
   }
 ]

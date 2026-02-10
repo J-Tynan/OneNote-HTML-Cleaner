@@ -24,3 +24,6 @@ the MHT payload and pass the extracted HTML and image map into the pipeline.
 - `testfile-snippet`: minimal reproduction of OneNote table/list behavior.
 - `list-continuity`: verifies blank numbered rows are preserved.
 - `nbsp-inline-mixed`: removes NBSP inside mixed inline content without losing images.
+- `mht-full-snippet`: MHT sample with table rows, blank numbering, and inline image.
+- `table-styles`: preserves table layout and inline styles.
+- `cid-image`: ensures CID-based image refs are embedded.
