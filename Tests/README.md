@@ -15,3 +15,7 @@ so diffs still reflect pipeline output.
 - `expected/`: expected HTML output from the pipeline.
 - `cases.json`: maps inputs to expected outputs and config.
 - `runner.html`, `runner.js`: simple browser runner.
+
+## MHT cases
+Some cases set `"preprocess": "mht"` in `cases.json`. The runner will parse
+the MHT payload and pass the extracted HTML and image map into the pipeline.

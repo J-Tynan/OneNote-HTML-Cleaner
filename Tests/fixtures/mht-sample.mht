@@ -1,0 +1,18 @@
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="----=_NextPart_000_0000"
+
+------=_NextPart_000_0000
+Content-Location: file:///C:/Test/MhtSample.htm
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="utf-8"
+
+<!doctype html>
+<html><head><title>Mht Sample</title></head><body><p><img src="file:///C:/Test/image001.png" alt="Dot"></p></body></html>
+
+------=_NextPart_000_0000
+Content-Location: file:///C:/Test/image001.png
+Content-Transfer-Encoding: base64
+Content-Type: image/png
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII=
+------=_NextPart_000_0000--

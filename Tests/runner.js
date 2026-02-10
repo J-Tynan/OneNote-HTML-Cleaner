@@ -1,4 +1,5 @@
 import { runPipeline } from '../src/pipeline/pipeline.js';
+import { parseMht } from '../src/pipeline/mht.js';
 
 const resultsEl = document.getElementById('results');
 const runButton = document.getElementById('run');
@@ -19,7 +20,7 @@ runButton.addEventListener('click', async () => {
 });
 
 async function loadCases() {
-  const res = await fetch('./cases.json');
+  const res = await fetch('./cases.json', { cache: 'no-store' });
   if (!res.ok) {
     throw new Error('Failed to load cases.json');
   }
@@ -27,7 +28,7 @@ async function loadCases() {
 }
 
 async function loadText(path) {
-  const res = await fetch(path);
+  const res = await fetch(path, { cache: 'no-store' });
   if (!res.ok) {
     throw new Error('Failed to load ' + path);
   }
@@ -37,10 +38,12 @@ async function loadText(path) {
 async function runCase(testCase) {
   const rawInput = await loadText(testCase.input);
   const rawExpected = await loadText(testCase.expected);
-  const input = stripLivePreviewScripts(rawInput);
-  const expected = stripLivePreviewScripts(rawExpected);
-  const { output, logs } = await runPipeline(input, testCase.config || {});
-  const sanitizedOutput = stripLivePreviewScripts(output);
+  const pre = preprocessInput(rawInput, testCase);
+  const input = normalizeForCompare(pre.html);
+  const expected = normalizeForCompare(rawExpected);
+  const config = Object.assign({}, testCase.config || {}, pre.config || {});
+  const { output, logs } = await runPipeline(input, config);
+  const sanitizedOutput = normalizeForCompare(output);
   const pass = sanitizedOutput === expected;
   const diff = pass ? '' : describeDiff(sanitizedOutput, expected);
   return {
@@ -49,6 +52,18 @@ async function runCase(testCase) {
     diff,
     logs
   };
+}
+
+function preprocessInput(rawInput, testCase) {
+  if (testCase && testCase.preprocess === 'mht') {
+    const parsed = parseMht(rawInput);
+    return {
+      html: parsed.html || '',
+      config: { imageMap: parsed.imageMap || {} }
+    };
+  }
+
+  return { html: rawInput, config: {} };
 }
 
 function describeDiff(actual, expected) {
@@ -74,6 +89,39 @@ function stripLivePreviewScripts(html) {
   const re1 = /<script[^>]*___vscode_livepreview_injected_script[^>]*>\s*<\/script>/gi;
   const re2 = /<script[^>]*___vscode_livepreview_injected_script[^>]*\/?>/gi;
   return String(html).replace(re1, '').replace(re2, '');
+}
+
+function normalizeForCompare(html) {
+  if (!html) return html;
+  const stripped = stripLivePreviewScripts(html);
+  const normalized = String(stripped).replace(/\r\n/g, '\n');
+  return canonicalizeHtml(normalized);
+}
+
+function canonicalizeHtml(html) {
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    removeWhitespaceTextNodes(doc);
+    const doctype = '<!DOCTYPE html>';
+    return doctype + doc.documentElement.outerHTML;
+  } catch (err) {
+    // Fallback to a minimal normalization if parsing fails
+    return String(html).replace(/>\s+</g, '><').trim();
+  }
+}
+
+function removeWhitespaceTextNodes(root) {
+  const walker = root.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const toRemove = [];
+  let node = walker.nextNode();
+  while (node) {
+    if (!node.nodeValue || /^\s+$/.test(node.nodeValue)) {
+      toRemove.push(node);
+    }
+    node = walker.nextNode();
+  }
+  toRemove.forEach(n => n.parentNode && n.parentNode.removeChild(n));
 }
 
 function renderResults(results) {

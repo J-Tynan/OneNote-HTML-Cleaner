@@ -16,5 +16,28 @@
     "input": "./fixtures/list-alpha.html",
     "expected": "./expected/list-alpha.html",
     "config": { "RepairListItemValues": "smart" }
+  },
+  {
+    "name": "blank-numbered-rows",
+    "input": "./fixtures/blank-numbered-rows.html",
+    "expected": "./expected/blank-numbered-rows.html",
+    "config": { "RepairListItemValues": "smart" }
+  },
+  {
+    "name": "image-embed",
+    "input": "./fixtures/image-embed.html",
+    "expected": "./expected/image-embed.html",
+    "config": {
+      "imageMap": {
+        "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
+      }
+    }
+  },
+  {
+    "name": "mht-sample",
+    "input": "./fixtures/mht-sample.mht",
+    "expected": "./expected/mht-sample.html",
+    "preprocess": "mht",
+    "config": {}
   }
 ]
