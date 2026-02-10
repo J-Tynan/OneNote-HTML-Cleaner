@@ -39,5 +39,27 @@
     "expected": "./expected/mht-sample.html",
     "preprocess": "mht",
     "config": {}
+  },
+  {
+    "name": "testfile-snippet",
+    "input": "./fixtures/testfile-snippet.html",
+    "expected": "./expected/testfile-snippet.html",
+    "config": { "RepairListItemValues": "smart" }
+  },
+  {
+    "name": "list-continuity",
+    "input": "./fixtures/list-continuity.html",
+    "expected": "./expected/list-continuity.html",
+    "config": { "RepairListItemValues": "smart" }
+  },
+  {
+    "name": "nbsp-inline-mixed",
+    "input": "./fixtures/nbsp-inline-mixed.html",
+    "expected": "./expected/nbsp-inline-mixed.html",
+    "config": {
+      "imageMap": {
+        "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
+      }
+    }
   }
 ]

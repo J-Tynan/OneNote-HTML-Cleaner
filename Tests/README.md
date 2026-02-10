@@ -19,3 +19,8 @@ so diffs still reflect pipeline output.
 ## MHT cases
 Some cases set `"preprocess": "mht"` in `cases.json`. The runner will parse
 the MHT payload and pass the extracted HTML and image map into the pipeline.
+
+## Added fixtures
+- `testfile-snippet`: minimal reproduction of OneNote table/list behavior.
+- `list-continuity`: verifies blank numbered rows are preserved.
+- `nbsp-inline-mixed`: removes NBSP inside mixed inline content without losing images.
