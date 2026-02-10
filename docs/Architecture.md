@@ -5,6 +5,7 @@
 - Pipeline modules under `src/pipeline/`
 - UI communicates with worker via `postMessage` using Contracts.md shapes
 - Output: per-file cleaned HTML and optional ZIP export (JSZip later)
+- Import flow: file picker and drag/drop accept .mht, .mhtml, .html, .htm
 
 ## Pipeline flow
 1. MHT parsing: extract HTML and build an image map.

@@ -6,6 +6,8 @@ export function initUI(workerManager) {
   const fileInput = document.getElementById('fileInput');
   const dropzone = document.getElementById('dropzone');
   const fileList = document.getElementById('fileList');
+  const allowedExtensions = ['.mht', '.mhtml', '.html', '.htm'];
+  const allowedMimeTypes = ['text/html', 'message/rfc822', 'application/octet-stream'];
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -18,6 +20,25 @@ export function initUI(workerManager) {
     el.innerHTML = `<strong>${escapeHtml(name)}</strong> <span class="status">queued</span>`;
     fileList.appendChild(el);
     return el;
+  }
+
+  function isSupportedFile(file) {
+    const name = (file && file.name) ? file.name.toLowerCase() : '';
+    const hasExt = allowedExtensions.some(ext => name.endsWith(ext));
+    const type = (file && file.type) ? file.type.toLowerCase() : '';
+    const hasType = type ? allowedMimeTypes.includes(type) : false;
+    return hasExt || hasType;
+  }
+
+  function addUnsupportedFile(file) {
+    const id = crypto.randomUUID();
+    const li = addListItem(file.name || 'unknown', id);
+    const status = li.querySelector('.status');
+    if (status) status.textContent = 'unsupported file type';
+    li.appendChild(document.createTextNode(' '));
+    const hint = document.createElement('span');
+    hint.textContent = 'Expected .mht, .mhtml, .html, or .htm';
+    li.appendChild(hint);
   }
 
   // Download helper that prepends a UTF-8 BOM to help Edge detect UTF-8 correctly.
@@ -46,6 +67,10 @@ export function initUI(workerManager) {
   }
 
   async function handleFile(file) {
+    if (!isSupportedFile(file)) {
+      addUnsupportedFile(file);
+      return;
+    }
     const text = await file.text();
     const id = crypto.randomUUID();
     const li = addListItem(file.name, id);
