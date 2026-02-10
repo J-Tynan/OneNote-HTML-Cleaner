@@ -27,3 +27,7 @@ the MHT payload and pass the extracted HTML and image map into the pipeline.
 - `mht-full-snippet`: MHT sample with table rows, blank numbering, and inline image.
 - `table-styles`: preserves table layout and inline styles.
 - `cid-image`: ensures CID-based image refs are embedded.
+- `nested-table-mixed-lists`: nested tables with mixed ordered/unordered lists.
+- `rtl-mixed-direction`: right-to-left text mixed with LTR content.
+- `large-image-data`: large embedded image data URI handling.
+- `onenote-callout`: callout icon + text layout seen in OneNote.

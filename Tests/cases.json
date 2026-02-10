@@ -85,5 +85,37 @@
         "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
       }
     }
+  },
+  {
+    "name": "nested-table-mixed-lists",
+    "input": "./fixtures/nested-table-mixed-lists.html",
+    "expected": "./expected/nested-table-mixed-lists.html",
+    "config": { "RepairListItemValues": "smart" }
+  },
+  {
+    "name": "rtl-mixed-direction",
+    "input": "./fixtures/rtl-mixed-direction.html",
+    "expected": "./expected/rtl-mixed-direction.html",
+    "config": {}
+  },
+  {
+    "name": "large-image-data",
+    "input": "./fixtures/large-image-data.html",
+    "expected": "./expected/large-image-data.html",
+    "config": {
+      "imageMap": {
+        "large-image.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADUlEQVR42mP8/5+hHgAHggJ/lCL+4gAAAABJRU5ErkJggg=="
+      }
+    }
+  },
+  {
+    "name": "onenote-callout",
+    "input": "./fixtures/onenote-callout.html",
+    "expected": "./expected/onenote-callout.html",
+    "config": {
+      "imageMap": {
+        "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
+      }
+    }
   }
 ]
