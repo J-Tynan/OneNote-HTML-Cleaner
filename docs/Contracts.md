@@ -1,5 +1,11 @@
 # Contracts
 
+## Pipeline invariants
+- Preserve original text spacing and line breaks.
+- Remove all non-breaking spaces (convert to regular spaces).
+- Preserve fonts, sizes, tables, alignment, list numbering, and inline images.
+- Keep HTML structure stable unless a specific repair rule requires adjustment.
+
 ## Worker request
 ```json
 {

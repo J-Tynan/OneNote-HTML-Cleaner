@@ -73,6 +73,29 @@ export function sanitizeImageAttributes(doc) {
   return logs;
 }
 
+export function removeNbsp(doc) {
+  const logs = [];
+  if (!doc || typeof doc.createTreeWalker !== 'function') {
+    return logs;
+  }
+
+  const walker = doc.createTreeWalker(doc, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+  let updated = 0;
+
+  while (node) {
+    const value = node.nodeValue;
+    if (value && value.indexOf('\u00a0') !== -1) {
+      node.nodeValue = value.replace(/\u00a0/g, ' ');
+      updated++;
+    }
+    node = walker.nextNode();
+  }
+
+  if (updated) logs.push({ step: 'RemoveNbsp', updated });
+  return logs;
+}
+
 export function injectCssLink(doc, cssHref) {
   const head = doc.querySelector('head') || doc.documentElement;
   const link = doc.createElement('link');

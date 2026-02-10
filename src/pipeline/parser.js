@@ -6,7 +6,22 @@ export function parseHtmlToDocument(htmlString) {
 }
 
 export function documentToHtml(doc) {
-  // Return serialized HTML with doctype if present
-  const serializer = new XMLSerializer();
-  return '<!DOCTYPE html>\n' + serializer.serializeToString(doc);
+  const doctype = buildDoctype(doc);
+  const html = doc && doc.documentElement ? doc.documentElement.outerHTML : '';
+  return doctype + '\n' + html;
+}
+
+function buildDoctype(doc) {
+  if (!doc || !doc.doctype) return '<!DOCTYPE html>';
+  const dt = doc.doctype;
+  let id = '';
+  if (dt.publicId) {
+    id += ' PUBLIC "' + dt.publicId + '"';
+  } else if (dt.systemId) {
+    id += ' SYSTEM';
+  }
+  if (dt.systemId) {
+    id += ' "' + dt.systemId + '"';
+  }
+  return '<!DOCTYPE ' + dt.name + id + '>';
 }

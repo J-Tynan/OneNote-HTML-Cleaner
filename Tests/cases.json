@@ -1,0 +1,20 @@
+[
+  {
+    "name": "sample1",
+    "input": "./fixtures/sample1.html",
+    "expected": "./expected/sample1.html",
+    "config": {}
+  },
+  {
+    "name": "nbsp",
+    "input": "./fixtures/nbsp.html",
+    "expected": "./expected/nbsp.html",
+    "config": {}
+  },
+  {
+    "name": "list-alpha",
+    "input": "./fixtures/list-alpha.html",
+    "expected": "./expected/list-alpha.html",
+    "config": { "RepairListItemValues": "smart" }
+  }
+]

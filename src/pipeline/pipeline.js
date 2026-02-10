@@ -38,6 +38,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureHead(doc, { defaultTitle: config.defaultTitle })));
     logs.push(...ensureArray(sanitize.removeOneNoteMeta(doc)));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
+    logs.push(...ensureArray(sanitize.removeNbsp(doc)));
 
     // List repair
     const listMode = config.RepairListItemValues || 'smart';

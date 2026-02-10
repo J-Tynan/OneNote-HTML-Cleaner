@@ -12,16 +12,36 @@ function safeSlice(s, n = 200) {
 export function decodeQuotedPrintable(text) {
   if (typeof text !== 'string') return text;
   // Remove soft line breaks
-  let t = text.replace(/=\r?\n/g, '');
-  // Replace =XX hex escapes
-  t = t.replace(/=([0-9A-Fa-f]{2})/g, (m, hex) => {
-    try {
-      return String.fromCharCode(parseInt(hex, 16));
-    } catch {
-      return '';
+  const cleaned = text.replace(/=\r?\n/g, '');
+  const bytes = [];
+
+  for (let i = 0; i < cleaned.length; i++) {
+    const ch = cleaned[i];
+    if (ch === '=' && i + 2 < cleaned.length) {
+      const hex = cleaned.slice(i + 1, i + 3);
+      if (/^[0-9A-Fa-f]{2}$/.test(hex)) {
+        bytes.push(parseInt(hex, 16));
+        i += 2;
+        continue;
+      }
     }
-  });
-  return t;
+    bytes.push(cleaned.charCodeAt(i) & 0xff);
+  }
+
+  const u8 = new Uint8Array(bytes);
+  if (typeof TextDecoder !== 'undefined') {
+    try {
+      return new TextDecoder('utf-8', { fatal: false }).decode(u8);
+    } catch {
+      // fall through to manual decode
+    }
+  }
+
+  let out = '';
+  for (let i = 0; i < bytes.length; i++) {
+    out += String.fromCharCode(bytes[i]);
+  }
+  return out;
 }
 
 function normalizeBase64(b64) {

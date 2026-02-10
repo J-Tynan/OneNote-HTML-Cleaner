@@ -1,14 +1,13 @@
 // src/pipeline/format.js
 export function normalizeWhitespace(html) {
-  // Collapse multiple spaces and blank lines; keep simple and safe
-  let out = html.replace(/ {2,}/g, ' ');
-  out = out.replace(/(\r?\n){2,}/g, '\r\n');
-  // Trim spaces before attribute quotes
-  out = out.replace(/\s+"/g, '"').replace(/\s+'/g, "'");
+  // Only normalize non-breaking spaces; preserve all other spacing and line breaks.
+  let out = String(html || '');
+  out = out.replace(/\u00a0/g, ' ');
+  out = out.replace(/&nbsp;/gi, ' ');
   return out;
 }
 
 export function formatDocument(doc, options = {}) {
   // Optionally pretty-print; for now return doc unchanged and a log
-  return [{ step: 'format', details: 'normalized whitespace' }];
+  return [{ step: 'format', details: 'normalized nbsp only' }];
 }
