@@ -6,8 +6,12 @@ export function initUI(workerManager) {
   const fileInput = document.getElementById('fileInput');
   const dropzone = document.getElementById('dropzone');
   const fileList = document.getElementById('fileList');
+  const filterFailures = document.getElementById('filterFailures');
+  const collapseStatus = document.getElementById('collapseStatus');
+  const downloadZipButton = document.getElementById('downloadZip');
   const allowedExtensions = ['.mht', '.mhtml', '.html', '.htm'];
   const allowedMimeTypes = ['text/html', 'message/rfc822', 'application/octet-stream'];
+  const successfulOutputs = new Map();
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -17,9 +21,52 @@ export function initUI(workerManager) {
     const el = document.createElement('div');
     el.className = 'file-item';
     el.dataset.id = id;
-    el.innerHTML = `<strong>${escapeHtml(name)}</strong> <span class="status">queued</span>`;
+    el.dataset.status = 'queued';
+    el.innerHTML = `<strong>${escapeHtml(name)}</strong> <span class="status-badge status-queued">Queued</span> <span class="status-text">queued</span>`;
     fileList.appendChild(el);
+    applyFilters();
     return el;
+  }
+
+  function applyFilters() {
+    if (!filterFailures) return;
+    const showOnlyFailures = filterFailures.checked;
+    const items = fileList.querySelectorAll('.file-item');
+    for (const item of items) {
+      const status = item.dataset.status || 'queued';
+      const isFailure = status === 'error' || status === 'unsupported';
+      item.style.display = (!showOnlyFailures || isFailure) ? '' : 'none';
+    }
+  }
+
+  function applyCollapse() {
+    if (!collapseStatus) return;
+    fileList.classList.toggle('status-collapsed', collapseStatus.checked);
+  }
+
+  function updateZipButton() {
+    if (!downloadZipButton) return;
+    downloadZipButton.disabled = successfulOutputs.size === 0;
+  }
+
+  function setStatus(li, state, detail) {
+    const badge = li.querySelector('.status-badge');
+    const text = li.querySelector('.status-text');
+    if (!badge || !text) return;
+
+    const labels = {
+      queued: 'Queued',
+      working: 'Working',
+      success: 'Done',
+      error: 'Error',
+      unsupported: 'Unsupported'
+    };
+
+    badge.className = `status-badge status-${state}`;
+    badge.textContent = labels[state] || state;
+    text.textContent = detail || '';
+    li.dataset.status = state;
+    applyFilters();
   }
 
   function isSupportedFile(file) {
@@ -33,12 +80,7 @@ export function initUI(workerManager) {
   function addUnsupportedFile(file) {
     const id = crypto.randomUUID();
     const li = addListItem(file.name || 'unknown', id);
-    const status = li.querySelector('.status');
-    if (status) status.textContent = 'unsupported file type';
-    li.appendChild(document.createTextNode(' '));
-    const hint = document.createElement('span');
-    hint.textContent = 'Expected .mht, .mhtml, .html, or .htm';
-    li.appendChild(hint);
+    setStatus(li, 'unsupported', 'Expected .mht, .mhtml, .html, or .htm');
   }
 
   // Download helper that prepends a UTF-8 BOM to help Edge detect UTF-8 correctly.
@@ -66,6 +108,49 @@ export function initUI(workerManager) {
     downloadBlob(name, text, 'text/plain');
   }
 
+  function downloadBinary(filename, blob) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function getZipFilename() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+    return `cleaned_${stamp}.zip`;
+  }
+
+  async function downloadZip() {
+    if (!downloadZipButton || downloadZipButton.disabled) return;
+    const JSZip = window.JSZip;
+    if (!JSZip) {
+      console.error('[ui] JSZip not available; ensure dependency is installed and loaded');
+      return;
+    }
+
+    const zip = new JSZip();
+    for (const [name, html] of successfulOutputs.entries()) {
+      const content = '\uFEFF' + (html || '');
+      zip.file(name, content);
+    }
+
+    downloadZipButton.disabled = true;
+    downloadZipButton.textContent = 'Building ZIP...';
+
+    try {
+      const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', mimeType: 'application/zip' });
+      downloadBinary(getZipFilename(), blob);
+    } finally {
+      downloadZipButton.textContent = 'Download ZIP';
+      updateZipButton();
+    }
+  }
+
   async function handleFile(file) {
     if (!isSupportedFile(file)) {
       addUnsupportedFile(file);
@@ -77,11 +162,9 @@ export function initUI(workerManager) {
 
     // Progress callback wrapper
     const onprogress = (p) => {
-      const status = li.querySelector('.status');
-      if (!status) return;
       const step = p.step || 'progress';
       const pct = p.percent ? ` ${p.percent}%` : '';
-      status.textContent = `${step}${pct}`;
+      setStatus(li, 'working', `${step}${pct}`);
     };
 
     // Store a small preview for diagnostics
@@ -90,7 +173,7 @@ export function initUI(workerManager) {
     workerManager.enqueue({ id, type: 'process-file', fileName: file.name, html: text, relativePath: file.name, config: {} }, onprogress)
       .then(res => {
         try {
-          li.querySelector('.status').textContent = 'done';
+          setStatus(li, 'success', 'complete');
           const out = res.outputHtml || '';
           console.log('[ui] pipeline result length:', out.length);
           console.log('[ui] pipeline result startsWith:', out.slice(0, 200).replace(/\r?\n/g, '\\n'));
@@ -107,6 +190,8 @@ export function initUI(workerManager) {
             li.appendChild(btn);
           } else {
             const downloadName = file.name.replace(/\.(mht|mhtml|htm|html)$/i, '') + '_cleaned.html';
+            successfulOutputs.set(downloadName, out);
+            updateZipButton();
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([('\uFEFF' + out)], { type: 'text/html;charset=utf-8' }));
             a.download = downloadName;
@@ -119,7 +204,7 @@ export function initUI(workerManager) {
         }
       })
       .catch(err => {
-        li.querySelector('.status').textContent = 'error';
+        setStatus(li, 'error', 'processing failed');
         console.error('[ui] processing error:', err);
         const dbgName = file.name.replace(/\.(mht|mhtml|htm|html)$/i, '') + '_error_debug.txt';
         downloadDebug(dbgName, String(err));
@@ -139,4 +224,16 @@ export function initUI(workerManager) {
       await handleFile(f);
     }
   });
+
+  if (filterFailures) {
+    filterFailures.addEventListener('change', applyFilters);
+  }
+  if (collapseStatus) {
+    collapseStatus.addEventListener('change', applyCollapse);
+    applyCollapse();
+  }
+  if (downloadZipButton) {
+    downloadZipButton.addEventListener('click', downloadZip);
+    updateZipButton();
+  }
 }

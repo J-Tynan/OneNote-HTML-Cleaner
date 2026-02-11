@@ -13,9 +13,15 @@
       <p>Import .mht, .mhtml, or .html files to clean and export.</p>
       <input id="fileInput" type="file" multiple accept=".mht,.mhtml,.html,.htm" />
       <div id="dropzone">Drop files here</div>
+      <div id="statusControls">
+        <label><input id="filterFailures" type="checkbox" /> Show only failures/unsupported</label>
+        <label><input id="collapseStatus" type="checkbox" /> Compact status details</label>
+        <button id="downloadZip" type="button" disabled>Download ZIP</button>
+      </div>
     </section>
     <section id="fileList"></section>
   </main>
+  <script src="node_modules/jszip/dist/jszip.min.js"></script>
   <script type="module" src="src/app.js"></script>
 </body>
 </html>

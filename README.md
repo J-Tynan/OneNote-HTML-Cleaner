@@ -7,6 +7,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - PWA scaffold in place (HTML, CSS, manifest, service worker).
 - Modular pipeline layout created under `src/pipeline/`.
 - Initial test and fixture structure added.
+- ZIP export support via JSZip (requires `npm install`).
 
 ## Project Structure
 
@@ -15,6 +16,12 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - `src/worker.js`, `src/worker-wrapper.js`: future background processing.
 - `src/pipeline/`: parsing, sanitization, and formatting stages.
 - `tests/fixtures/`: sample inputs for regression coverage.
+- `package.json`: dependencies for ZIP export.
+
+## Local Setup
+
+1. Run `npm install` to fetch JSZip for ZIP exports.
+2. Serve the project with a local web server that can access `node_modules/`.
 
 ## Refactor Goals
 
