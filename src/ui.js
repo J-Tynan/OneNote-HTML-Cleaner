@@ -48,19 +48,39 @@ export function initUI(workerManager) {
     downloadBinary(downloadName, blob);
   }
 
-  function buildHierarchyList(node) {
+  function buildHierarchyList(node, pageMap, downloadBaseName) {
     const ul = document.createElement('ul');
     ul.className = 'native-tree';
 
     const li = document.createElement('li');
-    li.textContent = node.name || '(unnamed)';
+    const titleSpan = document.createElement('span');
+    titleSpan.textContent = (node && node.name) ? node.name : '(unnamed)';
+    li.appendChild(titleSpan);
+
+    if (node && node.kind === 'page' && node.path && pageMap && downloadBaseName) {
+      const page = pageMap.get(node.path);
+      if (page) {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = 'Download';
+        link.className = 'native-page-link';
+        link.onclick = (event) => {
+          event.preventDefault();
+          const downloadName = `${downloadBaseName}_${toFolderSafeName(page.name || 'page')}.html`;
+          downloadBlob(downloadName, page.html || '', 'text/html');
+        };
+        li.appendChild(document.createTextNode(' '));
+        li.appendChild(link);
+      }
+    }
+
     ul.appendChild(li);
 
-    const children = Array.isArray(node.children) ? node.children : [];
+    const children = Array.isArray(node && node.children) ? node.children : [];
     if (children.length > 0) {
       const childContainer = document.createElement('ul');
       for (const child of children) {
-        const childTree = buildHierarchyList(child);
+        const childTree = buildHierarchyList(child, pageMap, downloadBaseName);
         childContainer.appendChild(childTree.firstElementChild);
       }
       li.appendChild(childContainer);
@@ -120,7 +140,12 @@ export function initUI(workerManager) {
     }
 
     if (nativeResult && nativeResult.hierarchy) {
-      li.appendChild(buildHierarchyList(nativeResult.hierarchy));
+      const downloadBaseName = file && file.name ? baseNameFromFile(file.name) : 'native';
+      const pageMap = new Map(pages
+        .filter((page) => page && page.path)
+        .map((page) => [page.path, page])
+      );
+      li.appendChild(buildHierarchyList(nativeResult.hierarchy, pageMap, downloadBaseName));
     }
 
     if (warnings.length > 0) {
@@ -136,27 +161,6 @@ export function initUI(workerManager) {
       }
       details.appendChild(warnList);
       li.appendChild(details);
-    }
-
-    if (pages.length > 0) {
-      const pagesContainer = document.createElement('div');
-      pagesContainer.className = 'native-pages';
-      pagesContainer.textContent = 'Page downloads:';
-
-      for (const page of pages) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = `Download ${page.name || 'page'}`;
-        button.onclick = () => {
-          const html = page.html || '';
-          const downloadName = `${baseNameFromFile(file.name)}_${toFolderSafeName(page.name || 'page')}.html`;
-          downloadBlob(downloadName, html, 'text/html');
-        };
-        pagesContainer.appendChild(document.createTextNode(' '));
-        pagesContainer.appendChild(button);
-      }
-
-      li.appendChild(pagesContainer);
     }
 
     const zipButton = document.createElement('button');
