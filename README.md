@@ -44,6 +44,21 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 
 The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
 
+## Native OneNote files (Phase 1)
+
+- `.one` and `.onepkg` files are now accepted in the file picker and drag/drop flow.
+- `.one` processing currently:
+	- Validates native section signature.
+	- Extracts page-title candidates using metadata/string heuristics.
+	- Builds per-page HTML placeholders for individual downloads.
+	- Supports per-file ZIP export that preserves section/page hierarchy.
+- `.onepkg` processing currently:
+	- Validates CAB container signature (`MSCF`).
+	- Reads archive entries and displays notebook hierarchy.
+	- ZIP export is available, with a README placeholder when converted pages are not yet extracted.
+
+This phase establishes native file routing and hierarchy handling. Full fidelity page-content extraction for native formats is still in progress.
+
 ## Refactor Goals
 
 1. Preserve the existing PowerShell script behavior while improving portability.

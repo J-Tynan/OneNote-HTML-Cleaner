@@ -30,6 +30,25 @@
 }
 ```
 
+## Worker request (native OneNote)
+```json
+{
+  "id": "string",
+  "type": "process-native-file",
+  "fileName": "Test Section.one",
+  "relativePath": "Test Section.one",
+  "sourceKind": "one|onepkg",
+  "bytes": "ArrayBuffer",
+  "config": {
+    "Profile": "cornell|generic"
+  }
+}
+```
+
+`process-native-file` is the binary-safe path for OneNote native containers:
+- `one`: OneNote section (`*.one`)
+- `onepkg`: OneNote notebook package (`*.onepkg`, CAB container)
+
 `Profile` is preferred for new integrations:
 - `cornell`: enables Cornell-specific semantic and layout helpers.
 - `generic`: conservative OneNote cleanup with Cornell-specific transforms disabled.
@@ -46,6 +65,32 @@ Legacy flags remain supported and can override profile defaults.
   "logs": [ { "step": "...", "details": "..." } ]
 }
 ```
+
+## Worker response (done, native)
+```json
+{
+  "id": "string",
+  "status": "done",
+  "resultType": "native",
+  "relativePath": "Test Section.one",
+  "nativeResult": {
+    "sourceKind": "one|onepkg",
+    "hierarchy": {
+      "kind": "section|notebook|folder|entry",
+      "name": "string",
+      "path": "string",
+      "children": []
+    },
+    "pages": [
+      { "name": "string", "path": "string", "html": "string" }
+    ],
+    "warnings": ["string"]
+  },
+  "logs": []
+}
+```
+
+Phase-1 implementation currently validates native signatures and returns hierarchy scaffolding plus warnings. Full page extraction and hierarchy-preserving ZIP payload generation are staged next.
 ---
 ## Progress message
 ```json

@@ -11,7 +11,7 @@
   <header><h1>OneNote HTML Cleaner</h1></header>
   <main>
     <section id="controls">
-      <p>Import .mht, .mhtml, or .html files to clean and export.</p>
+      <p>Import .mht, .mhtml, .html, .one, or .onepkg files to clean and export.</p>
       <div id="statusControls">
         <label for="conversionProfile">Conversion profile</label>
         <select id="conversionProfile" aria-label="Conversion profile">
@@ -23,7 +23,7 @@
         <button id="downloadZip" type="button" disabled>Download ZIP</button>
       </div>
       <label for="fileInput">Choose files</label>
-      <input id="fileInput" type="file" multiple accept=".mht,.mhtml,.html,.htm" />
+      <input id="fileInput" type="file" multiple accept=".mht,.mhtml,.html,.htm,.one,.onepkg" />
       <div id="dropzone">Drop files here</div>
     </section>
     <section id="fileList"></section>

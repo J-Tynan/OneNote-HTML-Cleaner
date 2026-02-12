@@ -2,6 +2,8 @@
 // UI glue: file input, drag/drop, worker handling, debug helpers
 // Includes BOM on downloads and diagnostic logging to help track MHT -> HTML issues.
 
+import { detectSourceKind, baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
+
 export function initUI(workerManager) {
   const fileInput = document.getElementById('fileInput');
   const dropzone = document.getElementById('dropzone');
@@ -10,9 +12,130 @@ export function initUI(workerManager) {
   const filterFailures = document.getElementById('filterFailures');
   const collapseStatus = document.getElementById('collapseStatus');
   const downloadZipButton = document.getElementById('downloadZip');
-  const allowedExtensions = ['.mht', '.mhtml', '.html', '.htm'];
+  const allowedExtensions = ['.mht', '.mhtml', '.html', '.htm', '.one', '.onepkg'];
   const allowedMimeTypes = ['text/html', 'message/rfc822', 'application/octet-stream'];
   const successfulOutputs = new Map();
+
+  async function downloadNativeZip(file, nativeResult) {
+    const JSZip = window.JSZip;
+    if (!JSZip) {
+      console.error('[ui] JSZip not available; ensure dependency is installed and loaded');
+      return;
+    }
+
+    const zip = new JSZip();
+    const pages = Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [];
+
+    for (const page of pages) {
+      if (!page || !page.path) continue;
+      const html = page.html || '';
+      zip.file(page.path, '\uFEFF' + html);
+    }
+
+    if (pages.length === 0) {
+      const baseName = toFolderSafeName(baseNameFromFile(file.name));
+      const warnings = Array.isArray(nativeResult && nativeResult.warnings) ? nativeResult.warnings : [];
+      const note = [
+        'No converted pages were available for export in this build.',
+        '',
+        ...warnings
+      ].join('\n');
+      zip.file(`${baseName}/README.txt`, note);
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', mimeType: 'application/zip' });
+    const downloadName = `${baseNameFromFile(file.name)}_converted.zip`;
+    downloadBinary(downloadName, blob);
+  }
+
+  function buildHierarchyList(node) {
+    const ul = document.createElement('ul');
+    ul.className = 'native-tree';
+
+    const li = document.createElement('li');
+    li.textContent = node.name || '(unnamed)';
+    ul.appendChild(li);
+
+    const children = Array.isArray(node.children) ? node.children : [];
+    if (children.length > 0) {
+      const childContainer = document.createElement('ul');
+      for (const child of children) {
+        const childTree = buildHierarchyList(child);
+        childContainer.appendChild(childTree.firstElementChild);
+      }
+      li.appendChild(childContainer);
+    }
+
+    return ul;
+  }
+
+  function renderNativeResult(li, file, nativeResult) {
+    const info = document.createElement('div');
+    info.className = 'native-info';
+
+    const sourceLabel = nativeResult && nativeResult.sourceKind ? nativeResult.sourceKind.toUpperCase() : 'NATIVE';
+    const pages = Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [];
+    info.textContent = `${sourceLabel}: parsed. Pages discovered: ${pages.length}`;
+    li.appendChild(info);
+
+    if (nativeResult && nativeResult.hierarchy) {
+      li.appendChild(buildHierarchyList(nativeResult.hierarchy));
+    }
+
+    const warnings = Array.isArray(nativeResult && nativeResult.warnings) ? nativeResult.warnings : [];
+    if (warnings.length > 0) {
+      const details = document.createElement('details');
+      const summary = document.createElement('summary');
+      summary.textContent = 'Native parser notes';
+      details.appendChild(summary);
+      const warnList = document.createElement('ul');
+      for (const warning of warnings) {
+        const warnItem = document.createElement('li');
+        warnItem.textContent = warning;
+        warnList.appendChild(warnItem);
+      }
+      details.appendChild(warnList);
+      li.appendChild(details);
+    }
+
+    if (pages.length > 0) {
+      const pagesContainer = document.createElement('div');
+      pagesContainer.className = 'native-pages';
+      pagesContainer.textContent = 'Page downloads:';
+
+      for (const page of pages) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = `Download ${page.name || 'page'}`;
+        button.onclick = () => {
+          const html = page.html || '';
+          const downloadName = `${baseNameFromFile(file.name)}_${toFolderSafeName(page.name || 'page')}.html`;
+          downloadBlob(downloadName, html, 'text/html');
+        };
+        pagesContainer.appendChild(document.createTextNode(' '));
+        pagesContainer.appendChild(button);
+      }
+
+      li.appendChild(pagesContainer);
+    }
+
+    const zipButton = document.createElement('button');
+    zipButton.type = 'button';
+    zipButton.textContent = `Download ${sourceLabel} ZIP`;
+    zipButton.onclick = async () => {
+      zipButton.disabled = true;
+      const originalText = zipButton.textContent;
+      zipButton.textContent = 'Building ZIP...';
+      try {
+        await downloadNativeZip(file, nativeResult);
+      } finally {
+        zipButton.textContent = originalText;
+        zipButton.disabled = false;
+      }
+    };
+    li.appendChild(document.createTextNode(' '));
+    li.appendChild(zipButton);
+  }
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -81,7 +204,7 @@ export function initUI(workerManager) {
   function addUnsupportedFile(file) {
     const id = crypto.randomUUID();
     const li = addListItem(file.name || 'unknown', id);
-    setStatus(li, 'unsupported', 'Expected .mht, .mhtml, .html, or .htm');
+    setStatus(li, 'unsupported', 'Expected .mht, .mhtml, .html, .htm, .one, or .onepkg');
   }
 
   // Download helper that prepends a UTF-8 BOM to help Edge detect UTF-8 correctly.
@@ -165,7 +288,8 @@ export function initUI(workerManager) {
       addUnsupportedFile(file);
       return;
     }
-    const text = await file.text();
+
+    const sourceKind = detectSourceKind(file.name, file.type);
     const id = crypto.randomUUID();
     const li = addListItem(file.name, id);
 
@@ -179,16 +303,43 @@ export function initUI(workerManager) {
     // Store a small preview for diagnostics
     console.log(`[ui] enqueue file=${file.name} size=${file.size} type=${file.type}`);
 
-    workerManager.enqueue({
-      id,
-      type: 'process-file',
-      fileName: file.name,
-      html: text,
-      relativePath: file.name,
-      config: getConversionConfig()
-    }, onprogress)
+    let payload;
+    let transferList = [];
+
+    if (sourceKind === 'one' || sourceKind === 'onepkg') {
+      const bytes = await file.arrayBuffer();
+      payload = {
+        id,
+        type: 'process-native-file',
+        fileName: file.name,
+        relativePath: file.name,
+        sourceKind,
+        bytes,
+        config: getConversionConfig()
+      };
+      transferList = [bytes];
+    } else {
+      const text = await file.text();
+      payload = {
+        id,
+        type: 'process-file',
+        fileName: file.name,
+        sourceKind,
+        html: text,
+        relativePath: file.name,
+        config: getConversionConfig()
+      };
+    }
+
+    workerManager.enqueue(payload, onprogress, transferList)
       .then(res => {
         try {
+          if (res.resultType === 'native') {
+            setStatus(li, 'success', 'native parse complete');
+            renderNativeResult(li, file, res.nativeResult || {});
+            return;
+          }
+
           setStatus(li, 'success', 'complete');
           const out = res.outputHtml || '';
           console.log('[ui] pipeline result length:', out.length);
@@ -222,7 +373,7 @@ export function initUI(workerManager) {
       .catch(err => {
         setStatus(li, 'error', 'processing failed');
         console.error('[ui] processing error:', err);
-        const dbgName = file.name.replace(/\.(mht|mhtml|htm|html)$/i, '') + '_error_debug.txt';
+        const dbgName = file.name.replace(/\.(mht|mhtml|htm|html|one|onepkg)$/i, '') + '_error_debug.txt';
         downloadDebug(dbgName, String(err));
       });
   }

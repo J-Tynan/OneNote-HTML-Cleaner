@@ -61,10 +61,10 @@ export default class WorkerManager {
     };
   }
 
-  enqueue(payload, onprogress) {
+  enqueue(payload, onprogress, transferList = []) {
     return new Promise((resolve, reject) => {
       this.callbacks.set(payload.id, { resolve, reject, onprogress, payload });
-      this.worker.postMessage(payload);
+      this.worker.postMessage(payload, transferList);
     });
   }
 }

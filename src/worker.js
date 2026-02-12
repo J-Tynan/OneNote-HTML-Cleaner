@@ -1,29 +1,54 @@
 // src/worker.js
 import { runPipeline } from './pipeline/pipeline.js';
 import { parseMht } from './pipeline/mht.js';
+import { detectSourceKind } from './importers/sourceKind.js';
+import { importOneSection } from './importers/one.js';
+import { importOnePackage } from './importers/onepkg.js';
 
 self.onmessage = async (e) => {
   const payload = e.data;
   const id = payload.id || crypto.randomUUID();
   const fileName = payload.fileName || payload.relativePath || 'unknown';
+  const sourceKind = payload.sourceKind || detectSourceKind(fileName, payload.mimetype);
 
   console.log(`[worker] received job id=${id} file=${fileName}`);
 
-  const hasDOMParser = (typeof DOMParser !== 'undefined');
-  console.log(`[worker] DOMParser available: ${hasDOMParser}`);
-
-  // If DOMParser is not available, tell main thread to fallback
-  if (!hasDOMParser) {
-    self.postMessage({ id, status: 'unsupported', reason: 'DOMParser not available in worker' });
-    return;
-  }
-
   try {
+    if (sourceKind === 'one' || sourceKind === 'onepkg') {
+      self.postMessage({ id, status: 'progress', step: 'inspect-native', percent: 10 });
+      const bytes = payload.bytes;
+      let nativeResult;
+
+      if (sourceKind === 'one') {
+        nativeResult = importOneSection(bytes, { fileName });
+      } else {
+        nativeResult = importOnePackage(bytes, { fileName });
+      }
+
+      self.postMessage({
+        id,
+        status: 'done',
+        resultType: 'native',
+        nativeResult,
+        relativePath: payload.relativePath || payload.fileName,
+        logs: []
+      });
+      return;
+    }
+
+    const hasDOMParser = (typeof DOMParser !== 'undefined');
+    console.log(`[worker] DOMParser available: ${hasDOMParser}`);
+
+    if (!hasDOMParser) {
+      self.postMessage({ id, status: 'unsupported', reason: 'DOMParser not available in worker' });
+      return;
+    }
+
     let htmlInput = payload.html || '';
     let imageMap = (payload.config && payload.config.imageMap) || {};
 
     // If filename indicates MHT/MHTML, attempt to parse it here in the worker
-    if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
+    if (sourceKind === 'mht') {
       console.log('[worker] detected MHT input, attempting parseMht in worker');
       const parsed = parseMht(htmlInput);
       if (parsed && parsed.html) {
