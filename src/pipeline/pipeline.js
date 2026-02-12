@@ -42,7 +42,9 @@ export async function runPipeline(htmlString, config = {}) {
 
     // List repair
     const listMode = config.RepairListItemValues || 'smart';
-    logs.push(...ensureArray(fixLists(doc, listMode)));
+    logs.push(...ensureArray(fixLists(doc, listMode, {
+      listPaddingLeft: config.ListPaddingLeft || '1.2em'
+    })));
 
     // Image embedding (map may be provided in config.imageMap)
     const map = config.imageMap || {};

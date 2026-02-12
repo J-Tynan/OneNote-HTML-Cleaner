@@ -117,5 +117,14 @@
         "image001.png": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/6X2dS8AAAAASUVORK5CYII="
       }
     }
+  },
+  {
+    "name": "list-indent-normalize",
+    "input": "./fixtures/list-indent-normalize.html",
+    "expected": "./expected/list-indent-normalize.html",
+    "config": {
+      "RepairListItemValues": "smart",
+      "ListPaddingLeft": "1.2em"
+    }
   }
 ]

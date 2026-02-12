@@ -24,7 +24,7 @@ Mark expected cleanup changes (e.g., branding removal) as “pass with notes” 
 | File | Criteria Covered | Result | Notes |
 | --- | --- | --- | --- |
 | `Tests/DevToys.mht` | Structure, Content, Images, Links | ✅ Pass | Images load, no MIME artifacts. |
-| `Tests/Communicate using Markdown.mht` | Tables, Metadata, Accessibility | ⚠️ Needs follow-up | Table lost borders; consider adding `border-collapse`. |
+| `Tests/Communicate using Markdown.mht` | Structure, Tables, Metadata, Accessibility | ⚠️ Needs follow-up | Table lost borders; consider adding `border-collapse`. |
 | `Tests/Resolve merge conflicts.mht` | Structure, Content, Links, Metadata |  |  |
 | `Tests/Test File.mht` | Structure, Content, Images |  |  |
 

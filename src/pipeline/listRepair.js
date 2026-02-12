@@ -82,6 +82,113 @@ function inferListTypes(doc) {
   return logs;
 }
 
+const LIST_INDENT_STYLE_KEYS = ['margin-left', 'padding-left', 'text-indent'];
+const ONE_NOTE_STYLE_HINT_KEYS = ['mso-list', 'mso-level-number-format', 'mso-level-text'];
+const DEFAULT_LIST_PADDING_LEFT = '1.2em';
+
+function parseStyleDeclarations(styleText) {
+  return String(styleText || '')
+    .split(';')
+    .map(part => part.trim())
+    .filter(Boolean)
+    .map(part => {
+      const idx = part.indexOf(':');
+      if (idx === -1) return null;
+      const prop = part.slice(0, idx).trim().toLowerCase();
+      const value = part.slice(idx + 1).trim();
+      if (!prop) return null;
+      return { prop, value };
+    })
+    .filter(Boolean);
+}
+
+function serializeStyleDeclarations(entries) {
+  return entries.map(({ prop, value }) => `${prop}: ${value}`).join('; ');
+}
+
+function removeStyleKeys(styleText, keysToRemove) {
+  const removeSet = new Set(keysToRemove.map(k => String(k || '').toLowerCase()));
+  const entries = parseStyleDeclarations(styleText).filter(({ prop }) => !removeSet.has(prop));
+  return serializeStyleDeclarations(entries);
+}
+
+function upsertStyleKey(styleText, key, value) {
+  const normalizedKey = String(key || '').toLowerCase();
+  const entries = parseStyleDeclarations(styleText).filter(({ prop }) => prop !== normalizedKey);
+  entries.push({ prop: normalizedKey, value: String(value || '').trim() });
+  return serializeStyleDeclarations(entries);
+}
+
+function parseCssLengthToPx(rawValue) {
+  const value = String(rawValue || '').trim().toLowerCase();
+  const match = value.match(/^(-?\d*\.?\d+)\s*(px|pt|em|rem)?$/i);
+  if (!match) return null;
+  const amount = parseFloat(match[1]);
+  const unit = (match[2] || 'px').toLowerCase();
+  if (Number.isNaN(amount)) return null;
+  if (unit === 'px') return amount;
+  if (unit === 'pt') return amount * (96 / 72);
+  if (unit === 'em' || unit === 'rem') return amount * 16;
+  return null;
+}
+
+function hasOneNoteOrExcessiveIndent(styleText) {
+  const entries = parseStyleDeclarations(styleText);
+  if (!entries.length) return false;
+
+  for (const { prop, value } of entries) {
+    if (ONE_NOTE_STYLE_HINT_KEYS.includes(prop)) return true;
+    if (!LIST_INDENT_STYLE_KEYS.includes(prop)) continue;
+    const px = parseCssLengthToPx(value);
+    if (px !== null && Math.abs(px) >= 24) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function normalizeListIndentation(doc, options = {}) {
+  const logs = [];
+  const lists = Array.from(doc.querySelectorAll('ol,ul'));
+  let normalized = 0;
+  const paddingLeft = options.listPaddingLeft || DEFAULT_LIST_PADDING_LEFT;
+
+  lists.forEach(list => {
+    const ownStyle = list.getAttribute('style') || '';
+    const liNodes = Array.from(list.querySelectorAll(':scope > li'));
+    const hasLiIndent = liNodes.some(li => hasOneNoteOrExcessiveIndent(li.getAttribute('style') || ''));
+    const shouldNormalize = hasOneNoteOrExcessiveIndent(ownStyle) || hasLiIndent;
+    if (!shouldNormalize) return;
+
+    let cleanedListStyle = removeStyleKeys(ownStyle, LIST_INDENT_STYLE_KEYS.concat(ONE_NOTE_STYLE_HINT_KEYS));
+    cleanedListStyle = upsertStyleKey(cleanedListStyle, 'padding-left', paddingLeft);
+    if (cleanedListStyle) {
+      list.setAttribute('style', cleanedListStyle);
+    } else {
+      list.removeAttribute('style');
+    }
+
+    liNodes.forEach(li => {
+      const liStyle = li.getAttribute('style') || '';
+      const cleanedLiStyle = removeStyleKeys(liStyle, LIST_INDENT_STYLE_KEYS.concat(ONE_NOTE_STYLE_HINT_KEYS));
+      if (cleanedLiStyle) {
+        li.setAttribute('style', cleanedLiStyle);
+      } else if (li.hasAttribute('style')) {
+        li.removeAttribute('style');
+      }
+    });
+
+    normalized += 1;
+  });
+
+  if (normalized) {
+    logs.push({ step: 'normalizeListIndentation', normalized, paddingLeft });
+  }
+
+  return logs;
+}
+
 export function mergeStyled(doc) {
   const logs = [];
   // For each table cell (<td>), find multiple <ol> children and merge them
@@ -175,10 +282,11 @@ export function smartRepair(doc) {
   return logs;
 }
 
-export function fixLists(doc, mode = 'smart') {
+export function fixLists(doc, mode = 'smart', options = {}) {
   const logs = [];
   if (mode === 'mergeStyled') logs.push(...mergeStyled(doc));
   logs.push(...removeEmptyListItems(doc));
+  logs.push(...normalizeListIndentation(doc, options));
   logs.push(...inferListTypes(doc));
   if (mode === 'renumber') logs.push(...renumber(doc));
   if (mode === 'smart') logs.push(...smartRepair(doc));
