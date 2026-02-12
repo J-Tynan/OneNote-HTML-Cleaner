@@ -3,6 +3,7 @@ import { parseHtmlToDocument, documentToHtml } from './parser.js';
 import * as sanitize from './sanitize.js';
 import { fixLists } from './listRepair.js';
 import { annotateCornellSemantics } from './cornellSemantics.js';
+import { mergeCreatedDateTimeRow } from './dateTimeLayout.js';
 import { migrateInlineStylesToUtilities } from './inlineStyleMigration.js';
 import * as images from './images.js';
 import * as format from './format.js';
@@ -46,6 +47,13 @@ export async function runPipeline(htmlString, config = {}) {
     if (useCornellSemantics) {
       logs.push(...ensureArray(annotateCornellSemantics(doc, {
         allowFallback: config.CornellHeaderFallback !== false
+      })));
+    }
+
+    const mergeCreatedDateTime = config.MergeCreatedDateTime !== false;
+    if (mergeCreatedDateTime) {
+      logs.push(...ensureArray(mergeCreatedDateTimeRow(doc, {
+        gap: config.CreatedDateTimeGap || '0.75em'
       })));
     }
 

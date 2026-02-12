@@ -179,6 +179,8 @@ export function initUI(workerManager) {
       config: {
         UseCornellSemantics: true,
         CornellHeaderFallback: true,
+        MergeCreatedDateTime: true,
+        CreatedDateTimeGap: '0.75em',
         MigrateInlineStylesToUtilities: true,
         RemoveMigratedInlineDeclarations: false,
         InjectTailwindCss: true,

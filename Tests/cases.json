@@ -140,5 +140,18 @@
       "InjectTailwindCss": true,
       "TailwindCssHref": "assets/tailwind-output.css"
     }
+  },
+  {
+    "name": "created-datetime-row",
+    "input": "./fixtures/created-datetime-row.html",
+    "expected": "./expected/created-datetime-row.html",
+    "config": {
+      "MergeCreatedDateTime": true,
+      "CreatedDateTimeGap": "0.75em",
+      "MigrateInlineStylesToUtilities": true,
+      "RemoveMigratedInlineDeclarations": false,
+      "InjectTailwindCss": true,
+      "TailwindCssHref": "assets/tailwind-output.css"
+    }
   }
 ]
