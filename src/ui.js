@@ -75,14 +75,54 @@ export function initUI(workerManager) {
 
     const sourceLabel = nativeResult && nativeResult.sourceKind ? nativeResult.sourceKind.toUpperCase() : 'NATIVE';
     const pages = Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [];
-    info.textContent = `${sourceLabel}: parsed. Pages discovered: ${pages.length}`;
+    const warnings = Array.isArray(nativeResult && nativeResult.warnings) ? nativeResult.warnings : [];
+    const hasFallback = warnings.some((item) => /placeholder|unsupported compression|cannot be decoded in-browser/i.test(String(item || '')));
+    const extractionLabel = hasFallback ? 'parsed with fallbacks' : 'parsed';
+    info.textContent = `${sourceLabel}: ${extractionLabel}. Pages discovered: ${pages.length}`;
     li.appendChild(info);
+
+    const isOnePkgCompressedFallback = (nativeResult && nativeResult.sourceKind === 'onepkg')
+      && warnings.some((item) => /unsupported compression|lzx/i.test(String(item || '')));
+
+    if (isOnePkgCompressedFallback) {
+      const helper = document.createElement('details');
+      const summary = document.createElement('summary');
+      summary.textContent = 'How to extract this compressed .onepkg';
+      helper.appendChild(summary);
+
+      const helperText = document.createElement('p');
+      helperText.textContent = 'Run this PowerShell command, then import the extracted .one files:';
+      helper.appendChild(helperText);
+
+      const commandBlock = document.createElement('pre');
+      const safeInputPath = String(file && file.name ? file.name : 'Notebook.onepkg').replace(/'/g, "''");
+      const commandText = `powershell -ExecutionPolicy Bypass -File .\\tools\\Extract-OnePkg.ps1 -InputPath '.\\${safeInputPath}' -Force`;
+      commandBlock.textContent = commandText;
+      helper.appendChild(commandBlock);
+
+      const copyButton = document.createElement('button');
+      copyButton.type = 'button';
+      copyButton.textContent = 'Copy command';
+      copyButton.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(commandText);
+          copyButton.textContent = 'Copied';
+          setTimeout(() => {
+            copyButton.textContent = 'Copy command';
+          }, 1200);
+        } catch (err) {
+          console.warn('[ui] clipboard write failed:', err);
+        }
+      };
+      helper.appendChild(copyButton);
+
+      li.appendChild(helper);
+    }
 
     if (nativeResult && nativeResult.hierarchy) {
       li.appendChild(buildHierarchyList(nativeResult.hierarchy));
     }
 
-    const warnings = Array.isArray(nativeResult && nativeResult.warnings) ? nativeResult.warnings : [];
     if (warnings.length > 0) {
       const details = document.createElement('details');
       const summary = document.createElement('summary');

@@ -18,7 +18,11 @@
 ## Native OneNote import flow (in progress)
 1. UI detects source kind (`html`, `mht`, `one`, `onepkg`) and reads native files as `ArrayBuffer`.
 2. Worker routes native payloads to `src/importers/` adapters:
-	- `one.js`: validates OneNote section signature and returns section scaffold.
-	- `onepkg.js`: validates CAB signature (`MSCF`) and builds hierarchy from CAB entries.
+	- `one.js`: validates OneNote section signature and derives page titles for per-page HTML generation.
+	- `onepkg.js`: validates CAB signature (`MSCF`), parses CAB folder/file tables, attempts section-byte extraction for uncompressed folders, and falls back to section placeholders for compressed folders.
 3. UI renders returned hierarchy and parser warnings.
-4. Full page extraction and hierarchy-preserving ZIP export are planned next.
+4. Full page-content extraction for compressed CAB folders (e.g., LZX) is planned next.
+
+## Windows companion extraction
+- `tools/Extract-OnePkg.ps1` uses `expand.exe` to unpack compressed `.onepkg` files into section files (`*.one`).
+- Extracted sections can be imported directly through the existing native `.one` flow for richer conversion output.

@@ -90,7 +90,7 @@ Legacy flags remain supported and can override profile defaults.
 }
 ```
 
-Phase-1 implementation currently validates native signatures and returns hierarchy scaffolding plus warnings. Full page extraction and hierarchy-preserving ZIP payload generation are staged next.
+Phase-1 implementation validates native signatures and returns hierarchy plus generated downloadable pages (heuristic for `.one`). For `.onepkg`, the importer parses CAB metadata, attempts section-byte extraction for uncompressed folders, and falls back to placeholders for compressed folders (for example `lzx`). Full page-content extraction for compressed section payloads is staged next.
 ---
 ## Progress message
 ```json

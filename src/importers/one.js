@@ -57,6 +57,42 @@ function extractWideStringRecords(bytes) {
   return records;
 }
 
+function extractUtf8StringRecords(bytes) {
+  const records = [];
+  let start = -1;
+  let current = '';
+
+  for (let index = 0; index < bytes.length; index += 1) {
+    const byte = bytes[index];
+    const isPrintable = byte >= 0x20 && byte <= 0x7E;
+    if (isPrintable) {
+      if (start < 0) {
+        start = index;
+      }
+      current += String.fromCharCode(byte);
+      continue;
+    }
+
+    if (current.length >= 4) {
+      const value = current.replace(/\s+/g, ' ').trim();
+      if (value) {
+        records.push({ value, startOffset: start, endOffset: index });
+      }
+    }
+    start = -1;
+    current = '';
+  }
+
+  if (current.length >= 4) {
+    const value = current.replace(/\s+/g, ' ').trim();
+    if (value) {
+      records.push({ value, startOffset: start, endOffset: bytes.length });
+    }
+  }
+
+  return records;
+}
+
 function isLikelyPageTitle(value) {
   if (!value) return false;
   if (value.length < 4 || value.length > 80) return false;
@@ -142,6 +178,28 @@ function isLikelyPreviewLine(value, blockedValues = new Set()) {
   if (/resolutionId|provider=|hash=|localId|PageTitle|PageDateTime/i.test(value)) return false;
   if (/^Calibri(\s|$)/i.test(value)) return false;
   if (/^[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}$/.test(value) && !/page/i.test(value)) return false;
+
+  const allowedChars = value.match(/[A-Za-z0-9\s,.;:'"!?()\-_/]/g) || [];
+  const printableRatio = allowedChars.length / value.length;
+  if (printableRatio < 0.85) return false;
+
+  const letterRatio = (value.match(/[A-Za-z]/g) || []).length / value.length;
+  if (letterRatio < 0.25 && !/\d{2,}/.test(value)) return false;
+
+  const longWordCount = (value.match(/[A-Za-z]{3,}/g) || []).length;
+  if (longWordCount === 0 && !/\d{2,}/.test(value)) return false;
+
+  if (/[^A-Za-z0-9\s]{3,}/.test(value)) return false;
+
+  if (/^[A-Z0-9]{3,}[!?]?$/.test(value)) return false;
+
+  const isDateOrTime = /\b\d{1,2}:\d{2}(?::\d{2})?\b/.test(value) || /\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b/.test(value);
+  if (!isDateOrTime) {
+    const vowelCount = (value.match(/[AEIOUaeiou]/g) || []).length;
+    if (vowelCount < 2) return false;
+    if (!/\s/.test(value) && value.length > 16) return false;
+  }
+
   return true;
 }
 
@@ -179,6 +237,34 @@ function extractPreviewLinesForPage(records, descriptor, nextDescriptor, fallbac
   return fallbackLines.slice(0, maxLines);
 }
 
+function extractPreviewLinesFromRange(records, startOffset, endOffset, blockedValues, maxLines = 8) {
+  const lines = [];
+  const min = Math.max(0, startOffset - 4096);
+  const max = endOffset + 4096;
+
+  for (const record of records) {
+    if (record.endOffset < min || record.startOffset > max) continue;
+    const value = record.value;
+    if (!isLikelyPreviewLine(value, blockedValues)) continue;
+    if (!lines.includes(value)) lines.push(value);
+    if (lines.length >= maxLines) break;
+  }
+
+  return lines;
+}
+
+function mergeUniqueLines(primary, secondary, maxLines = 8) {
+  const merged = [];
+  for (const source of [primary || [], secondary || []]) {
+    for (const line of source) {
+      if (!line || merged.includes(line)) continue;
+      merged.push(line);
+      if (merged.length >= maxLines) return merged;
+    }
+  }
+  return merged;
+}
+
 function buildPageHtml(title, previewLines) {
   const titleEscaped = escapeHtml(title || 'Untitled Page');
   const lines = Array.isArray(previewLines) && previewLines.length > 0
@@ -205,15 +291,29 @@ export function importOneSection(arrayBuffer, options = {}) {
   const sectionName = baseNameFromFile(options.fileName || 'Section.one');
   const sectionFolder = toFolderSafeName(sectionName);
   const extractedRecords = extractWideStringRecords(bytes);
+  const extractedUtf8Records = extractUtf8StringRecords(bytes);
   const pageDescriptors = extractPageDescriptors(extractedRecords);
   const blockedValues = new Set(pageDescriptors.map((item) => item.title));
-  const fallbackPreviewLines = extractPreviewLines(extractedRecords, blockedValues);
+  const fallbackPreviewLines = mergeUniqueLines(
+    extractPreviewLines(extractedRecords, blockedValues),
+    extractPreviewLines(extractedUtf8Records, blockedValues)
+  );
 
   const pages = pageDescriptors.map((descriptor, index) => {
     const nextDescriptor = pageDescriptors[index + 1] || null;
     const title = descriptor.title || `Page ${index + 1}`;
     const safeTitle = toFolderSafeName(title);
-    const previewLines = extractPreviewLinesForPage(extractedRecords, descriptor, nextDescriptor, fallbackPreviewLines, blockedValues);
+
+    const wideLines = extractPreviewLinesForPage(extractedRecords, descriptor, nextDescriptor, fallbackPreviewLines, blockedValues);
+    const currentRecord = descriptor.titleIndex >= 0 ? extractedRecords[descriptor.titleIndex] : extractedRecords[descriptor.markerIndex];
+    const nextRecord = nextDescriptor
+      ? (nextDescriptor.titleIndex >= 0 ? extractedRecords[nextDescriptor.titleIndex] : extractedRecords[nextDescriptor.markerIndex])
+      : null;
+    const rangeStart = currentRecord ? currentRecord.startOffset : 0;
+    const rangeEnd = nextRecord ? nextRecord.startOffset : bytes.length;
+    const utf8Lines = extractPreviewLinesFromRange(extractedUtf8Records, rangeStart, rangeEnd, blockedValues);
+    const previewLines = mergeUniqueLines(wideLines, utf8Lines);
+
     return {
       name: title,
       path: `${sectionFolder}/${safeTitle}.html`,

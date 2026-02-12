@@ -54,10 +54,23 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 	- Supports per-file ZIP export that preserves section/page hierarchy.
 - `.onepkg` processing currently:
 	- Validates CAB container signature (`MSCF`).
-	- Reads archive entries and displays notebook hierarchy.
-	- ZIP export is available, with a README placeholder when converted pages are not yet extracted.
+	- Reads archive entries and derives `Section Groups > Section > Page` hierarchy.
+	- Attempts deep extraction by decoding uncompressed section payloads and reusing `.one` extraction.
+	- Falls back to per-section downloadable HTML placeholders when CAB compression is unsupported in-browser (e.g. `lzx`).
+	- ZIP export includes these generated pages under notebook/section folder structure.
+	- For fully extracted content on compressed notebooks, export from OneNote to `.one` or `.mht` and convert those files in this tool.
 
-This phase establishes native file routing and hierarchy handling. Full fidelity page-content extraction for native formats is still in progress.
+### Windows helper for compressed `.onepkg`
+
+Use the included script to extract compressed notebook packages via `expand.exe`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\Extract-OnePkg.ps1 -InputPath .\Tests\"Test Notebook.onepkg" -Force
+```
+
+The script writes an `*.extracted` folder (or your custom output path) with section files (`*.one`). You can then import those `.one` files into this app for richer conversion.
+
+This phase establishes native file routing, hierarchy handling, and section-level native downloads. Full fidelity page-content extraction for native formats is still in progress.
 
 ## Refactor Goals
 
