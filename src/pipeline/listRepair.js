@@ -21,6 +21,11 @@ function removeEmptyListItems(doc) {
   let removed = 0;
 
   lis.forEach(li => {
+    const parentList = li.closest('ol,ul');
+    const parentTag = parentList ? parentList.tagName.toLowerCase() : '';
+    if (parentTag !== 'ol') {
+      return;
+    }
     const text = cleanText(li.textContent);
     const value = li.getAttribute('value');
     const hasValue = value !== null && value !== undefined && String(value).trim() !== '';
@@ -148,20 +153,52 @@ function hasOneNoteOrExcessiveIndent(styleText) {
   return false;
 }
 
+function addClasses(el, classNames) {
+  if (!el || !classNames || !classNames.length) return;
+  if (typeof el.classList !== 'undefined') {
+    classNames.forEach(name => el.classList.add(name));
+    return;
+  }
+
+  const set = new Set(String(el.getAttribute('class') || '').split(/\s+/).filter(Boolean));
+  classNames.forEach(name => set.add(name));
+  el.setAttribute('class', Array.from(set).join(' '));
+}
+
+function normalizeCueColumnLists(doc) {
+  const logs = [];
+  const cueLists = Array.from(doc.querySelectorAll('td.cues ol, td.cues ul'));
+  let updated = 0;
+
+  cueLists.forEach(list => {
+    if (list.tagName.toLowerCase() === 'ol') {
+      addClasses(list, ['list-decimal', 'list-outside', 'pl-5']);
+    } else {
+      addClasses(list, ['list-disc', 'list-outside', 'pl-5']);
+    }
+    updated += 1;
+  });
+
+  if (updated) logs.push({ step: 'normalizeCueColumnLists', updated });
+  return logs;
+}
+
 export function normalizeListIndentation(doc, options = {}) {
   const logs = [];
   const lists = Array.from(doc.querySelectorAll('ol,ul'));
   let normalized = 0;
   const paddingLeft = options.listPaddingLeft || DEFAULT_LIST_PADDING_LEFT;
+  const normalizeAll = options.normalizeAllListIndent === true;
 
   lists.forEach(list => {
     const ownStyle = list.getAttribute('style') || '';
     const liNodes = Array.from(list.querySelectorAll(':scope > li'));
     const hasLiIndent = liNodes.some(li => hasOneNoteOrExcessiveIndent(li.getAttribute('style') || ''));
-    const shouldNormalize = hasOneNoteOrExcessiveIndent(ownStyle) || hasLiIndent;
+    const shouldNormalize = normalizeAll || hasOneNoteOrExcessiveIndent(ownStyle) || hasLiIndent;
     if (!shouldNormalize) return;
 
     let cleanedListStyle = removeStyleKeys(ownStyle, LIST_INDENT_STYLE_KEYS.concat(ONE_NOTE_STYLE_HINT_KEYS));
+    cleanedListStyle = upsertStyleKey(cleanedListStyle, 'margin-left', '0');
     cleanedListStyle = upsertStyleKey(cleanedListStyle, 'padding-left', paddingLeft);
     if (cleanedListStyle) {
       list.setAttribute('style', cleanedListStyle);
@@ -183,7 +220,7 @@ export function normalizeListIndentation(doc, options = {}) {
   });
 
   if (normalized) {
-    logs.push({ step: 'normalizeListIndentation', normalized, paddingLeft });
+    logs.push({ step: 'normalizeListIndentation', normalized, paddingLeft, normalizeAll });
   }
 
   return logs;
@@ -287,6 +324,7 @@ export function fixLists(doc, mode = 'smart', options = {}) {
   if (mode === 'mergeStyled') logs.push(...mergeStyled(doc));
   logs.push(...removeEmptyListItems(doc));
   logs.push(...normalizeListIndentation(doc, options));
+  logs.push(...normalizeCueColumnLists(doc));
   logs.push(...inferListTypes(doc));
   if (mode === 'renumber') logs.push(...renumber(doc));
   if (mode === 'smart') logs.push(...smartRepair(doc));

@@ -1,0 +1,28 @@
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .cornell-table {
+    @apply w-full text-sm leading-6 text-slate-900;
+  }
+
+  .cornell-table td,
+  .cornell-table th {
+    @apply align-top;
+  }
+
+  .cornell-table td.cues,
+  .cornell-table th.cues {
+    @apply w-48 pr-3 text-sm;
+  }
+
+  .cornell-table td.notes,
+  .cornell-table th.notes {
+    @apply text-base leading-7;
+  }
+
+  .cornell-table td.cues ol,
+  .cornell-table td.cues ul {
+    @apply list-outside pl-5;
+  }
+}

@@ -2,7 +2,14 @@
   "name": "onenote-html-cleaner",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --minify",
+    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --watch"
+  },
   "dependencies": {
     "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
   }
 }

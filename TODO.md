@@ -2,7 +2,7 @@
 
 All project TODO items are tracked here. Please do not leave TODO comments in source files — add or update entries in this file instead.
 
-- [x] Review cleaned HTML output (completed 2026-02-12).
+- [ ] Review cleaned HTML output.
 - [ ] Audit accessibility of outputs.
 - [ ] Add badge icons + compact view improvements.
 - [ ] Investigate whethr we can inject advanced features in to our conversion process (such as adding a close-able toolbar at the top or bottom of the page).

@@ -170,7 +170,23 @@ export function initUI(workerManager) {
     // Store a small preview for diagnostics
     console.log(`[ui] enqueue file=${file.name} size=${file.size} type=${file.type}`);
 
-    workerManager.enqueue({ id, type: 'process-file', fileName: file.name, html: text, relativePath: file.name, config: {} }, onprogress)
+    workerManager.enqueue({
+      id,
+      type: 'process-file',
+      fileName: file.name,
+      html: text,
+      relativePath: file.name,
+      config: {
+        UseCornellSemantics: true,
+        CornellHeaderFallback: true,
+        MigrateInlineStylesToUtilities: true,
+        RemoveMigratedInlineDeclarations: false,
+        InjectTailwindCss: true,
+        TailwindCssHref: 'assets/tailwind-output.css',
+        ListPaddingLeft: '1.2em',
+        NormalizeAllListIndent: true
+      }
+    }, onprogress)
       .then(res => {
         try {
           setStatus(li, 'success', 'complete');

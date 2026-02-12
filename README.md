@@ -8,6 +8,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Modular pipeline layout created under `src/pipeline/`.
 - Initial test and fixture structure added.
 - ZIP export support via JSZip (requires `npm install`).
+- Tailwind utility baseline added for converted Cornell-style output (non-destructive, no preflight reset).
 
 ## Project Structure
 
@@ -21,7 +22,20 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 ## Local Setup
 
 1. Run `npm install` to fetch JSZip for ZIP exports.
-2. Serve the project with a local web server that can access `node_modules/`.
+2. Run `npm run build:tailwind` to generate `assets/tailwind-output.css`.
+3. Serve the project with a local web server that can access `node_modules/`.
+
+## Tailwind Migration (Scoped)
+
+- Tailwind runs with `preflight` disabled to avoid global resets.
+- Pipeline adds semantic classes for Cornell-style tables/cells:
+	- `table` -> `cornell-table`
+	- cue column cell -> `cues`
+	- notes column cell -> `notes`
+- Cue-column lists are normalized with utility classes (`list-inside`, `pl-0`) while preserving numbering.
+- Safe inline style migration maps only:
+	- `font-family`, `font-size`, `font-weight`, `margin-top`, `margin-bottom`
+- Layout-critical width/structure styles are kept inline for fidelity.
 
 ## Refactor Goals
 

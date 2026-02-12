@@ -126,5 +126,19 @@
       "RepairListItemValues": "smart",
       "ListPaddingLeft": "1.2em"
     }
+  },
+  {
+    "name": "cornell-tailwind-migration",
+    "input": "./fixtures/cornell-tailwind-migration.html",
+    "expected": "./expected/cornell-tailwind-migration.html",
+    "config": {
+      "RepairListItemValues": "smart",
+      "ListPaddingLeft": "1.2em",
+      "UseCornellSemantics": true,
+      "CornellHeaderFallback": true,
+      "MigrateInlineStylesToUtilities": true,
+      "InjectTailwindCss": true,
+      "TailwindCssHref": "assets/tailwind-output.css"
+    }
   }
 ]

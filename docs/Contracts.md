@@ -3,8 +3,9 @@
 ## Pipeline invariants
 - Preserve original text spacing and line breaks.
 - Remove all non-breaking spaces (convert to regular spaces).
-- Preserve fonts, sizes, tables, alignment, list numbering, and inline images.
+- Preserve widths, table structure, alignment, list numbering, and inline images.
 - Keep HTML structure stable unless a specific repair rule requires adjustment.
+- Optional migration may convert safe inline typography/margins to utility classes.
 
 ## Worker request
 ```json
@@ -16,6 +17,13 @@
   "html": "string",
   "config": {
     "RepairListItemValues": "smart|mergeStyled|renumber",
+    "ListPaddingLeft": "1.2em",
+    "UseCornellSemantics": true,
+    "CornellHeaderFallback": true,
+    "MigrateInlineStylesToUtilities": true,
+    "InlineStyleMigrationSelector": "[style]",
+    "InjectTailwindCss": true,
+    "TailwindCssHref": "assets/tailwind-output.css",
     "imageMap": { "path": "data:...base64" }
   }
 }
