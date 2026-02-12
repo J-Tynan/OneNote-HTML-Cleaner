@@ -37,6 +37,13 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 	- `font-family`, `font-size`, `font-weight`, `margin-top`, `margin-bottom`
 - Layout-critical width/structure styles are kept inline for fidelity.
 
+## Conversion Profiles
+
+- `Cornell (tuned)`: current default in the UI, optimized for Cornell-style note pages.
+- `Generic OneNote`: broader mode for varied pages; Cornell-specific transforms are disabled, while list indentation normalization and created date/time row merge remain enabled.
+
+The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
+
 ## Refactor Goals
 
 1. Preserve the existing PowerShell script behavior while improving portability.

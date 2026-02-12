@@ -16,6 +16,7 @@
   "relativePath": "string",
   "html": "string",
   "config": {
+    "Profile": "cornell|generic",
     "RepairListItemValues": "smart|mergeStyled|renumber",
     "ListPaddingLeft": "1.2em",
     "UseCornellSemantics": true,
@@ -28,6 +29,12 @@
   }
 }
 ```
+
+`Profile` is preferred for new integrations:
+- `cornell`: enables Cornell-specific semantic and layout helpers.
+- `generic`: conservative OneNote cleanup with Cornell-specific transforms disabled.
+
+Legacy flags remain supported and can override profile defaults.
 ---
 ## Worker response (done)
 ```json

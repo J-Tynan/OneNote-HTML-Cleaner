@@ -6,6 +6,7 @@ export function initUI(workerManager) {
   const fileInput = document.getElementById('fileInput');
   const dropzone = document.getElementById('dropzone');
   const fileList = document.getElementById('fileList');
+  const conversionProfile = document.getElementById('conversionProfile');
   const filterFailures = document.getElementById('filterFailures');
   const collapseStatus = document.getElementById('collapseStatus');
   const downloadZipButton = document.getElementById('downloadZip');
@@ -125,6 +126,14 @@ export function initUI(workerManager) {
     return `cleaned_${stamp}.zip`;
   }
 
+  function getConversionConfig() {
+    const profile = conversionProfile ? conversionProfile.value : 'cornell';
+    return {
+      Profile: profile,
+      TailwindCssHref: 'assets/tailwind-output.css'
+    };
+  }
+
   async function downloadZip() {
     if (!downloadZipButton || downloadZipButton.disabled) return;
     const JSZip = window.JSZip;
@@ -176,18 +185,7 @@ export function initUI(workerManager) {
       fileName: file.name,
       html: text,
       relativePath: file.name,
-      config: {
-        UseCornellSemantics: true,
-        CornellHeaderFallback: true,
-        MergeCreatedDateTime: true,
-        CreatedDateTimeGap: '0.75em',
-        MigrateInlineStylesToUtilities: true,
-        RemoveMigratedInlineDeclarations: false,
-        InjectTailwindCss: true,
-        TailwindCssHref: 'assets/tailwind-output.css',
-        ListPaddingLeft: '1.2em',
-        NormalizeAllListIndent: true
-      }
+      config: getConversionConfig()
     }, onprogress)
       .then(res => {
         try {

@@ -1,5 +1,6 @@
 // src/pipeline/pipeline.js
 import { parseHtmlToDocument, documentToHtml } from './parser.js';
+import { normalizePipelineConfig } from './config.js';
 import * as sanitize from './sanitize.js';
 import { fixLists } from './listRepair.js';
 import { annotateCornellSemantics } from './cornellSemantics.js';
@@ -16,6 +17,7 @@ import * as format from './format.js';
  */
 export async function runPipeline(htmlString, config = {}) {
   const logs = [];
+  const resolvedConfig = normalizePipelineConfig(config);
 
   try {
     // Basic input validation & preview
@@ -38,47 +40,47 @@ export async function runPipeline(htmlString, config = {}) {
 
     // Parse into a Document (DOMParser must be available in caller)
     const doc = parseHtmlToDocument(htmlString || '<!doctype html><html><head></head><body></body></html>');
-    logs.push(...ensureArray(sanitize.ensureHead(doc, { defaultTitle: config.defaultTitle })));
+    logs.push(...ensureArray(sanitize.ensureHead(doc, { defaultTitle: resolvedConfig.defaultTitle })));
     logs.push(...ensureArray(sanitize.removeOneNoteMeta(doc)));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
     logs.push(...ensureArray(sanitize.removeNbsp(doc)));
 
-    const useCornellSemantics = config.UseCornellSemantics !== false;
+    const useCornellSemantics = resolvedConfig.UseCornellSemantics !== false;
     if (useCornellSemantics) {
       logs.push(...ensureArray(annotateCornellSemantics(doc, {
-        allowFallback: config.CornellHeaderFallback !== false
+        allowFallback: resolvedConfig.CornellHeaderFallback !== false
       })));
     }
 
-    const mergeCreatedDateTime = config.MergeCreatedDateTime !== false;
+    const mergeCreatedDateTime = resolvedConfig.MergeCreatedDateTime !== false;
     if (mergeCreatedDateTime) {
       logs.push(...ensureArray(mergeCreatedDateTimeRow(doc, {
-        gap: config.CreatedDateTimeGap || '0.75em'
+        gap: resolvedConfig.CreatedDateTimeGap || '0.75em'
       })));
     }
 
-    const migrateInlineStyles = config.MigrateInlineStylesToUtilities !== false;
+    const migrateInlineStyles = resolvedConfig.MigrateInlineStylesToUtilities !== false;
     if (migrateInlineStyles) {
       logs.push(...ensureArray(migrateInlineStylesToUtilities(doc, {
-        selector: config.InlineStyleMigrationSelector || '[style]',
-        removeMigratedDeclarations: config.RemoveMigratedInlineDeclarations === true
+        selector: resolvedConfig.InlineStyleMigrationSelector || '[style]',
+        removeMigratedDeclarations: resolvedConfig.RemoveMigratedInlineDeclarations === true
       })));
     }
 
     // List repair
-    const listMode = config.RepairListItemValues || 'smart';
+    const listMode = resolvedConfig.RepairListItemValues || 'smart';
     logs.push(...ensureArray(fixLists(doc, listMode, {
-      listPaddingLeft: config.ListPaddingLeft || '1.2em',
-      normalizeAllListIndent: config.NormalizeAllListIndent === true
+      listPaddingLeft: resolvedConfig.ListPaddingLeft || '1.2em',
+      normalizeAllListIndent: resolvedConfig.NormalizeAllListIndent === true
     })));
 
-    const injectTailwindCss = config.InjectTailwindCss !== false;
+    const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {
-      logs.push(...ensureArray(sanitize.injectCssLink(doc, config.TailwindCssHref || 'assets/tailwind-output.css')));
+      logs.push(...ensureArray(sanitize.injectCssLink(doc, resolvedConfig.TailwindCssHref || 'assets/tailwind-output.css')));
     }
 
     // Image embedding (map may be provided in config.imageMap)
-    const map = config.imageMap || {};
+    const map = resolvedConfig.imageMap || {};
     logs.push(...ensureArray(images.embedImagesInHtml(doc, map)));
 
     // Formatting
