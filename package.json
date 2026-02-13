@@ -8,7 +8,9 @@
     "test:smoke:native": "node ./Tests/smoke-native.js"
   },
   "dependencies": {
-    "jszip": "^3.10.1"
+    "fflate": "^0.8.2",
+    "jszip": "^3.10.1",
+    "libarchive.js": "^2.0.2"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"

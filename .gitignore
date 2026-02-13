@@ -17,4 +17,4 @@ pnpm-debug.log*
 .DS_Store
 
 # Ignore all files in any directory named Tests
-Tests/
+# (removed - keep `Tests` in repo so fixtures and smoke tests are versioned)

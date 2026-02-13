@@ -17,12 +17,13 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Highest priority (native fidelity)
 - [ ] Replace heuristic `.one` text extraction with a structured parser that preserves page layout semantics (headings, lists, tables, whitespace, section boundaries). (in progress — prototype renderer added)
+- [x] Improve table/list detection and rendering in `.one` renderer (supports tab/pipe/multi-space splitting, markdown separators, row normalization).
 - [ ] Add extraction support for embedded resources from native payloads (images, attachments, object placeholders) and map them into exported HTML. (in progress — inline images extracted)
 - [ ] Preserve page metadata (title, created/modified timestamps, author fields where available) and render it consistently in output HTML. (in progress — basic metadata detection added)
 - [ ] Improve HTML output templating for native pages so structure and spacing are represented instead of flat preview lists. (in progress)
 
 ## `.onepkg` deep extraction
-- [ ] Add proper in-app decode path for compressed CAB folders (LZX/MSZIP) so `.onepkg` extraction is not limited to placeholders.
+- [x] Add proper in-app decode path for compressed CAB folders (LZX/MSZIP) — implemented a libarchive.js WASM fallback for LZX and MSZIP; next: optional native LZX WASM decoder integration.
 - [ ] Expand section extraction to parse full page trees from extracted `.one` binaries, including nested groups/sections/pages. (in progress — folder/cab parsing added; deeper extraction ongoing)
 - [x] Keep browser fallback UX for unsupported compression, but include clearer post-extract import guidance and verification steps. (helper panel + PowerShell command added)
 
@@ -30,11 +31,13 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [x] Add regression fixtures for `Tests/Test Section.one` and `Tests/Test Notebook.onepkg` that check for minimum content fidelity (tables/images/metadata markers).
 - [x] Add smoke checks for native output in `Tests/Cleaned` to ensure links, ZIP export, and hierarchy rendering remain stable.
 - [x] Define acceptance criteria for “content fidelity” (structure, tables, images, whitespace, metadata) and use it as a release gate for native parsing.
+- [ ] Add targeted unit/fixture tests for table-edge cases and `.onepkg` LZX extraction path.
 
 ## Product/docs follow-up
 - [ ] Document current native limitations and expected fidelity in README/docs to set realistic user expectations until parser work lands.
-- [ ] Decide whether to prioritize in-browser decoder integration or a hybrid companion-tool workflow for compressed notebooks. (in progress — companion helper implemented; research/integration pending)
+- [ ] Decide whether to prioritize in-browser decoder integration or a hybrid companion-tool workflow for compressed notebooks. (in progress — libarchive.js fallback implemented; research/integration pending)
+- [ ] Polish page naming for GUID-like section/page titles (make friendly display names for downloads).
 
 ---
 
-If you move a TODO from code into this file, consider adding a short code comment to indicate the task was centralized, e.g. `// todo: moved to TODO.md`.
+If you move a TODO from code into this file, consider adding a short code comment to indicate the task was centralized, e.g. `// todo: moved to TODO.md`. 

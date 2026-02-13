@@ -265,24 +265,63 @@ function mergeUniqueLines(primary, secondary, maxLines = 8) {
   return merged;
 }
 
+function isMarkdownSeparatorRow(cells) {
+  if (!Array.isArray(cells) || cells.length < 2) return false;
+  return cells.every((cell) => /^:?-{3,}:?$/.test(String(cell || '').trim()));
+}
+
+function splitByMultiSpace(value) {
+  if (!/\s{2,}/.test(value)) return null;
+
+  const cells = value
+    .split(/\s{2,}/)
+    .map((cell) => cell.trim())
+    .filter((cell) => cell.length > 0);
+
+  if (cells.length < 2) return null;
+  const contentful = cells.filter((cell) => /[A-Za-z0-9]/.test(cell)).length;
+  if (contentful < 2) return null;
+  return cells;
+}
+
 function splitTableCells(line) {
   const value = String(line || '').trim();
   if (!value) return null;
 
   if (value.includes('\t')) {
-    const cells = value.split('\t').map((cell) => cell.trim());
-    const nonEmptyCount = cells.filter((cell) => cell.length > 0).length;
-    if (cells.length >= 2 && nonEmptyCount >= 2) {
-      return cells;
+    const cells = value
+      .split('\t')
+      .map((cell) => cell.trim())
+      .filter((cell) => cell.length > 0);
+    if (cells.length >= 2) {
+      return {
+        cells,
+        delimiter: 'tab',
+        separator: isMarkdownSeparatorRow(cells)
+      };
     }
   }
 
   if (value.includes('|')) {
     const rawCells = value.split('|').map((cell) => cell.trim());
+    const leadingOrTrailingPipe = value.startsWith('|') || value.endsWith('|');
     const cells = rawCells.filter((cell) => cell.length > 0);
-    if (cells.length >= 2) {
-      return cells;
+    if (cells.length >= 2 && (leadingOrTrailingPipe || rawCells.length >= 3)) {
+      return {
+        cells,
+        delimiter: 'pipe',
+        separator: isMarkdownSeparatorRow(cells)
+      };
     }
+  }
+
+  const spacedCells = splitByMultiSpace(value);
+  if (spacedCells) {
+    return {
+      cells: spacedCells,
+      delimiter: 'space',
+      separator: isMarkdownSeparatorRow(spacedCells)
+    };
   }
 
   return null;
@@ -322,7 +361,18 @@ function buildStructuredBlocks(lines) {
 
   const flushTable = () => {
     if (tableState && tableState.rows.length > 0) {
-      blocks.push({ kind: 'table', rows: tableState.rows.slice() });
+      const maxColumns = tableState.rows.reduce((max, row) => Math.max(max, row.length), 0);
+      const normalizedRows = tableState.rows.map((row) => {
+        if (row.length === maxColumns) return row.slice();
+        return [...row, ...new Array(maxColumns - row.length).fill('')];
+      });
+
+      blocks.push({
+        kind: 'table',
+        rows: normalizedRows,
+        hasExplicitHeader: tableState.hasExplicitHeader,
+        delimiter: tableState.delimiter
+      });
     }
     tableState = null;
   };
@@ -335,17 +385,44 @@ function buildStructuredBlocks(lines) {
       continue;
     }
 
-    const tableCells = splitTableCells(line);
-    if (tableCells) {
+    const tableInfo = splitTableCells(line);
+    if (tableInfo) {
       flushList();
+
       if (!tableState) {
-        tableState = { rows: [tableCells], columnCount: tableCells.length };
-      } else if (tableState.columnCount === tableCells.length) {
-        tableState.rows.push(tableCells);
-      } else {
-        flushTable();
-        tableState = { rows: [tableCells], columnCount: tableCells.length };
+        if (tableInfo.separator) {
+          continue;
+        }
+
+        tableState = {
+          rows: [tableInfo.cells],
+          delimiter: tableInfo.delimiter,
+          hasExplicitHeader: false
+        };
+        continue;
       }
+
+      if (tableInfo.separator && tableState.rows.length === 1 && tableInfo.cells.length === tableState.rows[0].length) {
+        tableState.hasExplicitHeader = true;
+        continue;
+      }
+
+      const sameDelimiter = tableState.delimiter === tableInfo.delimiter;
+      const similarWidth = Math.abs(tableState.rows[0].length - tableInfo.cells.length) <= 1;
+      if (!sameDelimiter || !similarWidth) {
+        flushTable();
+        if (tableInfo.separator) {
+          continue;
+        }
+        tableState = {
+          rows: [tableInfo.cells],
+          delimiter: tableInfo.delimiter,
+          hasExplicitHeader: false
+        };
+        continue;
+      }
+
+      tableState.rows.push(tableInfo.cells);
       continue;
     }
 
@@ -415,7 +492,8 @@ function renderStructuredBlocks(blocks) {
       if (rows.length === 0) continue;
 
       const firstRow = rows[0] || [];
-      const hasHeader = rows.length > 1 && firstRow.some((cell) => /[A-Za-z]/.test(String(cell || '')));
+      const hasHeader = Boolean(block.hasExplicitHeader)
+        || (rows.length > 1 && firstRow.some((cell) => /[A-Za-z]/.test(String(cell || ''))));
 
       const headerHtml = hasHeader
         ? `<thead><tr>${firstRow.map((cell) => `<th>${escapeHtml(cell)}</th>`).join('')}</tr></thead>`

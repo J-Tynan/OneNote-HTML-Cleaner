@@ -375,6 +375,8 @@ export function initUI(workerManager) {
       };
     }
 
+    setStatus(li, 'working', 'starting');
+
     workerManager.enqueue(payload, onprogress, transferList)
       .then(res => {
         try {

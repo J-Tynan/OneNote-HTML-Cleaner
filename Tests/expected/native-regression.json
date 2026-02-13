@@ -1,0 +1,91 @@
+{
+  "name": "native-regression-baseline",
+  "groups": [
+    {
+      "label": "one-pages",
+      "folder": "Test Section_converted/Test Section",
+      "minHtmlFiles": 2
+    },
+    {
+      "label": "onepkg-pages",
+      "folder": "Test Notebook_converted/Test Notebook",
+      "minHtmlFiles": 4
+    }
+  ],
+  "requiredFiles": [
+    "Test Section_converted/Test Section/Test Page 1.html",
+    "Test Section_converted/Test Section/Test Page 2.html",
+    "Test Notebook_converted/Test Notebook/Quick Notes/Quick Notes.html",
+    "Test Notebook_converted/Test Notebook/Temp Group/New Section 1/New Section 1.html",
+    "Test Notebook_converted/Test Notebook/Temp Group/New Section 2/New Section 2.html",
+    "Test Notebook_converted/Test Notebook/Temp Section/Temp Section.html"
+  ],
+  "files": {
+    "Test Section_converted/Test Section/Test Page 1.html": {
+      "mustContain": [
+        "<title>Test Page 1</title>",
+        "<h1>Test Page 1</h1>",
+        "Converted from native OneNote section"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    },
+    "Test Section_converted/Test Section/Test Page 2.html": {
+      "mustContain": [
+        "<title>Test Page 2</title>",
+        "<h1>Test Page 2</h1>",
+        "Converted from native OneNote section"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    },
+    "Test Notebook_converted/Test Notebook/Quick Notes/Quick Notes.html": {
+      "mustContain": [
+        "<title>Quick Notes</title>",
+        "Converted from OneNote notebook package",
+        "Section path: <code>Quick Notes.one</code>"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    },
+    "Test Notebook_converted/Test Notebook/Temp Group/New Section 1/New Section 1.html": {
+      "mustContain": [
+        "<title>New Section 1</title>",
+        "Converted from OneNote notebook package",
+        "Section path: <code>Temp Group/New Section 1.one</code>"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    },
+    "Test Notebook_converted/Test Notebook/Temp Group/New Section 2/New Section 2.html": {
+      "mustContain": [
+        "<title>New Section 2</title>",
+        "Converted from OneNote notebook package",
+        "Section path: <code>Temp Group/New Section 2.one</code>"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    },
+    "Test Notebook_converted/Test Notebook/Temp Section/Temp Section.html": {
+      "mustContain": [
+        "<title>Temp Section</title>",
+        "Converted from OneNote notebook package",
+        "Section path: <code>Temp Section.one</code>"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    }
+  }
+}

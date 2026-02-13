@@ -22,7 +22,7 @@ self.onmessage = async (e) => {
       if (sourceKind === 'one') {
         nativeResult = importOneSection(bytes, { fileName });
       } else {
-        nativeResult = importOnePackage(bytes, { fileName });
+        nativeResult = await importOnePackage(bytes, { fileName });
       }
 
       self.postMessage({

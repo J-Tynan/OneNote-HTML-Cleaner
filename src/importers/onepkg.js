@@ -1,5 +1,21 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { importOneSection } from './one.js';
+import { inflateSync } from '../../node_modules/fflate/esm/browser.js';
+
+let libarchiveModulePromise = null;
+
+async function getLibarchiveArchive() {
+  if (!libarchiveModulePromise) {
+    libarchiveModulePromise = import('../../node_modules/libarchive.js/dist/libarchive.js');
+  }
+
+  const module = await libarchiveModulePromise;
+  if (!module || !module.Archive) {
+    throw new Error('libarchive.js did not expose Archive export');
+  }
+
+  return module.Archive;
+}
 
 function readUInt16(view, offset) {
   return view.getUint16(offset, true);
@@ -35,14 +51,32 @@ function parseCabEntries(arrayBuffer) {
   const coffFiles = readUInt32(view, 16);
   const cFolders = readUInt16(view, 26);
   const cFiles = readUInt16(view, 28);
+  const flags = readUInt16(view, 30);
   const cbCabinet = readUInt32(view, 8);
 
   if (coffFiles <= 0 || coffFiles >= bytes.length) {
     throw new Error('Invalid .onepkg cabinet file table offset');
   }
 
-  const folders = [];
+  let cbCFHeader = 0;
+  let cbCFFolder = 0;
+  let cbCFData = 0;
   let folderOffset = 36;
+
+  if ((flags & 0x0004) !== 0) {
+    if (bytes.length < 40) {
+      throw new Error('Invalid .onepkg cabinet reserve header');
+    }
+    cbCFHeader = readUInt16(view, 36);
+    cbCFFolder = bytes[38] || 0;
+    cbCFData = bytes[39] || 0;
+    folderOffset = 40 + cbCFHeader;
+    if (folderOffset > bytes.length) {
+      throw new Error('Invalid .onepkg reserve sizes exceed cabinet length');
+    }
+  }
+
+  const folders = [];
 
   for (let index = 0; index < cFolders; index += 1) {
     if (folderOffset + 8 > bytes.length) {
@@ -54,7 +88,7 @@ function parseCabEntries(arrayBuffer) {
       cCFData: readUInt16(view, folderOffset + 4),
       typeCompress: readUInt16(view, folderOffset + 6)
     });
-    folderOffset += 8;
+    folderOffset += 8 + cbCFFolder;
   }
 
   const entries = [];
@@ -91,6 +125,10 @@ function parseCabEntries(arrayBuffer) {
   return {
     cbCabinet,
     folderCount: cFolders,
+    flags,
+    cbCFHeader,
+    cbCFFolder,
+    cbCFData,
     folders,
     entryCount: cFiles,
     entries
@@ -106,14 +144,43 @@ function decodeCompressionType(typeCompress) {
   return 'unknown';
 }
 
-function extractFolderUncompressedData(bytes, folder) {
+function decodeMszipBlock(blockBytes, expectedSize) {
+  if (!blockBytes || blockBytes.length < 2) {
+    throw new Error('Invalid MSZIP CFDATA block: missing signature bytes');
+  }
+
+  if (blockBytes[0] !== 0x43 || blockBytes[1] !== 0x4B) {
+    throw new Error('Invalid MSZIP CFDATA block: expected CK signature');
+  }
+
+  const rawDeflate = blockBytes.subarray(2);
+  const inflated = inflateSync(rawDeflate);
+  if (!(inflated instanceof Uint8Array)) {
+    throw new Error('MSZIP inflate returned invalid output');
+  }
+
+  if (typeof expectedSize === 'number' && expectedSize > 0 && inflated.length !== expectedSize) {
+    throw new Error(`MSZIP block size mismatch: expected ${expectedSize}, got ${inflated.length}`);
+  }
+
+  return inflated;
+}
+
+function extractFolderData(bytes, folder, options = {}) {
   if (!folder || folder.coffCabStart <= 0 || folder.coffCabStart >= bytes.length) {
     return null;
   }
 
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const compression = decodeCompressionType(folder.typeCompress);
-  if (compression !== 'none') {
+  const cbCFData = typeof options.cbCFData === 'number' ? options.cbCFData : 0;
+  const lzxDecoder = typeof options.lzxDecoder === 'function' ? options.lzxDecoder : null;
+
+  if (compression !== 'none' && compression !== 'mszip' && compression !== 'lzx') {
+    return null;
+  }
+
+  if (compression === 'lzx' && !lzxDecoder) {
     return null;
   }
 
@@ -125,16 +192,47 @@ function extractFolderUncompressedData(bytes, folder) {
     if (cursor + 8 > bytes.length) break;
     const cbData = readUInt16(view, cursor + 4);
     const cbUncomp = readUInt16(view, cursor + 6);
-    const dataStart = cursor + 8;
+    const dataStart = cursor + 8 + cbCFData;
     const dataEnd = dataStart + cbData;
     if (dataEnd > bytes.length) break;
-    if (cbData !== cbUncomp) {
-      return null;
-    }
+
     const chunk = bytes.slice(dataStart, dataEnd);
-    chunks.push(chunk);
-    totalLength += chunk.length;
+    let outputChunk;
+
+    if (compression === 'none') {
+      if (cbData !== cbUncomp) {
+        return null;
+      }
+      outputChunk = chunk;
+    } else if (compression === 'mszip') {
+      try {
+        outputChunk = decodeMszipBlock(chunk, cbUncomp);
+      } catch (_error) {
+        return null;
+      }
+    } else {
+      try {
+        outputChunk = lzxDecoder(chunk, {
+          expectedSize: cbUncomp,
+          folder,
+          blockIndex: index
+        });
+      } catch (_error) {
+        return null;
+      }
+
+      if (!(outputChunk instanceof Uint8Array) || outputChunk.length === 0) {
+        return null;
+      }
+    }
+
+    chunks.push(outputChunk);
+    totalLength += outputChunk.length;
     cursor = dataEnd;
+  }
+
+  if (chunks.length === 0) {
+    return null;
   }
 
   const output = new Uint8Array(totalLength);
@@ -146,24 +244,92 @@ function extractFolderUncompressedData(bytes, folder) {
   return output;
 }
 
-function buildFolderDataMap(arrayBuffer, folders) {
+function buildFolderDataMap(arrayBuffer, folders, options = {}) {
   const bytes = new Uint8Array(arrayBuffer);
   const map = new Map();
+  const summary = {
+    decodedFolderCount: 0,
+    failedFolderCount: 0,
+    decodedCompressionKinds: new Set(),
+    failedCompressionKinds: new Set()
+  };
 
   for (const folder of folders) {
-    const rawData = extractFolderUncompressedData(bytes, folder);
+    const compression = decodeCompressionType(folder.typeCompress);
+    const rawData = extractFolderData(bytes, folder, options);
     if (rawData) {
       map.set(folder.index, rawData);
+      summary.decodedFolderCount += 1;
+      summary.decodedCompressionKinds.add(compression);
+    } else {
+      summary.failedFolderCount += 1;
+      summary.failedCompressionKinds.add(compression);
     }
   }
 
-  return map;
+  return {
+    map,
+    summary: {
+      ...summary,
+      decodedCompressionKinds: [...summary.decodedCompressionKinds],
+      failedCompressionKinds: [...summary.failedCompressionKinds]
+    }
+  };
 }
 
 function normalizeEntryPath(value = '') {
   return String(value || '')
     .replace(/\\/g, '/')
     .replace(/^\/+|\/+$/g, '');
+}
+
+function toArchiveInputFile(arrayBuffer, fileName) {
+  const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
+  if (typeof File === 'function') {
+    return new File([blob], fileName || 'Notebook.onepkg', { type: 'application/octet-stream' });
+  }
+  blob.name = fileName || 'Notebook.onepkg';
+  return blob;
+}
+
+async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
+  const sectionMap = new Map();
+  const extractedPaths = [];
+  const warnings = [];
+  let archive = null;
+
+  try {
+    const Archive = await getLibarchiveArchive();
+    archive = await Archive.open(toArchiveInputFile(arrayBuffer, fileName));
+    const fileArray = await archive.getFilesArray();
+
+    for (const entry of fileArray) {
+      if (!entry || !entry.file) continue;
+      const relPath = normalizeEntryPath(`${entry.path || ''}${entry.file.name || ''}`);
+      if (!/\.one$/i.test(relPath)) continue;
+
+      const extracted = await entry.file.extract();
+      const extractedBuffer = await extracted.arrayBuffer();
+      sectionMap.set(relPath, new Uint8Array(extractedBuffer));
+      extractedPaths.push(relPath);
+    }
+  } catch (error) {
+    warnings.push(`libarchive.js extraction failed: ${String(error && error.message ? error.message : error)}`);
+  } finally {
+    if (archive && typeof archive.close === 'function') {
+      try {
+        await archive.close();
+      } catch (_ignored) {
+        // no-op
+      }
+    }
+  }
+
+  return {
+    sectionMap,
+    extractedPaths,
+    warnings
+  };
 }
 
 function splitPath(value = '') {
@@ -309,8 +475,22 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
   };
 }
 
-function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed) {
-  const folderData = buildFolderDataMap(parsed.arrayBuffer, parsed.folders);
+async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed) {
+  const { map: folderData, summary: folderDecodeSummary } = buildFolderDataMap(parsed.arrayBuffer, parsed.folders, {
+    cbCFData: parsed.cbCFData,
+    lzxDecoder: parsed.lzxDecoder
+  });
+
+  let libarchiveSectionMap = new Map();
+  const libarchiveWarnings = [];
+  const compressionKinds = parsed.folders.map((folder) => decodeCompressionType(folder.typeCompress));
+  const hasLzx = compressionKinds.includes('lzx');
+  if (hasLzx) {
+    const archiveExtract = await extractSectionBytesViaLibarchive(parsed.arrayBuffer, parsed.fileName || 'Notebook.onepkg');
+    libarchiveSectionMap = archiveExtract.sectionMap;
+    libarchiveWarnings.push(...archiveExtract.warnings);
+  }
+
   const pages = [];
   const sectionDescriptors = [];
   let extractedSectionCount = 0;
@@ -324,8 +504,13 @@ function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed) 
     const sectionName = stripExtension(fileName);
 
     let sectionBytes = null;
+    const mappedSectionBytes = libarchiveSectionMap.get(entryPath);
+    if (mappedSectionBytes) {
+      sectionBytes = mappedSectionBytes;
+    }
+
     const folderBytes = folderData.get(entry.folderIndex);
-    if (folderBytes && entry.uncompressedOffset >= 0 && entry.size >= 0) {
+    if (!sectionBytes && folderBytes && entry.uncompressedOffset >= 0 && entry.size >= 0) {
       const start = entry.uncompressedOffset;
       const end = start + entry.size;
       if (end <= folderBytes.length) {
@@ -345,7 +530,10 @@ function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed) 
     pages,
     sectionDescriptors,
     extractedSectionCount,
-    uncompressedFolderCount: folderData.size
+    decodedFolderCount: folderData.size,
+    folderDecodeSummary,
+    libarchiveExtractedSectionCount: libarchiveSectionMap.size,
+    libarchiveWarnings
   };
 }
 
@@ -379,7 +567,7 @@ function buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors)
   return hierarchy;
 }
 
-export function importOnePackage(arrayBuffer, options = {}) {
+export async function importOnePackage(arrayBuffer, options = {}) {
   if (!(arrayBuffer instanceof ArrayBuffer)) {
     throw new Error('Expected binary .onepkg payload as ArrayBuffer');
   }
@@ -387,33 +575,53 @@ export function importOnePackage(arrayBuffer, options = {}) {
   const parsedBase = parseCabEntries(arrayBuffer);
   const parsed = {
     ...parsedBase,
-    arrayBuffer
+    arrayBuffer,
+    fileName: options.fileName || 'Notebook.onepkg',
+    lzxDecoder: options.lzxDecoder
   };
   const notebookName = baseNameFromFile(options.fileName || 'Notebook.onepkg');
   const notebookFolder = toFolderSafeName(notebookName);
   const compressionKinds = parsed.folders.map((folder) => decodeCompressionType(folder.typeCompress));
-  const hasUnsupportedCompression = compressionKinds.some((kind) => kind !== 'none');
+  const hasUnsupportedCompression = compressionKinds.some((kind) => kind !== 'none' && kind !== 'mszip');
 
   const {
     pages,
     sectionDescriptors,
     extractedSectionCount,
-    uncompressedFolderCount
-  } = deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed);
+    decodedFolderCount,
+    folderDecodeSummary,
+    libarchiveExtractedSectionCount,
+    libarchiveWarnings
+  } = await deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed);
 
   const hierarchy = buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors);
 
   const warnings = [
     `Parsed CAB container with ${parsed.entryCount} entries across ${parsed.folderCount} folder(s).`,
     `Detected ${sectionDescriptors.length} section file(s) and generated ${pages.length} downloadable page(s).`,
-    `Deep extraction succeeded for ${extractedSectionCount} section(s).`
+    `Deep extraction succeeded for ${extractedSectionCount} section(s).`,
+    `Decoded ${decodedFolderCount}/${parsed.folderCount} CAB folder payload(s) in-browser.`
   ];
 
+  if (libarchiveExtractedSectionCount > 0) {
+    warnings.push(`libarchive.js extracted ${libarchiveExtractedSectionCount} section payload(s) from compressed archive entries.`);
+  }
+
+  warnings.push(...libarchiveWarnings);
+
+  if (folderDecodeSummary.failedCompressionKinds.length > 0 && libarchiveExtractedSectionCount === 0) {
+    warnings.push(`Failed folder decode kinds: ${folderDecodeSummary.failedCompressionKinds.join(', ')}.`);
+  }
+
   if (hasUnsupportedCompression) {
-    warnings.push(`Some CAB folders use unsupported compression (${compressionKinds.join(', ')}); placeholders are used where bytes cannot be decoded in-browser.`);
-    warnings.push('For full content extraction from compressed .onepkg files, export sections/pages to .one or .mht from OneNote and re-import those files.');
-  } else if (uncompressedFolderCount === 0) {
-    warnings.push('No uncompressed CAB folder payloads were available for direct section-byte extraction.');
+    if (libarchiveExtractedSectionCount > 0) {
+      warnings.push(`Detected unsupported CAB compression kinds (${compressionKinds.join(', ')}), but libarchive.js fallback decoded section payloads for extraction.`);
+    } else {
+      warnings.push(`Some CAB folders use unsupported compression (${compressionKinds.join(', ')}); placeholders are used where bytes cannot be decoded in-browser.`);
+      warnings.push('LZX support requires a WASM decoder hook (`options.lzxDecoder`) or libarchive.js extraction fallback to decode compressed payloads.');
+    }
+  } else if (decodedFolderCount === 0) {
+    warnings.push('No CAB folder payloads were decoded for direct section-byte extraction.');
   }
 
   return {

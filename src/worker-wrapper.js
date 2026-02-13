@@ -3,11 +3,43 @@ export default class WorkerManager {
   constructor(workerPath = 'src/worker.js') {
     this.worker = new Worker(workerPath, { type: 'module' });
     this.callbacks = new Map();
+    this.defaultTimeoutMs = 120000;
+
+    this.rejectAllPending = (reason) => {
+      for (const [id, cb] of this.callbacks.entries()) {
+        if (cb && cb.timeoutHandle) {
+          clearTimeout(cb.timeoutHandle);
+        }
+        cb.reject({ id, status: 'error', error: reason });
+      }
+      this.callbacks.clear();
+    };
+
+    this.worker.onerror = (event) => {
+      const baseMessage = event && event.message
+        ? event.message
+        : 'Worker failed before completing queued jobs';
+      const fileInfo = event && event.filename
+        ? ` (${event.filename}${event.lineno ? `:${event.lineno}` : ''}${event.colno ? `:${event.colno}` : ''})`
+        : '';
+      const message = `${baseMessage}${fileInfo}`;
+      console.error('[worker-wrapper] worker error:', message, event);
+      this.rejectAllPending(message);
+    };
+
+    this.worker.onmessageerror = (event) => {
+      console.error('[worker-wrapper] worker message error:', event);
+      this.rejectAllPending('Worker message serialization failed');
+    };
 
     this.worker.onmessage = async (e) => {
       const msg = e.data;
       const cb = this.callbacks.get(msg.id);
       if (!cb) return;
+
+      if (cb.timeoutHandle) {
+        clearTimeout(cb.timeoutHandle);
+      }
 
       if (msg.status === 'done') {
         cb.resolve(msg);
@@ -61,10 +93,24 @@ export default class WorkerManager {
     };
   }
 
-  enqueue(payload, onprogress, transferList = []) {
+  enqueue(payload, onprogress, transferList = [], timeoutMs = this.defaultTimeoutMs) {
     return new Promise((resolve, reject) => {
-      this.callbacks.set(payload.id, { resolve, reject, onprogress, payload });
-      this.worker.postMessage(payload, transferList);
+      const timeoutHandle = setTimeout(() => {
+        const active = this.callbacks.get(payload.id);
+        if (!active) return;
+        this.callbacks.delete(payload.id);
+        reject({ id: payload.id, status: 'error', error: `Worker timeout after ${timeoutMs}ms` });
+      }, timeoutMs);
+
+      this.callbacks.set(payload.id, { resolve, reject, onprogress, payload, timeoutHandle });
+
+      try {
+        this.worker.postMessage(payload, transferList);
+      } catch (error) {
+        clearTimeout(timeoutHandle);
+        this.callbacks.delete(payload.id);
+        reject({ id: payload.id, status: 'error', error: String(error) });
+      }
     });
   }
 }
