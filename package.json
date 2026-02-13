@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --minify",
-    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --watch"
+    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --watch",
+    "test:smoke:native": "node ./Tests/smoke-native.js"
   },
   "dependencies": {
     "jszip": "^3.10.1"

@@ -7,6 +7,13 @@ This folder contains lightweight browser-based tests for the HTML pipeline.
 2. Open `tests/runner.html` in the browser.
 3. Click "Run Tests" to execute the cases in `tests/cases.json`.
 
+### Native smoke test (terminal)
+- Run `npm run test:smoke:native` to validate starter checklist-aligned checks against converted native outputs in `Tests/Cleaned`.
+- Optional: `node ./Tests/smoke-native.js --cleaned-dir "Tests/Cleaned"`.
+- The script also prints criteria coverage for the 9-point visual checklist (automated/partial/manual).
+- Regression fixture assertions are loaded from `Tests/expected/native-regression.json` (required files, per-file markers, and folder minimums).
+- Optional custom fixture path: `node ./Tests/smoke-native.js --fixture "Tests/expected/native-regression.json"`.
+
 Note: if you use VS Code Live Preview, the runner strips the injected script tag
 so diffs still reflect pipeline output.
 
