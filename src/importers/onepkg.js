@@ -1,5 +1,6 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { importOneSection } from './one.js';
+import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
 import { inflateSync } from '../../node_modules/fflate/esm/browser.js';
 
 let libarchiveModulePromise = null;
@@ -295,7 +296,7 @@ function toArchiveInputFile(arrayBuffer, fileName) {
 async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
   const sectionMap = new Map();
   const extractedPaths = [];
-  const warnings = [];
+  const warningDetails = [];
   let archive = null;
 
   try {
@@ -314,7 +315,11 @@ async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
       extractedPaths.push(relPath);
     }
   } catch (error) {
-    warnings.push(`libarchive.js extraction failed: ${String(error && error.message ? error.message : error)}`);
+    warningDetails.push(makeWarning(
+      WARNING_CODES.onepkg.libarchiveExtractFailed,
+      `libarchive.js extraction failed: ${String(error && error.message ? error.message : error)}`,
+      'warning'
+    ));
   } finally {
     if (archive && typeof archive.close === 'function') {
       try {
@@ -328,7 +333,8 @@ async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
   return {
     sectionMap,
     extractedPaths,
-    warnings
+    warningDetails,
+    warnings: toWarningMessages(warningDetails)
   };
 }
 
@@ -420,6 +426,17 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
   const safeSectionName = toFolderSafeName(sectionName);
   const sectionFolderParts = [notebookFolder, ...safeGroupParts, safeSectionName];
   const sectionFolderPath = joinPath(sectionFolderParts);
+  const sectionLogicalPath = [notebookName, ...groupParts, sectionName].join('/');
+
+  const baseMetadata = {
+    title: sectionName,
+    author: undefined,
+    createdAt: undefined,
+    modifiedAt: undefined,
+    notebook: notebookName,
+    sectionPath: sectionLogicalPath,
+    source: 'onepkg'
+  };
 
   if (sectionBytes) {
     try {
@@ -429,10 +446,30 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
       if (sectionResult && Array.isArray(sectionResult.pages) && sectionResult.pages.length > 0) {
         const mappedPages = sectionResult.pages.map((page) => {
           const safePageName = toFolderSafeName(page.name || 'Page');
+          const mappedResources = Array.isArray(page.resources)
+            ? page.resources.map((resource) => {
+              const originalPath = String(resource && resource.path ? resource.path : resource && resource.fileName ? resource.fileName : 'resource.bin');
+              const fileName = originalPath.split('/').pop();
+              return {
+                ...resource,
+                path: `${sectionFolderPath}/_resources/${fileName}`,
+                relativePath: `_resources/${fileName}`
+              };
+            })
+            : [];
+
           return {
             name: page.name || 'Page',
             path: `${sectionFolderPath}/${safePageName}.html`,
-            html: page.html || buildOnePkgSectionPageHtml(notebookName, entryPath, sectionName)
+            html: page.html || buildOnePkgSectionPageHtml(notebookName, entryPath, sectionName),
+            metadata: {
+              ...baseMetadata,
+              ...(page && typeof page.metadata === 'object' ? page.metadata : {}),
+              sectionPath: sectionLogicalPath,
+              notebook: notebookName,
+              source: 'onepkg->one'
+            },
+            resources: mappedResources
           };
         });
 
@@ -458,7 +495,8 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
   const placeholderPage = {
     name: sectionName,
     path: placeholderPath,
-    html: buildOnePkgSectionPageHtml(notebookName, entryPath, sectionName)
+    html: buildOnePkgSectionPageHtml(notebookName, entryPath, sectionName),
+    metadata: baseMetadata
   };
 
   return {
@@ -482,13 +520,13 @@ async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, pa
   });
 
   let libarchiveSectionMap = new Map();
-  const libarchiveWarnings = [];
+  const libarchiveWarningDetails = [];
   const compressionKinds = parsed.folders.map((folder) => decodeCompressionType(folder.typeCompress));
   const hasLzx = compressionKinds.includes('lzx');
   if (hasLzx) {
     const archiveExtract = await extractSectionBytesViaLibarchive(parsed.arrayBuffer, parsed.fileName || 'Notebook.onepkg');
     libarchiveSectionMap = archiveExtract.sectionMap;
-    libarchiveWarnings.push(...archiveExtract.warnings);
+    libarchiveWarningDetails.push(...(Array.isArray(archiveExtract.warningDetails) ? archiveExtract.warningDetails : []));
   }
 
   const pages = [];
@@ -533,7 +571,8 @@ async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, pa
     decodedFolderCount: folderData.size,
     folderDecodeSummary,
     libarchiveExtractedSectionCount: libarchiveSectionMap.size,
-    libarchiveWarnings
+    libarchiveWarningDetails,
+    libarchiveWarnings: toWarningMessages(libarchiveWarningDetails)
   };
 }
 
@@ -591,43 +630,46 @@ export async function importOnePackage(arrayBuffer, options = {}) {
     decodedFolderCount,
     folderDecodeSummary,
     libarchiveExtractedSectionCount,
-    libarchiveWarnings
+    libarchiveWarningDetails
   } = await deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed);
 
   const hierarchy = buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors);
 
-  const warnings = [
-    `Parsed CAB container with ${parsed.entryCount} entries across ${parsed.folderCount} folder(s).`,
-    `Detected ${sectionDescriptors.length} section file(s) and generated ${pages.length} downloadable page(s).`,
-    `Deep extraction succeeded for ${extractedSectionCount} section(s).`,
-    `Decoded ${decodedFolderCount}/${parsed.folderCount} CAB folder payload(s) in-browser.`
+  const warningDetails = [
+    makeWarning(WARNING_CODES.onepkg.cabParsedSummary, `Parsed CAB container with ${parsed.entryCount} entries across ${parsed.folderCount} folder(s).`),
+    makeWarning(WARNING_CODES.onepkg.sectionsGeneratedSummary, `Detected ${sectionDescriptors.length} section file(s) and generated ${pages.length} downloadable page(s).`),
+    makeWarning(WARNING_CODES.onepkg.deepExtractionSummary, `Deep extraction succeeded for ${extractedSectionCount} section(s).`),
+    makeWarning(WARNING_CODES.onepkg.folderDecodeSummary, `Decoded ${decodedFolderCount}/${parsed.folderCount} CAB folder payload(s) in-browser.`)
   ];
 
   if (libarchiveExtractedSectionCount > 0) {
-    warnings.push(`libarchive.js extracted ${libarchiveExtractedSectionCount} section payload(s) from compressed archive entries.`);
+    warningDetails.push(makeWarning(WARNING_CODES.onepkg.libarchiveExtractSummary, `libarchive.js extracted ${libarchiveExtractedSectionCount} section payload(s) from compressed archive entries.`));
   }
 
-  warnings.push(...libarchiveWarnings);
+  warningDetails.push(...(Array.isArray(libarchiveWarningDetails) ? libarchiveWarningDetails : []));
 
   if (folderDecodeSummary.failedCompressionKinds.length > 0 && libarchiveExtractedSectionCount === 0) {
-    warnings.push(`Failed folder decode kinds: ${folderDecodeSummary.failedCompressionKinds.join(', ')}.`);
+    warningDetails.push(makeWarning(WARNING_CODES.onepkg.folderDecodeFailedKinds, `Failed folder decode kinds: ${folderDecodeSummary.failedCompressionKinds.join(', ')}.`, 'warning'));
   }
 
   if (hasUnsupportedCompression) {
     if (libarchiveExtractedSectionCount > 0) {
-      warnings.push(`Detected unsupported CAB compression kinds (${compressionKinds.join(', ')}), but libarchive.js fallback decoded section payloads for extraction.`);
+      warningDetails.push(makeWarning(WARNING_CODES.onepkg.unsupportedCompressionWithFallback, `Detected unsupported CAB compression kinds (${compressionKinds.join(', ')}), but libarchive.js fallback decoded section payloads for extraction.`, 'warning'));
     } else {
-      warnings.push(`Some CAB folders use unsupported compression (${compressionKinds.join(', ')}); placeholders are used where bytes cannot be decoded in-browser.`);
-      warnings.push('LZX support requires a WASM decoder hook (`options.lzxDecoder`) or libarchive.js extraction fallback to decode compressed payloads.');
+      warningDetails.push(makeWarning(WARNING_CODES.onepkg.unsupportedCompressionPlaceholders, `Some CAB folders use unsupported compression (${compressionKinds.join(', ')}); placeholders are used where bytes cannot be decoded in-browser.`, 'warning'));
+      warningDetails.push(makeWarning(WARNING_CODES.onepkg.lzxDecoderHint, 'LZX support requires a WASM decoder hook (`options.lzxDecoder`) or libarchive.js extraction fallback to decode compressed payloads.'));
     }
   } else if (decodedFolderCount === 0) {
-    warnings.push('No CAB folder payloads were decoded for direct section-byte extraction.');
+    warningDetails.push(makeWarning(WARNING_CODES.onepkg.noFolderDecode, 'No CAB folder payloads were decoded for direct section-byte extraction.', 'warning'));
   }
+
+  const warnings = toWarningMessages(warningDetails);
 
   return {
     sourceKind: 'onepkg',
     hierarchy,
     pages,
+    warningDetails,
     warnings,
     archiveEntries: parsed.entries
   };

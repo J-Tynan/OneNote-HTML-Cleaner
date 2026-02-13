@@ -118,6 +118,7 @@ function run() {
     const html = readText(filePath);
     check(/<h1>\s*[^<]+\s*<\/h1>/i.test(html), `${relative(filePath)}: expected H1 for page title`, failures, 1);
     check(/Converted from native OneNote section/i.test(html), `${relative(filePath)}: expected native .one conversion marker`, failures, 2);
+    check(/<(p|ul|ol|table|h2|h3)\b/i.test(html), `${relative(filePath)}: expected semantic content block markup`, failures, 1);
   }
 
   for (const filePath of notebookFiles) {

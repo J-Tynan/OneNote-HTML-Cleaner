@@ -1,4 +1,5 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
+import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
 
 const ONE_SIGNATURE = [0xE4, 0x52, 0x5C, 0x7B, 0x8C, 0xD8, 0xA7, 0x4D, 0xAE, 0xB1, 0x53, 0x78, 0xD0, 0x29, 0x96, 0xD3];
 
@@ -239,8 +240,8 @@ function extractPreviewLinesForPage(records, descriptor, nextDescriptor, fallbac
 
 function extractPreviewLinesFromRange(records, startOffset, endOffset, blockedValues, maxLines = 8) {
   const lines = [];
-  const min = Math.max(0, startOffset - 4096);
-  const max = endOffset + 4096;
+  const min = Math.max(0, startOffset);
+  const max = Math.max(min, endOffset);
 
   for (const record of records) {
     if (record.endOffset < min || record.startOffset > max) continue;
@@ -253,6 +254,48 @@ function extractPreviewLinesFromRange(records, startOffset, endOffset, blockedVa
   return lines;
 }
 
+function looksBinaryLikeToken(value = '') {
+  const text = String(value || '').trim();
+  if (!text) return false;
+  if (/\b(?:IDAT|IHDR|JFIF|Exif|PK\x03\x04|%PDF|obj|endobj)\b/i.test(text)) return true;
+  if (/^[A-Za-z0-9+\/=_-]{10,}$/.test(text) && !/\s/.test(text)) return true;
+  if (/[^A-Za-z0-9\s,.;:'"!?()\-_/]{2,}/.test(text)) return true;
+  return false;
+}
+
+function semanticLineScore(value = '') {
+  const line = String(value || '').trim();
+  if (!line) return Number.NEGATIVE_INFINITY;
+
+  if (toHeadingLevel(line)) return 4;
+  if (splitTableCells(line)) return 4;
+  if (/^(?:[-*•]|\d+[\.)]|[A-Za-z][\.)])\s+/.test(line)) return 4;
+
+  let score = 0;
+  if (/\b\d{1,2}:\d{2}(?::\d{2})?\b/.test(line)) score += 1;
+  if (/\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b/.test(line)) score += 1;
+  if (/\s/.test(line)) score += 1;
+  if ((line.match(/[A-Za-z]{3,}/g) || []).length >= 2) score += 2;
+  if (/^[A-Z0-9]{3,}[!?]?$/.test(line)) score -= 2;
+  if (looksBinaryLikeToken(line)) score -= 3;
+  return score;
+}
+
+function filterSemanticLines(lines = [], maxLines = 24) {
+  const filtered = [];
+  for (const candidate of lines) {
+    const line = String(candidate || '').trim();
+    if (!line || filtered.includes(line)) continue;
+
+    const score = semanticLineScore(line);
+    if (score < 1) continue;
+
+    filtered.push(line);
+    if (filtered.length >= maxLines) break;
+  }
+  return filtered;
+}
+
 function mergeUniqueLines(primary, secondary, maxLines = 8) {
   const merged = [];
   for (const source of [primary || [], secondary || []]) {
@@ -263,6 +306,104 @@ function mergeUniqueLines(primary, secondary, maxLines = 8) {
     }
   }
   return merged;
+}
+
+function buildPageSegments(pageDescriptors, wideRecords, byteLength) {
+  if (!Array.isArray(pageDescriptors) || pageDescriptors.length === 0) {
+    return [{
+      title: 'Page 1',
+      startOffset: 0,
+      endOffset: byteLength,
+      source: 'fallback'
+    }];
+  }
+
+  return pageDescriptors.map((descriptor, index) => {
+    const nextDescriptor = pageDescriptors[index + 1] || null;
+    const currentRecord = descriptor.titleIndex >= 0
+      ? wideRecords[descriptor.titleIndex]
+      : wideRecords[descriptor.markerIndex];
+    const nextRecord = nextDescriptor
+      ? (nextDescriptor.titleIndex >= 0 ? wideRecords[nextDescriptor.titleIndex] : wideRecords[nextDescriptor.markerIndex])
+      : null;
+
+    const previousDescriptor = index > 0 ? pageDescriptors[index - 1] : null;
+    const previousRecord = previousDescriptor
+      ? (previousDescriptor.titleIndex >= 0 ? wideRecords[previousDescriptor.titleIndex] : wideRecords[previousDescriptor.markerIndex])
+      : null;
+
+    const rawStart = currentRecord ? currentRecord.startOffset : 0;
+    const rawEnd = nextRecord ? nextRecord.startOffset : byteLength;
+    const previousStart = previousRecord ? previousRecord.startOffset : 0;
+    const boundedStart = Math.max(previousStart, rawStart - 512);
+    const boundedEnd = Math.min(byteLength, Math.max(boundedStart + 1, rawEnd + 256));
+
+    return {
+      title: descriptor.title || `Page ${index + 1}`,
+      startOffset: boundedStart,
+      endOffset: boundedEnd,
+      source: 'descriptor'
+    };
+  });
+}
+
+function collectSegmentSemanticLines(wideRecords, utf8Records, segment, blockedValues, maxLines = 24) {
+  const wideLines = extractPreviewLinesFromRange(
+    wideRecords,
+    segment.startOffset,
+    segment.endOffset,
+    blockedValues,
+    Math.max(maxLines * 2, 32)
+  );
+
+  const utf8Lines = extractPreviewLinesFromRange(
+    utf8Records,
+    segment.startOffset,
+    segment.endOffset,
+    blockedValues,
+    Math.max(maxLines * 2, 32)
+  );
+
+  const merged = mergeUniqueLines(wideLines, utf8Lines, Math.max(maxLines * 2, 32));
+  return filterSemanticLines(merged, maxLines);
+}
+
+function buildSemanticPageModels(wideRecords, utf8Records, pageDescriptors, blockedValues, byteLength) {
+  const fallbackPoolRaw = mergeUniqueLines(
+    extractPreviewLines(wideRecords, blockedValues, 32),
+    extractPreviewLines(utf8Records, blockedValues, 32),
+    32
+  );
+  const fallbackPool = filterSemanticLines(fallbackPoolRaw, 24);
+
+  const segments = buildPageSegments(pageDescriptors, wideRecords, byteLength);
+  const models = segments.map((segment, index) => {
+    const scopedLines = collectSegmentSemanticLines(wideRecords, utf8Records, segment, blockedValues, 24);
+    const fallbackLines = fallbackPool.slice(0, 24);
+    const lines = scopedLines.length > 0 ? scopedLines : fallbackLines;
+    const blocks = buildStructuredBlocks(lines);
+    const metadata = extractPageMetadata(lines, segment.title || `Page ${index + 1}`);
+
+    return {
+      title: segment.title || `Page ${index + 1}`,
+      source: segment.source,
+      lines,
+      blocks,
+      metadata: metadata.canonical,
+      metadataSources: metadata.sources,
+      metadataItems: metadata.items,
+      metadataConflicts: metadata.conflicts,
+      fallbackUsed: scopedLines.length === 0
+    };
+  });
+
+  const fallbackPageCount = models.filter((item) => item.fallbackUsed).length;
+  return {
+    models,
+    fallbackPageCount,
+    fallbackPoolSize: fallbackPool.length,
+    filteredOutCount: Math.max(0, fallbackPoolRaw.length - fallbackPool.length)
+  };
 }
 
 function isMarkdownSeparatorRow(cells) {
@@ -347,10 +488,27 @@ function toHeadingLevel(line) {
   return null;
 }
 
+function isParagraphJoinCandidate(previousLine, nextLine) {
+  const prev = String(previousLine || '').trim();
+  const next = String(nextLine || '').trim();
+  if (!prev || !next) return false;
+  if (toHeadingLevel(next)) return false;
+  if (splitTableCells(next)) return false;
+  if (/^(?:[-*•]|\d+[\.)]|[A-Za-z][\.)])\s+/.test(next)) return false;
+
+  const prevEndsSentence = /[.!?;:]$/.test(prev);
+  const nextLooksNewSentence = /^[A-Z][A-Za-z0-9]/.test(next);
+
+  if (!prevEndsSentence) return true;
+  if (!nextLooksNewSentence) return true;
+  return false;
+}
+
 function buildStructuredBlocks(lines) {
   const blocks = [];
   let listState = null;
   let tableState = null;
+  let paragraphState = null;
 
   const flushList = () => {
     if (listState && listState.items.length > 0) {
@@ -377,17 +535,26 @@ function buildStructuredBlocks(lines) {
     tableState = null;
   };
 
+  const flushParagraph = () => {
+    if (paragraphState && paragraphState.text) {
+      blocks.push({ kind: 'paragraph', text: paragraphState.text });
+    }
+    paragraphState = null;
+  };
+
   for (const rawLine of lines) {
     const line = String(rawLine || '').trim();
     if (!line) {
       flushList();
       flushTable();
+      flushParagraph();
       continue;
     }
 
     const tableInfo = splitTableCells(line);
     if (tableInfo) {
       flushList();
+      flushParagraph();
 
       if (!tableState) {
         if (tableInfo.separator) {
@@ -409,7 +576,9 @@ function buildStructuredBlocks(lines) {
 
       const sameDelimiter = tableState.delimiter === tableInfo.delimiter;
       const similarWidth = Math.abs(tableState.rows[0].length - tableInfo.cells.length) <= 1;
-      if (!sameDelimiter || !similarWidth) {
+      const compatibleDelimiter = sameDelimiter || tableState.rows.length >= 2;
+
+      if (!compatibleDelimiter || !similarWidth) {
         flushTable();
         if (tableInfo.separator) {
           continue;
@@ -449,17 +618,25 @@ function buildStructuredBlocks(lines) {
     }
 
     flushList();
+    flushTable();
 
     const heading = toHeadingLevel(line);
     if (heading && heading.text.length > 0) {
+      flushParagraph();
       blocks.push({ kind: 'heading', level: heading.level, text: heading.text });
     } else {
-      blocks.push({ kind: 'paragraph', text: line });
+      if (paragraphState && isParagraphJoinCandidate(paragraphState.text, line)) {
+        paragraphState.text = `${paragraphState.text} ${line}`;
+      } else {
+        flushParagraph();
+        paragraphState = { text: line };
+      }
     }
   }
 
   flushList();
   flushTable();
+  flushParagraph();
 
   return blocks;
 }
@@ -512,13 +689,162 @@ function renderStructuredBlocks(blocks) {
 }
 
 function extractDetectedMetadata(lines) {
+  return extractPageMetadata(lines).items;
+}
+
+function normalizeMetadataLabel(label) {
+  return String(label || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[_\-]+/g, ' ')
+    .replace(/\s+/g, ' ');
+}
+
+function toCanonicalMetadataKey(label) {
+  const value = normalizeMetadataLabel(label);
+  if (!value) return null;
+
+  const aliasMap = {
+    title: 'title',
+    'page title': 'title',
+    'section title': 'title',
+    author: 'author',
+    owner: 'author',
+    'created by': 'author',
+    'last edited by': 'author',
+    'last modified by': 'author',
+    created: 'createdAt',
+    'created at': 'createdAt',
+    'created on': 'createdAt',
+    'creation time': 'createdAt',
+    'date created': 'createdAt',
+    modified: 'modifiedAt',
+    updated: 'modifiedAt',
+    'updated at': 'modifiedAt',
+    'updated on': 'modifiedAt',
+    'last modified': 'modifiedAt',
+    'modified at': 'modifiedAt',
+    'modified on': 'modifiedAt',
+    'last saved': 'modifiedAt',
+    'date modified': 'modifiedAt'
+  };
+
+  if (aliasMap[value]) {
+    return aliasMap[value];
+  }
+
+  if (value.startsWith('created ')) return 'createdAt';
+  if (value.startsWith('modified ') || value.startsWith('updated ')) return 'modifiedAt';
+  return null;
+}
+
+function normalizeMetadataDate(rawValue) {
+  const value = String(rawValue || '').trim();
+  if (!value) return '';
+
+  const likelyLocaleOnly = /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/.test(value) && !/(z|utc|gmt|[+\-]\d{2}:?\d{2})$/i.test(value);
+  if (likelyLocaleOnly) {
+    return value;
+  }
+
+  const parsed = Date.parse(value);
+  if (!Number.isNaN(parsed)) {
+    return new Date(parsed).toISOString();
+  }
+
+  return value;
+}
+
+function metadataPriorityFor(key, source) {
+  if (key === 'title') {
+    if (source === 'line-key-value') return 3;
+    if (source === 'hint') return 1;
+    return 2;
+  }
+
+  if (key === 'author') {
+    if (source === 'line-key-value') return 3;
+    return 1;
+  }
+
+  if (key === 'createdAt' || key === 'modifiedAt') {
+    if (source === 'line-key-value') return 3;
+    if (source === 'line-heuristic') return 2;
+    return 1;
+  }
+
+  return 0;
+}
+
+function setCanonicalMetadataValue(canonical, metadataSources, conflicts, key, value, source = 'line-heuristic') {
+  const normalizedValue = String(value || '').trim();
+  if (!key || !normalizedValue) return;
+
+  const finalValue = (key === 'createdAt' || key === 'modifiedAt')
+    ? normalizeMetadataDate(normalizedValue)
+    : normalizedValue;
+
+  const incomingPriority = metadataPriorityFor(key, source);
+  const existingPriority = metadataPriorityFor(key, metadataSources[key] || 'unknown');
+
+  if (!canonical[key]) {
+    canonical[key] = finalValue;
+    metadataSources[key] = source;
+    return;
+  }
+
+  if (canonical[key] !== finalValue && incomingPriority > existingPriority) {
+    conflicts.push({ key, existing: canonical[key], incoming: finalValue, existingSource: metadataSources[key], incomingSource: source, resolution: 'replaced-by-priority' });
+    canonical[key] = finalValue;
+    metadataSources[key] = source;
+    return;
+  }
+
+  if (canonical[key] !== finalValue) {
+    conflicts.push({ key, existing: canonical[key], incoming: finalValue, existingSource: metadataSources[key], incomingSource: source, resolution: 'kept-existing' });
+  }
+}
+
+function extractPageMetadata(lines, titleHint) {
   const items = [];
   const seen = new Set();
   const dateRegex = /\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b/;
   const timeRegex = /\b\d{1,2}:\d{2}(?::\d{2})?\b/;
+  const canonical = {
+    title: String(titleHint || '').trim() || undefined,
+    author: undefined,
+    createdAt: undefined,
+    modifiedAt: undefined
+  };
+  const metadataSources = {
+    title: canonical.title ? 'hint' : undefined,
+    author: undefined,
+    createdAt: undefined,
+    modifiedAt: undefined
+  };
+  const conflicts = [];
 
   for (const line of lines) {
-    if (!line) continue;
+    const lineText = String(line || '').trim();
+    if (!lineText) continue;
+
+    const keyValueMatch = lineText.match(/^([^:\-]{2,40})\s*[:\-]\s*(.+)$/);
+    if (keyValueMatch) {
+      const [, rawLabel, rawValue] = keyValueMatch;
+      const canonicalKey = toCanonicalMetadataKey(rawLabel);
+      if (canonicalKey) {
+        setCanonicalMetadataValue(canonical, metadataSources, conflicts, canonicalKey, rawValue, 'line-key-value');
+      }
+    }
+
+    if (!canonical.createdAt && dateRegex.test(lineText) && timeRegex.test(lineText)) {
+      setCanonicalMetadataValue(canonical, metadataSources, conflicts, 'createdAt', lineText, 'line-heuristic');
+    }
+
+    if (!canonical.modifiedAt && /modified|updated/i.test(lineText) && dateRegex.test(lineText)) {
+      setCanonicalMetadataValue(canonical, metadataSources, conflicts, 'modifiedAt', lineText, 'line-heuristic');
+    }
+
     if (dateRegex.test(line) && !seen.has(`date:${line}`)) {
       items.push({ label: 'Detected date', value: line });
       seen.add(`date:${line}`);
@@ -530,7 +856,32 @@ function extractDetectedMetadata(lines) {
     if (items.length >= 6) break;
   }
 
-  return items;
+  if (canonical.author && !seen.has(`author:${canonical.author}`)) {
+    items.unshift({ label: 'Author', value: canonical.author });
+    seen.add(`author:${canonical.author}`);
+  }
+
+  if (canonical.modifiedAt && !seen.has(`modified:${canonical.modifiedAt}`)) {
+    items.unshift({ label: 'Modified', value: canonical.modifiedAt });
+    seen.add(`modified:${canonical.modifiedAt}`);
+  }
+
+  if (canonical.createdAt && !seen.has(`created:${canonical.createdAt}`)) {
+    items.unshift({ label: 'Created', value: canonical.createdAt });
+    seen.add(`created:${canonical.createdAt}`);
+  }
+
+  if (canonical.title && !seen.has(`title:${canonical.title}`)) {
+    items.unshift({ label: 'Title', value: canonical.title });
+    seen.add(`title:${canonical.title}`);
+  }
+
+  return {
+    canonical,
+    sources: metadataSources,
+    items: items.slice(0, 8),
+    conflicts
+  };
 }
 
 function uint8ArrayToBase64(bytes) {
@@ -587,32 +938,98 @@ function findGifEnd(bytes, start) {
   return -1;
 }
 
-function extractEmbeddedImages(bytes, options = {}) {
-  const maxImages = typeof options.maxImages === 'number' ? options.maxImages : 6;
-  const maxBytesPerImage = typeof options.maxBytesPerImage === 'number' ? options.maxBytesPerImage : 400000;
-  const images = [];
+function findPdfEnd(bytes, start) {
+  const marker = [0x25, 0x25, 0x45, 0x4F, 0x46]; // %%EOF
+  for (let i = start + 8; i <= bytes.length - marker.length; i += 1) {
+    let match = true;
+    for (let j = 0; j < marker.length; j += 1) {
+      if (bytes[i + j] !== marker[j]) {
+        match = false;
+        break;
+      }
+    }
+    if (match) {
+      return Math.min(bytes.length, i + marker.length + 2);
+    }
+  }
+  return -1;
+}
 
-  const addImage = (kind, start, end) => {
-    if (images.length >= maxImages) return;
+function findZipEnd(bytes, start) {
+  for (let i = start + 4; i <= bytes.length - 22; i += 1) {
+    const isEocd =
+      bytes[i] === 0x50 &&
+      bytes[i + 1] === 0x4B &&
+      bytes[i + 2] === 0x05 &&
+      bytes[i + 3] === 0x06;
+
+    if (!isEocd) continue;
+    const commentLength = bytes[i + 20] | (bytes[i + 21] << 8);
+    const end = i + 22 + commentLength;
+    if (end <= bytes.length) {
+      return end;
+    }
+  }
+  return -1;
+}
+
+function extractObjectPlaceholderHints(records = []) {
+  const hints = [];
+  const seen = new Set();
+  const fileNameRegex = /\b[^<>:"/\\|?*\s]+\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|txt|csv|rtf)\b/i;
+
+  for (const record of records) {
+    const value = String(record && record.value ? record.value : '').trim();
+    if (!value) continue;
+
+    const hasPlaceholderSignal = /(attachment|embedded file|embedded object|object|ole|package|icon)/i.test(value);
+    const fileNameMatch = value.match(fileNameRegex);
+
+    if (!hasPlaceholderSignal && !fileNameMatch) continue;
+
+    const normalized = value.replace(/\s+/g, ' ').trim();
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    hints.push(normalized);
+    if (hints.length >= 10) break;
+  }
+
+  return hints;
+}
+
+function extractEmbeddedResources(bytes, options = {}) {
+  const maxResources = typeof options.maxResources === 'number' ? options.maxResources : 12;
+  const maxBytesPerResource = typeof options.maxBytesPerResource === 'number' ? options.maxBytesPerResource : 600000;
+  const resources = [];
+  const seenRanges = new Set();
+
+  const addResource = (kind, extension, mimeType, start, end) => {
+    if (resources.length >= maxResources) return;
     if (start < 0 || end <= start || end > bytes.length) return;
 
     const length = end - start;
-    if (length < 64 || length > maxBytesPerImage) return;
+    if (length < 64 || length > maxBytesPerResource) return;
+
+    const rangeKey = `${start}:${end}`;
+    if (seenRanges.has(rangeKey)) return;
+    seenRanges.add(rangeKey);
 
     const blob = bytes.slice(start, end);
-    const mimeType = kind === 'png'
-      ? 'image/png'
-      : (kind === 'jpeg' ? 'image/jpeg' : 'image/gif');
+    const index = resources.length + 1;
+    const fileName = `${kind}-${String(index).padStart(2, '0')}.${extension}`;
 
-    images.push({
+    resources.push({
       kind,
+      extension,
+      fileName,
       mimeType,
       size: length,
-      dataUri: `data:${mimeType};base64,${uint8ArrayToBase64(blob)}`
+      bytes: blob,
+      dataUri: mimeType.startsWith('image/') ? `data:${mimeType};base64,${uint8ArrayToBase64(blob)}` : null
     });
   };
 
-  for (let index = 0; index < bytes.length && images.length < maxImages; index += 1) {
+  for (let index = 0; index < bytes.length && resources.length < maxResources; index += 1) {
     if (
       bytes[index] === 0x89 &&
       bytes[index + 1] === 0x50 &&
@@ -625,7 +1042,7 @@ function extractEmbeddedImages(bytes, options = {}) {
     ) {
       const end = findPngEnd(bytes, index);
       if (end > 0) {
-        addImage('png', index, end);
+        addResource('image', 'png', 'image/png', index, end);
         index = end - 1;
       }
       continue;
@@ -634,7 +1051,7 @@ function extractEmbeddedImages(bytes, options = {}) {
     if (bytes[index] === 0xFF && bytes[index + 1] === 0xD8) {
       const end = findJpegEnd(bytes, index);
       if (end > 0) {
-        addImage('jpeg', index, end);
+        addResource('image', 'jpg', 'image/jpeg', index, end);
         index = end - 1;
       }
       continue;
@@ -651,36 +1068,81 @@ function extractEmbeddedImages(bytes, options = {}) {
     if (hasGifHeader) {
       const end = findGifEnd(bytes, index);
       if (end > 0) {
-        addImage('gif', index, end);
+        addResource('image', 'gif', 'image/gif', index, end);
+        index = end - 1;
+      }
+      continue;
+    }
+
+    const hasPdfHeader =
+      bytes[index] === 0x25 &&
+      bytes[index + 1] === 0x50 &&
+      bytes[index + 2] === 0x44 &&
+      bytes[index + 3] === 0x46;
+
+    if (hasPdfHeader) {
+      const end = findPdfEnd(bytes, index);
+      if (end > 0) {
+        addResource('attachment', 'pdf', 'application/pdf', index, end);
+        index = end - 1;
+      }
+      continue;
+    }
+
+    const hasZipHeader =
+      bytes[index] === 0x50 &&
+      bytes[index + 1] === 0x4B &&
+      bytes[index + 2] === 0x03 &&
+      bytes[index + 3] === 0x04;
+
+    if (hasZipHeader) {
+      const end = findZipEnd(bytes, index);
+      if (end > 0) {
+        addResource('attachment', 'zip', 'application/zip', index, end);
         index = end - 1;
       }
     }
   }
 
-  return images;
+  return resources;
 }
 
-function buildPageHtml(title, previewLines, embeddedImages = []) {
-  const titleEscaped = escapeHtml(title || 'Untitled Page');
-  const lines = Array.isArray(previewLines) && previewLines.length > 0
-    ? previewLines
+function buildPageHtml(pageModelOrTitle, previewLines, mediaResources = [], attachmentResources = [], placeholderHints = []) {
+  const pageModel = (pageModelOrTitle && typeof pageModelOrTitle === 'object' && !Array.isArray(pageModelOrTitle))
+    ? pageModelOrTitle
+    : {
+      title: pageModelOrTitle,
+      lines: Array.isArray(previewLines) ? previewLines : []
+    };
+
+  const titleEscaped = escapeHtml(pageModel.title || 'Untitled Page');
+  const lines = Array.isArray(pageModel.lines) && pageModel.lines.length > 0
+    ? pageModel.lines
     : ['No page text preview could be extracted from this native section content in the current heuristic pass.'];
 
-  const blocks = buildStructuredBlocks(lines);
+  const blocks = Array.isArray(pageModel.blocks) ? pageModel.blocks : buildStructuredBlocks(lines);
   const contentHtml = renderStructuredBlocks(blocks);
-  const metadataItems = extractDetectedMetadata(lines);
+  const metadataItems = Array.isArray(pageModel.metadataItems) ? pageModel.metadataItems : extractDetectedMetadata(lines);
   const metadataHtml = metadataItems.length > 0
     ? `<section><h2>Detected metadata</h2><dl>${metadataItems.map((item) => `<dt>${escapeHtml(item.label)}</dt><dd>${escapeHtml(item.value)}</dd>`).join('')}</dl></section>`
     : '';
 
-  const mediaHtml = Array.isArray(embeddedImages) && embeddedImages.length > 0
-    ? `<section><h2>Detected embedded media</h2>${embeddedImages.map((image, index) => `<figure><img src="${image.dataUri}" alt="Embedded media ${index + 1}" /><figcaption>${escapeHtml(image.kind.toUpperCase())} · ${escapeHtml(String(image.size))} bytes</figcaption></figure>`).join('')}</section>`
+  const mediaHtml = Array.isArray(mediaResources) && mediaResources.length > 0
+    ? `<section><h2>Detected embedded media</h2>${mediaResources.map((resource, index) => `<figure><img src="${escapeHtml(resource.relativePath || resource.dataUri || '')}" alt="Embedded media ${index + 1}" /><figcaption>${escapeHtml(String(resource.fileName || 'image'))} · ${escapeHtml(String(resource.size))} bytes</figcaption></figure>`).join('')}</section>`
+    : '';
+
+  const attachmentsHtml = Array.isArray(attachmentResources) && attachmentResources.length > 0
+    ? `<section><h2>Detected attachments</h2><ul>${attachmentResources.map((resource) => `<li><a href="${escapeHtml(resource.relativePath || '#')}" download>${escapeHtml(resource.fileName || 'attachment')}</a> <small>(${escapeHtml(String(resource.size))} bytes)</small></li>`).join('')}</ul></section>`
+    : '';
+
+  const placeholdersHtml = Array.isArray(placeholderHints) && placeholderHints.length > 0
+    ? `<section><h2>Detected object placeholders</h2><ul>${placeholderHints.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section>`
     : '';
 
   const fallbackList = lines.map((line) => `<li>${escapeHtml(line)}</li>`).join('');
   const bodyContent = contentHtml || `<ul>${fallbackList}</ul>`;
 
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${titleEscaped}</title></head><body><main><h1>${titleEscaped}</h1><p>Converted from native OneNote section with heuristic extraction.</p><h2>Extracted content</h2>${bodyContent}${metadataHtml}${mediaHtml}</main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${titleEscaped}</title></head><body><main><h1>${titleEscaped}</h1><p>Converted from native OneNote section with heuristic extraction.</p><h2>Extracted content</h2>${bodyContent}${metadataHtml}${mediaHtml}${attachmentsHtml}${placeholdersHtml}</main></body></html>`;
 }
 
 export function importOneSection(arrayBuffer, options = {}) {
@@ -697,36 +1159,62 @@ export function importOneSection(arrayBuffer, options = {}) {
   const sectionFolder = toFolderSafeName(sectionName);
   const extractedRecords = extractWideStringRecords(bytes);
   const extractedUtf8Records = extractUtf8StringRecords(bytes);
-  const embeddedImages = extractEmbeddedImages(bytes, { maxImages: 6, maxBytesPerImage: 400000 });
+  const embeddedResources = extractEmbeddedResources(bytes, { maxResources: 12, maxBytesPerResource: 600000 });
+  const mediaResources = embeddedResources.filter((item) => item.kind === 'image');
+  const attachmentResources = embeddedResources.filter((item) => item.kind === 'attachment');
+  const placeholderHints = extractObjectPlaceholderHints([...extractedRecords, ...extractedUtf8Records]);
+  const mappedResources = embeddedResources.map((resource) => ({
+    ...resource,
+    path: `${sectionFolder}/_resources/${resource.fileName}`,
+    relativePath: `_resources/${resource.fileName}`
+  }));
   const pageDescriptors = extractPageDescriptors(extractedRecords);
   const blockedValues = new Set(pageDescriptors.map((item) => item.title));
-  const fallbackPreviewLines = mergeUniqueLines(
-    extractPreviewLines(extractedRecords, blockedValues),
-    extractPreviewLines(extractedUtf8Records, blockedValues),
-    24
+  const semanticPages = buildSemanticPageModels(
+    extractedRecords,
+    extractedUtf8Records,
+    pageDescriptors,
+    blockedValues,
+    bytes.length
   );
 
-  const pages = pageDescriptors.map((descriptor, index) => {
-    const nextDescriptor = pageDescriptors[index + 1] || null;
-    const title = descriptor.title || `Page ${index + 1}`;
+  const pages = semanticPages.models.map((pageModel) => {
+    const title = pageModel.title || 'Page';
     const safeTitle = toFolderSafeName(title);
 
-    const wideLines = extractPreviewLinesForPage(extractedRecords, descriptor, nextDescriptor, fallbackPreviewLines, blockedValues, 24);
-    const currentRecord = descriptor.titleIndex >= 0 ? extractedRecords[descriptor.titleIndex] : extractedRecords[descriptor.markerIndex];
-    const nextRecord = nextDescriptor
-      ? (nextDescriptor.titleIndex >= 0 ? extractedRecords[nextDescriptor.titleIndex] : extractedRecords[nextDescriptor.markerIndex])
-      : null;
-    const rangeStart = currentRecord ? currentRecord.startOffset : 0;
-    const rangeEnd = nextRecord ? nextRecord.startOffset : bytes.length;
-    const utf8Lines = extractPreviewLinesFromRange(extractedUtf8Records, rangeStart, rangeEnd, blockedValues, 24);
-    const previewLines = mergeUniqueLines(wideLines, utf8Lines, 24);
+    const pageMediaResources = mediaResources.map((resource) => ({
+      ...resource,
+      relativePath: `_resources/${resource.fileName}`
+    }));
+    const pageAttachmentResources = attachmentResources.map((resource) => ({
+      ...resource,
+      relativePath: `_resources/${resource.fileName}`
+    }));
 
     return {
       name: title,
       path: `${sectionFolder}/${safeTitle}.html`,
-      html: buildPageHtml(title, previewLines, embeddedImages)
+      html: buildPageHtml(pageModel, null, pageMediaResources, pageAttachmentResources, placeholderHints),
+      metadata: pageModel.metadata || {
+        title,
+        author: undefined,
+        createdAt: undefined,
+        modifiedAt: undefined
+      },
+      resources: mappedResources
     };
   });
+
+  const metadataConflictCount = semanticPages.models.reduce(
+    (total, pageModel) => total + (Array.isArray(pageModel.metadataConflicts) ? pageModel.metadataConflicts.length : 0),
+    0
+  );
+  const metadataPriorityReplacementCount = semanticPages.models.reduce(
+    (total, pageModel) => total + (Array.isArray(pageModel.metadataConflicts)
+      ? pageModel.metadataConflicts.filter((item) => item && item.resolution === 'replaced-by-priority').length
+      : 0),
+    0
+  );
 
   const hierarchyChildren = pages.map((page) => ({
     kind: 'page',
@@ -734,6 +1222,15 @@ export function importOneSection(arrayBuffer, options = {}) {
     path: page.path,
     children: []
   }));
+
+  const warningDetails = [
+    makeWarning(WARNING_CODES.one.signatureValidated, 'Section file signature validated.'),
+    makeWarning(WARNING_CODES.one.structuredModelsSummary, `Structured parser generated ${pages.length} page model(s) from ${pageDescriptors.length} title descriptor(s).`),
+    makeWarning(WARNING_CODES.one.fallbackSemanticSummary, `Fallback semantic line pool size: ${semanticPages.fallbackPoolSize}; filtered out ${semanticPages.filteredOutCount} low-confidence line(s); fallback used on ${semanticPages.fallbackPageCount} page(s).`),
+    makeWarning(WARNING_CODES.one.metadataCanonicalizationSummary, `Metadata canonicalization produced ${pages.length} page metadata object(s) with ${metadataConflictCount} conflict(s); ${metadataPriorityReplacementCount} replaced via source-priority rules.`),
+    makeWarning(WARNING_CODES.one.embeddedResourceScanSummary, `Detected ${mediaResources.length} embedded image candidate(s) and ${attachmentResources.length} attachment candidate(s) via binary signature scan.`),
+    makeWarning(WARNING_CODES.one.placeholderHintsSummary, `Detected ${placeholderHints.length} object-placeholder hint(s) from native text records.`)
+  ];
 
   return {
     sourceKind: 'one',
@@ -744,10 +1241,7 @@ export function importOneSection(arrayBuffer, options = {}) {
       children: hierarchyChildren
     },
     pages,
-    warnings: [
-      'Section file signature validated.',
-      `Extracted ${pages.length} page title(s) and page-specific text previews using native metadata heuristics.`,
-      `Detected ${embeddedImages.length} embedded image candidate(s) via binary signature scan.`
-    ]
+    warningDetails,
+    warnings: toWarningMessages(warningDetails)
   };
 }

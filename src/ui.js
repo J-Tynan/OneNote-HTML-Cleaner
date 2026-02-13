@@ -3,6 +3,7 @@
 // Includes BOM on downloads and diagnostic logging to help track MHT -> HTML issues.
 
 import { detectSourceKind, baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
+import { WARNING_CODES } from './importers/warnings.js';
 
 export function initUI(workerManager) {
   const fileInput = document.getElementById('fileInput');
@@ -25,11 +26,44 @@ export function initUI(workerManager) {
 
     const zip = new JSZip();
     const pages = Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [];
+    const writtenResources = new Set();
 
     for (const page of pages) {
       if (!page || !page.path) continue;
       const html = page.html || '';
       zip.file(page.path, '\uFEFF' + html);
+
+      const metadata = page && typeof page.metadata === 'object' ? page.metadata : null;
+      if (metadata) {
+        const metadataPath = page.path.endsWith('.html')
+          ? page.path.replace(/\.html$/i, '.metadata.json')
+          : `${page.path}.metadata.json`;
+
+        const metadataPayload = {
+          name: page.name || null,
+          path: page.path,
+          metadata
+        };
+
+        zip.file(metadataPath, `${JSON.stringify(metadataPayload, null, 2)}\n`);
+      }
+
+      const resources = Array.isArray(page.resources) ? page.resources : [];
+      for (const resource of resources) {
+        if (!resource || !resource.path || writtenResources.has(resource.path)) continue;
+
+        const rawBytes = resource.bytes;
+        let payload = null;
+        if (rawBytes instanceof Uint8Array) {
+          payload = rawBytes;
+        } else if (rawBytes instanceof ArrayBuffer) {
+          payload = new Uint8Array(rawBytes);
+        }
+
+        if (!payload || payload.length === 0) continue;
+        zip.file(resource.path, payload, { binary: true });
+        writtenResources.add(resource.path);
+      }
     }
 
     if (pages.length === 0) {
@@ -96,13 +130,29 @@ export function initUI(workerManager) {
     const sourceLabel = nativeResult && nativeResult.sourceKind ? nativeResult.sourceKind.toUpperCase() : 'NATIVE';
     const pages = Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [];
     const warnings = Array.isArray(nativeResult && nativeResult.warnings) ? nativeResult.warnings : [];
-    const hasFallback = warnings.some((item) => /placeholder|unsupported compression|cannot be decoded in-browser/i.test(String(item || '')));
+    const warningDetails = Array.isArray(nativeResult && nativeResult.warningDetails) ? nativeResult.warningDetails : [];
+    const warningCodes = new Set(
+      warningDetails
+        .map((item) => (item && item.code ? String(item.code) : ''))
+        .filter((item) => item.length > 0)
+    );
+
+    const hasFallbackCode = warningCodes.has(WARNING_CODES.onepkg.unsupportedCompressionPlaceholders)
+      || warningCodes.has(WARNING_CODES.onepkg.unsupportedCompressionWithFallback)
+      || warningCodes.has(WARNING_CODES.onepkg.noFolderDecode);
+    const hasFallbackRegex = warnings.some((item) => /placeholder|unsupported compression|cannot be decoded in-browser/i.test(String(item || '')));
+    const hasFallback = hasFallbackCode || hasFallbackRegex;
     const extractionLabel = hasFallback ? 'parsed with fallbacks' : 'parsed';
     info.textContent = `${sourceLabel}: ${extractionLabel}. Pages discovered: ${pages.length}`;
     li.appendChild(info);
 
     const isOnePkgCompressedFallback = (nativeResult && nativeResult.sourceKind === 'onepkg')
-      && warnings.some((item) => /unsupported compression|lzx/i.test(String(item || '')));
+      && (
+        warningCodes.has(WARNING_CODES.onepkg.unsupportedCompressionPlaceholders)
+        || warningCodes.has(WARNING_CODES.onepkg.unsupportedCompressionWithFallback)
+        || warningCodes.has(WARNING_CODES.onepkg.lzxDecoderHint)
+        || warnings.some((item) => /unsupported compression|lzx/i.test(String(item || '')))
+      );
 
     if (isOnePkgCompressedFallback) {
       const helper = document.createElement('details');

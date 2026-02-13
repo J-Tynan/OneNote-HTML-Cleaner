@@ -84,11 +84,16 @@ Legacy flags remain supported and can override profile defaults.
     "pages": [
       { "name": "string", "path": "string", "html": "string" }
     ],
+    "warningDetails": [
+      { "code": "string", "severity": "info|warning|error", "message": "string" }
+    ],
     "warnings": ["string"]
   },
   "logs": []
 }
 ```
+
+`warningDetails` is optional and additive; `warnings` remains the backward-compatible string array used by existing UI flows and tests.
 
 Phase-1 implementation validates native signatures and returns hierarchy plus generated downloadable pages (heuristic for `.one`). For `.onepkg`, the importer parses CAB metadata, attempts section-byte extraction for uncompressed folders, and falls back to placeholders for compressed folders (for example `lzx`). Full page-content extraction for compressed section payloads is staged next.
 ---

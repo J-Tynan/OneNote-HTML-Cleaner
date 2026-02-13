@@ -50,7 +50,9 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 - `.one` processing currently:
 	- Validates native section signature.
 	- Extracts page-title candidates using metadata/string heuristics.
+	- Canonicalizes page metadata fields (`title`, `author`, `createdAt`, `modifiedAt`) when detectable.
 	- Builds per-page HTML placeholders for individual downloads.
+	- Emits per-page metadata sidecars (`*.metadata.json`) in ZIP exports.
 	- Supports per-file ZIP export that preserves section/page hierarchy.
 - `.onepkg` processing currently:
 	- Validates CAB container signature (`MSCF`).

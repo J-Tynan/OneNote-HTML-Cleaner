@@ -26,3 +26,21 @@ assets/wasm/
 # local editor / debug artifacts
 .vscode/
 
+# IDE/editor project files
+.idea/
+.vs/
+*.suo
+*.user
+*.sln
+
+# OS files
+Thumbs.db
+desktop.ini
+
+# Generated test outputs / temporary files
+Tests/Cleaned/
+*.log
+.history/
+.pytest_cache/
+
+
