@@ -18,3 +18,11 @@ pnpm-debug.log*
 
 # Ignore all files in any directory named Tests
 # (removed - keep `Tests` in repo so fixtures and smoke tests are versioned)
+
+# Vendor and build artifacts created by the libmspack wasm build
+.vendor/
+assets/wasm/
+.tmp-*
+# local editor / debug artifacts
+.vscode/
+

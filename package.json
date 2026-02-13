@@ -5,7 +5,11 @@
   "scripts": {
     "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --minify",
     "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --watch",
-    "test:smoke:native": "node ./Tests/smoke-native.js"
+    "test:smoke:native": "node ./Tests/smoke-native.js",
+    "build:libmspack:wasm": "powershell -ExecutionPolicy Bypass -File ./tools/Build-LibmspackWasm.ps1",
+    "build:libmspack:wasm:wsl": "powershell -ExecutionPolicy Bypass -File ./tools/Build-LibmspackWasm-WSL.ps1",
+    "build:libmspack:wasm:wsl:check": "powershell -ExecutionPolicy Bypass -File ./tools/Build-LibmspackWasm-WSL.ps1 -CheckOnly",
+    "build:libmspack:wasm:smoke": "npm run build:libmspack:wasm && node ./tools/check-libmspack-wasm.js"
   },
   "dependencies": {
     "fflate": "^0.8.2",

@@ -70,6 +70,42 @@ powershell -ExecutionPolicy Bypass -File .\tools\Extract-OnePkg.ps1 -InputPath .
 
 The script writes an `*.extracted` folder (or your custom output path) with section files (`*.one`). You can then import those `.one` files into this app for richer conversion.
 
+### Build `libmspack` WASM artifact (optional)
+
+If you want to experiment with a dedicated CAB/LZX decoder path, you can build a reproducible `libmspack` WASM module:
+
+```powershell
+npm run build:libmspack:wasm
+```
+
+On Windows, this command now auto-falls back to the WSL build runner when native `bash`/`make` are not available.
+
+Or run fully inside WSL from PowerShell (recommended on Windows):
+
+```powershell
+npm run build:libmspack:wasm:wsl
+```
+
+Notes:
+
+- Requires Emscripten SDK (`emcc`) installed locally.
+- Requires POSIX build tools (`bash` + `make`) because `libmspack` uses autotools.
+- WSL variant requirements are checked with:
+
+```powershell
+npm run build:libmspack:wasm:wsl:check
+```
+
+- If `emcc` is not globally available in your shell, pass the SDK location directly:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\Build-LibmspackWasm.ps1 -EmsdkPath C:\emsdk
+```
+
+- Output artifacts are written to `assets/wasm/` as:
+	- `libmspack-core.js`
+	- `libmspack-core.wasm`
+
 This phase establishes native file routing, hierarchy handling, and section-level native downloads. Full fidelity page-content extraction for native formats is still in progress.
 
 ## Refactor Goals

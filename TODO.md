@@ -24,6 +24,7 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## `.onepkg` deep extraction
 - [x] Add proper in-app decode path for compressed CAB folders (LZX/MSZIP) — implemented a libarchive.js WASM fallback for LZX and MSZIP; next: optional native LZX WASM decoder integration.
+- [x] Add reproducible `libmspack` WASM build tooling for Windows + WSL (`npm run build:libmspack:wasm`, `:wsl`, and `:wsl:check`) with automatic WSL fallback when native POSIX tools are unavailable.
 - [ ] Expand section extraction to parse full page trees from extracted `.one` binaries, including nested groups/sections/pages. (in progress — folder/cab parsing added; deeper extraction ongoing)
 - [x] Keep browser fallback UX for unsupported compression, but include clearer post-extract import guidance and verification steps. (helper panel + PowerShell command added)
 
