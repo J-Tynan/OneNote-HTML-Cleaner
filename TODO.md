@@ -5,11 +5,17 @@ All project TODO items are tracked here. Please do not leave TODO comments in so
 This file was merged with `TODOs.md` to keep a single canonical task list for the project.
 
 ## Current focus (PWA first)
-- [ ] Keep scope centered on browser-first parsing + conversion of OneNote formats to clean modern HTML.
+- [ ] Keep scope centered on browser-first parsing + conversion of MHTML to clean modern HTML.
 - [ ] Prioritize extraction fidelity and HTML structure before UI polish/advanced features.
 - [ ] Treat optional native helper tooling (WASM/CLI) as support work, not the main product surface.
+- [ ] Explicitly defer `.one` and `.onepkg` structural parsing to a later milestone so the first stable release ships on the reliable MHTML path.
 
-## Next milestone (ordered)
+## Next milestone (MHTML release)
+1. Harden the MHTML-to-HTML pipeline against fixtures and metadata scenarios so outputs match modern semantic HTML expectations.
+2. Expand targeted fixture tests for MHTML edge cases (tables, lists, whitespace, inline resources) and cross-browser smoke checks.
+3. Verify existing toolbar/config behavior remains stable for the MHTML flow and document the acceptance gate for this release.
+
+## Future native import milestone (post-stable)
 1. Structured `.one` parser (replace heuristic text scraping with semantic block parsing).
 2. Embedded resource mapping (images/attachments/object placeholders) with reliable HTML links.
 3. Structured warning diagnostics (Option C): emit warning codes + backward-compatible warning strings for native import flows. (completed)
@@ -23,7 +29,7 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [ ] Re-design UI to look professional and accessible.
 
 ## Conversion / Features
-- [ ] Implement optional injected output toolbar in exported HTML. (spec locked: self-contained inline bundle; initial scope includes edit + metadata toggles on day one; execution split between high-leverage work and Raptor Mini grunt tasks)
+- [x] Implement optional single injected output toolbar in exported HTML with multiple advanced feature toggles. (spec locked: self-contained inline bundle; initial scope includes edit + metadata toggles on day one; execution split between high-leverage work and Raptor Mini grunt tasks)
 - [x] Process entire notebooks to hierarchical folder ZIPs. (implemented: hierarchy + per-page downloads + ZIP export)
 - [x] Run browser validation / smoke tests.
 
@@ -34,36 +40,36 @@ Delivery mode for this feature is now explicitly split:
 - Mechanical coding, wiring, fixtures, and repetitive test/docs tasks delegated to `Raptor Mini`.
 
 ### Phase 0 — Spec lock (before coding)
-- [ ] [HIGH-LEVERAGE] Finalize toolbar DOM contract: single namespaced container id, insertion point, reserved spacing behavior, no-overlap guarantee.
-- [ ] [HIGH-LEVERAGE] Finalize interaction contract for day-one scope:
+- [x] [HIGH-LEVERAGE] Finalize toolbar DOM contract: single namespaced container id, insertion point, reserved spacing behavior, no-overlap guarantee.
+- [x] [HIGH-LEVERAGE] Finalize interaction contract for day-one scope:
 	- Edit mode toggle (text-focused and reversible)
 	- Metadata panel toggle
 	- Close/hide behavior
-- [ ] [HIGH-LEVERAGE] Define deterministic idempotency rule (re-processing cannot duplicate toolbar markup).
-- [ ] [RAPTOR MINI] Mirror decisions in docs (`docs/Toolbar idea.md`, `docs/Contracts.md`, README note).
+- [x] [HIGH-LEVERAGE] Define deterministic idempotency rule (re-processing cannot duplicate toolbar markup).
+- [x] [RAPTOR MINI] Mirror decisions in docs (`docs/Toolbar idea.md`, `docs/Contracts.md`, README note).
 
 ### Phase 1 — Config + wiring (default OFF)
-- [ ] [HIGH-LEVERAGE] Define canonical config shape + defaults for toolbar options in pipeline config normalization.
-- [ ] [RAPTOR MINI] Add UI controls for:
+- [x] [HIGH-LEVERAGE] Define canonical config shape + defaults for toolbar options in pipeline config normalization.
+- [x] [RAPTOR MINI] Add UI controls for the single advanced toolbar:
 	- Enable toolbar injection
 	- Enable edit mode toggle feature
 	- Enable metadata panel toggle feature
-- [ ] [RAPTOR MINI] Wire config through `src/ui.js` → worker payloads for both processing flows (`process-file`, `process-native-file`).
-- [ ] [RAPTOR MINI] Ensure default OFF keeps existing output parity and existing fixtures stable.
+- [x] [RAPTOR MINI] Wire config through `src/ui.js` → worker payloads for both processing flows (`process-file`, `process-native-file`).
+- [x] [RAPTOR MINI] Ensure default OFF keeps existing output parity and existing fixtures stable.
 
 ### Phase 2 — Implementation (single injector, reused everywhere)
-- [ ] [HIGH-LEVERAGE] Implement one shared, self-contained inline toolbar injector module (inline CSS + inline JS; no external asset dependency).
-- [ ] [RAPTOR MINI] Integrate injector into pipeline output path.
-- [ ] [HIGH-LEVERAGE] Integrate injector into native `.one` output path with minimal template duplication.
-- [ ] [RAPTOR MINI] Integrate injector into native `.onepkg` paths (placeholder + extracted pages) using same injector entrypoint.
-- [ ] [RAPTOR MINI] Add guard checks for single-instance injection.
+- [x] [HIGH-LEVERAGE] Implement one shared, self-contained inline toolbar injector module (inline CSS + inline JS; no external asset dependency).
+- [x] [RAPTOR MINI] Integrate injector into pipeline output path.
+- [x] [HIGH-LEVERAGE] Integrate injector into native `.one` output path with minimal template duplication.
+- [x] [RAPTOR MINI] Integrate injector into native `.onepkg` paths (placeholder + extracted pages) using same injector entrypoint.
+- [x] [RAPTOR MINI] Add guard checks for single-instance injection.
 
 ### Phase 3 — Feature behavior hardening (day-one scope)
-- [ ] [HIGH-LEVERAGE] Finalize edit-mode boundaries (what is editable vs protected semantic scaffolding).
-- [ ] [RAPTOR MINI] Implement edit-mode toggling and state class hooks per spec.
-- [ ] [HIGH-LEVERAGE] Finalize metadata panel content schema (source names, profile, timestamp, parser diagnostics summary).
-- [ ] [RAPTOR MINI] Implement metadata panel rendering/toggling with accessible labels and keyboard focus order.
-- [ ] [RAPTOR MINI] Implement close/hide behavior and ensure reversibility.
+- [x] [HIGH-LEVERAGE] Finalize edit-mode boundaries (what is editable vs protected semantic scaffolding).
+- [x] [RAPTOR MINI] Implement edit-mode toggling and state class hooks per spec.
+- [x] [HIGH-LEVERAGE] Finalize metadata panel content schema (source names, profile, timestamp, parser diagnostics summary).
+- [x] [RAPTOR MINI] Implement metadata panel rendering/toggling with accessible labels and keyboard focus order.
+- [x] [RAPTOR MINI] Implement close/hide behavior and ensure reversibility.
 
 ### Phase 4 — Validation + release gating
 - [ ] [HIGH-LEVERAGE] Define acceptance matrix:

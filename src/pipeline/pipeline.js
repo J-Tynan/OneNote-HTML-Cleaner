@@ -8,6 +8,7 @@ import { mergeCreatedDateTimeRow } from './dateTimeLayout.js';
 import { migrateInlineStylesToUtilities } from './inlineStyleMigration.js';
 import * as images from './images.js';
 import * as format from './format.js';
+import { injectOutputToolbar, summarizeWarningsBySeverity } from './toolbarInjector.js';
 
 /**
  * runPipeline(htmlString, config)
@@ -90,15 +91,31 @@ export async function runPipeline(htmlString, config = {}) {
     const serialized = documentToHtml(doc);
     const normalized = format.normalizeWhitespace(serialized);
 
+    const warningSummary = summarizeWarningsBySeverity(
+      logs.filter((item) => item && (item.level === 'warn' || item.level === 'warning' || item.level === 'error'))
+        .map((item) => ({ severity: item.level === 'warn' ? 'warning' : item.level }))
+    );
+
+    const withToolbar = injectOutputToolbar(normalized, {
+      ...resolvedConfig,
+      SourceName: resolvedConfig.SourceName || resolvedConfig.fileName || 'Converted file',
+      SourceKind: resolvedConfig.SourceKind || resolvedConfig.sourceKind || 'html',
+      WarningSummary: warningSummary
+    });
+
+    if (withToolbar !== normalized) {
+      logs.push({ step: 'injectToolbar', level: 'info', details: 'Injected single advanced toolbar (inline bundle).' });
+    }
+
     // Final sanity check: does output look like HTML?
-    const outPreview = (normalized || '').slice(0, 1000);
+    const outPreview = (withToolbar || '').slice(0, 1000);
     console.log('[pipeline] output preview:', outPreview.replace(/\r?\n/g, '\\n'));
     if (!/<!doctype|<html|<body/i.test(outPreview)) {
       console.warn('[pipeline] output does not look like HTML; investigate earlier steps');
       logs.push({ step: 'validateOutput', level: 'warn', details: 'output does not look like HTML' });
     }
 
-    return { output: normalized, logs };
+    return { output: withToolbar, logs };
   } catch (err) {
     console.error('[pipeline] unexpected error:', err);
     logs.push({ step: 'pipelineError', level: 'error', details: String(err) });

@@ -25,6 +25,10 @@
     "InlineStyleMigrationSelector": "[style]",
     "InjectTailwindCss": true,
     "TailwindCssHref": "assets/tailwind-output.css",
+    "ToolbarEnabled": false,
+    "ToolbarEditToggleEnabled": false,
+    "ToolbarMetadataToggleEnabled": false,
+    "ToolbarBundleMode": "inline",
     "imageMap": { "path": "data:...base64" }
   }
 }
@@ -40,7 +44,11 @@
   "sourceKind": "one|onepkg",
   "bytes": "ArrayBuffer",
   "config": {
-    "Profile": "cornell|generic"
+    "Profile": "cornell|generic",
+    "ToolbarEnabled": false,
+    "ToolbarEditToggleEnabled": false,
+    "ToolbarMetadataToggleEnabled": false,
+    "ToolbarBundleMode": "inline"
   }
 }
 ```
@@ -54,6 +62,11 @@
 - `generic`: conservative OneNote cleanup with Cornell-specific transforms disabled.
 
 Legacy flags remain supported and can override profile defaults.
+
+Toolbar flags are additive and optional:
+- default OFF in all flows
+- `ToolbarBundleMode` is currently `inline` only
+- when disabled, output must remain parity-equivalent to baseline conversion output
 ---
 ## Worker response (done)
 ```json
@@ -95,9 +108,15 @@ Legacy flags remain supported and can override profile defaults.
 
 `warningDetails` is optional and additive; `warnings` remains the backward-compatible string array used by existing UI flows and tests.
 
+Toolbar injection is optional and controlled by config; response shapes do not change when toolbar is enabled.
+
 Phase-1 implementation validates native signatures and returns hierarchy plus generated downloadable pages (heuristic for `.one`). For `.onepkg`, the importer parses CAB metadata, attempts section-byte extraction for uncompressed folders, and falls back to placeholders for compressed folders (for example `lzx`). Full page-content extraction for compressed section payloads is staged next.
 ---
 ## Progress message
 ```json
 { "id":"string", "status":"progress", "step":"Sanitize", "percent":40 }
 ```
+
+## Toolbar Phase 0 reference
+
+See `docs/Toolbar-Phase0-Spec.md` for the locked toolbar injection contract, idempotency rule, and day-one behavior boundaries.

@@ -4,9 +4,23 @@ This note captures post‑milestone ideas for advanced functionality to explore 
 
 ---
 
+## Phase 0 Lock (Current Implementation Contract)
+
+The toolbar feature now has a locked Phase 0 implementation contract in `docs/Toolbar-Phase0-Spec.md`.
+
+Locked decisions:
+- Injection model: self-contained inline bundle.
+- Default mode: OFF.
+- Single toolbar surface with day-one controls: Edit mode toggle, Metadata panel toggle, Close/hide control.
+- Idempotency: re-processing must not duplicate toolbar container/assets.
+
+This file remains the broader ideation document; implementation details and acceptance requirements now live in the dedicated Phase 0 spec.
+
+---
+
 ## 1. Injected Output Toolbar (Opt‑In)
 
-Introduce an optional toolbar injected into converted HTML output.
+Introduce one optional toolbar injected into converted HTML output, with multiple advanced feature toggles.
 
 ### Goals
 - Provide post‑conversion tooling without modifying the source pipeline.
@@ -15,6 +29,7 @@ Introduce an optional toolbar injected into converted HTML output.
 
 ### Design Notes
 - Inject a single, namespaced container (e.g. `#onenote-cleaner-toolbar`) at the top of `<body>`.
+- Keep all advanced controls in this single container rather than creating separate toolbars.
 - Use `position: sticky` or `position: fixed` with reserved layout space to avoid content overlap.
 - Bundle toolbar JS + CSS as a single module.
 - Enable via conversion flag or profile option.

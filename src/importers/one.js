@@ -1,5 +1,6 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
+import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';
 
 const ONE_SIGNATURE = [0xE4, 0x52, 0x5C, 0x7B, 0x8C, 0xD8, 0xA7, 0x4D, 0xAE, 0xB1, 0x53, 0x78, 0xD0, 0x29, 0x96, 0xD3];
 
@@ -1232,6 +1233,29 @@ export function importOneSection(arrayBuffer, options = {}) {
     makeWarning(WARNING_CODES.one.placeholderHintsSummary, `Detected ${placeholderHints.length} object-placeholder hint(s) from native text records.`)
   ];
 
+  const warningSummary = summarizeWarningsBySeverity(warningDetails);
+  const toolbarContext = {
+    ToolbarEnabled: options.ToolbarEnabled === true,
+    ToolbarEditToggleEnabled: options.ToolbarEditToggleEnabled === true,
+    ToolbarMetadataToggleEnabled: options.ToolbarMetadataToggleEnabled === true,
+    ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
+    SourceName: options.SourceName || options.fileName || sectionName,
+    SourceKind: options.SourceKind || 'one',
+    Profile: options.Profile || 'generic',
+    WarningSummary: warningSummary
+  };
+
+  const pagesWithToolbar = pages.map((page) => ({
+    ...page,
+    html: injectOutputToolbar(page.html, {
+      ...toolbarContext,
+      SourceName: page.path || toolbarContext.SourceName,
+      sourceName: page.name || toolbarContext.SourceName,
+      warningSummary: warningSummary,
+      metadata: page.metadata || null
+    })
+  }));
+
   return {
     sourceKind: 'one',
     hierarchy: {
@@ -1240,7 +1264,7 @@ export function importOneSection(arrayBuffer, options = {}) {
       path: `${sectionFolder}/`,
       children: hierarchyChildren
     },
-    pages,
+    pages: pagesWithToolbar,
     warningDetails,
     warnings: toWarningMessages(warningDetails)
   };

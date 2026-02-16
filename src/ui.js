@@ -10,6 +10,9 @@ export function initUI(workerManager) {
   const dropzone = document.getElementById('dropzone');
   const fileList = document.getElementById('fileList');
   const conversionProfile = document.getElementById('conversionProfile');
+  const toolbarEnabled = document.getElementById('toolbarEnabled');
+  const toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
+  const toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
   const filterFailures = document.getElementById('filterFailures');
   const collapseStatus = document.getElementById('collapseStatus');
   const downloadZipButton = document.getElementById('downloadZip');
@@ -347,7 +350,11 @@ export function initUI(workerManager) {
     const profile = conversionProfile ? conversionProfile.value : 'cornell';
     return {
       Profile: profile,
-      TailwindCssHref: 'assets/tailwind-output.css'
+      TailwindCssHref: 'assets/tailwind-output.css',
+      ToolbarEnabled: Boolean(toolbarEnabled && toolbarEnabled.checked),
+      ToolbarEditToggleEnabled: Boolean(toolbarEditToggleEnabled && toolbarEditToggleEnabled.checked),
+      ToolbarMetadataToggleEnabled: Boolean(toolbarMetadataToggleEnabled && toolbarMetadataToggleEnabled.checked),
+      ToolbarBundleMode: 'inline'
     };
   }
 

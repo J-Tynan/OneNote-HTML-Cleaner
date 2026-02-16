@@ -1,6 +1,7 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { importOneSection } from './one.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
+import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';
 import { inflateSync } from '../../node_modules/fflate/esm/browser.js';
 
 let libarchiveModulePromise = null;
@@ -419,7 +420,7 @@ function deriveSectionPages(notebookName, notebookFolder, entries) {
   return { pages, sectionDescriptors };
 }
 
-function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sectionName, sectionBytes) {
+function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sectionName, sectionBytes, options = {}) {
   const parts = splitPath(entryPath);
   const groupParts = parts.slice(0, -1).map((item) => stripExtension(item));
   const safeGroupParts = groupParts.map((item) => toFolderSafeName(item));
@@ -442,7 +443,16 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
     try {
       const sectionOffset = sectionBytes.byteOffset;
       const sectionArrayBuffer = sectionBytes.buffer.slice(sectionOffset, sectionOffset + sectionBytes.byteLength);
-      const sectionResult = importOneSection(sectionArrayBuffer, { fileName: `${sectionName}.one` });
+      const sectionResult = importOneSection(sectionArrayBuffer, {
+        fileName: `${sectionName}.one`,
+        ToolbarEnabled: options.ToolbarEnabled === true,
+        ToolbarEditToggleEnabled: options.ToolbarEditToggleEnabled === true,
+        ToolbarMetadataToggleEnabled: options.ToolbarMetadataToggleEnabled === true,
+        ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
+        SourceName: `${notebookName}/${entryPath}`,
+        SourceKind: 'onepkg',
+        Profile: options.Profile || 'generic'
+      });
       if (sectionResult && Array.isArray(sectionResult.pages) && sectionResult.pages.length > 0) {
         const mappedPages = sectionResult.pages.map((page) => {
           const safePageName = toFolderSafeName(page.name || 'Page');
@@ -513,7 +523,7 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
   };
 }
 
-async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed) {
+async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed, options = {}) {
   const { map: folderData, summary: folderDecodeSummary } = buildFolderDataMap(parsed.arrayBuffer, parsed.folders, {
     cbCFData: parsed.cbCFData,
     lzxDecoder: parsed.lzxDecoder
@@ -556,7 +566,7 @@ async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, pa
       }
     }
 
-    const sectionResult = buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sectionName, sectionBytes);
+    const sectionResult = buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sectionName, sectionBytes, options);
     pages.push(...sectionResult.pages);
     sectionDescriptors.push(sectionResult.descriptor);
     if (sectionResult.extractedFromSection) {
@@ -631,7 +641,7 @@ export async function importOnePackage(arrayBuffer, options = {}) {
     folderDecodeSummary,
     libarchiveExtractedSectionCount,
     libarchiveWarningDetails
-  } = await deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed);
+  } = await deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed, options);
 
   const hierarchy = buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors);
 
@@ -664,11 +674,26 @@ export async function importOnePackage(arrayBuffer, options = {}) {
   }
 
   const warnings = toWarningMessages(warningDetails);
+  const warningSummary = summarizeWarningsBySeverity(warningDetails);
+
+  const pagesWithToolbar = pages.map((page) => ({
+    ...page,
+    html: injectOutputToolbar(page.html, {
+      ToolbarEnabled: options.ToolbarEnabled === true,
+      ToolbarEditToggleEnabled: options.ToolbarEditToggleEnabled === true,
+      ToolbarMetadataToggleEnabled: options.ToolbarMetadataToggleEnabled === true,
+      ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
+      SourceName: page.path || options.fileName || notebookName,
+      SourceKind: 'onepkg',
+      Profile: options.Profile || 'generic',
+      WarningSummary: warningSummary
+    })
+  }));
 
   return {
     sourceKind: 'onepkg',
     hierarchy,
-    pages,
+    pages: pagesWithToolbar,
     warningDetails,
     warnings,
     archiveEntries: parsed.entries

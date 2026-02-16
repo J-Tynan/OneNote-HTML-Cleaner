@@ -75,7 +75,12 @@ export default class WorkerManager {
             }
           }
 
-          const result = await pipelineMod.runPipeline(htmlInput, Object.assign({}, payload.config || {}, { imageMap }));
+          const sourceKind = payload.sourceKind || (/\.(mht|mhtml)$/i.test(fileName) ? 'mht' : 'html');
+          const result = await pipelineMod.runPipeline(htmlInput, Object.assign({}, payload.config || {}, {
+            imageMap,
+            SourceName: fileName || payload.relativePath || 'Converted file',
+            SourceKind: sourceKind
+          }));
           const response = {
             id: msg.id,
             status: 'done',

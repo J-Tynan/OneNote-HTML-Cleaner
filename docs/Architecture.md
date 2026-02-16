@@ -26,3 +26,32 @@
 ## Windows companion extraction
 - `tools/Extract-OnePkg.ps1` uses `expand.exe` to unpack compressed `.onepkg` files into section files (`*.one`).
 - Extracted sections can be imported directly through the existing native `.one` flow for richer conversion output.
+
+## Optional injected toolbar architecture (Phase 0 locked)
+
+Contract reference: `docs/Toolbar-Phase0-Spec.md`
+
+- Toolbar is opt-in and default OFF.
+- Bundle mode is inline/self-contained only in current phase.
+- Injection must be idempotent and must not alter core conversion semantics.
+
+### Touchpoints
+
+1. Config normalization and defaults
+	- `src/pipeline/config.js`
+2. UI controls and payload construction
+	- `src/ui.js`
+	- `index.html`
+3. Worker message pass-through for both processing types
+	- `src/worker.js`
+4. Pipeline output injection path
+	- `src/pipeline/pipeline.js`
+5. Native output injection paths
+	- `src/importers/one.js`
+	- `src/importers/onepkg.js`
+
+### Day-one behavior envelope
+
+- Edit mode toggle applies only to approved text nodes.
+- Metadata panel is read-only provenance output.
+- Close/hide is reversible and non-destructive.

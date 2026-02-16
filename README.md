@@ -110,6 +110,16 @@ powershell -ExecutionPolicy Bypass -File .\tools\Build-LibmspackWasm.ps1 -EmsdkP
 
 This phase establishes native file routing, hierarchy handling, and section-level native downloads. Full fidelity page-content extraction for native formats is still in progress.
 
+## Optional injected toolbar (experimental)
+
+- An opt-in single injected output toolbar is planned and currently spec-locked in `docs/Toolbar-Phase0-Spec.md`.
+- Default is OFF to preserve output parity and test stability.
+- Day-one scope includes multiple feature toggles within that single toolbar:
+	- Edit mode toggle (text-focused and reversible)
+	- Metadata panel toggle (read-only provenance)
+	- Close/hide control
+- Bundle model is self-contained inline only for standalone exported HTML compatibility.
+
 ## Refactor Goals
 
 1. Preserve the existing PowerShell script behavior while improving portability.

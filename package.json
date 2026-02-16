@@ -6,6 +6,7 @@
     "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --minify",
     "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --watch",
     "test:smoke:native": "node ./Tests/smoke-native.js",
+    "test:toolbar": "node ./Tests/toolbar-injector.js",
     "test:semantic:native": "node ./Tests/semantic-native-parser.js",
     "test:metadata:onepkg": "node ./Tests/metadata-onepkg-parser.js",
     "test:warnings:contract": "node ./Tests/warning-code-contract.js",

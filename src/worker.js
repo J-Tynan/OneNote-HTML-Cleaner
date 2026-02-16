@@ -17,12 +17,16 @@ self.onmessage = async (e) => {
     if (sourceKind === 'one' || sourceKind === 'onepkg') {
       self.postMessage({ id, status: 'progress', step: 'inspect-native', percent: 10 });
       const bytes = payload.bytes;
+      const nativeOptions = {
+        fileName,
+        ...(payload.config || {})
+      };
       let nativeResult;
 
       if (sourceKind === 'one') {
-        nativeResult = importOneSection(bytes, { fileName });
+        nativeResult = importOneSection(bytes, nativeOptions);
       } else {
-        nativeResult = await importOnePackage(bytes, { fileName });
+        nativeResult = await importOnePackage(bytes, nativeOptions);
       }
 
       self.postMessage({
@@ -61,7 +65,11 @@ self.onmessage = async (e) => {
     }
 
     self.postMessage({ id, status: 'progress', step: 'start', percent: 0 });
-    const result = await runPipeline(htmlInput, Object.assign({}, payload.config || {}, { imageMap }));
+    const result = await runPipeline(htmlInput, Object.assign({}, payload.config || {}, {
+      imageMap,
+      SourceName: fileName,
+      SourceKind: sourceKind
+    }));
     console.log(`[worker] job ${id} done, output length=${String((result.output || '').length)}`);
     self.postMessage({
       id,
