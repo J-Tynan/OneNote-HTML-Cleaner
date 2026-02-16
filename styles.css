@@ -1,15 +1,110 @@
-body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 0; padding: 1rem; background:#f7f7f8; color:#111; }
-#dropzone { border: 2px dashed #bbb; padding: 1rem; margin-top: 1rem; background:#fff; cursor:copy; }
-#statusControls { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .75rem; font-size: .9rem; }
-#statusControls label { display: inline-flex; align-items: center; gap: .4rem; }
-#statusControls button { border: 1px solid #ccc; background: #fff; color: #222; padding: .35rem .6rem; border-radius: .4rem; cursor: pointer; }
-#statusControls button:disabled { opacity: .6; cursor: not-allowed; }
-.file-item { padding: .5rem 0; border-bottom: 1px solid #eee; }
-.status-badge { display: inline-block; margin-left: .5rem; padding: .1rem .45rem; border-radius: 999px; font-size: .7rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
-.status-text { color: #666; margin-left: .5rem; }
-.status-collapsed .status-text { display: none; }
-.status-queued { background: #e9e9ec; color: #555; }
-.status-working { background: #e3f2ff; color: #0b5cad; }
-.status-success { background: #e6f4ea; color: #1e7d34; }
-.status-error { background: #fde7e9; color: #b42318; }
-.status-unsupported { background: #fde7e9; color: #b42318; }
+:root {
+  color-scheme: light;
+}
+
+/* === BASELINE === */
+
+html {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f8fafc; /* slate-50 */
+  color: #0f172a; /* slate-900 */
+}
+
+/* === TYPOGRAPHY RHYTHM === */
+
+h1, h2, h3 {
+  line-height: 1.25;
+}
+
+p {
+  line-height: 1.6;
+}
+
+.text-muted {
+  color: #64748b; /* slate-500 */
+}
+
+.text-help {
+  color: #475569; /* slate-600 */
+  font-size: 0.75rem;
+}
+
+/* === DETAILS / SUMMARY CLEANUP === */
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* === NATIVE TREE (STRUCTURE VIEW) === */
+
+.native-tree {
+  margin-top: 0.5rem;
+}
+
+.native-tree ul {
+  margin-left: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid #e2e8f0; /* slate-200 */
+}
+
+.native-tree li {
+  margin: 0.25rem 0;
+}
+
+/* === UI SURFACE SYSTEM (TAILWIND COMPONENTS) === */
+
+@layer components {
+  /* Primary surface (hero, main panels) */
+  .card-panel {
+    @apply rounded-2xl border border-slate-200 bg-white p-5 sm:p-6;
+  }
+
+  /* Softer contextual surface (status, advanced zones) */
+  .card-panel--soft {
+    @apply bg-slate-50;
+  }
+
+  /* Sub-panels inside a card */
+  .card-section {
+    @apply rounded-xl border border-slate-200 bg-slate-50 p-4;
+  }
+
+  /* Option group panels */
+  .option-panel {
+    @apply space-y-3 rounded-lg border border-slate-200 bg-white p-4;
+  }
+
+  /* Checkbox rows */
+  .checkbox-option {
+    @apply flex items-start gap-3 text-sm text-slate-700 cursor-pointer;
+  }
+
+  .checkbox-input {
+    @apply mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center
+           rounded border border-slate-300 bg-white text-white
+           peer-checked:border-sky-600 peer-checked:bg-sky-600
+           peer-focus:ring-2 peer-focus:ring-sky-500 peer-focus:ring-offset-1;
+  }
+}
+
+/* === PANEL STATE FEEDBACK === */
+
+[data-panel-state="idle"] {
+  opacity: 1;
+}
+
+[data-panel-state="processing"],
+[data-panel-state="queued"],
+[data-panel-state="completed"],
+[data-panel-state="partial"] {
+  transition: opacity 150ms ease;
+}

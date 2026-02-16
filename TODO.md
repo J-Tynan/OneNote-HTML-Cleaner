@@ -25,8 +25,8 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 ## General / UI
 - [ ] Review cleaned HTML output. (manual review pending)
 - [ ] Audit accessibility of outputs.
-- [ ] Add badge icons + compact view improvements.
-- [ ] Re-design UI to look professional and accessible.
+- [x] Add badge icons + compact view improvements.
+- [x] Re-design UI to look professional and accessible.
 
 ## Conversion / Features
 - [x] Implement optional single injected output toolbar in exported HTML with multiple advanced feature toggles. (spec locked: self-contained inline bundle; initial scope includes edit + metadata toggles on day one; execution split between high-leverage work and Raptor Mini grunt tasks)

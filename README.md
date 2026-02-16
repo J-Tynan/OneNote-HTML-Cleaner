@@ -10,6 +10,12 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - ZIP export support via JSZip (requires `npm install`).
 - Tailwind utility baseline added for converted Cornell-style output (non-destructive, no preflight reset).
 
+## UI experience
+
+- The front-end now follows a lightweight state machine: the import panel is always the dominant action, the status panel describes Empty → Processing → Completed/Partial, and diagnostics only appear when work is underway or issues occur.
+- Advanced controls live in a collapsed `<details>` block labeled “Advanced options (Optional)” so the surface stays calm while still letting power users tweak conversion profile, native toolbar toggles, and status filters.
+- Semantic layout (`header`, `main`, `section`, `footer`) plus Tailwind utility spacing/typography keep the experience accessible without extra frameworks, matching the offline-first promise of the app.
+
 ## Project Structure
 
 - `index.html`, `styles.css`, `manifest.json`, `service-worker.js`: PWA shell.
@@ -64,11 +70,9 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 
 ### Windows helper for compressed `.onepkg`
 
-Use the included script to extract compressed notebook packages via `expand.exe`:
+Use the included helper script to extract compressed notebook packages locally (see `tools/Extract-OnePkg.ps1`).
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\Extract-OnePkg.ps1 -InputPath .\Tests\"Test Notebook.onepkg" -Force
-```
+> Note: extraction is a local developer operation — run the tool on your machine and import the resulting `*.one` section files into the app.
 
 The script writes an `*.extracted` folder (or your custom output path) with section files (`*.one`). You can then import those `.one` files into this app for richer conversion.
 
@@ -98,11 +102,7 @@ Notes:
 npm run build:libmspack:wasm:wsl:check
 ```
 
-- If `emcc` is not globally available in your shell, pass the SDK location directly:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\Build-LibmspackWasm.ps1 -EmsdkPath C:\emsdk
-```
+- If `emcc` is not globally available in your shell, pass the SDK location directly by running the local build helper `tools/Build-LibmspackWasm.ps1` (run it from PowerShell on your development machine).
 
 - Output artifacts are written to `assets/wasm/` as:
 	- `libmspack-core.js`
