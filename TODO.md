@@ -23,9 +23,63 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [ ] Re-design UI to look professional and accessible.
 
 ## Conversion / Features
-- [ ] Investigate whether we can inject advanced features into our conversion process (such as adding a closable toolbar in the exported HTML).
+- [ ] Implement optional injected output toolbar in exported HTML. (spec locked: self-contained inline bundle; initial scope includes edit + metadata toggles on day one; execution split between high-leverage work and Raptor Mini grunt tasks)
 - [x] Process entire notebooks to hierarchical folder ZIPs. (implemented: hierarchy + per-page downloads + ZIP export)
 - [x] Run browser validation / smoke tests.
+
+## Optional Feature Plan: Injected Output Toolbar (Cost-Optimized Delivery)
+
+Delivery mode for this feature is now explicitly split:
+- High-leverage design/integration decisions handled with stronger model support.
+- Mechanical coding, wiring, fixtures, and repetitive test/docs tasks delegated to `Raptor Mini`.
+
+### Phase 0 — Spec lock (before coding)
+- [ ] [HIGH-LEVERAGE] Finalize toolbar DOM contract: single namespaced container id, insertion point, reserved spacing behavior, no-overlap guarantee.
+- [ ] [HIGH-LEVERAGE] Finalize interaction contract for day-one scope:
+	- Edit mode toggle (text-focused and reversible)
+	- Metadata panel toggle
+	- Close/hide behavior
+- [ ] [HIGH-LEVERAGE] Define deterministic idempotency rule (re-processing cannot duplicate toolbar markup).
+- [ ] [RAPTOR MINI] Mirror decisions in docs (`docs/Toolbar idea.md`, `docs/Contracts.md`, README note).
+
+### Phase 1 — Config + wiring (default OFF)
+- [ ] [HIGH-LEVERAGE] Define canonical config shape + defaults for toolbar options in pipeline config normalization.
+- [ ] [RAPTOR MINI] Add UI controls for:
+	- Enable toolbar injection
+	- Enable edit mode toggle feature
+	- Enable metadata panel toggle feature
+- [ ] [RAPTOR MINI] Wire config through `src/ui.js` → worker payloads for both processing flows (`process-file`, `process-native-file`).
+- [ ] [RAPTOR MINI] Ensure default OFF keeps existing output parity and existing fixtures stable.
+
+### Phase 2 — Implementation (single injector, reused everywhere)
+- [ ] [HIGH-LEVERAGE] Implement one shared, self-contained inline toolbar injector module (inline CSS + inline JS; no external asset dependency).
+- [ ] [RAPTOR MINI] Integrate injector into pipeline output path.
+- [ ] [HIGH-LEVERAGE] Integrate injector into native `.one` output path with minimal template duplication.
+- [ ] [RAPTOR MINI] Integrate injector into native `.onepkg` paths (placeholder + extracted pages) using same injector entrypoint.
+- [ ] [RAPTOR MINI] Add guard checks for single-instance injection.
+
+### Phase 3 — Feature behavior hardening (day-one scope)
+- [ ] [HIGH-LEVERAGE] Finalize edit-mode boundaries (what is editable vs protected semantic scaffolding).
+- [ ] [RAPTOR MINI] Implement edit-mode toggling and state class hooks per spec.
+- [ ] [HIGH-LEVERAGE] Finalize metadata panel content schema (source names, profile, timestamp, parser diagnostics summary).
+- [ ] [RAPTOR MINI] Implement metadata panel rendering/toggling with accessible labels and keyboard focus order.
+- [ ] [RAPTOR MINI] Implement close/hide behavior and ensure reversibility.
+
+### Phase 4 — Validation + release gating
+- [ ] [HIGH-LEVERAGE] Define acceptance matrix:
+	- OFF mode: no output change across pipeline/native flows
+	- ON mode: deterministic toolbar injection exactly once
+	- Exported HTML opens standalone without runtime dependency on app assets
+- [ ] [RAPTOR MINI] Add fixture tests for toolbar OFF parity and toolbar ON behavior.
+- [ ] [RAPTOR MINI] Add native-path checks for `.one` and `.onepkg` outputs with toolbar enabled.
+- [ ] [RAPTOR MINI] Keep current native test suite green (`test:semantic:native`, `test:metadata:onepkg`, `test:warnings:contract`, `test:smoke:native`).
+- [ ] [HIGH-LEVERAGE] Final review pass for UX clarity, accessibility, and scope discipline.
+
+### Delegation checklist for `Raptor Mini` sessions
+- [ ] Use small, file-scoped prompts (one file or one integration point per prompt).
+- [ ] Require no speculative refactors outside scoped files.
+- [ ] Require tests to run after each change batch.
+- [ ] Escalate architecture or behavior ambiguities for high-leverage review instead of guessing.
 
 ## Highest priority (native fidelity)
 - [ ] Replace heuristic `.one` text extraction with a structured parser that preserves page layout semantics (headings, lists, tables, whitespace, section boundaries). (in progress — phase 3 added semantic confidence filtering, tighter page segment windows, low-confidence diagnostics, and direct parser semantic test coverage)
