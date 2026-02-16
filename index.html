@@ -47,17 +47,12 @@
 
       <div class="grid gap-4 lg:grid-cols-2">
 
-        <!-- Import buttons -->
+        <!-- Import button -->
         <div class="card-section space-y-3">
-          <div class="space-y-3 mt-2">
-            <button id="importManyButton" type="button"
+          <div class="mt-2">
+            <button id="importButton" type="button"
               class="inline-flex w-full items-center justify-center rounded-lg bg-sky-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-              Import multiple files
-            </button>
-
-            <button id="importSingleButton" type="button"
-              class="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-              Import one file
+              Import files
             </button>
           </div>
 
@@ -65,7 +60,7 @@
             accept=".mht,.mhtml,.html,.htm,.one,.onepkg" />
 
           <p class="mt-3 text-sm text-slate-700">
-            Files are queued immediately and processed in the browser.
+            Select one or more files. They are queued immediately and processed in the browser.
           </p>
           <p class="mt-1 text-xs text-muted">
             No upload. No cloud dependency.
