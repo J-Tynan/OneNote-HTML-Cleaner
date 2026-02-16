@@ -108,3 +108,13 @@ summary::-webkit-details-marker {
 [data-panel-state="partial"] {
   transition: opacity 150ms ease;
 }
+
+/* === DROPZONE DRAG HIGHLIGHT === */
+
+#dropzone.border-sky-500 {
+  background-color: #e0f2fe; /* sky-100 */
+}
+
+#dropzone.border-sky-500 p {
+  color: #0369a1; /* sky-700 */
+}

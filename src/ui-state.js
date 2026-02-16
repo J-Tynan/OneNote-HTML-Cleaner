@@ -1,5 +1,36 @@
 // src/ui-state.js
 export function createStateHelpers(ctx) {
+  const statusBadgeClasses = ctx.STATUS_BADGE_CLASSES || {
+    queued: 'status-badge inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700',
+    working: 'status-badge inline-flex items-center rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-sky-700',
+    success: 'status-badge inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700',
+    partial: 'status-badge inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700',
+    error: 'status-badge inline-flex items-center rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-rose-700',
+    unsupported: 'status-badge inline-flex items-center rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-rose-700'
+  };
+
+  const statusItemClasses = ctx.STATUS_ITEM_CLASSES || {
+    queued: 'file-item rounded-xl border border-slate-200 bg-white p-4',
+    working: 'file-item rounded-xl border border-sky-200 bg-sky-50 p-4',
+    success: 'file-item rounded-xl border border-emerald-200 bg-emerald-50 p-4',
+    partial: 'file-item rounded-xl border border-amber-200 bg-amber-50 p-4',
+    error: 'file-item rounded-xl border border-rose-200 bg-rose-50 p-4',
+    unsupported: 'file-item rounded-xl border border-rose-200 bg-rose-50 p-4'
+  };
+
+  const appStateBadgeClasses = ctx.APP_STATE_BADGE_CLASSES || {
+    idle: 'inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700',
+    queued: 'inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700',
+    processing: 'inline-flex items-center rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-sky-700',
+    completed: 'inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700',
+    partial: 'inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700'
+  };
+
+  const importPrimaryClass = ctx.IMPORT_PRIMARY_CLASS || 'inline-flex w-full items-center justify-center rounded-lg bg-sky-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2';
+  const importSecondaryClass = ctx.IMPORT_SECONDARY_CLASS || 'inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2';
+  const downloadPrimaryClass = ctx.DOWNLOAD_PRIMARY_CLASS || 'inline-flex items-center justify-center rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+  const downloadSecondaryClass = ctx.DOWNLOAD_SECONDARY_CLASS || 'inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+
   const STATUS_LABELS = {
     queued: 'Queued',
     working: 'Working',
@@ -70,7 +101,7 @@ export function createStateHelpers(ctx) {
     }
 
     if (ctx.appStateBadge) {
-      ctx.appStateBadge.className = ctx.APP_STATE_BADGE_CLASSES[state];
+      ctx.appStateBadge.className = appStateBadgeClasses[state] || appStateBadgeClasses.idle;
       ctx.appStateBadge.textContent = badgeLabel;
     }
 
@@ -122,13 +153,13 @@ export function createStateHelpers(ctx) {
 
     const downloadCanBePrimary = state === 'completed' || state === 'partial';
     if (ctx.downloadZipButton) {
-      ctx.downloadZipButton.className = downloadCanBePrimary ? ctx.DOWNLOAD_PRIMARY_CLASS : ctx.DOWNLOAD_SECONDARY_CLASS;
+      ctx.downloadZipButton.className = downloadCanBePrimary ? downloadPrimaryClass : downloadSecondaryClass;
     }
     if (ctx.importManyButton) {
-      ctx.importManyButton.className = downloadCanBePrimary ? ctx.IMPORT_SECONDARY_CLASS : ctx.IMPORT_PRIMARY_CLASS;
+      ctx.importManyButton.className = downloadCanBePrimary ? importSecondaryClass : importPrimaryClass;
     }
     if (ctx.importSingleButton) {
-      ctx.importSingleButton.className = ctx.IMPORT_SECONDARY_CLASS;
+      ctx.importSingleButton.className = importSecondaryClass;
     }
   }
 
@@ -138,10 +169,10 @@ export function createStateHelpers(ctx) {
 
   function addListItem(name, id) {
     const el = document.createElement('div');
-    el.className = ctx.STATUS_ITEM_CLASSES.queued;
+    el.className = statusItemClasses.queued;
     el.dataset.id = id;
     el.dataset.status = 'queued';
-    el.innerHTML = `<div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"><div class="min-w-0"><p class="truncate text-sm font-semibold text-slate-900">${escapeHtml(name)}</p><p class="status-text mt-1 text-sm text-slate-600">Queued for processing.</p></div><span class="${ctx.STATUS_BADGE_CLASSES.queued}">Queued</span></div><div class="item-content mt-3 space-y-3"></div><div class="item-actions mt-3 flex flex-wrap gap-2"></div>`;
+    el.innerHTML = `<div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between"><div class="min-w-0"><p class="truncate text-sm font-semibold text-slate-900">${escapeHtml(name)}</p><p class="status-text mt-1 text-sm text-slate-600">Queued for processing.</p></div><span class="${statusBadgeClasses.queued}">Queued</span></div><div class="item-content mt-3 space-y-3"></div><div class="item-actions mt-3 flex flex-wrap gap-2"></div>`;
     ctx.fileList.appendChild(el);
     applyFilters();
     applyCollapse();
@@ -174,10 +205,10 @@ export function createStateHelpers(ctx) {
     const text = li.querySelector('.status-text');
     if (!badge || !text) return;
 
-    badge.className = ctx.STATUS_BADGE_CLASSES[state] || ctx.STATUS_BADGE_CLASSES.queued;
+    badge.className = statusBadgeClasses[state] || statusBadgeClasses.queued;
     badge.textContent = STATUS_LABELS[state] || state;
     text.textContent = detail || '';
-    li.className = ctx.STATUS_ITEM_CLASSES[state] || ctx.STATUS_ITEM_CLASSES.queued;
+    li.className = statusItemClasses[state] || statusItemClasses.queued;
     li.dataset.status = state;
     applyCollapse();
     applyFilters();

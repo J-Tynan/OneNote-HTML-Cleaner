@@ -51,10 +51,14 @@
         <div class="card-section space-y-3">
           <div class="mt-2">
             <button id="importButton" type="button"
-              class="inline-flex w-full items-center justify-center rounded-lg bg-sky-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+              class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
               Import files
             </button>
           </div>
+
+          <p class="mt-2 text-xs text-muted">
+            Or drag files into the area on the right
+          </p>
 
           <input id="fileInput" class="sr-only" type="file" multiple
             accept=".mht,.mhtml,.html,.htm,.one,.onepkg" />
@@ -69,14 +73,20 @@
 
         <!-- Dropzone -->
         <div id="dropzone"
-          class="rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-700"
+          class="flex min-h-[12rem] flex-col items-center justify-center rounded-2xl
+                 border-2 border-dashed border-slate-300 bg-slate-50 p-6
+                 text-center text-sm text-slate-700 transition-colors"
           role="region"
           aria-label="Drop files to import"
           tabindex="0">
 
-          <p class="font-medium text-slate-800">Drag and drop files</p>
-          <p class="mt-1 text-sm text-slate-700">Drop here to add files to the queue.</p>
-          <p class="mt-2 text-xs text-muted">The drop area highlights while dragging files.</p>
+          <p class="text-base font-medium text-slate-800">Drag and drop files</p>
+          <p class="mt-1 text-sm text-slate-600">
+            Drop files here to add them to the queue
+          </p>
+          <p class="mt-2 text-xs text-muted">
+            You can also click “Import files” instead
+          </p>
         </div>
       </div>
     </section>
