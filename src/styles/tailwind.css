@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Flowbite (optional prebuilt component styles) */
+@import "flowbite";
+
+/* Your component overrides should come after Flowbite so they win */
+@import "../../styles.css";

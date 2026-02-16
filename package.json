@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --minify",
-    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/tailwind.input.css -o ./assets/tailwind-output.css --watch",
+    "build:tailwind": "tailwindcss -c tailwind.config.js -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --minify",
+    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --watch",
     "test:smoke:native": "node ./Tests/smoke-native.js",
     "test:toolbar": "node ./Tests/toolbar-injector.js",
     "test:semantic:native": "node ./Tests/semantic-native-parser.js",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "fflate": "^0.8.2",
+    "flowbite": "^4.0.1",
     "jszip": "^3.10.1",
     "libarchive.js": "^2.0.2"
   },

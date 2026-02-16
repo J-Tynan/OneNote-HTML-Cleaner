@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>OneNote HTML Cleaner</title>
-  <link rel="stylesheet" href="assets/tailwind-output.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/tailwind-output.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body class="min-h-screen bg-slate-50 text-slate-900">
@@ -22,12 +22,8 @@
 
   <main class="mx-auto w-full max-w-6xl space-y-6 px-4 py-6 md:px-8">
 
-    <!-- Import / Hero -->
-    <section id="controls"
-      class="card-panel space-y-4"
-      aria-labelledby="importHeading"
-      data-panel-state="idle">
-
+    <!-- Import / Unified Flowbite-style Dropzone -->
+    <section id="controls" class="card-panel space-y-4" aria-labelledby="importHeading" data-panel-state="idle">
       <div class="flex items-start justify-between gap-4">
         <div>
           <h2 id="importHeading" class="text-lg font-medium text-slate-900">Import files</h2>
@@ -45,63 +41,39 @@
         </button>
       </div>
 
-      <div class="grid gap-4 lg:grid-cols-2">
+      <!-- Unified dropzone (Flowbite-friendly markup and classes) -->
+      <div id="dropzone"
+        class="flex min-h-[14rem] flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm text-slate-700 transition-colors"
+        role="region"
+        aria-label="Upload files"
+        tabindex="0">
 
-        <!-- Import button -->
-        <div class="card-section space-y-3">
-          <div class="mt-2">
-            <button id="importButton" type="button"
-              class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-              Import files
-            </button>
-          </div>
+        <p class="text-base font-medium text-slate-800">
+          Click the button below<br />
+          or drag files here to upload.
+        </p>
 
-          <p class="mt-2 text-xs text-muted">
-            Or drag files into the area on the right
-          </p>
+        <!-- Browse files button (keeps same ID for existing JS hooks) -->
+        <button id="importButton" type="button"
+          class="inline-flex items-center justify-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+          Browse files
+        </button>
 
-          <input id="fileInput" class="sr-only" type="file" multiple
-            accept=".mht,.mhtml,.html,.htm,.one,.onepkg" />
+        <p class="text-xs text-muted">
+          Files are processed locally in your browser.
+        </p>
 
-          <p class="mt-3 text-sm text-slate-700">
-            Select one or more files. They are queued immediately and processed in the browser.
-          </p>
-          <p class="mt-1 text-xs text-muted">
-            No upload. No cloud dependency.
-          </p>
-        </div>
-
-        <!-- Dropzone -->
-        <div id="dropzone"
-          class="flex min-h-[12rem] flex-col items-center justify-center rounded-2xl
-                 border-2 border-dashed border-slate-300 bg-slate-50 p-6
-                 text-center text-sm text-slate-700 transition-colors"
-          role="region"
-          aria-label="Drop files to import"
-          tabindex="0">
-
-          <p class="text-base font-medium text-slate-800">Drag and drop files</p>
-          <p class="mt-1 text-sm text-slate-600">
-            Drop files here to add them to the queue
-          </p>
-          <p class="mt-2 text-xs text-muted">
-            You can also click “Import files” instead
-          </p>
-        </div>
+        <!-- Hidden file input (kept for JS hooks) -->
+        <input id="fileInput" class="sr-only" type="file" multiple
+          accept=".mht,.mhtml,.html,.htm,.one,.onepkg" />
       </div>
     </section>
 
     <!-- Status / Work Area -->
-    <section id="statusPanel"
-      class="hidden card-panel card-panel--soft space-y-3"
-      aria-live="polite"
-      aria-label="Processing status"
-      data-panel-state="idle">
-
+    <section id="statusPanel" class="hidden card-panel card-panel--soft space-y-3" aria-live="polite" aria-label="Processing status" data-panel-state="idle">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="text-lg font-medium text-slate-900">Status and results</h2>
-        <span id="appStateBadge"
-          class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
+        <span id="appStateBadge" class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
           Empty
         </span>
       </div>
@@ -114,15 +86,11 @@
         High-level progress appears here while details stay below.
       </p>
 
-      <div id="warningSummary"
-        class="hidden rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-900">
-      </div>
+      <div id="warningSummary" class="hidden rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-900"></div>
 
       <div id="fileList" class="space-y-3"></div>
 
-      <details id="diagnosticsPanel"
-        class="hidden mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
-
+      <details id="diagnosticsPanel" class="hidden mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
         <summary class="cursor-pointer text-sm font-medium text-slate-800">
           Advanced statistics and diagnostics
           <span id="diagnosticsCount" class="text-xs font-normal text-muted">(0)</span>
@@ -132,9 +100,7 @@
           Summary first; expand only when you need detail.
         </p>
 
-        <ul id="diagnosticsList"
-          class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-        </ul>
+        <ul id="diagnosticsList" class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700"></ul>
       </details>
     </section>
 
@@ -151,7 +117,6 @@
         </p>
 
         <div id="statusControls" class="mt-4 grid gap-4 lg:grid-cols-2">
-
           <div class="option-panel">
             <h3 class="text-sm font-medium text-slate-800">Conversion profile</h3>
             <p class="text-xs text-muted">
@@ -160,8 +125,7 @@
 
             <label class="flex flex-col gap-1 text-sm text-slate-700">
               <span>Profile</span>
-              <select id="conversionProfile"
-                class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
+              <select id="conversionProfile" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500">
                 <option value="cornell" selected>Cornell (tuned)</option>
                 <option value="generic">Generic OneNote</option>
               </select>
@@ -175,57 +139,47 @@
             </p>
 
             <label class="checkbox-option">
-              <input id="toolbarEnabled" type="checkbox" class="peer sr-only">
+              <input id="toolbarEnabled" type="checkbox" class="peer sr-only" />
               <span class="checkbox-input">✓</span>
               <span>
                 <span class="block">Inject output toolbar (experimental)</span>
-                <span class="text-xs text-muted">
-                  Adds a single optional toolbar with advanced controls in exported HTML.
-                </span>
+                <span class="text-xs text-muted">Adds a single optional toolbar with advanced controls in exported HTML.</span>
               </span>
             </label>
 
             <label class="checkbox-option">
-              <input id="toolbarEditToggleEnabled" type="checkbox" class="peer sr-only">
+              <input id="toolbarEditToggleEnabled" type="checkbox" class="peer sr-only" />
               <span class="checkbox-input">✓</span>
               <span>
                 <span class="block">Enable toolbar edit toggle</span>
-                <span class="text-xs text-muted">
-                  Allows text-focused in-browser edits in supported output regions.
-                </span>
+                <span class="text-xs text-muted">Allows text-focused in-browser edits in supported output regions.</span>
               </span>
             </label>
 
             <label class="checkbox-option">
-              <input id="toolbarMetadataToggleEnabled" type="checkbox" class="peer sr-only">
+              <input id="toolbarMetadataToggleEnabled" type="checkbox" class="peer sr-only" />
               <span class="checkbox-input">✓</span>
               <span>
                 <span class="block">Enable toolbar metadata panel</span>
-                <span class="text-xs text-muted">
-                  Shows source and conversion diagnostics in exported HTML.
-                </span>
+                <span class="text-xs text-muted">Shows source and conversion diagnostics in exported HTML.</span>
               </span>
             </label>
 
             <label class="checkbox-option">
-              <input id="filterFailures" type="checkbox" class="peer sr-only">
+              <input id="filterFailures" type="checkbox" class="peer sr-only" />
               <span class="checkbox-input">✓</span>
               <span>
                 <span class="block">Show only failures or unsupported files</span>
-                <span class="text-xs text-muted">
-                  Focus the queue on items that need attention.
-                </span>
+                <span class="text-xs text-muted">Focus the queue on items that need attention.</span>
               </span>
             </label>
 
             <label class="checkbox-option">
-              <input id="collapseStatus" type="checkbox" class="peer sr-only">
+              <input id="collapseStatus" type="checkbox" class="peer sr-only" />
               <span class="checkbox-input">✓</span>
               <span>
                 <span class="block">Compact status details</span>
-                <span class="text-xs text-muted">
-                  Reduce detail text for larger batches.
-                </span>
+                <span class="text-xs text-muted">Reduce detail text for larger batches.</span>
               </span>
             </label>
           </div>
@@ -240,6 +194,8 @@
       <a href="README.md" class="underline hover:text-slate-700">Documentation</a>
     </p>
   </footer>
+
+  <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
 
   <script src="node_modules/jszip/dist/jszip.min.js"></script>
   <script type="module" src="src/app.js"></script>
