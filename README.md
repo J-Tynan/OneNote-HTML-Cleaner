@@ -11,6 +11,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Tailwind utility baseline added for converted Cornell-style output (non-destructive, no preflight reset).
  - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
  - Experimental support for native OneNote files (`.one`, `.onepkg`) is available but not fully implemented; see the "Native OneNote files" section for known limitations and recommended developer workflows.
+ - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and will be added in future feature branches.
 
 ## UI experience
 
@@ -18,6 +19,8 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Advanced controls live in a collapsed `<details>` block labeled “Advanced options (Optional)” so the surface stays calm while still letting power users tweak conversion profile, native toolbar toggles, and status filters.
 - Semantic layout (`header`, `main`, `section`, `footer`) plus Tailwind utility spacing/typography keep the experience accessible without extra frameworks, matching the offline-first promise of the app.
 - The UI now includes a Light / Dark theme toggle (top-right). It defaults to Light on first visit and records that choice to `localStorage`; subsequent toggles persist the user's preference.
+ - The app enforces an MHTML-only intake for the stable release: non-MHTML files are shown as "Unsupported" in the queue and are not sent to the conversion pipeline (no partial conversions, no silent failures).
+ - Advanced options now include an "Automatically convert files when added to the queue" toggle. When disabled, files remain in the queue until the user starts conversion manually; the preference persists across sessions.
 
 ## Project Structure
 
@@ -33,6 +36,11 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 1. Run `npm install` to fetch JSZip for ZIP exports.
 2. Run `npm run build:tailwind` to generate `assets/tailwind-output.css`.
 3. Serve the project with a local web server that can access `node_modules/`.
+
+## Testing
+
+- Automated tests include lightweight Node checks and Playwright smoke tests. Current Playwright smoke tests cover theme initialization/toggling and ZIP/download flows (`Tests/theme-playwright.js`, `Tests/ui-download-zip-playwright.js`).
+- Additions: there are unit tests for download helpers and other pipeline contracts under `Tests/`.
 
 ## Tailwind Migration (Scoped)
 

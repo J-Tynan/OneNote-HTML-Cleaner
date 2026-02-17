@@ -28,12 +28,16 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [ ] Audit accessibility of outputs.
 - [x] Add badge icons + compact view improvements.
 - [x] Re-design UI to look professional and accessible.
- - [x] Add Light/Dark theme toggle and polish dark mode.
+  - [x] Add Light/Dark theme toggle and polish dark mode.
+  - [x] Add auto-convert checkbox in Advanced options and persist setting.
+  - [x] Hide auto-convert notice when auto-convert is disabled.
+  - [x] Detect and mark unsupported file types (MHTML-only release) and prevent processing.
 
 ## Conversion / Features
 - [x] Implement optional single injected output toolbar in exported HTML with multiple advanced feature toggles. (spec locked: self-contained inline bundle; initial scope includes edit + metadata toggles on day one; execution split between high-leverage work and Raptor Mini grunt tasks)
 - [x] Process entire notebooks to hierarchical folder ZIPs. (implemented: hierarchy + per-page downloads + ZIP export)
 - [x] Run browser validation / smoke tests.
+- [x] Enforce MHTML-only intake at UI layer; surface "Unsupported" for other formats (do not send to pipeline).
 
 ## Optional Feature Plan: Injected Output Toolbar (Cost-Optimized Delivery)
 
@@ -114,6 +118,8 @@ Delivery mode for this feature is now explicitly split:
 - [ ] Add targeted unit/fixture tests for table-edge cases and compressed `.onepkg` LZX extraction paths; keep metadata regression coverage green (`test:semantic:native` + `test:metadata:onepkg`).
 - [x] Add npm script for download tests (`test:ui-downloads`).
 - [x] Automate browser smoke test (headless) for `Tests/ui-download-zip.html`.
+- [x] Add Playwright smoke test for theme toggle & persistence (`Tests/theme-playwright.js`).
+- [ ] Add Playwright smoke test for auto-convert & unsupported-file flows (`Tests/auto-convert-playwright.js`).
 
 ## Product/docs follow-up
 - [ ] Document current native limitations and expected fidelity in README/docs to set realistic user expectations until parser work lands.
