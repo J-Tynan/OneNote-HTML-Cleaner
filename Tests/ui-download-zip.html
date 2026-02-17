@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UI — Download ZIP smoke test</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;padding:20px}</style>
+  <script src="/node_modules/jszip/dist/jszip.min.js"></script>
+</head>
+<body>
+  <h1>UI — Download ZIP smoke test</h1>
+  <div id="out"></div>
+
+  <!-- Minimal DOM hooks used by src/ui.js -->
+  <button id="downloadZip" type="button" disabled>Download ZIP</button>
+  <div id="fileList"></div>
+  <div id="statusPanel" class="hidden"></div>
+  <span id="appStateBadge">Empty</span>
+
+  <!-- Advanced options (minimal hooks) -->
+  <select id="conversionProfile"><option value="cornell">Cornell</option></select>
+  <input id="toolbarEnabled" type="checkbox" />
+  <input id="toolbarEditToggleEnabled" type="checkbox" />
+  <input id="toolbarMetadataToggleEnabled" type="checkbox" />
+
+  <script type="module">
+    import { initUI, state, renderFileList } from '../src/ui.js';
+
+    function pass(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:green">PASS: ${msg}</div>`; }
+    function fail(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:red">FAIL: ${msg}</div>`; }
+
+    // Stub JSZip so we can detect ZIP generation without performing a download
+    window.__test_generateAsync_called = false;
+    window.JSZip = function () {
+      this._files = {};
+      this.file = (name, content) => { this._files[name] = content; return this; };
+      this.generateAsync = (opts) => { window.__test_generateAsync_called = true; return Promise.resolve(new Blob([])); };
+    };
+
+    initUI();
+
+    // Simulate a successfully converted file with outputHtml
+    const entry = { id: 't-1', name: 'Sample Page.mht', size: 1024, status: 'success', outputHtml: '<!doctype html><html><body><p>ok</p></body></html>' };
+    state.queue.push(entry);
+    renderFileList();
+
+    // Verify per-file download button exists
+    const perFileBtn = document.querySelector('[data-download-id="t-1"]');
+    if (perFileBtn) pass('Per-file Download button rendered'); else fail('Per-file Download button not rendered');
+
+    // Intercept anchor creation to assert download filename on per-file click
+    const realCreate = Document.prototype.createElement;
+    Document.prototype.createElement = function(tag) {
+      const el = realCreate.call(this, tag);
+      if (tag.toLowerCase() === 'a') window.__lastAnchor = el;
+      return el;
+    };
+
+    // Click per-file download and check anchor metadata
+    perFileBtn.click();
+    setTimeout(() => {
+      if (window.__lastAnchor && window.__lastAnchor.download && window.__lastAnchor.download.endsWith('.html')) {
+        pass('Per-file download attempted with correct filename');
+      } else {
+        fail('Per-file download did not create expected anchor');
+      }
+
+      // Now verify ZIP button enabled and building ZIP triggers JSZip.generateAsync()
+      const zipBtn = document.getElementById('downloadZip');
+      if (!zipBtn.disabled) {
+        pass('Download ZIP button enabled');
+      } else {
+        fail('Download ZIP button still disabled');
+      }
+
+      // Trigger ZIP click
+      zipBtn.click();
+
+      setTimeout(() => {
+        if (window.__test_generateAsync_called) pass('ZIP generation invoked (JSZip.generateAsync called)');
+        else fail('ZIP generation was not invoked');
+
+        // Restore createElement
+        Document.prototype.createElement = realCreate;
+      }, 200);
+    }, 50);
+  </script>
+</body>
+</html>
