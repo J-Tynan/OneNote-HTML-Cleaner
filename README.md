@@ -9,6 +9,8 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Initial test and fixture structure added.
 - ZIP export support via JSZip (requires `npm install`).
 - Tailwind utility baseline added for converted Cornell-style output (non-destructive, no preflight reset).
+ - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
+ - Experimental support for native OneNote files (`.one`, `.onepkg`) is available but not fully implemented; see the "Native OneNote files" section for known limitations and recommended developer workflows.
 
 ## UI experience
 
@@ -50,23 +52,20 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 
 The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
 
-## Native OneNote files (Phase 1)
+## Native OneNote files (Phase 1) — Experimental
 
-- `.one` and `.onepkg` files are now accepted in the file picker and drag/drop flow.
-- `.one` processing currently:
-	- Validates native section signature.
-	- Extracts page-title candidates using metadata/string heuristics.
-	- Canonicalizes page metadata fields (`title`, `author`, `createdAt`, `modifiedAt`) when detectable.
-	- Builds per-page HTML placeholders for individual downloads.
-	- Emits per-page metadata sidecars (`*.metadata.json`) in ZIP exports.
-	- Supports per-file ZIP export that preserves section/page hierarchy.
-- `.onepkg` processing currently:
-	- Validates CAB container signature (`MSCF`).
-	- Reads archive entries and derives `Section Groups > Section > Page` hierarchy.
-	- Attempts deep extraction by decoding uncompressed section payloads and reusing `.one` extraction.
-	- Falls back to per-section downloadable HTML placeholders when CAB compression is unsupported in-browser (e.g. `lzx`).
-	- ZIP export includes these generated pages under notebook/section folder structure.
-	- For fully extracted content on compressed notebooks, export from OneNote to `.one` or `.mht` and convert those files in this tool.
+- Note: native `.one` and `.onepkg` handling is experimental and partial. The app accepts these files in the picker and via drag/drop, but full in-browser extraction for all compressed notebooks is not yet implemented. Some flows will fall back to placeholder exports or require developer-side preprocessing.
+
+- `.one` processing (experimental/partial):
+	- Attempts to validate native section signatures when possible.
+	- Tries to extract page-title candidates and canonicalize basic metadata (`title`, `author`, `createdAt`, `modifiedAt`).
+	- Produces per-page HTML placeholders and metadata sidecars (`*.metadata.json`) for ZIP exports when full content extraction isn’t available.
+
+- `.onepkg` processing (experimental/partial):
+	- Detects CAB container signature (`MSCF`) and enumerates archive entries to derive notebook hierarchy.
+	- May decode uncompressed section payloads and reuse `.one` extraction logic, but compressed payloads (for example, LZX) are not fully decoded in-browser yet.
+	- For compressed notebooks, the pipeline currently falls back to per-section placeholders or recommends exporting to `.one`/`.mht` and importing those files for richer conversion.
+	- ZIP exports include generated pages and metadata when possible, but exact fidelity varies with archive compression.
 
 ### Windows helper for compressed `.onepkg`
 
