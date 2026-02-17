@@ -50,7 +50,7 @@
       <!-- LEFT COLUMN -->
       <div class="space-y-6 lg:col-span-5">
 
-        <!-- Import header -->
+        <!-- Import files -->
         <section class="card-panel space-y-4" aria-labelledby="importHeading">
           <div class="flex items-start justify-between gap-4">
             <div>
@@ -60,6 +60,12 @@
               </p>
               <p class="mt-2 text-xs text-muted">
                 Supported in this release: MHTML (.mht, .mhtml)
+              </p>
+              <p id="autoConvertNotice" class="mt-1 text-xs text-muted">
+                Files are converted automatically when added to the queue.
+                <span class="block">
+                  You can change this behaviour in Advanced options.
+                </span>
               </p>
             </div>
 
@@ -117,6 +123,20 @@
                 </h3>
 
                 <div class="space-y-3">
+
+                  <label class="checkbox-option flex items-start gap-3" for="autoConvertEnabled">
+                    <input
+                      id="autoConvertEnabled"
+                      type="checkbox"
+                      checked
+                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                    <span>
+                      Automatically convert files when added to the queue
+                      <span class="block text-xs text-muted">
+                        When disabled, files will wait in the queue until you start conversion manually.
+                      </span>
+                    </span>
+                  </label>
 
                   <label class="checkbox-option flex items-start gap-3" for="toolbarEnabled">
                     <input
@@ -209,10 +229,8 @@
             No files in the queue yet. Add files to begin conversion.
           </p>
 
-          <!-- File list -->
           <div id="fileList" class="space-y-3"></div>
 
-          <!-- Diagnostics -->
           <details
             id="diagnosticsPanel"
             class="hidden mt-4 rounded-lg border bg-slate-50 p-3">

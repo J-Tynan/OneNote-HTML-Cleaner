@@ -19,6 +19,8 @@ const dom = {
   toolbarEnabled: null,
   toolbarEditToggleEnabled: null,
   toolbarMetadataToggleEnabled: null
+  ,
+  autoConvertEnabled: null
 };
 
 const runtime = {
@@ -27,6 +29,8 @@ const runtime = {
   workerManager: null,
   successfulOutputs: new Map(),
   downloadHelpers: null
+  ,
+  autoConvertEnabled: true
 };
 
 export const state = {
@@ -120,6 +124,24 @@ function rebuildSuccessfulOutputs() {
 
 function isSupportedSourceKind(sourceKind) {
   return sourceKind === 'mht';
+}
+
+function setAutoConvertEnabled(value) {
+  runtime.autoConvertEnabled = Boolean(value);
+  try {
+    localStorage.setItem('autoConvertEnabled', runtime.autoConvertEnabled ? 'true' : 'false');
+  } catch (err) {
+    // best-effort persistence
+  }
+  if (dom.autoConvertNotice) {
+    dom.autoConvertNotice.classList.toggle('hidden', !runtime.autoConvertEnabled);
+  }
+}
+
+function onAutoConvertChange(event) {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) return;
+  setAutoConvertEnabled(target.checked);
 }
 
 /* === DROPZONE STATE === */
@@ -325,8 +347,10 @@ export function addFilesToQueue(files) {
   state.queue = [...state.queue, ...addedEntries];
   renderFileList();
 
-  for (const entry of processableEntries) {
-    processEntry(entry);
+  if (runtime.autoConvertEnabled) {
+    for (const entry of processableEntries) {
+      processEntry(entry);
+    }
   }
 }
 
@@ -432,6 +456,7 @@ function bindEvents() {
   dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarMetadataToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
+  dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
   window.addEventListener('resize', logLayoutMode);
 
@@ -440,7 +465,7 @@ function bindEvents() {
 
 /* === INIT === */
 
-export function initUI(workerManager) {
+export function initUI(workerManager, options = {}) {
   dom.dropzone = document.getElementById('dropzone');
   dom.importButton = document.getElementById('importButton');
   dom.fileInput = document.getElementById('fileInput');
@@ -452,6 +477,18 @@ export function initUI(workerManager) {
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
   dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
   dom.toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
+  dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
+  dom.autoConvertNotice = document.getElementById('autoConvertNotice');
+
+  const { autoConvertEnabled = true } = options;
+  runtime.autoConvertEnabled = Boolean(autoConvertEnabled);
+  if (dom.autoConvertEnabled) {
+    dom.autoConvertEnabled.checked = runtime.autoConvertEnabled;
+  }
+  // Ensure the notice visibility matches initial runtime state
+  if (dom.autoConvertNotice) {
+    dom.autoConvertNotice.classList.toggle('hidden', !runtime.autoConvertEnabled);
+  }
 
   runtime.workerManager = workerManager || null;
   runtime.downloadHelpers = createDownloadHelpers({

@@ -62,12 +62,15 @@ function createStaticServer(root) {
     });
 
     const page = await ctx.newPage();
+    page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+    page.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
     await page.goto(url, { waitUntil: 'networkidle' });
 
     // Initial state should be light (no 'dark' class) and initTheme() should persist that choice
     const hasDarkInitially = await page.evaluate(() => document.documentElement.classList.contains('dark'));
     if (hasDarkInitially) throw new Error('Expected initial theme to be light');
     const storedAfterLoad = await page.evaluate(() => localStorage.getItem('theme'));
+    console.log('STORED_AFTER_LOAD:', storedAfterLoad);
     if (storedAfterLoad !== 'light') throw new Error('Expected localStorage.theme to be "light" after init when none was present');
 
     // Click the theme toggle and assert dark mode applied + persisted
