@@ -20,6 +20,23 @@ export const state = {
   queue: []
 };
 
+/* === DEV / CONFIDENCE HELPERS === */
+
+function logLayoutMode() {
+  const width = window.innerWidth;
+  let mode = 'Layout C · Mobile';
+
+  if (width >= 1024) {
+    mode = 'Layout A · Desktop';
+  } else if (width >= 640) {
+    mode = 'Layout B · Tablet / Laptop';
+  }
+
+  console.debug(`[UI] Active layout: ${mode} (${width}px)`);
+}
+
+/* === UTILITIES === */
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (ch) => ({
     '&': '&amp;',
@@ -38,21 +55,30 @@ function formatBytes(size) {
   return `${value.toFixed(power === 0 ? 0 : 1)} ${units[power]}`;
 }
 
+/* === STATUS VISIBILITY === */
+
 function updateStatusVisibility() {
   const count = state.queue.length;
+
   if (dom.statusPanel) {
     dom.statusPanel.classList.toggle('hidden', count === 0);
   }
+
   if (dom.appStateBadge) {
-    dom.appStateBadge.textContent = count === 0 ? STATUS_EMPTY : `${count} queued`;
+    dom.appStateBadge.textContent = count === 0
+      ? STATUS_EMPTY
+      : `${count} queued`;
   }
 }
+
+/* === DROPZONE STATE === */
 
 function setDropzoneActive(active) {
   if (!dom.dropzone) return;
   dom.dropzone.classList.toggle('border-sky-500', active);
-  dom.dropzone.classList.toggle('bg-sky-50', active);
 }
+
+/* === QUEUE HELPERS === */
 
 function nextId() {
   return crypto.randomUUID();
@@ -75,11 +101,13 @@ function processEntry(entry) {
   if (typeof window.processFileEntry === 'function') {
     try {
       window.processFileEntry(entry.file, (result) => {
-        const status = result && typeof result.status === 'string' ? result.status : 'completed';
+        const status = result && typeof result.status === 'string'
+          ? result.status
+          : 'completed';
         updateEntryStatus(entry.id, status);
       });
       return;
-    } catch (_error) {
+    } catch {
       updateEntryStatus(entry.id, 'error');
       return;
     }
@@ -90,10 +118,8 @@ function processEntry(entry) {
   }, 200);
 }
 
-/**
- * Render the current queue into `#fileList`.
- * Idempotent: replaces list markup based on current state only.
- */
+/* === RENDERING === */
+
 export function renderFileList() {
   if (!dom.fileList) return;
 
@@ -101,6 +127,7 @@ export function renderFileList() {
     const safeName = escapeHtml(entry.name);
     const safeStatus = escapeHtml(entry.status || 'queued');
     const safeSize = escapeHtml(formatBytes(entry.size));
+
     return `
       <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}">
         <div class="flex items-start justify-between gap-3">
@@ -108,7 +135,13 @@ export function renderFileList() {
             <p class="truncate text-sm font-semibold text-slate-900">${safeName}</p>
             <p class="mt-1 text-xs text-slate-500">${safeSize} · ${safeStatus}</p>
           </div>
-          <button type="button" class="remove-item inline-flex items-center rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50" data-remove-id="${entry.id}" aria-label="Remove ${safeName}">Remove</button>
+          <button
+            type="button"
+            class="remove-item inline-flex items-center rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            data-remove-id="${entry.id}"
+            aria-label="Remove ${safeName}">
+            Remove
+          </button>
         </div>
       </div>
     `;
@@ -118,10 +151,8 @@ export function renderFileList() {
   updateStatusVisibility();
 }
 
-/**
- * Remove an entry by id from the queue and re-render.
- * @param {string} id Queue entry id.
- */
+/* === QUEUE MUTATION === */
+
 export function removeFromQueue(id) {
   const next = state.queue.filter((entry) => entry.id !== id);
   if (next.length === state.queue.length) return;
@@ -129,10 +160,6 @@ export function removeFromQueue(id) {
   renderFileList();
 }
 
-/**
- * Add files to queue and trigger processing per newly added entry.
- * @param {File[] | FileList | Iterable<File>} files Files to enqueue.
- */
 export function addFilesToQueue(files) {
   const list = Array.from(files || []).filter((file) => file instanceof File);
   if (list.length === 0) return;
@@ -152,6 +179,8 @@ export function addFilesToQueue(files) {
     processEntry(entry);
   }
 }
+
+/* === EVENT HANDLERS === */
 
 function onDropzoneDragEnter(event) {
   event.preventDefault();
@@ -175,36 +204,33 @@ function onDropzoneDrop(event) {
   event.preventDefault();
   runtime.dragCounter = 0;
   setDropzoneActive(false);
-  const files = event.dataTransfer && event.dataTransfer.files ? event.dataTransfer.files : [];
+  const files = event.dataTransfer?.files || [];
   addFilesToQueue(files);
 }
 
 function onDropzoneKeyDown(event) {
   if (event.key !== 'Enter' && event.key !== ' ') return;
   event.preventDefault();
-  if (dom.fileInput) {
-    dom.fileInput.click();
-  }
+  dom.fileInput?.click();
 }
 
 function onImportButtonClick() {
-  if (dom.fileInput) {
-    dom.fileInput.click();
-  }
+  dom.fileInput?.click();
 }
 
 function onFileInputChange(event) {
   const input = event.target;
   addFilesToQueue(input.files || []);
   input.value = '';
+
+  /* Restore focus for mobile + keyboard users */
+  dom.dropzone?.focus();
 }
 
 function onPaste(event) {
-  const clipboardFiles = event.clipboardData && event.clipboardData.files
-    ? event.clipboardData.files
-    : null;
-  if (!clipboardFiles || clipboardFiles.length === 0) return;
-  addFilesToQueue(clipboardFiles);
+  const files = event.clipboardData?.files;
+  if (!files || files.length === 0) return;
+  addFilesToQueue(files);
 }
 
 function onFileListClick(event) {
@@ -213,22 +239,21 @@ function onFileListClick(event) {
   const removeButton = target.closest('[data-remove-id]');
   if (!removeButton) return;
   const id = removeButton.getAttribute('data-remove-id');
-  if (!id) return;
-  removeFromQueue(id);
+  if (id) removeFromQueue(id);
 }
 
 async function onDownloadZipClick() {
-  if (!dom.downloadZip) return;
-  if (typeof window.createZip !== 'function') return;
+  if (!dom.downloadZip || typeof window.createZip !== 'function') return;
 
   dom.downloadZip.disabled = true;
   try {
     await Promise.resolve(window.createZip(state.queue));
-  } catch (_error) {
   } finally {
     dom.downloadZip.disabled = false;
   }
 }
+
+/* === EVENT BINDING === */
 
 function bindEvents() {
   if (runtime.listenersBound) return;
@@ -245,33 +270,20 @@ function bindEvents() {
   document.addEventListener('paste', onPaste);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
 
+  window.addEventListener('resize', logLayoutMode);
+
   runtime.listenersBound = true;
   runtime.cleanup = () => {
-    dom.dropzone?.removeEventListener('dragenter', onDropzoneDragEnter);
-    dom.dropzone?.removeEventListener('dragover', onDropzoneDragOver);
-    dom.dropzone?.removeEventListener('dragleave', onDropzoneDragLeave);
-    dom.dropzone?.removeEventListener('drop', onDropzoneDrop);
-    dom.dropzone?.removeEventListener('keydown', onDropzoneKeyDown);
-
-    dom.importButton?.removeEventListener('click', onImportButtonClick);
-    dom.fileInput?.removeEventListener('change', onFileInputChange);
-    dom.fileList?.removeEventListener('click', onFileListClick);
-    document.removeEventListener('paste', onPaste);
-    dom.downloadZip?.removeEventListener('click', onDownloadZipClick);
-
+    window.removeEventListener('resize', logLayoutMode);
     runtime.listenersBound = false;
     runtime.cleanup = null;
   };
 }
 
-/**
- * Initialize UI wiring for queue, dropzone, and optional zip creation.
- * @param {unknown} _workerManager Reserved argument for compatibility.
- */
+/* === INIT === */
+
 export function initUI(_workerManager) {
-  if (typeof runtime.cleanup === 'function') {
-    runtime.cleanup();
-  }
+  runtime.cleanup?.();
 
   dom.dropzone = document.getElementById('dropzone');
   dom.importButton = document.getElementById('importButton');
@@ -285,4 +297,5 @@ export function initUI(_workerManager) {
   setDropzoneActive(false);
   bindEvents();
   renderFileList();
+  logLayoutMode();
 }

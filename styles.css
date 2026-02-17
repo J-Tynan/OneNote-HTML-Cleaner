@@ -44,43 +44,36 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* === NATIVE TREE (STRUCTURE VIEW) === */
-
-.native-tree {
-  margin-top: 0.5rem;
+/* Improve stability when expanding details (especially mobile) */
+details[open] > summary {
+  margin-bottom: 0.5rem;
 }
 
-.native-tree ul {
-  margin-left: 0.75rem;
-  padding-left: 0.75rem;
-  border-left: 1px solid #e2e8f0; /* slate-200 */
-}
-
-.native-tree li {
-  margin: 0.25rem 0;
-}
-
-/* === UI SURFACE SYSTEM (TAILWIND COMPONENTS) === */
+/* === UI SURFACE SYSTEM === */
 
 @layer components {
-  /* Primary surface (hero, main panels) */
+
+  /* Primary surface (desktop workbench panels) */
   .card-panel {
-    @apply rounded-2xl border border-slate-200 bg-white p-5 sm:p-6;
+    @apply rounded-2xl border border-slate-200 bg-white p-5 sm:p-6
+           transition-colors duration-150;
   }
 
-  /* Softer contextual surface (status, advanced zones) */
+  /* Softer contextual surface (status, diagnostics, advanced zones) */
   .card-panel--soft {
     @apply bg-slate-50;
   }
 
-  /* Sub-panels inside a card */
+  /* Sub-panels inside cards */
   .card-section {
-    @apply rounded-xl border border-slate-200 bg-slate-50 p-4;
+    @apply rounded-xl border border-slate-200 bg-slate-50 p-4
+           transition-colors duration-150;
   }
 
   /* Option group panels */
   .option-panel {
-    @apply space-y-3 rounded-lg border border-slate-200 bg-white p-4;
+    @apply space-y-3 rounded-lg border border-slate-200 bg-white p-4
+           transition-colors duration-150;
   }
 
   /* Checkbox rows */
@@ -96,17 +89,14 @@ summary::-webkit-details-marker {
   }
 }
 
-/* === PANEL STATE FEEDBACK === */
+/* === STATUS / QUEUE ITEMS === */
 
-[data-panel-state="idle"] {
-  opacity: 1;
+.file-item {
+  transition: background-color 120ms ease, border-color 120ms ease;
 }
 
-[data-panel-state="processing"],
-[data-panel-state="queued"],
-[data-panel-state="completed"],
-[data-panel-state="partial"] {
-  transition: opacity 150ms ease;
+.file-item:hover {
+  background-color: #f8fafc; /* slate-50 */
 }
 
 /* === DROPZONE DRAG HIGHLIGHT === */
@@ -117,4 +107,64 @@ summary::-webkit-details-marker {
 
 #dropzone.border-sky-500 p {
   color: #0369a1; /* sky-700 */
+}
+
+/* === PANEL STATE FEEDBACK === */
+
+[data-panel-state="processing"],
+[data-panel-state="queued"],
+[data-panel-state="completed"],
+[data-panel-state="partial"] {
+  transition: opacity 150ms ease;
+}
+
+/* === MOBILE POLISH (Layout C) === */
+
+@media (max-width: 639px) {
+
+  /* Reduce density for calm, focused mobile flow */
+  .card-panel {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .card-section {
+    padding: 0.75rem;
+  }
+
+  .option-panel {
+    padding: 0.75rem;
+  }
+
+  /* Slightly tighten text rhythm */
+  p {
+    line-height: 1.5;
+  }
+}
+
+/* === TABLET GUIDANCE (Layout B) === */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+
+  /* Emphasise step-by-step flow */
+  .card-panel {
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+  }
+}
+
+/* === DESKTOP WORKBENCH (Layout A) === */
+
+@media (min-width: 1024px) {
+
+  /* Stronger separation between columns */
+  .card-panel {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+}
+
+/* === DEV / DEBUG HELPERS === */
+
+.layout-debug {
+  pointer-events: none;
+  user-select: none;
 }

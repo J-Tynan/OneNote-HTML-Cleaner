@@ -6,10 +6,13 @@ module.exports = {
     './Tests/**/*.{html,mht}',
     './node_modules/flowbite/**/*.js'
   ],
+
   corePlugins: {
     preflight: false
   },
+
   safelist: [
+    /* Typography */
     'font-sans',
     'text-xs',
     'text-sm',
@@ -20,6 +23,8 @@ module.exports = {
     'font-medium',
     'font-semibold',
     'font-bold',
+
+    /* Spacing */
     'mt-0',
     'mt-1',
     'mt-2',
@@ -32,22 +37,48 @@ module.exports = {
     'mb-3',
     'mb-4',
     'mb-6',
+    'pl-0',
+    'pl-5',
+    'pr-3',
+
+    /* Lists */
     'list-inside',
     'list-outside',
     'list-decimal',
     'list-disc',
-    'pl-0',
-    'pl-5',
-    'leading-6',
-    'leading-7',
+
+    /* Widths */
     'w-full',
     'w-48',
-    'pr-3',
-    'text-slate-900'
+
+    /* Colors */
+    'text-slate-900',
+    'border-sky-500',
+    'bg-sky-100',
+
+    /* Visibility */
+    'hidden',
+    'block',
+
+    /* Responsive layout utilities */
+    'lg:grid-cols-12',
+    'lg:col-span-5',
+    'lg:col-span-7',
+    'sm:hidden',
+    'lg:hidden',
+    'lg:block'
   ],
+
   theme: {
-    extend: {}
+    extend: {
+      /* Optional readability aliases */
+      screens: {
+        tablet: '640px',
+        laptop: '1024px'
+      }
+    }
   },
+
   plugins: [
     require('flowbite/plugin')
   ]
