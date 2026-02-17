@@ -43,4 +43,12 @@ Tests/Cleaned/
 .history/
 .pytest_cache/
 
+# Playwright / headless test artifacts
+playwright-report/
+.playwright/
+test-results/
+screenshots/
+video/
+
+
 

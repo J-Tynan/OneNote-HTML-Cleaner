@@ -9,6 +9,7 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [ ] Prioritize extraction fidelity and HTML structure before UI polish/advanced features.
 - [ ] Treat optional native helper tooling (WASM/CLI) as support work, not the main product surface.
 - [ ] Explicitly defer `.one` and `.onepkg` structural parsing to a later milestone so the first stable release ships on the reliable MHTML path.
+- Note: MHTML → modern HTML pipeline is nearing completion (core transforms and formatting largely implemented).
 
 ## Next milestone (MHTML release)
 1. Harden the MHTML-to-HTML pipeline against fixtures and metadata scenarios so outputs match modern semantic HTML expectations.
@@ -108,7 +109,10 @@ Delivery mode for this feature is now explicitly split:
 - [x] Add dedicated metadata propagation regression test for `.onepkg` import (`Tests/metadata-onepkg-parser.js`) and wire npm script (`test:metadata:onepkg`).
 - [x] Add warning-code contract test (`Tests/warning-code-contract.js`) and npm script (`test:warnings:contract`).
 - [x] Centralize warning codes and helpers (`src/importers/warnings.js`) and migrate importers/UI/tests to use them.
+- [x] Add unit/fixture tests for ZIP/button behavior and a browser smoke page (`Tests/ui-download-zip.html`).
 - [ ] Add targeted unit/fixture tests for table-edge cases and compressed `.onepkg` LZX extraction paths; keep metadata regression coverage green (`test:semantic:native` + `test:metadata:onepkg`).
+- [x] Add npm script for download tests (`test:ui-downloads`).
+- [x] Automate browser smoke test (headless) for `Tests/ui-download-zip.html`.
 
 ## Product/docs follow-up
 - [ ] Document current native limitations and expected fidelity in README/docs to set realistic user expectations until parser work lands.
