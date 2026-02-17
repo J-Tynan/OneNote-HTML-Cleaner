@@ -182,3 +182,47 @@ details[open] > summary {
   pointer-events: none;
   user-select: none;
 }
+
+/* === DARK THEME OVERRIDES === */
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #0f172a; /* slate-900 */
+  color: #e6eef8; /* slate-100-ish */
+}
+
+html.dark .card-panel {
+  background-color: #0b1220; /* darker surface */
+  border-color: #374151; /* slate-700 */
+}
+
+html.dark .card-panel--soft,
+html.dark .card-section,
+html.dark .option-panel {
+  background-color: #071025;
+  border-color: #1f2937; /* slate-800 */
+}
+
+html.dark .text-muted {
+  color: #94a3b8; /* slate-400 */
+}
+
+html.dark .text-help {
+  color: #cbd5e1; /* slate-300 */
+}
+
+html.dark .btn-primary {
+  /* preserve CTA visibility in dark */
+  background-color: #0ea5b3; /* sky-500 */
+  color: #062023;
+}
+
+html.dark #dropzone.border-sky-500 {
+  background-color: #083344; /* darker sky-900-ish */
+}
+
+html.dark .file-item:hover {
+  background-color: #071025;
+}

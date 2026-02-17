@@ -17,6 +17,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - The front-end now follows a lightweight state machine: the import panel is always the dominant action, the status panel describes Empty → Processing → Completed/Partial, and diagnostics only appear when work is underway or issues occur.
 - Advanced controls live in a collapsed `<details>` block labeled “Advanced options (Optional)” so the surface stays calm while still letting power users tweak conversion profile, native toolbar toggles, and status filters.
 - Semantic layout (`header`, `main`, `section`, `footer`) plus Tailwind utility spacing/typography keep the experience accessible without extra frameworks, matching the offline-first promise of the app.
+- The UI now includes a Light / Dark theme toggle (top-right). It defaults to Light on first visit and records that choice to `localStorage`; subsequent toggles persist the user's preference.
 
 ## Project Structure
 

@@ -7,6 +7,9 @@ module.exports = {
     './node_modules/flowbite/**/*.js'
   ],
 
+  // Enable class-based dark mode so the app can toggle theme at runtime
+  darkMode: 'class',
+
   corePlugins: {
     preflight: false
   },

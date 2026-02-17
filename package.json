@@ -12,6 +12,7 @@
     "test:warnings:contract": "node ./Tests/warning-code-contract.js",
     "test:ui-downloads": "node ./Tests/ui-downloads-config.js",
     "test:ui-download-smoke": "node ./Tests/ui-download-zip-playwright.js",
+    "test:theme": "node ./Tests/tailwind-darkmode.js && node ./Tests/theme-playwright.js",
     "build:libmspack:wasm": "powershell -ExecutionPolicy Bypass -File ./tools/Build-LibmspackWasm.ps1",
     "build:libmspack:wasm:wsl": "powershell -ExecutionPolicy Bypass -File ./tools/Build-LibmspackWasm-WSL.ps1",
     "build:libmspack:wasm:wsl:check": "powershell -ExecutionPolicy Bypass -File ./tools/Build-LibmspackWasm-WSL.ps1 -CheckOnly",
