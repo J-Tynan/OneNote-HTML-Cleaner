@@ -1,5 +1,19 @@
 :root {
   color-scheme: light;
+
+  /* Color tokens (light theme) */
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-soft: #f8fafc;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --text-help: #475569;
+  --border-muted: #e2e8f0;
+  --cta-bg: #0ea5b3;
+  --cta-bg-hover: #0891b2;
+  --cta-bg-active: #056b6d;
+  --cta-text: #ffffff;
+  --dropzone-highlight: #e0f2fe;
 }
 
 /* === BASELINE === */
@@ -11,8 +25,8 @@ html {
 
 body {
   margin: 0;
-  background-color: #f8fafc; /* slate-50 */
-  color: #0f172a; /* slate-900 */
+  background-color: var(--bg-page);
+  color: var(--text-primary);
 }
 
 /* === TYPOGRAPHY RHYTHM === */
@@ -26,11 +40,11 @@ p {
 }
 
 .text-muted {
-  color: #64748b; /* slate-500 */
+  color: var(--text-muted);
 }
 
 .text-help {
-  color: #475569; /* slate-600 */
+  color: var(--text-help);
   font-size: 0.75rem;
 }
 
@@ -55,25 +69,37 @@ details[open] > summary {
 
   /* Primary surface (desktop workbench panels) */
   .card-panel {
-    @apply rounded-2xl border border-slate-200 bg-white p-5 sm:p-6
+    @apply rounded-2xl border p-5 sm:p-6
            transition-colors duration-150;
+    background-color: var(--bg-card);
+    border-color: var(--border-muted);
   }
 
   /* Softer contextual surface (status, diagnostics, advanced zones) */
   .card-panel--soft {
-    @apply bg-slate-50;
+    background-color: var(--bg-soft);
+  }
+
+  /* Header follows the same surface token so it reads consistently in dark */
+  header {
+    background-color: var(--bg-card);
+    border-bottom-color: var(--border-muted);
   }
 
   /* Sub-panels inside cards */
   .card-section {
-    @apply rounded-xl border border-slate-200 bg-slate-50 p-4
+    @apply rounded-xl p-4
            transition-colors duration-150;
+    background-color: var(--bg-soft);
+    border-color: var(--border-muted);
   }
 
   /* Option group panels */
   .option-panel {
-    @apply space-y-3 rounded-lg border border-slate-200 bg-white p-4
+    @apply space-y-3 rounded-lg p-4
            transition-colors duration-150;
+    background-color: var(--bg-card);
+    border-color: var(--border-muted);
   }
 
   /* Checkbox rows */
@@ -92,19 +118,30 @@ details[open] > summary {
   .btn-primary {
     @apply inline-flex items-center justify-center
            rounded-md
-           bg-sky-600
            px-4 py-2
            text-sm font-medium
-           text-white
            shadow-sm
            transition-colors
-           hover:bg-sky-700
-           active:bg-sky-800
            focus:outline-none
-           focus:ring-2 focus:ring-sky-500 focus:ring-offset-2
+           focus:ring-2 focus:ring-offset-2
            disabled:cursor-not-allowed
            disabled:opacity-50;
+    background-color: var(--cta-bg);
+    color: var(--cta-text);
+    border: none;
   }
+  .btn-primary:hover { background-color: var(--cta-bg-hover); }
+  .btn-primary:active { background-color: var(--cta-bg-active); }
+  .btn-primary:focus { box-shadow: 0 0 0 4px rgba(14,165,179,0.12); }
+
+  /* Ghost button (used for theme toggle) */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded px-2 py-1 text-sm;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid transparent;
+  }
+  .btn-ghost:hover { background-color: rgba(2,6,23,0.04); }
 }
 
 /* === STATUS / QUEUE ITEMS === */
@@ -114,17 +151,17 @@ details[open] > summary {
 }
 
 .file-item:hover {
-  background-color: #f8fafc; /* slate-50 */
+  background-color: var(--bg-soft);
 }
 
 /* === DROPZONE DRAG HIGHLIGHT === */
 
 #dropzone.border-sky-500 {
-  background-color: #e0f2fe; /* sky-100 */
+  background-color: var(--dropzone-highlight);
 }
 
 #dropzone.border-sky-500 p {
-  color: #0369a1; /* sky-700 */
+  color: var(--cta-bg);
 }
 
 /* === PANEL STATE FEEDBACK === */
@@ -183,46 +220,19 @@ details[open] > summary {
   user-select: none;
 }
 
-/* === DARK THEME OVERRIDES === */
+/* === DARK THEME VARIABLES === */
 html.dark {
   color-scheme: dark;
-}
-
-html.dark body {
-  background-color: #0f172a; /* slate-900 */
-  color: #e6eef8; /* slate-100-ish */
-}
-
-html.dark .card-panel {
-  background-color: #0b1220; /* darker surface */
-  border-color: #374151; /* slate-700 */
-}
-
-html.dark .card-panel--soft,
-html.dark .card-section,
-html.dark .option-panel {
-  background-color: #071025;
-  border-color: #1f2937; /* slate-800 */
-}
-
-html.dark .text-muted {
-  color: #94a3b8; /* slate-400 */
-}
-
-html.dark .text-help {
-  color: #cbd5e1; /* slate-300 */
-}
-
-html.dark .btn-primary {
-  /* preserve CTA visibility in dark */
-  background-color: #0ea5b3; /* sky-500 */
-  color: #062023;
-}
-
-html.dark #dropzone.border-sky-500 {
-  background-color: #083344; /* darker sky-900-ish */
-}
-
-html.dark .file-item:hover {
-  background-color: #071025;
+  --bg-page: #0f172a;
+  --bg-card: #0b1220;
+  --bg-soft: #071025;
+  --text-primary: #e6eef8;
+  --text-muted: #94a3b8;
+  --text-help: #cbd5e1;
+  --border-muted: #1f2937;
+  --cta-bg: #0ea5b3;
+  --cta-bg-hover: #0891b2;
+  --cta-bg-active: #065b58;
+  --cta-text: #062023;
+  --dropzone-highlight: #083344;
 }
