@@ -104,7 +104,8 @@ details[open] > summary {
 
   /* Checkbox rows */
   .checkbox-option {
-    @apply flex items-start gap-3 text-sm text-slate-700 cursor-pointer;
+    @apply flex items-start gap-3 text-sm cursor-pointer;
+    color: var(--text-primary);
   }
 
   .checkbox-input {
@@ -235,4 +236,62 @@ html.dark {
   --cta-bg-active: #065b58;
   --cta-text: #062023;
   --dropzone-highlight: #083344;
+}
+
+/* Dark-mode utility overrides for existing Tailwind classes in markup */
+html.dark body.bg-slate-50 {
+  background-color: var(--bg-page) !important;
+}
+
+html.dark body.text-slate-900 {
+  color: var(--text-primary) !important;
+}
+
+html.dark .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+html.dark .bg-slate-50 {
+  background-color: var(--bg-soft) !important;
+}
+
+html.dark .border-slate-200,
+html.dark .border-slate-300 {
+  border-color: var(--border-muted) !important;
+}
+
+html.dark .text-slate-900,
+html.dark .text-slate-700,
+html.dark .text-slate-600,
+html.dark .text-slate-500 {
+  color: var(--text-primary) !important;
+}
+
+html.dark .text-help,
+html.dark .text-muted {
+  color: var(--text-help) !important;
+}
+
+html.dark select,
+html.dark input[type="text"],
+html.dark input[type="search"],
+html.dark textarea {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-muted) !important;
+}
+
+html.dark #dropzone {
+  background-color: var(--bg-soft) !important;
+  border-color: #475569 !important;
+}
+
+html.dark #dropzone p,
+html.dark #dropzone .text-base,
+html.dark #dropzone .text-xs {
+  color: var(--text-primary) !important;
+}
+
+html.dark .btn-ghost:hover {
+  background-color: rgba(148, 163, 184, 0.16);
 }
