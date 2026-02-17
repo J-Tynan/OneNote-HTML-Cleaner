@@ -1,5 +1,8 @@
 // src/ui.js
 
+import { createDownloadHelpers } from './ui-downloads.js';
+import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
+
 const STATUS_EMPTY = 'Empty';
 
 const dom = {
@@ -9,12 +12,19 @@ const dom = {
   fileList: null,
   statusPanel: null,
   appStateBadge: null,
-  downloadZip: null
+  downloadZip: null,
+  conversionProfile: null,
+  toolbarEnabled: null,
+  toolbarEditToggleEnabled: null,
+  toolbarMetadataToggleEnabled: null
 };
 
 const runtime = {
   dragCounter: 0,
-  listenersBound: false
+  listenersBound: false,
+  workerManager: null,
+  successfulOutputs: new Map(),
+  downloadHelpers: null
 };
 
 export const state = {
@@ -70,6 +80,40 @@ function updateStatusVisibility() {
       ? STATUS_EMPTY
       : `${count} queued`;
   }
+
+  updateZipButton();
+}
+
+function isSuccessStatus(status) {
+  const normalized = String(status || '').toLowerCase();
+  return normalized === 'success' || normalized === 'completed';
+}
+
+function updateZipButton() {
+  if (!dom.downloadZip) return;
+  dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
+}
+
+function rebuildSuccessfulOutputs() {
+  runtime.successfulOutputs.clear();
+
+  for (const entry of state.queue) {
+    if (!isSuccessStatus(entry.status)) continue;
+    if (typeof entry.outputHtml !== 'string' || entry.outputHtml.length === 0) continue;
+
+    const stem = baseNameFromFile(entry.name || 'output');
+    let filename = `${stem}.html`;
+    let index = 2;
+
+    while (runtime.successfulOutputs.has(filename)) {
+      filename = `${stem} (${index}).html`;
+      index += 1;
+    }
+
+    runtime.successfulOutputs.set(filename, entry.outputHtml);
+  }
+
+  updateZipButton();
 }
 
 /* === DROPZONE STATE === */
@@ -98,6 +142,62 @@ function updateEntryStatus(id, status) {
 
 /* === PROCESSING === */
 
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(reader.error || new Error('Could not read file as text'));
+    reader.readAsText(file);
+  });
+}
+
+function readFileAsArrayBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error('Could not read file as bytes'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function processEntryWithWorker(entry) {
+  try {
+    const sourceKind = detectSourceKind(entry.name, entry.file.type);
+    const payload = {
+      id: entry.id,
+      fileName: entry.name,
+      relativePath: entry.name,
+      mimetype: entry.file.type || '',
+      sourceKind,
+      config: runtime.downloadHelpers
+        ? runtime.downloadHelpers.getConversionConfig()
+        : { Profile: 'cornell', TailwindCssHref: 'assets/tailwind-output.css' }
+    };
+
+    let transferList = [];
+    if (sourceKind === 'one' || sourceKind === 'onepkg') {
+      const bytes = await readFileAsArrayBuffer(entry.file);
+      payload.bytes = bytes;
+      transferList = [bytes];
+    } else {
+      payload.html = await readFileAsText(entry.file);
+    }
+
+    const result = await runtime.workerManager.enqueue(payload, null, transferList);
+
+    if (result && typeof result.outputHtml === 'string') {
+      entry.outputHtml = result.outputHtml;
+      updateEntryStatus(entry.id, 'success');
+      return;
+    }
+
+    updateEntryStatus(entry.id, 'error');
+  } catch (err) {
+    console.error('[ui] worker processing error', err);
+    updateEntryStatus(entry.id, 'error');
+  }
+}
+
 function processEntry(entry) {
   updateEntryStatus(entry.id, 'working');
 
@@ -122,9 +222,12 @@ function processEntry(entry) {
     }
   }
 
-  setTimeout(() => {
-    updateEntryStatus(entry.id, 'success');
-  }, 200);
+  if (runtime.workerManager) {
+    void processEntryWithWorker(entry);
+    return;
+  }
+
+  updateEntryStatus(entry.id, 'error');
 }
 
 /* === RENDERING === */
@@ -169,6 +272,7 @@ export function renderFileList() {
   }).join('');
 
   dom.fileList.innerHTML = markup;
+  rebuildSuccessfulOutputs();
   updateStatusVisibility();
 }
 
@@ -252,6 +356,7 @@ function onPaste(event) {
 
 function onFileListClick(event) {
   const target = event.target;
+  if (!(target instanceof Element)) return;
 
   const removeButton = target.closest('[data-remove-id]');
   if (removeButton) {
@@ -267,10 +372,19 @@ function onFileListClick(event) {
 
     const filename = entry.name.replace(/\.[^.]+$/, '') + '.html';
 
-    if (typeof window.downloadBlob === 'function') {
-      window.downloadBlob(filename, entry.outputHtml, 'text/html');
+    if (runtime.downloadHelpers && typeof runtime.downloadHelpers.downloadBlob === 'function') {
+      runtime.downloadHelpers.downloadBlob(filename, entry.outputHtml, 'text/html');
     }
   }
+}
+
+async function onDownloadZipClick() {
+  if (!runtime.downloadHelpers || typeof runtime.downloadHelpers.downloadZip !== 'function') return;
+  await runtime.downloadHelpers.downloadZip();
+}
+
+function onAdvancedOptionsChange() {
+  rebuildSuccessfulOutputs();
 }
 
 /* === EVENT BINDING === */
@@ -287,6 +401,11 @@ function bindEvents() {
   dom.importButton?.addEventListener('click', onImportButtonClick);
   dom.fileInput?.addEventListener('change', onFileInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
+  dom.downloadZip?.addEventListener('click', onDownloadZipClick);
+  dom.conversionProfile?.addEventListener('change', onAdvancedOptionsChange);
+  dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.toolbarMetadataToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
 
   window.addEventListener('resize', logLayoutMode);
@@ -296,7 +415,7 @@ function bindEvents() {
 
 /* === INIT === */
 
-export function initUI() {
+export function initUI(workerManager) {
   dom.dropzone = document.getElementById('dropzone');
   dom.importButton = document.getElementById('importButton');
   dom.fileInput = document.getElementById('fileInput');
@@ -304,6 +423,24 @@ export function initUI() {
   dom.statusPanel = document.getElementById('statusPanel');
   dom.appStateBadge = document.getElementById('appStateBadge');
   dom.downloadZip = document.getElementById('downloadZip');
+  dom.conversionProfile = document.getElementById('conversionProfile');
+  dom.toolbarEnabled = document.getElementById('toolbarEnabled');
+  dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
+  dom.toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
+
+  runtime.workerManager = workerManager || null;
+  runtime.downloadHelpers = createDownloadHelpers({
+    successfulOutputs: runtime.successfulOutputs,
+    downloadZipButton: dom.downloadZip,
+    conversionProfile: dom.conversionProfile,
+    toolbarEnabled: dom.toolbarEnabled,
+    toolbarEditToggleEnabled: dom.toolbarEditToggleEnabled,
+    toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled
+  }, updateZipButton);
+
+  if (!window.JSZip) {
+    console.warn('[ui] JSZip is not loaded on window; ZIP download will be unavailable');
+  }
 
   runtime.dragCounter = 0;
   setDropzoneActive(false);
