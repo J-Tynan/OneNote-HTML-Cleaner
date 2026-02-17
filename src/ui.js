@@ -4,6 +4,8 @@ import { createDownloadHelpers } from './ui-downloads.js';
 import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
 
 const STATUS_EMPTY = 'Empty';
+const STATUS_UNSUPPORTED = 'Unsupported';
+const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current release.';
 
 const dom = {
   dropzone: null,
@@ -114,6 +116,10 @@ function rebuildSuccessfulOutputs() {
   }
 
   updateZipButton();
+}
+
+function isSupportedSourceKind(sourceKind) {
+  return sourceKind === 'mht';
 }
 
 /* === DROPZONE STATE === */
@@ -237,8 +243,10 @@ export function renderFileList() {
 
   const markup = state.queue.map((entry) => {
     const safeName = escapeHtml(entry.name);
-    const safeStatus = escapeHtml(entry.status || 'queued');
+    const displayStatus = entry.status === 'unsupported' ? STATUS_UNSUPPORTED : (entry.status || 'queued');
+    const safeStatus = escapeHtml(displayStatus);
     const safeSize = escapeHtml(formatBytes(entry.size));
+    const safeMessage = entry.message ? escapeHtml(entry.message) : '';
     const hasOutput = typeof entry.outputHtml === 'string' && entry.outputHtml.length > 0;
 
     return `
@@ -247,6 +255,7 @@ export function renderFileList() {
           <div class="min-w-0">
             <p class="truncate text-sm font-semibold text-slate-900">${safeName}</p>
             <p class="mt-1 text-xs text-slate-500">${safeSize} · ${safeStatus}</p>
+            ${safeMessage ? `<p class="mt-1 text-xs text-muted">${safeMessage}</p>` : ''}
           </div>
           <button
             type="button"
@@ -289,18 +298,34 @@ export function addFilesToQueue(files) {
   const list = Array.from(files || []).filter((file) => file instanceof File);
   if (list.length === 0) return;
 
-  const addedEntries = list.map((file) => ({
-    id: nextId(),
-    name: file.name || 'unnamed',
-    size: Number.isFinite(file.size) ? file.size : 0,
-    status: 'queued',
-    file
-  }));
+  const addedEntries = [];
+  const processableEntries = [];
+
+  for (const file of list) {
+    const sourceKind = detectSourceKind(file.name, file.type);
+    const supported = isSupportedSourceKind(sourceKind);
+    const entry = {
+      id: nextId(),
+      name: file.name || 'unnamed',
+      size: Number.isFinite(file.size) ? file.size : 0,
+      status: supported ? 'queued' : 'unsupported',
+      file,
+      sourceKind
+    };
+
+    if (!supported) {
+      entry.message = UNSUPPORTED_MESSAGE;
+    } else {
+      processableEntries.push(entry);
+    }
+
+    addedEntries.push(entry);
+  }
 
   state.queue = [...state.queue, ...addedEntries];
   renderFileList();
 
-  for (const entry of addedEntries) {
+  for (const entry of processableEntries) {
     processEntry(entry);
   }
 }
