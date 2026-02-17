@@ -1,3 +1,5 @@
+// src/ui.js
+
 const STATUS_EMPTY = 'Empty';
 
 const dom = {
@@ -12,8 +14,7 @@ const dom = {
 
 const runtime = {
   dragCounter: 0,
-  listenersBound: false,
-  cleanup: null
+  listenersBound: false
 };
 
 export const state = {
@@ -95,26 +96,34 @@ function updateEntryStatus(id, status) {
   renderFileList();
 }
 
+/* === PROCESSING === */
+
 function processEntry(entry) {
-  updateEntryStatus(entry.id, 'processing');
+  updateEntryStatus(entry.id, 'working');
 
   if (typeof window.processFileEntry === 'function') {
     try {
       window.processFileEntry(entry.file, (result) => {
+        if (result && typeof result.outputHtml === 'string') {
+          entry.outputHtml = result.outputHtml;
+        }
+
         const status = result && typeof result.status === 'string'
           ? result.status
-          : 'completed';
+          : 'success';
+
         updateEntryStatus(entry.id, status);
       });
       return;
-    } catch {
+    } catch (err) {
+      console.error('[ui] processing error', err);
       updateEntryStatus(entry.id, 'error');
       return;
     }
   }
 
   setTimeout(() => {
-    updateEntryStatus(entry.id, 'completed');
+    updateEntryStatus(entry.id, 'success');
   }, 200);
 }
 
@@ -127,6 +136,7 @@ export function renderFileList() {
     const safeName = escapeHtml(entry.name);
     const safeStatus = escapeHtml(entry.status || 'queued');
     const safeSize = escapeHtml(formatBytes(entry.size));
+    const hasOutput = typeof entry.outputHtml === 'string' && entry.outputHtml.length > 0;
 
     return `
       <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}">
@@ -143,6 +153,17 @@ export function renderFileList() {
             Remove
           </button>
         </div>
+
+        ${hasOutput ? `
+          <div class="mt-3">
+            <button
+              type="button"
+              class="btn-primary text-xs px-3 py-1.5"
+              data-download-id="${entry.id}">
+              Download HTML
+            </button>
+          </div>
+        ` : ''}
       </div>
     `;
   }).join('');
@@ -204,8 +225,7 @@ function onDropzoneDrop(event) {
   event.preventDefault();
   runtime.dragCounter = 0;
   setDropzoneActive(false);
-  const files = event.dataTransfer?.files || [];
-  addFilesToQueue(files);
+  addFilesToQueue(event.dataTransfer?.files || []);
 }
 
 function onDropzoneKeyDown(event) {
@@ -219,37 +239,37 @@ function onImportButtonClick() {
 }
 
 function onFileInputChange(event) {
-  const input = event.target;
-  addFilesToQueue(input.files || []);
-  input.value = '';
-
-  /* Restore focus for mobile + keyboard users */
+  addFilesToQueue(event.target.files || []);
+  event.target.value = '';
   dom.dropzone?.focus();
 }
 
 function onPaste(event) {
-  const files = event.clipboardData?.files;
-  if (!files || files.length === 0) return;
-  addFilesToQueue(files);
+  if (event.clipboardData?.files?.length) {
+    addFilesToQueue(event.clipboardData.files);
+  }
 }
 
 function onFileListClick(event) {
   const target = event.target;
-  if (!(target instanceof Element)) return;
+
   const removeButton = target.closest('[data-remove-id]');
-  if (!removeButton) return;
-  const id = removeButton.getAttribute('data-remove-id');
-  if (id) removeFromQueue(id);
-}
+  if (removeButton) {
+    removeFromQueue(removeButton.getAttribute('data-remove-id'));
+    return;
+  }
 
-async function onDownloadZipClick() {
-  if (!dom.downloadZip || typeof window.createZip !== 'function') return;
+  const downloadButton = target.closest('[data-download-id]');
+  if (downloadButton) {
+    const id = downloadButton.getAttribute('data-download-id');
+    const entry = getQueueEntry(id);
+    if (!entry || !entry.outputHtml) return;
 
-  dom.downloadZip.disabled = true;
-  try {
-    await Promise.resolve(window.createZip(state.queue));
-  } finally {
-    dom.downloadZip.disabled = false;
+    const filename = entry.name.replace(/\.[^.]+$/, '') + '.html';
+
+    if (typeof window.downloadBlob === 'function') {
+      window.downloadBlob(filename, entry.outputHtml, 'text/html');
+    }
   }
 }
 
@@ -268,23 +288,15 @@ function bindEvents() {
   dom.fileInput?.addEventListener('change', onFileInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
   document.addEventListener('paste', onPaste);
-  dom.downloadZip?.addEventListener('click', onDownloadZipClick);
 
   window.addEventListener('resize', logLayoutMode);
 
   runtime.listenersBound = true;
-  runtime.cleanup = () => {
-    window.removeEventListener('resize', logLayoutMode);
-    runtime.listenersBound = false;
-    runtime.cleanup = null;
-  };
 }
 
 /* === INIT === */
 
-export function initUI(_workerManager) {
-  runtime.cleanup?.();
-
+export function initUI() {
   dom.dropzone = document.getElementById('dropzone');
   dom.importButton = document.getElementById('importButton');
   dom.fileInput = document.getElementById('fileInput');
