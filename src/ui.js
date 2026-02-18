@@ -7,6 +7,26 @@ const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
 const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current release.';
 
+// DEBUG_UI: set to true for local development to enable UI-only debug logs.
+// Keep false in production to avoid console noise.
+const DEBUG_UI = false;
+
+/**
+ * UI-only debug logger. No-ops when DEBUG_UI is false.
+ * - Prefixes with "[UI]" unless the first argument already contains a [UI] prefix.
+ * - Use for development-only informational logs; errors/warnings stay untouched.
+ */
+function debugUI(...args) {
+  if (!DEBUG_UI) return;
+  if (args.length === 0) return;
+  const [first, ...rest] = args;
+  if (typeof first === 'string' && /^\s*\[ui\]/i.test(first)) {
+    console.log(first, ...rest);
+  } else {
+    console.log('[UI]', ...args);
+  }
+}
+
 const dom = {
   dropzone: null,
   importButton: null,
@@ -49,7 +69,7 @@ function logLayoutMode() {
     mode = 'Layout B · Tablet / Laptop';
   }
 
-  console.debug(`[UI] Active layout: ${mode} (${width}px)`);
+  debugUI(`[UI] Active layout: ${mode} (${width}px)`);
 }
 
 /* === UTILITIES === */
@@ -211,10 +231,10 @@ async function processEntryWithWorker(entry) {
       payload.html = await readFileAsText(entry.file);
     }
 
-    console.info('[ui] Dispatching entry to worker:', entry.id, entry.name);
+    debugUI('[ui] Dispatching entry to worker:', entry.id, entry.name);
     const result = await runtime.workerManager.enqueue(payload, null, transferList);
 
-    console.info('[ui] Worker returned for entry:', entry.id, 'status=', result && result.status ? result.status : 'unknown');
+    debugUI('[ui] Worker returned for entry:', entry.id, 'status=', result && result.status ? result.status : 'unknown');
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
@@ -351,12 +371,12 @@ export function addFilesToQueue(files) {
   renderFileList();
 
   if (runtime.autoConvertEnabled) {
-    console.info('[ui] autoConvertEnabled=true — starting processing for', processableEntries.length, 'entries');
+    debugUI('[ui] autoConvertEnabled=true — starting processing for', processableEntries.length, 'entries');
     for (const entry of processableEntries) {
       processEntry(entry);
     }
   } else {
-    console.info('[ui] autoConvertEnabled=false — files added to queue but not processed');
+    debugUI('[ui] autoConvertEnabled=false — files added to queue but not processed');
   }
 }
 
@@ -505,9 +525,9 @@ export function initUI(workerManager, options = {}) {
   }, updateZipButton);
 
   if (window.JSZip) {
-    console.info('[ui] JSZip loaded');
+    debugUI('[ui] JSZip loaded');
   } else {
-    console.warn('[ui] JSZip not found; ZIP downloads disabled (use CDN or include JSZip in production)');
+    console.warn('[UI] JSZip not found; ZIP downloads disabled (use CDN or include JSZip in production)');
   }
 
   runtime.dragCounter = 0;

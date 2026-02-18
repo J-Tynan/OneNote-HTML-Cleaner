@@ -5,13 +5,26 @@ import { detectSourceKind } from './importers/sourceKind.js';
 import { importOneSection } from './importers/one.js';
 import { importOnePackage } from './importers/onepkg.js';
 
+// DEBUG_WORKER: enable for verbose worker runtime logs during development
+const DEBUG_WORKER = false;
+function debugWorker(...args) {
+  if (!DEBUG_WORKER) return;
+  if (args.length === 0) return;
+  const [first, ...rest] = args;
+  if (typeof first === 'string' && /^\s*\[worker\]/i.test(first)) {
+    console.log(first, ...rest);
+  } else {
+    console.log('[Worker]', ...args);
+  }
+} 
+
 self.onmessage = async (e) => {
   const payload = e.data;
   const id = payload.id || crypto.randomUUID();
   const fileName = payload.fileName || payload.relativePath || 'unknown';
   const sourceKind = payload.sourceKind || detectSourceKind(fileName, payload.mimetype);
 
-  console.log(`[worker] received job id=${id} file=${fileName}`);
+  debugWorker(`[worker] received job id=${id} file=${fileName}`);
 
   try {
     if (sourceKind === 'one' || sourceKind === 'onepkg') {
@@ -41,7 +54,7 @@ self.onmessage = async (e) => {
     }
 
     const hasDOMParser = (typeof DOMParser !== 'undefined');
-    console.log(`[worker] DOMParser available: ${hasDOMParser}`);
+    debugWorker(`[worker] DOMParser available: ${hasDOMParser}`);
 
     if (!hasDOMParser) {
       self.postMessage({ id, status: 'unsupported', reason: 'DOMParser not available in worker' });
@@ -53,12 +66,12 @@ self.onmessage = async (e) => {
 
     // If filename indicates MHT/MHTML, attempt to parse it here in the worker
     if (sourceKind === 'mht') {
-      console.log('[worker] detected MHT input, attempting parseMht in worker');
+      debugWorker('[worker] detected MHT input, attempting parseMht in worker');
       const parsed = parseMht(htmlInput);
       if (parsed && parsed.html) {
         htmlInput = parsed.html;
         imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-        console.log(`[worker] parseMht: html length=${htmlInput.length} parts=${parsed.parts.length} boundary=${parsed.boundary}`);
+        debugWorker(`[worker] parseMht: html length=${htmlInput.length} parts=${parsed.parts.length} boundary=${parsed.boundary}`);
       } else {
         console.warn('[worker] parseMht did not return HTML; continuing with original payload.html');
       }
@@ -70,7 +83,7 @@ self.onmessage = async (e) => {
       SourceName: fileName,
       SourceKind: sourceKind
     }));
-    console.log(`[worker] job ${id} done, output length=${String((result.output || '').length)}`);
+    debugWorker(`[worker] job ${id} done, output length=${String((result.output || '').length)}`);
     self.postMessage({
       id,
       status: 'done',

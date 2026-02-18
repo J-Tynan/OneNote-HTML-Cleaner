@@ -3,7 +3,21 @@ export default class WorkerManager {
   constructor(workerPath = './worker.js') {
     // Resolve worker script relative to this module so it works on GitHub Pages subpaths
     const resolved = new URL(workerPath, import.meta.url).href;
-    console.info('[worker-wrapper] creating worker from', resolved);
+
+    // DEBUG_WORKER: toggle for worker-wrapper informational logs in development
+    const DEBUG_WORKER = false;
+    const debugWorker = (...args) => {
+      if (!DEBUG_WORKER) return;
+      if (args.length === 0) return;
+      const [first, ...rest] = args;
+      if (typeof first === 'string' && /^\s*\[worker-wrapper\]/i.test(first)) {
+        console.log(first, ...rest);
+      } else {
+        console.log('[Worker]', ...args);
+      }
+    };
+
+    debugWorker('[worker-wrapper] creating worker from', resolved);
     try {
       this.worker = new Worker(resolved, { type: 'module' });
     } catch (err) {
@@ -73,12 +87,12 @@ export default class WorkerManager {
 
           const fileName = payload.fileName || payload.relativePath || '';
           if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
-            console.log('[worker-wrapper] main-thread parseMht for', fileName);
+            debugWorker('[worker-wrapper] main-thread parseMht for', fileName);
             const parsed = mhtMod.parseMht(htmlInput);
             if (parsed && parsed.html) {
               htmlInput = parsed.html;
               imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-              console.log('[worker-wrapper] parseMht produced html length', htmlInput.length);
+              debugWorker('[worker-wrapper] parseMht produced html length', htmlInput.length);
             } else {
               console.warn('[worker-wrapper] parseMht returned no HTML; proceeding with original payload.html');
             }
@@ -119,7 +133,7 @@ export default class WorkerManager {
       this.callbacks.set(payload.id, { resolve, reject, onprogress, payload, timeoutHandle });
 
       try {
-        console.info('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
+        debugWorker('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
         this.worker.postMessage(payload, transferList);
       } catch (error) {
         clearTimeout(timeoutHandle);

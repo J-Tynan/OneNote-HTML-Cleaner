@@ -2,6 +2,13 @@
 import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
 
 export function createDownloadHelpers(ctx, updateZipButton) {
+  // Development-only download logging
+  const DEBUG_DL = false;
+  function debugDL(...args) {
+    if (!DEBUG_DL) return;
+    console.log('[UI]', ...args);
+  }
+
   function downloadBlob(filename, text, mime = 'text/html') {
     const bom = '\uFEFF';
     const content = bom + (text || '');
@@ -9,7 +16,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const hasCharset = /<meta\s+charset=["']?utf-8["']?/i.test(content)
       || /<meta\s+http-equiv=["']content-type["']\s+content=["'][^"']*charset=utf-8/i.test(content);
     const hasDataImages = /data:image\//i.test(content);
-    console.log(`[ui] downloadBlob: filename=${filename} hasCharset=${hasCharset} hasDataImages=${hasDataImages} length=${content.length}`);
+    debugDL(`[ui] downloadBlob: filename=${filename} hasCharset=${hasCharset} hasDataImages=${hasDataImages} length=${content.length}`);
 
     const blob = new Blob([content], { type: `${mime};charset=utf-8` });
     const a = document.createElement('a');
