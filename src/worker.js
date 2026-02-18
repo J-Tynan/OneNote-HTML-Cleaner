@@ -1,4 +1,6 @@
 // src/worker.js
+// Ensure global debug hooks exist before importing modules that may access them
+import './worker-globals.js';
 import { runPipeline } from './pipeline/pipeline.js';
 import { parseMht } from './pipeline/mht.js';
 import { detectSourceKind } from './importers/sourceKind.js';
@@ -21,7 +23,14 @@ function debugWorker(...args) {
 // Defensive: expose `debugWorker` on the worker global so accidental global
 // references (from third-party or imported modules) do not cause a
 // ReferenceError inside the worker — safer for production and reduced OOMs.
-try { globalThis.debugWorker = debugWorker; } catch (e) { /* ignore */ }
+const workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
+  || (typeof self !== 'undefined' && self)
+  || (typeof window !== 'undefined' && window)
+  || null;
+
+if (workerGlobal) {
+  workerGlobal.debugWorker = debugWorker;
+}
 
 self.onmessage = async (e) => {
   const payload = e.data;
