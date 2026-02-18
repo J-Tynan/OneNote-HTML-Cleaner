@@ -64,6 +64,8 @@ function createStaticServer(root) {
     const page = await ctx.newPage();
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     page.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
+    page.on('requestfailed', (req) => console.log('PAGE REQ FAILED:', req.url(), req.failure && req.failure().errorText));
+    page.on('requestfinished', (req) => console.log('PAGE REQ FINISHED:', req.url()));
     await page.goto(url, { waitUntil: 'networkidle' });
 
     // Initial state should be light (no 'dark' class) and initTheme() should persist that choice

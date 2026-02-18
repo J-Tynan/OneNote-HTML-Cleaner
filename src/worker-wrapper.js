@@ -1,7 +1,16 @@
 // src/worker-wrapper.js
 export default class WorkerManager {
-  constructor(workerPath = 'src/worker.js') {
-    this.worker = new Worker(workerPath, { type: 'module' });
+  constructor(workerPath = './worker.js') {
+    // Resolve worker script relative to this module so it works on GitHub Pages subpaths
+    const resolved = new URL(workerPath, import.meta.url).href;
+    console.info('[worker-wrapper] creating worker from', resolved);
+    try {
+      this.worker = new Worker(resolved, { type: 'module' });
+    } catch (err) {
+      console.error('[worker-wrapper] failed to construct Worker with', resolved, err);
+      throw err;
+    }
+
     this.callbacks = new Map();
     this.defaultTimeoutMs = 120000;
 
@@ -110,6 +119,7 @@ export default class WorkerManager {
       this.callbacks.set(payload.id, { resolve, reject, onprogress, payload, timeoutHandle });
 
       try {
+        console.info('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
         this.worker.postMessage(payload, transferList);
       } catch (error) {
         clearTimeout(timeoutHandle);

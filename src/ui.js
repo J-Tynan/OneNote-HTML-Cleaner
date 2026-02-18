@@ -211,7 +211,10 @@ async function processEntryWithWorker(entry) {
       payload.html = await readFileAsText(entry.file);
     }
 
+    console.info('[ui] Dispatching entry to worker:', entry.id, entry.name);
     const result = await runtime.workerManager.enqueue(payload, null, transferList);
+
+    console.info('[ui] Worker returned for entry:', entry.id, 'status=', result && result.status ? result.status : 'unknown');
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
@@ -348,13 +351,14 @@ export function addFilesToQueue(files) {
   renderFileList();
 
   if (runtime.autoConvertEnabled) {
+    console.info('[ui] autoConvertEnabled=true — starting processing for', processableEntries.length, 'entries');
     for (const entry of processableEntries) {
       processEntry(entry);
     }
+  } else {
+    console.info('[ui] autoConvertEnabled=false — files added to queue but not processed');
   }
 }
-
-/* === EVENT HANDLERS === */
 
 function onDropzoneDragEnter(event) {
   event.preventDefault();
@@ -500,8 +504,10 @@ export function initUI(workerManager, options = {}) {
     toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled
   }, updateZipButton);
 
-  if (!window.JSZip) {
-    console.warn('[ui] JSZip is not loaded on window; ZIP download will be unavailable');
+  if (window.JSZip) {
+    console.info('[ui] JSZip loaded');
+  } else {
+    console.warn('[ui] JSZip not found; ZIP downloads disabled (use CDN or include JSZip in production)');
   }
 
   runtime.dragCounter = 0;

@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     autoConvertEnabled = DEFAULT_AUTO_CONVERT;
   }
 
-  const wm = new WorkerManager('src/worker.js');
+  const wm = new WorkerManager('./worker.js');
+  console.info('[app] WorkerManager created');
 
   // Initialise UI with resolved preferences
   initUI(wm, {
