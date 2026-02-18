@@ -9,7 +9,22 @@ const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current rele
 
 // DEBUG_UI: set to true for local development to enable UI-only debug logs.
 // Keep false in production to avoid console noise.
-const DEBUG_UI = false;
+const DEBUG_UI = true;
+
+// DEBUG_WORKER: enable to surface worker-specific debug logs from the UI layer.
+// When true, messages will be prefixed with [Worker].
+const DEBUG_WORKER = false;
+
+function debugWorker(...args) {
+  if (!DEBUG_WORKER) return;
+  if (args.length === 0) return;
+  const [first, ...rest] = args;
+  if (typeof first === 'string' && /^\s*\[worker\]/i.test(first)) {
+    console.log(first, ...rest);
+  } else {
+    console.log('[Worker]', ...args);
+  }
+}
 
 /**
  * UI-only debug logger. No-ops when DEBUG_UI is false.
@@ -244,7 +259,25 @@ async function processEntryWithWorker(entry) {
 
     updateEntryStatus(entry.id, 'error');
   } catch (err) {
-    console.error('[ui] worker processing error', err);
+    console.groupCollapsed('[ui] worker processing error', err);
+    try {
+      console.error('[ui] worker processing error', err);
+      console.log('entry:', { id: entry.id, name: entry.name, size: entry.size, sourceKind: entry.sourceKind, status: entry.status });
+      if (typeof payload !== 'undefined') {
+        console.log('payload summary:', {
+          id: payload.id,
+          fileName: payload.fileName,
+          mimetype: payload.mimetype,
+          htmlLength: payload.html ? payload.html.length : undefined,
+          hasBytes: !!payload.bytes
+        });
+      }
+      console.log('workerManager callbacks count:', runtime.workerManager && runtime.workerManager.callbacks ? runtime.workerManager.callbacks.size : undefined);
+    } catch (logErr) {
+      console.error('[ui] error while logging worker failure context', logErr);
+    }
+    console.groupEnd();
+
     updateEntryStatus(entry.id, 'error');
   }
 }

@@ -52,7 +52,20 @@ export default class WorkerManager {
         ? ` (${event.filename}${event.lineno ? `:${event.lineno}` : ''}${event.colno ? `:${event.colno}` : ''})`
         : '';
       const message = `${baseMessage}${fileInfo}`;
-      console.error('[worker-wrapper] worker error:', message, event);
+
+      // Provide additional diagnostic context (pending callbacks summary)
+      try {
+        const pendingSummary = Array.from(this.callbacks.values()).map((cb) => ({
+          id: cb.payload && cb.payload.id,
+          fileName: cb.payload && cb.payload.fileName,
+          hasBytes: !!(cb.payload && cb.payload.bytes),
+          htmlLength: cb.payload && typeof cb.payload.html === 'string' ? cb.payload.html.length : undefined
+        }));
+        console.error('[worker-wrapper] worker error:', message, { event, pending: pendingSummary });
+      } catch (logErr) {
+        console.error('[worker-wrapper] worker error (failed to summarize pending callbacks):', message, event, logErr);
+      }
+
       this.rejectAllPending(message);
     };
 
@@ -74,6 +87,19 @@ export default class WorkerManager {
         cb.resolve(msg);
         this.callbacks.delete(msg.id);
       } else if (msg.status === 'error') {
+        try {
+          const payloadSummary = cb && cb.payload ? {
+            id: cb.payload.id,
+            fileName: cb.payload.fileName,
+            mimetype: cb.payload.mimetype,
+            bytesLength: cb.payload.bytes ? (cb.payload.bytes.byteLength || 'ArrayBuffer') : undefined,
+            htmlLength: cb.payload.html ? cb.payload.html.length : undefined
+          } : undefined;
+          console.error('[worker-wrapper] worker reported error', { id: msg.id, error: msg.error, stack: msg.stack, filename: msg.filename, lineno: msg.lineno, colno: msg.colno, payload: payloadSummary });
+        } catch (logErr) {
+          console.error('[worker-wrapper] error while logging worker error:', logErr);
+        }
+
         cb.reject(msg);
         this.callbacks.delete(msg.id);
       } else if (msg.status === 'progress' && cb.onprogress) {
@@ -139,6 +165,8 @@ export default class WorkerManager {
       this.callbacks.set(payload.id, { resolve, reject, onprogress, payload, timeoutHandle });
 
       try {
+        const transferSummary = Array.isArray(transferList) ? transferList.map(t => (t && t.byteLength) ? `ArrayBuffer(${t.byteLength})` : String(t)) : [];
+        console.info('[worker-wrapper] postMessage -> id=', payload.id, 'file=', payload.fileName || payload.relativePath, 'transferList=', transferSummary);
         debugWorker('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
         this.worker.postMessage(payload, transferList);
       } catch (error) {
