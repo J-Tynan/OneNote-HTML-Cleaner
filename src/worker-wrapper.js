@@ -4,6 +4,12 @@ export default class WorkerManager {
     // Resolve worker script relative to this module so it works on GitHub Pages subpaths
     const resolved = new URL(workerPath, import.meta.url).href;
 
+    // If a service worker is controlling the page, append a cache-busting
+    // query so the browser requests the latest `worker.js` instead of a
+    // stale cached version. This is a conservative, reversible fallback.
+    const shouldCacheBust = (typeof navigator !== 'undefined' && navigator.serviceWorker && navigator.serviceWorker.controller);
+    const resolvedForWorker = shouldCacheBust ? `${resolved}?_=${Date.now()}` : resolved;
+
     // DEBUG_WORKER: toggle for worker-wrapper informational logs in development
     const DEBUG_WORKER = false;
     const debugWorker = (...args) => {
@@ -17,9 +23,9 @@ export default class WorkerManager {
       }
     };
 
-    debugWorker('[worker-wrapper] creating worker from', resolved);
+    debugWorker('[worker-wrapper] creating worker from', resolvedForWorker);
     try {
-      this.worker = new Worker(resolved, { type: 'module' });
+      this.worker = new Worker(resolvedForWorker, { type: 'module' });
     } catch (err) {
       console.error('[worker-wrapper] failed to construct Worker with', resolved, err);
       throw err;
