@@ -22,6 +22,8 @@ pnpm-debug.log*
 # Vendor and build artifacts created by the libmspack wasm build
 .vendor/
 assets/wasm/
+.// Tailwind output (generated)
+assets/tailwind-output.css
 .tmp-*
 # local editor / debug artifacts
 .vscode/
