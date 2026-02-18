@@ -16,7 +16,12 @@ function debugWorker(...args) {
   } else {
     console.log('[Worker]', ...args);
   }
-} 
+}
+
+// Defensive: expose `debugWorker` on the worker global so accidental global
+// references (from third-party or imported modules) do not cause a
+// ReferenceError inside the worker — safer for production and reduced OOMs.
+try { globalThis.debugWorker = debugWorker; } catch (e) { /* ignore */ }
 
 self.onmessage = async (e) => {
   const payload = e.data;
