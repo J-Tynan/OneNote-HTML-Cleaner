@@ -25,6 +25,8 @@ These tasks were identified from recent debugging and are ordered by priority fo
 - [ ] Standardize test output formatting — ensure tests print `Result: PASS` / `Result: FAIL` consistently.
 - [ ] Run tests after changes and collect logs — re-run native and Playwright smoke tests and archive logs for the rollout.
 
+- [ ] Remove `debugWorker()` references from codebase — ensure all references are deleted and any diagnostic behavior is replaced by structured diagnostics.
+
 ## Tomorrow's focus (start here)
 
 Begin work with the smallest, highest-impact items so we unblock further diagnostics and releases quickly.
@@ -40,6 +42,13 @@ Begin work with the smallest, highest-impact items so we unblock further diagnos
 3. Improve `debugWorker` global initialization & diagnostics — Owner: `infra` — Status: next
 	- Estimated time: 1–2 hours
 	- Quick checklist: ensure `worker-globals.js` runs first and posts structured `init` diagnostics; include worker file URL/hash when possible.
+
+4. Remove `debugWorker()` references from codebase — Owner: `infra` — Status: next
+	- Estimated time: 30–60 minutes
+	- Quick checklist:
+		1. Search for `debugWorker` references in `src/` and `Tests/` and remove or replace them with the standardized diagnostics/logging conventions.
+		2. Update `worker-globals.js` to no longer export or rely on `debugWorker` if replaced.
+		3. Run unit and Playwright smoke tests to ensure no regressions.
 
 Note: after these three items are complete we should be able to reproduce and fix the remaining PWA client failures reliably; proceed to the remaining prioritized tasks afterward.
 
