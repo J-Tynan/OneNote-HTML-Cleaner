@@ -3,29 +3,9 @@ export default class WorkerManager {
   constructor(workerPath = './worker.js') {
     // Resolve worker script relative to this module so it works on GitHub Pages subpaths
     const resolved = new URL(workerPath, import.meta.url).href;
-
-    // If a service worker is controlling the page, append a cache-busting
-    // query so the browser requests the latest `worker.js` instead of a
-    // stale cached version. This is a conservative, reversible fallback.
-    const shouldCacheBust = (typeof navigator !== 'undefined' && navigator.serviceWorker && navigator.serviceWorker.controller);
-    const resolvedForWorker = shouldCacheBust ? `${resolved}?_=${Date.now()}` : resolved;
-
-    // DEBUG_WORKER: toggle for worker-wrapper informational logs in development
-    const DEBUG_WORKER = false;
-    const debugWorker = (...args) => {
-      if (!DEBUG_WORKER) return;
-      if (args.length === 0) return;
-      const [first, ...rest] = args;
-      if (typeof first === 'string' && /^\s*\[worker-wrapper\]/i.test(first)) {
-        console.log(first, ...rest);
-      } else {
-        console.log('[Worker]', ...args);
-      }
-    };
-
-    debugWorker('[worker-wrapper] creating worker from', resolvedForWorker);
+    console.info('[worker-wrapper] creating worker from', resolved);
     try {
-      this.worker = new Worker(resolvedForWorker, { type: 'module' });
+      this.worker = new Worker(resolved, { type: 'module' });
     } catch (err) {
       console.error('[worker-wrapper] failed to construct Worker with', resolved, err);
       throw err;
@@ -52,20 +32,7 @@ export default class WorkerManager {
         ? ` (${event.filename}${event.lineno ? `:${event.lineno}` : ''}${event.colno ? `:${event.colno}` : ''})`
         : '';
       const message = `${baseMessage}${fileInfo}`;
-
-      // Provide additional diagnostic context (pending callbacks summary)
-      try {
-        const pendingSummary = Array.from(this.callbacks.values()).map((cb) => ({
-          id: cb.payload && cb.payload.id,
-          fileName: cb.payload && cb.payload.fileName,
-          hasBytes: !!(cb.payload && cb.payload.bytes),
-          htmlLength: cb.payload && typeof cb.payload.html === 'string' ? cb.payload.html.length : undefined
-        }));
-        console.error('[worker-wrapper] worker error:', message, { event, pending: pendingSummary });
-      } catch (logErr) {
-        console.error('[worker-wrapper] worker error (failed to summarize pending callbacks):', message, event, logErr);
-      }
-
+      console.error('[worker-wrapper] worker error:', message, event);
       this.rejectAllPending(message);
     };
 
@@ -87,19 +54,6 @@ export default class WorkerManager {
         cb.resolve(msg);
         this.callbacks.delete(msg.id);
       } else if (msg.status === 'error') {
-        try {
-          const payloadSummary = cb && cb.payload ? {
-            id: cb.payload.id,
-            fileName: cb.payload.fileName,
-            mimetype: cb.payload.mimetype,
-            bytesLength: cb.payload.bytes ? (cb.payload.bytes.byteLength || 'ArrayBuffer') : undefined,
-            htmlLength: cb.payload.html ? cb.payload.html.length : undefined
-          } : undefined;
-          console.error('[worker-wrapper] worker reported error', { id: msg.id, error: msg.error, stack: msg.stack, filename: msg.filename, lineno: msg.lineno, colno: msg.colno, payload: payloadSummary });
-        } catch (logErr) {
-          console.error('[worker-wrapper] error while logging worker error:', logErr);
-        }
-
         cb.reject(msg);
         this.callbacks.delete(msg.id);
       } else if (msg.status === 'progress' && cb.onprogress) {
@@ -119,12 +73,12 @@ export default class WorkerManager {
 
           const fileName = payload.fileName || payload.relativePath || '';
           if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
-            debugWorker('[worker-wrapper] main-thread parseMht for', fileName);
+            console.log('[worker-wrapper] main-thread parseMht for', fileName);
             const parsed = mhtMod.parseMht(htmlInput);
             if (parsed && parsed.html) {
               htmlInput = parsed.html;
               imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-              debugWorker('[worker-wrapper] parseMht produced html length', htmlInput.length);
+              console.log('[worker-wrapper] parseMht produced html length', htmlInput.length);
             } else {
               console.warn('[worker-wrapper] parseMht returned no HTML; proceeding with original payload.html');
             }
@@ -165,9 +119,7 @@ export default class WorkerManager {
       this.callbacks.set(payload.id, { resolve, reject, onprogress, payload, timeoutHandle });
 
       try {
-        const transferSummary = Array.isArray(transferList) ? transferList.map(t => (t && t.byteLength) ? `ArrayBuffer(${t.byteLength})` : String(t)) : [];
-        console.info('[worker-wrapper] postMessage -> id=', payload.id, 'file=', payload.fileName || payload.relativePath, 'transferList=', transferSummary);
-        debugWorker('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
+        console.info('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
         this.worker.postMessage(payload, transferList);
       } catch (error) {
         clearTimeout(timeoutHandle);

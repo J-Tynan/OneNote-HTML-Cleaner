@@ -1,36 +1,9 @@
 // src/worker.js
-// Ensure global debug hooks exist before importing modules that may access them
-import './worker-globals.js';
 import { runPipeline } from './pipeline/pipeline.js';
 import { parseMht } from './pipeline/mht.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 import { importOneSection } from './importers/one.js';
 import { importOnePackage } from './importers/onepkg.js';
-
-// DEBUG_WORKER: enable for verbose worker runtime logs during development
-const DEBUG_WORKER = false;
-function debugWorker(...args) {
-  if (!DEBUG_WORKER) return;
-  if (args.length === 0) return;
-  const [first, ...rest] = args;
-  if (typeof first === 'string' && /^\s*\[worker\]/i.test(first)) {
-    console.log(first, ...rest);
-  } else {
-    console.log('[Worker]', ...args);
-  }
-}
-
-// Defensive: expose `debugWorker` on the worker global so accidental global
-// references (from third-party or imported modules) do not cause a
-// ReferenceError inside the worker — safer for production and reduced OOMs.
-const workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
-  || (typeof self !== 'undefined' && self)
-  || (typeof window !== 'undefined' && window)
-  || null;
-
-if (workerGlobal) {
-  workerGlobal.debugWorker = debugWorker;
-}
 
 self.onmessage = async (e) => {
   const payload = e.data;
@@ -38,7 +11,7 @@ self.onmessage = async (e) => {
   const fileName = payload.fileName || payload.relativePath || 'unknown';
   const sourceKind = payload.sourceKind || detectSourceKind(fileName, payload.mimetype);
 
-  debugWorker(`[worker] received job id=${id} file=${fileName}`);
+  console.log(`[worker] received job id=${id} file=${fileName}`);
 
   try {
     if (sourceKind === 'one' || sourceKind === 'onepkg') {
@@ -68,7 +41,7 @@ self.onmessage = async (e) => {
     }
 
     const hasDOMParser = (typeof DOMParser !== 'undefined');
-    debugWorker(`[worker] DOMParser available: ${hasDOMParser}`);
+    console.log(`[worker] DOMParser available: ${hasDOMParser}`);
 
     if (!hasDOMParser) {
       self.postMessage({ id, status: 'unsupported', reason: 'DOMParser not available in worker' });
@@ -80,12 +53,12 @@ self.onmessage = async (e) => {
 
     // If filename indicates MHT/MHTML, attempt to parse it here in the worker
     if (sourceKind === 'mht') {
-      debugWorker('[worker] detected MHT input, attempting parseMht in worker');
+      console.log('[worker] detected MHT input, attempting parseMht in worker');
       const parsed = parseMht(htmlInput);
       if (parsed && parsed.html) {
         htmlInput = parsed.html;
         imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-        debugWorker(`[worker] parseMht: html length=${htmlInput.length} parts=${parsed.parts.length} boundary=${parsed.boundary}`);
+        console.log(`[worker] parseMht: html length=${htmlInput.length} parts=${parsed.parts.length} boundary=${parsed.boundary}`);
       } else {
         console.warn('[worker] parseMht did not return HTML; continuing with original payload.html');
       }
@@ -97,7 +70,7 @@ self.onmessage = async (e) => {
       SourceName: fileName,
       SourceKind: sourceKind
     }));
-    debugWorker(`[worker] job ${id} done, output length=${String((result.output || '').length)}`);
+    console.log(`[worker] job ${id} done, output length=${String((result.output || '').length)}`);
     self.postMessage({
       id,
       status: 'done',

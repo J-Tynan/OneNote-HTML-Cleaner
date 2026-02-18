@@ -7,41 +7,6 @@ const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
 const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current release.';
 
-// DEBUG_UI: set to true for local development to enable UI-only debug logs.
-// Keep false in production to avoid console noise.
-const DEBUG_UI = true;
-
-// DEBUG_WORKER: enable to surface worker-specific debug logs from the UI layer.
-// When true, messages will be prefixed with [Worker].
-const DEBUG_WORKER = false;
-
-function debugWorker(...args) {
-  if (!DEBUG_WORKER) return;
-  if (args.length === 0) return;
-  const [first, ...rest] = args;
-  if (typeof first === 'string' && /^\s*\[worker\]/i.test(first)) {
-    console.log(first, ...rest);
-  } else {
-    console.log('[Worker]', ...args);
-  }
-}
-
-/**
- * UI-only debug logger. No-ops when DEBUG_UI is false.
- * - Prefixes with "[UI]" unless the first argument already contains a [UI] prefix.
- * - Use for development-only informational logs; errors/warnings stay untouched.
- */
-function debugUI(...args) {
-  if (!DEBUG_UI) return;
-  if (args.length === 0) return;
-  const [first, ...rest] = args;
-  if (typeof first === 'string' && /^\s*\[ui\]/i.test(first)) {
-    console.log(first, ...rest);
-  } else {
-    console.log('[UI]', ...args);
-  }
-}
-
 const dom = {
   dropzone: null,
   importButton: null,
@@ -84,7 +49,7 @@ function logLayoutMode() {
     mode = 'Layout B · Tablet / Laptop';
   }
 
-  debugUI(`[UI] Active layout: ${mode} (${width}px)`);
+  console.debug(`[UI] Active layout: ${mode} (${width}px)`);
 }
 
 /* === UTILITIES === */
@@ -246,10 +211,10 @@ async function processEntryWithWorker(entry) {
       payload.html = await readFileAsText(entry.file);
     }
 
-    debugUI('[ui] Dispatching entry to worker:', entry.id, entry.name);
+    console.info('[ui] Dispatching entry to worker:', entry.id, entry.name);
     const result = await runtime.workerManager.enqueue(payload, null, transferList);
 
-    debugUI('[ui] Worker returned for entry:', entry.id, 'status=', result && result.status ? result.status : 'unknown');
+    console.info('[ui] Worker returned for entry:', entry.id, 'status=', result && result.status ? result.status : 'unknown');
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
@@ -259,25 +224,7 @@ async function processEntryWithWorker(entry) {
 
     updateEntryStatus(entry.id, 'error');
   } catch (err) {
-    console.groupCollapsed('[ui] worker processing error', err);
-    try {
-      console.error('[ui] worker processing error', err);
-      console.log('entry:', { id: entry.id, name: entry.name, size: entry.size, sourceKind: entry.sourceKind, status: entry.status });
-      if (typeof payload !== 'undefined') {
-        console.log('payload summary:', {
-          id: payload.id,
-          fileName: payload.fileName,
-          mimetype: payload.mimetype,
-          htmlLength: payload.html ? payload.html.length : undefined,
-          hasBytes: !!payload.bytes
-        });
-      }
-      console.log('workerManager callbacks count:', runtime.workerManager && runtime.workerManager.callbacks ? runtime.workerManager.callbacks.size : undefined);
-    } catch (logErr) {
-      console.error('[ui] error while logging worker failure context', logErr);
-    }
-    console.groupEnd();
-
+    console.error('[ui] worker processing error', err);
     updateEntryStatus(entry.id, 'error');
   }
 }
@@ -404,12 +351,12 @@ export function addFilesToQueue(files) {
   renderFileList();
 
   if (runtime.autoConvertEnabled) {
-    debugUI('[ui] autoConvertEnabled=true — starting processing for', processableEntries.length, 'entries');
+    console.info('[ui] autoConvertEnabled=true — starting processing for', processableEntries.length, 'entries');
     for (const entry of processableEntries) {
       processEntry(entry);
     }
   } else {
-    debugUI('[ui] autoConvertEnabled=false — files added to queue but not processed');
+    console.info('[ui] autoConvertEnabled=false — files added to queue but not processed');
   }
 }
 
@@ -558,9 +505,9 @@ export function initUI(workerManager, options = {}) {
   }, updateZipButton);
 
   if (window.JSZip) {
-    debugUI('[ui] JSZip loaded');
+    console.info('[ui] JSZip loaded');
   } else {
-    console.warn('[UI] JSZip not found; ZIP downloads disabled (use CDN or include JSZip in production)');
+    console.warn('[ui] JSZip not found; ZIP downloads disabled (use CDN or include JSZip in production)');
   }
 
   runtime.dragCounter = 0;

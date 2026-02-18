@@ -42,24 +42,6 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Automated tests include lightweight Node checks and Playwright smoke tests. Current Playwright smoke tests cover theme initialization/toggling and ZIP/download flows (`Tests/theme-playwright.js`, `Tests/ui-download-zip-playwright.js`).
 - Additions: there are unit tests for download helpers and other pipeline contracts under `Tests/`.
 
-**Developer debug flags**
-
-- Purpose: reduce console noise in production while preserving useful diagnostics for local development.
-- Flags added to the codebase (all default to `false`):
-	- `src/ui.js`: `DEBUG_UI` — helper `debugUI(...)` for UI/info logs.
-	- `src/app.js`: `DEBUG_APP` — helper `debugApp(...)` for app-level informational logs.
-	- `src/worker.js` and `src/worker-wrapper.js`: `DEBUG_WORKER` — helper(s) `debugWorker(...)` for worker/runtime info.
-	- `src/ui-downloads.js`: `DEBUG_DL` — helper `debugDL(...)` for download helper diagnostics.
-
-- How to use locally:
-	1. Edit the relevant file and set the flag to `true` (for example, in `src/ui.js` set `const DEBUG_UI = true;`).
-	2. Reload the app in your browser — gated debug logs will appear prefixed with `[UI]`, `[App]`, or `[Worker]`.
-
-- Notes & recommendations:
-	- All debug helpers are no-ops when their `DEBUG_*` flag is `false` so production consoles remain calm.
-	- Warnings (`console.warn`) and errors (`console.error`) are preserved and standardized with prefixes like `[UI]` and `[Worker]` so real issues remain visible in production.
-	- For convenience you can add a short dev note or script to toggle flags locally, but avoid enabling them in production builds.
-
 ## Tailwind Migration (Scoped)
 
 - Tailwind runs with `preflight` disabled to avoid global resets.
