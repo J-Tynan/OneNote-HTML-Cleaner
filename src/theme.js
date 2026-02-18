@@ -22,7 +22,7 @@ function updateToggleUI(theme) {
   const btn = document.getElementById(TOGGLE_ID);
   const icon = document.getElementById(ICON_ID);
   if (btn) btn.setAttribute('aria-pressed', String(theme === 'dark'));
-  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '🌞';
+  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
 }
 
 export function toggleTheme() {
