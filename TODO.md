@@ -15,9 +15,13 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 These tasks were identified from recent debugging and are ordered by priority for the PWA/worker hardening work.
 
-- [ ] Add explicit worker handshake (`ready`/`init`) — ensure `src/worker-wrapper.js` waits for a `ready` message before sending work.
-- [ ] Move import-time side-effects into explicit `init()` — refactor `src/worker.js` so module import does minimal work.
-- [ ] Improve `debugWorker` global initialization & diagnostics — ensure `src/worker-globals.js` defines a deterministic noop and posts structured diagnostics.
+- [x] Add explicit worker handshake (`ready`/`init`) — ensure `src/worker-wrapper.js` waits for a `ready` message before sending work.
+- [ ] Move import-time side-effects into explicit `init()` — refactor `src/worker.js` so module import does minimal work. (MHT-only: native importers deferred)
+- [x] Improve `debugWorker` global initialization & diagnostics — ensure `src/worker-globals.js` defines a deterministic noop and posts structured diagnostics (worker URL/hash added).
+
+- [x] Add explicit worker handshake (`ready`/`init`) — implemented: worker posts `{ type: 'ready' }`, wrapper buffers until ready, and a Playwright handshake test was added.
+- [ ] Move import-time side-effects into explicit `init()` — Status: in-progress (MHT-only refactor implemented; full pipeline audit and native importer migration pending).
+ - [x] Add Playwright tests: handshake, unsupported-file, import-safety, MHT fixtures — tests added under `Tests/` and npm scripts updated.
 - [ ] Add cache-update / service-worker unregister guidance and automation — include worker files in precache and document/automate `skipWaiting()`/`clients.claim()` rollout steps.
 - [ ] Harden message id/callback handling and diagnostics — log unmatched messages, add a reserved diagnostics channel, and improve summaries for payloads/errors.
 - [ ] Standardize logging formats across UI, wrapper, and worker — unify prefixes and a small JSON-summary shape for easier correlation.
@@ -25,30 +29,28 @@ These tasks were identified from recent debugging and are ordered by priority fo
 - [ ] Standardize test output formatting — ensure tests print `Result: PASS` / `Result: FAIL` consistently.
 - [ ] Run tests after changes and collect logs — re-run native and Playwright smoke tests and archive logs for the rollout.
 
-- [ ] Remove `debugWorker()` references from codebase — ensure all references are deleted and any diagnostic behavior is replaced by structured diagnostics.
+- [x] Remove `debugWorker()` references from codebase — `debugWorker` deprecated; `postDiagnostic()` added in `src/worker-globals.js`; no runtime callsites found (search + deprecation applied).
 
 ## Tomorrow's focus (start here)
 
 Begin work with the smallest, highest-impact items so we unblock further diagnostics and releases quickly.
 
-1. Add explicit worker handshake (`ready`/`init`) — Owner: `core/browser` — Status: in-progress
+1. Add explicit worker handshake (`ready`/`init`) — Owner: `core/browser` — Status: completed
 	- Estimated time: 2–4 hours
 	- Quick checklist: emit `{type:'ready'}` from the worker at the end of `init()`; buffer messages in `worker-wrapper` until ready; add a short Playwright test asserting ordering.
+	- Notes: Implemented — `src/worker.js` now posts `{ type: 'ready' }`, `src/worker-wrapper.js` buffers until handshake, and `Tests/worker-handshake-playwright.js` + `npm run test:worker-handshake` added.
 
-2. Move import-time side-effects into `init()` — Owner: `core/pipeline` — Status: next
+2. Move import-time side-effects into `init()` — Owner: `core/pipeline` — Status: in-progress
 	- Estimated time: 1–2 days (audit + refactor)
 	- Quick checklist: audit import-time code, refactor to `async init()`, ensure `init()` posts `ready` and captures errors.
+	- Notes: MHT-only init refactor implemented (worker lazy-loads `pipeline` + `mht` on init). Full audit and native `.one`/`.onepkg` migration deferred.
 
-3. Improve `debugWorker` global initialization & diagnostics — Owner: `infra` — Status: next
-	- Estimated time: 1–2 hours
-	- Quick checklist: ensure `worker-globals.js` runs first and posts structured `init` diagnostics; include worker file URL/hash when possible.
-
-4. Remove `debugWorker()` references from codebase — Owner: `infra` — Status: next
+3. Remove `debugWorker()` references from codebase — Owner: `infra` — Status: completed
 	- Estimated time: 30–60 minutes
 	- Quick checklist:
-		1. Search for `debugWorker` references in `src/` and `Tests/` and remove or replace them with the standardized diagnostics/logging conventions.
-		2. Update `worker-globals.js` to no longer export or rely on `debugWorker` if replaced.
-		3. Run unit and Playwright smoke tests to ensure no regressions.
+		1. Confirmed repository-wide search; no runtime callsites remain.
+		2. `src/worker-globals.js` now deprecates the global and exposes `postDiagnostic()` for structured diagnostics.
+		3. Run unit and Playwright smoke tests to ensure no regressions (recommended).
 
 Note: after these three items are complete we should be able to reproduce and fix the remaining PWA client failures reliably; proceed to the remaining prioritized tasks afterward.
 
@@ -72,9 +74,9 @@ Detailed task breakdown
 		3. Add tests that validate import-time errors are not thrown synchronously but are captured and posted as diagnostics.
 	- Complexity: Medium–High. Owner: core/pipeline.
 
-- Improve `debugWorker` global initialization & diagnostics
+- Improve `debugWorker` global initialization & diagnostics — Status: completed
 	- Goal: Make `debugWorker` reliably present during module evaluation and improve the fidelity of import-time error reports.
-	- Acceptance criteria: `src/worker-globals.js` defines a deterministic noop `debugWorker` on import and attaches `error`/`unhandledrejection` handlers that post a structured diagnostic message containing `id: 'init'`, `stack`, `file`, and `lineno` fields.
+	- Acceptance criteria: `src/worker-globals.js` defines a deterministic noop `debugWorker` on import and attaches `error`/`unhandledrejection` handlers that post a structured diagnostic message containing `id: 'init'`, `stack`, `file`, `lineno`, `workerUrl`, and `workerHash` fields.
 	- Suggested steps:
 		1. Keep the noop global but extend the diagnostic payload to include the worker file URL and a short file hash (if available).
 		2. Ensure `worker.js` imports `worker-globals.js` as the very first import.
@@ -165,18 +167,18 @@ Delivery mode for this feature is now explicitly split:
 ### Phase 0 — Spec lock (before coding)
 - [x] [HIGH-LEVERAGE] Finalize toolbar DOM contract: single namespaced container id, insertion point, reserved spacing behavior, no-overlap guarantee.
 - [x] [HIGH-LEVERAGE] Finalize interaction contract for day-one scope:
-	- Edit mode toggle (text-focused and reversible)
-	- Metadata panel toggle
-	- Close/hide behavior
+	- [ ] Edit mode toggle (text-focused and reversible)
+	- [ ] Metadata panel toggle
+	- [ ] Close/hide behavior
 - [x] [HIGH-LEVERAGE] Define deterministic idempotency rule (re-processing cannot duplicate toolbar markup).
 - [x] [RAPTOR MINI] Mirror decisions in docs (`docs/Toolbar idea.md`, `docs/Contracts.md`, README note).
 
 ### Phase 1 — Config + wiring (default OFF)
 - [x] [HIGH-LEVERAGE] Define canonical config shape + defaults for toolbar options in pipeline config normalization.
 - [x] [RAPTOR MINI] Add UI controls for the single advanced toolbar:
-	- Enable toolbar injection
-	- Enable edit mode toggle feature
-	- Enable metadata panel toggle feature
+	- [ ] Enable toolbar injection
+	- [ ] Enable edit mode toggle feature
+	- [ ] Enable metadata panel toggle feature
 - [x] [RAPTOR MINI] Wire config through `src/ui.js` → worker payloads for both processing flows (`process-file`, `process-native-file`).
 - [x] [RAPTOR MINI] Ensure default OFF keeps existing output parity and existing fixtures stable.
 

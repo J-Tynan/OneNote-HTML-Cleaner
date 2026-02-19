@@ -8,8 +8,33 @@ const _workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
   || null;
 
 if (_workerGlobal && typeof _workerGlobal.debugWorker === 'undefined') {
-  _workerGlobal.debugWorker = function debugWorker() { /* noop until overridden */ };
+  // Keep an import-time-safe noop for backward compatibility, but mark it
+  // deprecated so callers migrate to the structured `postDiagnostic()` API.
+  // This prevents ReferenceError during top-level imports while steering
+  // runtime usage toward the new helper.
+  _workerGlobal.debugWorker = function debugWorker(..._args) {
+    try {
+      if (!_workerGlobal.__debugWorkerDeprecatedShown) {
+        console.warn('[worker-globals] debugWorker() is deprecated — use postDiagnostic() instead.');
+        _workerGlobal.__debugWorkerDeprecatedShown = true;
+      }
+    } catch (ignore) { /* swallow */ }
+    /* noop for compatibility */
+  };
 }
+
+// Short stable fingerprint for the worker module (used in diagnostics).
+function _shortHexHash(s) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < String(s || '').length; i++) {
+    h ^= String(s).charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return (h >>> 0).toString(16).padStart(8, '0').slice(0, 8);
+}
+
+const _workerUrl = (typeof import.meta !== 'undefined' && import.meta.url) || (typeof self !== 'undefined' && self && self.location && self.location.href) || null;
+const _workerUrlHash = _workerUrl ? _shortHexHash(_workerUrl) : null;
 
 // Capture uncaught errors and unhandled rejections early in the worker's
 // lifecycle (import-time or runtime) and post a diagnostic message back to
@@ -28,7 +53,9 @@ try {
             filename: ev.filename,
             lineno: ev.lineno,
             colno: ev.colno,
-            stack: ev.error && ev.error.stack
+            stack: ev.error && ev.error.stack,
+            workerUrl: _workerUrl,
+            workerHash: _workerUrlHash
           });
         }
       } catch (ignore) { /* swallow logging errors */ }
@@ -43,12 +70,39 @@ try {
             status: 'error',
             phase: 'unhandledrejection',
             error: String(ev.reason && ev.reason.message ? ev.reason.message : ev.reason),
-            reason: ev.reason && (ev.reason.stack || String(ev.reason))
+            reason: ev.reason && (ev.reason.stack || String(ev.reason)),
+            workerUrl: _workerUrl,
+            workerHash: _workerUrlHash
           });
         }
       } catch (ignore) { /* swallow logging errors */ }
     });
   }
 } catch (ignore) { /* defensive */ }
+
+// A safe, structured diagnostic helper callers should use instead of the
+// legacy `debugWorker()` global. This is available at import-time via a
+// named export and will safely fall back to console debugging when
+// `postMessage` is unavailable.
+export function postDiagnostic(detail = {}) {
+  try {
+    const payload = Object.assign({
+      id: detail.id || 'diag',
+      status: detail.status || 'info',
+      phase: detail.phase || 'diagnostic',
+      timestamp: Date.now()
+    }, detail, {
+      workerUrl: _workerUrl,
+      workerHash: _workerUrlHash
+    });
+
+    if (typeof self !== 'undefined' && typeof self.postMessage === 'function') {
+      self.postMessage(payload);
+    } else {
+      // Not in a worker context — surface to console for local/dev runs.
+      console.debug('[worker-globals] postDiagnostic (fallback):', payload);
+    }
+  } catch (ignore) { /* swallow */ }
+}
 
 export default null;
