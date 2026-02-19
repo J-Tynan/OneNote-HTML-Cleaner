@@ -11,6 +11,28 @@ export default class WorkerManager {
       throw err;
     }
 
+    // Handshake / buffering state
+    this.ready = false; // becomes true when worker posts { type: 'ready' }
+    this.pendingQueue = []; // queued payloads while worker initializes
+    this.handshakeTimeoutMs = 5000; // fail-fast if worker doesn't handshake
+
+    // Start a short handshake timer to avoid indefinite buffering
+    this._handshakeTimer = setTimeout(() => {
+      if (!this.ready) {
+        console.error('[worker-wrapper] worker handshake timed out after', this.handshakeTimeoutMs, 'ms');
+        // Reject queued payloads with a clear diagnostic
+        for (const queued of this.pendingQueue) {
+          const cb = this.callbacks.get(queued.payload.id);
+          if (cb) {
+            if (cb.timeoutHandle) clearTimeout(cb.timeoutHandle);
+            cb.reject({ id: queued.payload.id, status: 'error', error: 'Worker handshake timeout' });
+            this.callbacks.delete(queued.payload.id);
+          }
+        }
+        this.pendingQueue = [];
+      }
+    }, this.handshakeTimeoutMs);
+
     this.callbacks = new Map();
     this.defaultTimeoutMs = 120000;
 
@@ -43,8 +65,48 @@ export default class WorkerManager {
 
     this.worker.onmessage = async (e) => {
       const msg = e.data;
+
+      // Handle explicit worker handshake message
+      if (msg && msg.type === 'ready') {
+        this.ready = true;
+        if (this._handshakeTimer) {
+          clearTimeout(this._handshakeTimer);
+          this._handshakeTimer = null;
+        }
+        console.info('[worker-wrapper] received ready from worker', msg);
+
+        // Flush any queued payloads now that the worker is ready
+        while (this.pendingQueue.length) {
+          const q = this.pendingQueue.shift();
+          try {
+            console.info('[worker-wrapper] flushing queued message id=', q.payload.id, 'file=', q.payload.fileName || q.payload.relativePath);
+            this.worker.postMessage(q.payload, q.transferList);
+          } catch (err) {
+            const cbQueued = this.callbacks.get(q.payload.id);
+            if (cbQueued) {
+              if (cbQueued.timeoutHandle) clearTimeout(cbQueued.timeoutHandle);
+              cbQueued.reject({ id: q.payload.id, status: 'error', error: String(err) });
+              this.callbacks.delete(q.payload.id);
+            }
+          }
+        }
+
+        return; // handshake message handled
+      }
+
       const cb = this.callbacks.get(msg.id);
-      if (!cb) return;
+      if (!cb) {
+        // Log unmatched message for diagnostics (compact summary)
+        try {
+          const summary = {
+            id: msg && msg.id,
+            status: msg && (msg.status || msg.type),
+            size: msg && msg.outputHtml ? String((msg.outputHtml || '').length) : undefined
+          };
+          console.warn('[worker-wrapper] unmatched worker message:', JSON.stringify(summary));
+        } catch (ignore) {}
+        return;
+      }
 
       if (cb.timeoutHandle) {
         clearTimeout(cb.timeoutHandle);
@@ -117,6 +179,13 @@ export default class WorkerManager {
       }, timeoutMs);
 
       this.callbacks.set(payload.id, { resolve, reject, onprogress, payload, timeoutHandle });
+
+      // If the worker hasn't finished its handshake yet, queue the payload
+      if (!this.ready) {
+        console.info('[worker-wrapper] worker not ready — queueing payload id=', payload.id);
+        this.pendingQueue.push({ payload, transferList });
+        return;
+      }
 
       try {
         console.info('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
