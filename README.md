@@ -26,7 +26,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 
 - `index.html`, `styles.css`, `manifest.json`, `service-worker.js`: PWA shell.
 - `src/app.js`, `src/ui.js`: UI wiring and application entry points.
-- `src/worker.js`, `src/worker-wrapper.js`: future background processing.
+- `src/worker.js`, `src/worker-wrapper.js`: future background processing. Worker startup is now explicit — the wrapper posts an `{ type: 'init' }` message after installing handlers; the worker performs lazy/dynamic imports during `init()` and then posts a `{ type: 'ready' }` handshake. This makes startup deterministic and improves diagnostic reporting.
 - `src/pipeline/`: parsing, sanitization, and formatting stages.
 - `tests/fixtures/`: sample inputs for regression coverage.
 - `package.json`: dependencies for ZIP export.
@@ -41,6 +41,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 
 - Automated tests include lightweight Node checks and Playwright smoke tests. Current Playwright smoke tests cover theme initialization/toggling and ZIP/download flows (`Tests/theme-playwright.js`, `Tests/ui-download-zip-playwright.js`).
 - Additions: there are unit tests for download helpers and other pipeline contracts under `Tests/`.
+ - New: a Playwright test `Tests/worker-init-playwright.js` validates the init → ready → job ordering, and the wrapper now sends the explicit init message to the worker during startup.
 
 ## Tailwind Migration (Scoped)
 

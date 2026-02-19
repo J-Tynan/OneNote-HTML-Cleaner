@@ -1,5 +1,5 @@
 // src/worker.js
-import './worker-globals.js';
+import { postDiagnostic } from './worker-globals.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 
 // Module-level placeholders for lazy-loaded modules. These are initialized
@@ -36,7 +36,7 @@ export async function init() {
     if (failed.length) {
       console.warn('[worker] imports failed during init():', failed);
       try {
-        self.postMessage({ id: 'init', status: 'error', phase: 'init-imports', details: failed });
+        postDiagnostic({ id: 'init', status: 'error', phase: 'init-imports', details: failed });
       } catch (ignore) { /* swallow */ }
     }
 
@@ -46,16 +46,29 @@ export async function init() {
   } catch (err) {
     console.error('[worker] init() error', err);
     try {
-      self.postMessage({ id: 'init', status: 'error', phase: 'init', error: String(err), stack: err && err.stack });
+      postDiagnostic({ id: 'init', status: 'error', phase: 'init', error: String(err), stack: err && err.stack });
     } catch (ignore) {}
     throw err;
   }
 }
 
-void init().catch((err) => { console.error('[worker] init() rejected', err); });
+// Do not auto-run `init()` at import time — the wrapper will explicitly
+// request initialization with `{ type: 'init' }` so startup is deterministic.
 
 self.onmessage = async (e) => {
   const payload = e.data;
+
+  // Support explicit initialization request from the wrapper. This defers
+  // dynamic imports until the wrapper posts `{ type: 'init' }`.
+  if (payload && payload.type === 'init') {
+    console.info('[worker] received init message from wrapper, starting init()');
+    try {
+      await init(payload.options || {});
+    } catch (err) {
+      console.error('[worker] init() failed after init message', err);
+    }
+    return; // init message handled
+  }
   const id = payload.id || crypto.randomUUID();
   const fileName = payload.fileName || payload.relativePath || 'unknown';
   const sourceKind = payload.sourceKind || detectSourceKind(fileName, payload.mimetype);
@@ -101,7 +114,13 @@ self.onmessage = async (e) => {
     }
 
     self.postMessage({ id, status: 'progress', step: 'start', percent: 0 });
-    if (typeof _runPipeline !== 'function') throw new Error('pipeline not available in worker');
+    if (typeof _runPipeline !== 'function') {
+      const msg = 'pipeline not available in worker';
+      console.error('[worker] ' + msg);
+      try { postDiagnostic({ id: 'init', status: 'error', phase: 'init', details: msg }); } catch (ignore) {}
+      self.postMessage({ id, status: 'error', error: msg });
+      return;
+    }
     const result = await _runPipeline(htmlInput, Object.assign({}, payload.config || {}, {
       imageMap,
       SourceName: fileName,
@@ -117,6 +136,7 @@ self.onmessage = async (e) => {
     });
   } catch (err) {
     console.error(`[worker] job ${id} error:`, err);
+    try { postDiagnostic({ id, status: 'error', phase: 'job', error: String(err), stack: err && err.stack }); } catch (ignore) {}
     self.postMessage({ id, status: 'error', error: String(err) });
   }
 };

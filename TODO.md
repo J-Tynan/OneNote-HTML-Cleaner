@@ -16,12 +16,13 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 These tasks were identified from recent debugging and are ordered by priority for the PWA/worker hardening work.
 
 - [x] Add explicit worker handshake (`ready`/`init`) — ensure `src/worker-wrapper.js` waits for a `ready` message before sending work.
-- [ ] Move import-time side-effects into explicit `init()` — refactor `src/worker.js` so module import does minimal work. (MHT-only: native importers deferred)
+- [x] Move import-time side-effects into explicit `init()` — MHT-only refactor implemented; full audit & native importer migration pending
 - [x] Improve `debugWorker` global initialization & diagnostics — ensure `src/worker-globals.js` defines a deterministic noop and posts structured diagnostics (worker URL/hash added).
 
 - [x] Add explicit worker handshake (`ready`/`init`) — implemented: worker posts `{ type: 'ready' }`, wrapper buffers until ready, and a Playwright handshake test was added.
-- [ ] Move import-time side-effects into explicit `init()` — Status: in-progress (MHT-only refactor implemented; full pipeline audit and native importer migration pending).
- - [x] Add Playwright tests: handshake, unsupported-file, import-safety, MHT fixtures — tests added under `Tests/` and npm scripts updated.
+ - [x] Move import-time side-effects into explicit `init()` — MHT-only refactor implemented; full pipeline audit and native importer migration pending.
+ - [x] Implement message-based init (wrapper → worker `{type:'init'}`) — worker defers dynamic imports until receiving `{ type: 'init' }`; added `Tests/worker-init-playwright.js`.
+ - [x] Add Playwright tests: handshake, init, unsupported-file, import-safety, MHT fixtures — tests added under `Tests/` and npm scripts updated.
 - [ ] Add cache-update / service-worker unregister guidance and automation — include worker files in precache and document/automate `skipWaiting()`/`clients.claim()` rollout steps.
 - [ ] Harden message id/callback handling and diagnostics — log unmatched messages, add a reserved diagnostics channel, and improve summaries for payloads/errors.
 - [ ] Standardize logging formats across UI, wrapper, and worker — unify prefixes and a small JSON-summary shape for easier correlation.

@@ -55,44 +55,50 @@ function createStaticServer(root) {
   try {
     browser = await chromium.launch({ headless: true });
     const ctx = await browser.newContext();
-    const page = await ctx.newPage();
 
-    page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
-    page.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
+    const page = await ctx.newPage();
+    const logs = [];
+    page.on('console', (msg) => logs.push(msg.text()));
+    page.on('pageerror', (err) => logs.push('PAGE ERROR: ' + (err && err.stack ? err.stack : err)));
 
     await page.goto(url, { waitUntil: 'networkidle' });
 
-    // Attempt to import key pipeline modules in the page to ensure they
-    // have no import-time side-effects that throw synchronously.
-    const result = await page.evaluate(async () => {
-      try {
-        await import('/src/pipeline/mht.js');
-        await import('/src/pipeline/pipeline.js');
-        await import('/src/pipeline/parser.js');
-        await import('/src/pipeline/sanitize.js');
-        await import('/src/pipeline/listRepair.js');
-        await import('/src/pipeline/inlineStyleMigration.js');
-        await import('/src/pipeline/images.js');
-        await import('/src/pipeline/toolbarInjector.js');
-        await import('/src/pipeline/cornellSemantics.js');
-        await import('/src/pipeline/dateTimeLayout.js');
-        await import('/src/pipeline/config.js');
-        return { ok: true };
-      } catch (err) {
-        return { ok: false, error: String(err && err.stack ? err.stack : err) };
-      }
+    // Trigger a conversion via the UI by uploading a small MHTML-like file to the hidden file input
+    await page.setInputFiles('#fileInput', {
+      name: 'test.mht',
+      mimeType: 'multipart/related',
+      buffer: Buffer.from('dummy')
     });
 
-    if (!result.ok) throw new Error('Import-safety failed: ' + result.error);
+    // Wait for logs that show wrapper sent `init` and worker posted `ready`
+    const start = Date.now();
+    let passed = false;
+    while (Date.now() - start < 10000) {
+      const sentInitIndex = logs.findIndex(l => /\[worker-wrapper\].*sending init to worker/.test(l));
+      const readyIndex = logs.findIndex(l => /\[worker\] posted ready/.test(l) || /\[worker-wrapper\].*received ready/.test(l));
+      const postIndex = logs.findIndex(l => /\[worker-wrapper\].*posting message to worker/.test(l) || /\[worker\] received job/.test(l));
+      if (sentInitIndex >= 0 && readyIndex >= 0 && postIndex >= 0) {
+        // Ensure init -> ready -> post ordering
+        if (sentInitIndex < readyIndex && readyIndex < postIndex) {
+          passed = true;
+          break;
+        } else {
+          throw new Error('Init/ready/post ordering violated. Logs:\n' + logs.join('\n'));
+        }
+      }
+      await new Promise(r => setTimeout(r, 100));
+    }
 
-    console.log('import-safety-playwright: OK');
+    if (!passed) throw new Error('Timeout waiting for init/ready/post sequence. Collected logs:\n' + logs.join('\n'));
+
+    console.log('worker-init-playwright: OK');
     await browser.close();
     server.close();
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
     server.close();
-    console.error('import-safety-playwright: FAIL', err && err.stack ? err.stack : err);
+    console.error('worker-init-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }
 })();

@@ -15,12 +15,28 @@ export default class WorkerManager {
     this.ready = false; // becomes true when worker posts { type: 'ready' }
     this.pendingQueue = []; // queued payloads while worker initializes
     this.handshakeTimeoutMs = 5000; // fail-fast if worker doesn't handshake
+    this.workerUrl = resolved; // expose resolved worker URL for diagnostics
 
-    // Start a short handshake timer to avoid indefinite buffering
-    this._handshakeTimer = setTimeout(() => {
+    // Start a short handshake timer to avoid indefinite buffering. When the
+    // timer fires emit a reserved diagnostic (`__diag__`) so support tooling
+    // can detect handshake failures reliably. Expose the handler for tests so
+    // we can trigger the timeout deterministically in Playwright.
+    this._onHandshakeTimeout = () => {
       if (!this.ready) {
+        const diag = {
+          id: '__diag__',
+          type: 'handshake-timeout',
+          timestamp: Date.now(),
+          pendingCount: this.pendingQueue.length,
+          workerUrl: this.workerUrl,
+          timeoutMs: this.handshakeTimeoutMs
+        };
         console.error('[worker-wrapper] worker handshake timed out after', this.handshakeTimeoutMs, 'ms');
-        // Reject queued payloads with a clear diagnostic
+        try {
+          console.warn('[worker-wrapper] diagnostic:', JSON.stringify(diag));
+        } catch (ignore) {}
+
+        // Reject queued payloads with a clear diagnostic and cancel callbacks
         for (const queued of this.pendingQueue) {
           const cb = this.callbacks.get(queued.payload.id);
           if (cb) {
@@ -31,7 +47,9 @@ export default class WorkerManager {
         }
         this.pendingQueue = [];
       }
-    }, this.handshakeTimeoutMs);
+    };
+
+    this._handshakeTimer = setTimeout(this._onHandshakeTimeout, this.handshakeTimeoutMs);
 
     this.callbacks = new Map();
     this.defaultTimeoutMs = 120000;
@@ -167,6 +185,16 @@ export default class WorkerManager {
         }
       }
     };
+
+    // Request the worker to perform explicit initialization now that the
+    // wrapper has installed message handlers. This defers the worker's
+    // dynamic imports until the wrapper controls the handshake lifecycle.
+    try {
+      console.info('[worker-wrapper] sending init to worker', this.workerUrl);
+      this.worker.postMessage({ type: 'init', options: {} });
+    } catch (err) {
+      console.warn('[worker-wrapper] failed to send init message', err);
+    }
   }
 
   enqueue(payload, onprogress, transferList = [], timeoutMs = this.defaultTimeoutMs) {
