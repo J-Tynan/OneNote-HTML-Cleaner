@@ -50,10 +50,9 @@ These tasks were identified from recent debugging and are ordered by priority fo
   - Worker diagnostics should use structured `postDiagnostic()` messages only.
   - Repository‑wide search confirmed no runtime callsites remain.
 
-- [ ] Add cache‑update / service‑worker unregister guidance and automation
-  - Required before tagging first stable PWA release.
-  - Include worker files in precache.
-  - Document `skipWaiting()` / `clients.claim()` rollout steps.
+ - [x] Add cache‑update / service‑worker unregister guidance and automation
+  - Implemented: worker files included in precache; `SKIP_WAITING` message handler added; activation handler deletes old caches and calls `clients.claim()`.
+  - Added `scripts/bump-sw-cache.js` (preview/apply cache-name bump) and `Tests/sw-bump.js` unit test. See `docs/Service-Worker-Updates.md` for usage.
 
 - [ ] Harden message id / callback handling and diagnostics
   - Log unmatched messages with timestamp and summary.
@@ -150,6 +149,10 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 - [ ] Add Playwright smoke test for auto‑convert and unsupported‑file flows.
 
 ---
+
+## Recent updates
+- Service-worker rollout: cache-name token + `SKIP_WAITING` flow implemented; bump helper script and test added; SW update smoke test passes locally.
+
 
 ## Product / docs follow‑up
 
