@@ -95,6 +95,13 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
    - Auto‑convert opt‑out.
    - Test conversion after each step.
 
+4. Quick win: Tweak Dark theme colours (UI)
+   - Owner: `design/frontend` — Estimated time: 30–60 minutes
+   - Quick checklist:
+     1. Review `styles.css` dark variables and adjust `--bg-*`, `--text-*`, and CTA tokens as needed.
+     2. Verify `tailwind.config.js` dark mode strategy (`darkMode: 'class'`) and `src/theme.js` toggle behavior.
+     3. Run the app, toggle theme, and confirm contrast and button states visually and with the existing Playwright theme test.
+
 ---
 
 ## Next milestone (MHTML release)
@@ -149,10 +156,6 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 - [ ] Add Playwright smoke test for auto‑convert and unsupported‑file flows.
 
 ---
-
-## Recent updates
-- Service-worker rollout: cache-name token + `SKIP_WAITING` flow implemented; bump helper script and test added; SW update smoke test passes locally.
-
 
 ## Product / docs follow‑up
 
