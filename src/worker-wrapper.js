@@ -54,6 +54,10 @@ export default class WorkerManager {
     this.callbacks = new Map();
     this.defaultTimeoutMs = 120000;
 
+    // In-memory diagnostics buffer (capped) for unmatched messages / worker diagnostics
+    this.diagnostics = [];
+    this._diagnosticsMax = 50;
+
     this.rejectAllPending = (reason) => {
       for (const [id, cb] of this.callbacks.entries()) {
         if (cb && cb.timeoutHandle) {
@@ -112,16 +116,54 @@ export default class WorkerManager {
         return; // handshake message handled
       }
 
-      const cb = this.callbacks.get(msg.id);
+      const cb = this.callbacks.get(msg && msg.id);
+
+      // Special-case worker-origin diagnostics (do not treat as regular callbacks)
+      if (msg && msg.id === '__diag__') {
+        try {
+          const diag = {
+            kind: 'worker-diagnostic',
+            timestamp: Date.now(),
+            payload: msg,
+            pendingCallbacks: this.callbacks.size,
+            workerUrl: this.workerUrl
+          };
+          // push into capped diagnostics buffer for later inspection
+          this.diagnostics.push(diag);
+          if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
+          try {
+            if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+              window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
+            }
+          } catch (ignore) {}
+          console.info('[worker-wrapper] worker diagnostic received:', JSON.stringify(diag));
+        } catch (ignore) {}
+        return;
+      }
+
       if (!cb) {
-        // Log unmatched message for diagnostics (compact summary)
+        // Structured unmatched-message logging + store into diagnostics buffer
         try {
           const summary = {
+            kind: 'unmatched-message',
             id: msg && msg.id,
             status: msg && (msg.status || msg.type),
-            size: msg && msg.outputHtml ? String((msg.outputHtml || '').length) : undefined
+            size: msg && msg.outputHtml ? String((msg.outputHtml || '').length) : undefined,
+            timestamp: Date.now(),
+            pendingCallbacks: this.callbacks.size,
+            workerUrl: this.workerUrl,
+            preview: this.summarizePayload(msg, 256)
           };
-          console.warn('[worker-wrapper] unmatched worker message:', JSON.stringify(summary));
+
+          this.diagnostics.push(summary);
+          if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
+          try {
+            if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+              window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: summary }));
+            }
+          } catch (ignore) {}
+
+          console.warn('[worker-wrapper] unmatched worker message (stored diagnostic):', JSON.stringify(summary));
         } catch (ignore) {}
         return;
       }
@@ -195,6 +237,28 @@ export default class WorkerManager {
     } catch (err) {
       console.warn('[worker-wrapper] failed to send init message', err);
     }
+  }
+
+  // Return a short, safe summary for logging (avoid dumping full HTML)
+  summarizePayload(payload, maxChars = 256) {
+    try {
+      if (!payload) return '';
+      const parts = [];
+      if (payload.type) parts.push(`type=${payload.type}`);
+      if (payload.fileName) parts.push(`file=${payload.fileName}`);
+      else if (payload.relativePath) parts.push(`file=${payload.relativePath}`);
+      if (payload.status) parts.push(`status=${payload.status}`);
+      if (payload.outputHtml) parts.push(`outputLen=${(payload.outputHtml || '').length}`);
+      const s = parts.join('; ');
+      return s.length > maxChars ? s.slice(0, maxChars) + '…' : s;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  // Expose recent diagnostics captured from worker/unmatched messages
+  getDiagnostics() {
+    return this.diagnostics.slice();
   }
 
   enqueue(payload, onprogress, transferList = [], timeoutMs = this.defaultTimeoutMs) {

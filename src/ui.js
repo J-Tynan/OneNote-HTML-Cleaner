@@ -90,6 +90,32 @@ function updateStatusVisibility() {
   updateZipButton();
 }
 
+/* === DIAGNOSTICS UI === */
+
+function formatDiagnosticForList(d) {
+  try {
+    const time = new Date(d.timestamp || Date.now()).toLocaleTimeString();
+    const kind = escapeHtml(d.kind || (d.payload && d.payload.type) || 'diag');
+    const brief = d.payload && d.payload.type ? escapeHtml(String(d.payload.type)) : '';
+    const details = escapeHtml(JSON.stringify(d.payload || {}));
+    return `<div class="mb-2 text-xs text-slate-700"><strong>[${time}] ${kind}</strong> ${brief}<div class="mt-1 text-[11px] text-muted">${details}</div></div>`;
+  } catch (e) {
+    return `<div class="text-xs text-muted">diagnostic</div>`;
+  }
+}
+
+function renderDiagnostics() {
+  if (!dom.diagnosticsList) return;
+  const diags = (runtime.workerManager && typeof runtime.workerManager.getDiagnostics === 'function')
+    ? runtime.workerManager.getDiagnostics()
+    : [];
+  try { console.debug('[ui] renderDiagnostics — count =', diags.length); } catch (ignore) {}
+
+  dom.diagnosticsList.innerHTML = diags.map(formatDiagnosticForList).join('\n') || '';
+  if (dom.diagnosticsCount) dom.diagnosticsCount.textContent = `(${diags.length})`;
+  if (dom.diagnosticsPanel) dom.diagnosticsPanel.classList.toggle('hidden', diags.length === 0);
+}
+
 function isSuccessStatus(status) {
   const normalized = String(status || '').toLowerCase();
   return normalized === 'success' || normalized === 'completed';
@@ -483,6 +509,9 @@ export function initUI(workerManager, options = {}) {
   dom.toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
   dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
   dom.autoConvertNotice = document.getElementById('autoConvertNotice');
+  dom.diagnosticsPanel = document.getElementById('diagnosticsPanel');
+  dom.diagnosticsList = document.getElementById('diagnosticsList');
+  dom.diagnosticsCount = document.getElementById('diagnosticsCount');
 
   const { autoConvertEnabled = true } = options;
   runtime.autoConvertEnabled = Boolean(autoConvertEnabled);
@@ -495,6 +524,27 @@ export function initUI(workerManager, options = {}) {
   }
 
   runtime.workerManager = workerManager || null;
+
+  // Expose a test helper to read worker-manager diagnostics from page context
+  try { window.__getWorkerManagerDiagnostics = () => (runtime.workerManager ? runtime.workerManager.getDiagnostics() : []); } catch (ignore) {}
+
+  // Diagnostics polling: reflect any worker diagnostics in the UI diagnostics panel
+  if (runtime._diagnosticsPoll) {
+    clearInterval(runtime._diagnosticsPoll);
+    runtime._diagnosticsPoll = null;
+  }
+  if (runtime.workerManager && dom.diagnosticsList) {
+    try {
+      console.info('[ui] initial diagnostics count:', runtime.workerManager.getDiagnostics().length);
+    } catch (ignore) {}
+    renderDiagnostics();
+    runtime._diagnosticsPoll = setInterval(renderDiagnostics, 1000);
+    // Immediate update when worker-wrapper dispatches a diagnostic event
+    window.addEventListener('worker-diagnostic', renderDiagnostics);
+  } else if (dom.diagnosticsPanel) {
+    dom.diagnosticsPanel.classList.add('hidden');
+  }
+
   runtime.downloadHelpers = createDownloadHelpers({
     successfulOutputs: runtime.successfulOutputs,
     downloadZipButton: dom.downloadZip,
