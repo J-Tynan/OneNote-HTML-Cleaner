@@ -26,6 +26,11 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
  - The app enforces an MHTML-only intake for the stable release: non-MHTML files are shown as "Unsupported" in the queue and are not sent to the conversion pipeline (no partial conversions, no silent failures).
  - Advanced options now include an "Automatically convert files when added to the queue" toggle. When disabled, files remain in the queue until the user starts conversion manually; the preference persists across sessions.
 
+New: in-app Help and keyboard shortcut
+
+- A compact Help button was added to the header that opens a small usage modal with brief instructions and a link to the GitHub repository.
+- The Help modal can be toggled with the `?` key (Shift+/) and closed with `Escape` or the Close button. The modal has been styled for responsive layout and accessible focus outlines.
+
 ## Project Structure
 
 - `index.html`, `styles.css`, `manifest.json`, `service-worker.js`: PWA shell.
@@ -40,6 +45,8 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 1. Run `npm install` to fetch JSZip for ZIP exports.
 2. Run `npm run build:tailwind` to generate `assets/tailwind-output.css`.
 3. Serve the project with a local web server that can access `node_modules/`.
+
+Developer note: the Help modal lives in `index.html` as `#helpModal`. Styles for modal rounding, responsive max-width, and focus outlines are in `styles.css` so you can tweak visuals without changing HTML markup.
 
 ## Testing
 

@@ -29,6 +29,19 @@
 
         <!-- Theme toggle -->
         <div class="flex items-center gap-3">
+          <!-- Help button: opens small usage popup -->
+          <button
+            id="helpButton"
+            type="button"
+            class="btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm"
+            aria-haspopup="dialog"
+            aria-controls="helpModal"
+            aria-expanded="false"
+            title="Help">
+            ?
+            <span class="sr-only">Help: show usage and GitHub link</span>
+          </button>
+
           <button
             id="themeToggle"
             type="button"
@@ -262,6 +275,33 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script type="module" src="src/ui.js"></script>
   <script type="module" src="src/app.js"></script>
+
+  <!-- Help modal (hidden by default) -->
+  <div
+    id="helpModal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center px-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="helpModalTitle">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative max-w-xl rounded bg-white p-6 shadow-lg">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 id="helpModalTitle" class="text-lg font-medium">How to use OneNote HTML Cleaner</h3>
+          <p class="mt-2 text-sm text-slate-700">
+            Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone.
+            The app converts the file locally in your browser and provides a download link when finished.
+          </p>
+          <p class="mt-3 text-sm text-slate-700">
+            Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>
+          </p>
+        </div>
+        <div class="flex items-start">
+          <button id="helpCloseButton" type="button" class="ml-4 btn-ghost" aria-label="Close help">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

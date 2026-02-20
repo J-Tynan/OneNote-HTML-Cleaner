@@ -489,6 +489,44 @@ function bindEvents() {
   document.addEventListener('paste', onPaste);
   dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
+  // Help modal events
+  dom.helpButton?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openHelpModal();
+  });
+
+  dom.helpCloseButton?.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeHelpModal();
+  });
+
+  // Close modal on Escape and click outside; open/close help with '?' shortcut
+  document.addEventListener('keydown', (e) => {
+    // Ignore shortcuts when typing in inputs, textareas, or contenteditable elements
+    const tgt = e.target;
+    const tag = tgt && tgt.tagName ? tgt.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || (tgt && tgt.isContentEditable)) return;
+
+    if (e.key === 'Escape') {
+      closeHelpModal();
+      return;
+    }
+
+    // Open/close help on '?' (Shift+/) or literal '?'
+    if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+      // toggle modal visibility
+      if (dom.helpModal && !dom.helpModal.classList.contains('hidden')) {
+        closeHelpModal();
+      } else {
+        openHelpModal();
+      }
+    }
+  });
+
+  dom.helpModal?.addEventListener('click', (e) => {
+    if (e.target === dom.helpModal) closeHelpModal();
+  });
+
   window.addEventListener('resize', logLayoutMode);
 
   runtime.listenersBound = true;
@@ -513,6 +551,9 @@ export function initUI(workerManager, options = {}) {
   dom.diagnosticsPanel = document.getElementById('diagnosticsPanel');
   dom.diagnosticsList = document.getElementById('diagnosticsList');
   dom.diagnosticsCount = document.getElementById('diagnosticsCount');
+  dom.helpButton = document.getElementById('helpButton');
+  dom.helpModal = document.getElementById('helpModal');
+  dom.helpCloseButton = document.getElementById('helpCloseButton');
 
   const { autoConvertEnabled = true } = options;
   runtime.autoConvertEnabled = Boolean(autoConvertEnabled);
@@ -566,4 +607,21 @@ export function initUI(workerManager, options = {}) {
   bindEvents();
   renderFileList();
   logLayoutMode();
+}
+
+/* === HELP MODAL === */
+
+function openHelpModal() {
+  if (!dom.helpModal || !dom.helpButton) return;
+  dom.helpModal.classList.remove('hidden');
+  dom.helpButton.setAttribute('aria-expanded', 'true');
+  // focus the close button for keyboard users
+  try { dom.helpCloseButton?.focus(); } catch (e) {}
+}
+
+function closeHelpModal() {
+  if (!dom.helpModal || !dom.helpButton) return;
+  dom.helpModal.classList.add('hidden');
+  dom.helpButton.setAttribute('aria-expanded', 'false');
+  try { dom.helpButton?.focus(); } catch (e) {}
 }

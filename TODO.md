@@ -9,6 +9,7 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 ## Recent Success
 
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
+ - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
 
 ## Rebuild safety rules (PWA)
 
@@ -130,6 +131,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 - [ ] Audit accessibility of outputs.
 - [x] Add badge icons and compact view improvements.
 - [x] Redesign UI to look professional and accessible.
+ - [x] Add in-app Help popup (Help button + modal) (2026-02-20)
   - [x] Add Light/Dark theme toggle and polish dark mode.
   - [x] Add auto‑convert checkbox in Advanced options and persist setting.
   - [x] Hide auto‑convert notice when auto‑convert is disabled.
