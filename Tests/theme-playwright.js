@@ -56,17 +56,25 @@ function createStaticServer(root) {
     browser = await chromium.launch({ headless: true });
     const ctx = await browser.newContext();
 
-    // Ensure deterministic start: clear any stored theme before page loads so initTheme() will persist the default
-    await ctx.addInitScript(() => {
-      try { localStorage.removeItem('theme'); } catch (e) { /* ignore */ }
-    });
-
     const page = await ctx.newPage();
+    // ensure clean storage once before first render
+    await page.goto(url, { waitUntil: 'networkidle' });
+    await page.evaluate(() => {
+      try { localStorage.removeItem('theme'); } catch (e) {}
+      try { localStorage.removeItem('themeVariant'); } catch (e) {}
+    });
+    // reload after clearing so initTheme applies default
+    await page.reload({ waitUntil: 'networkidle' });
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     page.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
     page.on('requestfailed', (req) => console.log('PAGE REQ FAILED:', req.url(), req.failure && req.failure().errorText));
     page.on('requestfinished', (req) => console.log('PAGE REQ FINISHED:', req.url()));
     await page.goto(url, { waitUntil: 'networkidle' });
+    // clear any persisted variant state before starting
+    await page.evaluate(() => {
+      localStorage.removeItem('themeVariant');
+      document.documentElement.removeAttribute('data-variant');
+    });
 
     // Initial state should be light (no 'dark' class) and initTheme() should persist that choice
     const hasDarkInitially = await page.evaluate(() => document.documentElement.classList.contains('dark'));
@@ -90,6 +98,34 @@ function createStaticServer(root) {
     // Ensure button state (aria-pressed) reflects theme
     const ariaPressed = await page.getAttribute('#themeToggle', 'aria-pressed');
     if (ariaPressed !== 'false') throw new Error('Expected #themeToggle aria-pressed="false" after reverting to light');
+
+    // --- Variant selector tests ---
+    // switch to dark and pick a variant
+    await page.click('#themeToggle');
+    await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
+    // directly apply a blue-tint variant and persist
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-variant', 'blue-tint');
+      localStorage.setItem('themeVariant', 'blue-tint');
+    });
+    // verify dataset and storage
+    await page.waitForFunction(() => document.documentElement.dataset.variant === 'blue-tint');
+    const storedVariant = await page.evaluate(() => localStorage.getItem('themeVariant'));
+    if (storedVariant !== 'blue-tint') throw new Error('Expected themeVariant stored');
+    // confirm computed style changed from default dark
+    const bgBefore = await page.evaluate(() => getComputedStyle(document.querySelector('.card-panel')).backgroundColor);
+    if (bgBefore === 'rgb(12,20,27)') throw new Error('Expected variant to alter card-panel bg');
+
+    // reload and verify persistence
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForSelector('#themeToggle');
+    const themeAfter = await page.evaluate(() => document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    const variantAfter = await page.evaluate(() => document.documentElement.dataset.variant || '');
+    if (themeAfter !== 'dark' || variantAfter !== 'blue-tint') {
+      throw new Error(`Expected dark+blue-tint after reload, saw theme=${themeAfter} variant=${variantAfter}`);
+    }
+    const storedAfterReload = await page.evaluate(() => localStorage.getItem('themeVariant'));
+    if (storedAfterReload !== 'blue-tint') throw new Error('Expected themeVariant to persist across reload');
 
     console.log('theme-playwright: OK');
     await browser.close();

@@ -1,5 +1,6 @@
 // src/theme.js
 const STORAGE_KEY = 'theme';
+const STORAGE_KEY_VARIANT = 'themeVariant';
 const TOGGLE_ID = 'themeToggle';
 const ICON_ID = 'themeToggleIcon';
 
@@ -8,6 +9,11 @@ function applyTheme(theme) {
   if (theme === 'dark') root.classList.add('dark');
   else root.classList.remove('dark');
   updateToggleUI(theme);
+  try {
+    window.dispatchEvent(new CustomEvent('theme:changed', { detail: { theme } }));
+  } catch (e) {
+    // ignore
+  }
 }
 
 function effectiveThemeFromSystem() {
@@ -23,6 +29,22 @@ function updateToggleUI(theme) {
   const icon = document.getElementById(ICON_ID);
   if (btn) btn.setAttribute('aria-pressed', String(theme === 'dark'));
   if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
+
+// apply a named dark‑variant by setting a data attribute and persisting
+// (used by tests and as a developer helper; no visible UI control shipped)
+export function applyThemeVariant(variant) {
+  try {
+    if (variant) {
+      document.documentElement.setAttribute('data-variant', variant);
+      localStorage.setItem(STORAGE_KEY_VARIANT, variant);
+    } else {
+      document.documentElement.removeAttribute('data-variant');
+      localStorage.removeItem(STORAGE_KEY_VARIANT);
+    }
+  } catch (e) {
+    // ignore storage errors
+  }
 }
 
 
@@ -51,10 +73,30 @@ export function initTheme() {
   // Apply the resolved theme and update UI
   applyTheme(theme);
 
+  // when dark, restore persisted variant if any
+  if (theme === 'dark') {
+    let storedVariant = null;
+    try { storedVariant = localStorage.getItem(STORAGE_KEY_VARIANT); } catch (e) { storedVariant = null; }
+    if (storedVariant) {
+      document.documentElement.setAttribute('data-variant', storedVariant);
+    }
+  }
+
   // Wire UI toggle if present
   const btn = document.getElementById(TOGGLE_ID);
   if (btn) {
-    btn.addEventListener('click', () => toggleTheme());
+    btn.addEventListener('click', () => {
+      const next = toggleTheme();
+      if (next === 'dark') {
+        // reapply stored variant after switching dark
+        let storedVariant = null;
+        try { storedVariant = localStorage.getItem(STORAGE_KEY_VARIANT); } catch (e) { storedVariant = null; }
+        if (storedVariant) applyThemeVariant(storedVariant);
+      } else {
+        // clear variant when leaving dark (optional)
+        document.documentElement.removeAttribute('data-variant');
+      }
+    });
     // reflect initial state
     btn.setAttribute('aria-pressed', String(theme === 'dark'));
   }

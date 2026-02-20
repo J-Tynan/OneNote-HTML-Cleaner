@@ -54,14 +54,33 @@ function createStaticServer(root) {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    const ctx = await browser.newContext();
 
-    // Ensure page starts with auto-convert disabled for this test
-    await ctx.addInitScript(() => {
+    // --- verify tooltip when auto-convert is ON using a fresh context ---
+    const ctx1 = await browser.newContext();
+    await ctx1.addInitScript(() => {
+      try { localStorage.setItem('autoConvertEnabled', 'true'); } catch (e) {}
+    });
+    const page1 = await ctx1.newPage();
+    page1.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+    page1.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
+
+    await page1.goto(url, { waitUntil: 'networkidle' });
+    await page1.waitForSelector('#convertButton');
+    // ensure wrapper element exists
+    await page1.waitForSelector('.convert-button-wrapper');
+    await page1.waitForFunction(() => {
+      const w = document.querySelector('.convert-button-wrapper');
+      return w && w.getAttribute('aria-describedby') === 'convertTooltip';
+    }, null, { timeout: 5000 });
+    await page1.waitForSelector('#convertTooltip[aria-hidden="false"]', { timeout: 5000 });
+    await page1.close();
+
+    // --- perform normal manual-convert flow with auto-convert OFF ---
+    const ctx2 = await browser.newContext();
+    await ctx2.addInitScript(() => {
       try { localStorage.setItem('autoConvertEnabled', 'false'); } catch (e) {}
     });
-
-    const page = await ctx.newPage();
+    const page = await ctx2.newPage();
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     page.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
 

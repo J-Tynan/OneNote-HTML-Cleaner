@@ -51,6 +51,9 @@
             <span id="themeToggleIcon" aria-hidden="true">🔆</span>
             <span class="sr-only">Toggle theme</span>
           </button>
+
+
+
         </div>
       </div>
     </div>
@@ -92,14 +95,20 @@
               </button>
 
               <!-- Convert button: triggers processing when auto-convert is OFF -->
-              <button
-                id="convertButton"
-                type="button"
-                class="btn-primary"
-                aria-label="Convert queued files"
-                disabled>
-                Convert
-              </button>
+              <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
+              <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
+                <button
+                  id="convertButton"
+                  type="button"
+                  class="btn-primary"
+                  aria-label="Convert queued files"
+                  disabled>
+                  Convert
+                </button>
+                <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
+                  Auto-convert is enabled — manual Convert is disabled
+                </div>
+              </div>
             </div>
           </div>
         </section>

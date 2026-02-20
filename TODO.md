@@ -108,12 +108,6 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
      2. Verify `tailwind.config.cjs` dark mode strategy (`darkMode: 'class'`) and `src/theme.js` toggle behavior.
      3. Run the app, toggle theme, and confirm contrast and button states visually and with the existing Playwright theme test.
 
-    5. Implement Dark theme variants in CSS (Option B) — Owner: `design/frontend` — completed (2026-02-20)
-      - Estimated time: 30–60 minutes (initial blocks)
-      - Quick checklist:
-        1. Add `html.dark[data-variant="<name>"] { ... }` blocks to `styles.css` for 3–4 variants.
-        2. Wire the test dropdown to toggle `document.documentElement.dataset.variant` (next step).
-        3. Verify style changes when variant is selected and persist `themeVariant` in `localStorage` if desired.
 
 ---
 
@@ -146,24 +140,58 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
    - Subtasks:
      - [x] Add `convertButton` markup to `index.html` (Step 1)
      - [x] Implement `processQueue()` and `updateConvertButton()` in `src/ui.js` (Step 2)
-     - [ ] Wire event handler in `bindEvents()` and ensure `updateConvertButton()` is called from `renderFileList()` and `setAutoConvertEnabled()` (Step 2)
-     - [ ] Add Playwright smoke test `Tests/auto-convert-manual-playwright.js` (Step 3)
-     - [ ] Update `README.md` with manual convert instructions (Step 3)
+     - [x] Wire event handler in `bindEvents()` and ensure `updateConvertButton()` is called from `renderFileList()` and `setAutoConvertEnabled()` (Step 2)
+     - [x] Add Playwright smoke test `Tests/auto-convert-manual-playwright.js` (Step 3)
+     - [x] Update `README.md` with manual convert instructions (Step 3)
 
-   - Notes: reuse existing `processEntry()`; keep Convert disabled when auto-convert is enabled.
-
-   - [ ] Add optional theme toggle (Light/Dark) in Advanced options
-     - Small UI toggle added to `Advanced options` allowing exported files to include
-       a Light (default) or Dark theme.
-     - Acceptance criteria:
-       - Exported/converted HTML includes minimal, non-blocking CSS for both themes.
-       - Exported HTML includes a tiny toggle snippet (or a single class) to switch
+   - [x] Add tooltip behavior for `Convert` when `auto-convert` is ON.
          between themes at runtime when opened in a browser.
        - Default export uses Light theme; enabling Dark is opt-in in Advanced options.
        - Feature must be optional and not change existing exported markup when disabled.
        - Keep the implementation small, dependency-free, and non-throwing.
 
----
+    ## UI Polish — Phased Plan (testing-first dropdowns)
+
+    To avoid scope creep and maintain safety, UI polish will be implemented in three separate phases. Each phase will provide 3–4 testable variants exposed via a temporary, testing-only dropdown in the header. Changes are immediate when a variant is selected so designers and engineers can compare quickly.
+
+    Phase 1 — Update UI Styling (Controls, Buttons, Spacing)
+ - [x] Add testing dropdown in header (`ui-style-variant`) with 3–4 variant presets; dropdown has been removed after variant selection.
+ - [x] Implement stylesheet tokens and base `.btn` updates used by the variants (`--radius-md`, `--btn-padding-x`, `--btn-shadow`).
+    - [ ] Verify changes with visual QA and Playwright smoke tests.
+
+    Acceptance criteria:
+    - Convert tooltip appears on hover/focus when `auto-convert` is enabled and `Convert` is disabled.
+    - Primary and secondary buttons show rounded corners, stronger contrast, and consistent padding across app.
+
+    Phase 2 — Light Theme Variants
+    - [ ] Add testing dropdown in header (`light-theme-variant`) with 3–4 Light theme choices (e.g. `Light Default`, `Warm`, `High Contrast`, `Muted`).
+    - [ ] Implement variant CSS for tokens used in exported HTML if required.
+    - [ ] Run visual QA and automated tests to ensure exported HTML remains stable.
+
+    Acceptance criteria:
+    - Selecting a Light theme variant updates the UI immediately and persists choice during the session.
+    - Exported/converted HTML is unchanged unless explicitly requested by the variant.
+
+    Phase 3 — Dark Theme Variants
+    - [ ] Add testing dropdown in header (`dark-theme-variant`) with 3–4 Dark theme choices (e.g. `Dark Default`, `Blue Tint`, `Mono`, `High Contrast`).
+    - [ ] Implement dark-theme token overrides and ensure focus/contrast rules are preserved.
+    - [ ] Run visual QA and tests (including Playwright theme tests) to validate contrast and accessibility.
+
+    Acceptance criteria:
+    - Selecting a Dark theme variant updates the UI immediately and persists choice during the session.
+    - Contrast ratios meet accessibility minimums for interactive controls.
+
+    Notes and rollout
+    - Each phase is self-contained: implement the testing dropdown and CSS hooks first, then create the 3–4 variants, then test.
+    - The dropdowns are temporary (testing-only) UI elements and will be removed after a variant is selected for final adoption.
+    - Keep changes small and verifiable; run the smoke test checklist after each variant addition.
+
+    Suggested next tasks (short term)
+    - [ ] Implement Phase 1 dropdown and basic `.btn` token support.
+    - [ ] Add tooltip behavior for `Convert` when `auto-convert` is ON.
+    - [ ] Add Playwright checks for tooltip + variant selection persistence.
+
+    ---
 
 ## Conversion / Features
 

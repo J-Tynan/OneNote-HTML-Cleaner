@@ -26,6 +26,10 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
  - The app enforces an MHTML-only intake for the stable release: non-MHTML files are shown as "Unsupported" in the queue and are not sent to the conversion pipeline (no partial conversions, no silent failures).
  - Advanced options now include an "Automatically convert files when added to the queue" toggle. When disabled, files remain in the queue until the user starts conversion manually; the preference persists across sessions.
 
+ - A new **Convert** button appears beside the Download ZIP control in the import panel. It is always visible but becomes disabled whenever auto‑convert is enabled. Hovering or focusing the button while it is disabled reveals a tooltip explaining that manual conversion is unavailable when auto‑convert is active. Clicking the button when enabled processes all queued files immediately and produces downloadable output; the convert state is driven by the same queue logic used for the automatic pipeline.
+ 
+ - **Dark theme variants** are implemented via `html.dark[data-variant="..."]` CSS token overrides and can be toggled via developer console or storage; they are purely optional UI changes and do not affect exported HTML. Available experimental variants: Blue tint, Charcoal, Mono, Blue contrast, Warm ink, Deep indigo, and Soft contrast.
+
 New: in-app Help and keyboard shortcut
 
 - A compact Help button was added to the header that opens a small usage modal with brief instructions and a link to the GitHub repository.

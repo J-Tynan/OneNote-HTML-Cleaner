@@ -1,6 +1,7 @@
 // src/ui.js
 
 import { createDownloadHelpers } from './ui-downloads.js';
+// theme variant functions now used indirectly; import removed
 import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
 import { info as logInfo, warn as logWarn, error as logError } from './logging.js';
 
@@ -17,6 +18,8 @@ const dom = {
   appStateBadge: null,
   downloadZip: null,
   convertButton: null,
+  convertButtonWrapper: null,
+  // uiStyleVariant temporary dropdown removed after Phase 1
   conversionProfile: null,
   toolbarEnabled: null,
   toolbarEditToggleEnabled: null,
@@ -127,6 +130,18 @@ function updateZipButton() {
   dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
 }
 
+function applyUiStyleVariant(variant) {
+  try {
+    if (variant && variant !== 'default') {
+      document.documentElement.setAttribute('data-ui-style', String(variant));
+    } else {
+      document.documentElement.removeAttribute('data-ui-style');
+    }
+  } catch (e) {
+    // noop
+  }
+}
+
 function rebuildSuccessfulOutputs() {
   runtime.successfulOutputs.clear();
 
@@ -162,6 +177,22 @@ function updateConvertButton() {
   const hasQueued = state.queue.some((e) => e.status === 'queued' && isSupportedSourceKind(e.sourceKind));
   const anyWorking = state.queue.some((e) => e.status === 'working');
   dom.convertButton.disabled = runtime.autoConvertEnabled || !hasQueued || anyWorking;
+
+  // Tooltip handling: show only when auto-convert is enabled and button disabled
+  const tooltip = document.getElementById('convertTooltip');
+  const wrapper = dom.convertButtonWrapper;
+  if (tooltip) {
+    const show = runtime.autoConvertEnabled && dom.convertButton.disabled;
+    if (show) {
+      tooltip.classList.remove('hidden');
+      tooltip.setAttribute('aria-hidden', 'false');
+      if (wrapper) wrapper.setAttribute('aria-describedby', 'convertTooltip');
+    } else {
+      tooltip.classList.add('hidden');
+      tooltip.setAttribute('aria-hidden', 'true');
+      if (wrapper) wrapper.removeAttribute('aria-describedby');
+    }
+  }
 }
 
 function onConvertClick(event) {
@@ -184,6 +215,8 @@ function setAutoConvertEnabled(value) {
   if (dom.autoConvertNotice) {
     dom.autoConvertNotice.classList.toggle('hidden', !runtime.autoConvertEnabled);
   }
+  // convert button state and tooltip depend on auto-convert toggles
+  updateConvertButton();
 }
 
 function onAutoConvertChange(event) {
@@ -505,6 +538,7 @@ function bindEvents() {
   dom.fileList?.addEventListener('click', onFileListClick);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
+  // light-theme testing dropdown removed; no listener attached
   dom.conversionProfile?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -517,6 +551,9 @@ function bindEvents() {
     e.preventDefault();
     openHelpModal();
   });
+
+  // dark-variant selector (testing only)
+
 
   dom.helpCloseButton?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -555,6 +592,7 @@ function bindEvents() {
   runtime.listenersBound = true;
 }
 
+
 /* === INIT === */
 
 export function initUI(workerManager, options = {}) {
@@ -566,6 +604,7 @@ export function initUI(workerManager, options = {}) {
   dom.appStateBadge = document.getElementById('appStateBadge');
   dom.downloadZip = document.getElementById('downloadZip');
   dom.convertButton = document.getElementById('convertButton');
+  dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');
   dom.conversionProfile = document.getElementById('conversionProfile');
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
   dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
@@ -579,6 +618,7 @@ export function initUI(workerManager, options = {}) {
   dom.helpModal = document.getElementById('helpModal');
   dom.helpCloseButton = document.getElementById('helpCloseButton');
 
+
   const { autoConvertEnabled = true } = options;
   runtime.autoConvertEnabled = Boolean(autoConvertEnabled);
   if (dom.autoConvertEnabled) {
@@ -590,6 +630,17 @@ export function initUI(workerManager, options = {}) {
   }
 
   runtime.workerManager = workerManager || null;
+
+  // Ensure the UI uses the Rounded CTA variant by default
+  try { applyUiStyleVariant('rounded-cta'); } catch (err) {}
+
+  // Apply any saved Light theme testing selection from sessionStorage (no-op now)
+  try {
+    // nothing to restore for Phase 2
+  } catch (err) {}
+
+  // no variant initialization required now that dropdown is gone
+
 
   // Expose a test helper to read worker-manager diagnostics from page context
   try { window.__getWorkerManagerDiagnostics = () => (runtime.workerManager ? runtime.workerManager.getDiagnostics() : []); } catch (ignore) {}
@@ -628,6 +679,8 @@ export function initUI(workerManager, options = {}) {
 
   runtime.dragCounter = 0;
   setDropzoneActive(false);
+  // previous phase-1 testing dropdown has been removed; default variant applied in styles
+
   bindEvents();
   renderFileList();
   updateConvertButton();
