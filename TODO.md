@@ -102,6 +102,13 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
      2. Verify `tailwind.config.js` dark mode strategy (`darkMode: 'class'`) and `src/theme.js` toggle behavior.
      3. Run the app, toggle theme, and confirm contrast and button states visually and with the existing Playwright theme test.
 
+    5. Implement Dark theme variants in CSS (Option B) — Owner: `design/frontend` — Status: in-progress
+      - Estimated time: 30–60 minutes (initial blocks)
+      - Quick checklist:
+        1. Add `html.dark[data-variant="<name>"] { ... }` blocks to `styles.css` for 3–4 variants.
+        2. Wire the test dropdown to toggle `document.documentElement.dataset.variant` (next step).
+        3. Verify style changes when variant is selected and persist `themeVariant` in `localStorage` if desired.
+
 ---
 
 ## Next milestone (MHTML release)

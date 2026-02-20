@@ -222,21 +222,24 @@ details[open] > summary {
 }
 
 /* === DARK THEME VARIABLES === */
+/* Default Dark theme now set to 'slate' variant */
 html.dark {
   color-scheme: dark;
-  --bg-page: #0f172a;
-  --bg-card: #0b1220;
-  --bg-soft: #071025;
-  --text-primary: #e6eef8;
-  --text-muted: #94a3b8;
-  --text-help: #cbd5e1;
-  --border-muted: #1f2937;
-  --cta-bg: #0ea5b3;
-  --cta-bg-hover: #0891b2;
-  --cta-bg-active: #065b58;
-  --cta-text: #062023;
-  --dropzone-highlight: #083344;
+  --bg-page: #0d1720;
+  --bg-card: #0c141b;
+  --bg-soft: #081119;
+  --text-primary: #e7eef8;
+  --text-muted: #98a9b6;
+  --text-help: #cfdde8;
+  --border-muted: #1e2933;
+  --cta-bg: #0fb1c0;
+  --cta-bg-hover: #0c95a3;
+  --cta-bg-active: #087174;
+  --cta-text: #ffffff;
+  --dropzone-highlight: #073042;
 }
+
+
 
 /* Dark-mode utility overrides for existing Tailwind classes in markup */
 html.dark body.bg-slate-50 {

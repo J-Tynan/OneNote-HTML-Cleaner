@@ -25,6 +25,8 @@ function updateToggleUI(theme) {
   if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
 }
 
+
+
 export function toggleTheme() {
   const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   const next = current === 'dark' ? 'light' : 'dark';
@@ -56,4 +58,6 @@ export function initTheme() {
     // reflect initial state
     btn.setAttribute('aria-pressed', String(theme === 'dark'));
   }
+
+
 }
