@@ -6,6 +6,10 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
+## Recent Success
+
+- [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
+
 ## Rebuild safety rules (PWA)
 
 When restoring from a known‑good build and re‑applying changes:

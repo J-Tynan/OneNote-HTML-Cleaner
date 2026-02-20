@@ -2,6 +2,7 @@
 
 import { createDownloadHelpers } from './ui-downloads.js';
 import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
+import { info as logInfo, warn as logWarn, error as logError } from './logging.js';
 
 const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
@@ -49,7 +50,7 @@ function logLayoutMode() {
     mode = 'Layout B · Tablet / Laptop';
   }
 
-  console.debug(`[UI] Active layout: ${mode} (${width}px)`);
+  logInfo('ui', { msg: `Active layout: ${mode} (${width}px)`, meta: { width, mode } });
 }
 
 /* === UTILITIES === */
@@ -109,7 +110,7 @@ function renderDiagnostics() {
   const diags = (runtime.workerManager && typeof runtime.workerManager.getDiagnostics === 'function')
     ? runtime.workerManager.getDiagnostics()
     : [];
-  try { console.debug('[ui] renderDiagnostics — count =', diags.length); } catch (ignore) {}
+  try { logInfo('ui', { msg: 'renderDiagnostics — count', meta: { count: diags.length } }); } catch (ignore) {}
 
   dom.diagnosticsList.innerHTML = diags.map(formatDiagnosticForList).join('\n') || '';
   if (dom.diagnosticsCount) dom.diagnosticsCount.textContent = `(${diags.length})`;
@@ -237,10 +238,10 @@ async function processEntryWithWorker(entry) {
       payload.html = await readFileAsText(entry.file);
     }
 
-    console.info('[ui] Dispatching entry to worker:', entry.id, entry.name);
+    logInfo('ui', { id: entry.id, msg: 'Dispatching entry to worker', meta: { name: entry.name } });
     const result = await runtime.workerManager.enqueue(payload, null, transferList);
 
-    console.info('[ui] Worker returned for entry:', entry.id, 'status=', result && result.status ? result.status : 'unknown');
+    logInfo('ui', { id: entry.id, msg: 'Worker returned for entry', meta: { status: (result && result.status) ? result.status : 'unknown' } });
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
@@ -250,7 +251,7 @@ async function processEntryWithWorker(entry) {
 
     updateEntryStatus(entry.id, 'error');
   } catch (err) {
-    console.error('[ui] worker processing error', err);
+    logError('ui', { id: entry.id, msg: 'worker processing error', meta: { error: err && err.message ? err.message : String(err) } });
     updateEntryStatus(entry.id, 'error');
   }
 }
@@ -273,7 +274,7 @@ function processEntry(entry) {
       });
       return;
     } catch (err) {
-      console.error('[ui] processing error', err);
+      logError('ui', { id: entry.id, msg: 'processing error', meta: { error: err && err.message ? err.message : String(err) } });
       updateEntryStatus(entry.id, 'error');
       return;
     }
@@ -377,12 +378,12 @@ export function addFilesToQueue(files) {
   renderFileList();
 
   if (runtime.autoConvertEnabled) {
-    console.info('[ui] autoConvertEnabled=true — starting processing for', processableEntries.length, 'entries');
+    logInfo('ui', { msg: 'autoConvertEnabled=true — starting processing', meta: { count: processableEntries.length } });
     for (const entry of processableEntries) {
       processEntry(entry);
     }
   } else {
-    console.info('[ui] autoConvertEnabled=false — files added to queue but not processed');
+    logInfo('ui', { msg: 'autoConvertEnabled=false — files added to queue' });
   }
 }
 
@@ -535,7 +536,7 @@ export function initUI(workerManager, options = {}) {
   }
   if (runtime.workerManager && dom.diagnosticsList) {
     try {
-      console.info('[ui] initial diagnostics count:', runtime.workerManager.getDiagnostics().length);
+      logInfo('ui', { msg: 'initial diagnostics count', meta: { count: runtime.workerManager.getDiagnostics().length } });
     } catch (ignore) {}
     renderDiagnostics();
     runtime._diagnosticsPoll = setInterval(renderDiagnostics, 1000);
@@ -555,9 +556,9 @@ export function initUI(workerManager, options = {}) {
   }, updateZipButton);
 
   if (window.JSZip) {
-    console.info('[ui] JSZip loaded');
+    logInfo('ui', { msg: 'JSZip loaded' });
   } else {
-    console.warn('[ui] JSZip not found; ZIP downloads disabled (use CDN or include JSZip in production)');
+    logWarn('ui', { msg: 'JSZip not found; ZIP downloads disabled', meta: { advice: 'include JSZip or use CDN in production' } });
   }
 
   runtime.dragCounter = 0;

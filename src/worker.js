@@ -36,7 +36,7 @@ export async function init() {
     if (failed.length) {
       console.warn('[worker] imports failed during init():', failed);
       try {
-        postDiagnostic({ id: 'init', status: 'error', phase: 'init-imports', details: failed });
+        postDiagnostic({ id: 'init', status: 'error', phase: 'init-imports', msg: 'imports failed during init', meta: { failed } });
       } catch (ignore) { /* swallow */ }
     }
 
@@ -46,7 +46,7 @@ export async function init() {
   } catch (err) {
     console.error('[worker] init() error', err);
     try {
-      postDiagnostic({ id: 'init', status: 'error', phase: 'init', error: String(err), stack: err && err.stack });
+      postDiagnostic({ id: 'init', status: 'error', phase: 'init', msg: String(err && err.message ? err.message : String(err)), meta: { stack: err && err.stack } });
     } catch (ignore) {}
     throw err;
   }
@@ -117,7 +117,7 @@ self.onmessage = async (e) => {
     if (typeof _runPipeline !== 'function') {
       const msg = 'pipeline not available in worker';
       console.error('[worker] ' + msg);
-      try { postDiagnostic({ id: 'init', status: 'error', phase: 'init', details: msg }); } catch (ignore) {}
+      try { postDiagnostic({ id: 'init', status: 'error', phase: 'init', msg, meta: { note: 'pipeline missing' } }); } catch (ignore) {}
       self.postMessage({ id, status: 'error', error: msg });
       return;
     }
@@ -136,7 +136,7 @@ self.onmessage = async (e) => {
     });
   } catch (err) {
     console.error(`[worker] job ${id} error:`, err);
-    try { postDiagnostic({ id, status: 'error', phase: 'job', error: String(err), stack: err && err.stack }); } catch (ignore) {}
+    try { postDiagnostic({ id, status: 'error', phase: 'job', msg: String(err && err.message ? err.message : String(err)), meta: { stack: err && err.stack } }); } catch (ignore) {}
     self.postMessage({ id, status: 'error', error: String(err) });
   }
 };

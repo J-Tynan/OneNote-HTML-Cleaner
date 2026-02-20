@@ -1,13 +1,15 @@
 // src/worker-wrapper.js
+import { info as logInfo, warn as logWarn, error as logError } from './logging.js';
+
 export default class WorkerManager {
   constructor(workerPath = './worker.js') {
     // Resolve worker script relative to this module so it works on GitHub Pages subpaths
     const resolved = new URL(workerPath, import.meta.url).href;
-    console.info('[worker-wrapper] creating worker from', resolved);
+    logInfo('worker-wrapper', { msg: 'creating worker from', meta: { resolved } });
     try {
       this.worker = new Worker(resolved, { type: 'module' });
     } catch (err) {
-      console.error('[worker-wrapper] failed to construct Worker with', resolved, err);
+      logError('worker-wrapper', { msg: 'failed to construct Worker', meta: { resolved, error: err && err.message ? err.message : String(err) } });
       throw err;
     }
 
@@ -31,9 +33,18 @@ export default class WorkerManager {
           workerUrl: this.workerUrl,
           timeoutMs: this.handshakeTimeoutMs
         };
-        console.error('[worker-wrapper] worker handshake timed out after', this.handshakeTimeoutMs, 'ms');
+        // store handshake-timeout in diagnostics buffer so UI/tests can observe it
         try {
-          console.warn('[worker-wrapper] diagnostic:', JSON.stringify(diag));
+          this.diagnostics.push(diag);
+          if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
+          if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+            try { window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag })); } catch (__) {}
+          }
+        } catch (ignore) {}
+
+        logError('worker-wrapper', { msg: 'worker handshake timed out', meta: { timeoutMs: this.handshakeTimeoutMs, pendingCount: this.pendingQueue.length, workerUrl: this.workerUrl } });
+        try {
+          logWarn('worker-wrapper', { msg: 'handshake diagnostic', meta: diag });
         } catch (ignore) {}
 
         // Reject queued payloads with a clear diagnostic and cancel callbacks
@@ -76,12 +87,12 @@ export default class WorkerManager {
         ? ` (${event.filename}${event.lineno ? `:${event.lineno}` : ''}${event.colno ? `:${event.colno}` : ''})`
         : '';
       const message = `${baseMessage}${fileInfo}`;
-      console.error('[worker-wrapper] worker error:', message, event);
+      logError('worker-wrapper', { msg: 'worker error', meta: { message, filename: event && event.filename, lineno: event && event.lineno, colno: event && event.colno } });
       this.rejectAllPending(message);
     };
 
     this.worker.onmessageerror = (event) => {
-      console.error('[worker-wrapper] worker message error:', event);
+      logError('worker-wrapper', { msg: 'worker message error', meta: { event: String(event) } });
       this.rejectAllPending('Worker message serialization failed');
     };
 
@@ -95,13 +106,13 @@ export default class WorkerManager {
           clearTimeout(this._handshakeTimer);
           this._handshakeTimer = null;
         }
-        console.info('[worker-wrapper] received ready from worker', msg);
+        logInfo('worker-wrapper', { msg: 'received ready from worker', meta: msg });
 
         // Flush any queued payloads now that the worker is ready
         while (this.pendingQueue.length) {
           const q = this.pendingQueue.shift();
           try {
-            console.info('[worker-wrapper] flushing queued message id=', q.payload.id, 'file=', q.payload.fileName || q.payload.relativePath);
+            logInfo('worker-wrapper', { id: q.payload.id, msg: 'flushing queued message', meta: { file: q.payload.fileName || q.payload.relativePath } });
             this.worker.postMessage(q.payload, q.transferList);
           } catch (err) {
             const cbQueued = this.callbacks.get(q.payload.id);
@@ -136,7 +147,7 @@ export default class WorkerManager {
               window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
             }
           } catch (ignore) {}
-          console.info('[worker-wrapper] worker diagnostic received:', JSON.stringify(diag));
+          logInfo('worker-wrapper', { msg: 'worker diagnostic received', meta: diag });
         } catch (ignore) {}
         return;
       }
@@ -163,7 +174,7 @@ export default class WorkerManager {
             }
           } catch (ignore) {}
 
-          console.warn('[worker-wrapper] unmatched worker message (stored diagnostic):', JSON.stringify(summary));
+          logWarn('worker-wrapper', { msg: 'unmatched worker message (stored diagnostic)', meta: summary });
         } catch (ignore) {}
         return;
       }
@@ -183,7 +194,7 @@ export default class WorkerManager {
       } else if (msg.status === 'unsupported') {
         // Worker cannot run DOM-based pipeline. Fallback to main-thread processing.
         try {
-          console.warn('[worker-wrapper] worker unsupported, falling back to main thread:', msg.reason);
+          logWarn('worker-wrapper', { msg: 'worker unsupported, falling back to main thread', meta: { reason: msg.reason } });
           // Dynamically import pipeline and mht parser in main thread
           const [pipelineMod, mhtMod] = await Promise.all([
             import('./pipeline/pipeline.js'),
@@ -195,14 +206,14 @@ export default class WorkerManager {
 
           const fileName = payload.fileName || payload.relativePath || '';
           if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
-            console.log('[worker-wrapper] main-thread parseMht for', fileName);
+            logInfo('worker-wrapper', { msg: 'main-thread parseMht for', meta: { fileName } });
             const parsed = mhtMod.parseMht(htmlInput);
             if (parsed && parsed.html) {
               htmlInput = parsed.html;
               imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-              console.log('[worker-wrapper] parseMht produced html length', htmlInput.length);
+              logInfo('worker-wrapper', { msg: 'parseMht produced html length', meta: { htmlLength: htmlInput.length } });
             } else {
-              console.warn('[worker-wrapper] parseMht returned no HTML; proceeding with original payload.html');
+              logWarn('worker-wrapper', { msg: 'parseMht returned no HTML; proceeding with original payload.html' });
             }
           }
 
@@ -232,10 +243,10 @@ export default class WorkerManager {
     // wrapper has installed message handlers. This defers the worker's
     // dynamic imports until the wrapper controls the handshake lifecycle.
     try {
-      console.info('[worker-wrapper] sending init to worker', this.workerUrl);
+      logInfo('worker-wrapper', { msg: 'sending init to worker', meta: { workerUrl: this.workerUrl } });
       this.worker.postMessage({ type: 'init', options: {} });
     } catch (err) {
-      console.warn('[worker-wrapper] failed to send init message', err);
+      logWarn('worker-wrapper', { msg: 'failed to send init message', meta: { error: err && err.message ? err.message : String(err) } });
     }
   }
 
@@ -274,13 +285,13 @@ export default class WorkerManager {
 
       // If the worker hasn't finished its handshake yet, queue the payload
       if (!this.ready) {
-        console.info('[worker-wrapper] worker not ready — queueing payload id=', payload.id);
+        logInfo('worker-wrapper', { id: payload.id, msg: 'worker not ready — queueing payload' });
         this.pendingQueue.push({ payload, transferList });
         return;
       }
 
       try {
-        console.info('[worker-wrapper] posting message to worker id=', payload.id, 'file=', payload.fileName || payload.relativePath);
+        logInfo('worker-wrapper', { id: payload.id, msg: 'posting message to worker', meta: { file: payload.fileName || payload.relativePath } });
         this.worker.postMessage(payload, transferList);
       } catch (error) {
         clearTimeout(timeoutHandle);

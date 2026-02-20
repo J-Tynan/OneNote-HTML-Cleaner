@@ -44,37 +44,27 @@ try {
     self.addEventListener('error', (ev) => {
       try {
         console.error('[worker-globals] uncaught error', ev.message, ev.filename, ev.lineno, ev.colno, ev.error);
-        if (typeof self.postMessage === 'function') {
-          self.postMessage({
-            id: 'init',
-            status: 'error',
-            phase: 'error',
-            error: String(ev.message),
-            filename: ev.filename,
-            lineno: ev.lineno,
-            colno: ev.colno,
-            stack: ev.error && ev.error.stack,
-            workerUrl: _workerUrl,
-            workerHash: _workerUrlHash
-          });
-        }
+        // Post a structured diagnostic using the helper so payloads are consistent.
+        postDiagnostic({
+          id: 'init',
+          status: 'error',
+          phase: 'error',
+          msg: String(ev.message),
+          meta: { filename: ev.filename, lineno: ev.lineno, colno: ev.colno, stack: ev.error && ev.error.stack }
+        });
       } catch (ignore) { /* swallow logging errors */ }
     });
 
     self.addEventListener('unhandledrejection', (ev) => {
       try {
         console.error('[worker-globals] unhandledrejection', ev.reason);
-        if (typeof self.postMessage === 'function') {
-          self.postMessage({
-            id: 'init',
-            status: 'error',
-            phase: 'unhandledrejection',
-            error: String(ev.reason && ev.reason.message ? ev.reason.message : ev.reason),
-            reason: ev.reason && (ev.reason.stack || String(ev.reason)),
-            workerUrl: _workerUrl,
-            workerHash: _workerUrlHash
-          });
-        }
+        postDiagnostic({
+          id: 'init',
+          status: 'error',
+          phase: 'unhandledrejection',
+          msg: String(ev.reason && ev.reason.message ? ev.reason.message : ev.reason),
+          meta: { reason: ev.reason && (ev.reason.stack || String(ev.reason)) }
+        });
       } catch (ignore) { /* swallow logging errors */ }
     });
   }
@@ -86,12 +76,20 @@ try {
 // `postMessage` is unavailable.
 export function postDiagnostic(detail = {}) {
   try {
+    const status = detail.status || 'info';
+    const level = (status === 'error') ? 'error' : (status === 'warn' || status === 'warning') ? 'warn' : 'info';
+    const msg = detail.msg || detail.message || detail.error || detail.phase || '';
+
     const payload = Object.assign({
       id: detail.id || 'diag',
-      status: detail.status || 'info',
+      status,
+      level,
       phase: detail.phase || 'diagnostic',
+      msg,
+      meta: detail.meta || detail.details || undefined,
       timestamp: Date.now()
     }, detail, {
+      source: 'worker',
       workerUrl: _workerUrl,
       workerHash: _workerUrlHash
     });
@@ -100,7 +98,7 @@ export function postDiagnostic(detail = {}) {
       self.postMessage(payload);
     } else {
       // Not in a worker context — surface to console for local/dev runs.
-      console.debug('[worker-globals] postDiagnostic (fallback):', payload);
+      try { console.debug('[worker-globals] postDiagnostic (fallback):', payload); } catch (_) {}
     }
   } catch (ignore) { /* swallow */ }
 }

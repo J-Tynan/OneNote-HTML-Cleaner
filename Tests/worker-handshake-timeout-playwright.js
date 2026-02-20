@@ -86,14 +86,18 @@ function createStaticServer(root) {
       // Trigger the wrapper's handshake-timeout immediately so the promise rejects
       setTimeout(() => { try { wm._onHandshakeTimeout(); } catch (e) { /* ignore */ } }, 50);
 
-      return await enqueuePromise;
+      const res = await enqueuePromise;
+      // Give wrapper a moment to record diagnostics
+      await new Promise(r => setTimeout(r, 20));
+      const diags = typeof wm.getDiagnostics === 'function' ? wm.getDiagnostics() : [];
+      return { result: res, diags };
     });
 
-    if (!result.ok) throw new Error('Expected enqueue to reject on handshake timeout: ' + result.error);
+    if (!result.result.ok) throw new Error('Expected enqueue to reject on handshake timeout: ' + result.result.error);
 
-    // Verify diagnostic was emitted to console
-    const diagLine = logs.find(l => /__diag__/.test(l) && /handshake-timeout/.test(l));
-    if (!diagLine) throw new Error('Expected diagnostic log for handshake-timeout not found. Logs:\n' + logs.join('\n'));
+    // Verify structured diagnostic was recorded in the wrapper diagnostics buffer
+    const found = (result.diags || []).some(d => d && (d.type === 'handshake-timeout' || (d.id === '__diag__' && /handshake-timeout/.test(d.type || ''))));
+    if (!found) throw new Error('Expected handshake-timeout diagnostic in WorkerManager diagnostics, got: ' + JSON.stringify(result.diags, null, 2));
 
     console.log('worker-handshake-timeout-playwright: OK');
     await browser.close();
