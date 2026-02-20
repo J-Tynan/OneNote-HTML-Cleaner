@@ -16,10 +16,10 @@ Developer checklist
 
 ```bash
 # preview the change (no-write)
-node scripts/bump-sw-cache.js --set=onenote-cleaner-v3
+node scripts/bump-sw-cache.cjs --set=onenote-cleaner-v3
 
 # apply the change to service-worker.js
-node scripts/bump-sw-cache.js --set=onenote-cleaner-v3 --yes
+node scripts/bump-sw-cache.cjs --set=onenote-cleaner-v3 --yes
 ```
 
 3. Activation: ensure `activate` handler deletes outdated caches and calls `clients.claim()` as needed.

@@ -6,6 +6,10 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
+## Recent Success
+
+- [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
+
 ## Rebuild safety rules (PWA)
 
 When restoring from a known‑good build and re‑applying changes:
@@ -52,7 +56,7 @@ These tasks were identified from recent debugging and are ordered by priority fo
 
  - [x] Add cache‑update / service‑worker unregister guidance and automation
   - Implemented: worker files included in precache; `SKIP_WAITING` message handler added; activation handler deletes old caches and calls `clients.claim()`.
-  - Added `scripts/bump-sw-cache.js` (preview/apply cache-name bump) and `Tests/sw-bump.js` unit test. See `docs/Service-Worker-Updates.md` for usage.
+  - Added `scripts/bump-sw-cache.cjs` (preview/apply cache-name bump) and `Tests/sw-bump.js` unit test. See `docs/Service-Worker-Updates.md` for usage.
 
 - [ ] Harden message id / callback handling and diagnostics
   - Log unmatched messages with timestamp and summary.
@@ -65,15 +69,17 @@ These tasks were identified from recent debugging and are ordered by priority fo
   - Prefer structured summaries (`id`, `type`, `size`, `timestamp`) for correlation.
 
 - [ ] Tidy Node test warnings
-  - Add `"type": "module"` to `package.json` if safe.
+ - [x] Tidy Node test warnings (2026-02-20)
+  - Added `"type": "module"` to `package.json` and converted test entry points to ESM where safe; renamed CommonJS configs/scripts to `.cjs` to maintain compatibility.
   - Remove `MODULE_TYPELESS_PACKAGE_JSON` warnings.
 
 - [ ] Standardize test output formatting
   - Ensure tests print `Result: PASS` / `Result: FAIL` consistently.
 
 - [ ] Run tests after changes and collect logs
-  - Re‑run native and Playwright smoke tests.
-  - Archive logs for rollout verification.
+ - [x] Run tests after changes and collect logs (2026-02-20)
+  - Re‑ran native and Playwright smoke tests locally; smoke suite passed.
+  - Archived test run outputs for verification.
 
 ---
 
@@ -85,9 +91,8 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
    - Confirm no work is dispatched before `{ type: 'ready' }`.
    - Re‑run handshake Playwright test.
 
-2. Restore and validate MHTML‑only PWA flow
-   - Convert known‑good `.mht` fixture.
-   - Confirm download link appears and ZIP export works.
+2. Restore and validate MHTML‑only PWA flow (done 2026-02-20)
+  - Converted known‑good `.mht` fixture and confirmed download link and ZIP export.
 
 3. Re‑apply UI features incrementally
    - Theme system.
@@ -99,7 +104,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
    - Owner: `design/frontend` — Estimated time: 30–60 minutes
    - Quick checklist:
      1. Review `styles.css` dark variables and adjust `--bg-*`, `--text-*`, and CTA tokens as needed.
-     2. Verify `tailwind.config.js` dark mode strategy (`darkMode: 'class'`) and `src/theme.js` toggle behavior.
+     2. Verify `tailwind.config.cjs` dark mode strategy (`darkMode: 'class'`) and `src/theme.js` toggle behavior.
      3. Run the app, toggle theme, and confirm contrast and button states visually and with the existing Playwright theme test.
 
     5. Implement Dark theme variants in CSS (Option B) — Owner: `design/frontend` — Status: in-progress
@@ -129,6 +134,17 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
   - [x] Add auto‑convert checkbox in Advanced options and persist setting.
   - [x] Hide auto‑convert notice when auto‑convert is disabled.
   - [x] Detect and mark unsupported file types (MHTML‑only release) and prevent processing.
+
+   - [ ] Add optional theme toggle (Light/Dark) in Advanced options
+     - Small UI toggle added to `Advanced options` allowing exported files to include
+       a Light (default) or Dark theme.
+     - Acceptance criteria:
+       - Exported/converted HTML includes minimal, non-blocking CSS for both themes.
+       - Exported HTML includes a tiny toggle snippet (or a single class) to switch
+         between themes at runtime when opened in a browser.
+       - Default export uses Light theme; enabling Dark is opt-in in Advanced options.
+       - Feature must be optional and not change existing exported markup when disabled.
+       - Keep the implementation small, dependency-free, and non-throwing.
 
 ---
 

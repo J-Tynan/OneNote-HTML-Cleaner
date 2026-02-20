@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 function usage() {
-  console.error('Usage: node scripts/bump-sw-cache.js --set=<name> | --increment [--file=<path>] [--yes]');
+  console.error('Usage: node scripts/bump-sw-cache.cjs --set=<name> | --increment [--file=<path>] [--yes]');
   process.exit(2);
 }
 
