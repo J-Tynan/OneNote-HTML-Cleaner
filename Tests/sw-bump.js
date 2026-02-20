@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { spawnSync } = require('child_process');
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawnSync } from 'child_process';
 
 const root = process.cwd();
 const src = path.join(root, 'service-worker.js');
@@ -9,7 +9,7 @@ try {
   fs.copyFileSync(src, tmp);
   const newName = 'onenote-cleaner-v-test-99';
   const cmd = process.execPath; // node
-  const args = [path.join(root, 'scripts', 'bump-sw-cache.js'), `--set=${newName}`, `--file=${tmp}`, '--yes'];
+  const args = [path.join(root, 'scripts', 'bump-sw-cache.cjs'), `--set=${newName}`, `--file=${tmp}`, '--yes'];
   const r = spawnSync(cmd, args, { encoding: 'utf8' });
   if (r.error) throw r.error;
   if (r.status !== 0) throw new Error('bump script failed: ' + r.stdout + '\n' + r.stderr);

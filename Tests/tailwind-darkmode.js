@@ -1,4 +1,7 @@
-const path = require('node:path');
+import path from 'node:path';
+import fs from 'node:fs';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 function fail(msg) {
   console.error(msg);
@@ -6,7 +9,10 @@ function fail(msg) {
 }
 
 async function main() {
-  const cfgPath = path.resolve(process.cwd(), 'tailwind.config.js');
+  const cfgPath = (function(){
+    const cjs = path.resolve(process.cwd(), 'tailwind.config.cjs');
+    return fs.existsSync(cjs) ? cjs : path.resolve(process.cwd(), 'tailwind.config.js');
+  })();
   const cfg = require(cfgPath);
   if (!cfg || cfg.darkMode !== 'class') {
     fail('tailwind.config.js must set darkMode: "class"');
