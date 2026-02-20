@@ -82,13 +82,25 @@
               </p>
             </div>
 
-            <button
-              id="downloadZip"
-              type="button"
-              class="btn-primary"
-              disabled>
-              Download ZIP
-            </button>
+            <div class="flex flex-col items-end gap-2">
+              <button
+                id="downloadZip"
+                type="button"
+                class="btn-primary"
+                disabled>
+                Download ZIP
+              </button>
+
+              <!-- Convert button: triggers processing when auto-convert is OFF -->
+              <button
+                id="convertButton"
+                type="button"
+                class="btn-primary"
+                aria-label="Convert queued files"
+                disabled>
+                Convert
+              </button>
+            </div>
           </div>
         </section>
 

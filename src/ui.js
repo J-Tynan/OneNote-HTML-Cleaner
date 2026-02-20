@@ -16,11 +16,11 @@ const dom = {
   statusPanel: null,
   appStateBadge: null,
   downloadZip: null,
+  convertButton: null,
   conversionProfile: null,
   toolbarEnabled: null,
   toolbarEditToggleEnabled: null,
-  toolbarMetadataToggleEnabled: null
-  ,
+  toolbarMetadataToggleEnabled: null,
   autoConvertEnabled: null
 };
 
@@ -147,6 +147,27 @@ function rebuildSuccessfulOutputs() {
   }
 
   updateZipButton();
+}
+
+function processQueue() {
+  for (const entry of state.queue) {
+    if (entry.status !== 'queued') continue;
+    if (!isSupportedSourceKind(entry.sourceKind)) continue;
+    processEntry(entry);
+  }
+}
+
+function updateConvertButton() {
+  if (!dom.convertButton) return;
+  const hasQueued = state.queue.some((e) => e.status === 'queued' && isSupportedSourceKind(e.sourceKind));
+  const anyWorking = state.queue.some((e) => e.status === 'working');
+  dom.convertButton.disabled = runtime.autoConvertEnabled || !hasQueued || anyWorking;
+}
+
+function onConvertClick(event) {
+  event.preventDefault();
+  processQueue();
+  updateConvertButton();
 }
 
 function isSupportedSourceKind(sourceKind) {
@@ -335,6 +356,7 @@ export function renderFileList() {
   dom.fileList.innerHTML = markup;
   rebuildSuccessfulOutputs();
   updateStatusVisibility();
+  updateConvertButton();
 }
 
 /* === QUEUE MUTATION === */
@@ -482,6 +504,7 @@ function bindEvents() {
   dom.fileInput?.addEventListener('change', onFileInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
+  dom.convertButton?.addEventListener('click', onConvertClick);
   dom.conversionProfile?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -542,6 +565,7 @@ export function initUI(workerManager, options = {}) {
   dom.statusPanel = document.getElementById('statusPanel');
   dom.appStateBadge = document.getElementById('appStateBadge');
   dom.downloadZip = document.getElementById('downloadZip');
+  dom.convertButton = document.getElementById('convertButton');
   dom.conversionProfile = document.getElementById('conversionProfile');
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
   dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
@@ -606,6 +630,7 @@ export function initUI(workerManager, options = {}) {
   setDropzoneActive(false);
   bindEvents();
   renderFileList();
+  updateConvertButton();
   logLayoutMode();
 }
 

@@ -101,14 +101,14 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
   - Auto‑convert opt‑out.
   - Test conversion after each step.
 
-4. Quick win: Tweak Dark theme colours (UI)
+4. Quick win: Tweak Dark theme colours (UI) - completed (2026-02-20)
    - Owner: `design/frontend` — Estimated time: 30–60 minutes
    - Quick checklist:
      1. Review `styles.css` dark variables and adjust `--bg-*`, `--text-*`, and CTA tokens as needed.
      2. Verify `tailwind.config.cjs` dark mode strategy (`darkMode: 'class'`) and `src/theme.js` toggle behavior.
      3. Run the app, toggle theme, and confirm contrast and button states visually and with the existing Playwright theme test.
 
-    5. Implement Dark theme variants in CSS (Option B) — Owner: `design/frontend` — Status: in-progress
+    5. Implement Dark theme variants in CSS (Option B) — Owner: `design/frontend` — completed (2026-02-20)
       - Estimated time: 30–60 minutes (initial blocks)
       - Quick checklist:
         1. Add `html.dark[data-variant="<name>"] { ... }` blocks to `styles.css` for 3–4 variants.
@@ -136,6 +136,21 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
   - [x] Add auto‑convert checkbox in Advanced options and persist setting.
   - [x] Hide auto‑convert notice when auto‑convert is disabled.
   - [x] Detect and mark unsupported file types (MHTML‑only release) and prevent processing.
+
+ - [ ] Add Convert button (manual-trigger for queued conversions)
+   - Location: `index.html` Import panel (below `Download ZIP`)
+   - Acceptance criteria:
+     - `Convert` is visible at all times in the Import panel (below `Download ZIP`).
+     - `Convert` is **disabled** when `auto-convert` is ON; becomes **enabled** when `auto-convert` is OFF and at least one supported file is queued.
+     - Clicking `Convert` processes all queued, supported files (uses existing `processEntry()`), updates statuses, and produces downloadable output.
+   - Subtasks:
+     - [x] Add `convertButton` markup to `index.html` (Step 1)
+     - [x] Implement `processQueue()` and `updateConvertButton()` in `src/ui.js` (Step 2)
+     - [ ] Wire event handler in `bindEvents()` and ensure `updateConvertButton()` is called from `renderFileList()` and `setAutoConvertEnabled()` (Step 2)
+     - [ ] Add Playwright smoke test `Tests/auto-convert-manual-playwright.js` (Step 3)
+     - [ ] Update `README.md` with manual convert instructions (Step 3)
+
+   - Notes: reuse existing `processEntry()`; keep Convert disabled when auto-convert is enabled.
 
    - [ ] Add optional theme toggle (Light/Dark) in Advanced options
      - Small UI toggle added to `Advanced options` allowing exported files to include
@@ -178,7 +193,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 - [x] Add warning‑code contract tests.
 - [x] Add ZIP and download UI tests.
 - [x] Add Playwright smoke test for theme toggle and persistence.
-- [ ] Add Playwright smoke test for auto‑convert and unsupported‑file flows.
+- [x] Add Playwright smoke test for auto‑convert (2026-02-20) and unsupported‑file flows.
 
 ---
 
