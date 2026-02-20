@@ -1,5 +1,9 @@
 # [WIP] OneNote HTML Cleaner
 
+Status: PWA tested — conversion and test updates
+
+This project has an updated PWA scaffold and the test suite was recently converted to ES modules (ESM). The PWA and core conversion pipeline have been tested locally (Playwright + native smoke tests) and are currently working. See "Project Notes" below for developer-facing changes that may affect local setup or CI.
+
 OneNote HTML Cleaner is being refactored from a single PowerShell script into a framework-free Progressive Web App (PWA). The goal is to provide an offline-capable, browser-based workflow for cleaning exported OneNote HTML with a modular, testable pipeline.
 
 ## Current Status
