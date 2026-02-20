@@ -1,5 +1,5 @@
-const path = require('node:path');
-const { pathToFileURL } = require('node:url');
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 function fail(message) {
   console.error(message);
