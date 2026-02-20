@@ -88,18 +88,18 @@ These tasks were identified from recent debugging and are ordered by priority fo
 
 Begin with the smallest, highest‑impact items to unblock diagnostics and releases.
 
-1. Verify worker handshake and init ordering
-   - Confirm no work is dispatched before `{ type: 'ready' }`.
-   - Re‑run handshake Playwright test.
+1. Verify worker handshake and init ordering — completed (2026-02-20)
+  - Confirm no work is dispatched before `{ type: 'ready' }`.
+  - Re‑run handshake Playwright test (`Tests/worker-init-playwright.js`): PASS
 
 2. Restore and validate MHTML‑only PWA flow (done 2026-02-20)
   - Converted known‑good `.mht` fixture and confirmed download link and ZIP export.
 
-3. Re‑apply UI features incrementally
-   - Theme system.
-   - Unsupported‑file handling.
-   - Auto‑convert opt‑out.
-   - Test conversion after each step.
+3. Re‑apply UI features incrementally — completed (2026-02-20)
+  - Theme system.
+  - Unsupported‑file handling.
+  - Auto‑convert opt‑out.
+  - Test conversion after each step.
 
 4. Quick win: Tweak Dark theme colours (UI)
    - Owner: `design/frontend` — Estimated time: 30–60 minutes

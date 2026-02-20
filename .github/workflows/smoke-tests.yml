@@ -1,0 +1,54 @@
+name: Smoke Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Playwright smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Tailwind (if present)
+        run: npm run build:tailwind --if-present
+
+      - name: Install Playwright browsers (best-effort)
+        run: npx playwright install --with-deps || true
+
+      - name: Start static server
+        run: |
+          # start a simple static server on port 58730 in background
+          npx http-server -c-1 -p 58730 > server.log 2>&1 &
+          # wait for server to be ready
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:58730/ >/dev/null 2>&1; then
+              echo "Server ready"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Run Playwright smoke scripts
+        env:
+          CI: true
+        run: |
+          set -e
+          echo "Running Playwright smoke scripts from Tests/"
+          for f in Tests/*playwright*.js; do
+            echo "=== Running: $f ==="
+            node "$f"
+          done
