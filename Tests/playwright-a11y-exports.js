@@ -1,10 +1,8 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
-import os from 'node:os';
 import { chromium } from 'playwright';
 import { createRequire } from 'module';
-import { runPipeline } from '../src/pipeline/pipeline.js';
 const require = createRequire(import.meta.url);
 
 function createStaticServer(root) {
@@ -135,20 +133,6 @@ async function auditPage(url, reportBase) {
     process.exit(1);
   }
   // when auditing an existing HTML directory (not MHT conversion), run the pipeline
-  if (targetDir && !mhtDir) {
-    const processed = path.join('Tests', 'exports-processed');
-    if (!fs.existsSync(processed)) fs.mkdirSync(processed, { recursive: true });
-    const htmlFiles = fs.readdirSync(targetDir).filter(f => f.match(/\.html?$/i));
-    console.log('preprocessing', htmlFiles.length, 'HTML files through pipeline');
-    for (const file of htmlFiles) {
-      const raw = fs.readFileSync(path.join(targetDir, file), 'utf8');
-      const base = path.basename(file, path.extname(file));
-      const run = await runPipeline(raw, { defaultTitle: base, defaultLang: 'en' });
-      fs.writeFileSync(path.join(processed, file), run.output, 'utf8');
-    }
-    targetDir = processed;
-    console.log('pipeline-preprocessed files written to', targetDir);
-  }
   // start server for app resources (needed for pipeline imports)
   const root = process.cwd();
   const mainServer = createStaticServer(root);

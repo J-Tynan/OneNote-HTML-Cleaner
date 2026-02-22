@@ -18,6 +18,10 @@ function analyze(html) {
       issues.push('missing <h1> inside <main>');
     }
   }
+  // ensure no inline spacing styles
+  if (/(?:letter-spacing|word-spacing|line-height)\s*:/i.test(html)) {
+    issues.push('contains inline spacing styles');
+  }
   return issues;
 }
 

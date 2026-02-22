@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-22T12:56:18.508Z",
-  "url": "http://127.0.0.1:50770/Test%20File.html",
+  "timestamp": "2026-02-22T16:34:52.102Z",
+  "url": "http://127.0.0.1:58411/Test%20File.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1358,7 +1358,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676\" class=\"font-sans text-sm\">31 March 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">15:30</span></p>",
+          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" class=\"font-sans text-sm\">31 March 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; margin-left: 0.75em\">15:30</span></p>",
           "target": [
             "div:nth-child(2) > .text-sm"
           ]
@@ -1390,7 +1390,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">15:30</span>",
+          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; margin-left: 0.75em\">15:30</span>",
           "target": [
             ".created-time"
           ]
@@ -2574,7 +2574,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.484in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt; color: #595959\" class=\"font-sans text-base\"> </blockquote>\n  </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.484in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </blockquote>\n  </td>",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(2) > td"
           ]
@@ -2606,7 +2606,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt; color: #595959\" class=\"font-sans text-base\"> </blockquote>",
+          "html": "<blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </blockquote>",
           "target": [
             "blockquote"
           ]
@@ -2734,7 +2734,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:1.4888in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:1.4888in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>\n    </td>",
           "target": [
             "tr:nth-child(3) > td > div > .cornell-table > tbody > tr:nth-child(1) > .cues"
           ]
@@ -2766,7 +2766,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
           "target": [
             ".cues > h1"
           ]
@@ -2798,7 +2798,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:5.2375in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:5.2375in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>\n    </td>",
           "target": [
             "tr:nth-child(3) > td > div > .cornell-table > tbody > tr:nth-child(1) > .notes"
           ]
@@ -2830,7 +2830,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
           "target": [
             ".notes > h1"
           ]
@@ -2958,7 +2958,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Item 1</span></li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"1\"]"
           ]
@@ -3182,7 +3182,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Item 2</span></li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"2\"]"
           ]
@@ -3406,7 +3406,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"3\"]"
           ]
@@ -3630,7 +3630,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"4\"]"
           ]
@@ -5230,7 +5230,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"5\"]"
           ]
@@ -5422,7 +5422,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"6\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"6\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"6\"]"
           ]
@@ -5614,7 +5614,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"7\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"7\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"7\"]"
           ]
@@ -5806,7 +5806,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"8\"]"
           ]
@@ -5998,7 +5998,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"9\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"9\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"9\"]"
           ]
@@ -6190,7 +6190,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"10\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"10\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"10\"]"
           ]
@@ -6382,7 +6382,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"11\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"11\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"11\"]"
           ]
@@ -6574,7 +6574,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"12\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"12\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"12\"]"
           ]
@@ -6766,7 +6766,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"13\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"13\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"13\"]"
           ]
@@ -6958,7 +6958,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"14\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"14\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"14\"]"
           ]
@@ -7150,7 +7150,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"15\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"15\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"15\"]"
           ]
@@ -7342,7 +7342,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"16\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"16\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"16\"]"
           ]
@@ -7534,7 +7534,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"17\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"17\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"17\"]"
           ]
@@ -7726,7 +7726,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"18\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"18\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"18\"]"
           ]
@@ -7918,7 +7918,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"19\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"19\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"19\"]"
           ]
@@ -8110,7 +8110,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li value=\"20\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"20\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"20\"]"
           ]
@@ -9742,7 +9742,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2381in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2381in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>\n    </td>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td"
           ]
@@ -9774,7 +9774,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -9902,7 +9902,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -10062,7 +10062,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -10190,7 +10190,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2423in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2423in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>\n    </td>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td"
           ]
@@ -10222,7 +10222,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -10350,7 +10350,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -10606,7 +10606,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; color: #969696; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
+          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
           "target": [
             "div:nth-child(2) > .text-xs"
           ]
@@ -10640,25 +10640,25 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
                   "target": [
                     ".cues > h1"
                   ]
                 },
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
                   "target": [
                     ".notes > h1"
                   ]
                 },
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
                   "target": [
                     "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
                   ]
                 },
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
                   "target": [
                     "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
                   ]
@@ -10694,7 +10694,7 @@
     },
     {
       "id": "color-contrast",
-      "impact": "serious",
+      "impact": null,
       "tags": [
         "cat.color",
         "wcag2aa",
@@ -10741,22 +10741,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#767676",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.54,
+                "contrastRatio": 21,
                 "fontSize": "10.0pt (13.3333px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.54"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676\" class=\"font-sans text-sm\">31 March 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">15:30</span></p>",
+          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" class=\"font-sans text-sm\">31 March 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; margin-left: 0.75em\">15:30</span></p>",
           "target": [
             "div:nth-child(2) > .text-sm"
           ]
@@ -10766,22 +10766,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#767676",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.54,
+                "contrastRatio": 21,
                 "fontSize": "10.0pt (13.3333px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.54"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">15:30</span>",
+          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; margin-left: 0.75em\">15:30</span>",
           "target": [
             ".created-time"
           ]
@@ -10966,22 +10966,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1e4e79",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.67,
+                "contrastRatio": 21,
                 "fontSize": "16.0pt (21.3333px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "3:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.67"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
           "target": [
             ".cues > h1"
           ]
@@ -10991,22 +10991,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1e4e79",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.67,
+                "contrastRatio": 21,
                 "fontSize": "16.0pt (21.3333px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "3:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.67"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
           "target": [
             ".notes > h1"
           ]
@@ -11016,16 +11016,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#2e75b5",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.85,
+                "contrastRatio": 21,
                 "fontSize": "11.0pt (14.6667px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.85"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
@@ -11066,16 +11066,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#2e75b5",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.85,
+                "contrastRatio": 21,
                 "fontSize": "11.0pt (14.6667px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.85"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
@@ -11116,16 +11116,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#2e75b5",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.85,
+                "contrastRatio": 21,
                 "fontSize": "11.0pt (14.6667px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.85"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
@@ -11166,16 +11166,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#2e75b5",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.85,
+                "contrastRatio": 21,
                 "fontSize": "11.0pt (14.6667px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.85"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
@@ -12241,22 +12241,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1e4e79",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.67,
+                "contrastRatio": 21,
                 "fontSize": "16.0pt (21.3333px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "3:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.67"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -12291,22 +12291,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1e4e79",
+                "fgColor": "#000000",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.67,
+                "contrastRatio": 21,
                 "fontSize": "16.0pt (21.3333px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "3:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.67"
+              "message": "Element has sufficient color contrast of 21"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -12334,6 +12334,31 @@
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Test\n          question</span>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#000000",
+                "bgColor": "#ffffff",
+                "contrastRatio": 21,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 21"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
+          "target": [
+            "div:nth-child(2) > .text-xs"
           ]
         }
       ]
@@ -12401,7 +12426,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
           "target": [
             ".cues > h1"
           ]
@@ -12419,7 +12444,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
           "target": [
             ".notes > h1"
           ]
@@ -12437,7 +12462,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -12455,7 +12480,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -12513,7 +12538,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
           "target": [
             ".cues > h1"
           ]
@@ -12531,7 +12556,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
           "target": [
             ".notes > h1"
           ]
@@ -12549,7 +12574,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -12567,7 +12592,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -14079,7 +14104,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Item 1</span></li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"1\"]"
           ]
@@ -14115,7 +14140,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Item 2</span></li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"2\"]"
           ]
@@ -14151,7 +14176,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"3\"]"
           ]
@@ -14187,7 +14212,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"4\"]"
           ]
@@ -14619,7 +14644,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"5\"]"
           ]
@@ -14655,7 +14680,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"6\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"6\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"6\"]"
           ]
@@ -14691,7 +14716,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"7\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"7\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"7\"]"
           ]
@@ -14727,7 +14752,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"8\"]"
           ]
@@ -14763,7 +14788,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"9\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"9\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"9\"]"
           ]
@@ -14799,7 +14824,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"10\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"10\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"10\"]"
           ]
@@ -14835,7 +14860,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"11\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"11\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"11\"]"
           ]
@@ -14871,7 +14896,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"12\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"12\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"12\"]"
           ]
@@ -14907,7 +14932,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"13\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"13\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"13\"]"
           ]
@@ -14943,7 +14968,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"14\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"14\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"14\"]"
           ]
@@ -14979,7 +15004,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"15\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"15\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"15\"]"
           ]
@@ -15015,7 +15040,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"16\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"16\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"16\"]"
           ]
@@ -15051,7 +15076,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"17\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"17\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"17\"]"
           ]
@@ -15087,7 +15112,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"18\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"18\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"18\"]"
           ]
@@ -15123,7 +15148,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"19\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"19\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"19\"]"
           ]
@@ -15159,7 +15184,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"20\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"20\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"20\"]"
           ]
@@ -15573,7 +15598,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -15609,7 +15634,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -15645,7 +15670,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -15885,25 +15910,25 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
                   "target": [
                     ".cues > h1"
                   ]
                 },
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
                   "target": [
                     ".notes > h1"
                   ]
                 },
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
                   "target": [
                     "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
                   ]
                 },
                 {
-                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+                  "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
                   "target": [
                     "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
                   ]
@@ -16070,7 +16095,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676\" class=\"font-sans text-sm\">31 March 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">15:30</span></p>",
+          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" class=\"font-sans text-sm\">31 March 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; margin-left: 0.75em\">15:30</span></p>",
           "target": [
             "div:nth-child(2) > .text-sm"
           ]
@@ -16090,7 +16115,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">15:30</span>",
+          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt; margin-left: 0.75em\">15:30</span>",
           "target": [
             ".created-time"
           ]
@@ -17030,7 +17055,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<tr>\n  <td style=\"border-width:0pt;vertical-align:top;width:7.484in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt; color: #595959\" class=\"font-sans text-base\"> </blockquote>\n  </td>\n </tr>",
+          "html": "<tr>\n  <td style=\"border-width:0pt;vertical-align:top;width:7.484in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </blockquote>\n  </td>\n </tr>",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(2)"
           ]
@@ -17050,7 +17075,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.484in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt; color: #595959\" class=\"font-sans text-base\"> </blockquote>\n  </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.484in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </blockquote>\n  </td>",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(2) > td"
           ]
@@ -17070,7 +17095,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt; color: #595959\" class=\"font-sans text-base\"> </blockquote>",
+          "html": "<blockquote style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </blockquote>",
           "target": [
             "blockquote"
           ]
@@ -17210,7 +17235,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:1.4888in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:1.4888in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>\n    </td>",
           "target": [
             "tr:nth-child(3) > td > div > .cornell-table > tbody > tr:nth-child(1) > .cues"
           ]
@@ -17230,7 +17255,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Cues</h1>",
           "target": [
             ".cues > h1"
           ]
@@ -17250,7 +17275,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:5.2375in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:5.2375in;padding:2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>\n    </td>",
           "target": [
             "tr:nth-child(3) > td > div > .cornell-table > tbody > tr:nth-child(1) > .notes"
           ]
@@ -17270,7 +17295,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Notes</h1>",
           "target": [
             ".notes > h1"
           ]
@@ -17390,7 +17415,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Item 1</span></li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"1\"]"
           ]
@@ -17570,7 +17595,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Item 2</span></li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"2\"]"
           ]
@@ -17750,7 +17775,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"3\"]"
           ]
@@ -17930,7 +17955,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
+          "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"4\"]"
           ]
@@ -18990,7 +19015,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"5\"]"
           ]
@@ -19150,7 +19175,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"6\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"6\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"6\"]"
           ]
@@ -19310,7 +19335,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"7\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"7\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"7\"]"
           ]
@@ -19470,7 +19495,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"8\"]"
           ]
@@ -19630,7 +19655,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"9\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"9\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"9\"]"
           ]
@@ -19790,7 +19815,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"10\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"10\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"10\"]"
           ]
@@ -19950,7 +19975,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"11\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"11\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"11\"]"
           ]
@@ -20110,7 +20135,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"12\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"12\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"12\"]"
           ]
@@ -20270,7 +20295,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"13\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"13\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"13\"]"
           ]
@@ -20430,7 +20455,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"14\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"14\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"14\"]"
           ]
@@ -20590,7 +20615,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"15\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"15\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"15\"]"
           ]
@@ -20750,7 +20775,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"16\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"16\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"16\"]"
           ]
@@ -20910,7 +20935,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"17\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"17\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"17\"]"
           ]
@@ -21070,7 +21095,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"18\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"18\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"18\"]"
           ]
@@ -21230,7 +21255,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"19\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"19\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"19\"]"
           ]
@@ -21390,7 +21415,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li value=\"20\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"> </li>",
+          "html": "<li value=\"20\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"> </li>",
           "target": [
             ".list-decimal > .mt-0.mb-0[value=\"20\"]"
           ]
@@ -22450,7 +22475,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<tr>\n    <td style=\"border-width:0pt;vertical-align:top;width:7.2381in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>\n    </td>\n   </tr>",
+          "html": "<tr>\n    <td style=\"border-width:0pt;vertical-align:top;width:7.2381in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>\n    </td>\n   </tr>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1)"
           ]
@@ -22470,7 +22495,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2381in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2381in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>\n    </td>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td"
           ]
@@ -22490,7 +22515,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Summary</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Summary</h1>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -22610,7 +22635,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -22770,7 +22795,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -22910,7 +22935,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<tr>\n    <td style=\"border-width:0pt;vertical-align:top;width:7.2423in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>\n    </td>\n   </tr>",
+          "html": "<tr>\n    <td style=\"border-width:0pt;vertical-align:top;width:7.2423in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>\n    </td>\n   </tr>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1)"
           ]
@@ -22930,7 +22955,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2423in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>\n    </td>",
+          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2423in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n    <h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>\n    </td>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td"
           ]
@@ -22950,7 +22975,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
+          "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(1) > td > h1"
           ]
@@ -23070,7 +23095,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
+          "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
             "tr:nth-child(5) > td > div > table > tbody > tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
@@ -23270,7 +23295,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n\n<p style=\"margin:0in\"> </p>\n\n<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; color: #969696; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
+          "html": "<div>\n\n<p style=\"margin:0in\"> </p>\n\n<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
           "target": [
             "main > div:nth-child(2)"
           ]
@@ -23310,7 +23335,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; color: #969696; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
+          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
           "target": [
             "div:nth-child(2) > .text-xs"
           ]
@@ -23687,54 +23712,5 @@
     }
   ],
   "incomplete": [],
-  "violations": [
-    {
-      "id": "color-contrast",
-      "impact": "serious",
-      "tags": [
-        "cat.color",
-        "wcag2aa",
-        "wcag143",
-        "TTv5",
-        "TT13.c",
-        "EN-301-549",
-        "EN-9.1.4.3",
-        "ACT",
-        "RGAAv4",
-        "RGAA-3.2.1"
-      ],
-      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
-      "help": "Elements must meet minimum color contrast ratio thresholds",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#969696",
-                "bgColor": "#ffffff",
-                "contrastRatio": 2.95,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": null,
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has insufficient color contrast of 2.95 (foreground color: #969696, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; color: #969696; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
-          "target": [
-            "div:nth-child(2) > .text-xs"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.95 (foreground color: #969696, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
-        }
-      ]
-    }
-  ]
+  "violations": []
 }
