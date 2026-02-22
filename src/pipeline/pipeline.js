@@ -41,10 +41,18 @@ export async function runPipeline(htmlString, config = {}) {
 
     // Parse into a Document (DOMParser must be available in caller)
     const doc = parseHtmlToDocument(htmlString || '<!doctype html><html><head></head><body></body></html>');
-    logs.push(...ensureArray(sanitize.ensureHead(doc, { defaultTitle: resolvedConfig.defaultTitle })));
+    // core sanitization/structure helpers
+    logs.push(...ensureArray(sanitize.ensureHead(doc, {
+      defaultTitle: resolvedConfig.defaultTitle,
+      defaultLang: resolvedConfig.defaultLang || 'en'
+    })));
     logs.push(...ensureArray(sanitize.removeOneNoteMeta(doc)));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
     logs.push(...ensureArray(sanitize.removeNbsp(doc)));
+    // ensure main and heading after basic sanitization
+    logs.push(...ensureArray(sanitize.ensureMainHeading(doc, {
+      defaultTitle: resolvedConfig.defaultTitle || resolvedConfig.fileName || 'Document'
+    })));
 
     const useCornellSemantics = resolvedConfig.UseCornellSemantics !== false;
     if (useCornellSemantics) {
@@ -74,6 +82,8 @@ export async function runPipeline(htmlString, config = {}) {
       listPaddingLeft: resolvedConfig.ListPaddingLeft || '1.2em',
       normalizeAllListIndent: resolvedConfig.NormalizeAllListIndent === true
     })));
+    // repair any malformed list structure left over
+    logs.push(...ensureArray(sanitize.ensureListStructure(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {

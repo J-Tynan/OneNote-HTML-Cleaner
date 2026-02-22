@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-22T12:27:33.840Z",
-  "url": "http://127.0.0.1:65050/Resolve%20merge%20conflicts.html",
+  "timestamp": "2026-02-22T12:56:14.878Z",
+  "url": "http://127.0.0.1:50738/Resolve%20merge%20conflicts.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -632,26 +632,6 @@
       "nodes": []
     },
     {
-      "id": "html-lang-valid",
-      "impact": null,
-      "tags": [
-        "cat.language",
-        "wcag2a",
-        "wcag311",
-        "TTv5",
-        "TT11.a",
-        "EN-301-549",
-        "EN-9.3.1.1",
-        "ACT",
-        "RGAAv4",
-        "RGAA-8.4.1"
-      ],
-      "description": "Ensure the lang attribute of the <html> element has a valid value",
-      "help": "<html> element must have a valid value for the lang attribute",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/html-lang-valid?application=axeAPI",
-      "nodes": []
-    },
-    {
       "id": "html-xml-lang-mismatch",
       "impact": null,
       "tags": [
@@ -786,18 +766,6 @@
       "nodes": []
     },
     {
-      "id": "landmark-main-is-top-level",
-      "impact": null,
-      "tags": [
-        "cat.semantics",
-        "best-practice"
-      ],
-      "description": "Ensure the main landmark is at top level",
-      "help": "Main landmark should not be contained in another landmark",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-main-is-top-level?application=axeAPI",
-      "nodes": []
-    },
-    {
       "id": "landmark-no-duplicate-banner",
       "impact": null,
       "tags": [
@@ -819,30 +787,6 @@
       "description": "Ensure the document has at most one contentinfo landmark",
       "help": "Document should not have more than one contentinfo landmark",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-no-duplicate-contentinfo?application=axeAPI",
-      "nodes": []
-    },
-    {
-      "id": "landmark-no-duplicate-main",
-      "impact": null,
-      "tags": [
-        "cat.semantics",
-        "best-practice"
-      ],
-      "description": "Ensure the document has at most one main landmark",
-      "help": "Document should not have more than one main landmark",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-no-duplicate-main?application=axeAPI",
-      "nodes": []
-    },
-    {
-      "id": "landmark-unique",
-      "impact": null,
-      "tags": [
-        "cat.semantics",
-        "best-practice"
-      ],
-      "description": "Ensure landmarks are unique",
-      "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-unique?application=axeAPI",
       "nodes": []
     },
     {
@@ -1256,7 +1200,7 @@
           "impact": null,
           "html": "<div style=\"direction:ltr;border-width:100%\">",
           "target": [
-            "body > div:nth-child(1)"
+            "main > div:nth-child(1)"
           ]
         },
         {
@@ -1288,7 +1232,7 @@
           "impact": null,
           "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:0in;width:7.602in\">",
           "target": [
-            "body > div:nth-child(1) > div"
+            "main > div:nth-child(1) > div"
           ]
         },
         {
@@ -1320,7 +1264,7 @@
           "impact": null,
           "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:.075in;width:3.1756in\">\n\n<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>\n\n</div>",
           "target": [
-            "body > div:nth-child(1) > div > div:nth-child(1)"
+            "main > div:nth-child(1) > div > div:nth-child(1)"
           ]
         },
         {
@@ -3112,7 +3056,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(2) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(2) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -3144,7 +3088,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"1\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -3176,7 +3120,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What you'll learn?</span>",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"1\"] > .font-normal"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -3336,7 +3280,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(3) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(3) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -3368,7 +3312,7 @@
           "impact": null,
           "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"2\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -3400,7 +3344,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What you'll build?</span>",
           "target": [
-            "li[value=\"2\"] > .font-normal"
+            ".mt-0.mb-0[value=\"2\"] > .font-normal"
           ]
         },
         {
@@ -3560,7 +3504,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(4) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(4) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -3592,7 +3536,7 @@
           "impact": null,
           "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"3\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -3624,7 +3568,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">In this course you will:</span>",
           "target": [
-            "li[value=\"3\"] > .font-normal"
+            ".mt-0.mb-0[value=\"3\"] > .font-normal"
           ]
         },
         {
@@ -3720,7 +3664,7 @@
           "impact": null,
           "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"]"
           ]
         },
         {
@@ -3752,7 +3696,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -3784,7 +3728,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -3816,7 +3760,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -3848,7 +3792,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -3880,7 +3824,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -3912,7 +3856,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -3944,7 +3888,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"4\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge your pull\n            request.</span></li>",
           "target": [
-            "ol[type=\"a\"] > li[value=\"4\"]"
+            "ol[type=\"a\"] > .mt-0.mb-0[value=\"4\"]"
           ]
         },
         {
@@ -3976,7 +3920,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge your pull\n            request.</span>",
           "target": [
-            "ol[type=\"a\"] > li[value=\"4\"] > span"
+            "ol[type=\"a\"] > .mt-0.mb-0[value=\"4\"] > span"
           ]
         },
         {
@@ -4072,7 +4016,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(5) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(5) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -4104,7 +4048,7 @@
           "impact": null,
           "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"4\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"4\"]"
           ]
         },
         {
@@ -4136,7 +4080,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What is a merge conflict?</span>",
           "target": [
-            "li[value=\"4\"] > .font-normal"
+            ".mt-0.mb-0[value=\"4\"] > .font-normal"
           ]
         },
         {
@@ -4296,7 +4240,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(6) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(6) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -4552,7 +4496,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(7) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(7) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -4776,7 +4720,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"1\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -4808,7 +4752,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -4840,7 +4784,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span></li>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"2\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -4872,7 +4816,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -4904,7 +4848,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span></li>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"3\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -4936,7 +4880,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -5096,7 +5040,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(8) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(8) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -5352,7 +5296,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(9) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(9) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -5576,7 +5520,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(10) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(10) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -5736,7 +5680,7 @@
           "impact": null,
           "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"]"
           ]
         },
         {
@@ -5768,7 +5712,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -5800,7 +5744,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -5832,7 +5776,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -5864,7 +5808,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -5896,7 +5840,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -5928,7 +5872,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -6120,7 +6064,7 @@
           "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"]"
           ]
         },
         {
@@ -6152,7 +6096,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         },
         {
@@ -6184,7 +6128,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">GitHub is very helpful in identifying where the\n          merge conflict is on the file and what steps you can take to resolve\n          it.</span>",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -6280,7 +6224,7 @@
           "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"]"
           ]
         },
         {
@@ -6312,7 +6256,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         },
         {
@@ -6344,7 +6288,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge conflicts can become complicated very\n          quickly.</span>",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -6600,7 +6544,7 @@
           "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"]"
           ]
         },
         {
@@ -6632,7 +6576,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         },
         {
@@ -6664,7 +6608,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">How do you untangle and resolve complicated merge\n          conflicts?</span>",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -6696,7 +6640,7 @@
           "impact": null,
           "html": "<p style=\"margin:0in\"> </p>",
           "target": [
-            "body > div:nth-child(2) > p:nth-child(1)"
+            "main > div:nth-child(2) > p:nth-child(1)"
           ]
         },
         {
@@ -6786,12 +6730,26 @@
               ],
               "impact": "serious",
               "message": "Page has a heading"
+            },
+            {
+              "id": "landmark",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<main>",
+                  "target": [
+                    "main"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Page has a landmark region"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\">",
+          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
           "target": [
             "html"
           ]
@@ -7189,7 +7147,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What you'll learn?</span>",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"1\"] > .font-normal"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -7239,7 +7197,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What you'll build?</span>",
           "target": [
-            "li[value=\"2\"] > .font-normal"
+            ".mt-0.mb-0[value=\"2\"] > .font-normal"
           ]
         },
         {
@@ -7289,7 +7247,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">In this course you will:</span>",
           "target": [
-            "li[value=\"3\"] > .font-normal"
+            ".mt-0.mb-0[value=\"3\"] > .font-normal"
           ]
         },
         {
@@ -7314,7 +7272,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -7339,7 +7297,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -7364,7 +7322,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -7389,7 +7347,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge your pull\n            request.</span>",
           "target": [
-            "ol[type=\"a\"] > li[value=\"4\"] > span"
+            "ol[type=\"a\"] > .mt-0.mb-0[value=\"4\"] > span"
           ]
         },
         {
@@ -7414,7 +7372,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What is a merge conflict?</span>",
           "target": [
-            "li[value=\"4\"] > .font-normal"
+            ".mt-0.mb-0[value=\"4\"] > .font-normal"
           ]
         },
         {
@@ -7614,7 +7572,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -7639,7 +7597,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -7864,7 +7822,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -7889,7 +7847,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -7914,7 +7872,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -7964,7 +7922,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">GitHub is very helpful in identifying where the\n          merge conflict is on the file and what steps you can take to resolve\n          it.</span>",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -7989,7 +7947,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge conflicts can become complicated very\n          quickly.</span>",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -8039,7 +7997,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">How do you untangle and resolve complicated merge\n          conflicts?</span>",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         }
       ]
@@ -8076,7 +8034,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\">",
+          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
           "target": [
             "html"
           ]
@@ -8187,25 +8145,25 @@
                 "headingOrder": [
                   {
                     "ancestry": [
-                      "html > body > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(1) > h1"
+                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(1) > h1"
                     ],
                     "level": 1
                   },
                   {
                     "ancestry": [
-                      "html > body > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(2) > h1"
+                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(2) > h1"
                     ],
                     "level": 1
                   },
                   {
                     "ancestry": [
-                      "html > body > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(2) > td > h1"
+                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(2) > td > h1"
                     ],
                     "level": 1
                   },
                   {
                     "ancestry": [
-                      "html > body > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
+                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
                     ],
                     "level": 1
                   }
@@ -8276,6 +8234,84 @@
           "html": "<h1 style=\"margin: 0in; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Study\n    Questions</h1>",
           "target": [
             "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "html-has-lang",
+      "impact": null,
+      "tags": [
+        "cat.language",
+        "wcag2a",
+        "wcag311",
+        "TTv5",
+        "TT11.a",
+        "EN-301-549",
+        "EN-9.3.1.1",
+        "ACT",
+        "RGAAv4",
+        "RGAA-8.3.1"
+      ],
+      "description": "Ensure every HTML document has a lang attribute",
+      "help": "<html> element must have a lang attribute",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/html-has-lang?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-lang",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "The <html> element has a lang attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "target": [
+            "html"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "html-lang-valid",
+      "impact": null,
+      "tags": [
+        "cat.language",
+        "wcag2a",
+        "wcag311",
+        "TTv5",
+        "TT11.a",
+        "EN-301-549",
+        "EN-9.3.1.1",
+        "ACT",
+        "RGAAv4",
+        "RGAA-8.4.1"
+      ],
+      "description": "Ensure the lang attribute of the <html> element has a valid value",
+      "help": "<html> element must have a valid value for the lang attribute",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/html-lang-valid?application=axeAPI",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "valid-lang",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Value of lang attribute is included in the list of valid languages"
+            }
+          ],
+          "impact": null,
+          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "target": [
+            "html"
           ]
         }
       ]
@@ -8538,6 +8574,142 @@
       ]
     },
     {
+      "id": "landmark-main-is-top-level",
+      "impact": null,
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure the main landmark is at top level",
+      "help": "Main landmark should not be contained in another landmark",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-main-is-top-level?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "landmark-is-top-level",
+              "data": {
+                "role": "main"
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "The main landmark is at the top level."
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<main>",
+          "target": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "landmark-no-duplicate-main",
+      "impact": null,
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure the document has at most one main landmark",
+      "help": "Document should not have more than one main landmark",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-no-duplicate-main?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "page-no-duplicate-main",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Document does not have more than one main landmark"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<main>",
+          "target": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "landmark-one-main",
+      "impact": null,
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure the document has a main landmark",
+      "help": "Document should have one main landmark",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-one-main?application=axeAPI",
+      "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "page-has-main",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<main>",
+                  "target": [
+                    "main"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Document has at least one main landmark"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "target": [
+            "html"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "landmark-unique",
+      "impact": null,
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure landmarks are unique",
+      "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-unique?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
+                "role": "main",
+                "accessibleText": null
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<main>",
+          "target": [
+            "main"
+          ]
+        }
+      ]
+    },
+    {
       "id": "link-name",
       "impact": null,
       "tags": [
@@ -8616,7 +8788,7 @@
     },
     {
       "id": "list",
-      "impact": "serious",
+      "impact": null,
       "tags": [
         "cat.structure",
         "wcag2a",
@@ -8643,9 +8815,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
           "target": [
-            "tr:nth-child(2) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(2) > .cues > .list-disc"
           ]
         },
         {
@@ -8663,7 +8835,25 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(3) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(2) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(3) > .cues > .list-disc"
           ]
         },
         {
@@ -8681,7 +8871,61 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(4) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(3) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(4) > .cues > .list-disc"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(4) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
+          "target": [
+            "tr:nth-child(4) > .notes > ul"
           ]
         },
         {
@@ -8699,7 +8943,25 @@
           "impact": null,
           "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(5) > .cues > .list-disc"
           ]
         },
         {
@@ -8717,7 +8979,25 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(5) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(5) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(6) > .cues > .list-disc"
           ]
         },
         {
@@ -8735,7 +9015,25 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(6) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(6) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(7) > .cues > .list-disc"
           ]
         },
         {
@@ -8753,7 +9051,7 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(7) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(7) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -8787,9 +9085,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
           "target": [
-            "tr:nth-child(8) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(8) > .cues > .list-disc"
           ]
         },
         {
@@ -8807,7 +9105,25 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(9) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(8) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(9) > .cues > .list-disc"
           ]
         },
         {
@@ -8825,7 +9141,61 @@
           "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(10) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(9) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(10) > .cues > .list-disc"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "target": [
+            "tr:nth-child(10) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
+          "target": [
+            "tr:nth-child(10) > .notes > ul"
           ]
         },
         {
@@ -8843,7 +9213,25 @@
           "impact": null,
           "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
+          "target": [
+            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(3) > td > ul"
           ]
         },
         {
@@ -8861,7 +9249,25 @@
           "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
+          "target": [
+            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(4) > td > ul"
           ]
         },
         {
@@ -8879,7 +9285,25 @@
           "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "only-listitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List element only has direct children that are allowed inside <li> elements"
+            }
+          ],
+          "impact": null,
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
+          "target": [
+            "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul"
           ]
         },
         {
@@ -8897,7 +9321,7 @@
           "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"]"
           ]
         }
       ]
@@ -8931,9 +9355,45 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(2) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"1\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"1\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(3) > .cues > .list-disc > li"
           ]
         },
         {
@@ -8951,7 +9411,25 @@
           "impact": null,
           "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"2\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"2\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(4) > .cues > .list-disc > li"
           ]
         },
         {
@@ -8969,7 +9447,25 @@
           "impact": null,
           "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"3\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"3\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(4) > .notes > ul > li"
           ]
         },
         {
@@ -8987,7 +9483,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -9005,7 +9501,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -9023,7 +9519,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -9041,7 +9537,25 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"4\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge your pull\n            request.</span></li>",
           "target": [
-            "ol[type=\"a\"] > li[value=\"4\"]"
+            "ol[type=\"a\"] > .mt-0.mb-0[value=\"4\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(5) > .cues > .list-disc > li"
           ]
         },
         {
@@ -9059,7 +9573,25 @@
           "impact": null,
           "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"4\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"4\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(6) > .cues > .list-disc > li"
           ]
         },
         {
@@ -9078,6 +9610,24 @@
           "html": "<li value=\"5\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
             "li[value=\"5\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(7) > .cues > .list-disc > li"
           ]
         },
         {
@@ -9113,7 +9663,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"1\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -9131,7 +9681,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span></li>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"2\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -9149,7 +9699,25 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span></li>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"3\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(8) > .cues > .list-disc > li"
           ]
         },
         {
@@ -9183,9 +9751,45 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(9) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<li value=\"8\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
             "li[value=\"8\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(10) > .cues > .list-disc > li"
           ]
         },
         {
@@ -9219,9 +9823,27 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(10) > .notes > ul > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -9239,7 +9861,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -9257,7 +9879,25 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(3) > td > ul > li"
           ]
         },
         {
@@ -9275,7 +9915,25 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(4) > td > ul > li"
           ]
         },
         {
@@ -9293,7 +9951,25 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "listitem",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "List item has a <ul>, <ol> or role=\"list\" parent element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul > li"
           ]
         },
         {
@@ -9311,7 +9987,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         }
       ]
@@ -9543,7 +10219,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\">",
+          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
           "target": [
             "html"
           ]
@@ -9552,7 +10228,7 @@
     },
     {
       "id": "region",
-      "impact": "moderate",
+      "impact": null,
       "tags": [
         "cat.keyboard",
         "best-practice",
@@ -9578,9 +10254,49 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<main>",
+          "target": [
+            "main"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div style=\"direction:ltr;border-width:100%\">",
+          "target": [
+            "main > div:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:0in;width:7.602in\">",
           "target": [
-            "body > div:nth-child(1) > div"
+            "main > div:nth-child(1) > div"
           ]
         },
         {
@@ -9600,7 +10316,7 @@
           "impact": null,
           "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:.075in;width:3.1756in\">\n\n<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>\n\n</div>",
           "target": [
-            "body > div:nth-child(1) > div > div:nth-child(1)"
+            "main > div:nth-child(1) > div > div:nth-child(1)"
           ]
         },
         {
@@ -11078,9 +11794,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(2) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(2) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(2) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -11100,7 +11836,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"1\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -11120,7 +11856,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What you'll learn?</span>",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"1\"] > .font-normal"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -11238,9 +11974,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(3) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(3) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(3) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -11260,7 +12016,7 @@
           "impact": null,
           "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"2\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -11280,7 +12036,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What you'll build?</span>",
           "target": [
-            "li[value=\"2\"] > .font-normal"
+            ".mt-0.mb-0[value=\"2\"] > .font-normal"
           ]
         },
         {
@@ -11398,9 +12154,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(4) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(4) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(4) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -11420,7 +12196,7 @@
           "impact": null,
           "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"3\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -11440,7 +12216,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">In this course you will:</span>",
           "target": [
-            "li[value=\"3\"] > .font-normal"
+            ".mt-0.mb-0[value=\"3\"] > .font-normal"
           ]
         },
         {
@@ -11498,9 +12274,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(4) > .notes > ul > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"]"
           ]
         },
         {
@@ -11520,7 +12316,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -11540,7 +12336,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -11560,7 +12356,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -11580,7 +12376,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -11600,7 +12396,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -11620,7 +12416,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(4) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -11640,7 +12436,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"4\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge your pull\n            request.</span></li>",
           "target": [
-            "ol[type=\"a\"] > li[value=\"4\"]"
+            "ol[type=\"a\"] > .mt-0.mb-0[value=\"4\"]"
           ]
         },
         {
@@ -11660,7 +12456,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge your pull\n            request.</span>",
           "target": [
-            "ol[type=\"a\"] > li[value=\"4\"] > span"
+            "ol[type=\"a\"] > .mt-0.mb-0[value=\"4\"] > span"
           ]
         },
         {
@@ -11738,9 +12534,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(5) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(5) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(5) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -11760,7 +12576,7 @@
           "impact": null,
           "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\">",
           "target": [
-            ".list-decimal[type=\"1\"] > li[value=\"4\"]"
+            ".list-decimal[type=\"1\"] > .mt-0.mb-0[value=\"4\"]"
           ]
         },
         {
@@ -11780,7 +12596,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">What is a merge conflict?</span>",
           "target": [
-            "li[value=\"4\"] > .font-normal"
+            ".mt-0.mb-0[value=\"4\"] > .font-normal"
           ]
         },
         {
@@ -11898,9 +12714,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(6) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(6) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(6) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -12078,9 +12914,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(7) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(7) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(7) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -12220,7 +13076,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"1\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -12240,7 +13096,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -12260,7 +13116,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span></li>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"2\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -12280,7 +13136,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -12300,7 +13156,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span></li>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"3\"]"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -12320,7 +13176,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span>",
           "target": [
-            ".notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            ".notes > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -12438,9 +13294,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(8) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(8) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(8) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -12618,9 +13494,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(9) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(9) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(9) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -12778,9 +13674,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(10) > .cues > .list-disc > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
           "target": [
-            "tr:nth-child(10) > .cues > .list-disc > .list-decimal[type=\"1\"]"
+            "tr:nth-child(10) > .cues > .list-disc > li > .list-decimal[type=\"1\"]"
           ]
         },
         {
@@ -12878,9 +13794,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(10) > .notes > ul > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"]"
           ]
         },
         {
@@ -12900,7 +13836,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"]"
           ]
         },
         {
@@ -12920,7 +13856,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -12940,7 +13876,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"]"
           ]
         },
         {
@@ -12960,7 +13896,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"2\"] > span"
           ]
         },
         {
@@ -12980,7 +13916,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"]"
           ]
         },
         {
@@ -13000,7 +13936,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ul > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(10) > .notes > ul > li > ol[type=\"a\"] > .mt-0.mb-0[value=\"3\"] > span"
           ]
         },
         {
@@ -13158,9 +14094,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(3) > td > ul > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"]"
           ]
         },
         {
@@ -13180,7 +14136,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         },
         {
@@ -13220,7 +14176,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">GitHub is very helpful in identifying where the\n          merge conflict is on the file and what steps you can take to resolve\n          it.</span>",
           "target": [
-            "tr:nth-child(3) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(3) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -13298,9 +14254,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(4) > td > ul > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"]"
           ]
         },
         {
@@ -13320,7 +14296,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         },
         {
@@ -13360,7 +14336,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge conflicts can become complicated very\n          quickly.</span>",
           "target": [
-            "tr:nth-child(4) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(4) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
           ]
         },
         {
@@ -13598,9 +14574,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<li>",
+          "target": [
+            "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul > li"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"]"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"]"
           ]
         },
         {
@@ -13620,7 +14616,7 @@
           "impact": null,
           "html": "<li style=\"color: #000000; margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\">",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"] > li"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0"
           ]
         },
         {
@@ -13660,7 +14656,27 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">How do you untangle and resolve complicated merge\n          conflicts?</span>",
           "target": [
-            "tr:nth-child(2) > td > ul > ul[type=\"disc\"] > li > span"
+            "tr:nth-child(2) > td > ul > li > ul[type=\"disc\"] > .mt-0.mb-0 > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div>\n\n<p style=\"margin:0in\"> </p>\n\n<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; color: #969696; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
+          "target": [
+            "main > div:nth-child(2)"
           ]
         },
         {
@@ -13680,7 +14696,7 @@
           "impact": null,
           "html": "<p style=\"margin:0in\"> </p>",
           "target": [
-            "body > div:nth-child(2) > p:nth-child(1)"
+            "main > div:nth-child(2) > p:nth-child(1)"
           ]
         },
         {
@@ -14103,547 +15119,6 @@
             ".text-xs"
           ],
           "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.95 (foreground color: #969696, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
-        }
-      ]
-    },
-    {
-      "id": "html-has-lang",
-      "impact": "serious",
-      "tags": [
-        "cat.language",
-        "wcag2a",
-        "wcag311",
-        "TTv5",
-        "TT11.a",
-        "EN-301-549",
-        "EN-9.3.1.1",
-        "ACT",
-        "RGAAv4",
-        "RGAA-8.3.1"
-      ],
-      "description": "Ensure every HTML document has a lang attribute",
-      "help": "<html> element must have a lang attribute",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/html-has-lang?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "has-lang",
-              "data": {
-                "messageKey": "noLang"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "The <html> element does not have a lang attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\">",
-          "target": [
-            "html"
-          ],
-          "failureSummary": "Fix any of the following:\n  The <html> element does not have a lang attribute"
-        }
-      ]
-    },
-    {
-      "id": "landmark-one-main",
-      "impact": "moderate",
-      "tags": [
-        "cat.semantics",
-        "best-practice"
-      ],
-      "description": "Ensure the document has a main landmark",
-      "help": "Document should have one main landmark",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-one-main?application=axeAPI",
-      "nodes": [
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "page-has-main",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "Document does not have a main landmark"
-            }
-          ],
-          "none": [],
-          "impact": "moderate",
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\">",
-          "target": [
-            "html"
-          ],
-          "failureSummary": "Fix all of the following:\n  Document does not have a main landmark"
-        }
-      ]
-    },
-    {
-      "id": "list",
-      "impact": "serious",
-      "tags": [
-        "cat.structure",
-        "wcag2a",
-        "wcag131",
-        "EN-301-549",
-        "EN-9.1.3.1",
-        "RGAAv4",
-        "RGAA-9.3.1"
-      ],
-      "description": "Ensure that lists are structured correctly",
-      "help": "<ul> and <ol> must only directly contain <li>, <script> or <template> elements",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/list?application=axeAPI",
-      "nodes": [
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(2) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(2) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(3) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(3) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(4) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(4) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
-                  "target": [
-                    "tr:nth-child(4) > .notes > ul > ol[type=\"a\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-          "target": [
-            "tr:nth-child(4) > .notes > ul"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(5) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(5) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(6) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(6) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(7) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(7) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(8) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(8) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(9) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(9) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal list-decimal list-outside pl-5\">",
-                  "target": [
-                    "tr:nth-child(10) > .cues > .list-disc > .list-decimal[type=\"1\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside pl-5\">",
-          "target": [
-            "tr:nth-child(10) > .cues > .list-disc"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ol"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"font-sans text-base font-normal\">",
-                  "target": [
-                    "tr:nth-child(10) > .notes > ul > ol[type=\"a\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ol"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-          "target": [
-            "tr:nth-child(10) > .notes > ul"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ol"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ul"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-                  "target": [
-                    "tr:nth-child(3) > td > ul > ul[type=\"disc\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ul"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-          "target": [
-            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(3) > td > ul"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ul"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ul"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-                  "target": [
-                    "tr:nth-child(4) > td > ul > ul[type=\"disc\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ul"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-          "target": [
-            "tr:nth-child(3) > td > div > table > tbody > tr:nth-child(4) > td > ul"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ul"
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "only-listitems",
-              "data": {
-                "values": "ul"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<ul type=\"disc\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-                  "target": [
-                    "tr:nth-child(2) > td > ul > ul[type=\"disc\"]"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "List element has direct children that are not allowed: ul"
-            }
-          ],
-          "impact": "serious",
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0in; margin-bottom: 0in; margin-left: 0; padding-left: 1.2em\">",
-          "target": [
-            "tr:nth-child(4) > td > div > table > tbody > tr:nth-child(2) > td > ul"
-          ],
-          "failureSummary": "Fix all of the following:\n  List element has direct children that are not allowed: ul"
-        }
-      ]
-    },
-    {
-      "id": "region",
-      "impact": "moderate",
-      "tags": [
-        "cat.keyboard",
-        "best-practice",
-        "RGAAv4",
-        "RGAA-9.2.1"
-      ],
-      "description": "Ensure all page content is contained by landmarks",
-      "help": "All page content should be contained by landmarks",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/region?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "Some page content is not contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "moderate",
-          "html": "<div style=\"direction:ltr;border-width:100%\">",
-          "target": [
-            "body > div:nth-child(1)"
-          ],
-          "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "Some page content is not contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "moderate",
-          "html": "<div>\n\n<p style=\"margin:0in\"> </p>\n\n<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; color: #969696; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
-          "target": [
-            "body > div:nth-child(2)"
-          ],
-          "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
         }
       ]
     }

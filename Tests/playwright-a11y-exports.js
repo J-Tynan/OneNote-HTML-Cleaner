@@ -1,8 +1,10 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { chromium } from 'playwright';
 import { createRequire } from 'module';
+import { runPipeline } from '../src/pipeline/pipeline.js';
 const require = createRequire(import.meta.url);
 
 function createStaticServer(root) {
@@ -132,7 +134,21 @@ async function auditPage(url, reportBase) {
     console.error('Target directory not found:', targetDir);
     process.exit(1);
   }
-
+  // when auditing an existing HTML directory (not MHT conversion), run the pipeline
+  if (targetDir && !mhtDir) {
+    const processed = path.join('Tests', 'exports-processed');
+    if (!fs.existsSync(processed)) fs.mkdirSync(processed, { recursive: true });
+    const htmlFiles = fs.readdirSync(targetDir).filter(f => f.match(/\.html?$/i));
+    console.log('preprocessing', htmlFiles.length, 'HTML files through pipeline');
+    for (const file of htmlFiles) {
+      const raw = fs.readFileSync(path.join(targetDir, file), 'utf8');
+      const base = path.basename(file, path.extname(file));
+      const run = await runPipeline(raw, { defaultTitle: base, defaultLang: 'en' });
+      fs.writeFileSync(path.join(processed, file), run.output, 'utf8');
+    }
+    targetDir = processed;
+    console.log('pipeline-preprocessed files written to', targetDir);
+  }
   // start server for app resources (needed for pipeline imports)
   const root = process.cwd();
   const mainServer = createStaticServer(root);
@@ -155,15 +171,20 @@ async function auditPage(url, reportBase) {
     for (const mht of mhtFiles) {
       console.log('converting', mht);
       const raw = fs.readFileSync(path.join(mhtDir, mht), 'utf8');
-      const html = await page.evaluate(async (rawInput) => {
+      const base = path.basename(mht, path.extname(mht));
+      const html = await page.evaluate(async (opts) => {
         const mht = await import('/src/pipeline/mht.js');
         const pipeline = await import('/src/pipeline/pipeline.js');
-        const parsed = mht.parseMht(rawInput || '');
-        const html = parsed && parsed.html ? parsed.html : rawInput;
-        const run = await pipeline.runPipeline(html, { imageMap: parsed && parsed.imageMap ? parsed.imageMap : {} });
+        const parsed = mht.parseMht(opts.rawInput || '');
+        const html = parsed && parsed.html ? parsed.html : opts.rawInput;
+        const run = await pipeline.runPipeline(html, {
+          imageMap: parsed && parsed.imageMap ? parsed.imageMap : {},
+          defaultTitle: opts.defaultTitle,
+          defaultLang: 'en'
+        });
         return run.output || '';
-      }, raw);
-      const name = path.basename(mht, path.extname(mht)) + '.html';
+      }, { rawInput: raw, defaultTitle: base });
+      const name = base + '.html';
       fs.writeFileSync(path.join(outDir, name), html, 'utf8');
     }
     await browser.close();

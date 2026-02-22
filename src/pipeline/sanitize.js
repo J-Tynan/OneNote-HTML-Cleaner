@@ -4,11 +4,18 @@
 export function ensureHead(doc, options = {}) {
   const logs = [];
   let head = doc.querySelector('head');
+  const html = doc.querySelector('html') || doc.documentElement;
   if (!head) {
     head = doc.createElement('head');
-    const html = doc.querySelector('html') || doc.documentElement;
     html.insertBefore(head, html.firstChild);
     logs.push({ step: 'EnsureHead', details: 'Inserted missing <head>' });
+  }
+
+  // Ensure the <html> tag has a lang attribute
+  const defaultLang = options.defaultLang || 'en';
+  if (html && !html.getAttribute('lang')) {
+    html.setAttribute('lang', defaultLang);
+    logs.push({ step: 'EnsureLang', details: `Added lang="${defaultLang}" to <html>` });
   }
 
   // Ensure charset
@@ -28,12 +35,16 @@ export function ensureHead(doc, options = {}) {
     logs.push({ step: 'EnsureViewport', details: 'Added viewport meta' });
   }
 
-  // Title preservation: if missing, create a minimal title
-  if (!head.querySelector('title')) {
-    const title = doc.createElement('title');
-    title.textContent = options.defaultTitle || 'Document';
-    head.appendChild(title);
+  // Title preservation: if missing or empty, create one using defaultTitle
+  let titleEl = head.querySelector('title');
+  if (!titleEl) {
+    titleEl = doc.createElement('title');
+    titleEl.textContent = options.defaultTitle || 'Document';
+    head.appendChild(titleEl);
     logs.push({ step: 'EnsureTitle', details: 'Added default title' });
+  } else if (!titleEl.textContent || !titleEl.textContent.trim()) {
+    titleEl.textContent = options.defaultTitle || 'Document';
+    logs.push({ step: 'EnsureTitle', details: 'Set title text to default title' });
   }
 
   return logs;
@@ -103,4 +114,103 @@ export function injectCssLink(doc, cssHref) {
   link.setAttribute('href', cssHref);
   head.appendChild(link);
   return [{ step: 'InjectCss', details: cssHref }];
+}
+
+// Ensure the document contains a <main> landmark and a level-1 heading
+export function ensureMainHeading(doc, options = {}) {
+  const logs = [];
+  const body = doc.body || doc.querySelector('body') || doc.documentElement;
+  if (!body) return logs;
+
+  let main = body.querySelector('main');
+  if (!main) {
+    main = doc.createElement('main');
+    // move all existing body children into main
+    while (body.firstChild) {
+      main.appendChild(body.firstChild);
+    }
+    body.appendChild(main);
+    logs.push({ step: 'EnsureMain', details: 'Wrapped body content in <main>' });
+  }
+
+  // ensure there's an <h1> inside main
+  let h1 = main.querySelector('h1');
+  if (!h1) {
+    // try to promote first heading anywhere in body
+    const firstHeading = body.querySelector('h1,h2,h3,h4,h5,h6');
+    if (firstHeading) {
+      // if it's not already h1, change tag
+      if (firstHeading.tagName.toLowerCase() !== 'h1') {
+        const promoted = doc.createElement('h1');
+        promoted.textContent = firstHeading.textContent;
+        firstHeading.replaceWith(promoted);
+        h1 = promoted;
+        logs.push({ step: 'PromoteHeading', details: `Promoted ${firstHeading.tagName} to <h1>` });
+        // ensure it's inside main
+        if (!main.contains(h1)) {
+          main.insertBefore(h1, main.firstChild);
+        }
+      } else {
+        // it is h1 but maybe outside main; move it
+        h1 = firstHeading;
+        if (!main.contains(h1)) {
+          h1.remove();
+          main.insertBefore(h1, main.firstChild);
+          logs.push({ step: 'MoveH1', details: 'Moved existing <h1> into <main>' });
+        }
+      }
+    } else {
+      // no headings at all; create one from defaultTitle
+      const newH1 = doc.createElement('h1');
+      newH1.textContent = options.defaultTitle || 'Document';
+      main.insertBefore(newH1, main.firstChild);
+      logs.push({ step: 'EnsureH1', details: 'Inserted default <h1> in <main>' });
+    }
+  }
+
+  return logs;
+}
+
+// repair malformed lists by ensuring only <li> children and wrapping other nodes
+export function ensureListStructure(doc) {
+  const logs = [];
+  const lists = Array.from(doc.querySelectorAll('ul,ol'));
+  let fixedCount = 0;
+  lists.forEach(list => {
+    let changed = false;
+    const children = Array.from(list.childNodes);
+    children.forEach(node => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const tag = node.tagName.toLowerCase();
+        if (tag !== 'li') {
+          const li = doc.createElement('li');
+          li.appendChild(node.cloneNode(true));
+          list.replaceChild(li, node);
+          changed = true;
+        }
+      } else if (node.nodeType === Node.TEXT_NODE) {
+        const txt = node.textContent.trim();
+        if (txt) {
+          const li = doc.createElement('li');
+          li.textContent = txt;
+          list.replaceChild(li, node);
+          changed = true;
+        } else {
+          list.removeChild(node);
+          changed = true;
+        }
+      }
+      // other node types (comments) can be removed
+      else if (node.nodeType !== Node.ELEMENT_NODE) {
+        list.removeChild(node);
+        changed = true;
+      }
+    });
+    if (changed) {
+      fixedCount++;
+      logs.push({ step: 'EnsureListStructure', details: `Fixed children of <${list.tagName.toLowerCase()}>` });
+    }
+  });
+  if (fixedCount) logs.push({ step: 'EnsureListStructureCount', fixedCount });
+  return logs;
 }
