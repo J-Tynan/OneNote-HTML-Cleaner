@@ -1,0 +1,4 @@
+Communicate using Markdown.html: FAIL
+DevToys.html: FAIL
+Resolve merge conflicts.html: FAIL
+Test File.html: FAIL

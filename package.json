@@ -18,6 +18,7 @@
     "bump-sw-cache": "node ./scripts/bump-sw-cache.cjs",
     "test:theme": "node ./Tests/tailwind-darkmode.js && node ./Tests/theme-playwright.js",
     "test:playwright:a11y": "node ./Tests/playwright-a11y.js",
+    "test:playwright:a11y-exports": "node ./Tests/playwright-a11y-exports.js --dir Tests/Cleaned",
     "test:worker-handshake": "node ./Tests/worker-handshake-playwright.js",
     "test:worker-init": "node ./Tests/worker-init-playwright.js",
     "test:worker-init-failure": "node ./Tests/worker-init-failure-playwright.js",
