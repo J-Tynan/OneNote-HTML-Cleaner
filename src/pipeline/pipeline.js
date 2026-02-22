@@ -76,11 +76,6 @@ export async function runPipeline(htmlString, config = {}) {
       })));
     }
 
-    // sanitize pre/code blocks for inline color/background/font-size that break contrast
-    logs.push(...ensureArray(sanitize.sanitizePreStyles(doc)));
-    // remove generic inline color/background declarations that caused contrast failures
-    logs.push(...ensureArray(sanitize.removeInlineColorDeclarations(doc)));
-
     // List repair
     const listMode = resolvedConfig.RepairListItemValues || 'smart';
     logs.push(...ensureArray(fixLists(doc, listMode, {

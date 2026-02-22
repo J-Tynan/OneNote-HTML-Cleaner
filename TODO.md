@@ -101,10 +101,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 ## General / UI
 
 - [ ] Review cleaned HTML output (manual review).
-  - [x] Audit accessibility of outputs.  <!-- NEXT TASK -->
-    - [x] Run automated axe audit against exported HTML samples (`npm run test:playwright:a11y-exports`).  Reports generated under `Tests/reports/exports` (found document-title/html-has-lang violations in sample pages).
-    - [ ] Manually review 3 representative exported pages for semantics and focus order
-    - [ ] Produce remediation list mapping failures → `styles.css` tokens or markup changes
+  - [ ] (manual review pending)
     - [ ] Address contrast violations in exported HTML (`color-contrast` on <pre> elements) by normalizing or removing problematic inline styles (pipeline update)
 - [x] Prevent layout shift when Advanced options open by reserving scrollbar gutter (2026-02-22)
 - [x] Add badge icons and compact view improvements.

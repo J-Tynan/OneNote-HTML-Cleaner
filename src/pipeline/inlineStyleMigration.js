@@ -3,9 +3,6 @@ const FONT_SIZE_RE = /^font-size$/i;
 const FONT_WEIGHT_RE = /^font-weight$/i;
 const MARGIN_TOP_RE = /^margin-top$/i;
 const MARGIN_BOTTOM_RE = /^margin-bottom$/i;
-const LETTER_SPACING_RE = /^letter-spacing$/i;
-const WORD_SPACING_RE = /^word-spacing$/i;
-const LINE_HEIGHT_RE = /^line-height$/i;
 
 const FONT_SIZE_MAP = [
   { maxPx: 12, className: 'text-xs' },
@@ -180,16 +177,6 @@ export function migrateInlineStylesToUtilities(doc, options = {}) {
           }
           return;
         }
-      }
-
-      // remove spacing properties that axe marks as problematic when inline
-      if (LETTER_SPACING_RE.test(normalizedProp) ||
-          WORD_SPACING_RE.test(normalizedProp) ||
-          LINE_HEIGHT_RE.test(normalizedProp)) {
-        // drop it unconditionally; spacing should be controlled via CSS
-        declarationsMigrated += 1;
-        changed = true;
-        return;
       }
 
       kept.push({ prop, value });
