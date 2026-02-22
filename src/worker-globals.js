@@ -82,6 +82,7 @@ export function postDiagnostic(detail = {}) {
 
     const payload = Object.assign({
       id: detail.id || 'diag',
+      type: '__diag__',
       status,
       level,
       phase: detail.phase || 'diagnostic',

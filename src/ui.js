@@ -3,7 +3,7 @@
 import { createDownloadHelpers } from './ui-downloads.js';
 // theme variant functions now used indirectly; import removed
 import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
-import { info as logInfo, warn as logWarn, error as logError } from './logging.js';
+import { info as logInfo, warn as logWarn, error as logError, setEnabled as setLogEnabled } from './logging.js';
 
 const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
@@ -596,6 +596,7 @@ function bindEvents() {
 /* === INIT === */
 
 export function initUI(workerManager, options = {}) {
+  try { setLogEnabled(typeof window !== 'undefined' && window && window.LOGGING_ENABLED !== false); } catch (_) {}
   dom.dropzone = document.getElementById('dropzone');
   dom.importButton = document.getElementById('importButton');
   dom.fileInput = document.getElementById('fileInput');
@@ -644,6 +645,8 @@ export function initUI(workerManager, options = {}) {
 
   // Expose a test helper to read worker-manager diagnostics from page context
   try { window.__getWorkerManagerDiagnostics = () => (runtime.workerManager ? runtime.workerManager.getDiagnostics() : []); } catch (ignore) {}
+  // Expose runtime object for debugging/tests (avoid name collision in prod)
+  try { window.__getRuntime = () => runtime; } catch (ignore) {}
 
   // Diagnostics polling: reflect any worker diagnostics in the UI diagnostics panel
   if (runtime._diagnosticsPoll) {

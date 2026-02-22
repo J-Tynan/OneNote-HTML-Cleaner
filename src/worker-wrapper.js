@@ -1,8 +1,9 @@
 // src/worker-wrapper.js
-import { info as logInfo, warn as logWarn, error as logError } from './logging.js';
+import { info as logInfo, warn as logWarn, error as logError, setEnabled as setLogEnabled } from './logging.js';
 
 export default class WorkerManager {
   constructor(workerPath = './worker.js') {
+    try { setLogEnabled(typeof window !== 'undefined' && window && window.LOGGING_ENABLED !== false); } catch (_) {}
     // Resolve worker script relative to this module so it works on GitHub Pages subpaths
     const resolved = new URL(workerPath, import.meta.url).href;
     logInfo('worker-wrapper', { msg: 'creating worker from', meta: { resolved } });
@@ -99,6 +100,11 @@ export default class WorkerManager {
     this.worker.onmessage = async (e) => {
       const msg = e.data;
 
+      // quick sanity validation for any message received
+      if (!this.validateMessage(msg)) {
+        return;
+      }
+
       // Handle explicit worker handshake message
       if (msg && msg.type === 'ready') {
         this.ready = true;
@@ -130,7 +136,9 @@ export default class WorkerManager {
       const cb = this.callbacks.get(msg && msg.id);
 
       // Special-case worker-origin diagnostics (do not treat as regular callbacks)
-      if (msg && msg.id === '__diag__') {
+      // recognize diagnostics by a reserved `type` value; id may also be
+      // '__diag__' for backward compatibility.
+      if (msg && (msg.type === '__diag__' || msg.id === '__diag__')) {
         try {
           const diag = {
             kind: 'worker-diagnostic',
@@ -250,6 +258,52 @@ export default class WorkerManager {
     }
   }
 
+  // Validate incoming messages from the worker. This helps catch
+  // malformed payloads early and prevents runtime exceptions or
+  // mis-routed callbacks. If a message is invalid a diagnostic is stored
+  // and the function returns false so the caller can bail out.
+  validateMessage(msg) {
+    if (!msg || typeof msg !== 'object') {
+      const diag = {
+        kind: 'worker-diagnostic',
+        timestamp: Date.now(),
+        payload: msg,
+        note: 'received non-object message from worker',
+        workerUrl: this.workerUrl
+      };
+      try {
+        this.diagnostics.push(diag);
+        if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
+        }
+      } catch (ignore) {}
+      logWarn('worker-wrapper', { msg: 'invalid worker message', meta: { msg } });
+      return false;
+    }
+    // diagnostics messages are allowed to omit id
+    if (msg.type === '__diag__' || msg.id === '__diag__') return true;
+    if (!msg.id || typeof msg.id !== 'string') {
+      const diag = {
+        kind: 'worker-diagnostic',
+        timestamp: Date.now(),
+        payload: msg,
+        note: 'worker message missing id',
+        workerUrl: this.workerUrl
+      };
+      try {
+        this.diagnostics.push(diag);
+        if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
+        }
+      } catch (ignore) {}
+      logWarn('worker-wrapper', { msg: 'worker message without id', meta: { msg } });
+      return false;
+    }
+    return true;
+  }
+
   // Return a short, safe summary for logging (avoid dumping full HTML)
   summarizePayload(payload, maxChars = 256) {
     try {
@@ -273,6 +327,23 @@ export default class WorkerManager {
   }
 
   enqueue(payload, onprogress, transferList = [], timeoutMs = this.defaultTimeoutMs) {
+    // Ensure every payload has a stable string id controlled by the wrapper.
+    // This prevents the worker from generating its own ID and producing
+    // unmatched-message diagnostics. Conversion helpers (UI/tests) may pass a
+    // pre-generated id, but we still normalize it here.
+    try {
+      if (!payload || typeof payload !== 'object') payload = {};
+      if (!payload.id || typeof payload.id !== 'string') {
+        payload.id = crypto.randomUUID();
+      }
+    } catch (e) {
+      // crypto.randomUUID may not exist in some test environments; fall back
+      // to a simple timestamp string (non-cryptographic, but unique enough).
+      if (!payload.id || typeof payload.id !== 'string') {
+        payload.id = String(Date.now()) + '-' + Math.random().toString(36).slice(2);
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const timeoutHandle = setTimeout(() => {
         const active = this.callbacks.get(payload.id);

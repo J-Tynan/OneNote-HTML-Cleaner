@@ -1,5 +1,14 @@
 // Minimal, non-throwing structured logger for browser + test environments.
 // Keep this file tiny and dependency-free; use `preview` for large payloads.
+// The logger can be globally enabled/disabled via `setEnabled()` or by
+// setting `process.env.LOGGING_ENABLED` (not 'false') in Node/tests. A
+// disabled logger becomes a no-op to avoid noise in production or tests.
+
+let _enabled = true;
+
+export function setEnabled(val) {
+  _enabled = !!val;
+}
 
 const MAX_PREVIEW_LENGTH = 160;
 
@@ -25,6 +34,7 @@ function formatPrefix(source, level, ts, id) {
 }
 
 export function log(source = 'app', level = 'info', { id, type, msg = '', meta, preview } = {}) {
+  if (!_enabled) return;
   try {
     const ts = nowIso();
     const safePreview = preview ?? (meta ? safeStringify(meta) : undefined);

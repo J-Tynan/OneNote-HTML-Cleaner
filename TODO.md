@@ -123,6 +123,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 
 - [ ] Review cleaned HTML output (manual review).
 - [ ] Audit accessibility of outputs.
+- [x] Prevent layout shift when Advanced options open by reserving scrollbar gutter (2026-02-22)
 - [x] Add badge icons and compact view improvements.
 - [x] Redesign UI to look professional and accessible.
  - [x] Add in-app Help popup (Help button + modal) (2026-02-20)

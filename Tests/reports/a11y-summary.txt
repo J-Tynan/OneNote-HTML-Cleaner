@@ -1,0 +1,2 @@
+light: total=0 serious_or_critical=0
+dark: total=0 serious_or_critical=0
