@@ -126,7 +126,11 @@ self.onmessage = async (e) => {
       if (typeof _parseMht !== 'function') {
         logWarn('worker', { id, msg: 'parseMht not available (module not loaded)' });
       } else {
-        const parsed = _parseMht(htmlInput);
+        // enable charset logging if requested by the caller (test harness)
+        if (payload && payload.debug && payload.debug.mhtCharsetLogging) {
+          try { globalThis.MHT_CHARSET_LOG = true; } catch {};
+        }
+        const parsed = _parseMht(htmlInput, payload.config || {});
         if (parsed && parsed.html) {
           htmlInput = parsed.html;
           imageMap = Object.assign({}, imageMap, parsed.imageMap || {});

@@ -92,7 +92,27 @@ async function auditPage(url, reportBase) {
 
     const results = await page.evaluate(async () => await axe.run());
     const outPath = reportBase + `-${theme}.json`;
-    fs.writeFileSync(outPath, JSON.stringify(results, null, 2));
+    // sanitize control characters in string fields to avoid invalid Unicode escapes
+    function sanitizeString(s) {
+      if (typeof s !== 'string') return s;
+      // replace C0 control chars U+0000..U+001F except TAB(0x09), LF(0x0A), CR(0x0D)
+      return s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+    }
+    function sanitizeObject(o) {
+      if (o == null) return o;
+      if (typeof o === 'string') return sanitizeString(o);
+      if (Array.isArray(o)) return o.map(sanitizeObject);
+      if (typeof o === 'object') {
+        const out = {};
+        for (const k of Object.keys(o)) {
+          out[k] = sanitizeObject(o[k]);
+        }
+        return out;
+      }
+      return o;
+    }
+    const safeResults = sanitizeObject(results);
+    fs.writeFileSync(outPath, JSON.stringify(safeResults, null, 2));
     const serious = results.violations.filter(x => x.impact === 'serious' || x.impact === 'critical');
     if (serious.length) {
       hadSerious = true;
@@ -110,12 +130,16 @@ async function auditPage(url, reportBase) {
   const argv = process.argv.slice(2);
   let targetDir = null;
   let mhtDir = null;
+  let enableFallback = false;
   for (let i = 0; i < argv.length; i++) {
     if ((argv[i] === '--dir' || argv[i] === '-d') && argv[i+1]) {
       targetDir = argv[++i];
     }
     if ((argv[i] === '--mhtDir' || argv[i] === '--mht') && argv[i+1]) {
       mhtDir = argv[++i];
+    }
+    if (argv[i] === '--enable-fallback' || argv[i] === '--fallback') {
+      enableFallback = true;
     }
   }
   if (mhtDir) {
@@ -159,15 +183,16 @@ async function auditPage(url, reportBase) {
       const html = await page.evaluate(async (opts) => {
         const mht = await import('/src/pipeline/mht.js');
         const pipeline = await import('/src/pipeline/pipeline.js');
-        const parsed = mht.parseMht(opts.rawInput || '');
+        const parsed = mht.parseMht(opts.rawInput || '', { EnableCharsetFallback: opts.enableFallback });
         const html = parsed && parsed.html ? parsed.html : opts.rawInput;
         const run = await pipeline.runPipeline(html, {
           imageMap: parsed && parsed.imageMap ? parsed.imageMap : {},
           defaultTitle: opts.defaultTitle,
-          defaultLang: 'en'
+          defaultLang: 'en',
+          EnableCharsetFallback: opts.enableFallback
         });
         return run.output || '';
-      }, { rawInput: raw, defaultTitle: base });
+      }, { rawInput: raw, defaultTitle: base, enableFallback });
       const name = base + '.html';
       fs.writeFileSync(path.join(outDir, name), html, 'utf8');
     }

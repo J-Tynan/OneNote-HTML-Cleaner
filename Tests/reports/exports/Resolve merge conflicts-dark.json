@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-22T16:34:49.702Z",
-  "url": "http://127.0.0.1:65310/Resolve%20merge%20conflicts.html",
+  "timestamp": "2026-02-23T12:32:13.314Z",
+  "url": "http://127.0.0.1:65484/Resolve%20merge%20conflicts.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1486,7 +1486,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -1582,7 +1582,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -2382,7 +2382,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -2638,7 +2638,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span style=\"font-style:italic\">Merge conflicts happen when\n  two people make changes to the same file on GitHub\u0014a common occurrence when\n  you\u0019re working with others. This course guides you through the steps to\n  finding the best merge conflict solution, so your team can keep building.</span>",
+          "html": "<span style=\"font-style:italic\">Merge conflicts happen when\n  two people make changes to the same file on GitHuba common occurrence when\n  youre working with others. This course guides you through the steps to\n  finding the best merge conflict solution, so your team can keep building.</span>",
           "target": [
             "blockquote > span"
           ]
@@ -2734,7 +2734,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -2830,7 +2830,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -6382,7 +6382,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -7070,7 +7070,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span style=\"font-style:italic\">Merge conflicts happen when\n  two people make changes to the same file on GitHub\u0014a common occurrence when\n  you\u0019re working with others. This course guides you through the steps to\n  finding the best merge conflict solution, so your team can keep building.</span>",
+          "html": "<span style=\"font-style:italic\">Merge conflicts happen when\n  two people make changes to the same file on GitHuba common occurrence when\n  youre working with others. This course guides you through the steps to\n  finding the best merge conflict solution, so your team can keep building.</span>",
           "target": [
             "blockquote > span"
           ]
@@ -10479,7 +10479,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -10579,7 +10579,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -11199,7 +11199,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -11439,7 +11439,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span style=\"font-style:italic\">Merge conflicts happen when\n  two people make changes to the same file on GitHub\u0014a common occurrence when\n  you\u0019re working with others. This course guides you through the steps to\n  finding the best merge conflict solution, so your team can keep building.</span>",
+          "html": "<span style=\"font-style:italic\">Merge conflicts happen when\n  two people make changes to the same file on GitHuba common occurrence when\n  youre working with others. This course guides you through the steps to\n  finding the best merge conflict solution, so your team can keep building.</span>",
           "target": [
             "blockquote > span"
           ]
@@ -11519,7 +11519,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -11619,7 +11619,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -14439,7 +14439,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -14772,7 +14772,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -14790,7 +14790,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -14808,7 +14808,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -14826,7 +14826,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -14844,7 +14844,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -14862,7 +14862,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -14902,7 +14902,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -14920,7 +14920,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -14938,7 +14938,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -14956,7 +14956,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -14974,7 +14974,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -14992,7 +14992,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -15032,7 +15032,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -15050,7 +15050,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]

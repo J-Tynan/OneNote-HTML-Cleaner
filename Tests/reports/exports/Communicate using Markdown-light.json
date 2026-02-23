@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-22T16:34:43.761Z",
-  "url": "http://127.0.0.1:56035/Communicate%20using%20Markdown.html",
+  "timestamp": "2026-02-23T12:32:08.269Z",
+  "url": "http://127.0.0.1:49893/Communicate%20using%20Markdown.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1467,7 +1467,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -1563,7 +1563,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -2363,7 +2363,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -2779,7 +2779,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -2875,7 +2875,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -3547,7 +3547,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<span style=\"mso-spacerun:yes\">�</span>",
+          "html": "<span style=\"mso-spacerun:yes\"> </span>",
           "target": [
             "tr:nth-child(3) > .notes > p > span:nth-child(5)"
           ]
@@ -4667,9 +4667,201 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" lang=\"yo\" class=\"font-sans text-base\"><span>var</span><span> myVar </span><span>=</span><span> </span><span>\"Hello, world!\"</span><span>;</span></p>",
+          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" lang=\"yo\" class=\"font-sans text-base\"><span style=\"\">var</span><span style=\"\"> myVar </span><span style=\"\">=</span><span style=\"\"> </span><span style=\"\">\"Hello, world!\"</span><span style=\"\">;</span></p>",
           "target": [
             "tr:nth-child(7) > .notes > p:nth-child(2)"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span style=\"\">var</span>",
+          "target": [
+            "p:nth-child(2) > span:nth-child(1)"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span style=\"\"> myVar </span>",
+          "target": [
+            "p:nth-child(2) > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span style=\"\">=</span>",
+          "target": [
+            "p:nth-child(2) > span:nth-child(3)"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span style=\"\"> </span>",
+          "target": [
+            "span:nth-child(4)"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span style=\"\">\"Hello, world!\"</span>",
+          "target": [
+            "p:nth-child(2) > span:nth-child(5)"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span style=\"\">;</span>",
+          "target": [
+            "span:nth-child(6)"
           ]
         },
         {
@@ -6331,7 +6523,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -7294,31 +7486,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span style=\"mso-spacerun:yes\">�</span>",
-          "target": [
-            "tr:nth-child(3) > .notes > p > span:nth-child(5)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#000000",
-                "bgColor": "#ffffff",
-                "contrastRatio": 21,
-                "fontSize": "11.0pt (14.6667px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 21"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base font-normal\">File extensions?</span>",
           "target": [
             "li[value=\"3\"] > .font-normal"
@@ -7669,7 +7836,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>var</span>",
+          "html": "<span style=\"\">var</span>",
           "target": [
             "p:nth-child(2) > span:nth-child(1)"
           ]
@@ -7694,7 +7861,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span> myVar </span>",
+          "html": "<span style=\"\"> myVar </span>",
           "target": [
             "p:nth-child(2) > span:nth-child(2)"
           ]
@@ -7719,7 +7886,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>\"Hello, world!\"</span>",
+          "html": "<span style=\"\">\"Hello, world!\"</span>",
           "target": [
             "p:nth-child(2) > span:nth-child(5)"
           ]
@@ -10528,7 +10695,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -10628,7 +10795,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -11268,7 +11435,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -11628,7 +11795,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -11728,7 +11895,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -12308,7 +12475,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span style=\"mso-spacerun:yes\">�</span>",
+          "html": "<span style=\"mso-spacerun:yes\"> </span>",
           "target": [
             "tr:nth-child(3) > .notes > p > span:nth-child(5)"
           ]
@@ -13208,7 +13375,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" lang=\"yo\" class=\"font-sans text-base\"><span>var</span><span> myVar </span><span>=</span><span> </span><span>\"Hello, world!\"</span><span>;</span></p>",
+          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" lang=\"yo\" class=\"font-sans text-base\"><span style=\"\">var</span><span style=\"\"> myVar </span><span style=\"\">=</span><span style=\"\"> </span><span style=\"\">\"Hello, world!\"</span><span style=\"\">;</span></p>",
           "target": [
             "tr:nth-child(7) > .notes > p:nth-child(2)"
           ]
@@ -13228,7 +13395,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>var</span>",
+          "html": "<span style=\"\">var</span>",
           "target": [
             "p:nth-child(2) > span:nth-child(1)"
           ]
@@ -13248,7 +13415,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span> myVar </span>",
+          "html": "<span style=\"\"> myVar </span>",
           "target": [
             "p:nth-child(2) > span:nth-child(2)"
           ]
@@ -13268,7 +13435,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>=</span>",
+          "html": "<span style=\"\">=</span>",
           "target": [
             "p:nth-child(2) > span:nth-child(3)"
           ]
@@ -13288,7 +13455,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span> </span>",
+          "html": "<span style=\"\"> </span>",
           "target": [
             "span:nth-child(4)"
           ]
@@ -13308,7 +13475,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>\"Hello, world!\"</span>",
+          "html": "<span style=\"\">\"Hello, world!\"</span>",
           "target": [
             "p:nth-child(2) > span:nth-child(5)"
           ]
@@ -13328,7 +13495,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>;</span>",
+          "html": "<span style=\"\">;</span>",
           "target": [
             "span:nth-child(6)"
           ]
@@ -14768,7 +14935,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -15101,7 +15268,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -15119,7 +15286,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -15137,7 +15304,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -15155,7 +15322,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -15173,7 +15340,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -15191,7 +15358,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -15231,7 +15398,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "div:nth-child(3) > div > table"
           ]
@@ -15249,7 +15416,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -15267,7 +15434,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(2) > .cornell-table"
           ]
@@ -15285,7 +15452,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(3) > td > div > table"
           ]
@@ -15303,7 +15470,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -15321,7 +15488,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\">",
           "target": [
             "tr:nth-child(4) > td > div > table"
           ]
@@ -15361,7 +15528,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n   border-collapse:collapse;border-style:solid;border-border-width:\n   0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
           ]
@@ -15379,7 +15546,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-color:#A3A3A3;\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:\n     ltr;border-collapse:collapse;border-style:solid;border-\n     border-width:0pt\" title=\"\" summary=\"\" class=\"cornell-table\">",
           "target": [
             "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
           ]
@@ -15976,7 +16143,7 @@
             }
           ],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" lang=\"yo\" class=\"font-sans text-base\"><span>var</span><span> myVar </span><span>=</span><span> </span><span>\"Hello, world!\"</span><span>;</span></p>",
+          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" lang=\"yo\" class=\"font-sans text-base\"><span style=\"\">var</span><span style=\"\"> myVar </span><span style=\"\">=</span><span style=\"\"> </span><span style=\"\">\"Hello, world!\"</span><span style=\"\">;</span></p>",
           "target": [
             "tr:nth-child(7) > .notes > p:nth-child(2)"
           ]

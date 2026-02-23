@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-22T16:34:46.588Z",
-  "url": "http://127.0.0.1:57411/DevToys.html",
+  "timestamp": "2026-02-23T12:32:10.855Z",
+  "url": "http://127.0.0.1:51536/DevToys.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1541,7 +1541,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "table"
           ]
@@ -3205,7 +3205,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "table"
           ]
@@ -3718,7 +3718,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "table"
           ]
@@ -3758,7 +3758,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
           "target": [
             "table"
           ]

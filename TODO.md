@@ -188,3 +188,17 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 - [ ] Document current native limitations and expected fidelity.
 - [ ] Decide on in‑browser decoder vs companion‑tool workflow.
 - [ ] Polish page naming for GUID‑like titles.
+
+---
+
+## Encoding fixes — Option A (priority)
+
+Fix mojibake and charset issues observed in converted exports. Follow a small, test-driven plan so changes are reversible and safe for the PWA.
+
+- [ ] Investigate MHT part `Content-Type` headers and current decoding behavior.  
+- [ ] Implement charset-aware decoding using `TextDecoder` with explicit charset selection and a CP1252 fallback for legacy parts.  
+- [ ] Add unit/regression tests that cover CP1252, UTF-8, and missing-charset scenarios (use fixtures).  
+- [ ] Re-run conversion and Playwright export audits; verify no new regressions and that mojibake is resolved.  
+- [ ] Commit, open PR, and add release notes documenting the fallback behavior and test coverage.
+
+Notes: prefer discovery logging first (non-invasive) before applying decoding changes to avoid surprising the PWA; I will proceed only after you approve Step 1.
