@@ -3,7 +3,9 @@
 import { createDownloadHelpers } from './ui-downloads.js';
 // theme variant functions now used indirectly; import removed
 import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
-import { info as logInfo, warn as logWarn, error as logError, setEnabled as setLogEnabled } from './logging.js';
+import { createLogger, setEnabled as setLogEnabled } from './logging.js';
+
+const logger = createLogger('ui');
 
 const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
@@ -53,7 +55,7 @@ function logLayoutMode() {
     mode = 'Layout B · Tablet / Laptop';
   }
 
-  logInfo('ui', { msg: `Active layout: ${mode} (${width}px)`, meta: { width, mode } });
+  logger.info({ msg: `Active layout: ${mode} (${width}px)`, meta: { width, mode } });
 }
 
 /* === UTILITIES === */
@@ -113,7 +115,7 @@ function renderDiagnostics() {
   const diags = (runtime.workerManager && typeof runtime.workerManager.getDiagnostics === 'function')
     ? runtime.workerManager.getDiagnostics()
     : [];
-  try { logInfo('ui', { msg: 'renderDiagnostics — count', meta: { count: diags.length } }); } catch (ignore) {}
+  try { logger.info({ msg: 'renderDiagnostics — count', meta: { count: diags.length } }); } catch (ignore) {}
 
   dom.diagnosticsList.innerHTML = diags.map(formatDiagnosticForList).join('\n') || '';
   if (dom.diagnosticsCount) dom.diagnosticsCount.textContent = `(${diags.length})`;
@@ -292,10 +294,10 @@ async function processEntryWithWorker(entry) {
       payload.html = await readFileAsText(entry.file);
     }
 
-    logInfo('ui', { id: entry.id, msg: 'Dispatching entry to worker', meta: { name: entry.name } });
+    logger.info({ id: entry.id, msg: 'Dispatching entry to worker', meta: { name: entry.name } });
     const result = await runtime.workerManager.enqueue(payload, null, transferList);
 
-    logInfo('ui', { id: entry.id, msg: 'Worker returned for entry', meta: { status: (result && result.status) ? result.status : 'unknown' } });
+    logger.info({ id: entry.id, msg: 'Worker returned for entry', meta: { status: (result && result.status) ? result.status : 'unknown' } });
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
@@ -305,7 +307,7 @@ async function processEntryWithWorker(entry) {
 
     updateEntryStatus(entry.id, 'error');
   } catch (err) {
-    logError('ui', { id: entry.id, msg: 'worker processing error', meta: { error: err && err.message ? err.message : String(err) } });
+    logger.error({ id: entry.id, msg: 'worker processing error', meta: { error: err && err.message ? err.message : String(err) } });
     updateEntryStatus(entry.id, 'error');
   }
 }
@@ -328,7 +330,7 @@ function processEntry(entry) {
       });
       return;
     } catch (err) {
-      logError('ui', { id: entry.id, msg: 'processing error', meta: { error: err && err.message ? err.message : String(err) } });
+      logger.error({ id: entry.id, msg: 'processing error', meta: { error: err && err.message ? err.message : String(err) } });
       updateEntryStatus(entry.id, 'error');
       return;
     }
@@ -433,12 +435,12 @@ export function addFilesToQueue(files) {
   renderFileList();
 
   if (runtime.autoConvertEnabled) {
-    logInfo('ui', { msg: 'autoConvertEnabled=true — starting processing', meta: { count: processableEntries.length } });
+    logger.info({ msg: 'autoConvertEnabled=true — starting processing', meta: { count: processableEntries.length } });
     for (const entry of processableEntries) {
       processEntry(entry);
     }
   } else {
-    logInfo('ui', { msg: 'autoConvertEnabled=false — files added to queue' });
+    logger.info({ msg: 'autoConvertEnabled=false — files added to queue' });
   }
 }
 
@@ -655,7 +657,7 @@ export function initUI(workerManager, options = {}) {
   }
   if (runtime.workerManager && dom.diagnosticsList) {
     try {
-      logInfo('ui', { msg: 'initial diagnostics count', meta: { count: runtime.workerManager.getDiagnostics().length } });
+      logger.info({ msg: 'initial diagnostics count', meta: { count: runtime.workerManager.getDiagnostics().length } });
     } catch (ignore) {}
     renderDiagnostics();
     runtime._diagnosticsPoll = setInterval(renderDiagnostics, 1000);
@@ -675,9 +677,9 @@ export function initUI(workerManager, options = {}) {
   }, updateZipButton);
 
   if (window.JSZip) {
-    logInfo('ui', { msg: 'JSZip loaded' });
+    logger.info({ msg: 'JSZip loaded' });
   } else {
-    logWarn('ui', { msg: 'JSZip not found; ZIP downloads disabled', meta: { advice: 'include JSZip or use CDN in production' } });
+    logger.warn({ msg: 'JSZip not found; ZIP downloads disabled', meta: { advice: 'include JSZip or use CDN in production' } });
   }
 
   runtime.dragCounter = 0;

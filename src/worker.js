@@ -2,7 +2,8 @@
 import { postDiagnostic } from './worker-globals.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 // logging helper allows consistent formatting across UI, wrapper, and worker
-import { info as logInfo, warn as logWarn, error as logError, setEnabled as setLogEnabled } from './logging.js';
+import { createLogger, setEnabled as setLogEnabled } from './logging.js';
+const logger = createLogger('worker');
 
 // Module-level placeholders for lazy-loaded modules. These are initialized
 // from `init()` so import-time evaluation of heavy modules is avoided.
@@ -17,7 +18,7 @@ export async function init() {
     // variable for testing or debug builds.
     try { setLogEnabled(typeof self !== 'undefined' && self && self.LOGGING_ENABLED !== false); } catch (_) {}
     const hasDOMParser = (typeof DOMParser !== 'undefined');
-    logInfo('worker', { msg: 'init()', meta: { hasDOMParser } });
+    logger.info({ msg: 'init()', meta: { hasDOMParser } });
 
     // Lazy-load heavy modules here so any import-time failures are
     // captured and posted as structured diagnostics (worker-globals).
@@ -39,7 +40,7 @@ export async function init() {
       .map((r, i) => ({ idx: i, status: r.status, reason: r.status === 'rejected' ? String(r.reason) : undefined }))
       .filter((r) => r.status === 'rejected');
     if (failed.length) {
-      logWarn('worker', { msg: 'imports failed during init()', meta: { failed } });
+      logger.warn({ msg: 'imports failed during init()', meta: { failed } });
       try {
         postDiagnostic({ id: 'init', status: 'error', phase: 'init-imports', msg: 'imports failed during init', meta: { failed } });
       } catch (ignore) { /* swallow */ }
@@ -47,9 +48,9 @@ export async function init() {
 
     // Post explicit ready handshake after init completes.
     self.postMessage({ type: 'ready', id: 'init', timestamp: Date.now(), hasDOMParser });
-    logInfo('worker', { msg: 'posted ready', meta: { hasDOMParser } });
+    logger.info({ msg: 'posted ready', meta: { hasDOMParser } });
   } catch (err) {
-    logError('worker', { msg: 'init() error', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
+    logger.error({ msg: 'init() error', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
     try {
       postDiagnostic({ id: 'init', status: 'error', phase: 'init', msg: String(err && err.message ? err.message : String(err)), meta: { stack: err && err.stack } });
     } catch (ignore) {}
@@ -66,11 +67,11 @@ self.onmessage = async (e) => {
   // Support explicit initialization request from the wrapper. This defers
   // dynamic imports until the wrapper posts `{ type: 'init' }`.
   if (payload && payload.type === 'init') {
-    logInfo('worker', { msg: 'received init message from wrapper' });
+    logger.info({ msg: 'received init message from wrapper' });
     try {
       await init(payload.options || {});
     } catch (err) {
-      logError('worker', { msg: 'init() failed after init message', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
+      logger.error({ msg: 'init() failed after init message', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
     }
     return; // init message handled
   }
@@ -81,7 +82,7 @@ self.onmessage = async (e) => {
   // ids and surfaces it during testing.
   if (!payload || typeof payload.id !== 'string') {
     const errMsg = 'payload.id missing or invalid in onmessage';
-    logError('worker', { msg: errMsg, meta: { received: payload } });
+    logger.error({ msg: errMsg, meta: { received: payload } });
     try {
       postDiagnostic({
         id: 'init',
@@ -97,20 +98,20 @@ self.onmessage = async (e) => {
   const fileName = payload.fileName || payload.relativePath || 'unknown';
   const sourceKind = payload.sourceKind || detectSourceKind(fileName, payload.mimetype);
 
-  logInfo('worker', { id, msg: 'received job', meta: { fileName } });
+  logger.info({ id, msg: 'received job', meta: { fileName } });
 
   try {
     // Native `.one` / `.onepkg` flows are out of scope for the current
     // (MHT-only) release — explicitly mark them unsupported so the UI can
     // surface the correct message and we avoid loading native importers.
     if (sourceKind === 'one' || sourceKind === 'onepkg') {
-      logWarn('worker', { id, msg: 'native importers disabled', meta: { sourceKind } });
+      logger.warn({ id, msg: 'native importers disabled', meta: { sourceKind } });
       self.postMessage({ id, status: 'unsupported', reason: 'native importers disabled in this release' });
       return;
     }
 
     const hasDOMParser = (typeof DOMParser !== 'undefined');
-    logInfo('worker', { id, msg: 'DOMParser availability', meta: { hasDOMParser } });
+    logger.info({ id, msg: 'DOMParser availability', meta: { hasDOMParser } });
 
     if (!hasDOMParser) {
       self.postMessage({ id, status: 'unsupported', reason: 'DOMParser not available in worker' });
@@ -122,9 +123,9 @@ self.onmessage = async (e) => {
 
     // If filename indicates MHT/MHTML, attempt to parse it here in the worker
     if (sourceKind === 'mht') {
-      logInfo('worker', { id, msg: 'detected MHT input, attempting parseMht' });
+      logger.info({ id, msg: 'detected MHT input, attempting parseMht' });
       if (typeof _parseMht !== 'function') {
-        logWarn('worker', { id, msg: 'parseMht not available (module not loaded)' });
+        logger.warn({ id, msg: 'parseMht not available (module not loaded)' });
       } else {
         // enable charset logging if requested by the caller (test harness)
         if (payload && payload.debug && payload.debug.mhtCharsetLogging) {
@@ -134,9 +135,9 @@ self.onmessage = async (e) => {
         if (parsed && parsed.html) {
           htmlInput = parsed.html;
           imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-          logInfo('worker', { id, msg: 'parseMht result', meta: { htmlLength: htmlInput.length, parts: parsed.parts.length, boundary: parsed.boundary } });
+          logger.info({ id, msg: 'parseMht result', meta: { htmlLength: htmlInput.length, parts: parsed.parts.length, boundary: parsed.boundary } });
         } else {
-          logWarn('worker', { id, msg: 'parseMht did not return HTML; proceeding with original payload.html' });
+          logger.warn({ id, msg: 'parseMht did not return HTML; proceeding with original payload.html' });
         }
       }
     }
@@ -144,7 +145,7 @@ self.onmessage = async (e) => {
     self.postMessage({ id, status: 'progress', step: 'start', percent: 0 });
     if (typeof _runPipeline !== 'function') {
       const msg = 'pipeline not available in worker';
-      logError('worker', { id, msg, meta: { note: 'pipeline not available' } });
+      logger.error({ id, msg, meta: { note: 'pipeline not available' } });
       try { postDiagnostic({ id: 'init', status: 'error', phase: 'init', msg, meta: { note: 'pipeline missing' } }); } catch (ignore) {}
       self.postMessage({ id, status: 'error', error: msg });
       return;
@@ -154,7 +155,7 @@ self.onmessage = async (e) => {
       SourceName: fileName,
       SourceKind: sourceKind
     }));
-    logInfo('worker', { id, msg: 'job done', meta: { outputLength: String((result.output || '').length) } });
+    logger.info({ id, msg: 'job done', meta: { outputLength: String((result.output || '').length) } });
     self.postMessage({
       id,
       status: 'done',
@@ -163,7 +164,7 @@ self.onmessage = async (e) => {
       logs: result.logs || []
     });
   } catch (err) {
-    logError('worker', { id, msg: 'job error', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
+    logger.error({ id, msg: 'job error', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
     try { postDiagnostic({ id, status: 'error', phase: 'job', msg: String(err && err.message ? err.message : String(err)), meta: { stack: err && err.stack } }); } catch (ignore) {}
     self.postMessage({ id, status: 'error', error: String(err) });
   }

@@ -2,7 +2,8 @@
 import { initUI } from './ui.js';
 import WorkerManager from './worker-wrapper.js';
 import { initTheme } from './theme.js';
-import { info as logInfo } from './logging.js';
+import { createLogger } from './logging.js';
+const logger = createLogger('app');
 
 const AUTO_CONVERT_STORAGE_KEY = 'autoConvertEnabled';
 const DEFAULT_AUTO_CONVERT = true;
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const wm = new WorkerManager('./worker.js');
-  logInfo('app', { msg: 'WorkerManager created' });
+  logger.info({ msg: 'WorkerManager created' });
 
   // Initialise UI with resolved preferences
   initUI(wm, {
