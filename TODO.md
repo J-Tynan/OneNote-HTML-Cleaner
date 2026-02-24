@@ -11,6 +11,8 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
  - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
 
+- [x] Convert-button end-to-end smoke test added: `Tests/convert-button-smoke-playwright.js` (2026-02-24)
+
 - Apply changes in small, isolated batches.
 - After each batch:
   - Convert a known‑good `.mht` fixture.
@@ -121,11 +123,11 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
      - `Convert` is **disabled** when `auto-convert` is ON; becomes **enabled** when `auto-convert` is OFF and at least one supported file is queued.
      - Clicking `Convert` processes all queued, supported files (uses existing `processEntry()`), updates statuses, and produces downloadable output.
    - Subtasks:
-     - [x] Add `convertButton` markup to `index.html` (Step 1)
-     - [x] Implement `processQueue()` and `updateConvertButton()` in `src/ui.js` (Step 2)
-     - [x] Wire event handler in `bindEvents()` and ensure `updateConvertButton()` is called from `renderFileList()` and `setAutoConvertEnabled()` (Step 2)
-     - [x] Add Playwright smoke test `Tests/auto-convert-manual-playwright.js` (Step 3)
-     - [x] Update `README.md` with manual convert instructions (Step 3)
+    - [x] Add `convertButton` markup to `index.html` (Step 1)
+    - [x] Implement `processQueue()` and `updateConvertButton()` in `src/ui.js` (Step 2)
+    - [x] Wire event handler in `bindEvents()` and ensure `updateConvertButton()` is called from `renderFileList()` and `setAutoConvertEnabled()` (Step 2)
+    - [x] Add Playwright smoke test `Tests/convert-button-smoke-playwright.js` (Step 3)
+    - [x] Update `README.md` with manual convert instructions (Step 3)
 
    - [x] Add tooltip behavior for `Convert` when `auto-convert` is ON.
          between themes at runtime when opened in a browser.
@@ -166,7 +168,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 
     Suggested next tasks (short term)
     - [ ] Implement Phase 1 dropdown and basic `.btn` token support.
-    - [ ] Add tooltip behavior for `Convert` when `auto-convert` is ON.
+    - [x] Add tooltip behavior for `Convert` when `auto-convert` is ON.
 
     ---
 
