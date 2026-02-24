@@ -9,6 +9,8 @@ import { migrateInlineStylesToUtilities } from './inlineStyleMigration.js';
 import * as images from './images.js';
 import * as format from './format.js';
 import { injectOutputToolbar, summarizeWarningsBySeverity } from './toolbarInjector.js';
+import { createLogger } from '../logging.js';
+const logger = createLogger('pipeline');
 
 /**
  * runPipeline(htmlString, config)
@@ -23,19 +25,19 @@ export async function runPipeline(htmlString, config = {}) {
   try {
     // Basic input validation & preview
     if (typeof htmlString !== 'string') {
-      console.warn('[pipeline] htmlString is not a string', typeof htmlString);
+      logger.warn({ msg: 'htmlString is not a string', meta: { type: typeof htmlString } });
       logs.push({ step: 'validateInput', level: 'warn', details: 'htmlString not a string' });
     }
     const preview = (htmlString || '').slice(0, 2000);
-    console.log('[pipeline] input preview:', preview.replace(/\r?\n/g, '\\n').slice(0, 1000));
+    logger.info({ msg: 'input preview', meta: { preview: preview.replace(/\r?\n/g, '\\n').slice(0, 1000) } });
     if (!/<!doctype|<html|<body/i.test(preview)) {
-      console.warn('[pipeline] input does not look like decoded HTML; may be raw MHT or encoded content');
+      logger.warn({ msg: 'input does not look like decoded HTML; may be raw MHT or encoded content' });
       logs.push({ step: 'validateInput', level: 'warn', details: 'input does not look like HTML' });
     }
 
     // If the input contains obvious MHTML markers, log them
     if (/^From:|^Content-Type: multipart\/related|^--|Single File Web Page|Web Archive/i.test(preview)) {
-      console.warn('[pipeline] input contains MHTML markers; ensure MHT parsing/decoding ran before pipeline');
+      logger.warn({ msg: 'input contains MHTML markers; ensure MHT parsing/decoding ran before pipeline' });
       logs.push({ step: 'validateInput', level: 'warn', details: 'MHTML markers detected in input' });
     }
 
@@ -121,15 +123,15 @@ export async function runPipeline(htmlString, config = {}) {
 
     // Final sanity check: does output look like HTML?
     const outPreview = (withToolbar || '').slice(0, 1000);
-    console.log('[pipeline] output preview:', outPreview.replace(/\r?\n/g, '\\n'));
+    logger.info({ msg: 'output preview', meta: { preview: outPreview.replace(/\r?\n/g, '\\n') } });
     if (!/<!doctype|<html|<body/i.test(outPreview)) {
-      console.warn('[pipeline] output does not look like HTML; investigate earlier steps');
+      logger.warn({ msg: 'output does not look like HTML; investigate earlier steps' });
       logs.push({ step: 'validateOutput', level: 'warn', details: 'output does not look like HTML' });
     }
 
     return { output: withToolbar, logs };
   } catch (err) {
-    console.error('[pipeline] unexpected error:', err);
+    logger.error({ msg: 'unexpected error', meta: { error: String(err) } });
     logs.push({ step: 'pipelineError', level: 'error', details: String(err) });
     throw err;
   }

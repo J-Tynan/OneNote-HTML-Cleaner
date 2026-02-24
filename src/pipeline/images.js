@@ -20,6 +20,9 @@ export function buildImageMapFromHtml(html, basePath = '') {
  * Generate candidate keys for a given src/href value so we can match
  * against the imageMap keys produced by parseMht (which include many variants).
  */
+import { createLogger } from '../logging.js';
+const logger = createLogger('images');
+
 function candidatesFor(val) {
   if (!val) return [];
   const c = new Set();
@@ -106,7 +109,7 @@ export function embedImagesInHtml(doc, map = {}) {
         if (replaced) replacements++;
       } catch (err) {
         // Non-fatal: continue processing other nodes
-        console.warn('[images] error processing node for', attr, err);
+        logger.warn({ msg: 'error processing node for', meta: { attr, error: String(err) } });
       }
     });
   });
@@ -115,8 +118,7 @@ export function embedImagesInHtml(doc, map = {}) {
 
   // If no replacements were made, provide a small diagnostic sample to help debugging
   if (replacements === 0 && unmatchedSamples.length > 0) {
-    console.warn('[images] no image replacements made; sample src/href values:', unmatchedSamples.slice(0, 5));
-    logs.push({ step: 'embedImages', replacements: 0, sampleUnmatched: unmatchedSamples.slice(0, 5) });
+    logger.warn({ msg: 'no image replacements made; sample src/href values', meta: { samples: unmatchedSamples.slice(0, 5) } });
   }
 
   return logs;

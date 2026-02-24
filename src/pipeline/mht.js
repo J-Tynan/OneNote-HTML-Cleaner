@@ -276,21 +276,21 @@ export function parseMht(rawText, options = {}) {
 
     rawText = toLatin1(rawText);
 
-    console.log('[mht] parseMht: raw length', rawText ? rawText.length : 0, 'opts', options && options.EnableControlSanitization ? 'sanitize' : options && options.EnableMapping ? 'map' : '');
+    logger.info({ msg: 'parseMht: raw length', meta: { length: rawText ? rawText.length : 0, opts: options && options.EnableControlSanitization ? 'sanitize' : options && options.EnableMapping ? 'map' : '' } });
     if (!rawText || typeof rawText !== 'string') {
-      console.warn('[mht] parseMht: empty or non-string input');
+      logger.warn({ msg: 'parseMht: empty or non-string input' });
       return { html: null, parts: [], boundary: null, imageMap: {} };
     }
 
     // Find boundary (look in headers near top)
     const boundaryMatch = rawText.match(/boundary="?([^"\r\n;]+)"?/i);
     const boundary = boundaryMatch ? boundaryMatch[1] : null;
-    console.log('[mht] detected boundary:', boundary);
+    logger.info({ msg: 'detected boundary', meta: { boundary } });
 
     // Determine separator and split parts
     const sep = boundary ? `--${boundary}` : null;
     const rawParts = sep ? rawText.split(sep) : rawText.split(/\r?\n--[^\r\n]+\r?\n/);
-    console.log('[mht] raw parts count (including preamble/epilogue):', rawParts.length);
+    logger.info({ msg: 'raw parts count (including preamble/epilogue)', meta: { count: rawParts.length } });
 
     const parts = [];
     // keep cursor so we can compute absolute offsets within rawText
@@ -336,15 +336,15 @@ export function parseMht(rawText, options = {}) {
       });
     }
 
-    console.log('[mht] parsed parts count (non-empty):', parts.length);
+    logger.info({ msg: 'parsed parts count (non-empty)', meta: { count: parts.length } });
     parts.forEach((p, idx) => {
-      console.log(`[mht] part ${idx}: type=${p.ContentType} loc=${safeSlice(p.ContentLocation, 80)} cte=${p.ContentTransferEncoding} bodyLen=${p.BodyRaw.length}`);
+      logger.info({ msg: `part ${idx}`, meta: { type: p.ContentType, loc: safeSlice(p.ContentLocation, 80), cte: p.ContentTransferEncoding, bodyLen: p.BodyRaw.length } });
     });
 
     // Find HTML part (prefer text/html)
     const htmlPart = parts.find(p => /text\/html/i.test(p.ContentType)) || parts.find(p => /application\/xhtml\+xml/i.test(p.ContentType));
     if (!htmlPart) {
-      console.warn('[mht] no text/html part found');
+      logger.warn({ msg: 'no text/html part found' });
     }
 
     let html = htmlPart ? htmlPart.BodyRaw : null;
@@ -386,7 +386,7 @@ export function parseMht(rawText, options = {}) {
               }
             }
           } catch {
-            console.warn('[mht] base64 decode failed for HTML part');
+            logger.warn({ msg: 'base64 decode failed for HTML part' });
           }
           return text;
         } else {
@@ -447,7 +447,7 @@ export function parseMht(rawText, options = {}) {
             const b64 = btoa(unescape(encodeURIComponent(decoded)));
             dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), b64);
           } catch (err) {
-            console.warn('[mht] failed to base64-encode decoded quoted-printable image', err);
+            logger.warn({ msg: 'failed to base64-encode decoded quoted-printable image', meta: { error: String(err) } });
           }
         } else {
           // Try to guess: if body looks like base64, use it
@@ -471,7 +471,7 @@ export function parseMht(rawText, options = {}) {
       }
     }
 
-    console.log('[mht] built imageMap entries:', Object.keys(imageMap).length);
+    logger.info({ msg: 'built imageMap entries', meta: { count: Object.keys(imageMap).length } });
     // detect C0 control characters in decoded HTML (except tab/lf/cr)
     function detectControlChars(s) {
       const res = { count: 0, samples: [] };
@@ -509,7 +509,7 @@ export function parseMht(rawText, options = {}) {
             return { ...s, rawTextOffset: rawOff };
           });
         }
-        console.warn(`[mht] control chars detected in HTML part${htmlPart ? ' index=' + htmlPart.index : ''} count=${controlCharDiagnostics.count} samples=${controlCharDiagnostics.samples.map(s=>s.codepoint).join(',')}`);
+        logger.warn({ msg: `control chars detected in HTML part${htmlPart ? ' index=' + htmlPart.index : ''}`, meta: { count: controlCharDiagnostics.count, samples: controlCharDiagnostics.samples.map(s => s.codepoint) } });
       }
       // optional sanitization flag
       if (options && options.EnableControlSanitization) {
@@ -517,10 +517,10 @@ export function parseMht(rawText, options = {}) {
         html = sanitizeControlChars(html);
         controlCharSanitized = true;
         if (before !== html) {
-          console.log('[mht] control chars removed by sanitization');
+          logger.info({ msg: 'control chars removed by sanitization' });
         }
       }
-      console.log('[mht] html preview:', safeSlice(html.replace(/\r?\n/g, '\\n'), 1000));
+      logger.info({ msg: 'html preview', meta: { preview: safeSlice(html.replace(/\r?\n/g, '\\n'), 1000) } });
     }
 
     // top-level summary fields for charset fallback
@@ -528,7 +528,7 @@ export function parseMht(rawText, options = {}) {
     const charsetUsed = parts.find(p => p.CharsetUsed)?.CharsetUsed || null;
     return { html, parts, boundary, imageMap, controlCharDiagnostics, controlCharSanitized, charsetFallback, charsetUsed };
   } catch (err) {
-    console.error('[mht] parseMht unexpected error', err);
+    logger.error({ msg: 'parseMht unexpected error', meta: { error: String(err) } });
     return { html: null, parts: [], boundary: null, imageMap: {} };
   }
 }

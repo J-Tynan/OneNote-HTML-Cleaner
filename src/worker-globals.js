@@ -7,6 +7,9 @@ const _workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
   || (typeof window !== 'undefined' && window)
   || null;
 
+import { createLogger } from './logging.js';
+const logger = createLogger('worker-globals');
+
 if (_workerGlobal && typeof _workerGlobal.debugWorker === 'undefined') {
   // Keep an import-time-safe noop for backward compatibility, but mark it
   // deprecated so callers migrate to the structured `postDiagnostic()` API.
@@ -15,7 +18,7 @@ if (_workerGlobal && typeof _workerGlobal.debugWorker === 'undefined') {
   _workerGlobal.debugWorker = function debugWorker(..._args) {
     try {
       if (!_workerGlobal.__debugWorkerDeprecatedShown) {
-        console.warn('[worker-globals] debugWorker() is deprecated — use postDiagnostic() instead.');
+        logger.warn({ msg: 'debugWorker() is deprecated — use postDiagnostic() instead.' });
         _workerGlobal.__debugWorkerDeprecatedShown = true;
       }
     } catch (ignore) { /* swallow */ }
@@ -43,7 +46,7 @@ try {
   if (typeof self !== 'undefined' && self) {
     self.addEventListener('error', (ev) => {
       try {
-        console.error('[worker-globals] uncaught error', ev.message, ev.filename, ev.lineno, ev.colno, ev.error);
+        logger.error({ msg: 'uncaught error', meta: { message: ev.message, filename: ev.filename, lineno: ev.lineno, colno: ev.colno, error: ev.error } });
         // Post a structured diagnostic using the helper so payloads are consistent.
         postDiagnostic({
           id: 'init',
@@ -57,7 +60,7 @@ try {
 
     self.addEventListener('unhandledrejection', (ev) => {
       try {
-        console.error('[worker-globals] unhandledrejection', ev.reason);
+        logger.error({ msg: 'unhandledrejection', meta: { reason: ev.reason } });
         postDiagnostic({
           id: 'init',
           status: 'error',
@@ -99,7 +102,7 @@ export function postDiagnostic(detail = {}) {
       self.postMessage(payload);
     } else {
       // Not in a worker context — surface to console for local/dev runs.
-      try { console.debug('[worker-globals] postDiagnostic (fallback):', payload); } catch (_) {}
+      try { logger.info({ msg: 'postDiagnostic (fallback)', meta: payload }); } catch (_) {}
     }
   } catch (ignore) { /* swallow */ }
 }

@@ -1,5 +1,7 @@
 // src/ui-downloads.js
 import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
+import { createLogger } from './logging.js';
+const logger = createLogger('ui');
 
 export function createDownloadHelpers(ctx, updateZipButton) {
   function downloadBlob(filename, text, mime = 'text/html') {
@@ -9,7 +11,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const hasCharset = /<meta\s+charset=["']?utf-8["']?/i.test(content)
       || /<meta\s+http-equiv=["']content-type["']\s+content=["'][^"']*charset=utf-8/i.test(content);
     const hasDataImages = /data:image\//i.test(content);
-    console.log(`[ui] downloadBlob: filename=${filename} hasCharset=${hasCharset} hasDataImages=${hasDataImages} length=${content.length}`);
+    logger.info({ msg: `downloadBlob: filename=${filename}`, meta: { hasCharset, hasDataImages, length: content.length } });
 
     const blob = new Blob([content], { type: `${mime};charset=utf-8` });
     const a = document.createElement('a');
@@ -58,7 +60,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     if (!ctx.downloadZipButton || ctx.downloadZipButton.disabled) return;
     const JSZip = window.JSZip;
     if (!JSZip) {
-      console.error('[ui] JSZip not available; ensure dependency is installed and loaded');
+      logger.error({ msg: 'JSZip not available; ensure dependency is installed and loaded' });
       return;
     }
 
@@ -82,7 +84,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
   async function downloadNativeZip(file, nativeResult) {
     const JSZip = window.JSZip;
     if (!JSZip) {
-      console.error('[ui] JSZip not available; ensure dependency is installed and loaded');
+      logger.error({ msg: 'JSZip not available; ensure dependency is installed and loaded' });
       return;
     }
 
