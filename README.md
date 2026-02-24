@@ -20,7 +20,10 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 ### Recent Fixes
 
 - List duplication regression: fixed an issue where explicit bullet glyphs and trivial nested list wrappers produced duplicated bullets in cleaned exports. The sanitizer now strips leading glyph characters from `li` text nodes and collapses single-child nested lists when safe, preserving semantic lists while removing artifacts introduced by certain OneNote exports.
+  * `fixLists` was hardened to avoid cloning list items and to be idempotent when run multiple times.
+  * A new defensive `dedupeLists` pass runs during every pipeline invocation to remove any accidentally duplicated `<li>` elements. This step runs after `ensureListStructure` and has no effect on well-formed lists.
 - Playwright checks: added lightweight Playwright smoke tests (`Tests/ui-phase1-theme.spec.js`, `Tests/ui-phase1-convert-tooltip.spec.js`) to verify Phase 1 UI tokens and the `Convert` button behavior. Both tests passed locally during verification.
+- Worker messaging hardening: the wrapper now issues its own UUIDs for every request, maintains a mapping to caller-supplied ids, detects duplicate responses, logs unmatched messages, and records detailed diagnostics including pending‑callback counts. Diagnostics schema is enforced and exposed to the UI; new tests verify these behaviors (`Tests/worker-duplicate-response-playwright.js`, `Tests/worker-unmatched-message-playwright.js`, `Tests/diagnostic-schema.js`, extended existing id/handshake tests`).
 
 ## UI experience
 

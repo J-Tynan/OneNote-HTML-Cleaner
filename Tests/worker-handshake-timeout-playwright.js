@@ -96,8 +96,11 @@ function createStaticServer(root) {
     if (!result.result.ok) throw new Error('Expected enqueue to reject on handshake timeout: ' + result.result.error);
 
     // Verify structured diagnostic was recorded in the wrapper diagnostics buffer
-    const found = (result.diags || []).some(d => d && (d.type === 'handshake-timeout' || (d.id === '__diag__' && /handshake-timeout/.test(d.type || ''))));
-    if (!found) throw new Error('Expected handshake-timeout diagnostic in WorkerManager diagnostics, got: ' + JSON.stringify(result.diags, null, 2));
+    const diagEntry = (result.diags || []).find(d => d && (d.type === 'handshake-timeout' || (d.id === '__diag__' && /handshake-timeout/.test(d.type || ''))));
+    if (!diagEntry) throw new Error('Expected handshake-timeout diagnostic in WorkerManager diagnostics, got: ' + JSON.stringify(result.diags, null, 2));
+    if (typeof diagEntry.pendingCount !== 'number') {
+      throw new Error('Handshake-timeout diagnostic missing pendingCount: ' + JSON.stringify(diagEntry));
+    }
 
     console.log('worker-handshake-timeout-playwright: OK');
     await browser.close();

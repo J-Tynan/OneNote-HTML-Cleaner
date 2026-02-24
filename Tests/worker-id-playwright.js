@@ -109,10 +109,39 @@ function createStaticServer(root) {
       if (info.result.id !== info.sent.id) {
         throw new Error('Worker response id did not match sent id: ' + info.sent.id + ' vs ' + info.result.id);
       }
+      if (info.result.originalId !== null && info.result.originalId !== undefined) {
+        throw new Error('Expected originalId to be null for payload with no client id');
+      }
     } else if (info.result && info.result.error && info.result.error.id) {
       if (info.result.error.id !== info.sent.id) {
         throw new Error('Worker error id did not match sent id: ' + info.sent.id + ' vs ' + info.result.error.id);
       }
+    }
+
+    // Now send a payload with an explicit client id and ensure mapping preserved
+    const mapped = await page.evaluate(async () => {
+      const runtime = window.__getRuntime ? window.__getRuntime() : null;
+      const payload = { id: 'client-123', type: 'probe-client-id' };
+      window.__lastPayload = null;
+      let result;
+      try {
+        result = await runtime.workerManager.enqueue(Object.assign({}, payload));
+      } catch (e) {
+        result = { error: e };
+      }
+      return {
+        sent: window.__lastPayload,
+        result
+      };
+    });
+    if (!mapped.sent || mapped.sent.id === 'client-123') {
+      throw new Error('Wrapper failed to generate new wrapperId for client-supplied id');
+    }
+    if (mapped.result && mapped.result.id !== mapped.sent.id) {
+      throw new Error('Response id mismatch on second call');
+    }
+    if (mapped.result && mapped.result.originalId !== 'client-123') {
+      throw new Error('originalId was not preserved: ' + mapped.result.originalId);
     }
 
     console.log('worker-id-playwright: OK');

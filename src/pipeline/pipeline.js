@@ -84,6 +84,8 @@ export async function runPipeline(htmlString, config = {}) {
     })));
     // repair any malformed list structure left over
     logs.push(...ensureArray(sanitize.ensureListStructure(doc)));
+    // defensive deduplication pass to remove any accidental clone/duplicate
+    logs.push(...ensureArray(sanitize.dedupeLists(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {
