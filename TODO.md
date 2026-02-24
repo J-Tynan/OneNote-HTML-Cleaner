@@ -221,7 +221,8 @@ Notes: prefer discovery logging first (non-invasive) before applying decoding ch
 These follow-ups address artifacts, control characters, accessibility, and output size issues found in exported HTML. Prioritize the control-character fix first (high severity).
 
 - **Sanitization tasks**
-  - [ ] Add a pipeline sanitizer that removes Office/Word/OneNote artifacts (`xmlns:o`, `Main-File`/`File-List` links, `mso-*` spans/attributes, `mso-spacerun`, `class` tokens injected by Office) during conversion.
+  - [x] Add a pipeline sanitizer that removes Office/Word/OneNote artifacts (`xmlns:o`, `Main-File`/`File-List` links, `mso-*` spans/attributes, `mso-spacerun`, `class` tokens injected by Office) during conversion.
+  - regenerate `Tests/Cleaned` fixtures to verify the sanitizer (local step)
   - [ ] Remove obsolete attributes left by conversion (e.g. `summary` on `table`, legacy `xmlns` values) or normalize them to modern equivalents.
   - [ ] Normalize or collapse repetitive inline font/size/style attributes into a minimal stylesheet or atomic utility classes to reduce output size and duplicated markup.
 
