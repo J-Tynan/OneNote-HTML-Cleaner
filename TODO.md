@@ -45,9 +45,11 @@ Note: MHTML → modern HTML pipeline is nearing completion (core transforms and 
  - [x] Add cache‑update / service‑worker unregister guidance and automation
   - Implemented: worker files included in precache; `SKIP_WAITING` message handler added; activation handler deletes old caches and calls `clients.claim()`.
 
-- [ ] Harden message id / callback handling and diagnostics
-  - Log unmatched messages with timestamp and summary.
-  - Add reserved diagnostics channel.
+- [x] Harden message id / callback handling and diagnostics
+  - Wrapper issues its own UUID for every payload and tracks caller-supplied ids.
+  - Detect duplicate responses, log unmatched messages, and record pending callback counts.
+  - Diagnostics use a structured `__diag__` schema; tests ensure conformance.
+  - Added Playwright/unit tests (`worker-duplicate-response`, `worker-unmatched-message`, `diagnostic-schema`) and extended existing tests.
 
 - [ ] Standardize logging formats across UI, wrapper, and worker
   - Use consistent prefixes: `[ui]`, `[worker-wrapper]`, `[worker]`.
@@ -251,6 +253,6 @@ These tasks are intended to be conservative and test-driven: implement detection
  [x] Create focused unit/regression test(s) asserting list markup fidelity for problem fixtures.
  [x] Implement minimal pipeline fix (non-destructive): stripped explicit bullet glyphs and collapsed trivial nested lists in the sanitizer.
  [x] Run full regression suite and review output in `Tests/Cleaned` — regression test(s) pass and cleaned HTML saved.
- [ ] Document the root cause and fix in `README.md` and release notes.
+ [x] Document the root cause and fix in `README.md` and release notes.
 
  Note: The cleaned outputs for the affected fixtures have been placed in `Tests/Cleaned` and the focused regression test confirms the list-duplication regression is resolved. Please review and commit when ready.

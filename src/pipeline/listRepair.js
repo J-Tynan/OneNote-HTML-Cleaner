@@ -239,13 +239,14 @@ export function mergeStyled(doc) {
     const mergedOl = doc.createElement('ol');
     // copy attributes
     for (const attr of first.attributes) mergedOl.setAttribute(attr.name, attr.value);
-    // collect all li children
+    // collect all li children (moving rather than cloning)
     ols.forEach(ol => {
-      getLiNodesFromOl(ol).forEach(li => {
-        mergedOl.appendChild(li.cloneNode(true));
+      const lis = getLiNodesFromOl(ol).slice(); // copy to avoid live list issues
+      lis.forEach(li => {
+        mergedOl.appendChild(li); // moves node from original ol
       });
     });
-    // remove original ols and append merged
+    // remove original ols (now likely empty) and append merged
     ols.forEach(ol => ol.remove());
     td.appendChild(mergedOl);
     mergedCount++;

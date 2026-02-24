@@ -64,11 +64,18 @@ export default class WorkerManager {
     this._handshakeTimer = setTimeout(this._onHandshakeTimeout, this.handshakeTimeoutMs);
 
     this.callbacks = new Map();
+    // map wrapperId -> original caller id (may be null)
+    this._wrapperToOriginal = new Map();
+    // set of recently handled wrapperIds (for duplicate-response detection)
+    this._recentlyHandled = new Set();
     this.defaultTimeoutMs = 120000;
 
     // In-memory diagnostics buffer (capped) for unmatched messages / worker diagnostics
     this.diagnostics = [];
     this._diagnosticsMax = 50;
+
+    // configuration
+    this.maxPendingCallbacks = 1000; // arbitrary cap to avoid unbounded memory
 
     this.rejectAllPending = (reason) => {
       for (const [id, cb] of this.callbacks.entries()) {
@@ -161,6 +168,23 @@ export default class WorkerManager {
       }
 
       if (!cb) {
+        // maybe this is a duplicate of a previously-handled id?
+        if (msg && msg.id && this._recentlyHandled.has(msg.id)) {
+          // record duplicate-response diagnostic
+          const dup = {
+            kind: 'duplicate-response',
+            id: msg.id,
+            status: msg.status || msg.type,
+            timestamp: Date.now(),
+            workerUrl: this.workerUrl,
+            note: 'worker sent a second message for the same id',
+            pendingCallbacks: this.callbacks.size
+          };
+          this._pushDiagnostic(dup);
+          logWarn('worker-wrapper', { msg: 'duplicate worker response', meta: dup });
+          return;
+        }
+
         // Structured unmatched-message logging + store into diagnostics buffer
         try {
           const summary = {
@@ -174,14 +198,7 @@ export default class WorkerManager {
             preview: this.summarizePayload(msg, 256)
           };
 
-          this.diagnostics.push(summary);
-          if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
-          try {
-            if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
-              window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: summary }));
-            }
-          } catch (ignore) {}
-
+          this._pushDiagnostic(summary);
           logWarn('worker-wrapper', { msg: 'unmatched worker message (stored diagnostic)', meta: summary });
         } catch (ignore) {}
         return;
@@ -192,11 +209,25 @@ export default class WorkerManager {
       }
 
       if (msg.status === 'done') {
+        // attach originalId for caller convenience
+        if (this._wrapperToOriginal.has(msg.id)) {
+          msg.originalId = this._wrapperToOriginal.get(msg.id);
+          this._wrapperToOriginal.delete(msg.id);
+        }
         cb.resolve(msg);
         this.callbacks.delete(msg.id);
+        this._recentlyHandled.add(msg.id);
+        // clear recentlyHandled after a short delay to limit set size
+        setTimeout(() => this._recentlyHandled.delete(msg.id), 30000);
       } else if (msg.status === 'error') {
+        if (this._wrapperToOriginal.has(msg.id)) {
+          msg.originalId = this._wrapperToOriginal.get(msg.id);
+          this._wrapperToOriginal.delete(msg.id);
+        }
         cb.reject(msg);
         this.callbacks.delete(msg.id);
+        this._recentlyHandled.add(msg.id);
+        setTimeout(() => this._recentlyHandled.delete(msg.id), 30000);
       } else if (msg.status === 'progress' && cb.onprogress) {
         cb.onprogress(msg);
       } else if (msg.status === 'unsupported') {
@@ -238,9 +269,19 @@ export default class WorkerManager {
             relativePath: payload.relativePath || payload.fileName,
             logs: result.logs
           };
+          // preserve original id mapping if available
+          if (this._wrapperToOriginal.has(msg.id)) {
+            response.originalId = this._wrapperToOriginal.get(msg.id);
+            this._wrapperToOriginal.delete(msg.id);
+          }
           cb.resolve(response);
         } catch (err) {
-          cb.reject({ id: msg.id, status: 'error', error: String(err) });
+          const errorObj = { id: msg.id, status: 'error', error: String(err) };
+          if (this._wrapperToOriginal.has(msg.id)) {
+            errorObj.originalId = this._wrapperToOriginal.get(msg.id);
+            this._wrapperToOriginal.delete(msg.id);
+          }
+          cb.reject(errorObj);
         } finally {
           this.callbacks.delete(msg.id);
         }
@@ -262,22 +303,32 @@ export default class WorkerManager {
   // malformed payloads early and prevents runtime exceptions or
   // mis-routed callbacks. If a message is invalid a diagnostic is stored
   // and the function returns false so the caller can bail out.
+  // push a diagnostic into buffer with schema enforcement
+  _pushDiagnostic(diag) {
+    try {
+      if (!diag || typeof diag !== 'object') return;
+      diag.type = '__diag__';
+      diag.timestamp = diag.timestamp || Date.now();
+      diag.source = diag.source || 'wrapper';
+      diag.workerUrl = this.workerUrl;
+      // optionally trim message fields
+      this.diagnostics.push(diag);
+      if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
+      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+        window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
+      }
+    } catch (ignore) {}
+  }
+
   validateMessage(msg) {
     if (!msg || typeof msg !== 'object') {
       const diag = {
-        kind: 'worker-diagnostic',
-        timestamp: Date.now(),
+        kind: 'invalid-message',
         payload: msg,
         note: 'received non-object message from worker',
-        workerUrl: this.workerUrl
+        pendingCallbacks: this.callbacks.size
       };
-      try {
-        this.diagnostics.push(diag);
-        if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
-        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
-          window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
-        }
-      } catch (ignore) {}
+      this._pushDiagnostic(diag);
       logWarn('worker-wrapper', { msg: 'invalid worker message', meta: { msg } });
       return false;
     }
@@ -285,19 +336,12 @@ export default class WorkerManager {
     if (msg.type === '__diag__' || msg.id === '__diag__') return true;
     if (!msg.id || typeof msg.id !== 'string') {
       const diag = {
-        kind: 'worker-diagnostic',
-        timestamp: Date.now(),
+        kind: 'missing-id',
         payload: msg,
         note: 'worker message missing id',
-        workerUrl: this.workerUrl
+        pendingCallbacks: this.callbacks.size
       };
-      try {
-        this.diagnostics.push(diag);
-        if (this.diagnostics.length > this._diagnosticsMax) this.diagnostics.shift();
-        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
-          window.dispatchEvent(new CustomEvent('worker-diagnostic', { detail: diag }));
-        }
-      } catch (ignore) {}
+      this._pushDiagnostic(diag);
       logWarn('worker-wrapper', { msg: 'worker message without id', meta: { msg } });
       return false;
     }
@@ -326,22 +370,42 @@ export default class WorkerManager {
     return this.diagnostics.slice();
   }
 
+  // number of currently unresolved callbacks
+  getPendingCount() {
+    return this.callbacks.size;
+  }
+
   enqueue(payload, onprogress, transferList = [], timeoutMs = this.defaultTimeoutMs) {
-    // Ensure every payload has a stable string id controlled by the wrapper.
-    // This prevents the worker from generating its own ID and producing
-    // unmatched-message diagnostics. Conversion helpers (UI/tests) may pass a
-    // pre-generated id, but we still normalize it here.
+    // Wrapper now always assigns its own authoritative ID. If the caller
+    // supplied one we remember it so we can echo it back later.
+    let clientId = null;
     try {
       if (!payload || typeof payload !== 'object') payload = {};
-      if (!payload.id || typeof payload.id !== 'string') {
-        payload.id = crypto.randomUUID();
+      if (payload.id && typeof payload.id === 'string') {
+        clientId = payload.id;
       }
+    } catch (e) {}
+    // generate wrapper ID
+    let wrapperId;
+    try {
+      wrapperId = crypto.randomUUID();
     } catch (e) {
-      // crypto.randomUUID may not exist in some test environments; fall back
-      // to a simple timestamp string (non-cryptographic, but unique enough).
-      if (!payload.id || typeof payload.id !== 'string') {
-        payload.id = String(Date.now()) + '-' + Math.random().toString(36).slice(2);
-      }
+      wrapperId = String(Date.now()) + '-' + Math.random().toString(36).slice(2);
+    }
+    payload.id = wrapperId;
+    this._wrapperToOriginal.set(wrapperId, clientId);
+
+    // enforce max pending callback count
+    if (this.callbacks.size >= this.maxPendingCallbacks) {
+      const diag = {
+        kind: 'overflow',
+        note: 'max pending callbacks exceeded',
+        pendingCallbacks: this.callbacks.size,
+        max: this.maxPendingCallbacks
+      };
+      this._pushDiagnostic(diag);
+      logError('worker-wrapper', { msg: 'cannot enqueue payload, max pending reached', meta: diag });
+      return Promise.reject({ id: wrapperId, status: 'error', error: 'max pending callbacks exceeded' });
     }
 
     return new Promise((resolve, reject) => {

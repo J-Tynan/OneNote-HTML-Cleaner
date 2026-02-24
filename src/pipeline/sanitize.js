@@ -253,3 +253,30 @@ export function ensureListStructure(doc) {
 
   return logs;
 }
+
+// Remove adjacent or identical duplicate <li> elements from any list. This is a
+// defensive pass meant to catch cases where earlier repairs accidentally
+// cloned or left behind items. It is idempotent and cheap for typical
+// documents. The pipeline invokes this after `ensureListStructure`.
+export function dedupeLists(doc) {
+  const logs = [];
+  const lists = Array.from(doc.querySelectorAll('ul,ol'));
+  lists.forEach(list => {
+    const seen = new Set();
+    let removed = 0;
+    Array.from(list.children).forEach(child => {
+      if (child.nodeType === ELEMENT_NODE && child.tagName.toLowerCase() === 'li') {
+        const html = child.outerHTML;
+        if (seen.has(html)) {
+          child.remove();
+          removed += 1;
+        } else {
+          seen.add(html);
+        }
+      }
+    });
+    if (removed) logs.push({ step: 'dedupeLists', list: list.tagName.toLowerCase(), removed });
+  });
+  return logs;
+}
+
