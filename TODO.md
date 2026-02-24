@@ -196,9 +196,60 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
 Fix mojibake and charset issues observed in converted exports. Follow a small, test-driven plan so changes are reversible and safe for the PWA.
 
 - [ ] Investigate MHT part `Content-Type` headers and current decoding behavior.  
-- [ ] Implement charset-aware decoding using `TextDecoder` with explicit charset selection and a CP1252 fallback for legacy parts.  
-- [ ] Add unit/regression tests that cover CP1252, UTF-8, and missing-charset scenarios (use fixtures).  
-- [ ] Re-run conversion and Playwright export audits; verify no new regressions and that mojibake is resolved.  
-- [ ] Commit, open PR, and add release notes documenting the fallback behavior and test coverage.
+ - [ ] Investigate MHT part `Content-Type` headers and current decoding behavior.
+ - [x] Discovery logging and CP1252 fallback prototyped (2026-02-23) — changes reverted to the stable pipeline; commit(s) saved in repository history.
+ - [x] Map decoded string indices back to original MHT offsets for diagnostics (2026-02-23)
+ - [x] Implement charset-aware decoding (UTF-8 → CP1252 fallback) — prototyped and validated in local tests (2026-02-23)
+ - [ ] Add unit/regression tests that cover CP1252, UTF-8, and missing-charset scenarios (use fixtures).
+ - [ ] Re-run conversion and Playwright export audits; verify no new regressions and that mojibake is resolved.
 
 Notes: prefer discovery logging first (non-invasive) before applying decoding changes to avoid surprising the PWA; I will proceed only after you approve Step 1.
+
+---
+
+## Sanitization, Quality & Encoding (recommended)
+
+These follow-ups address artifacts, control characters, accessibility, and output size issues found in exported HTML. Prioritize the control-character fix first (high severity).
+
+- **Sanitization tasks**
+  - [ ] Add a pipeline sanitizer that removes Office/Word/OneNote artifacts (`xmlns:o`, `Main-File`/`File-List` links, `mso-*` spans/attributes, `mso-spacerun`, `class` tokens injected by Office) during conversion.
+  - [ ] Remove obsolete attributes left by conversion (e.g. `summary` on `table`, legacy `xmlns` values) or normalize them to modern equivalents.
+  - [ ] Normalize or collapse repetitive inline font/size/style attributes into a minimal stylesheet or atomic utility classes to reduce output size and duplicated markup.
+
+- **Encoding & control characters**
+  - [x] Add a decode-time detection for C0 control characters (U+0000..U+001F excluding TAB/LF/CR). Log file, part, and byte offsets when found.
+  - [ ] Add unit/regression tests that assert exported HTML contains no C0 control characters; fail CI if they appear.
+  - [ ] If decoding improvements remove characters safely, implement refined `decodeBytes` / `needsFallback` logic on a feature branch and re-run regression tests.
+  - [x] If decoding cannot fully eliminate a small set of control codepoints, add a minimal sanitization/normalization step immediately prior to JSON serialization that only removes or replaces the problematic codepoints (document why).
+
+- **Accessibility & semantics checks**
+  - [ ] Add a smoke test asserting a valid heading hierarchy (exactly one page-level `h1`, then appropriate `h2`/`h3` ordering).
+  - [ ] Assert presence of a `main` landmark and one page-level `lang` attribute (choose a single `lang` and remove spurious `lang` values on inline elements).
+  - [ ] Verify that non-decorative images have `alt` text and add tests to catch inline images lacking `alt`.
+  - [ ] Add a test to detect table-based layout patterns left unnecessarily, and flag pages for manual review if excessive layout tables are present.
+
+- **Performance / output size**
+  - [ ] Add a rule to warn or reject exported HTML that inlines images larger than a configured threshold (e.g., 50 KB), to avoid bloated outputs.
+  - [ ] Add a lint/check that flags excessive inline styles (e.g., pages with > N inline style attributes) for further optimization.
+
+- **Regression fixtures**
+  - [ ] Add the problematic `.mht` fixtures (`Resolve merge conflicts`, `Communicate using Markdown`, etc.) to an encoding regression suite with locked expected outputs so fixes are covered by CI.
+
+These tasks are intended to be conservative and test-driven: implement detection and logging first, then propose small, reversible sanitization changes with regression coverage.
+
+---
+
+## New: List duplication bug (high priority)
+
+- Description: After applying the charset-fallback changes, some converted HTML files in [Tests/Cleaned](Tests/Cleaned) show duplicated bullet points or extra list markers (single lists sometimes render with one extra bullet, some lists show double bullets).
+- Repro: Converted `*.mht` files in `Tests/Cleaned` contain the regression; user tested PWA conversions and provided the samples.
+- Impact: Visual layout and semantics of lists are affected; accessibility and content fidelity may regress.
+
+### Tasks
+ [x] Investigate cause of list duplication (decode/mapping → HTML transform) — reproduced locally using `Tests/Cleaned` fixtures.
+ [x] Create focused unit/regression test(s) asserting list markup fidelity for problem fixtures.
+ [x] Implement minimal pipeline fix (non-destructive): stripped explicit bullet glyphs and collapsed trivial nested lists in the sanitizer.
+ [x] Run full regression suite and review output in `Tests/Cleaned` — regression test(s) pass and cleaned HTML saved.
+ [ ] Document the root cause and fix in `README.md` and release notes.
+
+ Note: The cleaned outputs for the affected fixtures have been placed in `Tests/Cleaned` and the focused regression test confirms the list-duplication regression is resolved. Please review and commit when ready.
