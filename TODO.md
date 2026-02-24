@@ -226,6 +226,12 @@ These follow-ups address artifacts, control characters, accessibility, and outpu
   - [ ] Remove obsolete attributes left by conversion (e.g. `summary` on `table`, legacy `xmlns` values) or normalize them to modern equivalents.  — IN-PROGRESS
   - [ ] Normalize or collapse repetitive inline font/size/style attributes into a minimal stylesheet or atomic utility classes to reduce output size and duplicated markup.  — STARTED (next task)
 
+  - Next tasks (table / style normalization):
+    - [ ] Implement `normalizeTableAttributes` in `src/pipeline/sanitize.js` — IN-PROGRESS
+    - [ ] Add unit test `Tests/table-attribute-normalization.unit.js` (covers `summary`, `border`, `cellpadding`, `cellspacing`, and Office `xmlns` cases)
+    - [ ] Regenerate `Tests/Cleaned` fixtures using `Tools/regenerate-cleaned.js` and verify `Tests/exports-regressions.js`
+    - [ ] Add an integration/regression MHT fixture that demonstrates legacy table attributes (for CI)
+
 - **Encoding & control characters**
   - [x] Add a decode-time detection for C0 control characters (U+0000..U+001F excluding TAB/LF/CR). Log file, part, and byte offsets when found.
   - [ ] Add unit/regression tests that assert exported HTML contains no C0 control characters; fail CI if they appear.
