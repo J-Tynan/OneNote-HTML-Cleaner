@@ -22,12 +22,24 @@ function analyze(html) {
   if (/(?:letter-spacing|word-spacing|line-height)\s*:/i.test(html)) {
     issues.push('contains inline spacing styles');
   }
+  // OneNote/Office artifacts we want to strip: xmlns:* declarations, mso- attributes,
+  // and leftover Main-File/File-List links in the body.
+  if (/\bxmlns:/i.test(html)) {
+    issues.push('contains xmlns: declaration');
+  }
+  if (/\bmso-/i.test(html)) {
+    issues.push('contains mso- artifact');
+  }
+  if (/Main-File/i.test(html)) {
+    issues.push('contains Main-File link');
+  }
   return issues;
 }
 
 (async () => {
   const argv = process.argv.slice(2);
-  const dir = argv[0] || path.join('Tests', 'exports-from-mht');
+  // by default, validate the cleaned HTML outputs users download; allow override
+  const dir = argv[0] || path.join('Tests', 'Cleaned');
   if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) {
     console.error('directory not found:', dir);
     process.exit(1);

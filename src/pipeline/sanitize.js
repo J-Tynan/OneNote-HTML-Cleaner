@@ -62,6 +62,73 @@ export function removeOneNoteMeta(doc) {
   return logs;
 }
 
+// remove various Office/OneNote artifacts such as mso- attributes, xmlns:*
+// declarations, and `mso-spacerun` spans. The output should retain all
+// meaningful text/content while stripping structural cruft that bloats the
+// document and may confuse downstream sanitizers.
+export function removeOfficeArtifacts(doc) {
+  const logs = [];
+  const all = Array.from(doc.querySelectorAll('*'));
+  all.forEach(el => {
+    // remove unwanted attributes
+    for (const { name } of Array.from(el.attributes)) {
+      if (/^(mso-|o:|xmlns:)/i.test(name)) {
+        el.removeAttribute(name);
+        logs.push({ step: 'RemoveAttr', tag: el.tagName, attr: name });
+      }
+      // also drop class names beginning with Mso (Office classes)
+      if (name === 'class') {
+        const cls = el.getAttribute('class');
+        if (/\bMso/i.test(cls)) {
+          el.removeAttribute('class');
+          logs.push({ step: 'RemoveClass', tag: el.tagName, details: cls });
+        }
+      }
+    }
+    // scrub style attribute value for mso- declarations
+    if (el.hasAttribute('style')) {
+      const style = el.getAttribute('style');
+      const cleaned = style.split(';').filter(s => !/mso-/i.test(s)).join(';');
+      if (cleaned !== style) {
+        el.setAttribute('style', cleaned);
+        logs.push({ step: 'CleanStyle', tag: el.tagName });
+      }
+    }
+
+    // strip mso-spacerun spans by replacing with their text (usually a space)
+    if (el.nodeType === 1) {
+      const style = el.getAttribute('style') || '';
+      if (/mso-spacerun\s*:\s*yes/i.test(style)) {
+        const txt = doc.createTextNode(el.textContent || ' ');
+        el.replaceWith(txt);
+        logs.push({ step: 'RemoveSpacerun', tag: el.tagName });
+        return; // element gone
+      }
+    }
+
+    // drop <link rel="Main-File"> or "File-List"
+    if (el.tagName.toLowerCase() === 'link') {
+      const rel = (el.getAttribute('rel') || '').toLowerCase();
+      if (rel === 'main-file' || rel === 'file-list') {
+        el.remove();
+        logs.push({ step: 'RemoveLink', details: rel });
+        return;
+      }
+    }
+
+    // collapse bullet-marker spans (some OneNote HTML wraps bullets in <span>)
+    if (el.tagName.toLowerCase() === 'span') {
+      const txt = el.textContent.trim();
+      if (/^[\u2022\u2023\u25AA\u25E6•·]$/.test(txt)) {
+        const tnode = doc.createTextNode(txt);
+        el.replaceWith(tnode);
+        logs.push({ step: 'FlattenBullet', details: txt });
+      }
+    }
+  });
+  return logs;
+}
+
 export function sanitizeImageAttributes(doc) {
   const logs = [];
   const imgs = Array.from(doc.querySelectorAll('img'));

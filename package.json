@@ -22,6 +22,7 @@
     "test:exports:regressions": "node ./Tests/exports-regressions.js",
     "test:check-c0": "node ./Tests/check-c0-exported.js",
     "test:charset": "node ./Tests/check-charset-regressions.js",
+    "test:sanitizer": "node ./Tests/sanitizer-onenote.unit.js",
     "test:worker-handshake": "node ./Tests/worker-handshake-playwright.js",
     "test:worker-init": "node ./Tests/worker-init-playwright.js",
     "test:worker-init-failure": "node ./Tests/worker-init-failure-playwright.js",

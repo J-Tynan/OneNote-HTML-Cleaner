@@ -49,6 +49,8 @@ export async function runPipeline(htmlString, config = {}) {
       defaultLang: resolvedConfig.defaultLang || 'en'
     })));
     logs.push(...ensureArray(sanitize.removeOneNoteMeta(doc)));
+    // newly added: strip Office/OneNote cruft (xmlns, mso- attributes, spacerun)
+    logs.push(...ensureArray(sanitize.removeOfficeArtifacts(doc)));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
     logs.push(...ensureArray(sanitize.removeNbsp(doc)));
     // ensure main and heading after basic sanitization

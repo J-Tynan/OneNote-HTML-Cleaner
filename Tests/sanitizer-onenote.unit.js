@@ -1,0 +1,78 @@
+import assert from 'node:assert';
+import { JSDOM } from 'jsdom';
+import * as sanitize from '../src/pipeline/sanitize.js';
+
+// polyfill DOMParser and NodeFilter for Node tests
+const dom = new JSDOM('');
+if (!global.DOMParser) global.DOMParser = dom.window.DOMParser;
+if (!global.NodeFilter) global.NodeFilter = dom.window.NodeFilter;
+
+function sanitizeHtml(html) {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
+  sanitize.removeOneNoteMeta(doc);
+  sanitize.removeOfficeArtifacts(doc);
+  sanitize.sanitizeImageAttributes(doc);
+  sanitize.removeNbsp(doc);
+  return doc.documentElement.outerHTML;
+}
+
+(function main() {
+  console.log('running OneNote sanitizer unit tests');
+  const cases = [
+    {
+      name: 'basic xmlns and links',
+      input: '<html xmlns:o="urn:foo"><head><link rel="Main-File" href=x></head><body>Hello</body></html>',
+      forbid: ['xmlns:o', 'Main-File'],
+    },
+    {
+      name: 'mso attributes removal',
+      input: '<p class="MsoNormal" style="mso-style-name:Normal;font-size:12pt">text</p>',
+      forbid: ['MsoNormal', 'mso-style-name'],
+    },
+    {
+      name: 'spacerun collapse',
+      input: '<span style="mso-spacerun:yes"> </span>',
+      forbid: ['mso-spacerun'],
+      expectContains: [' '],
+    },
+    {
+      name: 'bullet span flatten',
+      input: '<span>•</span>',
+      expectContains: ['•'],
+    },
+    {
+      name: 'list style cleaning',
+      input: '<ul style="padding-left:40px;mso-list:l0 level1 lfo1"><li>one</li></ul>',
+      forbid: ['mso-list'],
+    }
+  ];
+
+  let failed = false;
+  for (const c of cases) {
+    const out = sanitizeHtml(c.input);
+    if (c.forbid) {
+      for (const token of c.forbid) {
+        if (out.includes(token)) {
+          console.error(`${c.name}: output still contains ${token}`);
+          failed = true;
+        }
+      }
+    }
+    if (c.expectContains) {
+      for (const token of c.expectContains) {
+        if (!out.includes(token)) {
+          console.error(`${c.name}: output missing expected ${token}`);
+          failed = true;
+        }
+      }
+    }
+    if (!failed) console.log(`${c.name}: OK`);
+  }
+
+  if (failed) {
+    console.error('sanitizer-onenote: FAIL');
+    process.exit(1);
+  }
+  console.log('sanitizer-onenote: PASS');
+})();
