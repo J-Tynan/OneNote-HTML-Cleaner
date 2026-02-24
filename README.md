@@ -17,6 +17,11 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
  - Experimental support for native OneNote files (`.one`, `.onepkg`) is available but not fully implemented; see the "Native OneNote files" section for known limitations and recommended developer workflows.
  - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and will be added in future feature branches.
 
+### Recent Fixes
+
+- List duplication regression: fixed an issue where explicit bullet glyphs and trivial nested list wrappers produced duplicated bullets in cleaned exports. The sanitizer now strips leading glyph characters from `li` text nodes and collapses single-child nested lists when safe, preserving semantic lists while removing artifacts introduced by certain OneNote exports.
+- Playwright checks: added lightweight Playwright smoke tests (`Tests/ui-phase1-theme.spec.js`, `Tests/ui-phase1-convert-tooltip.spec.js`) to verify Phase 1 UI tokens and the `Convert` button behavior. Both tests passed locally during verification.
+
 ## UI experience
 
 - The front-end now follows a lightweight state machine: the import panel is always the dominant action, the status panel describes Empty → Processing → Completed/Partial, and diagnostics only appear when work is underway or issues occur.
