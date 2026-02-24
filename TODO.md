@@ -53,10 +53,14 @@ Note: MHTML → modern HTML pipeline is nearing completion (core transforms and 
   - Diagnostics use a structured `__diag__` schema; tests ensure conformance.
   - Added Playwright/unit tests (`worker-duplicate-response`, `worker-unmatched-message`, `diagnostic-schema`) and extended existing tests.
 
-- [ ] Standardize logging formats across UI, wrapper, and worker
-  - Use consistent prefixes: `[ui]`, `[worker-wrapper]`, `[worker]`.
-  - Logging helpers must be defined before use, gated behind flags, and guaranteed not to throw.
-  - Prefer structured summaries (`id`, `type`, `size`, `timestamp`) for correlation.
+- [x] Phase A: Add `createLogger()` helper and compatibility exports (done 2026-02-24)
+  - Uses existing human-readable prefixes; non-breaking.
+  - Included `Tests/logging-interface.js` to verify behaviour.
+  - TODO: migrate modules to use the new API.
+- [x] Phase B: Replace direct `logInfo`/`console.*` calls in UI, wrapper, worker and pipelines
+  - Modules updated: `src/ui.js`, `src/worker-wrapper.js`, `src/worker.js`, `src/app.js`, pipeline files, worker-globals, ui-downloads.
+  - All console logging replaced with structured human-readable logger.
+  - Tests run after migration to confirm no regressions.
 
 - [ ] Tidy Node test warnings
  - [x] Tidy Node test warnings (2026-02-20)
@@ -205,7 +209,7 @@ Fix mojibake and charset issues observed in converted exports. Follow a small, t
  - [x] Discovery logging and CP1252 fallback prototyped (2026-02-23) — changes reverted to the stable pipeline; commit(s) saved in repository history.
  - [x] Map decoded string indices back to original MHT offsets for diagnostics (2026-02-23)
  - [x] Implement charset-aware decoding (UTF-8 → CP1252 fallback) — prototyped and validated in local tests (2026-02-23)
- - [ ] Add unit/regression tests that cover CP1252, UTF-8, and missing-charset scenarios (use fixtures).
+ - [x] Add unit/regression tests that cover CP1252, UTF-8, and missing-charset scenarios (use fixtures).
  - [ ] Re-run conversion and Playwright export audits; verify no new regressions and that mojibake is resolved.
 
 Notes: prefer discovery logging first (non-invasive) before applying decoding changes to avoid surprising the PWA; I will proceed only after you approve Step 1.
