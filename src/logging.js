@@ -59,4 +59,14 @@ export const info = (source, payload) => log(source, 'info', payload);
 export const warn = (source, payload) => log(source, 'warn', payload);
 export const error = (source, payload) => log(source, 'error', payload);
 
-export default { log, info, warn, error, safeStringify };
+// factory to create a logger instance bound to a specific source string
+export function createLogger(source = 'app') {
+  return {
+    info: (payload) => info(source, payload),
+    warn: (payload) => warn(source, payload),
+    error: (payload) => error(source, payload),
+    log: (level, payload) => log(source, level, payload)
+  };
+}
+
+export default { log, info, warn, error, safeStringify, createLogger };
