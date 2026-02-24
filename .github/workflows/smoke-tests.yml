@@ -32,6 +32,9 @@ jobs:
       - name: Run charset regression tests
         run: node Tests/check-charset-regressions.js
 
+      - name: Run OneNote sanitizer unit tests
+        run: node Tests/sanitizer-onenote.unit.js
+
       - name: Check exported HTML for C0 controls
         run: node Tests/check-c0-exported.js
 

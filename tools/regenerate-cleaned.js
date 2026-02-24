@@ -1,0 +1,23 @@
+import fs from 'fs';
+import path from 'path';
+import { JSDOM } from 'jsdom';
+// polyfill DOMParser/NodeFilter for pipeline which expects browser APIs
+const dom = new JSDOM('');
+global.DOMParser = dom.window.DOMParser;
+global.NodeFilter = dom.window.NodeFilter;
+
+import { parseMht } from '../src/pipeline/mht.js';
+import { runPipeline } from '../src/pipeline/pipeline.js';
+
+async function main() {
+  const files = fs.readdirSync('Tests').filter(f => f.endsWith('.mht'));
+  for (const f of files) {
+    const raw = fs.readFileSync(path.join('Tests', f), 'latin1');
+    const p = parseMht(raw, { EnableCharsetFallback: true, EnableMapping: true });
+    const out = await runPipeline(p.html || '');
+    fs.writeFileSync(path.join('Tests', 'Cleaned', f.replace('.mht', '.html')), out.output, 'utf8');
+    console.log('regenerated', f);
+  }
+}
+
+main().catch(err => { console.error(err); process.exit(1); });
