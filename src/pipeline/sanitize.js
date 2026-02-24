@@ -117,6 +117,10 @@ export function injectCssLink(doc, cssHref) {
 }
 
 // Ensure the document contains a <main> landmark and a level-1 heading
+// cell constants for environments without global Node (e.g. Node.js/jsdom)
+const ELEMENT_NODE = typeof Node !== 'undefined' ? Node.ELEMENT_NODE : 1;
+const TEXT_NODE = typeof Node !== 'undefined' ? Node.TEXT_NODE : 3;
+
 export function ensureMainHeading(doc, options = {}) {
   const logs = [];
   const body = doc.body || doc.querySelector('body') || doc.documentElement;
@@ -180,7 +184,7 @@ export function ensureListStructure(doc) {
     let changed = false;
     const children = Array.from(list.childNodes);
     children.forEach(node => {
-      if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.nodeType === ELEMENT_NODE) {
         const tag = node.tagName.toLowerCase();
         if (tag !== 'li') {
           const li = doc.createElement('li');
@@ -188,7 +192,7 @@ export function ensureListStructure(doc) {
           list.replaceChild(li, node);
           changed = true;
         }
-      } else if (node.nodeType === Node.TEXT_NODE) {
+      } else if (node.nodeType === TEXT_NODE) {
         const txt = node.textContent.trim();
         if (txt) {
           const li = doc.createElement('li');
@@ -201,7 +205,7 @@ export function ensureListStructure(doc) {
         }
       }
       // other node types (comments) can be removed
-      else if (node.nodeType !== Node.ELEMENT_NODE) {
+      else if (node.nodeType !== ELEMENT_NODE) {
         list.removeChild(node);
         changed = true;
       }
@@ -212,5 +216,40 @@ export function ensureListStructure(doc) {
     }
   });
   if (fixedCount) logs.push({ step: 'EnsureListStructureCount', fixedCount });
+
+  // remove explicit bullet glyphs from list items (e.g. • or ·) to avoid duplicates
+  const bulletRegex = /^[\s\u00A0]*[•·\u2022\u00B7\-]+[\s\u00A0]*/;
+  Array.from(doc.querySelectorAll('li')).forEach(li => {
+    const first = li.firstChild;
+    if (first && first.nodeType === TEXT_NODE) {
+      const cleaned = first.textContent.replace(bulletRegex, '');
+      if (cleaned !== first.textContent) {
+        first.textContent = cleaned;
+        logs.push({ step: 'StripBulletGlyph', details: 'Removed explicit bullet from <li>' });
+      }
+    }
+  });
+
+  // second pass: collapse lists that merely wrap a single nested list
+  // e.g. <ul><li><ol>...</ol></li></ul>  -> <ol>...</ol>
+  const updatedLists = Array.from(doc.querySelectorAll('ul,ol'));
+  updatedLists.forEach(list => {
+    const elChildren = Array.from(list.children).filter(n=>n.nodeType===ELEMENT_NODE);
+    if (elChildren.length === 1 && elChildren[0].tagName.toLowerCase() === 'li') {
+      const li = elChildren[0];
+      const innerList = Array.from(li.children).find(n => n.tagName && /^(ul|ol)$/i.test(n.tagName));
+      if (innerList) {
+        // ensure the <li> has no other text content besides whitespace
+        const clone = li.cloneNode(true);
+        const childList = clone.querySelector('ul,ol');
+        if (childList) clone.removeChild(childList);
+        if (clone.textContent.trim() === '') {
+          list.replaceWith(innerList);
+          logs.push({ step: 'CollapseNestedList', details: `Collapsed <${list.tagName.toLowerCase()}> wrapping singleton <${innerList.tagName.toLowerCase()}>` });
+        }
+      }
+    }
+  });
+
   return logs;
 }

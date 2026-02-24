@@ -29,9 +29,9 @@ function findControls(s){
 
 for(const mht of mhtFiles){
   console.log('\n-- fixture:', mht);
-  const raw = fs.readFileSync(path.join(mhtDir,mht),'utf8');
-  const noF = parseMht(raw, { EnableCharsetFallback: false });
-  const yesF = parseMht(raw, { EnableCharsetFallback: true });
+  const raw = fs.readFileSync(path.join(mhtDir,mht),'latin1');
+  const noF = parseMht(raw, { EnableCharsetFallback: false, EnableMapping: true });
+  const yesF = parseMht(raw, { EnableCharsetFallback: true, EnableMapping: true });
   const noHtml = noF && noF.html ? noF.html : (noF && noF.output) || '';
   const yesHtml = yesF && yesF.html ? yesF.html : (yesF && yesF.output) || '';
   const nctl = findControls(noHtml);
@@ -43,6 +43,18 @@ for(const mht of mhtFiles){
 
   // If controls remain, dump raw HTML part BodyRaw and a hex preview to inspect bytes
   if ((nctl.length || yctl.length) && mhtModule) {
+    if (noF.controlCharDiagnostics && noF.controlCharDiagnostics.samples.length) {
+      console.log('  noFallback raw offsets', noF.controlCharDiagnostics.samples.map(s=>s.rawTextOffset));
+    }
+    if (yesF.controlCharDiagnostics && yesF.controlCharDiagnostics.samples.length) {
+      console.log('  withFallback raw offsets', yesF.controlCharDiagnostics.samples.map(s=>s.rawTextOffset));
+    }
+    if (yesF.parts) {
+      const htmlPart = yesF.parts.find(p => /text\/html/i.test(p.ContentType));
+      if (htmlPart) {
+        console.log('   charset declared', htmlPart.DeclaredCharset, 'used', htmlPart.CharsetUsed, 'fallback?', htmlPart.CharsetFallbackApplied);
+      }
+    }
     // find html part by reparsing quickly
     const p = (function(){
       const all = rawTextToParts(raw);

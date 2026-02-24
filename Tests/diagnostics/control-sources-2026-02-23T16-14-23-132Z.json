@@ -1,0 +1,92 @@
+[
+  {
+    "fixture": "Resolve merge conflicts.mht",
+    "mode": "noFallback",
+    "partIndex": 1,
+    "contentType": "text/html; charset=\"utf-8\"",
+    "cte": "quoted-printable",
+    "bodyRawStart": 510,
+    "sample": {
+      "index": 5256,
+      "codepoint": "U+0014",
+      "rawTextOffset": 5950
+    },
+    "rawSnippet": ".0pt;\r\n  color:#595959'><span style=3D'font-style:italic'>Merge conflicts happen",
+    "rawHex": "2e 30 70 74 3b 0d 0a 20 20 63 6f 6c 6f 72 3a 23 35 39 35 39 35 39 27 3e 3c 73 70 61 6e 20 73 74 79 6c 65 3d 33 44 27 66 6f 6e 74 2d 73 74 79 6c 65 3a 69 74 61 6c 69 63 27 3e 4d 65 72 67 65 20 63 6f 6e 66 6c 69 63 74 73 20 68 61 70 70 65 6e"
+  },
+  {
+    "fixture": "Resolve merge conflicts.mht",
+    "mode": "noFallback",
+    "partIndex": 1,
+    "contentType": "text/html; charset=\"utf-8\"",
+    "cte": "quoted-printable",
+    "bodyRawStart": 510,
+    "sample": {
+      "index": 5288,
+      "codepoint": "U+0019",
+      "rawTextOffset": 5982
+    },
+    "rawSnippet": "yle=3D'font-style:italic'>Merge conflicts happen w=\r\nhen\r\n  two people make chan",
+    "rawHex": "79 6c 65 3d 33 44 27 66 6f 6e 74 2d 73 74 79 6c 65 3a 69 74 61 6c 69 63 27 3e 4d 65 72 67 65 20 63 6f 6e 66 6c 69 63 74 73 20 68 61 70 70 65 6e 20 77 3d 0d 0a 68 65 6e 0d 0a 20 20 74 77 6f 20 70 65 6f 70 6c 65 20 6d 61 6b 65 20 63 68 61 6e"
+  },
+  {
+    "fixture": "Resolve merge conflicts.mht",
+    "mode": "withFallback",
+    "partIndex": 1,
+    "contentType": "text/html; charset=\"utf-8\"",
+    "cte": "quoted-printable",
+    "bodyRawStart": 510,
+    "sample": {
+      "index": 5256,
+      "codepoint": "U+0014",
+      "rawTextOffset": 5950
+    },
+    "rawSnippet": ".0pt;\r\n  color:#595959'><span style=3D'font-style:italic'>Merge conflicts happen",
+    "rawHex": "2e 30 70 74 3b 0d 0a 20 20 63 6f 6c 6f 72 3a 23 35 39 35 39 35 39 27 3e 3c 73 70 61 6e 20 73 74 79 6c 65 3d 33 44 27 66 6f 6e 74 2d 73 74 79 6c 65 3a 69 74 61 6c 69 63 27 3e 4d 65 72 67 65 20 63 6f 6e 66 6c 69 63 74 73 20 68 61 70 70 65 6e"
+  },
+  {
+    "fixture": "Resolve merge conflicts.mht",
+    "mode": "withFallback",
+    "partIndex": 1,
+    "contentType": "text/html; charset=\"utf-8\"",
+    "cte": "quoted-printable",
+    "bodyRawStart": 510,
+    "sample": {
+      "index": 5288,
+      "codepoint": "U+0019",
+      "rawTextOffset": 5982
+    },
+    "rawSnippet": "yle=3D'font-style:italic'>Merge conflicts happen w=\r\nhen\r\n  two people make chan",
+    "rawHex": "79 6c 65 3d 33 44 27 66 6f 6e 74 2d 73 74 79 6c 65 3a 69 74 61 6c 69 63 27 3e 4d 65 72 67 65 20 63 6f 6e 66 6c 69 63 74 73 20 68 61 70 70 65 6e 20 77 3d 0d 0a 68 65 6e 0d 0a 20 20 74 77 6f 20 70 65 6f 70 6c 65 20 6d 61 6b 65 20 63 68 61 6e"
+  },
+  {
+    "fixture": "Communicate using Markdown.mht",
+    "mode": "noFallback",
+    "partIndex": 1,
+    "contentType": "text/html; charset=\"utf-8\"",
+    "cte": "quoted-printable",
+    "bodyRawStart": 513,
+    "sample": {
+      "index": 5504,
+      "codepoint": "U+0019",
+      "rawTextOffset": 6225
+    },
+    "rawSnippet": "c'>This course wi=\r\nll walk\r\n  you through creating and using headings more effe",
+    "rawHex": "63 27 3e 54 68 69 73 20 63 6f 75 72 73 65 20 77 69 3d 0d 0a 6c 6c 20 77 61 6c 6b 0d 0a 20 20 79 6f 75 20 74 68 72 6f 75 67 68 20 63 72 65 61 74 69 6e 67 20 61 6e 64 20 75 73 69 6e 67 20 68 65 61 64 69 6e 67 73 20 6d 6f 72 65 20 65 66 66 65"
+  },
+  {
+    "fixture": "Communicate using Markdown.mht",
+    "mode": "withFallback",
+    "partIndex": 1,
+    "contentType": "text/html; charset=\"utf-8\"",
+    "cte": "quoted-printable",
+    "bodyRawStart": 513,
+    "sample": {
+      "index": 5504,
+      "codepoint": "U+0019",
+      "rawTextOffset": 6225
+    },
+    "rawSnippet": "c'>This course wi=\r\nll walk\r\n  you through creating and using headings more effe",
+    "rawHex": "63 27 3e 54 68 69 73 20 63 6f 75 72 73 65 20 77 69 3d 0d 0a 6c 6c 20 77 61 6c 6b 0d 0a 20 20 79 6f 75 20 74 68 72 6f 75 67 68 20 63 72 65 61 74 69 6e 67 20 61 6e 64 20 75 73 69 6e 67 20 68 65 61 64 69 6e 67 73 20 6d 6f 72 65 20 65 66 66 65"
+  }
+]

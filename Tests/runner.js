@@ -1,6 +1,20 @@
 import { runPipeline } from '../src/pipeline/pipeline.js';
 import { parseMht } from '../src/pipeline/mht.js';
 
+// Node-mode: allow running smoke tests from the CLI
+if (typeof document === 'undefined') {
+  const argv = process.argv.slice(2);
+  if (argv.includes('--run-smoke')) {
+    // run the convert-button smoke Playwright test
+    const script = 'Tests/convert-button-smoke-playwright.js';
+    const { spawnSync } = await import('child_process');
+    const res = spawnSync(process.execPath, [script], { stdio: 'inherit' });
+    process.exit(res.status || 0);
+  }
+  console.log('Tests/runner: no DOM available. Use --run-smoke to run smoke tests.');
+  process.exit(0);
+}
+
 const resultsEl = document.getElementById('results');
 const runButton = document.getElementById('run');
 
