@@ -29,6 +29,9 @@ jobs:
       - name: Install Playwright browsers (best-effort)
         run: npx playwright install --with-deps || true
 
+      - name: Check exported HTML for C0 controls
+        run: node Tests/check-c0-exported.js
+
       - name: Start static server
         run: |
           # start a simple static server on port 58730 in background

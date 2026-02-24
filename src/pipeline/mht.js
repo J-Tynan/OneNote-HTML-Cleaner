@@ -1,6 +1,9 @@
 // src/pipeline/mht.js
 // Minimal MHT/MHTML parser and image map builder for the PWA pipeline.
 // Exports:
+
+import { createLogger } from '../logging.js';
+const logger = createLogger('mht');
 //   parseMht(rawText, options={}) -> { html: string|null, parts: Array, boundary: string|null, imageMap: Object,
 //       controlCharDiagnostics?, controlCharSanitized?,
 //       parts[].BodyRawStart?, parts[].BodyDecodedMapping? }
