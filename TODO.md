@@ -138,14 +138,15 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
     Phase 1 — Update UI Styling (Controls, Buttons, Spacing)
  - [x] Add testing dropdown in header (`ui-style-variant`) with 3–4 variant presets; dropdown has been removed after variant selection.
  - [x] Implement stylesheet tokens and base `.btn` updates used by the variants (`--radius-md`, `--btn-padding-x`, `--btn-shadow`).
-    - [ ] Verify changes with visual QA and Playwright smoke tests.
+    - [x] Verify changes with visual QA and Playwright smoke tests.
+      - Playwright smoke tests added: `Tests/ui-phase1-theme.spec.js`, `Tests/ui-phase1-convert-tooltip.spec.js` — both passed locally.
 
     Acceptance criteria:
     - Convert tooltip appears on hover/focus when `auto-convert` is enabled and `Convert` is disabled.
     - Primary and secondary buttons show rounded corners, stronger contrast, and consistent padding across app.
 
     Phase 2 — Light Theme Variants
-    - [ ] Add testing dropdown in header (`light-theme-variant`) with 3–4 Light theme choices (e.g. `Light Default`, `Warm`, `High Contrast`, `Muted`).
+    - [ ] Add testing dropdown in header (`light-theme-variant`) with 7–8 Light theme choices (e.g. `Light Default`, `Warm`, `High Contrast`, `Muted`).
     - [ ] Implement variant CSS for tokens used in exported HTML if required.
     - [ ] Run visual QA and automated tests to ensure exported HTML remains stable.
 
@@ -153,7 +154,7 @@ Begin with the smallest, highest‑impact items to unblock diagnostics and relea
     - Selecting a Light theme variant updates the UI immediately and persists choice during the session.
 
     Phase 3 — Dark Theme Variants
-    - [ ] Add testing dropdown in header (`dark-theme-variant`) with 3–4 Dark theme choices (e.g. `Dark Default`, `Blue Tint`, `Mono`, `High Contrast`).
+    - [ ] Add testing dropdown in header (`dark-theme-variant`) with 7–8 Dark theme choices (e.g. `Dark Default`, `Blue Tint`, `Mono`, `High Contrast`).
     - Selecting a Dark theme variant updates the UI immediately and persists choice during the session.
 
     Notes and rollout
