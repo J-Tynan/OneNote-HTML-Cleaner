@@ -16,6 +16,17 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
+## Fixture Handling Policy
+
+- The `Tests/Cleaned/` directory contains generated HTML and is intentionally **not** checked in.
+- Regenerate these files locally using `npm run tools:regen-cleaned` (or `node Tools/regenerate-cleaned.js`).
+- After regeneration, run smoke/regression tests (`npm run test:exports:regressions && npm run test:smoke:native`).
+- Update `Tests/expected/native-regression.json` when adding/removing `.mht` inputs.
+
+(This policy keeps large artifacts out of source control and ensures developers rebuild them on demand.)
+
+---
+
 ## Rebuild & Change Safety Rules (PWA)
 
 - Apply changes in small, isolated batches.

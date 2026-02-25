@@ -66,6 +66,27 @@ Developer note: the Help modal lives in `index.html` as `#helpModal`. Styles for
 - Additions: there are unit tests for download helpers and other pipeline contracts under `Tests/`.
  - New: a Playwright test `Tests/worker-init-playwright.js` validates the init → ready → job ordering, and the wrapper now sends the explicit init message to the worker during startup.
 
+### Regenerating cleaned fixtures
+
+The project keeps `Tests/Cleaned/` out of version control; those HTML files are generated artifacts produced by the regression helper script. When you need to update or recreate them (for example, after modifying the conversion pipeline), run the helper from the workspace root:
+
+```powershell
+npm run tools:regen-cleaned
+# or directly:
+node Tools/regenerate-cleaned.js
+```
+
+After regeneration you can verify the results with the built-in smoke and regression runners:
+
+```powershell
+npm run test:exports:regressions
+npm run test:smoke:native
+```
+
+These commands check the current `Tests/*.mht` fixtures and ensure output matches expectations. If you add or remove `.mht` fixtures, update `Tests/expected/native-regression.json` accordingly so the native smoke test knows which files to validate.
+
+The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it local and regenerate as needed. See the project README and TODO for more details.
+
 ## Tailwind Migration (Scoped)
 
 - Tailwind runs with `preflight` disabled to avoid global resets.
