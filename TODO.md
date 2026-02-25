@@ -11,6 +11,8 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
 - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
 - [x] Convert-button end-to-end smoke test added: `Tests/convert-button-smoke-playwright.js` (2026-02-24)
+ - [x] Run local MHT conversion tests and regenerate `Tests/Cleaned` (2026-02-25)
+ - [x] Populate missing converted fixtures used by native smoke suite (local-only) (2026-02-25)
 
 ---
 
