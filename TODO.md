@@ -60,7 +60,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Encoding & character safety
 - [ ] Assert exported HTML is UTF‑8 encoded.
-- [ ] Add CI test asserting no C0 control characters appear in output.
+- [x] Add CI test asserting no C0 control characters appear in output.
 - [ ] Lock charset fallback behavior behind tests and documentation.
 
 ### Accessibility baseline
@@ -135,7 +135,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Encoding & control characters
 - [x] Detect C0 control characters at decode time.
-- [ ] Add CI test asserting no control characters in output.
+ - [x] Add CI test asserting no control characters in output.
 - [ ] Apply minimal sanitization only if decoding cannot fully resolve issues.
 
 ### Accessibility & semantics
