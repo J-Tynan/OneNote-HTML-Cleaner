@@ -40,7 +40,8 @@ const PROFILE_PRESETS = {
     RemoveMigratedInlineDeclarations: false,
     InlineStyleMigrationSelector: '[style]',
     InjectTailwindCss: true,
-    TailwindCssHref: 'assets/tailwind-output.css'
+    TailwindCssHref: 'assets/tailwind-output.css',
+    CollapseInlineStyles: false
   },
   generic: {
     Profile: 'generic',
@@ -55,7 +56,8 @@ const PROFILE_PRESETS = {
     RemoveMigratedInlineDeclarations: false,
     InlineStyleMigrationSelector: '[style]',
     InjectTailwindCss: false,
-    TailwindCssHref: 'assets/tailwind-output.css'
+    TailwindCssHref: 'assets/tailwind-output.css',
+    CollapseInlineStyles: false
   }
 };
 

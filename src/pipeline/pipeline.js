@@ -76,6 +76,14 @@ export async function runPipeline(htmlString, config = {}) {
       })));
     }
 
+    const collapseInlineStyles = resolvedConfig.CollapseInlineStyles !== false;
+    if (collapseInlineStyles) {
+      logs.push(...ensureArray(sanitize.collapseInlineStyleDuplicates(doc, {
+        minCount: resolvedConfig.CollapseInlineStylesMinCount || 3,
+        removeMigratedDeclarations: resolvedConfig.RemoveMigratedInlineDeclarations === true
+      })));
+    }
+
     const migrateInlineStyles = resolvedConfig.MigrateInlineStylesToUtilities !== false;
     if (migrateInlineStyles) {
       logs.push(...ensureArray(migrateInlineStylesToUtilities(doc, {

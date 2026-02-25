@@ -153,5 +153,14 @@
       "InjectTailwindCss": true,
       "TailwindCssHref": "assets/tailwind-output.css"
     }
+  },
+  {
+    "name": "collapse-inline-styles",
+    "input": "./fixtures/inline-style-collapse.html",
+    "expected": "./expected/inline-style-collapse.html",
+    "config": {
+      "CollapseInlineStyles": true,
+      "RemoveMigratedInlineDeclarations": true
+    }
   }
 ]

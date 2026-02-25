@@ -1,6 +1,32 @@
 // src/pipeline/sanitize.js
 // Lightweight sanitization and head cleanup inspired by the PowerShell script.
 
+// reuse helpers for inline-style analysis
+import {
+  parseStyle,
+  mapFontSize,
+  mapFontWeight,
+  mapMarginClass,
+  FONT_FAMILY_RE,
+  FONT_SIZE_RE,
+  FONT_WEIGHT_RE,
+  MARGIN_TOP_RE,
+  MARGIN_BOTTOM_RE
+} from './inlineStyleMigration.js';
+
+// small helper to add a class to an element (works even without classList)
+function addClass(el, className) {
+  if (!el || !className) return;
+  if (typeof el.classList !== 'undefined') {
+    el.classList.add(className);
+    return;
+  }
+  const classes = new Set(String(el.getAttribute('class') || '').split(/\s+/).filter(Boolean));
+  classes.add(className);
+  el.setAttribute('class', Array.from(classes).join(' '));
+}
+
+
 export function ensureHead(doc, options = {}) {
   const logs = [];
   let head = doc.querySelector('head');
@@ -224,6 +250,96 @@ export function injectCssLink(doc, cssHref) {
   link.setAttribute('href', cssHref);
   head.appendChild(link);
   return [{ step: 'InjectCss', details: cssHref }];
+}
+
+// collapse repeated inline styles among siblings by promoting common
+// declarations into a class on the parent.  This is intentionally
+// conservative: only full-style-text duplicates occurring at least
+// `minCount` times are considered.  When `removeMigratedDeclarations`
+// is true, the original `style` attribute is removed from the
+// affected children.
+export function collapseInlineStyleDuplicates(doc, options = {}) {
+  const logs = [];
+  const minCount = typeof options.minCount === 'number' ? options.minCount : 3;
+  const remove = options.removeMigratedDeclarations === true;
+
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  // utility to compute classes from a style string (reuses parsing logic)
+  function computeClasses(styleText) {
+    const classes = [];
+    const entries = parseStyle(styleText);
+    entries.forEach(({ prop, value }) => {
+      const normalized = prop.toLowerCase();
+      if (FONT_FAMILY_RE.test(normalized)) {
+        classes.push('font-sans');
+        return;
+      }
+      if (FONT_SIZE_RE.test(normalized)) {
+        const cls = mapFontSize(value);
+        if (cls) classes.push(cls);
+        return;
+      }
+      if (FONT_WEIGHT_RE.test(normalized)) {
+        const cls = mapFontWeight(value);
+        if (cls) classes.push(cls);
+        return;
+      }
+      if (MARGIN_TOP_RE.test(normalized)) {
+        const cls = mapMarginClass('mt', value);
+        if (cls) classes.push(cls);
+        return;
+      }
+      if (MARGIN_BOTTOM_RE.test(normalized)) {
+        const cls = mapMarginClass('mb', value);
+        if (cls) classes.push(cls);
+        return;
+      }
+    });
+    return classes.filter(Boolean);
+  }
+
+  // iterate all element parents
+  const parents = Array.from(doc.querySelectorAll('*'));
+  let promotions = 0;
+  let childrenFixed = 0;
+
+  parents.forEach(parent => {
+    const children = Array.from(parent.children).filter(c => c.getAttribute && c.getAttribute('style'));
+    if (children.length < minCount) return;
+
+    const styleGroups = new Map();
+    children.forEach(child => {
+      const txt = (child.getAttribute('style') || '').trim();
+      if (!txt) return;
+      const arr = styleGroups.get(txt) || [];
+      arr.push(child);
+      styleGroups.set(txt, arr);
+    });
+
+    for (const [styleText, arr] of styleGroups) {
+      if (arr.length >= minCount) {
+        const classes = computeClasses(styleText);
+        if (classes.length) {
+          classes.forEach(cl => addClass(parent, cl));
+          promotions++;
+          if (remove) {
+            arr.forEach(ch => {
+              ch.removeAttribute('style');
+              childrenFixed++;
+            });
+          }
+          logs.push({ step: 'CollapseInlineStyles', parent: parent.tagName.toLowerCase(), style: styleText, count: arr.length, classes });
+        }
+        break; // only one style per parent
+      }
+    }
+  });
+
+  if (promotions) {
+    logs.push({ step: 'CollapseInlineStylesSummary', promotions, childrenFixed, minCount, remove });
+  }
+  return logs;
 }
 
 // Ensure the document contains a <main> landmark and a level-1 heading
