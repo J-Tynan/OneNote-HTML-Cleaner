@@ -36,10 +36,11 @@ let overallFail = false;
 
 for (const fixture of fixtures) {
   const raw = fs.readFileSync(fixture, 'binary');
-  const parsed = parseMht(raw, { EnableCharsetFallback: true });
+  const parsed = parseMht(raw, { EnableCharsetFallback: true, EnableMapping: true });
   const htmlInput = parsed.html || '';
 
-  let { output } = await runPipeline(htmlInput, { EnableCharsetFallback: true });
+  // include imageMap so pipeline can inline any referenced images
+  let { output } = await runPipeline(htmlInput, { EnableCharsetFallback: true, imageMap: parsed.imageMap || {} });
   // allow manual fault injection for demonstration/debugging
   if (process.env.FORCE_C0_TEST && !overallFail) {
     output = '\u0001' + output;

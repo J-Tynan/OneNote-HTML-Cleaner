@@ -131,7 +131,8 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Remove Office/OneNote artifacts.
 - [ ] Remove obsolete attributes (`summary`, legacy `xmlns`).
 - [ ] Normalize repetitive inline styles.
-- [ ] Implement `normalizeTableAttributes` with unit tests.
+- [x] Implement `normalizeTableAttributes` with unit tests.
+- [x] Restore embedded images in pipeline and add `image-embedding.unit.js`.
 
 ### Encoding & control characters
 - [x] Detect C0 control characters at decode time.
