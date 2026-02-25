@@ -38,6 +38,9 @@ jobs:
       - name: Check exported HTML for C0 controls
         run: node Tests/check-c0-exported.js
 
+      - name: Check pipeline output for C0 controls
+        run: npm run test:check-c0-pipeline
+
       - name: Start static server
         run: |
           # start a simple static server on port 58730 in background
