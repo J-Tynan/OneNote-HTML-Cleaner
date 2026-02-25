@@ -10,6 +10,7 @@ import { parseMht } from '../src/pipeline/mht.js';
 import { runPipeline } from '../src/pipeline/pipeline.js';
 
 async function main() {
+  fs.mkdirSync(path.join('Tests', 'Cleaned'), { recursive: true });
   const files = fs.readdirSync('Tests').filter(f => f.endsWith('.mht'));
   for (const f of files) {
     const raw = fs.readFileSync(path.join('Tests', f), 'latin1');

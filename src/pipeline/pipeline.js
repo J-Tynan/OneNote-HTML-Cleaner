@@ -56,6 +56,9 @@ export async function runPipeline(htmlString, config = {}) {
       logs.push(...ensureArray(sanitize.normalizeTableAttributes(doc)));
     }
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
+    logs.push(...ensureArray(sanitize.ensureImageAlt(doc, {
+      fallbackAlt: resolvedConfig.ImageAltFallback || 'Image'
+    })));
     logs.push(...ensureArray(sanitize.removeNbsp(doc)));
     // ensure main and heading after basic sanitization
     logs.push(...ensureArray(sanitize.ensureMainHeading(doc, {

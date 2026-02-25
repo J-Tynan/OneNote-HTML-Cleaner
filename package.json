@@ -6,6 +6,8 @@
   "scripts": {
     "build:tailwind": "tailwindcss -c tailwind.config.cjs -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --minify",
     "watch:tailwind": "tailwindcss -c tailwind.config.cjs -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --watch",
+    "tools:regen-cleaned": "node ./tools/regenerate-cleaned.js",
+    "test:gate:native": "npm run tools:regen-cleaned && npm run test:exports:regressions && npm run test:smoke:native && npm run test:forbidden-artifacts",
     "test:smoke:native": "node ./Tests/smoke-native.js",
     "test:toolbar": "node ./Tests/toolbar-injector.js",
     "test:semantic:native": "node ./Tests/semantic-native-parser.js",
@@ -20,6 +22,8 @@
     "test:playwright:a11y": "node ./Tests/playwright-a11y.js",
     "test:playwright:a11y-exports": "node ./Tests/playwright-a11y-exports.js --dir Tests/Cleaned",
     "test:exports:regressions": "node ./Tests/exports-regressions.js",
+    "test:image-alt": "node ./Tests/image-alt.unit.js",
+    "test:forbidden-artifacts": "node ./Tests/check-forbidden-artifacts.js --dir Tests/Cleaned",
     "test:check-c0": "node ./Tests/check-c0-exported.js",
     "test:check-c0-pipeline": "node ./Tests/check-c0-pipeline.js",
     "test:charset": "node ./Tests/check-charset-regressions.js",

@@ -19,8 +19,8 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 ## Fixture Handling Policy
 
 - The `Tests/Cleaned/` directory contains generated HTML and is intentionally **not** checked in.
-- Regenerate these files locally using `npm run tools:regen-cleaned` (or `node Tools/regenerate-cleaned.js`).
-- After regeneration, run smoke/regression tests (`npm run test:exports:regressions && npm run test:smoke:native`).
+- Regenerate these files locally using `npm run tools:regen-cleaned` (or `node tools/regenerate-cleaned.js`).
+- After regeneration, run smoke/regression tests (`npm run test:gate:native`).
 - Update `Tests/expected/native-regression.json` when adding/removing `.mht` inputs.
 
 (This policy keeps large artifacts out of source control and ensures developers rebuild them on demand.)
@@ -153,11 +153,9 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] Apply minimal sanitization only if decoding cannot fully resolve issues.
 
 ### Accessibility & semantics
-- [ ] Add heading hierarchy smoke test.
-
 - [x] Add heading hierarchy smoke test. (2026-02-25)
 - [x] Assert single page‑level `lang` attribute.
-- [ ] Add test for missing `alt` text on images.
+- [x] Add test for missing `alt` text on images. (2026-02-25)
 - [ ] Detect excessive layout tables and flag for review.
 
 ### Performance / output size

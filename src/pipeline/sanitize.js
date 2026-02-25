@@ -253,6 +253,38 @@ export function sanitizeImageAttributes(doc) {
   return logs;
 }
 
+export function ensureImageAlt(doc, options = {}) {
+  const logs = [];
+  const imgs = Array.from(doc.querySelectorAll('img'));
+  const fallbackAlt = typeof options.fallbackAlt === 'string' && options.fallbackAlt.trim()
+    ? options.fallbackAlt.trim()
+    : 'Image';
+
+  let updated = 0;
+  let decorativeSkipped = 0;
+
+  imgs.forEach(img => {
+    const role = String(img.getAttribute('role') || '').trim().toLowerCase();
+    const ariaHidden = String(img.getAttribute('aria-hidden') || '').trim().toLowerCase();
+    const isDecorative = role === 'presentation' || role === 'none' || ariaHidden === 'true';
+    if (isDecorative) {
+      decorativeSkipped++;
+      return;
+    }
+
+    const alt = img.getAttribute('alt');
+    if (alt === null || !String(alt).trim()) {
+      img.setAttribute('alt', fallbackAlt);
+      updated++;
+    }
+  });
+
+  if (updated || decorativeSkipped) {
+    logs.push({ step: 'EnsureImageAlt', updated, decorativeSkipped });
+  }
+  return logs;
+}
+
 export function removeNbsp(doc) {
   const logs = [];
   if (!doc || typeof doc.createTreeWalker !== 'function') {

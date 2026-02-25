@@ -41,6 +41,9 @@ jobs:
       - name: Check pipeline output for C0 controls
         run: npm run test:check-c0-pipeline
 
+      - name: Regenerate cleaned fixtures and run native gates
+        run: npm run test:gate:native
+
       - name: Start static server
         run: |
           # start a simple static server on port 58730 in background

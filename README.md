@@ -73,7 +73,7 @@ The project keeps `Tests/Cleaned/` out of version control; those HTML files are 
 ```powershell
 npm run tools:regen-cleaned
 # or directly:
-node Tools/regenerate-cleaned.js
+node tools/regenerate-cleaned.js
 ```
 
 After regeneration you can verify the results with the built-in smoke and regression runners:
@@ -81,6 +81,9 @@ After regeneration you can verify the results with the built-in smoke and regres
 ```powershell
 npm run test:exports:regressions
 npm run test:smoke:native
+npm run test:forbidden-artifacts
+# all-in-one native gate:
+npm run test:gate:native
 ```
 
 These commands check the current `Tests/*.mht` fixtures and ensure output matches expectations. If you add or remove `.mht` fixtures, update `Tests/expected/native-regression.json` accordingly so the native smoke test knows which files to validate.
