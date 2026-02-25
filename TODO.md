@@ -143,7 +143,9 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Accessibility & semantics
 - [ ] Add heading hierarchy smoke test.
-- [ ] Assert single page‑level `lang` attribute.
+
+- [x] Add heading hierarchy smoke test. (2026-02-25)
+- [x] Assert single page‑level `lang` attribute.
 - [ ] Add test for missing `alt` text on images.
 - [ ] Detect excessive layout tables and flag for review.
 
