@@ -205,3 +205,6 @@ export function migrateInlineStylesToUtilities(doc, options = {}) {
 
   return logs;
 }
+
+// helpers exported for unit testing
+export { parseStyle, cssToPx, mapFontSize, mapFontWeight, mapMarginClass };
