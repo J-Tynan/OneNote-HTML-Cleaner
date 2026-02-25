@@ -51,6 +51,10 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.removeOneNoteMeta(doc)));
     // newly added: strip Office/OneNote cruft (xmlns, mso- attributes, spacerun)
     logs.push(...ensureArray(sanitize.removeOfficeArtifacts(doc)));
+    // clean up tables: obsolete attrs, legacy xmlns, summary
+    if (resolvedConfig.NormalizeTables !== false) {
+      logs.push(...ensureArray(sanitize.normalizeTableAttributes(doc)));
+    }
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
     logs.push(...ensureArray(sanitize.removeNbsp(doc)));
     // ensure main and heading after basic sanitization

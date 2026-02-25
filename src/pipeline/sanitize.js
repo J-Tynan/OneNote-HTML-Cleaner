@@ -129,6 +129,49 @@ export function removeOfficeArtifacts(doc) {
   return logs;
 }
 
+// normalize/remove obsolete or presentational table attributes
+export function normalizeTableAttributes(doc, options = {}) {
+  const logs = [];
+  // helper to detect Office/OneNote namespace URIs
+  const officeNsRe = /^https?:\/\/schemas\.microsoft\.com\/(office|onenote|word)/i;
+
+  Array.from(doc.querySelectorAll('table')).forEach(tbl => {
+    const removed = [];
+    // summary handling
+    if (tbl.hasAttribute('summary')) {
+      const val = tbl.getAttribute('summary');
+      if (/^mso-/i.test(val) || officeNsRe.test(val)) {
+        tbl.removeAttribute('summary');
+        removed.push('summary');
+      } else {
+        // keep value for review/accessibility
+        tbl.setAttribute('data-legacy-summary', val);
+        tbl.removeAttribute('summary');
+        logs.push({ step: 'NormalizeTableAttr', tag: 'TABLE', action: 'movedSummary', value: val });
+      }
+    }
+    // presentational attrs
+    ['border','cellpadding','cellspacing','align','valign'].forEach(a => {
+      if (tbl.hasAttribute(a)) {
+        const v = tbl.getAttribute(a);
+        tbl.removeAttribute(a);
+        removed.push(a);
+        tbl.setAttribute(`data-legacy-${a}`, v);
+      }
+    });
+    // bare xmlns removal when Office-related
+    if (tbl.hasAttribute('xmlns')) {
+      const ns = tbl.getAttribute('xmlns');
+      if (officeNsRe.test(ns)) {
+        tbl.removeAttribute('xmlns');
+        removed.push('xmlns');
+      }
+    }
+    if (removed.length) logs.push({ step: 'NormalizeTableAttr', tag: 'TABLE', removed });
+  });
+  return logs;
+}
+
 export function sanitizeImageAttributes(doc) {
   const logs = [];
   const imgs = Array.from(doc.querySelectorAll('img'));
