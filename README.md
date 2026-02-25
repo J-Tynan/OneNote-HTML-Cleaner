@@ -80,11 +80,20 @@ After regeneration you can verify the results with the built-in smoke and regres
 
 ```powershell
 npm run test:exports:regressions
+npm run test:locked-fixtures
 npm run test:smoke:native
 npm run test:forbidden-artifacts
 # all-in-one native gate:
 npm run test:gate:native
 ```
+
+If conversion changes are intentional and should become the new locked baseline, update the committed fixture snapshots:
+
+```powershell
+npm run fixtures:rebaseline
+```
+
+Then re-run `npm run test:gate:native` before committing.
 
 These commands check the current `Tests/*.mht` fixtures and ensure output matches expectations. If you add or remove `.mht` fixtures, update `Tests/expected/native-regression.json` accordingly so the native smoke test knows which files to validate.
 

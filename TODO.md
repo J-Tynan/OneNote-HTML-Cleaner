@@ -61,14 +61,14 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] Assert lists are represented only with `<ul>/<ol>/<li>` (no bullet glyphs).
 
 ### Forbidden markup & artifacts
-- [ ] Add CI check asserting no `mso-*` attributes appear in output.
-- [ ] Assert no Office/OneNote namespaces (`xmlns:o`, `xmlns:v`, `xmlns:w`) remain.
-- [ ] Assert no deprecated elements (`font`, `center`, `strike`) are emitted.
-- [ ] Assert no deprecated attributes (`bgcolor`, `align`, `border`, `summary`) remain.
+- [x] Add CI check asserting no `mso-*` attributes appear in output. (2026-02-25)
+- [x] Assert no Office/OneNote namespaces (`xmlns:o`, `xmlns:v`, `xmlns:w`) remain. (2026-02-25)
+- [x] Assert no deprecated elements (`font`, `center`, `strike`) are emitted. (2026-02-25)
+- [x] Assert no deprecated attributes (`bgcolor`, `align`, `border`, `summary`) remain. (2026-02-25)
 
 ### Attributes & styling
 - [ ] Normalize or remove repetitive inline styles introduced by conversion.
-- [ ] Add regression test asserting sanitizer idempotence.
+- [x] Add regression test asserting sanitizer idempotence. (2026-02-25)
 - [ ] Ensure visual fidelity does not rely on authoring‑tool‑specific styles.
 
 ### Encoding & character safety
@@ -83,9 +83,9 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] Normalize or remove inline styles that introduce contrast violations.
 
 ### Stability guarantees
-- [ ] Assert sanitization is idempotent.
-- [ ] Assert re‑running conversion on the same input produces equivalent output.
-- [ ] Lock cleaned fixtures for regression comparison.
+- [x] Assert sanitization is idempotent. (2026-02-25)
+- [x] Assert re‑running conversion on the same input produces equivalent output. (2026-02-25)
+- [x] Lock cleaned fixtures for regression comparison. (2026-02-25)
 
 ---
 
@@ -142,7 +142,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Sanitization
 - [x] Remove Office/OneNote artifacts.
-- [ ] Remove obsolete attributes (`summary`, legacy `xmlns`).
+- [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
 - [x] Normalize repetitive inline styles (migration + collapse rules).
 - [x] Implement `normalizeTableAttributes` with unit tests.
 - [x] Restore embedded images in pipeline and add `image-embedding.unit.js`.

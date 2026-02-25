@@ -59,6 +59,7 @@ function analyzeHtml(filePath, html) {
   const deprecatedTags = new Set(['font', 'center', 'strike']);
   const deprecatedAttrs = new Set(['bgcolor', 'align', 'border', 'summary']);
   const bannedXmlnsAttrs = new Set(['xmlns:o', 'xmlns:v', 'xmlns:w']);
+  const officeNsRe = /^https?:\/\/schemas\.microsoft\.com\/(office|onenote|word)/i;
 
   const allElements = Array.from(doc.querySelectorAll('*'));
 
@@ -92,6 +93,14 @@ function analyzeHtml(filePath, html) {
         });
       }
 
+      if (name === 'xmlns' && officeNsRe.test(value)) {
+        violations.push({
+          type: 'office-namespace-uri',
+          token: `xmlns=\"${value}\"`,
+          where: shortNodePath(el)
+        });
+      }
+
       if (deprecatedAttrs.has(name)) {
         violations.push({
           type: 'deprecated-attribute',
@@ -110,7 +119,7 @@ function analyzeHtml(filePath, html) {
       }
 
       // retain existing mso artifact protection used elsewhere in the repo
-      if (name === 'style' && /(^|;)\s*mso-/i.test(value)) {
+      if (name === 'style' && /(^|[;\s])mso-[a-z-]+\s*:/i.test(value)) {
         violations.push({
           type: 'office-style-declaration',
           token: 'style contains mso-*',

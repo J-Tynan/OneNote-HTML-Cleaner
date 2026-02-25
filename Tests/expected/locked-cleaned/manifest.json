@@ -1,0 +1,22 @@
+{
+  "name": "locked-cleaned-fixtures",
+  "updatedAt": "2026-02-25T12:17:42.032Z",
+  "source": "Tests/Cleaned",
+  "requiredFiles": [
+    "Communicate using Markdown.html",
+    "DevToys.html",
+    "Resolve merge conflicts.html",
+    "Test File.html"
+  ],
+  "normalization": {
+    "lineEndings": "LF",
+    "interTagWhitespaceCollapsed": true,
+    "trimTrailingWhitespaceLines": true
+  },
+  "hashes": {
+    "Communicate using Markdown.html": "1411a1f0ebbda4de94a4dd2a9ac33cda7ba2608a9e591b95684a4c65b35953ff",
+    "DevToys.html": "470d085630d3db92522a8731586113784aa06b4fe8aa9e5d84d61074f1495fd4",
+    "Resolve merge conflicts.html": "2b0a1d7933d7ed45ab6654d04d15344ab8f2ac640a2f3135bedf6e3cc69c9226",
+    "Test File.html": "afc774f1d331ed953d4789adf3e08bdccabcf81923bc281c515a82b108960ce5"
+  }
+}

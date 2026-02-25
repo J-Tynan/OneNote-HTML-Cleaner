@@ -9,7 +9,9 @@ This folder contains lightweight browser-based tests for the HTML pipeline.
 
 ### Native smoke test (terminal)
 - Run `npm run test:smoke:native` to validate starter checklist-aligned checks against converted native outputs in `Tests/Cleaned`.
-- Run `npm run test:gate:native` to execute the full native gate (`regen -> regressions -> smoke -> forbidden artifacts`) used by CI.
+- Run `npm run test:gate:native` to execute the full native gate (`regen -> idempotence -> rerun-equivalence -> obsolete-attrs -> regressions -> locked-fixtures -> smoke -> forbidden artifacts`) used by CI.
+- Run `npm run test:locked-fixtures` to compare current cleaned outputs against committed locked baselines in `Tests/expected/locked-cleaned`.
+- Run `npm run fixtures:rebaseline` only when output changes are intentional and approved.
 - Optional: `node ./Tests/smoke-native.js --cleaned-dir "Tests/Cleaned"`.
 - The script also prints criteria coverage for the 9-point visual checklist (automated/partial/manual).
 - Regression fixture assertions are loaded from `Tests/expected/native-regression.json` (required files, per-file markers, and folder minimums).

@@ -14,6 +14,8 @@ import {
   MARGIN_BOTTOM_RE
 } from './inlineStyleMigration.js';
 
+const OFFICE_NS_RE = /^https?:\/\/schemas\.microsoft\.com\/(office|onenote|word)/i;
+
 // small helper to add a class to an element (works even without classList)
 function addClass(el, className) {
   if (!el || !className) return;
@@ -130,10 +132,18 @@ export function removeOfficeArtifacts(doc) {
   const all = Array.from(doc.querySelectorAll('*'));
   all.forEach(el => {
     // remove unwanted attributes
-    for (const { name } of Array.from(el.attributes)) {
-      if (/^(mso-|o:|xmlns:)/i.test(name)) {
+    for (const { name, value } of Array.from(el.attributes)) {
+      if (/^(mso-|o:|v:|w:|xmlns:)/i.test(name)) {
         el.removeAttribute(name);
         logs.push({ step: 'RemoveAttr', tag: el.tagName, attr: name });
+      }
+      if (name.toLowerCase() === 'xmlns' && OFFICE_NS_RE.test(String(value || ''))) {
+        el.removeAttribute('xmlns');
+        logs.push({ step: 'RemoveAttr', tag: el.tagName, attr: 'xmlns' });
+      }
+      if (name.toLowerCase() === 'summary' && el.tagName.toLowerCase() !== 'table') {
+        el.removeAttribute('summary');
+        logs.push({ step: 'RemoveAttr', tag: el.tagName, attr: 'summary' });
       }
       // also drop class names beginning with Mso (Office classes)
       if (name === 'class') {
@@ -191,15 +201,13 @@ export function removeOfficeArtifacts(doc) {
 // normalize/remove obsolete or presentational table attributes
 export function normalizeTableAttributes(doc, options = {}) {
   const logs = [];
-  // helper to detect Office/OneNote namespace URIs
-  const officeNsRe = /^https?:\/\/schemas\.microsoft\.com\/(office|onenote|word)/i;
 
   Array.from(doc.querySelectorAll('table')).forEach(tbl => {
     const removed = [];
     // summary handling
     if (tbl.hasAttribute('summary')) {
       const val = tbl.getAttribute('summary');
-      if (/^mso-/i.test(val) || officeNsRe.test(val)) {
+      if (/^mso-/i.test(val) || OFFICE_NS_RE.test(val)) {
         tbl.removeAttribute('summary');
         removed.push('summary');
       } else {
@@ -221,7 +229,7 @@ export function normalizeTableAttributes(doc, options = {}) {
     // bare xmlns removal when Office-related
     if (tbl.hasAttribute('xmlns')) {
       const ns = tbl.getAttribute('xmlns');
-      if (officeNsRe.test(ns)) {
+      if (OFFICE_NS_RE.test(ns)) {
         tbl.removeAttribute('xmlns');
         removed.push('xmlns');
       }
@@ -310,6 +318,13 @@ export function removeNbsp(doc) {
 
 export function injectCssLink(doc, cssHref) {
   const head = doc.querySelector('head') || doc.documentElement;
+  const existing = Array.from(head.querySelectorAll('link[rel="stylesheet"]')).find((link) => {
+    const href = String(link.getAttribute('href') || '').trim();
+    return href === String(cssHref || '').trim();
+  });
+  if (existing) {
+    return [];
+  }
   const link = doc.createElement('link');
   link.setAttribute('rel', 'stylesheet');
   link.setAttribute('href', cssHref);
