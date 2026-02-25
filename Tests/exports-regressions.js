@@ -4,8 +4,14 @@ import path from 'node:path';
 // simple checker for exported HTML structure
 function analyze(html) {
   const issues = [];
-  if (!/<html[^>]*\blang=/i.test(html)) {
+  const htmlLangMatch = html.match(/<html[^>]*\blang\s*=\s*["']?([^"'\s>]+)["']?/i);
+  if (!htmlLangMatch) {
     issues.push('missing lang attribute on <html>');
+  } else {
+    const lang = htmlLangMatch[1].trim();
+    if (!/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/.test(lang)) {
+      issues.push(`invalid lang value on <html>: ${lang}`);
+    }
   }
   if (!/<title>\s*[^<]+\s*<\/title>/i.test(html)) {
     issues.push('missing or empty <title>');

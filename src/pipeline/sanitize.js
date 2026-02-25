@@ -26,22 +26,55 @@ function addClass(el, className) {
   el.setAttribute('class', Array.from(classes).join(' '));
 }
 
+function normalizeLangValue(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) return null;
+  if (trimmed.length > 35) return null;
+  if (/[^A-Za-z0-9-]/.test(trimmed)) return null;
+  if (/--/.test(trimmed) || trimmed.startsWith('-') || trimmed.endsWith('-')) return null;
+  const parts = trimmed.split('-');
+  if (!parts.length) return null;
+  if (!/^[A-Za-z]{2,3}$/.test(parts[0])) return null;
+  for (let i = 1; i < parts.length; i += 1) {
+    const token = parts[i];
+    if (!/^[A-Za-z0-9]{2,8}$/.test(token)) return null;
+  }
+  return trimmed;
+}
+
+function resolveDocumentLang(html, body, fallback = 'en') {
+  const htmlLang = normalizeLangValue(html && html.getAttribute ? html.getAttribute('lang') : null);
+  if (htmlLang) return { value: htmlLang, source: 'html' };
+
+  const bodyLang = normalizeLangValue(body && body.getAttribute ? body.getAttribute('lang') : null);
+  if (bodyLang) return { value: bodyLang, source: 'body' };
+
+  const fallbackLang = normalizeLangValue(fallback) || 'en';
+  return { value: fallbackLang, source: 'fallback' };
+}
+
 
 export function ensureHead(doc, options = {}) {
   const logs = [];
   let head = doc.querySelector('head');
   const html = doc.querySelector('html') || doc.documentElement;
+  const body = doc.querySelector('body');
   if (!head) {
     head = doc.createElement('head');
     html.insertBefore(head, html.firstChild);
     logs.push({ step: 'EnsureHead', details: 'Inserted missing <head>' });
   }
 
-  // Ensure the <html> tag has a lang attribute
+  // Ensure/normalize page-level language on <html>
   const defaultLang = options.defaultLang || 'en';
-  if (html && !html.getAttribute('lang')) {
-    html.setAttribute('lang', defaultLang);
-    logs.push({ step: 'EnsureLang', details: `Added lang="${defaultLang}" to <html>` });
+  const lang = resolveDocumentLang(html, body, defaultLang);
+  if (html) {
+    const previous = String(html.getAttribute('lang') || '').trim();
+    if (previous !== lang.value) {
+      html.setAttribute('lang', lang.value);
+      const action = previous ? `Normalized lang="${lang.value}" on <html>` : `Added lang="${lang.value}" to <html>`;
+      logs.push({ step: 'EnsureLang', details: action, source: lang.source });
+    }
   }
 
   // Ensure charset

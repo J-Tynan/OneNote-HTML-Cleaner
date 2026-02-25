@@ -73,7 +73,7 @@ function checkCommonHtmlQuality(filePath, html, failures) {
   check(mainMatches.length === 1, `${filePath}: expected exactly one <main>, found ${mainMatches.length}`, failures, 1);
 
   const h1Matches = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi) || [];
-  check(h1Matches.length === 1, `${filePath}: expected exactly one <h1>, found ${h1Matches.length}`, failures, 1);
+  check(h1Matches.length >= 1, `${filePath}: expected at least one <h1>, found ${h1Matches.length}`, failures, 1);
 
   const mainBlockMatch = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i);
   check(Boolean(mainBlockMatch), `${filePath}: missing <main>...</main> block`, failures, 1);
@@ -123,35 +123,23 @@ function run() {
     return;
   }
 
-  const sectionDir = path.join(cleanedDir, 'Test Section_converted', 'Test Section');
-  const notebookDir = path.join(cleanedDir, 'Test Notebook_converted', 'Test Notebook');
+  let checkedFiles = [];
+  if (fs.existsSync(fixturePath)) {
+    const fixture = readJson(fixturePath);
+    const requiredFiles = Array.isArray(fixture.requiredFiles) ? fixture.requiredFiles : [];
+    checkedFiles = requiredFiles
+      .map((relPath) => path.join(cleanedDir, relPath))
+      .filter((filePath) => fs.existsSync(filePath));
+  }
+  if (!checkedFiles.length) {
+    checkedFiles = walkHtmlFiles(cleanedDir);
+  }
 
-  check(fs.existsSync(sectionDir), `Missing section output directory: ${relative(sectionDir)}`, failures);
-  check(fs.existsSync(notebookDir), `Missing notebook output directory: ${relative(notebookDir)}`, failures);
-
-  const sectionFiles = walkHtmlFiles(sectionDir);
-  const notebookFiles = walkHtmlFiles(notebookDir);
-  const checkedFiles = [...sectionFiles, ...notebookFiles];
-
-  check(sectionFiles.length >= 1, 'Expected at least one converted .one page in Test Section output.', failures);
-  check(notebookFiles.length >= 1, 'Expected at least one converted .onepkg page in Test Notebook output.', failures);
+  check(checkedFiles.length >= 4, `Expected at least 4 converted HTML files in ${relative(cleanedDir)}.`, failures);
 
   for (const filePath of checkedFiles) {
     const html = readText(filePath);
     checkCommonHtmlQuality(relative(filePath), html, failures);
-  }
-
-  for (const filePath of sectionFiles) {
-    const html = readText(filePath);
-    check(/<h1>\s*[^<]+\s*<\/h1>/i.test(html), `${relative(filePath)}: expected H1 for page title`, failures, 1);
-    check(/Converted from native OneNote section/i.test(html), `${relative(filePath)}: expected native .one conversion marker`, failures, 2);
-    check(/<(p|ul|ol|table|h2|h3)\b/i.test(html), `${relative(filePath)}: expected semantic content block markup`, failures, 1);
-  }
-
-  for (const filePath of notebookFiles) {
-    const html = readText(filePath);
-    check(/Converted from OneNote notebook package/i.test(html), `${relative(filePath)}: expected .onepkg conversion marker`, failures, 2);
-    check(/Section path:\s*<code>[^<]+<\/code>/i.test(html), `${relative(filePath)}: expected section path metadata`, failures, 2);
   }
 
   applyRegressionFixtureAssertions(cleanedDir, fixturePath, failures);

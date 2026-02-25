@@ -1,8 +1,8 @@
-const FONT_FAMILY_RE = /^font-family$/i;
-const FONT_SIZE_RE = /^font-size$/i;
-const FONT_WEIGHT_RE = /^font-weight$/i;
-const MARGIN_TOP_RE = /^margin-top$/i;
-const MARGIN_BOTTOM_RE = /^margin-bottom$/i;
+export const FONT_FAMILY_RE = /^font-family$/i;
+export const FONT_SIZE_RE = /^font-size$/i;
+export const FONT_WEIGHT_RE = /^font-weight$/i;
+export const MARGIN_TOP_RE = /^margin-top$/i;
+export const MARGIN_BOTTOM_RE = /^margin-bottom$/i;
 
 const FONT_SIZE_MAP = [
   { maxPx: 12, className: 'text-xs' },
