@@ -44,9 +44,9 @@ Derived from `docs/HTML-Output-Standard.md`.
 All items in this section must be satisfied before tagging the first stable release.
 
 ### Document structure
-- [ ] Assert exactly one `<main>` element per exported document.
-- [ ] Assert exactly one page‑level `<h1>` per document.
-- [ ] Add regression test enforcing valid heading order (`h1 → h2 → h3`).
+- [x] Assert exactly one `<main>` element per exported document.
+- [x] Assert exactly one page-level `<h1>` per document.
+- [x] Add regression test enforcing valid heading order (`h1 → h2 → h3`).
 - [ ] Assert lists are represented only with `<ul>/<ol>/<li>` (no bullet glyphs).
 
 ### Forbidden markup & artifacts

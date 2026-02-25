@@ -69,6 +69,33 @@ function checkCommonHtmlQuality(filePath, html, failures) {
   check(/<!doctype html>/i.test(html), `${filePath}: missing <!doctype html>`, failures, 1);
   check(/<body\b[^>]*>/i.test(html) && /<\/body>/i.test(html), `${filePath}: missing <body> structure`, failures, 1);
 
+  const mainMatches = html.match(/<main\b[^>]*>/gi) || [];
+  check(mainMatches.length === 1, `${filePath}: expected exactly one <main>, found ${mainMatches.length}`, failures, 1);
+
+  const h1Matches = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi) || [];
+  check(h1Matches.length === 1, `${filePath}: expected exactly one <h1>, found ${h1Matches.length}`, failures, 1);
+
+  const mainBlockMatch = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i);
+  check(Boolean(mainBlockMatch), `${filePath}: missing <main>...</main> block`, failures, 1);
+  if (mainBlockMatch) {
+    const mainBlock = mainBlockMatch[0];
+    check(/<h1\b[^>]*>[\s\S]*?<\/h1>/i.test(mainBlock), `${filePath}: expected page-level <h1> inside <main>`, failures, 1);
+
+    // heading hierarchy check: no jumps greater than one level (h1->h3 is illegal)
+    const headings = [];
+    for (const m of mainBlock.matchAll(/<(h[1-6])\b[^>]*>/gi)) {
+      headings.push(m[1].toLowerCase());
+    }
+    for (let i = 1; i < headings.length; i += 1) {
+      const prev = Number(headings[i - 1].substring(1));
+      const curr = Number(headings[i].substring(1));
+      if (curr > prev + 1) {
+        check(false, `${filePath}: invalid heading sequence ${headings[i-1]} -> ${headings[i]}`, failures, 1);
+        break;
+      }
+    }
+  }
+
   const visibleText = String(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   check(visibleText.length >= 20, `${filePath}: expected readable content text`, failures, 2);
 
