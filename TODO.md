@@ -79,8 +79,7 @@ All items in this section must be satisfied before tagging the first stable rele
 ### Accessibility baseline
 - [x] Assert presence of `<main>` landmark.
 - [x] Assert exactly one page-level `<h1>`.
-- [ ] Add test asserting non‑decorative images include `alt` text.
-- [ ] Normalize or remove inline styles that introduce contrast violations.
+- [x] Add test asserting non-decorative images include `alt` text.
 
 ### Stability guarantees
 - [x] Assert sanitization is idempotent. (2026-02-25)
