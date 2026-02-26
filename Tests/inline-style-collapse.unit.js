@@ -64,4 +64,34 @@ console.log('running inline-style-collapse unit tests');
   children.forEach(c => assert(c.getAttribute('style').includes('margin-top:8px')));
 }
 
+// case: canonicalized matching should collapse when declaration order differs
+{
+  const html = `<div>
+    <p style="font-size:14px; font-family:Calibri"></p>
+    <p style="font-family:Calibri; font-size:14px"></p>
+    <p style="font-size:14px; font-family:Calibri"></p>
+  </div>`;
+  const doc = makeDoc(html);
+  collapseInlineStyleDuplicates(doc, { minCount: 3, removeMigratedDeclarations: true });
+  const parent = doc.querySelector('div');
+  assert(parent.className.includes('font-sans'), 'parent should get font-sans class from canonicalized group');
+  assert(parent.className.includes('text-sm'), 'parent should get text-sm class from canonicalized group');
+  const children = doc.querySelectorAll('p');
+  children.forEach(c => assert(!c.hasAttribute('style')));
+}
+
+// case: canonicalized matching should normalize prop/value case and spacing
+{
+  const html = `<div>
+    <p style="FONT-WEIGHT : BOLD; margin-top : 8PX"></p>
+    <p style="font-weight:bold; margin-top:8px"></p>
+    <p style="font-weight: bold; margin-top: 8px"></p>
+  </div>`;
+  const doc = makeDoc(html);
+  collapseInlineStyleDuplicates(doc, { minCount: 3, removeMigratedDeclarations: true });
+  const parent = doc.querySelector('div');
+  assert(parent.className.includes('font-bold'), 'parent should get normalized font weight class');
+  assert(parent.className.match(/mt-2/), 'parent should get normalized margin class');
+}
+
 console.log('inline-style-collapse: PASS');

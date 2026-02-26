@@ -67,7 +67,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Assert no deprecated attributes (`bgcolor`, `align`, `border`, `summary`) remain. (2026-02-25)
 
 ### Attributes & styling
-- [ ] Normalize or remove repetitive inline styles introduced by conversion.
+- [x] Normalize or remove repetitive inline styles introduced by conversion. (2026-02-26)
 - [x] Add regression test asserting sanitizer idempotence. (2026-02-25)
 - [ ] Ensure visual fidelity does not rely on authoring‑tool‑specific styles.
 

@@ -379,6 +379,37 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
     return classes.filter(Boolean);
   }
 
+  function canonicalizeStyleSignature(styleText) {
+    const entries = parseStyle(styleText);
+    if (!entries.length) return null;
+
+    const byProp = new Map();
+    entries.forEach(({ prop, value }) => {
+      const normalizedProp = String(prop || '').trim().toLowerCase();
+      if (!normalizedProp) return;
+
+      let normalizedValue = String(value || '').trim().replace(/\s+/g, ' ');
+      if (
+        FONT_FAMILY_RE.test(normalizedProp) ||
+        FONT_SIZE_RE.test(normalizedProp) ||
+        FONT_WEIGHT_RE.test(normalizedProp) ||
+        MARGIN_TOP_RE.test(normalizedProp) ||
+        MARGIN_BOTTOM_RE.test(normalizedProp)
+      ) {
+        normalizedValue = normalizedValue.toLowerCase();
+      }
+
+      // last declaration wins (CSS semantics)
+      byProp.set(normalizedProp, normalizedValue);
+    });
+
+    if (!byProp.size) return null;
+    return Array.from(byProp.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([prop, value]) => `${prop}:${value}`)
+      .join(';');
+  }
+
   // iterate all element parents
   const parents = Array.from(doc.querySelectorAll('*'));
   let promotions = 0;
@@ -389,17 +420,24 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
     if (children.length < minCount) return;
 
     const styleGroups = new Map();
+    const styleSamples = new Map();
     children.forEach(child => {
-      const txt = (child.getAttribute('style') || '').trim();
-      if (!txt) return;
-      const arr = styleGroups.get(txt) || [];
+      const originalText = (child.getAttribute('style') || '').trim();
+      if (!originalText) return;
+      const signature = canonicalizeStyleSignature(originalText);
+      if (!signature) return;
+      const arr = styleGroups.get(signature) || [];
       arr.push(child);
-      styleGroups.set(txt, arr);
+      styleGroups.set(signature, arr);
+      if (!styleSamples.has(signature)) {
+        styleSamples.set(signature, originalText);
+      }
     });
 
-    for (const [styleText, arr] of styleGroups) {
+    for (const [styleSignature, arr] of styleGroups) {
       if (arr.length >= minCount) {
-        const classes = computeClasses(styleText);
+        const sampleStyle = styleSamples.get(styleSignature) || styleSignature;
+        const classes = computeClasses(sampleStyle);
         if (classes.length) {
           classes.forEach(cl => addClass(parent, cl));
           promotions++;
@@ -409,7 +447,14 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
               childrenFixed++;
             });
           }
-          logs.push({ step: 'CollapseInlineStyles', parent: parent.tagName.toLowerCase(), style: styleText, count: arr.length, classes });
+          logs.push({
+            step: 'CollapseInlineStyles',
+            parent: parent.tagName.toLowerCase(),
+            style: sampleStyle,
+            signature: styleSignature,
+            count: arr.length,
+            classes
+          });
         }
         break; // only one style per parent
       }
