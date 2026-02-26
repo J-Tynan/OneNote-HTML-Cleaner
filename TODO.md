@@ -59,8 +59,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Assert exactly one page-level `<h1>` per document.
 - [x] Add regression test enforcing valid heading order (`h1 → h2 → h3`).
 - [x] Assert lists are represented only with `<ul>/<ol>/<li>` (no glyphs)
-
-### Forbidden markup & artifacts
+#
 - [x] Add CI check asserting no `mso-*` attributes appear in output. (2026-02-25)
 - [x] Assert no Office/OneNote namespaces (`xmlns:o`, `xmlns:v`, `xmlns:w`) remain. (2026-02-25)
 - [x] Assert no deprecated elements (`font`, `center`, `strike`) are emitted. (2026-02-25)
