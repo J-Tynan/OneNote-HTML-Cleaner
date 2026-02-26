@@ -73,13 +73,16 @@ function checkCommonHtmlQuality(filePath, html, failures) {
   check(mainMatches.length === 1, `${filePath}: expected exactly one <main>, found ${mainMatches.length}`, failures, 1);
 
   const h1Matches = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi) || [];
-  check(h1Matches.length >= 1, `${filePath}: expected at least one <h1>, found ${h1Matches.length}`, failures, 1);
+  // require exactly one H1 in the entire document
+  check(h1Matches.length === 1, `${filePath}: expected exactly one <h1>, found ${h1Matches.length}`, failures, 1);
 
   const mainBlockMatch = html.match(/<main\b[^>]*>[\s\S]*?<\/main>/i);
   check(Boolean(mainBlockMatch), `${filePath}: missing <main>...</main> block`, failures, 1);
   if (mainBlockMatch) {
     const mainBlock = mainBlockMatch[0];
-    check(/<h1\b[^>]*>[\s\S]*?<\/h1>/i.test(mainBlock), `${filePath}: expected page-level <h1> inside <main>`, failures, 1);
+    // require exactly one H1 inside the main landmark
+    const mainH1Matches = mainBlock.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi) || [];
+    check(mainH1Matches.length === 1, `${filePath}: expected exactly one <h1> inside <main>, found ${mainH1Matches.length}`, failures, 1);
 
     // heading hierarchy check: no jumps greater than one level (h1->h3 is illegal)
     const headings = [];

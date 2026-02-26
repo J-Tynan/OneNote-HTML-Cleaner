@@ -523,6 +523,22 @@ export function ensureMainHeading(doc, options = {}) {
     }
   }
 
+  // demote any additional <h1> elements (only the first instance should remain as level-1)
+  const allH1s = Array.from(body.querySelectorAll('h1'));
+  if (allH1s.length > 1) {
+    for (let i = 1; i < allH1s.length; i += 1) {
+      const extra = allH1s[i];
+      const h2 = doc.createElement('h2');
+      for (const attr of Array.from(extra.attributes || [])) {
+        h2.setAttribute(attr.name, attr.value);
+      }
+      // preserve inner HTML/contents including styling
+      h2.innerHTML = extra.innerHTML;
+      extra.replaceWith(h2);
+      logs.push({ step: 'DemoteExtraH1', details: 'Replaced extra <h1> with <h2>' });
+    }
+  }
+
   return logs;
 }
 

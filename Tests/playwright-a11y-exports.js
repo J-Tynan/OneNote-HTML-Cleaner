@@ -6,12 +6,13 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 function createStaticServer(root) {
+  const rootPath = path.resolve(root);
   return http.createServer((req, res) => {
     try {
-      const safeUrl = decodeURIComponent(req.url.split('?')[0]);
-      let filePath = path.join(root, safeUrl);
-      if (safeUrl === '/' || safeUrl === '') filePath = path.join(root, 'index.html');
-      if (!filePath.startsWith(root)) {
+      const safeUrl = decodeURIComponent(req.url.split('?')[0] || '');
+      const candidate = safeUrl === '/' || safeUrl === '' ? '/index.html' : safeUrl;
+      const filePath = path.resolve(rootPath, `.${candidate}`);
+      if (!filePath.startsWith(rootPath + path.sep) && filePath !== rootPath) {
         res.writeHead(403);
         res.end('Forbidden');
         return;

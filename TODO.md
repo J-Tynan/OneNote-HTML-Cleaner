@@ -77,8 +77,8 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Lock charset fallback behavior behind tests and documentation. (2026-02-26)
 
 ### Accessibility baseline
-- [ ] Assert presence of `<main>` landmark.
-- [ ] Assert exactly one page‑level `<h1>`.
+- [x] Assert presence of `<main>` landmark.
+- [x] Assert exactly one page-level `<h1>`.
 - [ ] Add test asserting non‑decorative images include `alt` text.
 - [ ] Normalize or remove inline styles that introduce contrast violations.
 
