@@ -65,5 +65,9 @@ jobs:
           echo "Running Playwright smoke scripts from Tests/"
           for f in Tests/*playwright*.js; do
             echo "=== Running: $f ==="
-            node "$f"
+            if [ "$f" = "Tests/playwright-a11y-exports.js" ]; then
+              node "$f" --dir Tests/Cleaned
+            else
+              node "$f"
+            fi
           done
