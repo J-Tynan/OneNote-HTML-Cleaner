@@ -33,7 +33,7 @@ console.log('running sanitizer idempotence regression test');
 
 const fixtures = fs
   .readdirSync('Tests')
-  .filter((name) => /\.mht$/i.test(name))
+  .filter((name) => /\.(mht|mhtml)$/i.test(name))
   .map((name) => path.join('Tests', name));
 
 if (!fixtures.length) {

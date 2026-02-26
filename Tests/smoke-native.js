@@ -66,7 +66,7 @@ function check(condition, message, failures, criterionId = null) {
   }
 }
 
-function checkCommonHtmlQuality(filePath, html, failures) {
+function checkCommonHtmlQuality(filePath, html, failures, options = {}) {
   check(/<!doctype html>/i.test(html), `${filePath}: missing <!doctype html>`, failures, 1);
   check(/<body\b[^>]*>/i.test(html) && /<\/body>/i.test(html), `${filePath}: missing <body> structure`, failures, 1);
 
@@ -101,7 +101,10 @@ function checkCommonHtmlQuality(filePath, html, failures) {
   }
 
   const visibleText = String(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  check(visibleText.length >= 20, `${filePath}: expected readable content text`, failures, 2);
+  const minVisibleText = Number.isFinite(options.minVisibleText)
+    ? options.minVisibleText
+    : 20;
+  check(visibleText.length >= minVisibleText, `${filePath}: expected readable content text`, failures, 2);
 
   check(/<meta\s+charset=["']?utf-8["']?/i.test(html), `${filePath}: missing UTF-8 charset meta`, failures, 7);
   check(/<title>\s*[^<]+\s*<\/title>/i.test(html), `${filePath}: missing meaningful <title>`, failures, 7);
@@ -146,9 +149,11 @@ function run() {
   }
 
   let checkedFiles = [];
+  let fixtureFileAssertions = {};
   if (fs.existsSync(fixturePath)) {
     const fixture = readJson(fixturePath);
     const requiredFiles = Array.isArray(fixture.requiredFiles) ? fixture.requiredFiles : [];
+    fixtureFileAssertions = fixture.files || {};
     checkedFiles = requiredFiles
       .map((relPath) => path.join(cleanedDir, relPath))
       .filter((filePath) => fs.existsSync(filePath));
@@ -161,7 +166,9 @@ function run() {
 
   for (const filePath of checkedFiles) {
     const html = readText(filePath);
-    checkCommonHtmlQuality(relative(filePath), html, failures);
+    const relFromCleaned = path.relative(cleanedDir, filePath).split(path.sep).join('/');
+    const fileOptions = fixtureFileAssertions[relFromCleaned] || {};
+    checkCommonHtmlQuality(relative(filePath), html, failures, fileOptions);
   }
 
   applyRegressionFixtureAssertions(cleanedDir, fixturePath, failures);

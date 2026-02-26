@@ -22,7 +22,7 @@ console.log('running C0-control-character pipeline compliance test');
 // scan MHT fixtures directly (any .mht in Tests root)
 const fixtures = fs
   .readdirSync('Tests')
-  .filter(f => f.match(/\.mht$/i))
+  .filter(f => f.match(/\.(mht|mhtml)$/i))
   .map(f => path.join('Tests', f));
 
 if (fixtures.length === 0) {

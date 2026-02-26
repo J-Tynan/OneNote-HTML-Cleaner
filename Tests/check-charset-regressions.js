@@ -21,6 +21,13 @@ const fixtures = [
     requiresFallback: false,
   },
   {
+    name: 'problematic-mhtml-full-snippet',
+    path: path.join('Tests', 'Problematic mht-full-snippet.mhtml'),
+    description: 'problematic fixture promoted into native locked suite using .mhtml extension',
+    expectedSubstring: '<html',
+    requiresFallback: false,
+  },
+  {
     name: 'inline-cp1252',
     // artificial sample / in-memory string; contains CP1252 smart quotes
     raw: `From: sample

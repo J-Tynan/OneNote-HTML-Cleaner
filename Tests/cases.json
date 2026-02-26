@@ -70,6 +70,13 @@
     "config": {}
   },
   {
+    "name": "mht-full-snippet-mhtml",
+    "input": "./fixtures/mht-full-snippet.mhtml",
+    "expected": "./expected/mht-full-snippet.html",
+    "preprocess": "mht",
+    "config": {}
+  },
+  {
     "name": "table-styles",
     "input": "./fixtures/table-styles.html",
     "expected": "./expected/table-styles.html",

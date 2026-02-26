@@ -1,10 +1,12 @@
 {
   "name": "locked-cleaned-fixtures",
-  "updatedAt": "2026-02-26T15:28:44.490Z",
+  "updatedAt": "2026-02-26T16:37:07.555Z",
   "source": "Tests/Cleaned",
   "requiredFiles": [
     "Communicate using Markdown.html",
     "DevToys.html",
+    "Problematic mht-full-snippet.html",
+    "Problematic mht-sample.html",
     "Resolve merge conflicts.html",
     "Test File.html"
   ],
@@ -16,6 +18,8 @@
   "hashes": {
     "Communicate using Markdown.html": "3635f3817ee2b69d5ebdd02c44414e668ae2db49c1141462de85bea9591aa30b",
     "DevToys.html": "470d085630d3db92522a8731586113784aa06b4fe8aa9e5d84d61074f1495fd4",
+    "Problematic mht-full-snippet.html": "355ae198ef85517286612678e62a996f770e96aaaa8c131383aa1b4aa4a775a4",
+    "Problematic mht-sample.html": "a4d9c4f53200ba0fec8990624e5ff1394dafe0c43bf2aef08360157b37fadabf",
     "Resolve merge conflicts.html": "c745335e91537ef6d84f2d3583b4ebc986af1a1b3c84a064cf2b400f6e1ff8e9",
     "Test File.html": "80b31ac86ef05c9ef4f6ffe412797518e62b55ffa0f7a0e0a47cc177b4dd0958"
   }

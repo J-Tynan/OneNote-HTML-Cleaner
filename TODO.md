@@ -110,8 +110,8 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ## General / UI
 
-- [ ] Manual review of cleaned HTML output.
-  - [ ] Address contrast violations in exported HTML (`<pre>` elements).
+- [x] Manual review of cleaned HTML output. (2026-02-26)
+  - Findings captured in `Tests/reports/manual-review-findings.md`.
 - [x] Prevent layout shift when Advanced options open.
 - [x] Redesign UI to look professional and accessible.
 - [x] Add in‑app Help popup and keyboard shortcut.
@@ -154,7 +154,6 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Add heading hierarchy smoke test. (2026-02-25)
 - [x] Assert single page‑level `lang` attribute.
 - [x] Add test for missing `alt` text on images. (2026-02-25)
-- [ ] Detect excessive layout tables and flag for review.
 
 ### Performance / output size
 - [ ] Warn or reject exported HTML with large inlined images.
@@ -164,7 +163,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ## Regression Fixtures
 
-- [ ] Add problematic `.mht` files to locked regression suite.
+- [x] Add problematic `.mht` files to locked regression suite. (2026-02-26)
 - [ ] Ensure CI covers encoding, list fidelity, and sanitization cases.
 
 ---

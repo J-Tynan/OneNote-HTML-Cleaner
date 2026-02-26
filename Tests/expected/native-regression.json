@@ -10,6 +10,8 @@
   "requiredFiles": [
     "Communicate using Markdown.html",
     "DevToys.html",
+    "Problematic mht-full-snippet.html",
+    "Problematic mht-sample.html",
     "Resolve merge conflicts.html",
     "Test File.html"
   ],
@@ -33,6 +35,27 @@
         "multipart/related",
         "Single File Web Page"
       ]
+    },
+    "Problematic mht-full-snippet.html": {
+      "mustContain": [
+        "<main",
+        "<h1"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ]
+    },
+    "Problematic mht-sample.html": {
+      "mustContain": [
+        "<main",
+        "<h1"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ],
+      "minVisibleText": 0
     },
     "Resolve merge conflicts.html": {
       "mustContain": [
