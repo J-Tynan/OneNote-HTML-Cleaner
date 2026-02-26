@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { JSDOM } from 'jsdom';
 
 const CRITERIA = [
   { id: 1, title: 'Structure', automation: 'partial' },
@@ -108,6 +109,24 @@ function checkCommonHtmlQuality(filePath, html, failures) {
   const hasMhtmlArtifacts = /(^From:|multipart\/related|Single File Web Page|Web Archive)/im.test(html) ||
     /\n--[-\w]{2,}/m.test(html);
   check(!hasMhtmlArtifacts, `${filePath}: appears to contain MHTML artifacts`, failures, 8);
+
+  // list-fidelity: make sure we don't accidentally leave bullet/number markers
+  // in plain paragraphs or table cells.  task-list syntax (- [x]) is allowed.
+  const faux = detectFauxList(html);
+  check(!faux, `${filePath}: suspicious list-like text outside semantic list -> "${faux}"`, failures, 2);
+}
+
+function detectFauxList(html) {
+  const { window: { document } } = new JSDOM(html);
+  for (const el of document.querySelectorAll('p,div,td,th')) {
+    if (el.closest('li,pre,code')) continue; // ignore real lists and code blocks
+    if (el.querySelector('pre,code')) continue; // skip if it contains inline code
+    const text = el.textContent.trim();
+    if (/^([-*•\u2022\u00B7]|\d+[.)])\s+(?!\[[ xX]\])/.test(text)) {
+      return text.split('\n')[0].trim();
+    }
+  }
+  return null;
 }
 
 function relative(filePath) {

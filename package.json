@@ -29,6 +29,7 @@
     "test:idempotence": "node ./Tests/check-sanitizer-idempotence.js",
     "test:rerun-equivalence": "node ./Tests/check-rerun-equivalence.js",
     "test:locked-fixtures": "node ./Tests/check-locked-fixtures.js",
+    "test:list-fidelity": "node ./Tests/list-fidelity.unit.js",
     "test:obsolete-attrs": "node ./Tests/obsolete-attributes.unit.js",
     "test:forbidden-artifacts": "node ./Tests/check-forbidden-artifacts.js --dir Tests/Cleaned",
     "test:check-c0": "node ./Tests/check-c0-exported.js",
