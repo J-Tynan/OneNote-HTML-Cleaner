@@ -1,6 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
+import { fileURLToPath } from 'node:url';
+
+const THIS_FILE = path.resolve(fileURLToPath(import.meta.url));
 
 function parseArgs(argv) {
   const args = {
@@ -51,7 +54,7 @@ function shortNodePath(node) {
   return parts.join(' > ');
 }
 
-function analyzeHtml(filePath, html) {
+export function analyzeHtml(filePath, html) {
   const violations = [];
   const dom = new JSDOM(html);
   const doc = dom.window.document;
@@ -60,6 +63,8 @@ function analyzeHtml(filePath, html) {
   const deprecatedAttrs = new Set(['bgcolor', 'align', 'border', 'summary']);
   const bannedXmlnsAttrs = new Set(['xmlns:o', 'xmlns:v', 'xmlns:w']);
   const officeNsRe = /^https?:\/\/schemas\.microsoft\.com\/(office|onenote|word)/i;
+  const officeClassTokenRe = /^(mso\w*|wordsection\d*)$/i;
+  const officeStyleDeclRe = /(^|[;\s])(mso-[a-z-]+|tab-stops|layout-grid(?:-mode|-line|-char)?|mso-element|mso-pagination)\s*:/i;
 
   const allElements = Array.from(doc.querySelectorAll('*'));
 
@@ -119,14 +124,34 @@ function analyzeHtml(filePath, html) {
       }
 
       // retain existing mso artifact protection used elsewhere in the repo
-      if (name === 'style' && /(^|[;\s])mso-[a-z-]+\s*:/i.test(value)) {
+      if (name === 'style' && officeStyleDeclRe.test(value)) {
         violations.push({
           type: 'office-style-declaration',
-          token: 'style contains mso-*',
+          token: 'style contains office-specific declarations',
           where: shortNodePath(el)
         });
       }
+
+      if (name === 'class') {
+        const tokens = value.trim().split(/\s+/).filter(Boolean);
+        for (const token of tokens) {
+          if (!officeClassTokenRe.test(token)) continue;
+          violations.push({
+            type: 'office-class-token',
+            token,
+            where: shortNodePath(el)
+          });
+        }
+      }
     }
+  }
+
+  if (/<!--\s*\[if\s+(?:gte\s+)?mso\b/i.test(html)) {
+    violations.push({
+      type: 'office-conditional-comment',
+      token: 'MSO conditional comment',
+      where: 'document'
+    });
   }
 
   if (violations.length === 0) {
@@ -174,4 +199,6 @@ function run() {
   process.exit(failed ? 1 : 0);
 }
 
-run();
+if (process.argv[1] && path.resolve(process.argv[1]) === THIS_FILE) {
+  run();
+}

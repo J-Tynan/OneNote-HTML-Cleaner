@@ -59,7 +59,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Assert exactly one page-level `<h1>` per document.
 - [x] Add regression test enforcing valid heading order (`h1 → h2 → h3`).
 - [x] Assert lists are represented only with `<ul>/<ol>/<li>` (no glyphs)
-#
+
 - [x] Add CI check asserting no `mso-*` attributes appear in output. (2026-02-25)
 - [x] Assert no Office/OneNote namespaces (`xmlns:o`, `xmlns:v`, `xmlns:w`) remain. (2026-02-25)
 - [x] Assert no deprecated elements (`font`, `center`, `strike`) are emitted. (2026-02-25)
@@ -68,7 +68,7 @@ All items in this section must be satisfied before tagging the first stable rele
 ### Attributes & styling
 - [x] Normalize or remove repetitive inline styles introduced by conversion. (2026-02-26)
 - [x] Add regression test asserting sanitizer idempotence. (2026-02-25)
-- [ ] Ensure visual fidelity does not rely on authoring‑tool‑specific styles.
+- [x] Ensure visual fidelity does not rely on authoring‑tool‑specific styles. (2026-02-26)
 
 ### Encoding & character safety
 - [x] Assert exported HTML is UTF‑8 encoded. (2026-02-26)
