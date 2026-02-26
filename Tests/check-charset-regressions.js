@@ -28,12 +28,12 @@ MIME-Version: 1.0
 Content-Type: multipart/related; boundary="b"
 
 --b
-Content-Type: text/html; charset="windows-1252"
+Content-Type: text/html; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 <p>=93Hello=94 =96 world</p>
 --b--`,
-    description: 'minimal MHT with windows-1252 charset (quotes and dash)',
+    description: 'minimal MHT that needs windows-1252 fallback (quotes and dash)',
     expectedSubstring: '“Hello” – world',
     requiresFallback: true,
   },

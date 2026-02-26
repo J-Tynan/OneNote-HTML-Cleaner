@@ -9,8 +9,11 @@ This folder contains lightweight browser-based tests for the HTML pipeline.
 
 ### Native smoke test (terminal)
 - Run `npm run test:smoke:native` to validate starter checklist-aligned checks against converted native outputs in `Tests/Cleaned`.
-- Run `npm run test:gate:native` to execute the full native gate (`regen -> idempotence -> rerun-equivalence -> obsolete-attrs -> regressions -> locked-fixtures -> smoke -> forbidden artifacts`) used by CI.
+- Run `npm run test:gate:native` to execute the full native gate (`regen -> charset -> charset-fallback -> utf8-encoding -> idempotence -> rerun-equivalence -> obsolete-attrs -> regressions -> locked-fixtures -> smoke -> forbidden artifacts`) used by CI.
 - Run `npm run test:locked-fixtures` to compare current cleaned outputs against committed locked baselines in `Tests/expected/locked-cleaned`.
+- Run `npm run test:charset` for charset regression fixtures.
+- Run `npm run test:charset-fallback` to lock fallback behavior for misdeclared quoted-printable content.
+- Run `npm run test:utf8-encoding` to verify exported files in `Tests/Cleaned` are valid UTF-8 with `<meta charset="utf-8">`.
 - Run `npm run fixtures:rebaseline` only when output changes are intentional and approved.
 - Optional: `node ./Tests/smoke-native.js --cleaned-dir "Tests/Cleaned"`.
 - The script also prints criteria coverage for the 9-point visual checklist (automated/partial/manual).

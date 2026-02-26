@@ -83,6 +83,9 @@ npm run test:exports:regressions
 npm run test:locked-fixtures
 npm run test:smoke:native
 npm run test:forbidden-artifacts
+npm run test:charset
+npm run test:charset-fallback
+npm run test:utf8-encoding
 # all-in-one native gate:
 npm run test:gate:native
 ```

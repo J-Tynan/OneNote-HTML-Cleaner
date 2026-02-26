@@ -72,9 +72,9 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] Ensure visual fidelity does not rely on authoring‑tool‑specific styles.
 
 ### Encoding & character safety
-- [ ] Assert exported HTML is UTF‑8 encoded.
+- [x] Assert exported HTML is UTF‑8 encoded. (2026-02-26)
 - [x] Add CI test asserting no C0 control characters appear in output.
-- [ ] Lock charset fallback behavior behind tests and documentation.
+- [x] Lock charset fallback behavior behind tests and documentation. (2026-02-26)
 
 ### Accessibility baseline
 - [ ] Assert presence of `<main>` landmark.
