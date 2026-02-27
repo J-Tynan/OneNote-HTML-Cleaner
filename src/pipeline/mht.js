@@ -376,7 +376,7 @@ export function parseMht(rawText, options = {}) {
               bytes = Buffer.from(b64, 'base64');
             }
             if (bytes) {
-              if (wantMap) {
+              if (wantsMap) {
                 // rudimentary mapping: each output char maps to start of body
                 return { text: new TextDecoder(charset, { fatal:false }).decode(bytes), mapping: Array.from({ length: bytes.length }, () => 0) };
               } else {
@@ -394,7 +394,7 @@ export function parseMht(rawText, options = {}) {
           return text;
         } else {
           // no decoding, return raw
-          if (wantMap) return { text, mapping: Array.from({length: text.length}, (_,i)=>i) };
+          if (wantsMap) return { text, mapping: Array.from({length: text.length}, (_,i)=>i) };
           return text;
         }
       }
@@ -411,12 +411,17 @@ export function parseMht(rawText, options = {}) {
       // detection & maybe fallback
       let origDiag = detectControlChars(html);
       let sawReplacement = html.indexOf('\uFFFD') !== -1;
+      let charsetFallbackAttempted = false;
       // ensure fields exist with defaults
       htmlPart.CharsetFallbackApplied = false;
       htmlPart.CharsetUsed = declaredCharset || 'utf-8';
+      htmlPart.CharsetFallbackAttempted = false;
+      htmlPart.DecodeRecoveryFailed = false;
       if (options && options.EnableCharsetFallback) {
         const needFallback = sawReplacement || origDiag.count > 0 || /[\u0080-\u009F]/.test(html);
         if (needFallback && declaredCharset !== 'windows-1252') {
+          charsetFallbackAttempted = true;
+          htmlPart.CharsetFallbackAttempted = true;
           // try cp1252
           const fallbackResult = runDecode(htmlPart.BodyRaw, 'windows-1252');
           const fbHtml = wantsMap ? fallbackResult.text : fallbackResult;
@@ -431,6 +436,10 @@ export function parseMht(rawText, options = {}) {
             origDiag = fbDiag;
           }
         }
+      }
+
+      if (charsetFallbackAttempted && detectControlChars(html).count > 0) {
+        htmlPart.DecodeRecoveryFailed = true;
       }
     }
 
@@ -502,8 +511,11 @@ export function parseMht(rawText, options = {}) {
 
     let controlCharDiagnostics = null;
     let controlCharSanitized = false;
+    let controlSanitizationReason = null;
+    let decodeRecoveryFailed = false;
     if (html) {
       controlCharDiagnostics = detectControlChars(html);
+      decodeRecoveryFailed = parts.some(p => p.DecodeRecoveryFailed === true);
       if (controlCharDiagnostics.count > 0) {
         // attach raw offsets if mapping is available
         if (options && options.EnableMapping && htmlPart && htmlPart.BodyDecodedMapping && typeof htmlPart.BodyRawStart === 'number') {
@@ -514,11 +526,13 @@ export function parseMht(rawText, options = {}) {
         }
         logger.warn({ msg: `control chars detected in HTML part${htmlPart ? ' index=' + htmlPart.index : ''}`, meta: { count: controlCharDiagnostics.count, samples: controlCharDiagnostics.samples.map(s => s.codepoint) } });
       }
-      // optional sanitization flag
-      if (options && options.EnableControlSanitization) {
+      // optional sanitization flag, or strict fallback failure recovery
+      const shouldSanitizeForDecodeFailure = decodeRecoveryFailed && controlCharDiagnostics.count > 0;
+      if ((options && options.EnableControlSanitization) || shouldSanitizeForDecodeFailure) {
         const before = html;
         html = sanitizeControlChars(html);
         controlCharSanitized = true;
+        controlSanitizationReason = shouldSanitizeForDecodeFailure ? 'decode-recovery-failed' : 'enabled-option';
         if (before !== html) {
           logger.info({ msg: 'control chars removed by sanitization' });
         }
@@ -528,8 +542,21 @@ export function parseMht(rawText, options = {}) {
 
     // top-level summary fields for charset fallback
     const charsetFallback = parts.some(p => p.CharsetFallbackApplied === true);
+    const charsetFallbackAttempted = parts.some(p => p.CharsetFallbackAttempted === true);
     const charsetUsed = parts.find(p => p.CharsetUsed)?.CharsetUsed || null;
-    return { html, parts, boundary, imageMap, controlCharDiagnostics, controlCharSanitized, charsetFallback, charsetUsed };
+    return {
+      html,
+      parts,
+      boundary,
+      imageMap,
+      controlCharDiagnostics,
+      controlCharSanitized,
+      controlSanitizationReason,
+      charsetFallback,
+      charsetFallbackAttempted,
+      charsetUsed,
+      decodeRecoveryFailed
+    };
   } catch (err) {
     logger.error({ msg: 'parseMht unexpected error', meta: { error: String(err) } });
     return { html: null, parts: [], boundary: null, imageMap: {} };

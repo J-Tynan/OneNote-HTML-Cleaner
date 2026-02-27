@@ -41,9 +41,9 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Project Scope (locked for first stable release)
 
-- [ ] Keep scope centered on browser‑first parsing + conversion of MHTML to clean modern HTML.
-- [ ] Prioritize extraction fidelity and HTML structure before UI polish or advanced features.
-- [ ] Explicitly defer `.one` and `.onepkg` structural parsing to a later milestone.
+- [ ] [P1] Keep scope centered on browser‑first parsing + conversion of MHTML to clean modern HTML.
+- [ ] [P1] Prioritize extraction fidelity and HTML structure before UI polish or advanced features.
+- [ ] [P1] Explicitly defer `.one` and `.onepkg` structural parsing to a later milestone.
 
 Note: MHTML → modern HTML pipeline is nearing completion (core transforms and formatting largely implemented).
 
@@ -126,13 +126,13 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Playwright smoke test added.
 - [x] README updated.
 
----
-
-## Encoding Fixes — Option A (priority)
-
-- [ ] Re‑run conversion and Playwright export audits after charset fixes.
-- [ ] Verify mojibake is resolved with no regressions.
-- [ ] Commit charset fallback changes only after full regression pass.
+### Experimental Export Formats
+- [ ] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default).
+- [ ] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`).
+- [ ] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled.
+- [ ] [P2] Add UX validation and disabled-state messaging for unsupported/unfinished formats.
+- [ ] [P2] Add smoke tests for export-format selection behavior.
+- [ ] [P3] Document feature as experimental in `README.md` and in-app help text.
 
 ---
 
@@ -147,8 +147,8 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Encoding & control characters
 - [x] Detect C0 control characters at decode time.
- - [x] Add CI test asserting no control characters in output.
-- [ ] Apply minimal sanitization only if decoding cannot fully resolve issues.
+- [x] Add CI test asserting no control characters in output.
+- [x] [P1] Apply minimal sanitization fallback only when decode recovery fails, with regression tests.
 
 ### Accessibility & semantics
 - [x] Add heading hierarchy smoke test. (2026-02-25)
@@ -156,15 +156,15 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Add test for missing `alt` text on images. (2026-02-25)
 
 ### Performance / output size
-- [ ] Warn or reject exported HTML with large inlined images.
-- [ ] Flag excessive inline styles for optimization.
+- [ ] [P2] Add guardrail for oversized inlined images (threshold + warning/fail behavior + test coverage).
+- [ ] [P2] Add threshold-based warning for excessive inline styles and verify via regression test.
 
 ---
 
 ## Regression Fixtures
 
 - [x] Add problematic `.mht` files to locked regression suite. (2026-02-26)
-- [ ] Ensure CI covers encoding, list fidelity, and sanitization cases.
+- [x] Ensure CI covers encoding, list fidelity, and sanitization cases. (2026-02-27)
 
 ---
 
@@ -179,6 +179,6 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ## Product / Docs Follow‑Up
 
-- [ ] Document native import limitations and expected fidelity.
-- [ ] Decide on in‑browser decoder vs companion‑tool workflow.
-- [ ] Polish page naming for GUID‑like titles.
+- [ ] [P2] Document native import limitations and expected fidelity in `README.md` and release notes.
+- [ ] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path.
+- [ ] [P3] Polish page naming for GUID-like titles with a deterministic title strategy.

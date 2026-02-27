@@ -247,7 +247,7 @@ export default class WorkerManager {
           const fileName = payload.fileName || payload.relativePath || '';
           if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
             logger.info({ msg: 'main-thread parseMht for', meta: { fileName } });
-            const parsed = mhtMod.parseMht(htmlInput);
+            const parsed = mhtMod.parseMht(htmlInput, payload.config || {});
             if (parsed && parsed.html) {
               htmlInput = parsed.html;
               imageMap = Object.assign({}, imageMap, parsed.imageMap || {});

@@ -44,6 +44,23 @@ Content-Transfer-Encoding: quoted-printable
     expectedSubstring: '“Hello” – world',
     requiresFallback: true,
   },
+  {
+    name: 'inline-recovery-failure-controls',
+    raw: `From: sample
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="b"
+
+--b
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<p>Hello=14world=19!</p>
+--b--`,
+    description: 'fallback attempt still leaves controls; strict recovery sanitization should apply',
+    expectedSubstring: '<p>Helloworld!</p>',
+    requiresFallback: true,
+    expectsDecodeRecoveryFailure: true,
+  },
 ];
 
 const optionSets = [
@@ -112,6 +129,28 @@ for (const fx of fixtures) {
       if (!hasMapping) {
         console.error(`${fx.name} ${label}: missing BodyDecodedMapping`);
         overallFail = true;
+      }
+    }
+
+    if (fx.expectsDecodeRecoveryFailure) {
+      if (opts.EnableCharsetFallback) {
+        if (p.decodeRecoveryFailed !== true) {
+          console.error(`${fx.name} ${label}: expected decodeRecoveryFailed=true when fallback enabled`);
+          overallFail = true;
+        }
+        if (p.controlCharSanitized !== true) {
+          console.error(`${fx.name} ${label}: expected controlCharSanitized=true when decode recovery fails`);
+          overallFail = true;
+        }
+        if (p.controlSanitizationReason !== 'decode-recovery-failed') {
+          console.error(`${fx.name} ${label}: expected controlSanitizationReason=decode-recovery-failed`);
+          overallFail = true;
+        }
+      } else {
+        if (p.decodeRecoveryFailed === true) {
+          console.error(`${fx.name} ${label}: did not expect decodeRecoveryFailed when fallback disabled`);
+          overallFail = true;
+        }
       }
     }
 

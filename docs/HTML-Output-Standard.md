@@ -1,14 +1,10 @@
 # HTML Output Standard (Internal)
 
-This document defines the guarantees, constraints, and non‑goals for HTML
-produced by the MHTML → HTML conversion pipeline.
+This document defines the guarantees, constraints, and non‑goals for HTML produced by the MHTML → HTML conversion pipeline.
 
-The objective is to emit **clean, modern, semantic HTML** that conforms to the
-HTML Living Standard, is stable under sanitization and formatting, and is free
-from authoring‑tool artifacts.
+The objective is to emit **clean, modern, semantic HTML** that conforms to the HTML Living Standard, is stable under sanitization and formatting, and is free from authoring‑tool artifacts.
 
-This is an internal engineering standard used to guide pipeline behavior,
-sanitization rules, regression tests, and release decisions.
+This is an internal engineering standard used to guide pipeline behavior, sanitization rules, regression tests, and release decisions.
 
 ---
 
@@ -16,12 +12,10 @@ sanitization rules, regression tests, and release decisions.
 
 - Output must be valid under the **HTML Living Standard (WHATWG)**.
 - Documents must be **UTF‑8 encoded**.
-- Output must not rely on deprecated, obsolete, or authoring‑tool‑specific
-  markup.
+- Output must not rely on deprecated, obsolete, or authoring‑tool‑specific   markup.
 - Output must render correctly in modern evergreen browsers without polyfills.
 
-The goal is **conformance and predictability**, not strict visual parity with
-the source authoring tool.
+The goal is **conformance and predictability**, not strict visual parity with the source authoring tool.
 
 ---
 
@@ -74,22 +68,19 @@ Any appearance of the above is considered a **conversion defect**.
   - Required behavior
 - Visual fidelity must not depend on authoring‑tool‑specific styles.
 
-The pipeline may remove or normalize styles that exist solely for layout or
-editor‑specific rendering.
+The pipeline may remove or normalize styles that exist solely for layout or editor‑specific rendering.
 
 ---
 
 ## 5. Encoding and Character Safety
 
 - Output must be UTF‑8 encoded.
-- Exported HTML must not contain **C0 control characters**
-  (`U+0000..U+001F`, excluding TAB, LF, CR).
+- Exported HTML must not contain **C0 control characters** (`U+0000..U+001F`, excluding TAB, LF, CR).
 - Charset fallback logic must be:
   - Deterministic
   - Test‑covered
   - Documented if lossy
-- Any normalization that removes or replaces characters must be justified and
-  covered by regression tests.
+- Any normalization that removes or replaces characters must be justified and covered by regression tests.
 
 Encoding correctness is a **release‑blocking requirement**.
 
@@ -102,11 +93,8 @@ The pipeline guarantees a minimal accessibility baseline:
 - Exactly one page‑level `<h1>`.
 - Presence of a `<main>` landmark.
 - Non‑decorative images must include `alt` text.
-- Contrast violations introduced by conversion must be corrected or normalized
-  where feasible.
 
-This baseline does not aim for full WCAG compliance, but avoids introducing
-accessibility regressions.
+This baseline does not aim for full WCAG compliance, but avoids introducing accessibility regressions.
 
 ---
 
