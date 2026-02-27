@@ -154,6 +154,22 @@ export function analyzeHtml(filePath, html) {
     });
   }
 
+  if (/xmlns\s*=\s*"http:\/\/www\.w3\.org\/TR\/REC-html40"/i.test(html)) {
+    violations.push({
+      type: 'legacy-html40-namespace',
+      token: 'xmlns="http://www.w3.org/TR/REC-html40"',
+      where: 'html'
+    });
+  }
+
+  if (/meta\s+http-equiv\s*=\s*"content-type"/i.test(html)) {
+    violations.push({
+      type: 'redundant-content-type-meta',
+      token: 'meta http-equiv="Content-Type"',
+      where: 'head'
+    });
+  }
+
   if (violations.length === 0) {
     return { filePath, ok: true, violations: [] };
   }

@@ -8,8 +8,11 @@ if (!global.NodeFilter) global.NodeFilter = dom.window.NodeFilter;
 
 function sanitizeDoc(html) {
   const doc = new JSDOM(html).window.document;
+  sanitize.ensureHead(doc, { defaultTitle: 'Document', defaultLang: 'en' });
   sanitize.removeOfficeArtifacts(doc);
+  sanitize.stripObsoleteHeadArtifacts(doc);
   sanitize.normalizeTableAttributes(doc);
+  sanitize.normalizeLegacyAttributes(doc, { removeLegacyDataAttrs: true });
   return doc;
 }
 
@@ -51,6 +54,14 @@ function sanitizeDoc(html) {
     const div = doc.querySelector('div');
     assert(div, 'div should exist');
     assert.equal(div.getAttribute('xmlns'), 'http://www.w3.org/1999/xhtml', 'non-office namespace URI should remain');
+  }
+
+  {
+    const doc = sanitizeDoc('<!doctype html><html xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body><p>Text</p></body></html>');
+    const html = doc.querySelector('html');
+    assert(html, 'html should exist');
+    assert.equal(html.hasAttribute('xmlns'), false, 'legacy REC-html40 namespace should be removed');
+    assert.equal(doc.querySelectorAll('meta[http-equiv="Content-Type"]').length, 0, 'redundant content-type meta should be removed');
   }
 
   console.log('obsolete-attributes: PASS');

@@ -1,6 +1,6 @@
 {
   "name": "locked-cleaned-fixtures",
-  "updatedAt": "2026-02-26T16:37:07.555Z",
+  "updatedAt": "2026-02-27T12:17:06.481Z",
   "source": "Tests/Cleaned",
   "requiredFiles": [
     "Communicate using Markdown.html",
@@ -16,11 +16,11 @@
     "trimTrailingWhitespaceLines": true
   },
   "hashes": {
-    "Communicate using Markdown.html": "3635f3817ee2b69d5ebdd02c44414e668ae2db49c1141462de85bea9591aa30b",
-    "DevToys.html": "470d085630d3db92522a8731586113784aa06b4fe8aa9e5d84d61074f1495fd4",
-    "Problematic mht-full-snippet.html": "355ae198ef85517286612678e62a996f770e96aaaa8c131383aa1b4aa4a775a4",
+    "Communicate using Markdown.html": "5f4ed84b0415d3e6575978b28400d7c6625876baf70fcfd9592cc0789e48a6dd",
+    "DevToys.html": "e02c67a279ea67df093316a47dd8a488547159f9093f659dda734adc06bbdfe2",
+    "Problematic mht-full-snippet.html": "003f200235e9926c1c9bfc1437742f01d0e05a8963bb63f8dcf2c1d1481c52d7",
     "Problematic mht-sample.html": "a4d9c4f53200ba0fec8990624e5ff1394dafe0c43bf2aef08360157b37fadabf",
-    "Resolve merge conflicts.html": "c745335e91537ef6d84f2d3583b4ebc986af1a1b3c84a064cf2b400f6e1ff8e9",
-    "Test File.html": "80b31ac86ef05c9ef4f6ffe412797518e62b55ffa0f7a0e0a47cc177b4dd0958"
+    "Resolve merge conflicts.html": "1f1962102cf840d803f870405e19eb6c768af7a7aac6d9c84a44144a209e0e59",
+    "Test File.html": "ea939b92d719fb29f23d30eb4d1ec7d76dbe80c118fd06ad216b3575cf6f2fde"
   }
 }
