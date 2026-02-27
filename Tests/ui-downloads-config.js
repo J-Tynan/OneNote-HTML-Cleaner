@@ -18,6 +18,8 @@ async function main() {
     toolbarEnabled: { checked: true },
     toolbarEditToggleEnabled: { checked: true },
     toolbarMetadataToggleEnabled: { checked: false },
+    externalizeCssEnabled: { checked: true },
+    externalizeCssMode: { value: 'per-page' },
     downloadZipButton: { disabled: false },
     successfulOutputs: new Map()
   };
@@ -32,6 +34,8 @@ async function main() {
   if (cfg.ToolbarEnabled !== true) fail('Expected ToolbarEnabled true');
   if (cfg.ToolbarEditToggleEnabled !== true) fail('Expected ToolbarEditToggleEnabled true');
   if (cfg.ToolbarMetadataToggleEnabled !== false) fail('Expected ToolbarMetadataToggleEnabled false');
+  if (cfg.ExternalizeCssEnabled !== true) fail('Expected ExternalizeCssEnabled true');
+  if (cfg.ExternalizeCssMode !== 'per-page') fail('Expected ExternalizeCssMode to be "per-page"');
 
   console.log('ui-downloads-config: OK');
 }

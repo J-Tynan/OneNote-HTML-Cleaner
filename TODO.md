@@ -142,6 +142,24 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] [P2] Add native + Playwright smoke coverage for toggle rendering, interaction, default state, and OLED-black variant behavior.
 - [ ] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help.
 
+### Externalized CSS for Converted Pages (HTML only)
+- [x] [P2] Add Advanced options checkbox: “Externalize CSS to separate file” (default OFF). (2026-02-27)
+- [x] [P2] Add dependent sub-option (enabled only when externalize is ON): “CSS mode: Shared stylesheet for all converted pages / One stylesheet per page”. (2026-02-27)
+- [x] [P2] Keep current embedded-style output as default/fallback when externalize is OFF. (2026-02-27)
+- [x] [P2] For ZIP exports, write stylesheet assets with deterministic names and update converted HTML to reference them. (2026-02-27)
+- [x] [P2] Define naming and path strategy for both modes (shared: one CSS asset per export batch; per-page: one CSS asset per converted page). (2026-02-27)
+- [x] [P2] Ensure externalized CSS output remains standalone-safe for expected usage (clear warning/help text when output is downloaded as a single HTML file without assets). (2026-02-27)
+- [x] [P2] Add regression and smoke tests for: toggle OFF parity, shared mode links, per-page mode links, and missing-asset behavior messaging. (2026-02-27)
+- [ ] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help.
+
+#### Externalized CSS review follow-up (post-implementation)
+- [ ] [P2] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
+- [ ] [P2] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
+- [ ] [P2] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name.
+- [ ] [P2] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
+- [ ] [P2] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
+- [ ] [P2] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
+
 ---
 
 ## Sanitization, Quality & Encoding (recommended)

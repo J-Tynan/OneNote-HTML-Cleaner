@@ -20,6 +20,7 @@ const logger = createLogger('pipeline');
  */
 export async function runPipeline(htmlString, config = {}) {
   const logs = [];
+  const outputAssets = [];
   const resolvedConfig = normalizePipelineConfig(config);
 
   try {
@@ -127,6 +128,25 @@ export async function runPipeline(htmlString, config = {}) {
     // Formatting
     logs.push(...ensureArray(format.formatDocument(doc)));
 
+    if (resolvedConfig.ExternalizeCssEnabled === true) {
+      const cssExtraction = sanitize.externalizeCss(doc, {
+        externalizeCssEnabled: true,
+        externalizeCssMode: resolvedConfig.ExternalizeCssMode || 'shared'
+      });
+      logs.push(...ensureArray(cssExtraction && cssExtraction.logs));
+      if (cssExtraction && typeof cssExtraction.cssText === 'string' && cssExtraction.cssText.trim()) {
+        outputAssets.push({
+          type: 'text/css',
+          role: 'converted-styles',
+          mode: resolvedConfig.ExternalizeCssMode || 'shared',
+          filename: resolvedConfig.ExternalizeCssMode === 'per-page'
+            ? 'converted-page.css'
+            : 'converted-shared.css',
+          content: cssExtraction.cssText
+        });
+      }
+    }
+
     // Serialize and normalize whitespace
     const serialized = documentToHtml(doc);
     const normalized = format.normalizeWhitespace(serialized);
@@ -155,7 +175,7 @@ export async function runPipeline(htmlString, config = {}) {
       logs.push({ step: 'validateOutput', level: 'warn', details: 'output does not look like HTML' });
     }
 
-    return { output: withToolbar, logs };
+    return { output: withToolbar, logs, assets: outputAssets };
   } catch (err) {
     logger.error({ msg: 'unexpected error', meta: { error: String(err) } });
     logs.push({ step: 'pipelineError', level: 'error', details: String(err) });

@@ -29,6 +29,24 @@ function normalizeUnitStrategy(value) {
   return 'preserve';
 }
 
+function normalizeExternalizeCssMode(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === 'per-page' ? 'per-page' : 'shared';
+}
+
+function normalizeExternalCssConfig(rawConfig = {}) {
+  const enabledValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExternalizeCssEnabled')
+    ? rawConfig.ExternalizeCssEnabled
+    : rawConfig.externalizeCssEnabled;
+  const modeValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExternalizeCssMode')
+    ? rawConfig.ExternalizeCssMode
+    : rawConfig.externalizeCssMode;
+  return {
+    ExternalizeCssEnabled: toBoolean(enabledValue, false),
+    ExternalizeCssMode: normalizeExternalizeCssMode(modeValue)
+  };
+}
+
 function normalizeToolbarConfig(rawConfig = {}) {
   return {
     ToolbarEnabled: toBoolean(rawConfig.ToolbarEnabled, false),
@@ -55,7 +73,9 @@ const PROFILE_PRESETS = {
     TailwindCssHref: 'assets/tailwind-output.css',
     CollapseInlineStyles: false,
     OutputCleanupMode: 'off',
-    UnitStrategy: 'normalize-safe'
+    UnitStrategy: 'normalize-safe',
+    ExternalizeCssEnabled: false,
+    ExternalizeCssMode: 'shared'
   },
   generic: {
     Profile: 'generic',
@@ -73,7 +93,9 @@ const PROFILE_PRESETS = {
     TailwindCssHref: 'assets/tailwind-output.css',
     CollapseInlineStyles: false,
     OutputCleanupMode: 'off',
-    UnitStrategy: 'normalize-safe'
+    UnitStrategy: 'normalize-safe',
+    ExternalizeCssEnabled: false,
+    ExternalizeCssMode: 'shared'
   }
 };
 
@@ -86,12 +108,14 @@ export function normalizePipelineConfig(rawConfig = {}) {
   const profile = normalizeProfile(rawConfig.Profile || rawConfig.profile);
   const preset = PROFILE_PRESETS[profile];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
+  const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
   const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
   const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
   return {
     ...preset,
     ...rawConfig,
     ...normalizedToolbarConfig,
+    ...normalizedExternalCssConfig,
     Profile: profile,
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy

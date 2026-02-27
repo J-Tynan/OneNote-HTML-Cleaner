@@ -4,6 +4,41 @@ import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
 export function createDownloadHelpers(ctx, updateZipButton) {
+  function getSuccessfulOutputRecord(value) {
+    if (value && typeof value === 'object' && typeof value.html === 'string') {
+      return {
+        html: value.html,
+        assets: Array.isArray(value.assets) ? value.assets : [],
+        config: value.config || null
+      };
+    }
+
+    return {
+      html: typeof value === 'string' ? value : '',
+      assets: [],
+      config: null
+    };
+  }
+
+  function ensureStylesheetLink(html, href) {
+    const linkTag = `<link rel="stylesheet" href="${href}">`;
+    if (new RegExp(`<link\\s+[^>]*href=["']${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*>`, 'i').test(html)) {
+      return html;
+    }
+    if (/<\/head>/i.test(html)) {
+      return html.replace(/<\/head>/i, `${linkTag}</head>`);
+    }
+    if (/<html[^>]*>/i.test(html)) {
+      return html.replace(/<html[^>]*>/i, (match) => `${match}<head>${linkTag}</head>`);
+    }
+    return `${linkTag}${html}`;
+  }
+
+  function getCssAssetContent(record) {
+    const cssAsset = (record.assets || []).find(asset => asset && asset.type === 'text/css' && typeof asset.content === 'string');
+    return cssAsset ? cssAsset.content : '';
+  }
+
   function downloadBlob(filename, text, mime = 'text/html') {
     const bom = '\uFEFF';
     const content = bom + (text || '');
@@ -54,6 +89,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
       ToolbarEnabled: Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked),
       ToolbarEditToggleEnabled: Boolean(ctx.toolbarEditToggleEnabled && ctx.toolbarEditToggleEnabled.checked),
       ToolbarMetadataToggleEnabled: Boolean(ctx.toolbarMetadataToggleEnabled && ctx.toolbarMetadataToggleEnabled.checked),
+      ExternalizeCssEnabled: Boolean(ctx.externalizeCssEnabled && ctx.externalizeCssEnabled.checked),
+      ExternalizeCssMode: ctx.externalizeCssMode ? String(ctx.externalizeCssMode.value || 'shared') : 'shared',
       ToolbarBundleMode: 'inline'
     };
   }
@@ -67,8 +104,42 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     }
 
     const zip = new JSZip();
-    for (const [name, html] of ctx.successfulOutputs.entries()) {
-      zip.file(name, `\uFEFF${html || ''}`);
+    const sharedCssParts = [];
+    const sharedCssFilename = 'converted-shared.css';
+    const perPageCssTaken = new Set();
+
+    for (const [name, value] of ctx.successfulOutputs.entries()) {
+      const record = getSuccessfulOutputRecord(value);
+      let html = record.html || '';
+      const config = record.config || {};
+      const externalizeEnabled = config.ExternalizeCssEnabled === true;
+      const cssMode = String(config.ExternalizeCssMode || 'shared').toLowerCase() === 'per-page' ? 'per-page' : 'shared';
+      const cssContent = getCssAssetContent(record).trim();
+
+      if (externalizeEnabled && cssContent) {
+        if (cssMode === 'per-page') {
+          const stem = String(name || 'output.html').replace(/\.html$/i, '') || 'output';
+          let cssName = `${stem}.css`;
+          let suffix = 2;
+          while (perPageCssTaken.has(cssName)) {
+            cssName = `${stem} (${suffix}).css`;
+            suffix += 1;
+          }
+          perPageCssTaken.add(cssName);
+          html = ensureStylesheetLink(html, cssName);
+          zip.file(cssName, `${cssContent}\n`);
+        } else {
+          html = ensureStylesheetLink(html, sharedCssFilename);
+          sharedCssParts.push(cssContent);
+        }
+      }
+
+      zip.file(name, `\uFEFF${html}`);
+    }
+
+    if (sharedCssParts.length) {
+      const uniqueParts = Array.from(new Set(sharedCssParts.filter(Boolean)));
+      zip.file(sharedCssFilename, `${uniqueParts.join('\n\n')}\n`);
     }
 
     ctx.downloadZipButton.disabled = true;

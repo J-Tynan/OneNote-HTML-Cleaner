@@ -91,6 +91,96 @@ function normalizeZeroCssLength(value) {
   return value;
 }
 
+function canonicalizeInlineStyle(styleText) {
+  const byProp = new Map();
+  parseInlineStyle(styleText).forEach(({ prop, value }) => {
+    byProp.set(prop, String(value || '').trim().replace(/\s+/g, ' '));
+  });
+  if (!byProp.size) return null;
+  return Array.from(byProp.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([prop, value]) => `${prop}:${value}`)
+    .join(';');
+}
+
+function hashStyleSignature(signature) {
+  let hash = 5381;
+  const text = String(signature || '');
+  for (let i = 0; i < text.length; i += 1) {
+    hash = ((hash << 5) + hash) ^ text.charCodeAt(i);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+export function externalizeCss(doc, options = {}) {
+  const logs = [];
+  if (!doc || options.externalizeCssEnabled !== true) {
+    return { logs, cssText: '' };
+  }
+
+  const extractedBlocks = [];
+  let extractedStyleTags = 0;
+  Array.from(doc.querySelectorAll('style')).forEach(styleEl => {
+    const css = String(styleEl.textContent || '').trim();
+    if (css) {
+      extractedBlocks.push(css);
+    }
+    styleEl.remove();
+    extractedStyleTags += 1;
+  });
+
+  const classBySignature = new Map();
+  const declarationsByClass = new Map();
+  let externalizedInlineStyles = 0;
+
+  Array.from(doc.querySelectorAll('[style]')).forEach(el => {
+    const original = String(el.getAttribute('style') || '').trim();
+    if (!original) {
+      el.removeAttribute('style');
+      return;
+    }
+
+    const normalized = dedupeInlineStyle(original);
+    const signature = canonicalizeInlineStyle(normalized);
+    if (!signature) {
+      el.removeAttribute('style');
+      return;
+    }
+
+    let className = classBySignature.get(signature);
+    if (!className) {
+      className = `extcss-${hashStyleSignature(signature)}`;
+      let suffix = 2;
+      while (declarationsByClass.has(className) && declarationsByClass.get(className) !== normalized) {
+        className = `extcss-${hashStyleSignature(signature)}-${suffix}`;
+        suffix += 1;
+      }
+      classBySignature.set(signature, className);
+      declarationsByClass.set(className, normalized);
+    }
+
+    addClass(el, className);
+    el.removeAttribute('style');
+    externalizedInlineStyles += 1;
+  });
+
+  const classRules = Array.from(declarationsByClass.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([className, declaration]) => `.${className} { ${declaration}; }`);
+
+  const cssText = [...classRules, ...extractedBlocks].join('\n\n').trim();
+  if (externalizedInlineStyles || extractedStyleTags) {
+    logs.push({
+      step: 'ExternalizeCss',
+      externalizedInlineStyles,
+      extractedStyleTags,
+      mode: String(options.externalizeCssMode || 'shared')
+    });
+  }
+
+  return { logs, cssText };
+}
+
 export function normalizeUnits(doc, options = {}) {
   const logs = [];
   const strategy = String(options.unitStrategy || 'preserve').toLowerCase();

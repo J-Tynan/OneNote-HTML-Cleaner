@@ -26,7 +26,9 @@ const dom = {
   toolbarEnabled: null,
   toolbarEditToggleEnabled: null,
   toolbarMetadataToggleEnabled: null,
-  autoConvertEnabled: null
+  autoConvertEnabled: null,
+  externalizeCssEnabled: null,
+  externalizeCssMode: null
 };
 
 const runtime = {
@@ -132,6 +134,12 @@ function updateZipButton() {
   dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
 }
 
+function updateExternalCssControls() {
+  if (!dom.externalizeCssEnabled || !dom.externalizeCssMode) return;
+  const enabled = dom.externalizeCssEnabled.checked === true;
+  dom.externalizeCssMode.disabled = !enabled;
+}
+
 function applyUiStyleVariant(variant) {
   try {
     if (variant && variant !== 'default') {
@@ -160,7 +168,11 @@ function rebuildSuccessfulOutputs() {
       index += 1;
     }
 
-    runtime.successfulOutputs.set(filename, entry.outputHtml);
+    runtime.successfulOutputs.set(filename, {
+      html: entry.outputHtml,
+      assets: Array.isArray(entry.outputAssets) ? entry.outputAssets : [],
+      config: entry.conversionConfig || null
+    });
   }
 
   updateZipButton();
@@ -273,6 +285,10 @@ function readFileAsArrayBuffer(file) {
 
 async function processEntryWithWorker(entry) {
   try {
+    const conversionConfig = runtime.downloadHelpers
+      ? runtime.downloadHelpers.getConversionConfig()
+      : { Profile: 'cornell', TailwindCssHref: 'assets/tailwind-output.css' };
+    entry.conversionConfig = conversionConfig;
     const sourceKind = detectSourceKind(entry.name, entry.file.type);
     const payload = {
       id: entry.id,
@@ -280,9 +296,7 @@ async function processEntryWithWorker(entry) {
       relativePath: entry.name,
       mimetype: entry.file.type || '',
       sourceKind,
-      config: runtime.downloadHelpers
-        ? runtime.downloadHelpers.getConversionConfig()
-        : { Profile: 'cornell', TailwindCssHref: 'assets/tailwind-output.css' }
+      config: conversionConfig
     };
 
     let transferList = [];
@@ -301,6 +315,7 @@ async function processEntryWithWorker(entry) {
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
+      entry.outputAssets = Array.isArray(result.outputAssets) ? result.outputAssets : [];
       updateEntryStatus(entry.id, 'success');
       return;
     }
@@ -314,12 +329,16 @@ async function processEntryWithWorker(entry) {
 
 function processEntry(entry) {
   updateEntryStatus(entry.id, 'working');
+  if (runtime.downloadHelpers && typeof runtime.downloadHelpers.getConversionConfig === 'function') {
+    entry.conversionConfig = runtime.downloadHelpers.getConversionConfig();
+  }
 
   if (typeof window.processFileEntry === 'function') {
     try {
       window.processFileEntry(entry.file, (result) => {
         if (result && typeof result.outputHtml === 'string') {
           entry.outputHtml = result.outputHtml;
+          entry.outputAssets = Array.isArray(result.outputAssets) ? result.outputAssets : [];
         }
 
         const status = result && typeof result.status === 'string'
@@ -356,6 +375,8 @@ export function renderFileList() {
     const safeSize = escapeHtml(formatBytes(entry.size));
     const safeMessage = entry.message ? escapeHtml(entry.message) : '';
     const hasOutput = typeof entry.outputHtml === 'string' && entry.outputHtml.length > 0;
+    const singleDownloadBlocked = Boolean(entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true);
+    const canDownloadHtml = hasOutput && !singleDownloadBlocked;
 
     return `
       <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}">
@@ -374,7 +395,7 @@ export function renderFileList() {
           </button>
         </div>
 
-        ${hasOutput ? `
+        ${canDownloadHtml ? `
           <div class="mt-3">
             <button
               type="button"
@@ -383,6 +404,9 @@ export function renderFileList() {
               Download HTML
             </button>
           </div>
+        ` : ''}
+        ${hasOutput && singleDownloadBlocked ? `
+          <p class="mt-3 text-xs text-muted">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
         ` : ''}
       </div>
     `;
@@ -506,6 +530,7 @@ function onFileListClick(event) {
     const id = downloadButton.getAttribute('data-download-id');
     const entry = getQueueEntry(id);
     if (!entry || !entry.outputHtml) return;
+    if (entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true) return;
 
     const filename = entry.name.replace(/\.[^.]+$/, '') + '.html';
 
@@ -521,6 +546,7 @@ async function onDownloadZipClick() {
 }
 
 function onAdvancedOptionsChange() {
+  updateExternalCssControls();
   rebuildSuccessfulOutputs();
 }
 
@@ -545,6 +571,8 @@ function bindEvents() {
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarMetadataToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.externalizeCssEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.externalizeCssMode?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
   dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
@@ -613,6 +641,8 @@ export function initUI(workerManager, options = {}) {
   dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
   dom.toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
   dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
+  dom.externalizeCssEnabled = document.getElementById('externalizeCssEnabled');
+  dom.externalizeCssMode = document.getElementById('externalizeCssMode');
   dom.autoConvertNotice = document.getElementById('autoConvertNotice');
   dom.diagnosticsPanel = document.getElementById('diagnosticsPanel');
   dom.diagnosticsList = document.getElementById('diagnosticsList');
@@ -673,7 +703,9 @@ export function initUI(workerManager, options = {}) {
     conversionProfile: dom.conversionProfile,
     toolbarEnabled: dom.toolbarEnabled,
     toolbarEditToggleEnabled: dom.toolbarEditToggleEnabled,
-    toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled
+    toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled,
+    externalizeCssEnabled: dom.externalizeCssEnabled,
+    externalizeCssMode: dom.externalizeCssMode
   }, updateZipButton);
 
   if (window.JSZip) {
@@ -684,6 +716,7 @@ export function initUI(workerManager, options = {}) {
 
   runtime.dragCounter = 0;
   setDropzoneActive(false);
+  updateExternalCssControls();
   // previous phase-1 testing dropdown has been removed; default variant applied in styles
 
   bindEvents();

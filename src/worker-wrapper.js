@@ -267,6 +267,7 @@ export default class WorkerManager {
             id: msg.id,
             status: 'done',
             outputHtml: result.output,
+            outputAssets: Array.isArray(result.assets) ? result.assets : [],
             relativePath: payload.relativePath || payload.fileName,
             logs: result.logs
           };

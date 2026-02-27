@@ -160,6 +160,7 @@ self.onmessage = async (e) => {
       id,
       status: 'done',
       outputHtml: result.output,
+      outputAssets: Array.isArray(result.assets) ? result.assets : [],
       relativePath: payload.relativePath || payload.fileName,
       logs: result.logs || []
     });
