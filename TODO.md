@@ -134,6 +134,14 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] [P2] Add smoke tests for export-format selection behavior.
 - [ ] [P3] Document feature as experimental in `README.md` and in-app help text.
 
+### Converted-Page Theme Toggle (HTML only)
+- [ ] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF).
+- [ ] [P2] Add dependent sub-checkbox: “Use OLED black for Dark theme” (enabled only when theme toggle option is ON).
+- [ ] [P2] Inject a simple symbol-based Light/Dark toggle into converted HTML pages (top-right corner, default Light, one click/tap toggles Dark).
+- [ ] [P2] Ensure this feature applies only to HTML exports; disable/hide and explain unavailability for `.md` / `.docx` / `.pdf` outputs.
+- [ ] [P2] Add native + Playwright smoke coverage for toggle rendering, interaction, default state, and OLED-black variant behavior.
+- [ ] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help.
+
 ---
 
 ## Sanitization, Quality & Encoding (recommended)
