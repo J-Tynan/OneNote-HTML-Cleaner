@@ -55,6 +55,15 @@ export async function runPipeline(htmlString, config = {}) {
     if (resolvedConfig.NormalizeTables !== false) {
       logs.push(...ensureArray(sanitize.normalizeTableAttributes(doc)));
     }
+    if (resolvedConfig.OutputCleanupMode === 'safe') {
+      logs.push(...ensureArray(sanitize.stripObsoleteHeadArtifacts(doc)));
+      logs.push(...ensureArray(sanitize.normalizeLegacyAttributes(doc, {
+        removeLegacyDataAttrs: true
+      })));
+    }
+    logs.push(...ensureArray(sanitize.normalizeUnits(doc, {
+      unitStrategy: resolvedConfig.UnitStrategy
+    })));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
     logs.push(...ensureArray(sanitize.ensureImageAlt(doc, {
       fallbackAlt: resolvedConfig.ImageAltFallback || 'Image'

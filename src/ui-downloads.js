@@ -48,6 +48,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const profile = ctx.conversionProfile ? ctx.conversionProfile.value : 'cornell';
     return {
       Profile: profile,
+      OutputCleanupMode: 'safe',
+      UnitStrategy: 'normalize-safe',
       TailwindCssHref: 'assets/tailwind-output.css',
       ToolbarEnabled: Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked),
       ToolbarEditToggleEnabled: Boolean(ctx.toolbarEditToggleEnabled && ctx.toolbarEditToggleEnabled.checked),

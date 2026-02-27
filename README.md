@@ -121,6 +121,12 @@ The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it 
 
 The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
 
+### Output cleanup defaults (current testing configuration)
+
+- `OutputCleanupMode` defaults to `safe` in the UI conversion path and fixture regeneration helper.
+- `UnitStrategy` now defaults to `normalize-safe` for testing and validation before merge to `main`.
+- Empty layout placeholders (for example in table/list structures) remain preserved; cleanup focuses on obsolete artifacts and conservative normalization only.
+
 ## Native OneNote files (Phase 1) — Experimental
 
 - Note: native `.one` and `.onepkg` handling is experimental and partial. The app accepts these files in the picker and via drag/drop, but full in-browser extraction for all compressed notebooks is not yet implemented. Some flows will fall back to placeholder exports or require developer-side preprocessing.

@@ -55,6 +55,170 @@ function resolveDocumentLang(html, body, fallback = 'en') {
   return { value: fallbackLang, source: 'fallback' };
 }
 
+function parseInlineStyle(styleText) {
+  return String(styleText || '')
+    .split(';')
+    .map(part => part.trim())
+    .filter(Boolean)
+    .map(part => {
+      const idx = part.indexOf(':');
+      if (idx === -1) return null;
+      const prop = part.slice(0, idx).trim().toLowerCase();
+      const value = part.slice(idx + 1).trim();
+      if (!prop) return null;
+      return { prop, value };
+    })
+    .filter(Boolean);
+}
+
+function serializeInlineStyle(entries) {
+  return entries.map(({ prop, value }) => `${prop}: ${value}`).join('; ');
+}
+
+function dedupeInlineStyle(styleText) {
+  const byProp = new Map();
+  parseInlineStyle(styleText).forEach(({ prop, value }) => {
+    byProp.set(prop, value);
+  });
+  return serializeInlineStyle(Array.from(byProp.entries()).map(([prop, value]) => ({ prop, value })));
+}
+
+function normalizeZeroCssLength(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (/^0+(?:\.0+)?(?:px|pt|pc|cm|mm|in|em|rem|%)$/.test(normalized)) {
+    return '0';
+  }
+  return value;
+}
+
+export function normalizeUnits(doc, options = {}) {
+  const logs = [];
+  const strategy = String(options.unitStrategy || 'preserve').toLowerCase();
+  if (strategy !== 'normalize-safe') return logs;
+
+  const all = Array.from(doc.querySelectorAll('[style]'));
+  let updated = 0;
+
+  all.forEach(el => {
+    const entries = parseInlineStyle(el.getAttribute('style'));
+    if (!entries.length) return;
+
+    const normalizedEntries = entries.map(({ prop, value }) => ({ prop, value: normalizeZeroCssLength(value) }));
+    const next = serializeInlineStyle(normalizedEntries);
+    const previous = String(el.getAttribute('style') || '').trim();
+    if (next !== previous) {
+      if (next) {
+        el.setAttribute('style', next);
+      } else {
+        el.removeAttribute('style');
+      }
+      updated++;
+    }
+  });
+
+  if (updated) {
+    logs.push({ step: 'NormalizeUnits', strategy, updated });
+  }
+  return logs;
+}
+
+export function stripObsoleteHeadArtifacts(doc) {
+  const logs = [];
+
+  const html = doc.querySelector('html') || doc.documentElement;
+  if (html && String(html.getAttribute('xmlns') || '').trim().toLowerCase() === 'http://www.w3.org/tr/rec-html40') {
+    html.removeAttribute('xmlns');
+    logs.push({ step: 'StripObsoleteHeadArtifacts', details: 'Removed legacy html xmlns' });
+  }
+
+  const head = doc.querySelector('head');
+  if (!head) return logs;
+
+  const hasCharsetMeta = Boolean(head.querySelector('meta[charset]'));
+  if (!hasCharsetMeta) return logs;
+
+  const contentTypeMetas = Array.from(head.querySelectorAll('meta[http-equiv]')).filter(meta => {
+    const eq = String(meta.getAttribute('http-equiv') || '').trim().toLowerCase();
+    return eq === 'content-type';
+  });
+
+  if (contentTypeMetas.length) {
+    contentTypeMetas.forEach(meta => meta.remove());
+    logs.push({ step: 'StripObsoleteHeadArtifacts', removedContentTypeMeta: contentTypeMetas.length });
+  }
+
+  return logs;
+}
+
+export function normalizeLegacyAttributes(doc, options = {}) {
+  const logs = [];
+  const removeLegacyDataAttrs = options.removeLegacyDataAttrs !== false;
+  let updatedStyles = 0;
+  let removedListType = 0;
+  let removedLegacyDataAttrs = 0;
+
+  Array.from(doc.querySelectorAll('ul[type]')).forEach(ul => {
+    const type = String(ul.getAttribute('type') || '').trim().toLowerCase();
+    if (!type) return;
+    ul.removeAttribute('type');
+    removedListType += 1;
+
+    if (type === 'disc') {
+      addClass(ul, 'list-disc');
+      addClass(ul, 'list-outside');
+    } else {
+      const styleEntries = parseInlineStyle(ul.getAttribute('style'));
+      const hasListStyleType = styleEntries.some(({ prop }) => prop === 'list-style-type');
+      if (!hasListStyleType) {
+        styleEntries.push({ prop: 'list-style-type', value: type });
+      }
+      const next = serializeInlineStyle(styleEntries);
+      if (next) ul.setAttribute('style', next);
+    }
+  });
+
+  Array.from(doc.querySelectorAll('[style]')).forEach(el => {
+    const original = String(el.getAttribute('style') || '').trim();
+    const deduped = dedupeInlineStyle(original);
+    const filteredEntries = parseInlineStyle(deduped).filter(({ prop, value }) => {
+      if (prop !== 'border-width') return true;
+      return String(value || '').trim() !== '100%';
+    });
+    const next = serializeInlineStyle(filteredEntries);
+    if (next !== original) {
+      if (next) {
+        el.setAttribute('style', next);
+      } else {
+        el.removeAttribute('style');
+      }
+      updatedStyles += 1;
+    }
+  });
+
+  if (removeLegacyDataAttrs) {
+    const tableAttrs = ['data-legacy-border', 'data-legacy-cellpadding', 'data-legacy-cellspacing', 'data-legacy-align', 'data-legacy-valign'];
+    Array.from(doc.querySelectorAll('table')).forEach(table => {
+      tableAttrs.forEach(attr => {
+        if (table.hasAttribute(attr)) {
+          table.removeAttribute(attr);
+          removedLegacyDataAttrs += 1;
+        }
+      });
+    });
+  }
+
+  if (removedListType || updatedStyles || removedLegacyDataAttrs) {
+    logs.push({
+      step: 'NormalizeLegacyAttributes',
+      removedListType,
+      updatedStyles,
+      removedLegacyDataAttrs
+    });
+  }
+
+  return logs;
+}
+
 
 export function ensureHead(doc, options = {}) {
   const logs = [];
