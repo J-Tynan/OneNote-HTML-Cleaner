@@ -17,6 +17,18 @@ function normalizeToolbarBundleMode(value) {
   return normalized === 'inline' ? 'inline' : 'inline';
 }
 
+function normalizeOutputCleanupMode(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'safe') return 'safe';
+  return 'off';
+}
+
+function normalizeUnitStrategy(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'normalize-safe') return 'normalize-safe';
+  return 'preserve';
+}
+
 function normalizeToolbarConfig(rawConfig = {}) {
   return {
     ToolbarEnabled: toBoolean(rawConfig.ToolbarEnabled, false),
@@ -41,7 +53,9 @@ const PROFILE_PRESETS = {
     InlineStyleMigrationSelector: '[style]',
     InjectTailwindCss: true,
     TailwindCssHref: 'assets/tailwind-output.css',
-    CollapseInlineStyles: false
+    CollapseInlineStyles: false,
+    OutputCleanupMode: 'off',
+    UnitStrategy: 'normalize-safe'
   },
   generic: {
     Profile: 'generic',
@@ -57,7 +71,9 @@ const PROFILE_PRESETS = {
     InlineStyleMigrationSelector: '[style]',
     InjectTailwindCss: false,
     TailwindCssHref: 'assets/tailwind-output.css',
-    CollapseInlineStyles: false
+    CollapseInlineStyles: false,
+    OutputCleanupMode: 'off',
+    UnitStrategy: 'normalize-safe'
   }
 };
 
@@ -70,10 +86,14 @@ export function normalizePipelineConfig(rawConfig = {}) {
   const profile = normalizeProfile(rawConfig.Profile || rawConfig.profile);
   const preset = PROFILE_PRESETS[profile];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
+  const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
+  const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
   return {
     ...preset,
     ...rawConfig,
     ...normalizedToolbarConfig,
-    Profile: profile
+    Profile: profile,
+    OutputCleanupMode: outputCleanupMode,
+    UnitStrategy: unitStrategy
   };
 }
