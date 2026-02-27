@@ -65,6 +65,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.normalizeUnits(doc, {
       unitStrategy: resolvedConfig.UnitStrategy
     })));
+    logs.push(...ensureArray(sanitize.normalizeAccessibleTextContrast(doc)));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
     logs.push(...ensureArray(sanitize.ensureImageAlt(doc, {
       fallbackAlt: resolvedConfig.ImageAltFallback || 'Image'

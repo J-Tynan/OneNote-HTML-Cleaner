@@ -5,16 +5,16 @@ import { JSDOM } from 'jsdom';
 const CRITERIA = [
   { id: 1, title: 'Structure', automation: 'partial' },
   { id: 2, title: 'Content', automation: 'partial' },
-  { id: 3, title: 'Images & Media', automation: 'manual' },
+  { id: 3, title: 'Images & Media', automation: 'partial' },
   { id: 4, title: 'Links', automation: 'manual' },
-  { id: 5, title: 'Tables/List Layout', automation: 'manual' },
-  { id: 6, title: 'Whitespace & Margins', automation: 'manual' },
+  { id: 5, title: 'Tables/List Layout', automation: 'partial' },
+  { id: 6, title: 'Whitespace & Margins', automation: 'partial' },
   { id: 7, title: 'Metadata', automation: 'automated' },
   { id: 8, title: 'MHTML Artifacts', automation: 'automated' },
   { id: 9, title: 'Accessibility', automation: 'manual' }
 ];
 
-const AUTOMATED_CRITERIA_IDS = new Set([1, 2, 7, 8]);
+const AUTOMATED_CRITERIA_IDS = new Set([1, 2, 3, 5, 6, 7, 8]);
 
 function parseArgs(argv) {
   const args = {
@@ -117,6 +117,44 @@ function checkCommonHtmlQuality(filePath, html, failures, options = {}) {
   // in plain paragraphs or table cells.  task-list syntax (- [x]) is allowed.
   const faux = detectFauxList(html);
   check(!faux, `${filePath}: suspicious list-like text outside semantic list -> "${faux}"`, failures, 2);
+
+  const { window: { document } } = new JSDOM(html);
+
+  const hasOrphanListItem = Array.from(document.querySelectorAll('li'))
+    .some((node) => !node.closest('ul,ol'));
+  check(!hasOrphanListItem, `${filePath}: found <li> outside <ul>/<ol>`, failures, 2);
+
+  for (const table of document.querySelectorAll('table')) {
+    const hasRow = table.querySelector('tr');
+    check(Boolean(hasRow), `${filePath}: found <table> without <tr>`, failures, 5);
+  }
+
+  const unresolvedResource = Array.from(document.querySelectorAll('img,source,audio,video'))
+    .map((node) => node.getAttribute('src') || '')
+    .find((src) => /^(cid:|file:\/\/\/)/i.test(src));
+  check(!unresolvedResource, `${filePath}: unresolved inline resource src -> ${unresolvedResource}`, failures, 3);
+
+  const controlCharMatch = html.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/);
+  check(!controlCharMatch, `${filePath}: contains disallowed C0 control characters`, failures, 7);
+
+  const excessiveBreakRun = html.match(/(?:<br\s*\/?>\s*){4,}/i);
+  check(!excessiveBreakRun, `${filePath}: excessive consecutive <br> run detected`, failures, 6);
+
+  let maxEmptyParagraphRun = 0;
+  let currentEmptyParagraphRun = 0;
+  for (const sibling of document.body ? Array.from(document.body.querySelectorAll(':scope > p')) : []) {
+    const isEmpty = (sibling.textContent || '').trim().length === 0;
+    if (isEmpty) {
+      currentEmptyParagraphRun += 1;
+      maxEmptyParagraphRun = Math.max(maxEmptyParagraphRun, currentEmptyParagraphRun);
+    } else {
+      currentEmptyParagraphRun = 0;
+    }
+  }
+  check(maxEmptyParagraphRun <= 5, `${filePath}: excessive consecutive empty paragraph blocks (${maxEmptyParagraphRun})`, failures, 6);
+
+  const suspiciousLongToken = visibleText.match(/\b[A-Za-z0-9_-]{90,}\b/);
+  check(!suspiciousLongToken, `${filePath}: suspicious long unbroken token may cause overflow`, failures, 6);
 }
 
 function detectFauxList(html) {
@@ -214,6 +252,8 @@ function applyRegressionFixtureAssertions(cleanedDir, fixturePath, failures) {
     const html = readText(filePath);
     const mustContain = Array.isArray(assertions.mustContain) ? assertions.mustContain : [];
     const mustNotContain = Array.isArray(assertions.mustNotContain) ? assertions.mustNotContain : [];
+    const mustMatch = Array.isArray(assertions.mustMatch) ? assertions.mustMatch : [];
+    const mustNotMatch = Array.isArray(assertions.mustNotMatch) ? assertions.mustNotMatch : [];
 
     for (const expectedText of mustContain) {
       check(
@@ -228,6 +268,26 @@ function applyRegressionFixtureAssertions(cleanedDir, fixturePath, failures) {
       check(
         !html.includes(forbiddenText),
         `${relative(filePath)}: found forbidden fixture text -> ${forbiddenText}`,
+        failures,
+        8
+      );
+    }
+
+    for (const expectedPattern of mustMatch) {
+      const regex = new RegExp(expectedPattern, 'i');
+      check(
+        regex.test(html),
+        `${relative(filePath)}: expected fixture regex not found -> ${expectedPattern}`,
+        failures,
+        2
+      );
+    }
+
+    for (const forbiddenPattern of mustNotMatch) {
+      const regex = new RegExp(forbiddenPattern, 'i');
+      check(
+        !regex.test(html),
+        `${relative(filePath)}: found forbidden fixture regex -> ${forbiddenPattern}`,
         failures,
         8
       );

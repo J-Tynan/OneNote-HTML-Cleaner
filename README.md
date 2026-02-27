@@ -184,6 +184,20 @@ npm run build:libmspack:wasm:wsl:check
 
 This phase establishes native file routing, hierarchy handling, and section-level native downloads. Full fidelity page-content extraction for native formats is still in progress.
 
+### Expected fidelity (current)
+
+- `.mht` / `.mhtml` (primary release path): highest fidelity and the only stable-release target.
+- `.one` (experimental): metadata and routing are partially available; content extraction varies by section content.
+- `.onepkg` (experimental): best-effort hierarchy and placeholder output when compressed payloads cannot be decoded in-browser.
+- Exports from native formats may differ from OneNote visual parity; this is expected in the current milestone.
+
+### Preferred workflow (current)
+
+1. Prefer exporting from OneNote to `.mht` / `.mhtml` for production conversion.
+2. Use `.one` / `.onepkg` imports only for exploratory or developer workflows.
+3. For compressed `.onepkg`, extract sections locally first (for example with `tools/Extract-OnePkg.ps1`), then import resulting `.one` files.
+4. Run `npm run test:gate:native` after pipeline changes before accepting regression updates.
+
 ## Optional injected toolbar (experimental)
 
 - An opt-in single injected output toolbar is planned and currently spec-locked in `docs/Toolbar-Phase0-Spec.md`.

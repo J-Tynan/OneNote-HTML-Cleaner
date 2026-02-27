@@ -91,6 +91,30 @@ function normalizeZeroCssLength(value) {
   return value;
 }
 
+const LOW_CONTRAST_COLOR_MAP = new Map([
+  ['#969696', '#666666'],
+  ['#808080', '#666666'],
+  ['gray', '#666666'],
+  ['grey', '#666666'],
+  ['#ff3030', '#c00000']
+]);
+
+function normalizeColorToken(value) {
+  return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function remapLowContrastColor(value) {
+  const original = String(value || '').trim();
+  if (!original) return original;
+
+  const importantSuffix = /\s*!important\s*$/i.test(original) ? ' !important' : '';
+  const raw = importantSuffix ? original.replace(/\s*!important\s*$/i, '').trim() : original;
+  const normalized = normalizeColorToken(raw);
+  const mapped = LOW_CONTRAST_COLOR_MAP.get(normalized);
+  if (!mapped) return original;
+  return `${mapped}${importantSuffix}`;
+}
+
 function canonicalizeInlineStyle(styleText) {
   const byProp = new Map();
   parseInlineStyle(styleText).forEach(({ prop, value }) => {
@@ -304,6 +328,42 @@ export function normalizeLegacyAttributes(doc, options = {}) {
       updatedStyles,
       removedLegacyDataAttrs
     });
+  }
+
+  return logs;
+}
+
+export function normalizeAccessibleTextContrast(doc) {
+  const logs = [];
+  let updatedColors = 0;
+
+  Array.from(doc.querySelectorAll('[style]')).forEach(el => {
+    const entries = parseInlineStyle(el.getAttribute('style'));
+    if (!entries.length) return;
+
+    let changed = false;
+    const nextEntries = entries.map(({ prop, value }) => {
+      if (prop !== 'color') return { prop, value };
+      const nextValue = remapLowContrastColor(value);
+      if (nextValue !== value) {
+        changed = true;
+        updatedColors += 1;
+      }
+      return { prop, value: nextValue };
+    });
+
+    if (changed) {
+      const nextStyle = serializeInlineStyle(nextEntries);
+      if (nextStyle) {
+        el.setAttribute('style', nextStyle);
+      } else {
+        el.removeAttribute('style');
+      }
+    }
+  });
+
+  if (updatedColors) {
+    logs.push({ step: 'NormalizeAccessibleTextContrast', updatedColors });
   }
 
   return logs;

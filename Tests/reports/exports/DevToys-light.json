@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-23T12:32:10.725Z",
-  "url": "http://127.0.0.1:51536/DevToys.html",
+  "timestamp": "2026-02-27T16:23:28.625Z",
+  "url": "http://127.0.0.1:50796/DevToys.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1253,7 +1253,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;border-width:100%\">",
+          "html": "<div style=\"direction: ltr\">",
           "target": [
             "main > div:nth-child(1)"
           ]
@@ -1285,9 +1285,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:0in;width:7.2597in\">",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: 0; width: 7.2597in\" class=\"mt-0\">",
           "target": [
-            "main > div:nth-child(1) > div"
+            "main > div:nth-child(1) > .mt-0"
           ]
         },
         {
@@ -1317,9 +1317,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:.075in;width:5.4652in\">\n\n<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>\n\n</div>",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: .075in; width: 5.4652in\" class=\"mt-0\">\n\n<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>\n\n</div>",
           "target": [
-            "main > div:nth-child(1) > div > div:nth-child(1)"
+            ".mt-0 > .mt-0"
           ]
         },
         {
@@ -1349,7 +1349,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
+          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
           "target": [
             ".text-xl"
           ]
@@ -1381,9 +1381,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:.0388in;margin-left:.075in;width:2.3152in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .0388in; margin-left: .075in; width: 2.3152in\">",
           "target": [
-            "div > div:nth-child(2)"
+            ".mt-0 > div:nth-child(2)"
           ]
         },
         {
@@ -1413,7 +1413,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(1)"
           ]
@@ -1445,7 +1445,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(2)"
           ]
@@ -1477,7 +1477,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:.4805in;margin-left:0in;width:7.2597in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .4805in; margin-left: 0; width: 7.2597in\">",
           "target": [
             "div:nth-child(3)"
           ]
@@ -1509,7 +1509,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr\">",
+          "html": "<div style=\"direction: ltr\">",
           "target": [
             "div:nth-child(3) > div"
           ]
@@ -1541,7 +1541,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
             "table"
           ]
@@ -1573,7 +1573,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.1798in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <h1>DevToys - A Swiss Army knife for developers</h1>\n  </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.1798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <h1>DevToys - A Swiss Army knife for developers</h1>\n  </td>",
           "target": [
             "tr:nth-child(1) > td"
           ]
@@ -1605,7 +1605,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.1798in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>\n  </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.1798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>\n  </td>",
           "target": [
             "tr:nth-child(2) > td"
           ]
@@ -1637,7 +1637,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>",
+          "html": "<p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>",
           "target": [
             "tr:nth-child(2) > td > .text-base.font-sans"
           ]
@@ -1669,7 +1669,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2493in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>\n  </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.2493in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>\n  </td>",
           "target": [
             "tr:nth-child(3) > td"
           ]
@@ -1701,7 +1701,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>",
+          "html": "<p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>",
           "target": [
             "tr:nth-child(3) > td > .text-base.font-sans"
           ]
@@ -1733,7 +1733,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             "div:nth-child(3) > .text-base.font-sans:nth-child(2)"
           ]
@@ -1765,7 +1765,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\">",
+          "html": "<p style=\"margin: 0\">",
           "target": [
             "p:nth-child(3)"
           ]
@@ -1797,7 +1797,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             ".text-base.font-sans:nth-child(4)"
           ]
@@ -1829,7 +1829,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\">",
+          "html": "<p style=\"margin: 0\">",
           "target": [
             "p:nth-child(5)"
           ]
@@ -1861,7 +1861,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             ".text-base.font-sans:nth-child(6)"
           ]
@@ -1893,7 +1893,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\">",
+          "html": "<p style=\"margin: 0\">",
           "target": [
             "p:nth-child(7)"
           ]
@@ -1925,7 +1925,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             ".text-base.font-sans:nth-child(8)"
           ]
@@ -1957,7 +1957,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\"> </p>",
+          "html": "<p style=\"margin: 0\"> </p>",
           "target": [
             "main > div:nth-child(2) > p:nth-child(1)"
           ]
@@ -1989,7 +1989,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
+          "html": "<p style=\"text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
           "target": [
             ".text-xs"
           ]
@@ -2050,7 +2050,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "html": "<html lang=\"en-GB\">",
           "target": [
             "html"
           ]
@@ -2096,7 +2096,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
+          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
           "target": [
             ".text-xl"
           ]
@@ -2106,22 +2106,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#000000",
+                "fgColor": "#666666",
                 "bgColor": "#ffffff",
-                "contrastRatio": 21,
+                "contrastRatio": 5.74,
                 "fontSize": "10.0pt (13.3333px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 21"
+              "message": "Element has sufficient color contrast of 5.74"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(1)"
           ]
@@ -2131,22 +2131,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#000000",
+                "fgColor": "#666666",
                 "bgColor": "#ffffff",
-                "contrastRatio": 21,
+                "contrastRatio": 5.74,
                 "fontSize": "10.0pt (13.3333px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 21"
+              "message": "Element has sufficient color contrast of 5.74"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(2)"
           ]
@@ -2221,7 +2221,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>",
+          "html": "<p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>",
           "target": [
             "tr:nth-child(3) > td > .text-base.font-sans"
           ]
@@ -2231,22 +2231,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#000000",
+                "fgColor": "#666666",
                 "bgColor": "#ffffff",
-                "contrastRatio": 21,
+                "contrastRatio": 5.74,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 21"
+              "message": "Element has sufficient color contrast of 5.74"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
+          "html": "<p style=\"text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
           "target": [
             ".text-xs"
           ]
@@ -2285,7 +2285,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "html": "<html lang=\"en-GB\">",
           "target": [
             "html"
           ]
@@ -2395,7 +2395,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "html": "<html lang=\"en-GB\">",
           "target": [
             "html"
           ]
@@ -2434,7 +2434,7 @@
             }
           ],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "html": "<html lang=\"en-GB\">",
           "target": [
             "html"
           ]
@@ -2705,7 +2705,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "html": "<html lang=\"en-GB\">",
           "target": [
             "html"
           ]
@@ -2970,7 +2970,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:dt=\"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882\" xmlns=\"http://www.w3.org/TR/REC-html40\" lang=\"en\">",
+          "html": "<html lang=\"en-GB\">",
           "target": [
             "html"
           ]
@@ -3025,7 +3025,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;border-width:100%\">",
+          "html": "<div style=\"direction: ltr\">",
           "target": [
             "main > div:nth-child(1)"
           ]
@@ -3045,9 +3045,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:0in;width:7.2597in\">",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: 0; width: 7.2597in\" class=\"mt-0\">",
           "target": [
-            "main > div:nth-child(1) > div"
+            "main > div:nth-child(1) > .mt-0"
           ]
         },
         {
@@ -3065,9 +3065,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:0in;margin-left:.075in;width:5.4652in\">\n\n<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>\n\n</div>",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: .075in; width: 5.4652in\" class=\"mt-0\">\n\n<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>\n\n</div>",
           "target": [
-            "main > div:nth-child(1) > div > div:nth-child(1)"
+            ".mt-0 > .mt-0"
           ]
         },
         {
@@ -3085,7 +3085,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
+          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
           "target": [
             ".text-xl"
           ]
@@ -3105,9 +3105,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:.0388in;margin-left:.075in;width:2.3152in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .0388in; margin-left: .075in; width: 2.3152in\">",
           "target": [
-            "div > div:nth-child(2)"
+            ".mt-0 > div:nth-child(2)"
           ]
         },
         {
@@ -3125,7 +3125,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(1)"
           ]
@@ -3145,7 +3145,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(2)"
           ]
@@ -3165,7 +3165,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr;margin-top:.4805in;margin-left:0in;width:7.2597in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .4805in; margin-left: 0; width: 7.2597in\">",
           "target": [
             "div:nth-child(3)"
           ]
@@ -3185,7 +3185,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction:ltr\">",
+          "html": "<div style=\"direction: ltr\">",
           "target": [
             "div:nth-child(3) > div"
           ]
@@ -3205,7 +3205,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
             "table"
           ]
@@ -3245,7 +3245,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<tr>\n  <td style=\"border-width:0pt;vertical-align:top;width:7.1798in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <h1>DevToys - A Swiss Army knife for developers</h1>\n  </td>\n </tr>",
+          "html": "<tr>\n  <td style=\"border-width: 0; vertical-align: top; width: 7.1798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <h1>DevToys - A Swiss Army knife for developers</h1>\n  </td>\n </tr>",
           "target": [
             "tr:nth-child(1)"
           ]
@@ -3265,7 +3265,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.1798in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <h1>DevToys - A Swiss Army knife for developers</h1>\n  </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.1798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <h1>DevToys - A Swiss Army knife for developers</h1>\n  </td>",
           "target": [
             "tr:nth-child(1) > td"
           ]
@@ -3305,7 +3305,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<tr>\n  <td style=\"border-width:0pt;vertical-align:top;width:7.1798in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>\n  </td>\n </tr>",
+          "html": "<tr>\n  <td style=\"border-width: 0; vertical-align: top; width: 7.1798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>\n  </td>\n </tr>",
           "target": [
             "tr:nth-child(2)"
           ]
@@ -3325,7 +3325,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.1798in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>\n  </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.1798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>\n  </td>",
           "target": [
             "tr:nth-child(2) > td"
           ]
@@ -3345,7 +3345,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>",
+          "html": "<p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\"><a href=\"https://devtoys.app/\">https://devtoys.app/</a></p>",
           "target": [
             "tr:nth-child(2) > td > .text-base.font-sans"
           ]
@@ -3405,7 +3405,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width:0pt;vertical-align:top;width:7.2493in;padding:2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>\n  </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.2493in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">\n  <p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>\n  </td>",
           "target": [
             "tr:nth-child(3) > td"
           ]
@@ -3425,7 +3425,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>",
+          "html": "<p style=\"margin: 0; font-family: Verdana; font-size: 12.0pt\" class=\"font-sans text-base\">DevToys helps in\n  daily tasks like formatting JSON, comparing text, testing RegExp.</p>",
           "target": [
             "tr:nth-child(3) > td > .text-base.font-sans"
           ]
@@ -3445,7 +3445,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             "div:nth-child(3) > .text-base.font-sans:nth-child(2)"
           ]
@@ -3465,7 +3465,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\">",
+          "html": "<p style=\"margin: 0\">",
           "target": [
             "p:nth-child(3)"
           ]
@@ -3505,7 +3505,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             ".text-base.font-sans:nth-child(4)"
           ]
@@ -3525,7 +3525,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\">",
+          "html": "<p style=\"margin: 0\">",
           "target": [
             "p:nth-child(5)"
           ]
@@ -3565,7 +3565,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             ".text-base.font-sans:nth-child(6)"
           ]
@@ -3585,7 +3585,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\">",
+          "html": "<p style=\"margin: 0\">",
           "target": [
             "p:nth-child(7)"
           ]
@@ -3625,7 +3625,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"> </p>",
           "target": [
             ".text-base.font-sans:nth-child(8)"
           ]
@@ -3645,7 +3645,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n\n<p style=\"margin:0in\"> </p>\n\n<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
+          "html": "<div>\n\n<p style=\"margin: 0\"> </p>\n\n<p style=\"text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
           "target": [
             "main > div:nth-child(2)"
           ]
@@ -3665,7 +3665,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin:0in\"> </p>",
+          "html": "<p style=\"margin: 0\"> </p>",
           "target": [
             "main > div:nth-child(2) > p:nth-child(1)"
           ]
@@ -3685,7 +3685,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"text-align: left; margin: 0in; font-family: Arial; font-size: 9pt; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
+          "html": "<p style=\"text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>",
           "target": [
             ".text-xs"
           ]
@@ -3718,7 +3718,7 @@
             }
           ],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
             "table"
           ]
@@ -3758,7 +3758,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" valign=\"top\" style=\"direction:ltr;\n border-collapse:collapse;border-style:solid;border-border-width:\n 0pt\" title=\"\" summary=\"\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
             "table"
           ]
@@ -3815,7 +3815,7 @@
             }
           ],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
+          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" lang=\"en-US\" class=\"font-sans text-xl\">DevToys\n- A Swiss Army knife for developers</p>",
           "target": [
             ".text-xl"
           ]
@@ -3833,7 +3833,7 @@
             }
           ],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">Thursday, April 25, 2024</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(1)"
           ]
@@ -3851,7 +3851,7 @@
             }
           ],
           "impact": null,
-          "html": "<p style=\"margin: 0in; font-family: Calibri; font-size: 10.0pt\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #666666\" lang=\"en-US\" class=\"font-sans text-sm\">4:27 PM</p>",
           "target": [
             ".text-sm.font-sans[lang=\"en-US\"]:nth-child(2)"
           ]

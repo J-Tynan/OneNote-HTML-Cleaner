@@ -60,21 +60,30 @@
     "Resolve merge conflicts.html": {
       "mustContain": [
         "<main",
-        "<h1"
+        "<h1",
+        "<table",
+        "<ol"
       ],
       "mustNotContain": [
         "multipart/related",
         "Single File Web Page"
+      ],
+      "mustNotMatch": [
+        "src\\s*=\\s*[\"'](?:cid:|file:///)"
       ]
     },
     "Test File.html": {
       "mustContain": [
         "<main",
-        "<h1"
+        "<h1",
+        "<table"
       ],
       "mustNotContain": [
         "multipart/related",
         "Single File Web Page"
+      ],
+      "mustNotMatch": [
+        "src\\s*=\\s*[\"'](?:cid:|file:///)"
       ]
     }
   }

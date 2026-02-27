@@ -64,6 +64,35 @@ function canonicalizeHtmlInPage(html) {
   })`;
 }
 
+function collectStructuralTokens(expectedHtml) {
+  const tokens = [];
+  const tagChecks = [
+    { tag: 'table', token: '<table' },
+    { tag: 'blockquote', token: '<blockquote' },
+    { tag: 'img', token: '<img' }
+  ];
+
+  if (/<(ul|ol)\b/i.test(expectedHtml)) {
+    tokens.push('__LIST__');
+  }
+
+  for (const check of tagChecks) {
+    const regex = new RegExp(`<${check.tag}\\b`, 'i');
+    if (regex.test(expectedHtml)) {
+      tokens.push(check.token);
+    }
+  }
+
+  return tokens;
+}
+
+function assertNoUnresolvedResourceRefs(html, caseName) {
+  const unresolved = String(html || '').match(/src\s*=\s*["'](?:cid:|file:\/\/\/)[^"']*["']/i);
+  if (unresolved) {
+    throw new Error(`MHT fixture mismatch: ${caseName} (unresolved resource reference: ${unresolved[0]})`);
+  }
+}
+
 (async () => {
   const root = process.cwd();
   const server = createStaticServer(root);
@@ -100,6 +129,7 @@ function canonicalizeHtmlInPage(html) {
       const rawInput = fs.readFileSync(inputPath, 'utf8');
       const rawExpected = fs.readFileSync(expectedPath, 'utf8');
       const config = tc.config || {};
+      const expectedStructuralTokens = collectStructuralTokens(rawExpected);
 
       // default to the 'generic' profile for fixture comparisons unless the
       // case explicitly sets a Profile — expected files assume no Tailwind
@@ -143,11 +173,25 @@ function canonicalizeHtmlInPage(html) {
           const sample = textMatch[1].trim();
           if (sample && sample !== titleToken) mustContain.push(sample);
         }
-        // Ensure images embedded as data URIs exist
-        mustContain.push('data:image/png;base64,');
+        // Ensure images embedded as data URIs exist when expected output contains images.
+        if (expectedStructuralTokens.includes('<img')) {
+          mustContain.push('data:image/png;base64,');
+        }
+
+        // Keep structural semantics from expected output in fallback mode.
+        for (const token of expectedStructuralTokens) {
+          if (token === '__LIST__') {
+            if (!/<(ul|ol)\b/i.test(actual)) {
+              mustContain.push('<ul-or-ol>');
+            }
+            continue;
+          }
+          mustContain.push(token);
+        }
 
         const missing = mustContain.filter(tok => !actual.includes(tok));
         if (missing.length === 0) {
+          assertNoUnresolvedResourceRefs(actual, tc.name);
           console.warn('MHT fixture serialization differs but structural tokens present; accepting:', tc.name);
           console.log('MHT fixture passed (structural):', tc.name);
         } else {
@@ -175,6 +219,7 @@ function canonicalizeHtmlInPage(html) {
           throw new Error('MHT fixture mismatch: ' + tc.name + ' (missing tokens: ' + missing.join(', ') + ')');
         }
       } else {
+        assertNoUnresolvedResourceRefs(res.actual || '', tc.name);
         console.log('MHT fixture passed:', tc.name);
       }
     }

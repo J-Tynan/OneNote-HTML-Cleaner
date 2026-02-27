@@ -25,3 +25,46 @@ Scope: `Tests/Cleaned/*.html` (4 fixtures)
 ## Decision
 - Manual review task is considered complete for the current fixture set.
 - Keep contrast and regression-fixture expansion tasks open.
+
+---
+
+## Release Evidence Update (2026-02-27)
+
+### Automated Coverage Snapshot
+- Native release gate (`npm run test:gate:native`) passes with criteria automation now covering:
+  - **C1 Structure** (partial)
+  - **C2 Content** (partial)
+  - **C3 Images & Media** (partial)
+  - **C5 Tables/List Layout** (partial)
+  - **C6 Whitespace & Margins** (partial)
+  - **C7 Metadata** (automated)
+  - **C8 MHTML Artifacts** (automated)
+- Toolbar/config acceptance is included in gate execution via `test:pipeline-config`, `test:toolbar`, and `test:ui-downloads`.
+
+### Manual Sign-off Still Required Before Stable Release
+- **C4 Links**: verify representative relative/absolute links open as expected.
+- **C9 Accessibility**: verify keyboard focus behavior and heading navigation flow in rendered output.
+
+### Fixture Set Used for Current Gate Validation
+- `Communicate using Markdown.html`
+- `DevToys.html`
+- `Problematic mht-full-snippet.html`
+- `Problematic mht-sample.html`
+- `Resolve merge conflicts.html`
+- `Test File.html`
+
+### Final C4/C9 Sign-off Pass (2026-02-27)
+
+#### C4 Links
+- Per-fixture link audit confirms content links are standard `http(s)` targets; no `javascript:` links detected.
+- Link-bearing fixtures in this set: `Communicate using Markdown.html`, `DevToys.html`, `Resolve merge conflicts.html`, `Test File.html`.
+- **Status:** Pass (with note) — static link integrity checks passed; full click-through behavior remains a browser manual check when preparing final release notes.
+
+#### C9 Accessibility
+- Ran `npm run test:playwright:a11y-exports` against `Tests/Cleaned`.
+- Summary (`Tests/reports/exports/a11y-exports-summary.txt`):
+  - FAIL: `Communicate using Markdown.html`, `DevToys.html`, `Resolve merge conflicts.html`, `Test File.html`
+  - OK: `Problematic mht-full-snippet.html`, `Problematic mht-sample.html`
+- Generated detailed reports in `Tests/reports/exports/*-(light|dark).json`.
+- Observed serious/critical rule hits in failing fixtures (for example `aria-hidden-body` and spacing-related rules).
+- **Status:** Not signed off — accessibility remediation is required before final stable release sign-off.

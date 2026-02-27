@@ -26,15 +26,17 @@ The native smoke test provides starter automated coverage for a subset of the ch
 | --- | --- | --- |
 | 1. Structure | Partial automation | `<!doctype html>`, `<body>` presence, `<h1>` exists for native `.one` pages |
 | 2. Content | Partial automation | Basic readable text present, native conversion marker text, `.onepkg` section path metadata |
-| 3. Images & Media | Manual review | Verify images/media render correctly in browser |
+| 3. Images & Media | Partial automation | Detect unresolved `cid:` / `file:///` media sources in cleaned HTML |
 | 4. Links | Manual review | Verify relative/absolute links open correctly |
-| 5. Tables/List Layout | Manual review | Verify table/list legibility and layout |
-| 6. Whitespace & Margins | Manual review | Verify spacing and overflow visually |
+| 5. Tables/List Layout | Partial automation | Detect orphan `<li>` nodes and `<table>` elements missing `<tr>` rows |
+| 6. Whitespace & Margins | Partial automation | Flag excessive `<br>` runs, long unbroken tokens, and excessive consecutive empty paragraph blocks |
 | 7. Metadata | Automated | UTF-8 charset meta + meaningful title present |
 | 8. MHTML Artifacts | Automated | Detect MHTML boundary/header artifacts in output HTML |
 | 9. Accessibility | Manual review | Verify heading order and keyboard focus behavior |
 
 Use smoke-test output as an early warning signal; manual review remains required for visual fidelity criteria.
+
+Pre-release gate command: `npm run test:gate:native` (includes `test:pipeline-config`, `test:toolbar`, and `test:ui-downloads` for toolbar/config acceptance coverage).
 
 Mark expected cleanup changes (e.g., branding removal) as “pass with notes” if intentional.
 

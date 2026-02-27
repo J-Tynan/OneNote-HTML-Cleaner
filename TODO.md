@@ -118,6 +118,8 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Add Light/Dark theme toggle.
 - [x] Add auto‑convert opt‑out and persistence.
 - [x] Detect and mark unsupported file types.
+- [ ] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width.
+- [ ] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports.
 
 ### Manual Convert Button
 - [x] Convert button implemented and tested.
@@ -129,6 +131,11 @@ All items in this section must be satisfied before tagging the first stable rele
 ### Experimental Export Formats
 - [ ] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default).
 - [ ] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`).
+- [ ] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats.
+- [ ] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible).
+- [ ] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling.
+- [ ] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown.
+- [ ] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing.
 - [ ] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled.
 - [ ] [P2] Add UX validation and disabled-state messaging for unsupported/unfinished formats.
 - [ ] [P2] Add smoke tests for export-format selection behavior.
@@ -152,13 +159,14 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] [P2] Add regression and smoke tests for: toggle OFF parity, shared mode links, per-page mode links, and missing-asset behavior messaging. (2026-02-27)
 - [ ] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help.
 
-#### Externalized CSS review follow-up (post-implementation)
-- [ ] [P2] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
-- [ ] [P2] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
-- [ ] [P2] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name.
-- [ ] [P2] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
-- [ ] [P2] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
-- [ ] [P2] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
+#### Externalized CSS review follow-up (deferred to post-release)
+Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
+- [ ] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
+- [ ] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
+- [ ] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name.
+- [ ] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
+- [ ] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
+- [ ] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
 
 ---
 
@@ -185,6 +193,12 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] [P2] Add guardrail for oversized inlined images (threshold + warning/fail behavior + test coverage).
 - [ ] [P2] Add threshold-based warning for excessive inline styles and verify via regression test.
 
+### Export output independence
+- [ ] [P1] Ensure exported HTML pages are dependency-free by default (no required external JS/CSS libraries when opening output files).
+- [ ] [P1] Add regression checks asserting converted HTML outputs do not require CDN or app-runtime library imports.
+- [ ] [P1] Keep optional export features self-contained in produced artifacts (for example inline assets or bundled sidecars) with safe fallback when disabled.
+- [ ] [P2] Document dependency-free export guarantees and known caveats in `README.md` and in-app help.
+
 ---
 
 ## Regression Fixtures
@@ -205,6 +219,6 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ## Product / Docs Follow‑Up
 
-- [ ] [P2] Document native import limitations and expected fidelity in `README.md` and release notes.
-- [ ] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path.
+- [x] [P2] Document native import limitations and expected fidelity in `README.md` and release notes. (2026-02-27)
+- [x] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path. (2026-02-27)
 - [ ] [P3] Polish page naming for GUID-like titles with a deterministic title strategy.
