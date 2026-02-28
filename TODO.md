@@ -118,6 +118,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Add Light/Dark theme toggle.
 - [x] Add auto‑convert opt‑out and persistence.
 - [x] Detect and mark unsupported file types.
+- [ ] [P1] Add small indentation to lists (bullet, numbered).
 - [ ] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width.
 - [ ] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports.
 
@@ -127,6 +128,13 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Tooltip shown when disabled.
 - [x] Playwright smoke test added.
 - [x] README updated.
+
+### Experimental handwriting conversion
+- [ ] [P2] Add handwriting fixtures (OneNote pages with ink) to regression suite.
+- [ ] [P2] Implement ink detection in pipeline: detect `<svg>`, VML, `<canvas>`, and raster `<img>` cases.
+- [ ] [P2] If only raster found, preserve image and add data-handwriting="raster" metadata.
+- [ ] [P2] Add accessibility labels for handwriting assets.
+- [ ] [P2] Add optional traced‑SVG sidecar workflow (feature branch, opt‑in).
 
 ### Experimental Export Formats
 - [ ] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default).
