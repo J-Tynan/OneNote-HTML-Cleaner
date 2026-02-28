@@ -74,6 +74,8 @@ const PROFILE_PRESETS = {
     CollapseInlineStyles: false,
     OutputCleanupMode: 'off',
     UnitStrategy: 'normalize-safe',
+    NormalizeDirectionLayout: true,
+    NormalizeTopLevelPageWidths: true,
     ExternalizeCssEnabled: false,
     ExternalizeCssMode: 'shared'
   },
@@ -94,6 +96,8 @@ const PROFILE_PRESETS = {
     CollapseInlineStyles: false,
     OutputCleanupMode: 'off',
     UnitStrategy: 'normalize-safe',
+    NormalizeDirectionLayout: true,
+    NormalizeTopLevelPageWidths: true,
     ExternalizeCssEnabled: false,
     ExternalizeCssMode: 'shared'
   }
@@ -111,6 +115,18 @@ export function normalizePipelineConfig(rawConfig = {}) {
   const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
   const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
   const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
+  const normalizeDirectionLayout = toBoolean(
+    Object.prototype.hasOwnProperty.call(rawConfig, 'NormalizeDirectionLayout')
+      ? rawConfig.NormalizeDirectionLayout
+      : rawConfig.normalizeDirectionLayout,
+    preset.NormalizeDirectionLayout !== false
+  );
+  const normalizeTopLevelPageWidths = toBoolean(
+    Object.prototype.hasOwnProperty.call(rawConfig, 'NormalizeTopLevelPageWidths')
+      ? rawConfig.NormalizeTopLevelPageWidths
+      : rawConfig.normalizeTopLevelPageWidths,
+    preset.NormalizeTopLevelPageWidths !== false
+  );
   return {
     ...preset,
     ...rawConfig,
@@ -118,6 +134,8 @@ export function normalizePipelineConfig(rawConfig = {}) {
     ...normalizedExternalCssConfig,
     Profile: profile,
     OutputCleanupMode: outputCleanupMode,
-    UnitStrategy: unitStrategy
+    UnitStrategy: unitStrategy,
+    NormalizeDirectionLayout: normalizeDirectionLayout,
+    NormalizeTopLevelPageWidths: normalizeTopLevelPageWidths
   };
 }

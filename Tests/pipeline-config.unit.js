@@ -27,7 +27,9 @@ async function main() {
     ExternalizeCssEnabled: 'true',
     ExternalizeCssMode: 'PER-PAGE',
     OutputCleanupMode: 'safe',
-    UnitStrategy: 'normalize-safe'
+    UnitStrategy: 'normalize-safe',
+    NormalizeDirectionLayout: 'false',
+    NormalizeTopLevelPageWidths: 'false'
   });
 
   assert(normalizedGeneric.Profile === 'generic', 'Expected Profile to normalize to generic');
@@ -39,6 +41,8 @@ async function main() {
   assert(normalizedGeneric.ExternalizeCssMode === 'per-page', 'Expected ExternalizeCssMode to normalize to per-page');
   assert(normalizedGeneric.OutputCleanupMode === 'safe', 'Expected OutputCleanupMode to normalize to safe');
   assert(normalizedGeneric.UnitStrategy === 'normalize-safe', 'Expected UnitStrategy to normalize to normalize-safe');
+  assert(normalizedGeneric.NormalizeDirectionLayout === false, 'Expected NormalizeDirectionLayout false');
+  assert(normalizedGeneric.NormalizeTopLevelPageWidths === false, 'Expected NormalizeTopLevelPageWidths false');
 
   const normalizedFallback = mod.normalizePipelineConfig({
     Profile: 'unknown-profile',
@@ -53,6 +57,8 @@ async function main() {
   assert(normalizedFallback.ExternalizeCssMode === 'shared', 'Expected invalid ExternalizeCssMode to fallback to shared');
   assert(normalizedFallback.OutputCleanupMode === 'off', 'Expected invalid OutputCleanupMode to fallback to off');
   assert(normalizedFallback.UnitStrategy === 'preserve', 'Expected invalid UnitStrategy to fallback to preserve');
+  assert(normalizedFallback.NormalizeDirectionLayout === true, 'Expected NormalizeDirectionLayout default true from preset');
+  assert(normalizedFallback.NormalizeTopLevelPageWidths === true, 'Expected NormalizeTopLevelPageWidths default true from preset');
 
   console.log('pipeline-config: PASS');
 }

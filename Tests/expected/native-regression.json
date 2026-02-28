@@ -21,6 +21,9 @@
         "<main",
         "<h1"
       ],
+      "mustMatch": [
+        "<title>\\s*Communicate\\s+using\\s+Markdown\\s*</title>"
+      ],
       "mustNotContain": [
         "multipart/related",
         "Single File Web Page"
@@ -63,6 +66,9 @@
         "<h1",
         "<table",
         "<ol"
+      ],
+      "mustMatch": [
+        "<title>\\s*Resolve\\s+merge\\s+conflicts\\s*</title>"
       ],
       "mustNotContain": [
         "multipart/related",

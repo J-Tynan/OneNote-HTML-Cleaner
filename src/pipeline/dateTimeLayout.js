@@ -6,9 +6,10 @@ function isDateText(text) {
   const value = cleanText(text);
   if (!value) return false;
   const monthDate = /^\d{1,2}\s+[A-Za-z]{3,}\s+\d{4}$/i;
+  const monthDateWithWeekday = /^(?:[A-Za-z]{3,},\s+)?[A-Za-z]{3,}\s+\d{1,2},\s+\d{4}$/i;
   const isoDate = /^\d{4}-\d{2}-\d{2}$/;
   const slashDate = /^\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}$/;
-  return monthDate.test(value) || isoDate.test(value) || slashDate.test(value);
+  return monthDate.test(value) || monthDateWithWeekday.test(value) || isoDate.test(value) || slashDate.test(value);
 }
 
 function isTimeText(text) {

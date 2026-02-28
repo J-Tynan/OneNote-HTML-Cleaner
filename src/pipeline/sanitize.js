@@ -786,6 +786,391 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
 const ELEMENT_NODE = typeof Node !== 'undefined' ? Node.ELEMENT_NODE : 1;
 const TEXT_NODE = typeof Node !== 'undefined' ? Node.TEXT_NODE : 3;
 
+function parseNumericFontSize(styleText = '') {
+  const m = String(styleText || '').match(/font-size\s*:\s*([0-9]*\.?[0-9]+)\s*(pt|px|em|rem)/i);
+  if (!m) return null;
+  const value = Number(m[1]);
+  const unit = String(m[2] || '').toLowerCase();
+  if (!Number.isFinite(value) || value <= 0) return null;
+  if (unit === 'pt') return value;
+  if (unit === 'px') return value * 0.75;
+  if (unit === 'em' || unit === 'rem') return value * 12;
+  return null;
+}
+
+function looksLikeOneNoteTitleCandidate(el) {
+  if (!el || !el.tagName) return false;
+  const tag = el.tagName.toLowerCase();
+  if (tag !== 'p' && tag !== 'div' && tag !== 'span') return false;
+  const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+  if (!text || text.length > 180) return false;
+  if (/^created with onenote\.?$/i.test(text)) return false;
+
+  const styleText = String(el.getAttribute('style') || '');
+  const fontSizePt = parseNumericFontSize(styleText);
+  if (fontSizePt !== null) return fontSizePt >= 16;
+
+  const className = String(el.getAttribute('class') || '').toLowerCase();
+  if (/\btext-(2xl|3xl|4xl|5xl|xl)\b/.test(className)) return true;
+
+  return false;
+}
+
+function findOneNoteTitleElement(main) {
+  if (!main || !main.querySelectorAll) return null;
+  const candidates = Array.from(main.querySelectorAll('p,div,span'));
+  for (const el of candidates) {
+    if (!looksLikeOneNoteTitleCandidate(el)) continue;
+    if (el.closest && el.closest('table,td,th')) continue;
+    if (el.querySelector && el.querySelector('img,table,ul,ol')) continue;
+    return el;
+  }
+  return null;
+}
+
+function copyAttributes(fromEl, toEl) {
+  for (const attr of Array.from(fromEl.attributes || [])) {
+    toEl.setAttribute(attr.name, attr.value);
+  }
+}
+
+function isPlaceholderDocumentTitle(value = '') {
+  const normalized = String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+  return normalized === '' || normalized === 'document';
+}
+
+function hasSignificantTextNodeChildren(el) {
+  return Array.from(el.childNodes || []).some(node => node.nodeType === TEXT_NODE && String(node.textContent || '').trim().length > 0);
+}
+
+function isDirectionLtrOnlyStyle(styleText) {
+  const entries = parseInlineStyle(styleText);
+  if (!entries.length) return false;
+  return entries.every(({ prop, value }) => prop === 'direction' && /^ltr$/i.test(String(value || '').trim()));
+}
+
+function hasUnsafeWrapperAttributes(el) {
+  return Array.from(el.attributes || []).some(attr => {
+    const name = String(attr.name || '').toLowerCase();
+    if (name === 'style') return false;
+    if (name === 'class') return String(attr.value || '').trim().length > 0;
+    return true;
+  });
+}
+
+function isAbsoluteWidthValue(value) {
+  return /^([0-9]*\.?[0-9]+)\s*(in|pt|px|pc|cm|mm)$/i.test(String(value || '').trim());
+}
+
+function stripAbsoluteWidthDeclaration(styleText) {
+  const entries = parseInlineStyle(styleText);
+  let removed = 0;
+  const filtered = entries.filter(({ prop, value }) => {
+    if (prop !== 'width') return true;
+    if (!isAbsoluteWidthValue(value)) return true;
+    removed += 1;
+    return false;
+  });
+  return {
+    removed,
+    style: serializeInlineStyle(filtered)
+  };
+}
+
+function stripLayoutPositionDeclarations(styleText, options = {}) {
+  const removeMarginTop = options.removeMarginTop === true;
+  const entries = parseInlineStyle(styleText);
+  let removed = 0;
+  const filtered = entries.filter(({ prop, value }) => {
+    if (prop === 'width' && isAbsoluteWidthValue(value)) {
+      removed += 1;
+      return false;
+    }
+    if (prop === 'margin-left') {
+      removed += 1;
+      return false;
+    }
+    if (removeMarginTop && prop === 'margin-top') {
+      removed += 1;
+      return false;
+    }
+    return true;
+  });
+
+  return {
+    removed,
+    style: serializeInlineStyle(filtered)
+  };
+}
+
+function styleEntriesToMap(styleText) {
+  const map = new Map();
+  parseInlineStyle(styleText).forEach(({ prop, value }) => {
+    map.set(prop, value);
+  });
+  return map;
+}
+
+function styleMapToString(styleMap) {
+  return serializeInlineStyle(Array.from(styleMap.entries()).map(([prop, value]) => ({ prop, value })));
+}
+
+function normalizeTitleBlockPositionStyle(styleText) {
+  const styleMap = styleEntriesToMap(styleText);
+  const before = styleMapToString(styleMap);
+
+  const width = styleMap.get('width');
+  if (width && isAbsoluteWidthValue(width)) {
+    styleMap.delete('width');
+  }
+
+  const marginTop = styleMap.get('margin-top');
+  if (marginTop) {
+    styleMap.set('margin-left', marginTop);
+  }
+
+  const after = styleMapToString(styleMap);
+  return {
+    changed: after !== before,
+    style: after
+  };
+}
+
+function setStyleDefaults(el, declarations = {}) {
+  if (!el || !el.getAttribute) return false;
+  const styleMap = styleEntriesToMap(el.getAttribute('style') || '');
+  const before = styleMapToString(styleMap);
+
+  Object.entries(declarations).forEach(([prop, value]) => {
+    styleMap.set(prop, value);
+  });
+
+  const after = styleMapToString(styleMap);
+  if (after === before) return false;
+  if (after) {
+    el.setAttribute('style', after);
+  } else {
+    el.removeAttribute('style');
+  }
+  return true;
+}
+
+function cleanInlineText(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim();
+}
+
+function isLikelyDateText(text) {
+  const value = cleanInlineText(text);
+  if (!value) return false;
+  const monthDate = /^\d{1,2}\s+[A-Za-z]{3,}\s+\d{4}$/i;
+  const monthDateWithWeekday = /^(?:[A-Za-z]{3,},\s+)?[A-Za-z]{3,}\s+\d{1,2},\s+\d{4}$/i;
+  const isoDate = /^\d{4}-\d{2}-\d{2}$/;
+  const slashDate = /^\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}$/;
+  return monthDate.test(value) || monthDateWithWeekday.test(value) || isoDate.test(value) || slashDate.test(value);
+}
+
+function isLikelyTimeText(text) {
+  const value = cleanInlineText(text);
+  if (!value) return false;
+  return /^\d{1,2}:\d{2}(?::\d{2})?(\s?[AP]M)?$/i.test(value);
+}
+
+function looksLikeDateTimeContainer(el) {
+  if (!el || !el.querySelectorAll) return false;
+  if (el.querySelector(':scope > p > span.created-time')) return true;
+  const paragraphs = Array.from(el.querySelectorAll(':scope > p'));
+  if (paragraphs.length < 2) return false;
+  const dateText = cleanInlineText(paragraphs[0].textContent);
+  const timeText = cleanInlineText(paragraphs[1].textContent);
+  return isLikelyDateText(dateText) && isLikelyTimeText(timeText);
+}
+
+function looksLikeTitleContainer(el) {
+  if (!el || !el.querySelectorAll) return false;
+  if (el.querySelector(':scope > h1')) return true;
+  const directChildren = Array.from(el.children || []);
+  return directChildren.some(child => looksLikeOneNoteTitleCandidate(child));
+}
+
+export function normalizeDirectionLayoutContainers(doc, options = {}) {
+  const logs = [];
+  const main = doc.querySelector('main');
+  if (!main) return logs;
+
+  const unwrapRedundantWrappers = options.unwrapRedundantWrappers !== false;
+  const normalizeTopLevelPageWidths = options.normalizeTopLevelPageWidths !== false;
+  const standardizeHeaderDatePositions = options.standardizeHeaderDatePositions !== false;
+
+  let wrappersUnwrapped = 0;
+  if (unwrapRedundantWrappers) {
+    let changed = true;
+    while (changed) {
+      changed = false;
+      const wrappers = Array.from(main.querySelectorAll('div[style]'));
+      for (const wrapper of wrappers) {
+        if (wrapper.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
+        if (!isDirectionLtrOnlyStyle(wrapper.getAttribute('style'))) continue;
+        if (hasUnsafeWrapperAttributes(wrapper)) continue;
+        if (hasSignificantTextNodeChildren(wrapper)) continue;
+
+        const elementChildren = Array.from(wrapper.children || []);
+        if (elementChildren.length !== 1) continue;
+
+        const child = elementChildren[0];
+        if (!child || !child.tagName || child.tagName.toLowerCase() !== 'div') continue;
+
+        wrapper.replaceWith(child);
+        wrappersUnwrapped += 1;
+        changed = true;
+        break;
+      }
+    }
+  }
+
+  let widthsNormalized = 0;
+  if (normalizeTopLevelPageWidths) {
+    const topLevelDivs = Array.from(main.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+    for (const div of topLevelDivs) {
+      if (div.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
+      const styleText = String(div.getAttribute('style') || '');
+      if (!styleText) continue;
+      const entries = parseInlineStyle(styleText);
+      const hasDirectionLtr = entries.some(({ prop, value }) => prop === 'direction' && /^ltr$/i.test(String(value || '').trim()));
+      if (!hasDirectionLtr) continue;
+
+      const next = stripAbsoluteWidthDeclaration(styleText);
+      if (!next.removed) continue;
+
+      if (next.style) {
+        div.setAttribute('style', next.style);
+      } else {
+        div.removeAttribute('style');
+      }
+      widthsNormalized += 1;
+    }
+  }
+
+  let positionsStandardized = 0;
+  if (standardizeHeaderDatePositions) {
+    const rootLayout = Array.from(main.children || []).find(el => el.tagName && el.tagName.toLowerCase() === 'div');
+    if (rootLayout) {
+      const sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+      for (const block of sectionBlocks) {
+        if (block.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
+
+        const isTitleBlock = looksLikeTitleContainer(block);
+        const isDateBlock = looksLikeDateTimeContainer(block);
+        if (!isTitleBlock && !isDateBlock) continue;
+
+        const styleText = String(block.getAttribute('style') || '');
+        if (!styleText) continue;
+
+        let next;
+        if (isTitleBlock) {
+          next = normalizeTitleBlockPositionStyle(styleText);
+        } else {
+          const stripped = stripLayoutPositionDeclarations(styleText, {
+            removeMarginTop: true
+          });
+          next = {
+            changed: stripped.removed > 0,
+            style: stripped.style
+          };
+        }
+        if (!next.changed) continue;
+
+        if (next.style) {
+          block.setAttribute('style', next.style);
+        } else {
+          block.removeAttribute('style');
+        }
+        positionsStandardized += 1;
+      }
+    }
+  }
+
+  if (wrappersUnwrapped || widthsNormalized || positionsStandardized) {
+    logs.push({
+      step: 'NormalizeDirectionLayoutContainers',
+      wrappersUnwrapped,
+      widthsNormalized,
+      positionsStandardized
+    });
+  }
+
+  return logs;
+}
+
+export function enforceHeaderDateTimeStyles(doc) {
+  const logs = [];
+  const main = doc.querySelector('main');
+  if (!main) return logs;
+
+  let titleStyled = 0;
+  let dateStyled = 0;
+  let timeStyled = 0;
+
+  const title = main.querySelector('h1');
+  if (title) {
+    const titleChanged = setStyleDefaults(title, {
+      'font-family': 'Calibri, Arial, sans-serif',
+      'font-size': '20pt',
+      'font-weight': '400',
+      'margin': '0'
+    });
+    addClass(title, 'converted-page-title');
+    if (titleChanged) titleStyled += 1;
+  }
+
+  const dateContainer = Array.from(main.querySelectorAll('div')).find(el => looksLikeDateTimeContainer(el));
+  if (dateContainer) {
+    const paragraphs = Array.from(dateContainer.querySelectorAll(':scope > p'));
+    if (paragraphs.length) {
+      const dateParagraph = paragraphs[0];
+      const dateChanged = setStyleDefaults(dateParagraph, {
+        'font-family': 'Calibri, Arial, sans-serif',
+        'font-size': '10pt',
+        'color': '#666666',
+        'margin': '0'
+      });
+      addClass(dateParagraph, 'converted-page-date');
+      if (dateChanged) dateStyled += 1;
+
+      const createdTime = dateParagraph.querySelector(':scope > span.created-time');
+      if (createdTime) {
+        const timeChanged = setStyleDefaults(createdTime, {
+          'font-family': 'Calibri, Arial, sans-serif',
+          'font-size': '10pt',
+          'color': '#666666'
+        });
+        addClass(createdTime, 'converted-page-time');
+        if (timeChanged) timeStyled += 1;
+      } else if (paragraphs[1]) {
+        const timeParagraph = paragraphs[1];
+        const timeParagraphChanged = setStyleDefaults(timeParagraph, {
+          'font-family': 'Calibri, Arial, sans-serif',
+          'font-size': '10pt',
+          'color': '#666666',
+          'margin': '0'
+        });
+        addClass(timeParagraph, 'converted-page-time');
+        if (timeParagraphChanged) timeStyled += 1;
+      }
+    }
+  }
+
+  if (titleStyled || dateStyled || timeStyled) {
+    logs.push({
+      step: 'EnforceHeaderDateTimeStyles',
+      titleStyled,
+      dateStyled,
+      timeStyled
+    });
+  }
+
+  return logs;
+}
+
 export function ensureMainHeading(doc, options = {}) {
   const logs = [];
   const body = doc.body || doc.querySelector('body') || doc.documentElement;
@@ -804,6 +1189,25 @@ export function ensureMainHeading(doc, options = {}) {
 
   // ensure there's an <h1> inside main
   let h1 = main.querySelector('h1');
+  const titleLike = findOneNoteTitleElement(main);
+
+  if (titleLike) {
+    if (titleLike.tagName && titleLike.tagName.toLowerCase() === 'h1') {
+      h1 = titleLike;
+      if (!main.contains(h1)) {
+        h1.remove();
+        main.insertBefore(h1, main.firstChild);
+      }
+    } else {
+      const promoted = doc.createElement('h1');
+      copyAttributes(titleLike, promoted);
+      promoted.innerHTML = titleLike.innerHTML;
+      titleLike.replaceWith(promoted);
+      h1 = promoted;
+      logs.push({ step: 'PromoteParagraphTitle', details: 'Promoted OneNote title paragraph to <h1>' });
+    }
+  }
+
   if (!h1) {
     // try to promote first heading anywhere in body
     const firstHeading = body.querySelector('h1,h2,h3,h4,h5,h6');
@@ -829,12 +1233,21 @@ export function ensureMainHeading(doc, options = {}) {
         }
       }
     } else {
-      // no headings at all; create one from defaultTitle
+      // fallback when no title-like node exists
       const newH1 = doc.createElement('h1');
       newH1.textContent = options.defaultTitle || 'Document';
       main.insertBefore(newH1, main.firstChild);
+      h1 = newH1;
       logs.push({ step: 'EnsureH1', details: 'Inserted default <h1> in <main>' });
     }
+  }
+
+  // If title is still placeholder-like, sync it with the resolved <h1>
+  const titleEl = (doc.head || doc.querySelector('head')) && (doc.head || doc.querySelector('head')).querySelector('title');
+  const h1Text = h1 && h1.textContent ? h1.textContent.trim() : '';
+  if (titleEl && h1Text && isPlaceholderDocumentTitle(titleEl.textContent)) {
+    titleEl.textContent = h1Text;
+    logs.push({ step: 'SyncTitleFromH1', details: 'Replaced placeholder <title> text from <h1>' });
   }
 
   // demote any additional <h1> elements (only the first instance should remain as level-1)

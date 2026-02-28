@@ -75,6 +75,13 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureMainHeading(doc, {
       defaultTitle: resolvedConfig.defaultTitle || resolvedConfig.fileName || 'Document'
     })));
+    if (resolvedConfig.NormalizeDirectionLayout !== false) {
+      logs.push(...ensureArray(sanitize.normalizeDirectionLayoutContainers(doc, {
+        unwrapRedundantWrappers: true,
+        normalizeTopLevelPageWidths: resolvedConfig.NormalizeTopLevelPageWidths !== false,
+        standardizeHeaderDatePositions: true
+      })));
+    }
 
     const useCornellSemantics = resolvedConfig.UseCornellSemantics !== false;
     if (useCornellSemantics) {
@@ -89,6 +96,7 @@ export async function runPipeline(htmlString, config = {}) {
         gap: resolvedConfig.CreatedDateTimeGap || '0.75em'
       })));
     }
+    logs.push(...ensureArray(sanitize.enforceHeaderDateTimeStyles(doc)));
 
     const collapseInlineStyles = resolvedConfig.CollapseInlineStyles !== false;
     if (collapseInlineStyles) {
