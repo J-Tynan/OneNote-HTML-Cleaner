@@ -60,6 +60,7 @@ const PROFILE_PRESETS = {
   cornell: {
     Profile: 'cornell',
     RepairListItemValues: 'smart',
+    ListMarginLeft: '0.35em',
     ListPaddingLeft: '1.2em',
     NormalizeAllListIndent: true,
     UseCornellSemantics: true,
@@ -82,6 +83,7 @@ const PROFILE_PRESETS = {
   generic: {
     Profile: 'generic',
     RepairListItemValues: 'smart',
+    ListMarginLeft: '0.35em',
     ListPaddingLeft: '1.2em',
     NormalizeAllListIndent: true,
     UseCornellSemantics: false,

@@ -87,9 +87,10 @@ function inferListTypes(doc) {
   return logs;
 }
 
-const LIST_INDENT_STYLE_KEYS = ['margin-left', 'padding-left', 'text-indent'];
+const LIST_INDENT_STYLE_KEYS = ['margin-left', 'padding-left', 'padding-inline-start', 'text-indent'];
 const ONE_NOTE_STYLE_HINT_KEYS = ['mso-list', 'mso-level-number-format', 'mso-level-text'];
 const DEFAULT_LIST_PADDING_LEFT = '1.2em';
+const DEFAULT_LIST_MARGIN_LEFT = '0.35em';
 
 function parseStyleDeclarations(styleText) {
   return String(styleText || '')
@@ -188,6 +189,7 @@ export function normalizeListIndentation(doc, options = {}) {
   const lists = Array.from(doc.querySelectorAll('ol,ul'));
   let normalized = 0;
   const paddingLeft = options.listPaddingLeft || DEFAULT_LIST_PADDING_LEFT;
+  const marginLeft = options.listMarginLeft || DEFAULT_LIST_MARGIN_LEFT;
   const normalizeAll = options.normalizeAllListIndent === true;
 
   lists.forEach(list => {
@@ -198,12 +200,19 @@ export function normalizeListIndentation(doc, options = {}) {
     if (!shouldNormalize) return;
 
     let cleanedListStyle = removeStyleKeys(ownStyle, LIST_INDENT_STYLE_KEYS.concat(ONE_NOTE_STYLE_HINT_KEYS));
-    cleanedListStyle = upsertStyleKey(cleanedListStyle, 'margin-left', '0');
+    cleanedListStyle = upsertStyleKey(cleanedListStyle, 'margin-left', marginLeft);
     cleanedListStyle = upsertStyleKey(cleanedListStyle, 'padding-left', paddingLeft);
+    cleanedListStyle = upsertStyleKey(cleanedListStyle, 'padding-inline-start', paddingLeft);
     if (cleanedListStyle) {
       list.setAttribute('style', cleanedListStyle);
     } else {
       list.removeAttribute('style');
+    }
+
+    if (list.tagName.toLowerCase() === 'ol') {
+      addClasses(list, ['list-decimal', 'list-outside']);
+    } else {
+      addClasses(list, ['list-disc', 'list-outside']);
     }
 
     liNodes.forEach(li => {
@@ -220,7 +229,7 @@ export function normalizeListIndentation(doc, options = {}) {
   });
 
   if (normalized) {
-    logs.push({ step: 'normalizeListIndentation', normalized, paddingLeft, normalizeAll });
+    logs.push({ step: 'normalizeListIndentation', normalized, marginLeft, paddingLeft, normalizeAll });
   }
 
   return logs;

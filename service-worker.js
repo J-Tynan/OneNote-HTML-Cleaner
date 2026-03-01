@@ -1,6 +1,6 @@
 // Single source-of-truth cache name — replace at build/release time if needed.
 // Build/release automation can replace the literal token `__SW_CACHE_NAME__` with a new value.
-const CACHE = (typeof __SW_CACHE_NAME__ !== 'undefined' && __SW_CACHE_NAME__) ? __SW_CACHE_NAME__ : 'onenote-cleaner-v2';
+const CACHE = (typeof __SW_CACHE_NAME__ !== 'undefined' && __SW_CACHE_NAME__) ? __SW_CACHE_NAME__ : 'onenote-cleaner-v3';
 
 // Include worker files in precache so clients update worker code during releases
 const ASSETS = ['/', '/index.html', '/styles.css', '/src/app.js', '/src/worker.js', '/src/worker-globals.js'];

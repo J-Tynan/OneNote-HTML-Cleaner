@@ -117,6 +117,7 @@ export async function runPipeline(htmlString, config = {}) {
     // List repair
     const listMode = resolvedConfig.RepairListItemValues || 'smart';
     logs.push(...ensureArray(fixLists(doc, listMode, {
+      listMarginLeft: resolvedConfig.ListMarginLeft || '0.35em',
       listPaddingLeft: resolvedConfig.ListPaddingLeft || '1.2em',
       normalizeAllListIndent: resolvedConfig.NormalizeAllListIndent === true
     })));
