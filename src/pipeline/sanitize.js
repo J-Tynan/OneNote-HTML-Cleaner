@@ -936,6 +936,26 @@ function normalizeTitleBlockPositionStyle(styleText) {
   };
 }
 
+function normalizeRootDocumentMarginStyle(styleText) {
+  const styleMap = styleEntriesToMap(styleText);
+  const before = styleMapToString(styleMap);
+  const marginTop = styleMap.get('margin-top');
+  if (!marginTop) {
+    return {
+      changed: false,
+      style: before
+    };
+  }
+
+  styleMap.set('margin-left', marginTop);
+
+  const after = styleMapToString(styleMap);
+  return {
+    changed: after !== before,
+    style: after
+  };
+}
+
 function setStyleDefaults(el, declarations = {}) {
   if (!el || !el.getAttribute) return false;
   const styleMap = styleEntriesToMap(el.getAttribute('style') || '');
@@ -1027,9 +1047,11 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
     }
   }
 
+  const topLevelDivs = Array.from(main.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+  const rootLayout = topLevelDivs[0] || null;
+
   let widthsNormalized = 0;
   if (normalizeTopLevelPageWidths) {
-    const topLevelDivs = Array.from(main.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
     for (const div of topLevelDivs) {
       if (div.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
       const styleText = String(div.getAttribute('style') || '');
@@ -1050,9 +1072,28 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
     }
   }
 
+  let rootMarginsStandardized = 0;
+  if (standardizeHeaderDatePositions && rootLayout) {
+    const rootStyleText = String(rootLayout.getAttribute('style') || '');
+    if (rootStyleText) {
+      const rootEntries = parseInlineStyle(rootStyleText);
+      const rootHasDirectionLtr = rootEntries.some(({ prop, value }) => prop === 'direction' && /^ltr$/i.test(String(value || '').trim()));
+      if (rootHasDirectionLtr) {
+        const nextRootStyle = normalizeRootDocumentMarginStyle(rootStyleText);
+        if (nextRootStyle.changed) {
+          if (nextRootStyle.style) {
+            rootLayout.setAttribute('style', nextRootStyle.style);
+          } else {
+            rootLayout.removeAttribute('style');
+          }
+          rootMarginsStandardized += 1;
+        }
+      }
+    }
+  }
+
   let positionsStandardized = 0;
   if (standardizeHeaderDatePositions) {
-    const rootLayout = Array.from(main.children || []).find(el => el.tagName && el.tagName.toLowerCase() === 'div');
     if (rootLayout) {
       const sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
       for (const block of sectionBlocks) {
@@ -1068,7 +1109,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
         let next;
         if (isTitleBlock) {
           next = normalizeTitleBlockPositionStyle(styleText);
-        } else {
+        } else if (isDateBlock) {
           const stripped = stripLayoutPositionDeclarations(styleText, {
             removeMarginTop: true
           });
@@ -1077,6 +1118,8 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
             style: stripped.style
           };
         }
+
+        if (!next) continue;
         if (!next.changed) continue;
 
         if (next.style) {
@@ -1094,6 +1137,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       step: 'NormalizeDirectionLayoutContainers',
       wrappersUnwrapped,
       widthsNormalized,
+      rootMarginsStandardized,
       positionsStandardized
     });
   }
