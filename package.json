@@ -28,6 +28,7 @@
     "test:inline-style-collapse": "node ./Tests/inline-style-collapse.unit.js",
     "test:inline-style-normalization": "node ./Tests/inline-style-normalization.unit.js",
     "test:contrast-colors": "node ./Tests/contrast-color-normalization.unit.js",
+    "test:inline-style-threshold-warning": "node ./Tests/inline-style-threshold-warning.unit.js",
     "test:externalize-css": "node ./Tests/externalize-css.unit.js",
     "test:style-dependency": "node ./Tests/style-dependency.unit.js",
     "test:idempotence": "node ./Tests/check-sanitizer-idempotence.js",

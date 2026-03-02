@@ -236,6 +236,51 @@ export function normalizeUnits(doc, options = {}) {
   return logs;
 }
 
+function normalizePositiveInteger(value, fallbackValue) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0) return fallbackValue;
+  return Math.floor(parsed);
+}
+
+export function warnExcessiveInlineStyles(doc, options = {}) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const enabled = options.enabled !== false;
+  if (!enabled) return logs;
+
+  const maxNodes = normalizePositiveInteger(options.maxNodes, 250);
+  const maxChars = normalizePositiveInteger(options.maxChars, 24000);
+
+  const nodes = Array.from(doc.querySelectorAll('[style]'));
+  const inlineStyleNodeCount = nodes.length;
+  let inlineStyleCharCount = 0;
+
+  nodes.forEach((node) => {
+    inlineStyleCharCount += String(node.getAttribute('style') || '').length;
+  });
+
+  const exceedsNodeThreshold = inlineStyleNodeCount > maxNodes;
+  const exceedsCharThreshold = inlineStyleCharCount > maxChars;
+  if (!exceedsNodeThreshold && !exceedsCharThreshold) return logs;
+
+  logs.push({
+    step: 'InlineStyleThresholdWarning',
+    level: 'warn',
+    details: 'Excessive inline style volume detected; output may be larger and less maintainable.',
+    meta: {
+      inlineStyleNodeCount,
+      inlineStyleCharCount,
+      maxNodes,
+      maxChars,
+      exceedsNodeThreshold,
+      exceedsCharThreshold
+    }
+  });
+
+  return logs;
+}
+
 export function stripObsoleteHeadArtifacts(doc) {
   const logs = [];
 

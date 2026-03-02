@@ -213,7 +213,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 
 ### Performance / output size
 - [x] [P2] Add guardrail for oversized inlined images (threshold + warning/fail behavior + test coverage). (2026-03-02)
-- [ ] [P2] Add threshold-based warning for excessive inline styles and verify via regression test.
+- [x] [P2] Add threshold-based warning for excessive inline styles and verify via regression test. (2026-03-02)
 
 ### Export output independence
 - [ ] [P1] Ensure exported HTML pages are dependency-free by default (no required external JS/CSS libraries when opening output files).

@@ -123,6 +123,12 @@ export async function runPipeline(htmlString, config = {}) {
       })));
     }
 
+    logs.push(...ensureArray(sanitize.warnExcessiveInlineStyles(doc, {
+      enabled: resolvedConfig.InlineStyleWarningEnabled !== false,
+      maxNodes: resolvedConfig.InlineStyleWarningMaxNodes,
+      maxChars: resolvedConfig.InlineStyleWarningMaxChars
+    })));
+
     // List repair
     const listMode = resolvedConfig.RepairListItemValues || 'smart';
     logs.push(...ensureArray(fixLists(doc, listMode, {
