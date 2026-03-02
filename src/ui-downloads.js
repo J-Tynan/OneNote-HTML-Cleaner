@@ -106,6 +106,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const sharedCssParts = [];
     const sharedCssFilename = 'converted-shared.css';
     const perPageCssTaken = new Set();
+    const warnings = [];
 
     for (const [name, value] of ctx.successfulOutputs.entries()) {
       const record = getSuccessfulOutputRecord(value);
@@ -131,6 +132,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
           html = ensureStylesheetLink(html, sharedCssFilename);
           sharedCssParts.push(cssContent);
         }
+      } else if (externalizeEnabled && !cssContent) {
+        warnings.push(`${name}: Externalize CSS is enabled, but no CSS sidecar was produced. Falling back to HTML output as-is.`);
       }
 
       zip.file(name, `\uFEFF${html}`);
@@ -139,6 +142,14 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     if (sharedCssParts.length) {
       const uniqueParts = Array.from(new Set(sharedCssParts.filter(Boolean)));
       zip.file(sharedCssFilename, `${uniqueParts.join('\n\n')}\n`);
+    }
+
+    if (warnings.length) {
+      zip.file('README.txt', [
+        'Some optional export features required fallback behavior during ZIP build.',
+        '',
+        ...warnings
+      ].join('\n'));
     }
 
     ctx.downloadZipButton.disabled = true;

@@ -67,9 +67,12 @@ function createStaticServer(root) {
     const text = await page.evaluate(() => document.body.innerText);
     const checks = [
       'PASS: Per-file Download button rendered',
+      'PASS: Per-file download blocked when CSS sidecar exists',
       'PASS: Per-file download attempted with correct filename',
       'PASS: Download ZIP button enabled',
-      'PASS: ZIP generation invoked (JSZip.generateAsync called)'
+      'PASS: ZIP generation invoked (JSZip.generateAsync called)',
+      'PASS: ZIP includes externalized CSS sidecar asset',
+      'PASS: ZIP includes fallback README warning for missing sidecar'
     ];
 
     for (const chk of checks) {

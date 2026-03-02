@@ -128,6 +128,14 @@ function isSuccessStatus(status) {
   return normalized === 'success' || normalized === 'completed';
 }
 
+function hasExternalizedCssAsset(entry) {
+  if (!entry || !Array.isArray(entry.outputAssets)) return false;
+  return entry.outputAssets.some((asset) => asset
+    && asset.type === 'text/css'
+    && typeof asset.content === 'string'
+    && asset.content.trim().length > 0);
+}
+
 function updateZipButton() {
   if (!dom.downloadZip) return;
   dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
@@ -374,7 +382,11 @@ export function renderFileList() {
     const safeSize = escapeHtml(formatBytes(entry.size));
     const safeMessage = entry.message ? escapeHtml(entry.message) : '';
     const hasOutput = typeof entry.outputHtml === 'string' && entry.outputHtml.length > 0;
-    const singleDownloadBlocked = Boolean(entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true);
+    const singleDownloadBlocked = Boolean(
+      entry.conversionConfig
+      && entry.conversionConfig.ExternalizeCssEnabled === true
+      && hasExternalizedCssAsset(entry)
+    );
     const canDownloadHtml = hasOutput && !singleDownloadBlocked;
 
     return `
@@ -529,7 +541,7 @@ function onFileListClick(event) {
     const id = downloadButton.getAttribute('data-download-id');
     const entry = getQueueEntry(id);
     if (!entry || !entry.outputHtml) return;
-    if (entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true) return;
+    if (entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true && hasExternalizedCssAsset(entry)) return;
 
     const filename = entry.name.replace(/\.[^.]+$/, '') + '.html';
 

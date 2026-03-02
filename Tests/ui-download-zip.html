@@ -31,22 +31,50 @@
 
     // Stub JSZip so we can detect ZIP generation without performing a download
     window.__test_generateAsync_called = false;
+    window.__test_zip_files = [];
+    window.__test_zip_readme = '';
     window.JSZip = function () {
       this._files = {};
       this.file = (name, content) => { this._files[name] = content; return this; };
-      this.generateAsync = (opts) => { window.__test_generateAsync_called = true; return Promise.resolve(new Blob([])); };
+      this.generateAsync = (opts) => {
+        window.__test_generateAsync_called = true;
+        window.__test_zip_files = Object.keys(this._files);
+        window.__test_zip_readme = String(this._files['README.txt'] || '');
+        return Promise.resolve(new Blob([]));
+      };
     };
 
     initUI();
 
     // Simulate a successfully converted file with outputHtml
-    const entry = { id: 't-1', name: 'Sample Page.mht', size: 1024, status: 'success', outputHtml: '<!doctype html><html><body><p>ok</p></body></html>' };
-    state.queue.push(entry);
+    const entry = {
+      id: 't-1',
+      name: 'Sample Page.mht',
+      size: 1024,
+      status: 'success',
+      outputHtml: '<!doctype html><html><body><p>ok</p></body></html>',
+      conversionConfig: { ExternalizeCssEnabled: true },
+      outputAssets: []
+    };
+    const entryWithSidecar = {
+      id: 't-2',
+      name: 'Styled Page.mht',
+      size: 1024,
+      status: 'success',
+      outputHtml: '<!doctype html><html><body><p>styled</p></body></html>',
+      conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
+      outputAssets: [{ type: 'text/css', content: '.demo{color:red}', filename: 'converted-shared.css' }]
+    };
+    state.queue.push(entry, entryWithSidecar);
     renderFileList();
 
     // Verify per-file download button exists
     const perFileBtn = document.querySelector('[data-download-id="t-1"]');
     if (perFileBtn) pass('Per-file Download button rendered'); else fail('Per-file Download button not rendered');
+
+    const sidecarBlockedBtn = document.querySelector('[data-download-id="t-2"]');
+    if (!sidecarBlockedBtn) pass('Per-file download blocked when CSS sidecar exists');
+    else fail('Per-file download should be blocked when CSS sidecar exists');
 
     // Intercept anchor creation to assert download filename on per-file click
     const realCreate = Document.prototype.createElement;
@@ -79,6 +107,18 @@
       setTimeout(() => {
         if (window.__test_generateAsync_called) pass('ZIP generation invoked (JSZip.generateAsync called)');
         else fail('ZIP generation was not invoked');
+
+        if (window.__test_zip_files.some((name) => name.endsWith('.css'))) {
+          pass('ZIP includes externalized CSS sidecar asset');
+        } else {
+          fail('ZIP missing expected CSS sidecar asset');
+        }
+
+        if (window.__test_zip_files.includes('README.txt') && /Falling back to HTML output as-is/i.test(window.__test_zip_readme)) {
+          pass('ZIP includes fallback README warning for missing sidecar');
+        } else {
+          fail('ZIP missing fallback README warning');
+        }
 
         // Restore createElement
         Document.prototype.createElement = realCreate;
