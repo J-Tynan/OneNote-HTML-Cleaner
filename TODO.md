@@ -126,9 +126,15 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Detect and mark unsupported file types.
 - [x] [P1] Add small indentation to lists (bullet, numbered). (2026-03-01)
 - [x] [P1] Move to a single OneNote parity-first conversion method (retire profile branching in UI/config). (2026-03-02)
-- [ ] [P1] Loosen tight left margin on converted-page content for better OneNote visual parity. (added 2026-03-01)
+- [x] [P1] Loosen tight left margin on converted-page content for better OneNote visual parity. (completed 2026-03-02)
 - [ ] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width.
 - [ ] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports.
+
+**Immediate Next Priority**
+- **Add guardrail for oversized inlined images (P2):** Prevent very large embedded images from forcing layout/margin regressions and from inflating exported artifacts. Recommended next step: add a size threshold, surface a warning in CLI/PWA, and add regression tests. (proposed 2026-03-02)
+
+**Notes / Deferred items**
+- `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
 
 ### Manual Convert Button
 - [x] Convert button implemented and tested.
