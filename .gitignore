@@ -46,6 +46,15 @@ Tests/reports/*.json
 .history/
 .pytest_cache/
 
+# Large binary fixtures/screenshots created by local test runs.
+# Consider moving these to a separate fixtures repo or using Git LFS
+# to avoid inflating the main repository history.
+Tests/OneNote originals/*.png
+Tests/OneNote originals/*.jpg
+Tests/OneNote originals/*.jpeg
+Tests/OneNote originals/*.gif
+Tests/screenshots/
+
 # Playwright / headless test artifacts
 playwright-report/
 .playwright/
