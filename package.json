@@ -17,6 +17,7 @@
     "test:ui-downloads": "node ./Tests/ui-downloads-config.js",
     "test:pipeline-config": "node ./Tests/pipeline-config.unit.js",
     "test:ui-download-smoke": "node ./Tests/ui-download-zip-playwright.js",
+    "test:header-edge": "node ./Tests/header-edge-to-edge-playwright.js",
     "test:sw-update": "node ./Tests/service-worker-update-playwright.js",
     "test:sw-bump": "node ./Tests/sw-bump.js",
     "bump-sw-cache": "node ./scripts/bump-sw-cache.cjs",

@@ -98,6 +98,7 @@ details[open] > summary {
 
   /* Header follows the same surface token so it reads consistently in dark */
   header {
+    width: 100vw;
     background-color: var(--bg-card);
     border-bottom-color: var(--border-muted);
   }

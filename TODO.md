@@ -127,8 +127,8 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] [P1] Add small indentation to lists (bullet, numbered). (2026-03-01)
 - [x] [P1] Move to a single OneNote parity-first conversion method (retire profile branching in UI/config). (2026-03-02)
 - [x] [P1] Loosen tight left margin on converted-page content for better OneNote visual parity. (completed 2026-03-02)
-- [ ] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width.
-- [ ] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports.
+- [x] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width. (2026-03-02)
+- [x] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports. (2026-03-02)
 
 **Immediate Next Priority**
 - **Add guardrail for oversized inlined images (P2):** Prevent very large embedded images from forcing layout/margin regressions and from inflating exported artifacts. Recommended next step: add a size threshold, surface a warning in CLI/PWA, and add regression tests. (proposed 2026-03-02)
