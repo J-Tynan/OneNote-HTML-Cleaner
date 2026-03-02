@@ -14,6 +14,12 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
  - [x] Run local MHT conversion tests and regenerate `Tests/Cleaned` (2026-02-25)
  - [x] Populate missing converted fixtures used by native smoke suite (local-only) (2026-02-25)
 
+- [x] Centralize fixture discovery and add `Tests/fixtures.js` (2026-03-02)
+- [x] Sanitizer: unwrap malformed list wrappers to prevent synthetic top-level bullets (2026-03-02)
+- [x] Sanitizer: align small standalone icon-only paragraphs to dominant table-cell inset (2026-03-02)
+- [x] Tests: add `Tests/list-structure-normalization.unit.js` and update `Tests/direction-layout-normalization.unit.js` (2026-03-02)
+- [x] Chore: update `.gitignore` to ignore large test binaries/screenshots (2026-03-02)
+
 ---
 
 ## Fixture Handling Policy
@@ -215,6 +221,8 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 
 - [x] Add problematic `.mht` files to locked regression suite. (2026-02-26)
 - [x] Ensure CI covers encoding, list fidelity, and sanitization cases. (2026-02-27)
+
+- [x] Ensure regression suite picks up newly added fixtures via discovery (2026-03-02)
 
 ---
 
