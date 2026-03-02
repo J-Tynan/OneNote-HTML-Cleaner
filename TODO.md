@@ -216,8 +216,8 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] [P2] Add threshold-based warning for excessive inline styles and verify via regression test. (2026-03-02)
 
 ### Export output independence
-- [ ] [P1] Ensure exported HTML pages are dependency-free by default (no required external JS/CSS libraries when opening output files).
-- [ ] [P1] Add regression checks asserting converted HTML outputs do not require CDN or app-runtime library imports.
+- [x] [P1] Ensure exported HTML pages are dependency-free by default (no required external JS/CSS libraries when opening output files). (2026-03-02)
+- [x] [P1] Add regression checks asserting converted HTML outputs do not require CDN or app-runtime library imports. (2026-03-02)
 - [ ] [P1] Keep optional export features self-contained in produced artifacts (for example inline assets or bundled sidecars) with safe fallback when disabled.
 - [ ] [P2] Document dependency-free export guarantees and known caveats in `README.md` and in-app help.
 

@@ -25,6 +25,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Playwright checks: added lightweight Playwright smoke tests (`Tests/ui-phase1-theme.spec.js`, `Tests/ui-phase1-convert-tooltip.spec.js`) to verify Phase 1 UI tokens and the `Convert` button behavior. Both tests passed locally during verification.
 - Worker messaging hardening: the wrapper now issues its own UUIDs for every request, maintains a mapping to caller-supplied ids, detects duplicate responses, logs unmatched messages, and records detailed diagnostics including pending‑callback counts. Diagnostics schema is enforced and exposed to the UI; new tests verify these behaviors (`Tests/worker-duplicate-response-playwright.js`, `Tests/worker-unmatched-message-playwright.js`, `Tests/diagnostic-schema.js`, extended existing id/handshake tests`).
 - Oversized inline-image guardrail: MHT image-part decoding now applies a configurable per-asset threshold (default 2 MiB) with warning diagnostics and behavior modes (`warn-skip` default, `warn-only` optional). Diagnostics are propagated into pipeline logs and covered by `Tests/mht-inline-image-guardrail.unit.js`.
+- Export-independence checks: regression analysis now fails converted outputs that require external/CDN scripts or stylesheets, app-runtime imports (`src/`, `node_modules`, worker/app bundles), or remote CSS `@import` dependencies. Coverage includes `Tests/export-independence.unit.js` and `Tests/check-forbidden-artifacts.js` against cleaned outputs.
 
 ## UI experience
 

@@ -54,6 +54,29 @@ function shortNodePath(node) {
   return parts.join(' > ');
 }
 
+function isRemoteDependencyRef(ref) {
+  const value = String(ref || '').trim();
+  if (!value) return false;
+  if (/^(https?:)?\/\//i.test(value)) return true;
+  return false;
+}
+
+function isAppRuntimeDependencyRef(ref) {
+  const value = String(ref || '').trim().toLowerCase();
+  if (!value) return false;
+  if (/^(?:\.\/|\.\.\/|\/)?src\//.test(value)) return true;
+  if (/^(?:\.\/|\.\.\/|\/)?node_modules\//.test(value)) return true;
+  if (/^(?:\.\/|\.\.\/|\/)?service-worker\.js$/.test(value)) return true;
+  if (/^(?:\.\/|\.\.\/|\/)?worker(?:-wrapper)?\.js$/.test(value)) return true;
+  return false;
+}
+
+function isStylesheetNode(node) {
+  if (!node || !node.tagName || node.tagName.toLowerCase() !== 'link') return false;
+  const rel = String(node.getAttribute('rel') || '').toLowerCase();
+  return /\bstylesheet\b/.test(rel);
+}
+
 export function analyzeHtml(filePath, html) {
   const violations = [];
   const dom = new JSDOM(html);
@@ -144,6 +167,44 @@ export function analyzeHtml(filePath, html) {
         }
       }
     }
+
+    if (el.tagName && el.tagName.toLowerCase() === 'script') {
+      const src = String(el.getAttribute('src') || '').trim();
+      if (src) {
+        if (isRemoteDependencyRef(src)) {
+          violations.push({
+            type: 'external-script-dependency',
+            token: src,
+            where: shortNodePath(el)
+          });
+        } else if (isAppRuntimeDependencyRef(src)) {
+          violations.push({
+            type: 'app-runtime-script-dependency',
+            token: src,
+            where: shortNodePath(el)
+          });
+        }
+      }
+    }
+
+    if (isStylesheetNode(el)) {
+      const href = String(el.getAttribute('href') || '').trim();
+      if (href) {
+        if (isRemoteDependencyRef(href)) {
+          violations.push({
+            type: 'external-stylesheet-dependency',
+            token: href,
+            where: shortNodePath(el)
+          });
+        } else if (isAppRuntimeDependencyRef(href)) {
+          violations.push({
+            type: 'app-runtime-stylesheet-dependency',
+            token: href,
+            where: shortNodePath(el)
+          });
+        }
+      }
+    }
   }
 
   if (/<!--\s*\[if\s+(?:gte\s+)?mso\b/i.test(html)) {
@@ -167,6 +228,14 @@ export function analyzeHtml(filePath, html) {
       type: 'redundant-content-type-meta',
       token: 'meta http-equiv="Content-Type"',
       where: 'head'
+    });
+  }
+
+  if (/@import\s+(?:url\()?["']?(?:https?:)?\/\//i.test(html)) {
+    violations.push({
+      type: 'external-css-import-dependency',
+      token: '@import remote stylesheet',
+      where: 'style'
     });
   }
 
