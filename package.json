@@ -40,6 +40,7 @@
     "test:check-c0-pipeline": "node ./Tests/check-c0-pipeline.js",
     "test:charset": "node ./Tests/check-charset-regressions.js",
     "test:charset-fallback": "node ./Tests/charset-fallback.unit.js",
+    "test:mht-inline-image-guardrail": "node ./Tests/mht-inline-image-guardrail.unit.js",
     "test:utf8-encoding": "node ./Tests/check-utf8-encoding.js --dir Tests/Cleaned",
     "test:sanitizer": "node ./Tests/sanitizer-onenote.unit.js",
     "test:worker-handshake": "node ./Tests/worker-handshake-playwright.js",

@@ -954,6 +954,48 @@ function getNumericDimension(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+const MIN_CONTENT_MARGIN_LEFT_IN = 0.125;
+
+function parseCssLengthToInches(value) {
+  const text = String(value || '').trim().toLowerCase();
+  if (!text) return null;
+  const match = text.match(/^([+-]?[0-9]*\.?[0-9]+)\s*(in|pt|px|pc|cm|mm)$/i);
+  if (!match) return null;
+  const magnitude = Number.parseFloat(match[1]);
+  if (!Number.isFinite(magnitude)) return null;
+  const unit = match[2].toLowerCase();
+  switch (unit) {
+    case 'in':
+      return magnitude;
+    case 'pt':
+      return magnitude / 72;
+    case 'px':
+      return magnitude / 96;
+    case 'pc':
+      return magnitude / 6;
+    case 'cm':
+      return magnitude / 2.54;
+    case 'mm':
+      return magnitude / 25.4;
+    default:
+      return null;
+  }
+}
+
+function toInchesCssValue(value) {
+  const rounded = Number(value.toFixed(4));
+  return `${rounded}in`;
+}
+
+function loosenContentBaselineLeftMargin(value) {
+  const original = String(value || '').trim();
+  if (!original) return original;
+  const inches = parseCssLengthToInches(original);
+  if (inches === null) return original;
+  if (inches >= MIN_CONTENT_MARGIN_LEFT_IN) return original;
+  return toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN);
+}
+
 function isLikelyInlineIconImage(img) {
   if (!img || !img.getAttribute) return false;
   const width = getNumericDimension(img.getAttribute('width'));
@@ -961,6 +1003,28 @@ function isLikelyInlineIconImage(img) {
   if (width !== null && width > 32) return false;
   if (height !== null && height > 32) return false;
   return true;
+}
+
+function isLargeContentImage(img) {
+  if (!img || !img.getAttribute) return false;
+  const width = getNumericDimension(img.getAttribute('width'));
+  const height = getNumericDimension(img.getAttribute('height'));
+  if (width !== null && width >= 128) return true;
+  if (height !== null && height >= 128) return true;
+  return false;
+}
+
+function isImageDominantContentBlock(block) {
+  if (!block || !block.querySelectorAll) return false;
+  const images = Array.from(block.querySelectorAll('img'));
+  if (!images.length) return false;
+  const hasLargeImage = images.some(img => isLargeContentImage(img));
+  if (!hasLargeImage) return false;
+
+  const cloned = block.cloneNode(true);
+  Array.from(cloned.querySelectorAll('img')).forEach(img => img.remove());
+  const text = cleanInlineText(cloned.textContent || '');
+  return text.length === 0;
 }
 
 function isStandaloneIconParagraph(paragraph) {
@@ -1066,6 +1130,14 @@ function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = 
   }
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
+  const existingMarginLeft = String(styleMap.get('margin-left') || '').trim();
+  const existingInches = parseCssLengthToInches(existingMarginLeft);
+  if (existingInches !== null && existingInches >= MIN_CONTENT_MARGIN_LEFT_IN) {
+    return {
+      changed: false,
+      style: before
+    };
+  }
   styleMap.set('margin-left', baselineMarginLeft);
   const after = styleMapToString(styleMap);
   return {
@@ -1271,6 +1343,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       };
       const rootMarginLeft = readMarginLeft(rootLayout);
       const baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
+      const contentBaselineMarginLeft = loosenContentBaselineLeftMargin(baselineMarginLeft);
 
       for (const block of sectionBlocks) {
         if (block.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
@@ -1282,7 +1355,10 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
         if (!hasDirectionLtr) continue;
 
         if (block === firstContentBlock) {
-          const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft);
+          const contentMarginBaselineForBlock = isImageDominantContentBlock(block)
+            ? toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN)
+            : contentBaselineMarginLeft;
+          const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, contentMarginBaselineForBlock);
           if (nextContentStyle.changed) {
             if (nextContentStyle.style) {
               block.setAttribute('style', nextContentStyle.style);

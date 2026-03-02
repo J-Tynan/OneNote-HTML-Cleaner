@@ -22,6 +22,15 @@ export async function runPipeline(htmlString, config = {}) {
   const logs = [];
   const outputAssets = [];
   const resolvedConfig = normalizePipelineConfig(config);
+  const parseWarnings = ensureArray(resolvedConfig.ParseWarnings || resolvedConfig.parseWarnings);
+  if (parseWarnings.length) {
+    logs.push(...parseWarnings.map((entry) => ({
+      step: entry && entry.step ? entry.step : 'parseMht',
+      level: entry && entry.level ? entry.level : 'warn',
+      details: entry && entry.details ? entry.details : 'MHT parse warning',
+      ...(entry && entry.meta ? { meta: entry.meta } : {})
+    })));
+  }
 
   try {
     // Basic input validation & preview

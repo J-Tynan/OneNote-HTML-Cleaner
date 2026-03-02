@@ -100,5 +100,70 @@ function createDoc(html) {
     assert(logs.some(entry => entry && entry.step === 'NormalizeDirectionLayoutContainers' && entry.iconParagraphsAligned === 2));
   }
 
+  {
+    const doc = createDoc('<html><body><main><div style="direction: ltr; margin-top:0; margin-left:0"><div style="direction: ltr; margin-top:0; margin-left:.075in"><h1>Sample Page Title</h1></div><div style="direction: ltr; margin-left:.075in"><p>Thursday, April 25, 2024</p><p>4:27 PM</p></div><div style="direction: ltr; margin-top:.2in; margin-left:.075in; width:6in"><p>Body content</p></div></div></main></body></html>');
+
+    normalizeDirectionLayoutContainers(doc, {
+      unwrapRedundantWrappers: true,
+      normalizeTopLevelPageWidths: true,
+      standardizeHeaderDatePositions: true
+    });
+
+    const titleBlock = doc.querySelector('main > div > div:nth-child(1)');
+    const dateBlock = doc.querySelector('main > div > div:nth-child(2)');
+    const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
+    assert(titleBlock);
+    assert(dateBlock);
+    assert(firstContentBlock);
+
+    const titleStyle = String(titleBlock.getAttribute('style') || '');
+    const dateStyle = String(dateBlock.getAttribute('style') || '');
+    const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
+
+    assert(/\bmargin-left\s*:\s*\.075in/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*\.075in/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*0\.125in/i.test(firstContentStyle));
+  }
+
+  {
+    const doc = createDoc('<html><body><main><div style="direction: ltr; margin-top:0; margin-left:0"><div style="direction: ltr; margin-top:0; margin-left:.2166in"><h1>Test Handwriting</h1></div><div style="direction: ltr; margin-left:.2166in"><p>28 February 2026</p><p>12:25</p></div><div style="direction: ltr; margin-top:.4881in; margin-left:.1951in; width:4.475in"><p>Body content</p></div></div></main></body></html>');
+
+    normalizeDirectionLayoutContainers(doc, {
+      unwrapRedundantWrappers: true,
+      normalizeTopLevelPageWidths: true,
+      standardizeHeaderDatePositions: true
+    });
+
+    const titleBlock = doc.querySelector('main > div > div:nth-child(1)');
+    const dateBlock = doc.querySelector('main > div > div:nth-child(2)');
+    const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
+    assert(titleBlock);
+    assert(dateBlock);
+    assert(firstContentBlock);
+
+    const titleStyle = String(titleBlock.getAttribute('style') || '');
+    const dateStyle = String(dateBlock.getAttribute('style') || '');
+    const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
+
+    assert(/\bmargin-left\s*:\s*\.2166in/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*\.2166in/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*\.1951in/i.test(firstContentStyle));
+  }
+
+  {
+    const doc = createDoc('<html><body><main><div style="direction: ltr; margin-top:0; margin-left:0; width:4.475in"><div style="direction: ltr; margin-top:0; margin-left:.2166in; width:2.4708in"><h1>Test Handwriting</h1></div><div style="direction: ltr; margin-top:.0409in; margin-left:.2166in; width:1in"><p>28 February 2026</p><p>12:25</p></div><div style="direction: ltr; margin-top:.4881in; margin-left:0; width:4.475in"><img width="537" height="261" src="x.png" alt="Ink Drawings"></div></div></main></body></html>');
+
+    normalizeDirectionLayoutContainers(doc, {
+      unwrapRedundantWrappers: true,
+      normalizeTopLevelPageWidths: true,
+      standardizeHeaderDatePositions: true
+    });
+
+    const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
+    assert(firstContentBlock);
+    const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
+    assert(/\bmargin-left\s*:\s*0\.125in/i.test(firstContentStyle));
+  }
+
   console.log('direction-layout-normalization: PASS');
 })();

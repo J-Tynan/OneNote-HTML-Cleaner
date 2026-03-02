@@ -243,6 +243,7 @@ export default class WorkerManager {
           const payload = cb.payload;
           let htmlInput = payload.html || '';
           let imageMap = (payload.config && payload.config.imageMap) || {};
+          let parseWarnings = [];
 
           const fileName = payload.fileName || payload.relativePath || '';
           if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
@@ -251,6 +252,9 @@ export default class WorkerManager {
             if (parsed && parsed.html) {
               htmlInput = parsed.html;
               imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
+              if (Array.isArray(parsed.imageDiagnostics) && parsed.imageDiagnostics.length) {
+                parseWarnings = parseWarnings.concat(parsed.imageDiagnostics);
+              }
               logger.info({ msg: 'parseMht produced html length', meta: { htmlLength: htmlInput.length } });
             } else {
               logger.warn({ msg: 'parseMht returned no HTML; proceeding with original payload.html' });
@@ -260,6 +264,7 @@ export default class WorkerManager {
           const sourceKind = payload.sourceKind || (/\.(mht|mhtml)$/i.test(fileName) ? 'mht' : 'html');
           const result = await pipelineMod.runPipeline(htmlInput, Object.assign({}, payload.config || {}, {
             imageMap,
+            ParseWarnings: parseWarnings,
             SourceName: fileName || payload.relativePath || 'Converted file',
             SourceKind: sourceKind
           }));

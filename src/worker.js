@@ -120,6 +120,7 @@ self.onmessage = async (e) => {
 
     let htmlInput = payload.html || '';
     let imageMap = (payload.config && payload.config.imageMap) || {};
+    let parseWarnings = [];
 
     // If filename indicates MHT/MHTML, attempt to parse it here in the worker
     if (sourceKind === 'mht') {
@@ -135,6 +136,9 @@ self.onmessage = async (e) => {
         if (parsed && parsed.html) {
           htmlInput = parsed.html;
           imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
+          if (Array.isArray(parsed.imageDiagnostics) && parsed.imageDiagnostics.length) {
+            parseWarnings = parseWarnings.concat(parsed.imageDiagnostics);
+          }
           logger.info({ id, msg: 'parseMht result', meta: { htmlLength: htmlInput.length, parts: parsed.parts.length, boundary: parsed.boundary } });
         } else {
           logger.warn({ id, msg: 'parseMht did not return HTML; proceeding with original payload.html' });
@@ -152,6 +156,7 @@ self.onmessage = async (e) => {
     }
     const result = await _runPipeline(htmlInput, Object.assign({}, payload.config || {}, {
       imageMap,
+      ParseWarnings: parseWarnings,
       SourceName: fileName,
       SourceKind: sourceKind
     }));

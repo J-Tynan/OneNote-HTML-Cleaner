@@ -173,6 +173,65 @@ function buildDataUriFromBase64(contentType, b64) {
   return `data:${contentType};base64,${b64}`;
 }
 
+function normalizeInlineImageGuardrailOptions(options = {}) {
+  const maxInlineImageBytesRaw =
+    options.InlineImageMaxBytes ??
+    options.inlineImageMaxBytes ??
+    options.MaxInlineImageBytes ??
+    options.maxInlineImageBytes;
+  const maxInlineImageBytesNumber = Number(maxInlineImageBytesRaw);
+  const maxInlineImageBytes = Number.isFinite(maxInlineImageBytesNumber) && maxInlineImageBytesNumber > 0
+    ? Math.floor(maxInlineImageBytesNumber)
+    : (2 * 1024 * 1024);
+
+  const enabledRaw =
+    options.EnableInlineImageSizeGuardrail ??
+    options.enableInlineImageSizeGuardrail;
+  const enabled = typeof enabledRaw === 'boolean'
+    ? enabledRaw
+    : String(enabledRaw || '').toLowerCase() !== 'false';
+
+  const behaviorRaw = String(
+    options.OversizedInlineImageBehavior ??
+    options.oversizedInlineImageBehavior ??
+    'warn-skip'
+  ).trim().toLowerCase();
+  const behavior = behaviorRaw === 'warn-only' ? 'warn-only' : 'warn-skip';
+
+  if (!enabled) {
+    return {
+      enabled: false,
+      maxInlineImageBytes,
+      behavior: 'off'
+    };
+  }
+
+  return {
+    enabled: true,
+    maxInlineImageBytes,
+    behavior
+  };
+}
+
+function estimateDecodedBase64Bytes(b64) {
+  if (!b64 || typeof b64 !== 'string') return 0;
+  const normalized = b64.replace(/\s+/g, '');
+  if (!normalized) return 0;
+  const padding = normalized.endsWith('==') ? 2 : (normalized.endsWith('=') ? 1 : 0);
+  return Math.max(0, Math.floor((normalized.length * 3) / 4) - padding);
+}
+
+function byteLengthFromString(value) {
+  if (typeof value !== 'string' || value.length === 0) return 0;
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.byteLength(value, 'utf8');
+  }
+  if (typeof TextEncoder !== 'undefined') {
+    return new TextEncoder().encode(value).length;
+  }
+  return value.length;
+}
+
 function parseHeaders(headerBlock) {
   const headers = {};
   const lines = headerBlock.split(/\r?\n/);
@@ -444,17 +503,22 @@ export function parseMht(rawText, options = {}) {
     }
 
     // Build image map from parts (images, fonts, octet-stream)
+    const inlineImageGuardrail = normalizeInlineImageGuardrailOptions(options);
+    const imageDiagnostics = [];
     const imageMap = {};
     for (const p of parts) {
       if (/^(image|font|application\/octet-stream)/i.test(p.ContentType || '')) {
         let dataUri = null;
+        let decodedBytes = 0;
         const cte = (p.ContentTransferEncoding || '').toLowerCase();
         if (/base64/i.test(cte)) {
           const b64 = normalizeBase64(p.BodyRaw);
+          decodedBytes = estimateDecodedBase64Bytes(b64);
           dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), b64);
         } else if (/quoted-printable/i.test(cte)) {
           // decode quoted printable then base64-encode the result for data URI
           const decoded = decodeQuotedPrintable(p.BodyRaw);
+          decodedBytes = byteLengthFromString(decoded);
           try {
             const b64 = btoa(unescape(encodeURIComponent(decoded)));
             dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), b64);
@@ -465,9 +529,12 @@ export function parseMht(rawText, options = {}) {
           // Try to guess: if body looks like base64, use it
           const maybe = p.BodyRaw.replace(/\s+/g, '');
           if (/^[A-Za-z0-9+/=]+$/.test(maybe) && maybe.length > 100) {
-            dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), normalizeBase64(maybe));
+            const maybeB64 = normalizeBase64(maybe);
+            decodedBytes = estimateDecodedBase64Bytes(maybeB64);
+            dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), maybeB64);
           } else {
             // fallback: treat raw bytes as text and base64-encode
+            decodedBytes = byteLengthFromString(p.BodyRaw);
             try {
               const b64 = btoa(unescape(encodeURIComponent(p.BodyRaw)));
               dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), b64);
@@ -478,6 +545,27 @@ export function parseMht(rawText, options = {}) {
         }
 
         if (dataUri) {
+          if (inlineImageGuardrail.enabled && decodedBytes > inlineImageGuardrail.maxInlineImageBytes) {
+            const diagnostic = {
+              step: 'inlineImageGuardrail',
+              level: 'warn',
+              details: inlineImageGuardrail.behavior === 'warn-skip'
+                ? 'Skipped oversized inline image asset during MHT image map build.'
+                : 'Oversized inline image asset detected during MHT image map build.',
+              meta: {
+                behavior: inlineImageGuardrail.behavior,
+                maxInlineImageBytes: inlineImageGuardrail.maxInlineImageBytes,
+                assetBytes: decodedBytes,
+                contentType: (p.ContentType || 'application/octet-stream').split(';')[0].trim(),
+                contentLocation: p.ContentLocation || ''
+              }
+            };
+            imageDiagnostics.push(diagnostic);
+            logger.warn({ msg: diagnostic.details, meta: diagnostic.meta });
+            if (inlineImageGuardrail.behavior === 'warn-skip') {
+              continue;
+            }
+          }
           addImageKeys(imageMap, p, dataUri);
         }
       }
@@ -549,6 +637,7 @@ export function parseMht(rawText, options = {}) {
       parts,
       boundary,
       imageMap,
+      imageDiagnostics,
       controlCharDiagnostics,
       controlCharSanitized,
       controlSanitizationReason,
@@ -559,6 +648,6 @@ export function parseMht(rawText, options = {}) {
     };
   } catch (err) {
     logger.error({ msg: 'parseMht unexpected error', meta: { error: String(err) } });
-    return { html: null, parts: [], boundary: null, imageMap: {} };
+    return { html: null, parts: [], boundary: null, imageMap: {}, imageDiagnostics: [] };
   }
 }

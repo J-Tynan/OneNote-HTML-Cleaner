@@ -212,7 +212,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] Add test for missing `alt` text on images. (2026-02-25)
 
 ### Performance / output size
-- [ ] [P2] Add guardrail for oversized inlined images (threshold + warning/fail behavior + test coverage).
+- [x] [P2] Add guardrail for oversized inlined images (threshold + warning/fail behavior + test coverage). (2026-03-02)
 - [ ] [P2] Add threshold-based warning for excessive inline styles and verify via regression test.
 
 ### Export output independence
