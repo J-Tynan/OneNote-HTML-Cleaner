@@ -2,9 +2,9 @@
 // Regression checks for charset fallback behavior
 
 import fs from 'fs';
-import path from 'path';
 import assert from 'assert';
 const { parseMht } = await import('../src/pipeline/mht.js');
+import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
 
 function checkNoControlChars(str) {
   for (let i = 0; i < str.length; i++) {
@@ -17,10 +17,7 @@ function checkNoControlChars(str) {
 }
 
 function runFixture(name) {
-  let filePath = path.resolve('Tests/fixtures', name);
-  if (!fs.existsSync(filePath)) {
-    filePath = path.resolve('Tests', name);
-  }
+  const filePath = resolveFixturePath(name);
   // read as latin1 to treat each byte as a character 0-255
   const raw = fs.readFileSync(filePath, 'latin1');
 
@@ -60,15 +57,12 @@ function runFixture(name) {
 
 function main() {
   const fixtures = [
-    'Resolve merge conflicts.mht',
-    'Test File.mht'
+    FIXTURE_FILES.RESOLVE_MERGE_CONFLICTS,
+    FIXTURE_FILES.TEST_FILE
     // more fixtures can be added as needed
   ];
   function loadRaw(name) {
-    let filePath = path.resolve('Tests/fixtures', name);
-    if (!fs.existsSync(filePath)) {
-      filePath = path.resolve('Tests', name);
-    }
+    const filePath = resolveFixturePath(name);
     return fs.readFileSync(filePath, 'utf-8');
   }
 

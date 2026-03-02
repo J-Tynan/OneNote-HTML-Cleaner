@@ -119,7 +119,8 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Add auto‑convert opt‑out and persistence.
 - [x] Detect and mark unsupported file types.
 - [x] [P1] Add small indentation to lists (bullet, numbered). (2026-03-01)
-- [ ] [P1] Loosen tight left margin on converted-page main content for better OneNote visual parity. (added 2026-03-01)
+- [x] [P1] Move to a single OneNote parity-first conversion method (retire profile branching in UI/config). (2026-03-02)
+- [ ] [P1] Loosen tight left margin on converted-page content for better OneNote visual parity. (added 2026-03-01)
 - [ ] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width.
 - [ ] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports.
 

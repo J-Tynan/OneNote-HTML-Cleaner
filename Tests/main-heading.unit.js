@@ -58,11 +58,11 @@ function run(html) {
 
   // 5. OneNote page-title paragraph should win over early Cornell-style h1 (e.g. "Cues")
   {
-    const doc = run('<html><head><title>Document</title></head><body><main><div><p style="margin:0;font-family:Calibri;font-size:20.0pt">Resolve merge conflicts</p></div><table><tr><td><h1>Cues</h1></td></tr></table></main></body></html>');
+    const doc = run('<html><head><title>Document</title></head><body><main><div><p style="margin:0;font-family:Calibri;font-size:20.0pt">Sample Note Title</p></div><table><tr><td><h1>Cues</h1></td></tr></table></main></body></html>');
     const h1s = doc.querySelectorAll('h1');
     assert.equal(h1s.length, 1);
-    assert.equal(h1s[0].textContent.trim(), 'Resolve merge conflicts');
-    assert.equal(doc.querySelector('title').textContent, 'Resolve merge conflicts');
+    assert.equal(h1s[0].textContent.trim(), 'Sample Note Title');
+    assert.equal(doc.querySelector('title').textContent, 'Sample Note Title');
     const h2s = doc.querySelectorAll('h2');
     assert.equal(h2s.length, 1);
     assert.equal(h2s[0].textContent.trim(), 'Cues');

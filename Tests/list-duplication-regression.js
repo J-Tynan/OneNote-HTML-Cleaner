@@ -7,6 +7,7 @@ import fs from 'fs';
 import { JSDOM } from 'jsdom';
 const { parseMht } = await import('../src/pipeline/mht.js');
 const { ensureListStructure } = await import('../src/pipeline/sanitize.js');
+import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
 
 // ensure DOMParser (and NodeFilter) are available for pipeline tests
 // (Node/jsdom doesn't provide them by default).
@@ -19,7 +20,7 @@ if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined')
 console.log('running list duplication regression test');
 
 // use the fixture that produced duplicated bullets previously
-const raw = fs.readFileSync('Tests/Communicate using Markdown.mht', 'binary');
+const raw = fs.readFileSync(resolveFixturePath(FIXTURE_FILES.COMMUNICATE_MARKDOWN), 'binary');
 const parsed = parseMht(raw, { EnableCharsetFallback: true, EnableMapping: true });
 
 // run the full pipeline to ensure end-to-end behavior including fixLists +

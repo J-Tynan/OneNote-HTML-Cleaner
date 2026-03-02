@@ -127,26 +127,12 @@
 
             <div id="statusControls" class="mt-4 space-y-4">
 
-              <!-- Conversion profile -->
-              <section class="option-panel" aria-labelledby="conversionProfileLabel">
-                <h3 id="conversionProfileLabel" class="text-sm font-medium text-slate-900">
-                  Conversion profile
+              <section class="option-panel" aria-labelledby="conversionMethodLabel">
+                <h3 id="conversionMethodLabel" class="text-sm font-medium text-slate-900">
+                  Conversion method
                 </h3>
-
-                <label for="conversionProfile" class="block text-xs text-muted">
-                  Output profile
-                </label>
-
-                <select
-                  id="conversionProfile"
-                  class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
-                  aria-describedby="conversionProfileHelp">
-                  <option value="cornell" selected>Cornell (tuned)</option>
-                  <option value="generic">Generic OneNote</option>
-                </select>
-
-                <p id="conversionProfileHelp" class="text-xs text-muted">
-                  Controls how aggressively OneNote‑specific structures are normalized.
+                <p class="text-xs text-muted">
+                  Uses a single OneNote parity-first conversion method for consistent, high-fidelity output.
                 </p>
               </section>
 

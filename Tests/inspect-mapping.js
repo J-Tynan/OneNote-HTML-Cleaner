@@ -1,8 +1,9 @@
 import fs from 'fs';
 import { parseMht, decodeQuotedPrintable } from '../src/pipeline/mht.js';
+import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
 
 // read fixture and parse with mapping enabled
-const raw = fs.readFileSync('Tests/Resolve merge conflicts.mht','utf8');
+const raw = fs.readFileSync(resolveFixturePath(FIXTURE_FILES.RESOLVE_MERGE_CONFLICTS), 'utf8');
 const p = parseMht(raw, { EnableMapping: true });
 const htmlPart = p.parts.find(pp => /text\/html/i.test(pp.ContentType));
 

@@ -14,7 +14,6 @@ async function main() {
   }
 
   const ctx = {
-    conversionProfile: { value: 'generic' },
     toolbarEnabled: { checked: true },
     toolbarEditToggleEnabled: { checked: true },
     toolbarMetadataToggleEnabled: { checked: false },
@@ -30,7 +29,7 @@ async function main() {
   }
 
   const cfg = helpers.getConversionConfig();
-  if (cfg.Profile !== 'generic') fail('Expected Profile to be "generic"');
+  if (cfg.Profile !== 'onenote') fail('Expected Profile to be "onenote"');
   if (cfg.ToolbarEnabled !== true) fail('Expected ToolbarEnabled true');
   if (cfg.ToolbarEditToggleEnabled !== true) fail('Expected ToolbarEditToggleEnabled true');
   if (cfg.ToolbarMetadataToggleEnabled !== false) fail('Expected ToolbarMetadataToggleEnabled false');

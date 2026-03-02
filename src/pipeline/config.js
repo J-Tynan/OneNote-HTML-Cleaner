@@ -56,9 +56,11 @@ function normalizeToolbarConfig(rawConfig = {}) {
   };
 }
 
+const SINGLE_PROFILE = 'onenote';
+
 const PROFILE_PRESETS = {
-  cornell: {
-    Profile: 'cornell',
+  [SINGLE_PROFILE]: {
+    Profile: SINGLE_PROFILE,
     RepairListItemValues: 'smart',
     ListMarginLeft: '0.35em',
     ListPaddingLeft: '1.2em',
@@ -79,40 +81,21 @@ const PROFILE_PRESETS = {
     NormalizeTopLevelPageWidths: true,
     ExternalizeCssEnabled: false,
     ExternalizeCssMode: 'shared'
-  },
-  generic: {
-    Profile: 'generic',
-    RepairListItemValues: 'smart',
-    ListMarginLeft: '0.35em',
-    ListPaddingLeft: '1.2em',
-    NormalizeAllListIndent: true,
-    UseCornellSemantics: false,
-    CornellHeaderFallback: false,
-    MergeCreatedDateTime: true,
-    CreatedDateTimeGap: '0.75em',
-    MigrateInlineStylesToUtilities: false,
-    RemoveMigratedInlineDeclarations: false,
-    InlineStyleMigrationSelector: '[style]',
-    InjectTailwindCss: false,
-    TailwindCssHref: 'assets/tailwind-output.css',
-    CollapseInlineStyles: false,
-    OutputCleanupMode: 'off',
-    UnitStrategy: 'normalize-safe',
-    NormalizeDirectionLayout: true,
-    NormalizeTopLevelPageWidths: true,
-    ExternalizeCssEnabled: false,
-    ExternalizeCssMode: 'shared'
   }
 };
 
 function normalizeProfile(value) {
   const profile = String(value || '').trim().toLowerCase();
-  return profile === 'generic' ? 'generic' : 'cornell';
+  if (!profile) return SINGLE_PROFILE;
+  if (profile === 'cornell' || profile === 'generic' || profile === SINGLE_PROFILE) {
+    return SINGLE_PROFILE;
+  }
+  return SINGLE_PROFILE;
 }
 
 export function normalizePipelineConfig(rawConfig = {}) {
   const profile = normalizeProfile(rawConfig.Profile || rawConfig.profile);
-  const preset = PROFILE_PRESETS[profile];
+  const preset = PROFILE_PRESETS[SINGLE_PROFILE];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
   const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
   const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
@@ -134,7 +117,7 @@ export function normalizePipelineConfig(rawConfig = {}) {
     ...rawConfig,
     ...normalizedToolbarConfig,
     ...normalizedExternalCssConfig,
-    Profile: profile,
+    Profile: SINGLE_PROFILE,
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy,
     NormalizeDirectionLayout: normalizeDirectionLayout,

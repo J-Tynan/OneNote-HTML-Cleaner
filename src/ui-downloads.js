@@ -80,9 +80,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
   }
 
   function getConversionConfig() {
-    const profile = ctx.conversionProfile ? ctx.conversionProfile.value : 'cornell';
     return {
-      Profile: profile,
+      Profile: 'onenote',
       OutputCleanupMode: 'safe',
       UnitStrategy: 'normalize-safe',
       TailwindCssHref: 'assets/tailwind-output.css',

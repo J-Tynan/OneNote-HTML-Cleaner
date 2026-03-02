@@ -3,16 +3,11 @@
 
 import fs from 'fs';
 import path from 'path';
-import assert from 'assert';
 const { parseMht } = await import('../src/pipeline/mht.js');
+import { CORE_NOTE_FIXTURES, resolveFixturePath } from './fixtures.js';
 
 async function main() {
-  const fixtures = [
-    'Resolve merge conflicts.mht',
-    'Test File.mht',
-    'Communicate using Markdown.mht',
-    'DevToys.mht'
-  ];
+  const fixtures = CORE_NOTE_FIXTURES;
 
   const results = [];
 
@@ -24,10 +19,7 @@ async function main() {
   ensureDir(diagnosticsDir);
 
   for (const name of fixtures) {
-    let filePath = path.resolve('Tests/fixtures', name);
-    if (!fs.existsSync(filePath)) {
-      filePath = path.resolve('Tests', name);
-    }
+    const filePath = resolveFixturePath(name);
     if (!fs.existsSync(filePath)) {
       console.warn('fixture not found', name);
       continue;

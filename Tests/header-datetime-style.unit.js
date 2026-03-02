@@ -12,7 +12,7 @@ function createDoc(html) {
   console.log('running header-datetime-style unit tests');
 
   {
-    const doc = createDoc('<html><head><title>Document</title></head><body><main><div><p style="font-size:20pt">Page Title</p></div><div><p>Thursday, April 25, 2024</p><p>4:27 PM</p></div></main></body></html>');
+    const doc = createDoc('<html><head><title>Document</title></head><body><main><div><p style="font-size:20pt; font-family: Calibri Light">Page Title</p></div><div><p>Thursday, April 25, 2024</p><p>4:27 PM</p></div></main></body></html>');
     ensureMainHeading(doc, { defaultTitle: 'Document' });
     mergeCreatedDateTimeRow(doc, { gap: '0.75em' });
     const logs = enforceHeaderDateTimeStyles(doc);
@@ -23,9 +23,12 @@ function createDoc(html) {
     assert(title);
     assert(/\bconverted-page-title\b/.test(String(title.getAttribute('class') || '')));
     const titleStyle = String(title.getAttribute('style') || '');
-    assert(/font-family\s*:\s*calibri, arial, sans-serif/i.test(titleStyle));
+    assert(/font-family\s*:\s*calibri light/i.test(titleStyle));
     assert(/font-size\s*:\s*20pt/i.test(titleStyle));
     assert(/font-weight\s*:\s*400/i.test(titleStyle));
+    assert(/display\s*:\s*inline-block/i.test(titleStyle));
+    assert(/padding-right\s*:\s*1in/i.test(titleStyle));
+    assert(/border-bottom\s*:\s*1px solid #b7b7b7/i.test(titleStyle));
 
     const dateParagraph = doc.querySelector('main div p');
     assert(dateParagraph);

@@ -18,7 +18,7 @@ async function main() {
     fail('normalizePipelineConfig not exported from src/pipeline/config.js');
   }
 
-  const normalizedGeneric = mod.normalizePipelineConfig({
+  const normalizedProfile = mod.normalizePipelineConfig({
     Profile: 'generic',
     ToolbarEnabled: 'true',
     ToolbarEditToggleEnabled: 'false',
@@ -32,17 +32,17 @@ async function main() {
     NormalizeTopLevelPageWidths: 'false'
   });
 
-  assert(normalizedGeneric.Profile === 'generic', 'Expected Profile to normalize to generic');
-  assert(normalizedGeneric.ToolbarEnabled === true, 'Expected ToolbarEnabled true');
-  assert(normalizedGeneric.ToolbarEditToggleEnabled === false, 'Expected ToolbarEditToggleEnabled false');
-  assert(normalizedGeneric.ToolbarMetadataToggleEnabled === true, 'Expected ToolbarMetadataToggleEnabled true');
-  assert(normalizedGeneric.ToolbarBundleMode === 'inline', 'Expected ToolbarBundleMode fallback to inline');
-  assert(normalizedGeneric.ExternalizeCssEnabled === true, 'Expected ExternalizeCssEnabled true');
-  assert(normalizedGeneric.ExternalizeCssMode === 'per-page', 'Expected ExternalizeCssMode to normalize to per-page');
-  assert(normalizedGeneric.OutputCleanupMode === 'safe', 'Expected OutputCleanupMode to normalize to safe');
-  assert(normalizedGeneric.UnitStrategy === 'normalize-safe', 'Expected UnitStrategy to normalize to normalize-safe');
-  assert(normalizedGeneric.NormalizeDirectionLayout === false, 'Expected NormalizeDirectionLayout false');
-  assert(normalizedGeneric.NormalizeTopLevelPageWidths === false, 'Expected NormalizeTopLevelPageWidths false');
+  assert(normalizedProfile.Profile === 'onenote', 'Expected Profile to normalize to onenote');
+  assert(normalizedProfile.ToolbarEnabled === true, 'Expected ToolbarEnabled true');
+  assert(normalizedProfile.ToolbarEditToggleEnabled === false, 'Expected ToolbarEditToggleEnabled false');
+  assert(normalizedProfile.ToolbarMetadataToggleEnabled === true, 'Expected ToolbarMetadataToggleEnabled true');
+  assert(normalizedProfile.ToolbarBundleMode === 'inline', 'Expected ToolbarBundleMode fallback to inline');
+  assert(normalizedProfile.ExternalizeCssEnabled === true, 'Expected ExternalizeCssEnabled true');
+  assert(normalizedProfile.ExternalizeCssMode === 'per-page', 'Expected ExternalizeCssMode to normalize to per-page');
+  assert(normalizedProfile.OutputCleanupMode === 'safe', 'Expected OutputCleanupMode to normalize to safe');
+  assert(normalizedProfile.UnitStrategy === 'normalize-safe', 'Expected UnitStrategy to normalize to normalize-safe');
+  assert(normalizedProfile.NormalizeDirectionLayout === false, 'Expected NormalizeDirectionLayout false');
+  assert(normalizedProfile.NormalizeTopLevelPageWidths === false, 'Expected NormalizeTopLevelPageWidths false');
 
   const normalizedFallback = mod.normalizePipelineConfig({
     Profile: 'unknown-profile',
@@ -52,7 +52,7 @@ async function main() {
     UnitStrategy: 'invalid-unit-strategy'
   });
 
-  assert(normalizedFallback.Profile === 'cornell', 'Expected unknown Profile to fallback to cornell');
+  assert(normalizedFallback.Profile === 'onenote', 'Expected unknown Profile to fallback to onenote');
   assert(normalizedFallback.ExternalizeCssEnabled === false, 'Expected camelCase externalizeCssEnabled false to be respected');
   assert(normalizedFallback.ExternalizeCssMode === 'shared', 'Expected invalid ExternalizeCssMode to fallback to shared');
   assert(normalizedFallback.OutputCleanupMode === 'off', 'Expected invalid OutputCleanupMode to fallback to off');

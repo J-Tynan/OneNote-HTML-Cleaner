@@ -22,7 +22,6 @@ const dom = {
   convertButton: null,
   convertButtonWrapper: null,
   // uiStyleVariant temporary dropdown removed after Phase 1
-  conversionProfile: null,
   toolbarEnabled: null,
   toolbarEditToggleEnabled: null,
   toolbarMetadataToggleEnabled: null,
@@ -567,7 +566,6 @@ function bindEvents() {
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
   // light-theme testing dropdown removed; no listener attached
-  dom.conversionProfile?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarMetadataToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -636,7 +634,6 @@ export function initUI(workerManager, options = {}) {
   dom.downloadZip = document.getElementById('downloadZip');
   dom.convertButton = document.getElementById('convertButton');
   dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');
-  dom.conversionProfile = document.getElementById('conversionProfile');
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
   dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
   dom.toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
@@ -700,7 +697,6 @@ export function initUI(workerManager, options = {}) {
   runtime.downloadHelpers = createDownloadHelpers({
     successfulOutputs: runtime.successfulOutputs,
     downloadZipButton: dom.downloadZip,
-    conversionProfile: dom.conversionProfile,
     toolbarEnabled: dom.toolbarEnabled,
     toolbarEditToggleEnabled: dom.toolbarEditToggleEnabled,
     toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled,

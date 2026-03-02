@@ -1,13 +1,13 @@
 import fs from 'node:fs';
-import path from 'node:path';
 import assert from 'node:assert';
 import { parseMht } from '../src/pipeline/mht.js';
+import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
 
 // fixtures exercise various charset scenarios
 const fixtures = [
   {
     name: 'resolve-merge-conflicts',
-    path: path.join('Tests', 'Resolve merge conflicts.mht'),
+    path: resolveFixturePath(FIXTURE_FILES.RESOLVE_MERGE_CONFLICTS),
     description: 'real-world file with ambiguous/missing charset',
     // the pipeline previously decoded this without error; we just check for an html tag
     expectedSubstring: '<html',
@@ -15,14 +15,14 @@ const fixtures = [
   },
   {
     name: 'test-file-utf8',
-    path: path.join('Tests', 'Test File.mht'),
+    path: resolveFixturePath(FIXTURE_FILES.TEST_FILE),
     description: 'known UTF-8 MHT fixture',
     expectedSubstring: '<html',
     requiresFallback: false,
   },
   {
     name: 'problematic-mhtml-full-snippet',
-    path: path.join('Tests', 'Problematic mht-full-snippet.mhtml'),
+    path: resolveFixturePath(FIXTURE_FILES.PROBLEMATIC_FULL_SNIPPET),
     description: 'problematic fixture promoted into native locked suite using .mhtml extension',
     expectedSubstring: '<html',
     requiresFallback: false,

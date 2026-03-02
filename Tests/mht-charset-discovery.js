@@ -4,6 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { FIXTURE_FILES, CORE_NOTE_FIXTURES, resolveFixturePath } from './fixtures.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { parseMht } = await import('../src/pipeline/mht.js');
@@ -21,16 +22,17 @@ async function run(fileName) {
 
 async function main() {
   const fixtures = [
-    'fixtures/mht-sample.mht',
-    'fixtures/mht-full-snippet.mht',
-    'DevToys.mht',
-    'Test File.mht',
-    'Communicate using Markdown.mht',
-    'Resolve merge conflicts.mht'
+    path.join('fixtures', FIXTURE_FILES.SAMPLE_MHT_SNIPPET),
+    path.join('fixtures', FIXTURE_FILES.FULL_MHT_SNIPPET),
+    ...CORE_NOTE_FIXTURES
   ];
   for (const f of fixtures) {
     try {
-      await run(f);
+      const fixturePath = f.includes(path.sep) ? path.resolve(__dirname, f) : resolveFixturePath(f);
+      const relativeLabel = path.isAbsolute(fixturePath)
+        ? path.relative(__dirname, fixturePath)
+        : f;
+      await run(relativeLabel);
     } catch (err) {
       console.error('error parsing', f, err);
     }

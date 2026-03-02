@@ -1,6 +1,8 @@
 import fs from 'fs';
 import { parseMht } from '../src/pipeline/mht.js';
-const raw = fs.readFileSync('Tests/Resolve merge conflicts.mht','latin1');
+import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
+
+const raw = fs.readFileSync(resolveFixturePath(FIXTURE_FILES.RESOLVE_MERGE_CONFLICTS), 'latin1');
 for (const opts of [{EnableCharsetFallback:true,EnableMapping:false},{EnableCharsetFallback:true,EnableMapping:true}]){
   const p = parseMht(raw, opts);
   console.log('opts', opts);

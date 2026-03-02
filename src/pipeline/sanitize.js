@@ -915,7 +915,101 @@ function styleMapToString(styleMap) {
   return serializeInlineStyle(Array.from(styleMap.entries()).map(([prop, value]) => ({ prop, value })));
 }
 
-function normalizeTitleBlockPositionStyle(styleText) {
+function isZeroLengthValue(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized) return true;
+  return /^0(?:[a-z%]+)?$/.test(normalized);
+}
+
+function extractPaddingLeftValue(styleMap) {
+  const explicit = String(styleMap.get('padding-left') || '').trim();
+  if (explicit) return explicit;
+
+  const shorthand = String(styleMap.get('padding') || '').trim();
+  if (!shorthand) return '';
+  const values = shorthand.split(/\s+/).filter(Boolean);
+  if (!values.length) return '';
+  if (values.length === 1) return values[0];
+  if (values.length === 2) return values[1];
+  if (values.length === 3) return values[1];
+  return values[3];
+}
+
+function getDominantTableContentInset(block) {
+  if (!block || !block.querySelectorAll) return '';
+  const cells = Array.from(block.querySelectorAll('table td, table th'));
+  for (const cell of cells) {
+    const hasReadableText = cleanInlineText(cell.textContent).length > 0;
+    if (!hasReadableText) continue;
+    const styleMap = styleEntriesToMap(cell.getAttribute('style') || '');
+    const inset = extractPaddingLeftValue(styleMap);
+    if (!inset || isZeroLengthValue(inset)) continue;
+    return inset;
+  }
+  return '';
+}
+
+function getNumericDimension(value) {
+  const parsed = parseFloat(String(value || '').trim());
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function isLikelyInlineIconImage(img) {
+  if (!img || !img.getAttribute) return false;
+  const width = getNumericDimension(img.getAttribute('width'));
+  const height = getNumericDimension(img.getAttribute('height'));
+  if (width !== null && width > 32) return false;
+  if (height !== null && height > 32) return false;
+  return true;
+}
+
+function isStandaloneIconParagraph(paragraph) {
+  if (!paragraph || !paragraph.tagName || paragraph.tagName.toLowerCase() !== 'p') return false;
+  const directChildren = Array.from(paragraph.children || []);
+  if (!directChildren.length) return false;
+  if (!directChildren.every(child => child.tagName && child.tagName.toLowerCase() === 'img')) return false;
+
+  const directImages = directChildren;
+  if (!directImages.length) return false;
+  if (!directImages.every(img => isLikelyInlineIconImage(img))) return false;
+
+  const text = cleanInlineText(paragraph.textContent);
+  return text.length === 0;
+}
+
+function alignStandaloneIconParagraphsToContentInset(block) {
+  const inset = getDominantTableContentInset(block);
+  if (!inset) {
+    return {
+      changed: 0,
+      inset: ''
+    };
+  }
+
+  let changed = 0;
+  const directParagraphs = Array.from(block.querySelectorAll(':scope > p'));
+  for (const paragraph of directParagraphs) {
+    if (!isStandaloneIconParagraph(paragraph)) continue;
+    const styleMap = styleEntriesToMap(paragraph.getAttribute('style') || '');
+    const existingMarginLeft = String(styleMap.get('margin-left') || '').trim();
+    if (existingMarginLeft && !isZeroLengthValue(existingMarginLeft)) continue;
+    styleMap.set('margin-left', inset);
+    const nextStyle = styleMapToString(styleMap);
+    if (nextStyle) {
+      paragraph.setAttribute('style', nextStyle);
+    } else {
+      paragraph.removeAttribute('style');
+    }
+    changed += 1;
+  }
+
+  return {
+    changed,
+    inset
+  };
+}
+
+function normalizeTitleBlockPositionStyle(styleText, baselineMarginLeft = '') {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
 
@@ -924,11 +1018,55 @@ function normalizeTitleBlockPositionStyle(styleText) {
     styleMap.delete('width');
   }
 
-  const marginTop = styleMap.get('margin-top');
-  if (marginTop) {
-    styleMap.set('margin-left', marginTop);
+  if (baselineMarginLeft) {
+    styleMap.set('margin-left', baselineMarginLeft);
+  } else {
+    const marginTop = styleMap.get('margin-top');
+    if (marginTop) {
+      styleMap.set('margin-left', marginTop);
+    }
   }
 
+  const after = styleMapToString(styleMap);
+  return {
+    changed: after !== before,
+    style: after
+  };
+}
+
+function normalizeDateBlockPositionStyle(styleText, baselineMarginLeft = '') {
+  const styleMap = styleEntriesToMap(styleText);
+  const before = styleMapToString(styleMap);
+
+  const width = styleMap.get('width');
+  if (width && isAbsoluteWidthValue(width)) {
+    styleMap.delete('width');
+  }
+
+  styleMap.delete('margin-top');
+  if (baselineMarginLeft) {
+    styleMap.set('margin-left', baselineMarginLeft);
+  } else {
+    styleMap.delete('margin-left');
+  }
+
+  const after = styleMapToString(styleMap);
+  return {
+    changed: after !== before,
+    style: after
+  };
+}
+
+function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = '') {
+  if (!baselineMarginLeft) {
+    return {
+      changed: false,
+      style: String(styleText || '')
+    };
+  }
+  const styleMap = styleEntriesToMap(styleText);
+  const before = styleMapToString(styleMap);
+  styleMap.set('margin-left', baselineMarginLeft);
   const after = styleMapToString(styleMap);
   return {
     changed: after !== before,
@@ -1093,30 +1231,77 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
   }
 
   let positionsStandardized = 0;
+  let firstContentBlockMarginsStandardized = 0;
+  let iconParagraphsAligned = 0;
   if (standardizeHeaderDatePositions) {
     if (rootLayout) {
       const sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+      let titleBlock = null;
+      let dateBlock = null;
+      let firstContentBlock = null;
+
       for (const block of sectionBlocks) {
         if (block.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
 
+        const styleText = String(block.getAttribute('style') || '');
+        if (!styleText) continue;
+        const entries = parseInlineStyle(styleText);
+        const hasDirectionLtr = entries.some(({ prop, value }) => prop === 'direction' && /^ltr$/i.test(String(value || '').trim()));
+        if (!hasDirectionLtr) continue;
+
         const isTitleBlock = looksLikeTitleContainer(block);
         const isDateBlock = looksLikeDateTimeContainer(block);
-        if (!isTitleBlock && !isDateBlock) continue;
+        if (isTitleBlock && !titleBlock) {
+          titleBlock = block;
+          continue;
+        }
+        if (isDateBlock && !dateBlock) {
+          dateBlock = block;
+          continue;
+        }
+        if (!isTitleBlock && !isDateBlock && !firstContentBlock) {
+          firstContentBlock = block;
+        }
+      }
+
+      const readMarginLeft = (block) => {
+        if (!block) return '';
+        const styleMap = styleEntriesToMap(block.getAttribute('style') || '');
+        return String(styleMap.get('margin-left') || '').trim();
+      };
+      const rootMarginLeft = readMarginLeft(rootLayout);
+      const baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
+
+      for (const block of sectionBlocks) {
+        if (block.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
 
         const styleText = String(block.getAttribute('style') || '');
         if (!styleText) continue;
+        const entries = parseInlineStyle(styleText);
+        const hasDirectionLtr = entries.some(({ prop, value }) => prop === 'direction' && /^ltr$/i.test(String(value || '').trim()));
+        if (!hasDirectionLtr) continue;
+
+        if (block === firstContentBlock) {
+          const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft);
+          if (nextContentStyle.changed) {
+            if (nextContentStyle.style) {
+              block.setAttribute('style', nextContentStyle.style);
+            } else {
+              block.removeAttribute('style');
+            }
+            firstContentBlockMarginsStandardized += 1;
+          }
+        }
+
+        const isTitleBlock = block === titleBlock;
+        const isDateBlock = block === dateBlock;
+        if (!isTitleBlock && !isDateBlock) continue;
 
         let next;
         if (isTitleBlock) {
-          next = normalizeTitleBlockPositionStyle(styleText);
+          next = normalizeTitleBlockPositionStyle(styleText, baselineMarginLeft);
         } else if (isDateBlock) {
-          const stripped = stripLayoutPositionDeclarations(styleText, {
-            removeMarginTop: true
-          });
-          next = {
-            changed: stripped.removed > 0,
-            style: stripped.style
-          };
+          next = normalizeDateBlockPositionStyle(styleText, baselineMarginLeft);
         }
 
         if (!next) continue;
@@ -1129,16 +1314,23 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
         }
         positionsStandardized += 1;
       }
+
+      if (firstContentBlock) {
+        const iconAlignment = alignStandaloneIconParagraphsToContentInset(firstContentBlock);
+        iconParagraphsAligned = iconAlignment.changed;
+      }
     }
   }
 
-  if (wrappersUnwrapped || widthsNormalized || positionsStandardized) {
+  if (wrappersUnwrapped || widthsNormalized || rootMarginsStandardized || firstContentBlockMarginsStandardized || positionsStandardized || iconParagraphsAligned) {
     logs.push({
       step: 'NormalizeDirectionLayoutContainers',
       wrappersUnwrapped,
       widthsNormalized,
       rootMarginsStandardized,
-      positionsStandardized
+      firstContentBlockMarginsStandardized,
+      positionsStandardized,
+      iconParagraphsAligned
     });
   }
 
@@ -1156,11 +1348,17 @@ export function enforceHeaderDateTimeStyles(doc) {
 
   const title = main.querySelector('h1');
   if (title) {
+    const existingTitleStyle = styleEntriesToMap(title.getAttribute('style') || '');
+    const titleFontFamily = String(existingTitleStyle.get('font-family') || '').trim() || 'Calibri Light, Calibri, Arial, sans-serif';
     const titleChanged = setStyleDefaults(title, {
-      'font-family': 'Calibri, Arial, sans-serif',
+      'font-family': titleFontFamily,
       'font-size': '20pt',
       'font-weight': '400',
-      'margin': '0'
+      'margin': '0',
+      'display': 'inline-block',
+      'padding-right': '1in',
+      'padding-bottom': '0.08em',
+      'border-bottom': '1px solid #b7b7b7'
     });
     addClass(title, 'converted-page-title');
     if (titleChanged) titleStyled += 1;
@@ -1318,7 +1516,22 @@ export function ensureListStructure(doc) {
   const logs = [];
   const lists = Array.from(doc.querySelectorAll('ul,ol'));
   let fixedCount = 0;
+  let unwrappedCount = 0;
   lists.forEach(list => {
+    const directElementChildren = Array.from(list.children || []).filter(n => n.nodeType === ELEMENT_NODE);
+    const hasDirectLi = directElementChildren.some(child => child.tagName && child.tagName.toLowerCase() === 'li');
+    if (directElementChildren.length > 0 && !hasDirectLi) {
+      const parent = list.parentNode;
+      if (parent) {
+        while (list.firstChild) {
+          parent.insertBefore(list.firstChild, list);
+        }
+        parent.removeChild(list);
+        unwrappedCount += 1;
+      }
+      return;
+    }
+
     let changed = false;
     const children = Array.from(list.childNodes);
     children.forEach(node => {
@@ -1354,6 +1567,7 @@ export function ensureListStructure(doc) {
     }
   });
   if (fixedCount) logs.push({ step: 'EnsureListStructureCount', fixedCount });
+  if (unwrappedCount) logs.push({ step: 'UnwrapMalformedListCount', unwrappedCount });
 
   // remove explicit bullet glyphs from list items (e.g. • or ·) to avoid duplicates
   const bulletRegex = /^[\s\u00A0]*[•·\u2022\u00B7\-]+[\s\u00A0]*/;
