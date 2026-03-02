@@ -182,7 +182,7 @@
                       <option value="per-page">One stylesheet per converted page</option>
                     </select>
                     <p id="externalizeCssModeHelp" class="text-xs text-muted">
-                      Single-file HTML download is disabled when external CSS is enabled.
+                      Single-file HTML download is disabled only when a CSS sidecar is produced; otherwise safe fallback download remains available.
                     </p>
                   </div>
 
@@ -326,6 +326,9 @@
           <p class="mt-2 text-sm text-slate-700">
             Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone.
             The app converts the file locally in your browser and provides a download link when finished.
+          </p>
+          <p class="mt-3 text-sm text-slate-700">
+            Converted pages are validated to avoid required CDN/app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together.
           </p>
           <p class="mt-3 text-sm text-slate-700">
             Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>

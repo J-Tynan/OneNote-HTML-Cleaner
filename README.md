@@ -211,6 +211,18 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 	- Close/hide control
 - Bundle model is self-contained inline only for standalone exported HTML compatibility.
 
+## Export dependency guarantees
+
+- Default exported HTML is checked to avoid required remote dependencies (no CDN script/style requirements in converted output).
+- Regression checks fail exports that include remote script/style references, app-runtime imports (`src/`, `node_modules`, worker/app bundles), or remote CSS `@import` declarations.
+- Local links authored in note content (for example normal `http(s)` links inside `<a href>`) are preserved and are not treated as runtime dependencies.
+
+### Caveats
+
+- Optional **Externalize CSS** mode writes CSS sidecars for ZIP output; those exports remain self-contained when HTML and CSS assets stay together.
+- If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
+- App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.
+
 ## Refactor Goals
 
 1. Preserve the existing PowerShell script behavior while improving portability.
