@@ -29,7 +29,10 @@ async function main() {
     OutputCleanupMode: 'safe',
     UnitStrategy: 'normalize-safe',
     NormalizeDirectionLayout: 'false',
-    NormalizeTopLevelPageWidths: 'false'
+    NormalizeTopLevelPageWidths: 'false',
+    ExperimentalExportEnabled: 'true',
+    ExportFormat: 'MARKDOWN',
+    MarkdownFlavor: 'GFM'
   });
 
   assert(normalizedProfile.Profile === 'onenote', 'Expected Profile to normalize to onenote');
@@ -43,13 +46,19 @@ async function main() {
   assert(normalizedProfile.UnitStrategy === 'normalize-safe', 'Expected UnitStrategy to normalize to normalize-safe');
   assert(normalizedProfile.NormalizeDirectionLayout === false, 'Expected NormalizeDirectionLayout false');
   assert(normalizedProfile.NormalizeTopLevelPageWidths === false, 'Expected NormalizeTopLevelPageWidths false');
+  assert(normalizedProfile.ExperimentalExportEnabled === true, 'Expected ExperimentalExportEnabled true');
+  assert(normalizedProfile.ExportFormat === 'markdown', 'Expected ExportFormat to normalize to markdown');
+  assert(normalizedProfile.MarkdownFlavor === 'gfm', 'Expected MarkdownFlavor to normalize to gfm');
 
   const normalizedFallback = mod.normalizePipelineConfig({
     Profile: 'unknown-profile',
     externalizeCssEnabled: 'false',
     externalizeCssMode: 'invalid',
     OutputCleanupMode: 'unexpected-mode',
-    UnitStrategy: 'invalid-unit-strategy'
+    UnitStrategy: 'invalid-unit-strategy',
+    ExperimentalExportEnabled: 'false',
+    ExportFormat: 'docx',
+    MarkdownFlavor: 'not-a-flavor'
   });
 
   assert(normalizedFallback.Profile === 'onenote', 'Expected unknown Profile to fallback to onenote');
@@ -59,6 +68,9 @@ async function main() {
   assert(normalizedFallback.UnitStrategy === 'preserve', 'Expected invalid UnitStrategy to fallback to preserve');
   assert(normalizedFallback.NormalizeDirectionLayout === true, 'Expected NormalizeDirectionLayout default true from preset');
   assert(normalizedFallback.NormalizeTopLevelPageWidths === true, 'Expected NormalizeTopLevelPageWidths default true from preset');
+  assert(normalizedFallback.ExperimentalExportEnabled === false, 'Expected ExperimentalExportEnabled false');
+  assert(normalizedFallback.ExportFormat === 'html', 'Expected ExportFormat to fallback to html when experiment disabled');
+  assert(normalizedFallback.MarkdownFlavor === 'obsidian', 'Expected invalid MarkdownFlavor to fallback to obsidian');
 
   console.log('pipeline-config: PASS');
 }

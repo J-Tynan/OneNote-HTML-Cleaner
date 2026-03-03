@@ -19,6 +19,9 @@ async function main() {
     toolbarMetadataToggleEnabled: { checked: false },
     externalizeCssEnabled: { checked: true },
     externalizeCssMode: { value: 'per-page' },
+    experimentalExportEnabled: { checked: true },
+    exportFormat: { value: 'markdown' },
+    markdownFlavor: { value: 'gfm' },
     downloadZipButton: { disabled: false },
     successfulOutputs: new Map()
   };
@@ -35,6 +38,13 @@ async function main() {
   if (cfg.ToolbarMetadataToggleEnabled !== false) fail('Expected ToolbarMetadataToggleEnabled false');
   if (cfg.ExternalizeCssEnabled !== true) fail('Expected ExternalizeCssEnabled true');
   if (cfg.ExternalizeCssMode !== 'per-page') fail('Expected ExternalizeCssMode to be "per-page"');
+  if (cfg.ExperimentalExportEnabled !== true) fail('Expected ExperimentalExportEnabled true');
+  if (cfg.ExportFormat !== 'markdown') fail('Expected ExportFormat to be "markdown" when experimental is enabled');
+  if (cfg.MarkdownFlavor !== 'gfm') fail('Expected MarkdownFlavor to be "gfm"');
+
+  ctx.experimentalExportEnabled.checked = false;
+  const cfgFallback = helpers.getConversionConfig();
+  if (cfgFallback.ExportFormat !== 'html') fail('Expected ExportFormat fallback to "html" when experimental is disabled');
 
   console.log('ui-downloads-config: OK');
 }

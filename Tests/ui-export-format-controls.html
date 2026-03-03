@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UI — Export format controls smoke test</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;padding:20px}.hidden{display:none}</style>
+</head>
+<body>
+  <h1>UI — Export format controls smoke test</h1>
+  <div id="out"></div>
+
+  <div id="dropzone" tabindex="0"></div>
+  <button id="importButton" type="button">Import</button>
+  <input id="fileInput" type="file" />
+  <div id="fileList"></div>
+  <div id="statusPanel" class="hidden"></div>
+  <span id="appStateBadge">Empty</span>
+  <button id="downloadZip" type="button" disabled>Download ZIP</button>
+  <div class="convert-button-wrapper" tabindex="0"><button id="convertButton" type="button" disabled>Convert</button></div>
+  <div id="convertTooltip" class="hidden" aria-hidden="true"></div>
+
+  <input id="toolbarEnabled" type="checkbox" />
+  <input id="toolbarEditToggleEnabled" type="checkbox" />
+  <input id="toolbarMetadataToggleEnabled" type="checkbox" />
+  <input id="autoConvertEnabled" type="checkbox" checked />
+  <input id="externalizeCssEnabled" type="checkbox" />
+  <select id="externalizeCssMode"><option value="shared">shared</option></select>
+  <p id="autoConvertNotice"></p>
+
+  <input id="experimentalExportEnabled" type="checkbox" />
+  <select id="exportFormat" class="hidden" disabled>
+    <option value="html" selected>HTML</option>
+    <option value="markdown">Markdown</option>
+    <option value="docx">DOCX</option>
+  </select>
+  <div id="markdownFlavorContainer" class="hidden">
+    <select id="markdownFlavor" disabled>
+      <option value="obsidian" selected>Obsidian</option>
+      <option value="commonmark">CommonMark</option>
+      <option value="gfm">GFM</option>
+      <option value="markdown-extra">Markdown Extra</option>
+    </select>
+  </div>
+  <p id="exportFormatHelp"></p>
+
+  <details id="diagnosticsPanel" class="hidden"></details>
+  <ul id="diagnosticsList"></ul>
+  <span id="diagnosticsCount"></span>
+
+  <button id="helpButton" type="button"></button>
+  <div id="helpModal" class="hidden"></div>
+  <button id="helpCloseButton" type="button"></button>
+
+  <script type="module">
+    import { initUI } from '../src/ui.js';
+
+    function pass(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:green">PASS: ${msg}</div>`; }
+    function fail(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:red">FAIL: ${msg}</div>`; }
+
+    initUI();
+
+    const experimental = document.getElementById('experimentalExportEnabled');
+    const exportFormat = document.getElementById('exportFormat');
+    const flavorContainer = document.getElementById('markdownFlavorContainer');
+    const flavor = document.getElementById('markdownFlavor');
+    const help = document.getElementById('exportFormatHelp');
+
+    if (exportFormat.disabled && exportFormat.classList.contains('hidden')) pass('Export format hidden/disabled by default');
+    else fail('Export format should be hidden/disabled by default');
+
+    if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled by default');
+    else fail('Markdown flavor should be hidden/disabled by default');
+
+    experimental.checked = true;
+    experimental.dispatchEvent(new Event('change', { bubbles: true }));
+
+    if (!exportFormat.disabled && !exportFormat.classList.contains('hidden')) pass('Export format enabled when experimental is ON');
+    else fail('Export format should be enabled when experimental is ON');
+
+    exportFormat.value = 'markdown';
+    exportFormat.dispatchEvent(new Event('change', { bubbles: true }));
+
+    if (!flavorContainer.classList.contains('hidden') && !flavor.disabled) pass('Markdown flavor shown/enabled when Markdown format selected');
+    else fail('Markdown flavor should be shown/enabled for Markdown format');
+
+    exportFormat.value = 'docx';
+    exportFormat.dispatchEvent(new Event('change', { bubbles: true }));
+
+    if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled for non-Markdown format');
+    else fail('Markdown flavor should be hidden/disabled for non-Markdown format');
+
+    if (/not yet implemented/i.test(help.textContent || '')) pass('DOCX help text shown for unsupported format');
+    else fail('Expected DOCX unsupported help text');
+
+    experimental.checked = false;
+    experimental.dispatchEvent(new Event('change', { bubbles: true }));
+
+    const cfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
+    if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');
+    else fail('Export format should fallback to HTML when experimental is OFF');
+  </script>
+</body>
+</html>

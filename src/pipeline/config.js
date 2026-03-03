@@ -34,6 +34,20 @@ function normalizeExternalizeCssMode(value) {
   return normalized === 'per-page' ? 'per-page' : 'shared';
 }
 
+function normalizeExportFormat(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'markdown' || normalized === 'docx') return normalized;
+  return 'html';
+}
+
+function normalizeMarkdownFlavor(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'commonmark' || normalized === 'gfm' || normalized === 'markdown-extra') {
+    return normalized;
+  }
+  return 'obsidian';
+}
+
 function normalizeExternalCssConfig(rawConfig = {}) {
   const enabledValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExternalizeCssEnabled')
     ? rawConfig.ExternalizeCssEnabled
@@ -44,6 +58,28 @@ function normalizeExternalCssConfig(rawConfig = {}) {
   return {
     ExternalizeCssEnabled: toBoolean(enabledValue, false),
     ExternalizeCssMode: normalizeExternalizeCssMode(modeValue)
+  };
+}
+
+function normalizeExportConfig(rawConfig = {}) {
+  const experimentalEnabled = Object.prototype.hasOwnProperty.call(rawConfig, 'ExperimentalExportEnabled')
+    ? rawConfig.ExperimentalExportEnabled
+    : rawConfig.experimentalExportEnabled;
+  const exportFormatValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExportFormat')
+    ? rawConfig.ExportFormat
+    : rawConfig.exportFormat;
+  const markdownFlavorValue = Object.prototype.hasOwnProperty.call(rawConfig, 'MarkdownFlavor')
+    ? rawConfig.MarkdownFlavor
+    : rawConfig.markdownFlavor;
+
+  const normalizedExperimental = toBoolean(experimentalEnabled, false);
+  const normalizedFormat = normalizeExportFormat(exportFormatValue);
+  const normalizedFlavor = normalizeMarkdownFlavor(markdownFlavorValue);
+
+  return {
+    ExperimentalExportEnabled: normalizedExperimental,
+    ExportFormat: normalizedExperimental ? normalizedFormat : 'html',
+    MarkdownFlavor: normalizedFlavor
   };
 }
 
@@ -85,7 +121,10 @@ const PROFILE_PRESETS = {
     NormalizeDirectionLayout: true,
     NormalizeTopLevelPageWidths: true,
     ExternalizeCssEnabled: false,
-    ExternalizeCssMode: 'shared'
+    ExternalizeCssMode: 'shared',
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html',
+    MarkdownFlavor: 'obsidian'
   }
 };
 
@@ -103,6 +142,7 @@ export function normalizePipelineConfig(rawConfig = {}) {
   const preset = PROFILE_PRESETS[SINGLE_PROFILE];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
   const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
+  const normalizedExportConfig = normalizeExportConfig(rawConfig);
   const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
   const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
   const normalizeDirectionLayout = toBoolean(
@@ -122,6 +162,7 @@ export function normalizePipelineConfig(rawConfig = {}) {
     ...rawConfig,
     ...normalizedToolbarConfig,
     ...normalizedExternalCssConfig,
+    ...normalizedExportConfig,
     Profile: SINGLE_PROFILE,
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy,

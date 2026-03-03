@@ -235,9 +235,21 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 
 - Markdown export is designed as **semantic fidelity over visual parity** with OneNote layout.
 - Default flavor target is **Obsidian-compatible** output, with additional flavor adapters planned.
+- Markdown conversion is architecture-guarded to run from **sanitized HTML output as the canonical source**, never directly from raw MHTML.
 - Conversion will be structure-first (headings, lists, tables, code blocks, images), not absolute-position/layout recreation.
 - Output should remain deterministic and standalone, without required CSS/JS/runtime dependencies.
+- Guardrails prohibit raw inline HTML emission (`<div>`, `<span>`, `<table>`) in default Markdown output.
 - Known limitation versus HTML export: Markdown will intentionally flatten free-form positioned content to a stable reading order.
+
+## Experimental export formats (in-app)
+
+- Advanced options now include an **Enable experimental export formats** toggle (OFF by default).
+- When enabled, **Export format** can be set to:
+	- HTML (`.html`) — default/stable path
+	- Markdown (`.md`) — structure-first conversion from sanitized HTML + flavor adapter
+	- Document (`.docx`) — currently not implemented (UI shows disabled-state guidance)
+- Markdown flavor selection is shown only when Markdown export is selected and defaults to **Obsidian-compatible**.
+- When experimental export is disabled, conversion always falls back to the existing HTML pipeline.
 
 ## Refactor Goals
 

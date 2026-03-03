@@ -175,49 +175,87 @@ Initial scope:
 
 #### Core Markdown conversion (shared)
 
-- [ ] [P2] Define a semantic Markdown intermediate representation (IR) derived from cleaned HTML.
-- [ ] [P2] Implement HTML → Markdown core conversion using the IR (structure‑first).
-- [ ] [P2] Add regression fixtures asserting stable Markdown output for representative pages.
-- [ ] [P2] Ensure Markdown export does not depend on CSS, JS, or runtime assets.
+- [x] [P2] Define a semantic Markdown intermediate representation (IR) derived from cleaned HTML. (2026-03-03)
+- [x] [P2] Implement HTML → Markdown core conversion using the IR (structure‑first). (2026-03-03)
+- [x] [P2] Add regression fixtures asserting stable Markdown output for representative pages. (2026-03-03)
+- [x] [P2] Ensure Markdown export does not depend on CSS, JS, or runtime assets. (2026-03-03)
 
 #### Markdown flavor support
 
-- [ ] [P2] Define supported Markdown flavors:
+- [x] [P2] Define supported Markdown flavors: (2026-03-03)
   - Obsidian‑compatible (default)
   - CommonMark
   - GitHub Flavored Markdown
   - Markdown Extra (optional)
 
-- [ ] [P2] Implement flavor adapters for:
+- [x] [P2] Implement flavor adapters for: (2026-03-03)
   - Lists and task lists
   - Tables
   - Fenced code blocks
   - Line‑break handling
 
-- [ ] [P2] Ensure Obsidian flavor renders cleanly without requiring Obsidian‑specific metadata.
-- [ ] [P2] Add smoke tests validating flavor selection and routing.
+- [x] [P2] Ensure Obsidian flavor renders cleanly without requiring Obsidian‑specific metadata. (2026-03-03)
+- [x] [P2] Add smoke tests validating flavor selection and routing. (2026-03-03)
+
+### Markdown Export — Architecture Guardrails (post‑release)
+
+- [x] [P2] Declare HTML as the canonical semantic source for all exports. (2026-03-03)  
+  Document (in code comments and `README.md`) that Markdown export must operate on sanitized HTML output, not raw MHTML or pre‑sanitized structures.
+
+- [x] [P2] Add a regression test asserting HTML → Markdown determinism. (2026-03-03)  
+  Given a fixed sanitized HTML fixture, Markdown output must be byte‑stable across runs and independent of UI options unrelated to export format.
+
+
+### Markdown Export — Conversion Boundaries
+
+- [x] [P2] Explicitly flatten free‑form layout during Markdown conversion. (2026-03-03)  
+  Add a test fixture with absolute positioning or multi‑column layout and assert that Markdown output is linearized in reading order.
+
+- [x] [P2] Prohibit inline HTML emission in Markdown by default. (2026-03-03)  
+  Add a guardrail test that fails if Markdown output contains raw `<div>`, `<span>`, or `<table>` tags unless a future opt‑in flag is enabled.
+
+
+### Markdown Flavor Handling — Obsidian‑First
+
+- [x] [P2] Implement a flavor adapter layer on top of core Markdown output. (2026-03-03)  
+  Core conversion produces neutral Markdown; flavor adapters apply small, isolated transformations (task lists, table alignment, line breaks).
+
+- [x] [P2] Set Obsidian‑compatible flavor as the default adapter. (2026-03-03)  
+  Ensure default output renders cleanly in Obsidian without requiring wikilinks, front‑matter, or vault‑specific metadata.
+
+- [x] [P2] Add a smoke test validating Obsidian‑flavored Markdown output. (2026-03-03)  
+  Assert that default Markdown output contains no constructs known to break Obsidian rendering.
+
+
+### Documentation & User Expectations
+
+- [x] [P2] Document Markdown export philosophy in `README.md`. (2026-03-03)  
+  Clearly state: semantic fidelity over visual parity, HTML‑derived conversion, Obsidian as default flavor.
+
+- [x] [P2] Add in‑app help text explaining Markdown tradeoffs. (2026-03-03)  
+  Briefly explain why layout may differ from OneNote and why this is intentional.
 
 ---
 
 ### Experimental Export Formats
-- [ ] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default).
-- [ ] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`).
-- [ ] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats.
-- [ ] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible (default).
+- [x] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default). (2026-03-03)
+- [x] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`). (2026-03-03)
+- [x] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats. (2026-03-03)
+- [x] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible (default). (2026-03-03)
 - [ ] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling.
-- [ ] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown.
-- [ ] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing.
-- [ ] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled.
-- [ ] [P2] Add UX validation and disabled-state messaging for unsupported/unfinished formats.
-- [ ] [P2] Add smoke tests for export-format selection behavior.
-- [ ] [P3] Document feature as experimental in `README.md` and in-app help text.
+- [x] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown. (2026-03-03)
+- [x] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing. (2026-03-03)
+- [x] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled. (2026-03-03)
+- [x] [P2] Add UX validation and disabled-state messaging for unsupported/unfinished formats. (2026-03-03)
+- [x] [P2] Add smoke tests for export-format selection behavior. (2026-03-03)
+- [x] [P3] Document feature as experimental in `README.md` and in-app help text. (2026-03-03)
 
 #### Markdown export UX
 
-- [ ] [P2] Default Markdown flavor to Obsidian‑compatible.
-- [ ] [P2] Clearly label Markdown export as “structure‑first (layout not preserved)”.
-- [ ] [P2] Disable Markdown flavor selection unless export format is Markdown.
-- [ ] [P2] Add help text explaining semantic vs visual tradeoffs.
+- [x] [P2] Default Markdown flavor to Obsidian‑compatible. (2026-03-03)
+- [x] [P2] Clearly label Markdown export as “structure‑first (layout not preserved)”. (2026-03-03)
+- [x] [P2] Disable Markdown flavor selection unless export format is Markdown. (2026-03-03)
+- [x] [P2] Add help text explaining semantic vs visual tradeoffs. (2026-03-03)
 
 
 ### Converted-Page Theme Toggle (HTML only)

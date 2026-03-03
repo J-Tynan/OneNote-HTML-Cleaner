@@ -27,7 +27,12 @@ const dom = {
   toolbarMetadataToggleEnabled: null,
   autoConvertEnabled: null,
   externalizeCssEnabled: null,
-  externalizeCssMode: null
+  externalizeCssMode: null,
+  experimentalExportEnabled: null,
+  exportFormat: null,
+  markdownFlavor: null,
+  markdownFlavorContainer: null,
+  exportFormatHelp: null
 };
 
 const runtime = {
@@ -136,6 +141,33 @@ function hasExternalizedCssAsset(entry) {
     && asset.content.trim().length > 0);
 }
 
+function getEntryOutputFormat(entry) {
+  if (entry && typeof entry.outputFormat === 'string') {
+    return entry.outputFormat === 'markdown' ? 'markdown' : 'html';
+  }
+  if (typeof entry?.outputText === 'string' && entry.outputText.length > 0) {
+    return 'markdown';
+  }
+  return 'html';
+}
+
+function getEntryOutputContent(entry) {
+  const format = getEntryOutputFormat(entry);
+  if (format === 'markdown') {
+    return typeof entry.outputText === 'string' ? entry.outputText : '';
+  }
+  return typeof entry.outputHtml === 'string' ? entry.outputHtml : '';
+}
+
+function getEntryDownloadFileName(entry) {
+  const stem = String(entry?.name || 'output').replace(/\.[^.]+$/, '');
+  return getEntryOutputFormat(entry) === 'markdown' ? `${stem}.md` : `${stem}.html`;
+}
+
+function getEntryDownloadMime(entry) {
+  return getEntryOutputFormat(entry) === 'markdown' ? 'text/markdown' : 'text/html';
+}
+
 function updateZipButton() {
   if (!dom.downloadZip) return;
   dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
@@ -145,6 +177,34 @@ function updateExternalCssControls() {
   if (!dom.externalizeCssEnabled || !dom.externalizeCssMode) return;
   const enabled = dom.externalizeCssEnabled.checked === true;
   dom.externalizeCssMode.disabled = !enabled;
+}
+
+function updateExportFormatControls() {
+  const experimentalEnabled = Boolean(dom.experimentalExportEnabled && dom.experimentalExportEnabled.checked);
+  const selectedFormat = dom.exportFormat ? String(dom.exportFormat.value || 'html').toLowerCase() : 'html';
+  const markdownSelected = experimentalEnabled && selectedFormat === 'markdown';
+
+  if (dom.exportFormat) {
+    dom.exportFormat.disabled = !experimentalEnabled;
+    dom.exportFormat.classList.toggle('hidden', !experimentalEnabled);
+  }
+  if (dom.markdownFlavorContainer) {
+    dom.markdownFlavorContainer.classList.toggle('hidden', !markdownSelected);
+  }
+  if (dom.markdownFlavor) {
+    dom.markdownFlavor.disabled = !markdownSelected;
+  }
+  if (dom.exportFormatHelp) {
+    if (!experimentalEnabled) {
+      dom.exportFormatHelp.textContent = 'Enable experimental export formats to choose output type.';
+    } else if (selectedFormat === 'docx') {
+      dom.exportFormatHelp.textContent = 'Document (.docx) export is not yet implemented. Choose HTML or Markdown.';
+    } else if (selectedFormat === 'markdown') {
+      dom.exportFormatHelp.textContent = 'Markdown export is structure-first (layout not preserved).';
+    } else {
+      dom.exportFormatHelp.textContent = 'HTML export keeps the existing parity-first conversion path.';
+    }
+  }
 }
 
 function applyUiStyleVariant(variant) {
@@ -164,19 +224,22 @@ function rebuildSuccessfulOutputs() {
 
   for (const entry of state.queue) {
     if (!isSuccessStatus(entry.status)) continue;
-    if (typeof entry.outputHtml !== 'string' || entry.outputHtml.length === 0) continue;
+    const content = getEntryOutputContent(entry);
+    if (!content) continue;
 
     const stem = baseNameFromFile(entry.name || 'output');
-    let filename = `${stem}.html`;
+    const extension = getEntryOutputFormat(entry) === 'markdown' ? 'md' : 'html';
+    let filename = `${stem}.${extension}`;
     let index = 2;
 
     while (runtime.successfulOutputs.has(filename)) {
-      filename = `${stem} (${index}).html`;
+      filename = `${stem} (${index}).${extension}`;
       index += 1;
     }
 
     runtime.successfulOutputs.set(filename, {
-      html: entry.outputHtml,
+      content,
+      format: getEntryOutputFormat(entry),
       assets: Array.isArray(entry.outputAssets) ? entry.outputAssets : [],
       config: entry.conversionConfig || null
     });
@@ -322,14 +385,30 @@ async function processEntryWithWorker(entry) {
 
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
+      entry.outputText = '';
+      entry.outputFormat = 'html';
       entry.outputAssets = Array.isArray(result.outputAssets) ? result.outputAssets : [];
       updateEntryStatus(entry.id, 'success');
       return;
     }
 
+    if (result && typeof result.outputText === 'string') {
+      entry.outputText = result.outputText;
+      entry.outputHtml = '';
+      entry.outputFormat = result.outputFormat === 'markdown' ? 'markdown' : 'markdown';
+      entry.outputAssets = [];
+      updateEntryStatus(entry.id, 'success');
+      return;
+    }
+
+    if (result && typeof result.error === 'string') {
+      entry.message = result.error;
+    }
+
     updateEntryStatus(entry.id, 'error');
   } catch (err) {
     logger.error({ id: entry.id, msg: 'worker processing error', meta: { error: err && err.message ? err.message : String(err) } });
+    entry.message = err && err.message ? err.message : String(err);
     updateEntryStatus(entry.id, 'error');
   }
 }
@@ -345,7 +424,14 @@ function processEntry(entry) {
       window.processFileEntry(entry.file, (result) => {
         if (result && typeof result.outputHtml === 'string') {
           entry.outputHtml = result.outputHtml;
+          entry.outputText = '';
+          entry.outputFormat = 'html';
           entry.outputAssets = Array.isArray(result.outputAssets) ? result.outputAssets : [];
+        } else if (result && typeof result.outputText === 'string') {
+          entry.outputText = result.outputText;
+          entry.outputHtml = '';
+          entry.outputFormat = 'markdown';
+          entry.outputAssets = [];
         }
 
         const status = result && typeof result.status === 'string'
@@ -381,13 +467,17 @@ export function renderFileList() {
     const safeStatus = escapeHtml(displayStatus);
     const safeSize = escapeHtml(formatBytes(entry.size));
     const safeMessage = entry.message ? escapeHtml(entry.message) : '';
-    const hasOutput = typeof entry.outputHtml === 'string' && entry.outputHtml.length > 0;
+    const outputFormat = getEntryOutputFormat(entry);
+    const hasOutput = getEntryOutputContent(entry).length > 0;
     const singleDownloadBlocked = Boolean(
+      outputFormat === 'html'
+      &&
       entry.conversionConfig
       && entry.conversionConfig.ExternalizeCssEnabled === true
       && hasExternalizedCssAsset(entry)
     );
-    const canDownloadHtml = hasOutput && !singleDownloadBlocked;
+    const canDownload = hasOutput && !singleDownloadBlocked;
+    const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
 
     return `
       <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}">
@@ -406,13 +496,13 @@ export function renderFileList() {
           </button>
         </div>
 
-        ${canDownloadHtml ? `
+        ${canDownload ? `
           <div class="mt-3">
             <button
               type="button"
               class="btn-primary text-xs px-3 py-1.5"
               data-download-id="${entry.id}">
-              Download HTML
+              ${downloadLabel}
             </button>
           </div>
         ` : ''}
@@ -540,13 +630,16 @@ function onFileListClick(event) {
   if (downloadButton) {
     const id = downloadButton.getAttribute('data-download-id');
     const entry = getQueueEntry(id);
-    if (!entry || !entry.outputHtml) return;
-    if (entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true && hasExternalizedCssAsset(entry)) return;
+    if (!entry) return;
+    const content = getEntryOutputContent(entry);
+    if (!content) return;
+    if (getEntryOutputFormat(entry) === 'html' && entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true && hasExternalizedCssAsset(entry)) return;
 
-    const filename = entry.name.replace(/\.[^.]+$/, '') + '.html';
+    const filename = getEntryDownloadFileName(entry);
+    const mime = getEntryDownloadMime(entry);
 
     if (runtime.downloadHelpers && typeof runtime.downloadHelpers.downloadBlob === 'function') {
-      runtime.downloadHelpers.downloadBlob(filename, entry.outputHtml, 'text/html');
+      runtime.downloadHelpers.downloadBlob(filename, content, mime);
     }
   }
 }
@@ -558,6 +651,7 @@ async function onDownloadZipClick() {
 
 function onAdvancedOptionsChange() {
   updateExternalCssControls();
+  updateExportFormatControls();
   rebuildSuccessfulOutputs();
 }
 
@@ -583,6 +677,9 @@ function bindEvents() {
   dom.toolbarMetadataToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssMode?.addEventListener('change', onAdvancedOptionsChange);
+  dom.experimentalExportEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.exportFormat?.addEventListener('change', onAdvancedOptionsChange);
+  dom.markdownFlavor?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
   dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
@@ -652,6 +749,11 @@ export function initUI(workerManager, options = {}) {
   dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
   dom.externalizeCssEnabled = document.getElementById('externalizeCssEnabled');
   dom.externalizeCssMode = document.getElementById('externalizeCssMode');
+  dom.experimentalExportEnabled = document.getElementById('experimentalExportEnabled');
+  dom.exportFormat = document.getElementById('exportFormat');
+  dom.markdownFlavor = document.getElementById('markdownFlavor');
+  dom.markdownFlavorContainer = document.getElementById('markdownFlavorContainer');
+  dom.exportFormatHelp = document.getElementById('exportFormatHelp');
   dom.autoConvertNotice = document.getElementById('autoConvertNotice');
   dom.diagnosticsPanel = document.getElementById('diagnosticsPanel');
   dom.diagnosticsList = document.getElementById('diagnosticsList');
@@ -713,7 +815,10 @@ export function initUI(workerManager, options = {}) {
     toolbarEditToggleEnabled: dom.toolbarEditToggleEnabled,
     toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled,
     externalizeCssEnabled: dom.externalizeCssEnabled,
-    externalizeCssMode: dom.externalizeCssMode
+    externalizeCssMode: dom.externalizeCssMode,
+    experimentalExportEnabled: dom.experimentalExportEnabled,
+    exportFormat: dom.exportFormat,
+    markdownFlavor: dom.markdownFlavor
   }, updateZipButton);
 
   if (window.JSZip) {
@@ -725,6 +830,7 @@ export function initUI(workerManager, options = {}) {
   runtime.dragCounter = 0;
   setDropzoneActive(false);
   updateExternalCssControls();
+  updateExportFormatControls();
   // previous phase-1 testing dropdown has been removed; default variant applied in styles
 
   bindEvents();

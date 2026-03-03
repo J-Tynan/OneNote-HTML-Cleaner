@@ -268,10 +268,39 @@ export default class WorkerManager {
             SourceName: fileName || payload.relativePath || 'Converted file',
             SourceKind: sourceKind
           }));
+          const experimentalEnabled = payload && payload.config && payload.config.ExperimentalExportEnabled === true;
+          const exportFormat = experimentalEnabled
+            ? String(payload.config.ExportFormat || 'html').toLowerCase()
+            : 'html';
+
+          if (exportFormat === 'markdown') {
+            const markdownMod = await import('./convert/markdownCore.js');
+            const outputMarkdown = markdownMod.convertSanitizedHtmlToMarkdown(result.output || '', {
+              flavor: payload && payload.config ? payload.config.MarkdownFlavor : undefined
+            });
+            const markdownResponse = {
+              id: msg.id,
+              status: 'done',
+              outputText: outputMarkdown,
+              outputFormat: 'markdown',
+              outputAssets: [],
+              relativePath: payload.relativePath || payload.fileName,
+              logs: result.logs
+            };
+            if (this._wrapperToOriginal.has(msg.id)) {
+              markdownResponse.originalId = this._wrapperToOriginal.get(msg.id);
+              this._wrapperToOriginal.delete(msg.id);
+            }
+            cb.resolve(markdownResponse);
+            this.callbacks.delete(msg.id);
+            return;
+          }
+
           const response = {
             id: msg.id,
             status: 'done',
             outputHtml: result.output,
+            outputFormat: 'html',
             outputAssets: Array.isArray(result.assets) ? result.assets : [],
             relativePath: payload.relativePath || payload.fileName,
             logs: result.logs
