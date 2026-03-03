@@ -83,6 +83,25 @@ function normalizeExportConfig(rawConfig = {}) {
   };
 }
 
+function normalizeConvertedPageThemeConfig(rawConfig = {}) {
+  const toggleEnabledValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ConvertedPageThemeToggleEnabled')
+    ? rawConfig.ConvertedPageThemeToggleEnabled
+    : rawConfig.convertedPageThemeToggleEnabled;
+  const oledBlackValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ConvertedPageThemeToggleOledBlack')
+    ? rawConfig.ConvertedPageThemeToggleOledBlack
+    : rawConfig.convertedPageThemeToggleOledBlack;
+
+  const convertedPageThemeToggleEnabled = toBoolean(toggleEnabledValue, false);
+  const convertedPageThemeToggleOledBlack = convertedPageThemeToggleEnabled
+    ? toBoolean(oledBlackValue, false)
+    : false;
+
+  return {
+    ConvertedPageThemeToggleEnabled: convertedPageThemeToggleEnabled,
+    ConvertedPageThemeToggleOledBlack: convertedPageThemeToggleOledBlack
+  };
+}
+
 function normalizeToolbarConfig(rawConfig = {}) {
   return {
     ToolbarEnabled: toBoolean(rawConfig.ToolbarEnabled, false),
@@ -124,7 +143,9 @@ const PROFILE_PRESETS = {
     ExternalizeCssMode: 'shared',
     ExperimentalExportEnabled: false,
     ExportFormat: 'html',
-    MarkdownFlavor: 'obsidian'
+    MarkdownFlavor: 'obsidian',
+    ConvertedPageThemeToggleEnabled: false,
+    ConvertedPageThemeToggleOledBlack: false
   }
 };
 
@@ -143,6 +164,7 @@ export function normalizePipelineConfig(rawConfig = {}) {
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
   const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
   const normalizedExportConfig = normalizeExportConfig(rawConfig);
+  const normalizedConvertedPageThemeConfig = normalizeConvertedPageThemeConfig(rawConfig);
   const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
   const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
   const normalizeDirectionLayout = toBoolean(
@@ -163,6 +185,7 @@ export function normalizePipelineConfig(rawConfig = {}) {
     ...normalizedToolbarConfig,
     ...normalizedExternalCssConfig,
     ...normalizedExportConfig,
+    ...normalizedConvertedPageThemeConfig,
     Profile: SINGLE_PROFILE,
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy,

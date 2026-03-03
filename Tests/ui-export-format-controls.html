@@ -44,6 +44,10 @@
   </div>
   <p id="exportFormatHelp"></p>
 
+  <input id="convertedPageThemeToggleEnabled" type="checkbox" />
+  <input id="convertedPageThemeToggleOledBlack" type="checkbox" disabled />
+  <p id="convertedPageThemeHelp"></p>
+
   <details id="diagnosticsPanel" class="hidden"></details>
   <ul id="diagnosticsList"></ul>
   <span id="diagnosticsCount"></span>
@@ -65,12 +69,21 @@
     const flavorContainer = document.getElementById('markdownFlavorContainer');
     const flavor = document.getElementById('markdownFlavor');
     const help = document.getElementById('exportFormatHelp');
+    const convertedThemeToggle = document.getElementById('convertedPageThemeToggleEnabled');
+    const convertedThemeOled = document.getElementById('convertedPageThemeToggleOledBlack');
+    const convertedThemeHelp = document.getElementById('convertedPageThemeHelp');
 
     if (exportFormat.disabled && exportFormat.classList.contains('hidden')) pass('Export format hidden/disabled by default');
     else fail('Export format should be hidden/disabled by default');
 
     if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled by default');
     else fail('Markdown flavor should be hidden/disabled by default');
+
+    if (!convertedThemeToggle.disabled) pass('Converted-page theme toggle enabled by default for HTML output');
+    else fail('Converted-page theme toggle should be enabled by default for HTML output');
+
+    if (convertedThemeOled.disabled) pass('OLED option disabled until converted-page theme toggle is enabled');
+    else fail('OLED option should be disabled until converted-page theme toggle is enabled');
 
     experimental.checked = true;
     experimental.dispatchEvent(new Event('change', { bubbles: true }));
@@ -90,15 +103,38 @@
     if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled for non-Markdown format');
     else fail('Markdown flavor should be hidden/disabled for non-Markdown format');
 
+    if (convertedThemeToggle.disabled) pass('Converted-page theme toggle disabled for non-HTML export format');
+    else fail('Converted-page theme toggle should be disabled for non-HTML export format');
+
+    if (/available only for html/i.test(convertedThemeHelp.textContent || '')) pass('Converted-page theme toggle HTML-only help text shown for non-HTML formats');
+    else fail('Expected converted-page theme HTML-only help text for non-HTML formats');
+
     if (/not yet implemented/i.test(help.textContent || '')) pass('DOCX help text shown for unsupported format');
     else fail('Expected DOCX unsupported help text');
 
     experimental.checked = false;
     experimental.dispatchEvent(new Event('change', { bubbles: true }));
 
+    const helpBeforeToggle = convertedThemeHelp.textContent || '';
+
+    convertedThemeToggle.checked = true;
+    convertedThemeToggle.dispatchEvent(new Event('change', { bubbles: true }));
+
+    if (!convertedThemeOled.disabled) pass('OLED option enabled when converted-page theme toggle is checked');
+    else fail('OLED option should be enabled when converted-page theme toggle is checked');
+
+    convertedThemeOled.checked = true;
+    convertedThemeOled.dispatchEvent(new Event('change', { bubbles: true }));
+    const helpAfterToggle = convertedThemeHelp.textContent || '';
+    if (helpBeforeToggle === helpAfterToggle) pass('Converted-page theme helper text remains stable when toggles are changed');
+    else fail('Converted-page theme helper text should remain stable when toggles are changed');
+
     const cfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
     if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');
     else fail('Export format should fallback to HTML when experimental is OFF');
+
+    if (cfg && cfg.ConvertedPageThemeToggleEnabled === true) pass('Converted-page theme toggle is passed in conversion config for HTML output');
+    else fail('Converted-page theme toggle should be present in conversion config for HTML output');
   </script>
 </body>
 </html>

@@ -130,6 +130,13 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 - `UnitStrategy` now defaults to `normalize-safe` for testing and validation before merge to `main`.
 - Empty layout placeholders (for example in table/list structures) remain preserved; cleanup focuses on obsolete artifacts and conservative normalization only.
 
+### Converted-page theme toggle (HTML-only, experimental)
+
+- Advanced options include an optional converted-page theme toggle for HTML exports.
+- When enabled, converted HTML injects a symbol-based Light/Dark toggle (default Light) and remembers the chosen theme per exported file using browser local storage.
+- Optional OLED-black mode applies pure-black dark surfaces to both page background and main content area.
+- The feature is disabled for non-HTML exports (for example Markdown and docx).
+
 ## Native OneNote files (Phase 1) — Experimental
 
 - Note: native `.one` and `.onepkg` handling is experimental and partial. The app accepts these files in the picker and via drag/drop, but full in-browser extraction for all compressed notebooks is not yet implemented. Some flows will fall back to placeholder exports or require developer-side preprocessing.
@@ -210,6 +217,7 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 	- Metadata panel toggle (read-only provenance)
 	- Close/hide control
 - Bundle model is self-contained inline only for standalone exported HTML compatibility.
+- When injected, the toolbar is hidden by default in converted pages; a small `Toolbar` button appears near the page theme toggle to reveal it.
 
 ## Export dependency guarantees
 

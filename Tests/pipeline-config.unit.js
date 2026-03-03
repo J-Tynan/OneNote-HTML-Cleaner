@@ -32,7 +32,9 @@ async function main() {
     NormalizeTopLevelPageWidths: 'false',
     ExperimentalExportEnabled: 'true',
     ExportFormat: 'MARKDOWN',
-    MarkdownFlavor: 'GFM'
+    MarkdownFlavor: 'GFM',
+    ConvertedPageThemeToggleEnabled: 'true',
+    ConvertedPageThemeToggleOledBlack: 'true'
   });
 
   assert(normalizedProfile.Profile === 'onenote', 'Expected Profile to normalize to onenote');
@@ -49,6 +51,8 @@ async function main() {
   assert(normalizedProfile.ExperimentalExportEnabled === true, 'Expected ExperimentalExportEnabled true');
   assert(normalizedProfile.ExportFormat === 'markdown', 'Expected ExportFormat to normalize to markdown');
   assert(normalizedProfile.MarkdownFlavor === 'gfm', 'Expected MarkdownFlavor to normalize to gfm');
+  assert(normalizedProfile.ConvertedPageThemeToggleEnabled === true, 'Expected ConvertedPageThemeToggleEnabled true');
+  assert(normalizedProfile.ConvertedPageThemeToggleOledBlack === true, 'Expected ConvertedPageThemeToggleOledBlack true');
 
   const normalizedFallback = mod.normalizePipelineConfig({
     Profile: 'unknown-profile',
@@ -58,7 +62,9 @@ async function main() {
     UnitStrategy: 'invalid-unit-strategy',
     ExperimentalExportEnabled: 'false',
     ExportFormat: 'docx',
-    MarkdownFlavor: 'not-a-flavor'
+    MarkdownFlavor: 'not-a-flavor',
+    ConvertedPageThemeToggleEnabled: 'false',
+    ConvertedPageThemeToggleOledBlack: 'true'
   });
 
   assert(normalizedFallback.Profile === 'onenote', 'Expected unknown Profile to fallback to onenote');
@@ -71,6 +77,8 @@ async function main() {
   assert(normalizedFallback.ExperimentalExportEnabled === false, 'Expected ExperimentalExportEnabled false');
   assert(normalizedFallback.ExportFormat === 'html', 'Expected ExportFormat to fallback to html when experiment disabled');
   assert(normalizedFallback.MarkdownFlavor === 'obsidian', 'Expected invalid MarkdownFlavor to fallback to obsidian');
+  assert(normalizedFallback.ConvertedPageThemeToggleEnabled === false, 'Expected ConvertedPageThemeToggleEnabled false');
+  assert(normalizedFallback.ConvertedPageThemeToggleOledBlack === false, 'Expected ConvertedPageThemeToggleOledBlack false when toggle disabled');
 
   console.log('pipeline-config: PASS');
 }

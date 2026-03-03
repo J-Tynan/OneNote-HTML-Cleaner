@@ -24,8 +24,8 @@ function analyze(html) {
       issues.push('missing <h1> inside <main>');
     }
   }
-  // ensure no inline spacing styles
-  if (/(?:letter-spacing|word-spacing|line-height)\s*:/i.test(html)) {
+  // ensure no inline spacing styles in style attributes
+  if (/style\s*=\s*["'][^"']*(?:letter-spacing|word-spacing|line-height)\s*:/i.test(html)) {
     issues.push('contains inline spacing styles');
   }
   // OneNote/Office artifacts we want to strip: xmlns:* declarations, mso- attributes,

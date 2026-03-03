@@ -45,7 +45,7 @@
           <button
             id="themeToggle"
             type="button"
-            class="btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm"
+            class="btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none"
             aria-pressed="false"
             aria-label="Toggle color theme">
             <span id="themeToggleIcon" aria-hidden="true">🔆</span>
@@ -227,6 +227,33 @@
                     </select>
                   </div>
 
+                  <label class="checkbox-option flex items-start gap-3" for="convertedPageThemeToggleEnabled">
+                    <input
+                      id="convertedPageThemeToggleEnabled"
+                      type="checkbox"
+                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                    <span>
+                      Add theme toggle (Light/Dark) to converted pages
+                      <span class="block text-xs text-muted">
+                        HTML-only. Adds a symbol-based toggle in exported pages (default Light).
+                      </span>
+                    </span>
+                  </label>
+
+                  <div class="pl-7 space-y-2">
+                    <label class="checkbox-option flex items-start gap-3" for="convertedPageThemeToggleOledBlack">
+                      <input
+                        id="convertedPageThemeToggleOledBlack"
+                        type="checkbox"
+                        disabled
+                        class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed" />
+                      <span>Use OLED black for Dark theme</span>
+                    </label>
+                    <p id="convertedPageThemeHelp" class="text-xs text-muted">
+                      Available for HTML export only. For non-HTML formats, converted-page theme toggle is disabled.
+                    </p>
+                  </div>
+
                   <label class="checkbox-option flex items-start gap-3" for="toolbarEnabled">
                     <input
                       id="toolbarEnabled"
@@ -379,6 +406,12 @@
           </p>
           <p class="mt-3 text-sm text-slate-700">
             Experimental export controls are available in Advanced options. HTML remains the default stable path; Markdown is available with selectable flavor; Document (.docx) is currently not implemented.
+          </p>
+          <p class="mt-3 text-sm text-slate-700">
+            Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light/Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
+          </p>
+          <p class="mt-3 text-sm text-slate-700">
+            If toolbar injection is enabled for converted pages, the toolbar starts hidden by default; use the small Toolbar button beside the page theme toggle to reveal it.
           </p>
           <p class="mt-3 text-sm text-slate-700">
             Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>

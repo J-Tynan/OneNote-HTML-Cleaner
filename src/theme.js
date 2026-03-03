@@ -28,7 +28,8 @@ function updateToggleUI(theme) {
   const btn = document.getElementById(TOGGLE_ID);
   const icon = document.getElementById(ICON_ID);
   if (btn) btn.setAttribute('aria-pressed', String(theme === 'dark'));
-  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+  if (btn) btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  if (icon) icon.textContent = theme === 'dark' ? '🌙' : '🔆';
 }
 
 // apply a named dark‑variant by setting a data attribute and persisting
