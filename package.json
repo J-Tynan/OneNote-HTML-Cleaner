@@ -26,6 +26,7 @@
     "test:playwright:a11y-exports": "node ./Tests/playwright-a11y-exports.js --dir Tests/Cleaned",
     "test:exports:regressions": "node ./Tests/exports-regressions.js",
     "test:image-alt": "node ./Tests/image-alt.unit.js",
+    "test:handwriting-detection": "node ./Tests/handwriting-detection.unit.js",
     "test:inline-style-collapse": "node ./Tests/inline-style-collapse.unit.js",
     "test:inline-style-normalization": "node ./Tests/inline-style-normalization.unit.js",
     "test:contrast-colors": "node ./Tests/contrast-color-normalization.unit.js",

@@ -13,6 +13,7 @@
     "Problematic mht-full-snippet.html",
     "Problematic mht-sample.html",
     "Resolve merge conflicts.html",
+    "Test Handwriting.html",
     "Test File.html"
   ],
   "files": {
@@ -83,6 +84,24 @@
         "<main",
         "<h1",
         "<table"
+      ],
+      "mustNotContain": [
+        "multipart/related",
+        "Single File Web Page"
+      ],
+      "mustNotMatch": [
+        "src\\s*=\\s*[\"'](?:cid:|file:///)"
+      ]
+    },
+    "Test Handwriting.html": {
+      "mustContain": [
+        "<main",
+        "<h1",
+        "data-handwriting=\"raster\"",
+        "alt=\"Handwritten notes (raster image)\""
+      ],
+      "mustMatch": [
+        "<title>\\s*Test\\s+Handwriting\\s*</title>"
       ],
       "mustNotContain": [
         "multipart/related",

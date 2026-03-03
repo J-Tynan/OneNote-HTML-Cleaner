@@ -76,6 +76,10 @@ export async function runPipeline(htmlString, config = {}) {
     })));
     logs.push(...ensureArray(sanitize.normalizeAccessibleTextContrast(doc)));
     logs.push(...ensureArray(sanitize.sanitizeImageAttributes(doc)));
+    logs.push(...ensureArray(sanitize.annotateHandwritingAssets(doc, {
+      enabled: resolvedConfig.HandwritingDetectionEnabled !== false,
+      rasterAltText: resolvedConfig.HandwritingRasterAltText || 'Handwritten notes (raster image)'
+    })));
     logs.push(...ensureArray(sanitize.ensureImageAlt(doc, {
       fallbackAlt: resolvedConfig.ImageAltFallback || 'Image'
     })));

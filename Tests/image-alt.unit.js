@@ -63,4 +63,17 @@ console.log('running image alt unit tests');
   assert.equal(img.getAttribute('alt'), 'Image', 'blank alt should be replaced for non-decorative image');
 }
 
+// raster-only handwriting image should use standardized handwriting alt label
+{
+  const input = '<!doctype html><html><head><title>x</title></head><body><img src="ink.png" alt="Ink Drawings"></body></html>';
+  const { output } = await runPipeline(input, {
+    InjectTailwindCss: false,
+    defaultTitle: 'Doc'
+  });
+  const doc = parseOutput(output);
+  const img = doc.querySelector('img');
+  assert(img, 'image should exist');
+  assert.equal(img.getAttribute('alt'), 'Handwritten notes (raster image)', 'handwriting raster alt should be normalized to approved wording');
+}
+
 console.log('image-alt: PASS');

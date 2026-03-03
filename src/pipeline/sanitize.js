@@ -620,6 +620,98 @@ export function sanitizeImageAttributes(doc) {
   return logs;
 }
 
+function isDecorativeImage(img) {
+  const role = String(img.getAttribute('role') || '').trim().toLowerCase();
+  const ariaHidden = String(img.getAttribute('aria-hidden') || '').trim().toLowerCase();
+  return role === 'presentation' || role === 'none' || ariaHidden === 'true';
+}
+
+function isLikelyHandwritingRasterImage(img) {
+  const alt = String(img.getAttribute('alt') || '').trim().toLowerCase();
+  const ariaLabel = String(img.getAttribute('aria-label') || '').trim().toLowerCase();
+  const title = String(img.getAttribute('title') || '').trim().toLowerCase();
+  const src = String(img.getAttribute('src') || '').trim().toLowerCase();
+  const signalText = [alt, ariaLabel, title, src].filter(Boolean).join(' ');
+  return /\b(ink|handwrit|ink\s+drawings?)\b/.test(signalText);
+}
+
+function countVmlElements(doc) {
+  const all = Array.from(doc.querySelectorAll('*'));
+  let count = 0;
+  all.forEach((node) => {
+    const tagName = String(node.tagName || '').toLowerCase();
+    const namespaceUri = String(node.namespaceURI || '').toLowerCase();
+    if (tagName.startsWith('v:') || tagName.startsWith('o:')) {
+      count += 1;
+      return;
+    }
+    if (namespaceUri.includes('vml') || namespaceUri.includes('office')) {
+      count += 1;
+    }
+  });
+  return count;
+}
+
+export function annotateHandwritingAssets(doc, options = {}) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const enabled = options.enabled !== false;
+  if (!enabled) return logs;
+
+  const rasterAlt = typeof options.rasterAltText === 'string' && options.rasterAltText.trim()
+    ? options.rasterAltText.trim()
+    : 'Handwritten notes (raster image)';
+
+  const svgCount = doc.querySelectorAll('svg').length;
+  const canvasCount = doc.querySelectorAll('canvas').length;
+  const vmlCount = countVmlElements(doc);
+  const rasterCandidates = Array.from(doc.querySelectorAll('img')).filter(isLikelyHandwritingRasterImage);
+  const rasterCandidateCount = rasterCandidates.length;
+  const rasterOnly = rasterCandidateCount > 0 && svgCount === 0 && canvasCount === 0 && vmlCount === 0;
+
+  let annotated = 0;
+  let altUpdated = 0;
+  let decorativeSkipped = 0;
+
+  if (rasterOnly) {
+    rasterCandidates.forEach((img) => {
+      img.setAttribute('data-handwriting', 'raster');
+      annotated += 1;
+      if (isDecorativeImage(img)) {
+        decorativeSkipped += 1;
+        return;
+      }
+      if (img.getAttribute('alt') !== rasterAlt) {
+        img.setAttribute('alt', rasterAlt);
+        altUpdated += 1;
+      }
+    });
+  }
+
+  if (svgCount || canvasCount || vmlCount || rasterCandidateCount || annotated || altUpdated || decorativeSkipped) {
+    logs.push({
+      step: 'DetectHandwritingAssets',
+      level: rasterOnly ? 'warn' : 'info',
+      details: rasterOnly
+        ? 'Raster-only handwriting assets detected; applied handwriting metadata and accessibility labels.'
+        : 'Handwriting asset scan complete.',
+      meta: {
+        svgCount,
+        canvasCount,
+        vmlCount,
+        rasterCandidateCount,
+        rasterOnly,
+        annotated,
+        altUpdated,
+        decorativeSkipped
+      }
+    });
+  }
+
+  return logs;
+}
+
 export function ensureImageAlt(doc, options = {}) {
   const logs = [];
   const imgs = Array.from(doc.querySelectorAll('img'));
@@ -631,9 +723,7 @@ export function ensureImageAlt(doc, options = {}) {
   let decorativeSkipped = 0;
 
   imgs.forEach(img => {
-    const role = String(img.getAttribute('role') || '').trim().toLowerCase();
-    const ariaHidden = String(img.getAttribute('aria-hidden') || '').trim().toLowerCase();
-    const isDecorative = role === 'presentation' || role === 'none' || ariaHidden === 'true';
+    const isDecorative = isDecorativeImage(img);
     if (isDecorative) {
       decorativeSkipped++;
       return;

@@ -75,6 +75,8 @@ const PROFILE_PRESETS = {
     InlineStyleWarningEnabled: true,
     InlineStyleWarningMaxNodes: 250,
     InlineStyleWarningMaxChars: 24000,
+    HandwritingDetectionEnabled: true,
+    HandwritingRasterAltText: 'Handwritten notes (raster image)',
     InjectTailwindCss: true,
     TailwindCssHref: 'assets/tailwind-output.css',
     CollapseInlineStyles: false,

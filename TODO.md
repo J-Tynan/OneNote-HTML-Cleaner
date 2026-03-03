@@ -144,11 +144,10 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] README updated.
 
 ### Experimental handwriting conversion
-- [ ] [P2] Add handwriting fixtures (OneNote pages with ink) to regression suite.
-- [ ] [P2] Implement ink detection in pipeline: detect `<svg>`, VML, `<canvas>`, and raster `<img>` cases.
-- [ ] [P2] If only raster found, preserve image and add data-handwriting="raster" metadata.
-- [ ] [P2] Add accessibility labels for handwriting assets.
-- [ ] [P2] Add optional traced‑SVG sidecar workflow (feature branch, opt‑in).
+- [x] [P2] Add handwriting fixtures (OneNote pages with ink) to regression suite. (2026-03-03)
+- [x] [P2] Implement ink detection in pipeline: detect `<svg>`, VML, `<canvas>`, and raster `<img>` cases. (2026-03-03)
+- [x] [P2] If only raster found, preserve image, replace alt-text with appropriate wording and add data-handwriting="raster" metadata. (2026-03-03)
+- [x] [P2] Add accessibility labels for handwriting assets. (2026-03-03)
 
 ### Experimental Export Formats
 - [ ] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default).
