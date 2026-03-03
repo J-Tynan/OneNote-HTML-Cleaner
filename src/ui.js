@@ -228,12 +228,8 @@ function updateConvertedPageThemeControls(effectiveFormat = 'html') {
   if (dom.convertedPageThemeHelp) {
     if (!htmlSelected) {
       dom.convertedPageThemeHelp.textContent = 'Converted-page theme toggle is available only for HTML export.';
-    } else if (!toggleEnabled) {
-      dom.convertedPageThemeHelp.textContent = 'Enable to inject a symbol-based Light/Dark toggle into converted HTML pages (default Light).';
-    } else if (dom.convertedPageThemeToggleOledBlack && dom.convertedPageThemeToggleOledBlack.checked) {
-      dom.convertedPageThemeHelp.textContent = 'Dark mode will use OLED-black backgrounds for page and main content surfaces.';
     } else {
-      dom.convertedPageThemeHelp.textContent = 'Dark mode uses a standard dark surface palette; state is remembered per exported file in your browser.';
+      dom.convertedPageThemeHelp.textContent = 'Enable to inject a symbol-based Light/Dark toggle into converted HTML pages (default Light). Optional OLED-black applies only when the toggle is enabled.';
     }
   }
 }
@@ -450,6 +446,11 @@ function processEntry(entry) {
     entry.conversionConfig = runtime.downloadHelpers.getConversionConfig();
   }
 
+  if (runtime.workerManager) {
+    void processEntryWithWorker(entry);
+    return;
+  }
+
   if (typeof window.processFileEntry === 'function') {
     try {
       window.processFileEntry(entry.file, (result) => {
@@ -470,18 +471,13 @@ function processEntry(entry) {
           : 'success';
 
         updateEntryStatus(entry.id, status);
-      });
+      }, entry.conversionConfig || {});
       return;
     } catch (err) {
       logger.error({ id: entry.id, msg: 'processing error', meta: { error: err && err.message ? err.message : String(err) } });
       updateEntryStatus(entry.id, 'error');
       return;
     }
-  }
-
-  if (runtime.workerManager) {
-    void processEntryWithWorker(entry);
-    return;
   }
 
   updateEntryStatus(entry.id, 'error');

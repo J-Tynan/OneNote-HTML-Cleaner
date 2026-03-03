@@ -217,6 +217,7 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 	- Metadata panel toggle (read-only provenance)
 	- Close/hide control
 - Bundle model is self-contained inline only for standalone exported HTML compatibility.
+- When injected, the toolbar is hidden by default in converted pages; a small `Toolbar` button appears near the page theme toggle to reveal it.
 
 ## Export dependency guarantees
 

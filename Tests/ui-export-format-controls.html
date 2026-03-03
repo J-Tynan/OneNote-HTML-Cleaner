@@ -115,11 +115,19 @@
     experimental.checked = false;
     experimental.dispatchEvent(new Event('change', { bubbles: true }));
 
+    const helpBeforeToggle = convertedThemeHelp.textContent || '';
+
     convertedThemeToggle.checked = true;
     convertedThemeToggle.dispatchEvent(new Event('change', { bubbles: true }));
 
     if (!convertedThemeOled.disabled) pass('OLED option enabled when converted-page theme toggle is checked');
     else fail('OLED option should be enabled when converted-page theme toggle is checked');
+
+    convertedThemeOled.checked = true;
+    convertedThemeOled.dispatchEvent(new Event('change', { bubbles: true }));
+    const helpAfterToggle = convertedThemeHelp.textContent || '';
+    if (helpBeforeToggle === helpAfterToggle) pass('Converted-page theme helper text remains stable when toggles are changed');
+    else fail('Converted-page theme helper text should remain stable when toggles are changed');
 
     const cfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
     if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');

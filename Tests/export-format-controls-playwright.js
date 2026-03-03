@@ -73,6 +73,7 @@ function createStaticServer(root) {
       'PASS: Converted-page theme toggle HTML-only help text shown for non-HTML formats',
       'PASS: DOCX help text shown for unsupported format',
       'PASS: OLED option enabled when converted-page theme toggle is checked',
+      'PASS: Converted-page theme helper text remains stable when toggles are changed',
       'PASS: Export format falls back to HTML when experimental is OFF',
       'PASS: Converted-page theme toggle is passed in conversion config for HTML output'
     ];
