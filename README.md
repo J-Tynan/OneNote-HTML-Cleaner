@@ -223,6 +223,22 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 - If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
 - App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.
 
+## Handwriting export behavior
+
+- OneNote handwriting content is preserved as raster image output when exported through MHTML (`.mht`, `.mhtml`).
+- The resulting handwriting appearance depends on the active OneNote theme and rendering at export time.
+- Vector ink primitives are not exposed by the current MHTML path, so editable vector ink is not available in converted HTML.
+- Current pipeline behavior detects handwriting-like raster assets and annotates them conservatively (`data-handwriting="raster"`) with accessibility-first alt text.
+- Future enhancements may include optional vectorization workflows, but these are post-release and experimental.
+
+## Markdown export philosophy (planned)
+
+- Markdown export is designed as **semantic fidelity over visual parity** with OneNote layout.
+- Default flavor target is **Obsidian-compatible** output, with additional flavor adapters planned.
+- Conversion will be structure-first (headings, lists, tables, code blocks, images), not absolute-position/layout recreation.
+- Output should remain deterministic and standalone, without required CSS/JS/runtime dependencies.
+- Known limitation versus HTML export: Markdown will intentionally flatten free-form positioned content to a stable reading order.
+
 ## Refactor Goals
 
 1. Preserve the existing PowerShell script behavior while improving portability.

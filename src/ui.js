@@ -738,6 +738,7 @@ export function initUI(workerManager, options = {}) {
 function openHelpModal() {
   if (!dom.helpModal || !dom.helpButton) return;
   dom.helpModal.classList.remove('hidden');
+  dom.helpModal.classList.add('flex');
   dom.helpButton.setAttribute('aria-expanded', 'true');
   // focus the close button for keyboard users
   try { dom.helpCloseButton?.focus(); } catch (e) {}
@@ -746,6 +747,7 @@ function openHelpModal() {
 function closeHelpModal() {
   if (!dom.helpModal || !dom.helpButton) return;
   dom.helpModal.classList.add('hidden');
+  dom.helpModal.classList.remove('flex');
   dom.helpButton.setAttribute('aria-expanded', 'false');
   try { dom.helpButton?.focus(); } catch (e) {}
 }

@@ -107,6 +107,7 @@ All items in this section must be satisfied before tagging the first stable rele
 ---
 
 ## Next Milestone — MHTML Release
+## Post‑Release Roadmap (v1.x) The following items are explicitly deferred until after the first stable release. They are exploratory or additive features that build on the now‑stable HTML pipeline.
 
 1. Harden MHTML‑to‑HTML pipeline against edge‑case fixtures.
 2. Expand targeted fixture tests (tables, lists, whitespace, inline resources).
@@ -148,12 +149,61 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] [P2] Implement ink detection in pipeline: detect `<svg>`, VML, `<canvas>`, and raster `<img>` cases. (2026-03-03)
 - [x] [P2] If only raster found, preserve image, replace alt-text with appropriate wording and add data-handwriting="raster" metadata. (2026-03-03)
 - [x] [P2] Add accessibility labels for handwriting assets. (2026-03-03)
+- [x] [P2] Document handwriting export behavior. (2026-03-03)
+  - Handwriting is preserved as raster images when exported from OneNote.
+  - Output depends on OneNote theme at export time.
+  - Vector ink is not available via MHTML.
+  - Future enhancements may include optional vectorization.
+
+---
+
+### Markdown Export — Semantic Fidelity (post‑release)
+
+Goal: Provide high‑quality, structure‑first Markdown exports suitable for long‑term
+knowledge bases and note‑taking tools. Visual parity with OneNote is not a goal.
+
+Design principles:
+- Semantic fidelity over visual layout.
+- Deterministic, renderer‑agnostic output.
+- One shared semantic conversion core with thin flavor adapters.
+- No inline HTML unless strictly necessary.
+
+Initial scope:
+- Headings, paragraphs, lists, tables, code blocks, images.
+- Flatten free‑form layout and absolute positioning.
+- Preserve document hierarchy and reading order.
+
+#### Core Markdown conversion (shared)
+
+- [ ] [P2] Define a semantic Markdown intermediate representation (IR) derived from cleaned HTML.
+- [ ] [P2] Implement HTML → Markdown core conversion using the IR (structure‑first).
+- [ ] [P2] Add regression fixtures asserting stable Markdown output for representative pages.
+- [ ] [P2] Ensure Markdown export does not depend on CSS, JS, or runtime assets.
+
+#### Markdown flavor support
+
+- [ ] [P2] Define supported Markdown flavors:
+  - Obsidian‑compatible (default)
+  - CommonMark
+  - GitHub Flavored Markdown
+  - Markdown Extra (optional)
+
+- [ ] [P2] Implement flavor adapters for:
+  - Lists and task lists
+  - Tables
+  - Fenced code blocks
+  - Line‑break handling
+
+- [ ] [P2] Ensure Obsidian flavor renders cleanly without requiring Obsidian‑specific metadata.
+- [ ] [P2] Add smoke tests validating flavor selection and routing.
+
+---
 
 ### Experimental Export Formats
 - [ ] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default).
 - [ ] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`).
 - [ ] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats.
-- [ ] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible).
+- [ ] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible (default).
 - [ ] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling.
 - [ ] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown.
 - [ ] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing.
@@ -161,6 +211,14 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] [P2] Add UX validation and disabled-state messaging for unsupported/unfinished formats.
 - [ ] [P2] Add smoke tests for export-format selection behavior.
 - [ ] [P3] Document feature as experimental in `README.md` and in-app help text.
+
+#### Markdown export UX
+
+- [ ] [P2] Default Markdown flavor to Obsidian‑compatible.
+- [ ] [P2] Clearly label Markdown export as “structure‑first (layout not preserved)”.
+- [ ] [P2] Disable Markdown flavor selection unless export format is Markdown.
+- [ ] [P2] Add help text explaining semantic vs visual tradeoffs.
+
 
 ### Converted-Page Theme Toggle (HTML only)
 - [ ] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF).
@@ -245,3 +303,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] [P2] Document native import limitations and expected fidelity in `README.md` and release notes. (2026-02-27)
 - [x] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path. (2026-02-27)
 - [ ] [P3] Polish page naming for GUID-like titles with a deterministic title strategy.
+- [x] [P2] Document Markdown export philosophy. (2026-03-03)
+  - Semantic fidelity over visual parity
+  - Obsidian as default flavor
+  - Known limitations vs HTML export
