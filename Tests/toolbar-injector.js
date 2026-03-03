@@ -39,6 +39,12 @@ async function main() {
   if (!/id="onenote-cleaner-toolbar"/i.test(injected)) {
     fail('Expected toolbar root to be injected once');
   }
+  if (!/>Tools<\/span>/i.test(injected)) {
+    fail('Expected toolbar title text to be Tools');
+  }
+  if (!/id="onenote-cleaner-toolbar"[^>]*\shidden/i.test(injected)) {
+    fail('Expected injected toolbar to be hidden by default');
+  }
   if (!/data-onc-action="edit-toggle"/i.test(injected)) {
     fail('Expected edit toggle control in injected toolbar');
   }
@@ -47,6 +53,43 @@ async function main() {
   }
   if (!/data-onc-action="hide-toolbar"/i.test(injected)) {
     fail('Expected hide control in injected toolbar');
+  }
+  if (!/data-onc-action="save"/i.test(injected)) {
+    fail('Expected save control in injected toolbar');
+  }
+  if (/data-onc-action="save-as"/i.test(injected)) {
+    fail('Did not expect save-as control in injected toolbar');
+  }
+  if (!/id="onc-toolbar-show"[^>]*>Toolbar</i.test(injected)) {
+    fail('Expected toolbar reveal button label to be Toolbar');
+  }
+  if (!/data-onc-edit-command="undo"/i.test(injected)
+    || !/data-onc-edit-command="h1"/i.test(injected)
+    || !/data-onc-edit-command="h2"/i.test(injected)
+    || !/data-onc-edit-command="h3"/i.test(injected)
+    || !/data-onc-edit-command="h4"/i.test(injected)
+    || !/data-onc-edit-command="bold"/i.test(injected)
+    || !/data-onc-edit-command="italic"/i.test(injected)
+    || !/data-onc-edit-command="color"/i.test(injected)
+    || !/data-onc-edit-command="size"/i.test(injected)
+    || !/data-onc-edit-command="sub"/i.test(injected)
+    || !/data-onc-edit-command="super"/i.test(injected)
+    || !/data-onc-edit-command="bullet"/i.test(injected)
+    || !/data-onc-edit-command="number"/i.test(injected)
+    || !/data-onc-edit-command="link"/i.test(injected)) {
+    fail('Expected edit-mode formatting controls to be injected');
+  }
+  if (!/data-onc-edit-command="bold"[^>]*data-onc-active="false"[^>]*aria-pressed="false"/i.test(injected)) {
+    fail('Expected edit command buttons to include inactive active-state attributes');
+  }
+  if (!/data-onc-edit-command="link"[^>]*>Link<\/button>/i.test(injected)) {
+    fail('Expected hyperlink button label to be Link');
+  }
+  if (/>Hyperlink<\/button>/i.test(injected)) {
+    fail('Did not expect Hyperlink label in edit controls');
+  }
+  if (/Advanced features in one toolbar/i.test(injected)) {
+    fail('Did not expect helper message text in injected toolbar');
   }
 
   const injectedAgain = mod.injectOutputToolbar(injected, {

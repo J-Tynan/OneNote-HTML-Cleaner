@@ -131,6 +131,22 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width. (2026-03-02)
 - [x] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports. (2026-03-02)
 
+### Outstanding Visual Tasks
+
+- [ ] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — currently wider than ideal; requires layout heuristic adjustments and regression fixtures.
+- [ ] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests.
+- [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
+- [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
+
+---
+
+## Toolbar Edit Controls
+
+- [x] Add Undo button to row of formatting tools (2026-03-03)
+- [x] Split heading control into H1–H4 buttons for explicit block styles (2026-03-03)
+- [x] Rename Hyperlink button to Link while keeping the dual-prompt flow (2026-03-03)
+- [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
+
 **Immediate Next Priority**
 - **Add guardrail for oversized inlined images (P2):** Prevent very large embedded images from forcing layout/margin regressions and from inflating exported artifacts. Recommended next step: add a size threshold, surface a warning in CLI/PWA, and add regression tests. (proposed 2026-03-02)
 
