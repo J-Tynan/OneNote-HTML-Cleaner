@@ -11,7 +11,7 @@ function assert(condition, message) {
   const injectorPath = path.resolve(process.cwd(), 'src', 'pipeline', 'toolbarInjector.js');
   const injector = await import(pathToFileURL(injectorPath).href);
 
-  const base = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Converted Page</title></head><body><main><h1>Converted</h1><p>Body</p></main></body></html>';
+  const base = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Converted Page</title></head><body><main><h1>Converted</h1><h2 id="summary-heading" style="color:#1E4E79">Summary</h2><ul><li id="study-question" style="color:#000000">Study Questions</li></ul><p>Body</p></main></body></html>';
   const withToolbarBase = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Converted Page</title></head><body><div id="onenote-cleaner-toolbar">Toolbar</div><main><h1>Converted</h1><p>Body</p></main></body></html>';
 
   const standardHtml = injector.injectConvertedPageThemeToggle(base, {
@@ -81,10 +81,29 @@ function assert(condition, message) {
 
     const initialTheme = await page.evaluate(() => document.documentElement.getAttribute('data-onc-converted-theme'));
     assert(initialTheme === 'light', 'Expected default converted-page theme to be light');
+    const initialIcon = await page.textContent('#onc-converted-theme-toggle');
+    assert((initialIcon || '').trim() === '🔆', `Expected light-theme toggle icon to be 🔆, got ${(initialIcon || '').trim()}`);
 
     await page.click('#onc-converted-theme-toggle');
     const darkTheme = await page.evaluate(() => document.documentElement.getAttribute('data-onc-converted-theme'));
     assert(darkTheme === 'dark', 'Expected converted-page theme to switch to dark on click');
+    const darkIcon = await page.textContent('#onc-converted-theme-toggle');
+    assert((darkIcon || '').trim() === '🌙', `Expected dark-theme toggle icon to be 🌙, got ${(darkIcon || '').trim()}`);
+
+    const standardDarkState = await page.evaluate(() => {
+      const bodyBg = getComputedStyle(document.body).backgroundColor;
+      const heading = document.getElementById('summary-heading');
+      const question = document.getElementById('study-question');
+      return {
+        bodyBg,
+        headingColor: heading ? getComputedStyle(heading).color : '',
+        questionColor: question ? getComputedStyle(question).color : ''
+      };
+    });
+
+    assert(standardDarkState.bodyBg === 'rgb(31, 31, 31)', `Expected standard dark body background to be dark grey, got ${standardDarkState.bodyBg}`);
+    assert(standardDarkState.headingColor === 'rgb(230, 230, 230)', `Expected Summary heading to recolor in dark theme, got ${standardDarkState.headingColor}`);
+    assert(standardDarkState.questionColor === 'rgb(230, 230, 230)', `Expected Study Questions text to recolor in dark theme, got ${standardDarkState.questionColor}`);
 
     await page.reload({ waitUntil: 'networkidle' });
     await page.waitForSelector('#onc-converted-theme-toggle');
@@ -97,14 +116,16 @@ function assert(condition, message) {
 
     const oledState = await page.evaluate(() => {
       const bodyBg = getComputedStyle(document.body).backgroundColor;
+      const bodyColor = getComputedStyle(document.body).color;
       const main = document.querySelector('main');
       const mainBg = main ? getComputedStyle(main).backgroundColor : '';
       const oled = document.documentElement.getAttribute('data-onc-converted-oled');
-      return { bodyBg, mainBg, oled };
+      return { bodyBg, bodyColor, mainBg, oled };
     });
 
     assert(oledState.oled === 'true', 'Expected OLED flag on document element when OLED option is enabled');
     assert(oledState.bodyBg === 'rgb(0, 0, 0)', `Expected OLED body background to be black, got ${oledState.bodyBg}`);
+    assert(oledState.bodyColor === 'rgb(214, 214, 207)', `Expected OLED body text color to be off-white, got ${oledState.bodyColor}`);
     assert(oledState.mainBg === 'rgb(0, 0, 0)', `Expected OLED main background to be black, got ${oledState.mainBg}`);
 
     await page.goto(`${baseUrl}/toolbar`, { waitUntil: 'networkidle' });
