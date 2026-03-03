@@ -18,6 +18,7 @@
     "test:pipeline-config": "node ./Tests/pipeline-config.unit.js",
     "test:ui-download-smoke": "node ./Tests/ui-download-zip-playwright.js",
     "test:export-format-controls": "node ./Tests/export-format-controls-playwright.js",
+    "test:converted-page-theme-toggle": "node ./Tests/converted-page-theme-toggle-playwright.js",
     "test:header-edge": "node ./Tests/header-edge-to-edge-playwright.js",
     "test:sw-update": "node ./Tests/service-worker-update-playwright.js",
     "test:sw-bump": "node ./Tests/sw-bump.js",

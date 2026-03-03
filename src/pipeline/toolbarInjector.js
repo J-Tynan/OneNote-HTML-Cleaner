@@ -4,6 +4,10 @@ const TOOLBAR_STYLE_ID = 'onc-toolbar-style';
 const TOOLBAR_SCRIPT_ID = 'onc-toolbar-script';
 const TOOLBAR_METADATA_ID = 'onc-toolbar-metadata';
 const TOOLBAR_SHOW_BUTTON_ID = 'onc-toolbar-show';
+const CONVERTED_THEME_ROOT_ID = 'onc-converted-theme-toggle';
+const CONVERTED_THEME_STYLE_ID = 'onc-converted-theme-style';
+const CONVERTED_THEME_SCRIPT_ID = 'onc-converted-theme-script';
+const CONVERTED_THEME_VERSION = 'v1';
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (ch) => ({
@@ -49,6 +53,24 @@ function hasToolbarRoot(html = '') {
   const hasId = new RegExp(`id=["']${TOOLBAR_ROOT_ID}["']`, 'i').test(html);
   const hasMarker = /data-onc-toolbar=["']v1["']/i.test(html);
   return hasId && hasMarker;
+}
+
+function hasConvertedThemeToggleRoot(html = '') {
+  const hasId = new RegExp(`id=["']${CONVERTED_THEME_ROOT_ID}["']`, 'i').test(html);
+  const hasMarker = /data-onc-converted-theme-toggle=["']v1["']/i.test(html);
+  return hasId && hasMarker;
+}
+
+function normalizeExportFormat(value = '') {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'markdown' || normalized === 'docx') return normalized;
+  return 'html';
+}
+
+function isHtmlExportEnabled(options = {}) {
+  const experimentalEnabled = options.ExperimentalExportEnabled === true;
+  const format = normalizeExportFormat(options.ExportFormat || 'html');
+  return !experimentalEnabled || format === 'html';
 }
 
 function buildStyleTag() {
@@ -279,4 +301,91 @@ export function summarizeWarningsBySeverity(items = []) {
     summary.total += 1;
   }
   return summary;
+}
+
+function buildConvertedThemeStyleTag() {
+  return `<style id="${CONVERTED_THEME_STYLE_ID}" data-onc-converted-theme-style="${CONVERTED_THEME_VERSION}">` +
+    `#${CONVERTED_THEME_ROOT_ID}{position:fixed;right:1rem;top:.75rem;z-index:10000;border:1px solid #c6ced8;background:#ffffff;color:#0f172a;border-radius:9999px;width:2.15rem;height:2.15rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:0 1px 2px rgba(15,23,42,.2);}` +
+    `#${CONVERTED_THEME_ROOT_ID}:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px;}` +
+    `html.onc-toolbar-present #${CONVERTED_THEME_ROOT_ID}{top:4.25rem;}` +
+    `html[data-onc-converted-theme="dark"] body{background:#111827;color:#e5e7eb;}` +
+    `html[data-onc-converted-theme="dark"] main{background:#111827;color:#e5e7eb;}` +
+    `html[data-onc-converted-theme="dark"][data-onc-converted-oled="true"] body{background:#000000;color:#e5e7eb;}` +
+    `html[data-onc-converted-theme="dark"][data-onc-converted-oled="true"] main{background:#000000;color:#e5e7eb;}` +
+    '</style>';
+}
+
+function buildConvertedThemeScriptTag(options = {}) {
+  const oledBlack = options.ConvertedPageThemeToggleOledBlack === true;
+  const script = `(function(){
+  function init(){
+    const root = document.getElementById('${CONVERTED_THEME_ROOT_ID}');
+    if (!root) return false;
+    if (root.dataset.oncInitialized === '1') return true;
+    root.dataset.oncInitialized = '1';
+
+    const html = document.documentElement;
+    if (document.getElementById('${TOOLBAR_ROOT_ID}')) {
+      html.classList.add('onc-toolbar-present');
+    }
+
+    const oledBlack = ${oledBlack ? 'true' : 'false'};
+    const storageKey = 'onc:converted-theme:' + location.pathname;
+
+    function applyTheme(nextTheme){
+      const theme = nextTheme === 'dark' ? 'dark' : 'light';
+      html.setAttribute('data-onc-converted-theme', theme);
+      html.setAttribute('data-onc-converted-oled', oledBlack ? 'true' : 'false');
+      root.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      root.setAttribute('aria-label', theme === 'dark' ? 'Switch converted page to light theme' : 'Switch converted page to dark theme');
+      root.textContent = theme === 'dark' ? '☀' : '☾';
+    }
+
+    let saved = 'light';
+    try {
+      saved = localStorage.getItem(storageKey) || 'light';
+    } catch (_err) {}
+
+    applyTheme(saved);
+
+    root.addEventListener('click', function(){
+      const current = html.getAttribute('data-onc-converted-theme') === 'dark' ? 'dark' : 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem(storageKey, next); } catch (_err) {}
+    });
+
+    return true;
+  }
+
+  if (!init()) {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  }
+})();`;
+
+  return `<script id="${CONVERTED_THEME_SCRIPT_ID}" data-onc-converted-theme-script="${CONVERTED_THEME_VERSION}">${script}</script>`;
+}
+
+function buildConvertedThemeToggleMarkup() {
+  return `<button type="button" id="${CONVERTED_THEME_ROOT_ID}" data-onc-converted-theme-toggle="${CONVERTED_THEME_VERSION}" aria-pressed="false" aria-label="Switch converted page to dark theme" title="Toggle converted page theme">☾</button>`;
+}
+
+export function injectConvertedPageThemeToggle(html, options = {}) {
+  const input = String(html || '');
+  if (!input) return input;
+
+  if (options.ConvertedPageThemeToggleEnabled !== true) {
+    return input;
+  }
+
+  if (!isHtmlExportEnabled(options)) {
+    return input;
+  }
+
+  if (hasConvertedThemeToggleRoot(input)) {
+    return input;
+  }
+
+  const withHead = injectIntoHead(input, `${buildConvertedThemeStyleTag()}${buildConvertedThemeScriptTag(options)}`);
+  return injectIntoBody(withHead, buildConvertedThemeToggleMarkup());
 }

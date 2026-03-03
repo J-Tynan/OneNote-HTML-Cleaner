@@ -64,11 +64,17 @@ function createStaticServer(root) {
     const checks = [
       'PASS: Export format hidden/disabled by default',
       'PASS: Markdown flavor hidden/disabled by default',
+      'PASS: Converted-page theme toggle enabled by default for HTML output',
+      'PASS: OLED option disabled until converted-page theme toggle is enabled',
       'PASS: Export format enabled when experimental is ON',
       'PASS: Markdown flavor shown/enabled when Markdown format selected',
       'PASS: Markdown flavor hidden/disabled for non-Markdown format',
+      'PASS: Converted-page theme toggle disabled for non-HTML export format',
+      'PASS: Converted-page theme toggle HTML-only help text shown for non-HTML formats',
       'PASS: DOCX help text shown for unsupported format',
-      'PASS: Export format falls back to HTML when experimental is OFF'
+      'PASS: OLED option enabled when converted-page theme toggle is checked',
+      'PASS: Export format falls back to HTML when experimental is OFF',
+      'PASS: Converted-page theme toggle is passed in conversion config for HTML output'
     ];
 
     for (const chk of checks) {

@@ -32,7 +32,10 @@ const dom = {
   exportFormat: null,
   markdownFlavor: null,
   markdownFlavorContainer: null,
-  exportFormatHelp: null
+  exportFormatHelp: null,
+  convertedPageThemeToggleEnabled: null,
+  convertedPageThemeToggleOledBlack: null,
+  convertedPageThemeHelp: null
 };
 
 const runtime = {
@@ -183,6 +186,7 @@ function updateExportFormatControls() {
   const experimentalEnabled = Boolean(dom.experimentalExportEnabled && dom.experimentalExportEnabled.checked);
   const selectedFormat = dom.exportFormat ? String(dom.exportFormat.value || 'html').toLowerCase() : 'html';
   const markdownSelected = experimentalEnabled && selectedFormat === 'markdown';
+  const effectiveFormat = experimentalEnabled ? selectedFormat : 'html';
 
   if (dom.exportFormat) {
     dom.exportFormat.disabled = !experimentalEnabled;
@@ -203,6 +207,33 @@ function updateExportFormatControls() {
       dom.exportFormatHelp.textContent = 'Markdown export is structure-first (layout not preserved).';
     } else {
       dom.exportFormatHelp.textContent = 'HTML export keeps the existing parity-first conversion path.';
+    }
+  }
+
+  updateConvertedPageThemeControls(effectiveFormat);
+}
+
+function updateConvertedPageThemeControls(effectiveFormat = 'html') {
+  const htmlSelected = String(effectiveFormat || 'html').toLowerCase() === 'html';
+  const toggleEnabled = Boolean(dom.convertedPageThemeToggleEnabled && dom.convertedPageThemeToggleEnabled.checked);
+
+  if (dom.convertedPageThemeToggleEnabled) {
+    dom.convertedPageThemeToggleEnabled.disabled = !htmlSelected;
+  }
+
+  if (dom.convertedPageThemeToggleOledBlack) {
+    dom.convertedPageThemeToggleOledBlack.disabled = !htmlSelected || !toggleEnabled;
+  }
+
+  if (dom.convertedPageThemeHelp) {
+    if (!htmlSelected) {
+      dom.convertedPageThemeHelp.textContent = 'Converted-page theme toggle is available only for HTML export.';
+    } else if (!toggleEnabled) {
+      dom.convertedPageThemeHelp.textContent = 'Enable to inject a symbol-based Light/Dark toggle into converted HTML pages (default Light).';
+    } else if (dom.convertedPageThemeToggleOledBlack && dom.convertedPageThemeToggleOledBlack.checked) {
+      dom.convertedPageThemeHelp.textContent = 'Dark mode will use OLED-black backgrounds for page and main content surfaces.';
+    } else {
+      dom.convertedPageThemeHelp.textContent = 'Dark mode uses a standard dark surface palette; state is remembered per exported file in your browser.';
     }
   }
 }
@@ -680,6 +711,8 @@ function bindEvents() {
   dom.experimentalExportEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.exportFormat?.addEventListener('change', onAdvancedOptionsChange);
   dom.markdownFlavor?.addEventListener('change', onAdvancedOptionsChange);
+  dom.convertedPageThemeToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.convertedPageThemeToggleOledBlack?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
   dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
@@ -754,6 +787,9 @@ export function initUI(workerManager, options = {}) {
   dom.markdownFlavor = document.getElementById('markdownFlavor');
   dom.markdownFlavorContainer = document.getElementById('markdownFlavorContainer');
   dom.exportFormatHelp = document.getElementById('exportFormatHelp');
+  dom.convertedPageThemeToggleEnabled = document.getElementById('convertedPageThemeToggleEnabled');
+  dom.convertedPageThemeToggleOledBlack = document.getElementById('convertedPageThemeToggleOledBlack');
+  dom.convertedPageThemeHelp = document.getElementById('convertedPageThemeHelp');
   dom.autoConvertNotice = document.getElementById('autoConvertNotice');
   dom.diagnosticsPanel = document.getElementById('diagnosticsPanel');
   dom.diagnosticsList = document.getElementById('diagnosticsList');
@@ -818,7 +854,9 @@ export function initUI(workerManager, options = {}) {
     externalizeCssMode: dom.externalizeCssMode,
     experimentalExportEnabled: dom.experimentalExportEnabled,
     exportFormat: dom.exportFormat,
-    markdownFlavor: dom.markdownFlavor
+    markdownFlavor: dom.markdownFlavor,
+    convertedPageThemeToggleEnabled: dom.convertedPageThemeToggleEnabled,
+    convertedPageThemeToggleOledBlack: dom.convertedPageThemeToggleOledBlack
   }, updateZipButton);
 
   if (window.JSZip) {

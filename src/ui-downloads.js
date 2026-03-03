@@ -107,7 +107,10 @@ export function createDownloadHelpers(ctx, updateZipButton) {
   function getConversionConfig() {
     const experimentalEnabled = Boolean(ctx.experimentalExportEnabled && ctx.experimentalExportEnabled.checked);
     const selectedFormat = normalizeExportFormat(ctx.exportFormat ? String(ctx.exportFormat.value || 'html') : 'html');
+    const effectiveFormat = experimentalEnabled ? selectedFormat : 'html';
     const selectedFlavor = normalizeMarkdownFlavor(ctx.markdownFlavor ? String(ctx.markdownFlavor.value || 'obsidian') : 'obsidian');
+    const convertedPageThemeToggleEnabled = Boolean(ctx.convertedPageThemeToggleEnabled && ctx.convertedPageThemeToggleEnabled.checked);
+    const convertedPageThemeToggleOledBlack = Boolean(ctx.convertedPageThemeToggleOledBlack && ctx.convertedPageThemeToggleOledBlack.checked);
 
     return {
       Profile: 'onenote',
@@ -120,8 +123,12 @@ export function createDownloadHelpers(ctx, updateZipButton) {
       ExternalizeCssEnabled: Boolean(ctx.externalizeCssEnabled && ctx.externalizeCssEnabled.checked),
       ExternalizeCssMode: ctx.externalizeCssMode ? String(ctx.externalizeCssMode.value || 'shared') : 'shared',
       ExperimentalExportEnabled: experimentalEnabled,
-      ExportFormat: experimentalEnabled ? selectedFormat : 'html',
+      ExportFormat: effectiveFormat,
       MarkdownFlavor: selectedFlavor,
+      ConvertedPageThemeToggleEnabled: effectiveFormat === 'html' ? convertedPageThemeToggleEnabled : false,
+      ConvertedPageThemeToggleOledBlack: effectiveFormat === 'html' && convertedPageThemeToggleEnabled
+        ? convertedPageThemeToggleOledBlack
+        : false,
       ToolbarBundleMode: 'inline'
     };
   }

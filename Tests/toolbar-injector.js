@@ -19,6 +19,9 @@ async function main() {
   if (!mod || typeof mod.injectOutputToolbar !== 'function') {
     fail('Could not import injectOutputToolbar from src/pipeline/toolbarInjector.js');
   }
+  if (typeof mod.injectConvertedPageThemeToggle !== 'function') {
+    fail('Could not import injectConvertedPageThemeToggle from src/pipeline/toolbarInjector.js');
+  }
 
   const baseHtml = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Sample</title></head><body><main><h1>Hello</h1><p>Body</p></main></body></html>';
 
@@ -70,6 +73,48 @@ async function main() {
 
   if (disabled !== baseHtml) {
     fail('Expected disabled toolbar config to keep output unchanged');
+  }
+
+  const withThemeToggle = mod.injectConvertedPageThemeToggle(baseHtml, {
+    ConvertedPageThemeToggleEnabled: true,
+    ConvertedPageThemeToggleOledBlack: true,
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html'
+  });
+
+  if (!/id="onc-converted-theme-toggle"/i.test(withThemeToggle)) {
+    fail('Expected converted-page theme toggle button to be injected');
+  }
+  if (!/id="onc-converted-theme-style"/i.test(withThemeToggle)) {
+    fail('Expected converted-page theme toggle style to be injected');
+  }
+  if (!/id="onc-converted-theme-script"/i.test(withThemeToggle)) {
+    fail('Expected converted-page theme toggle script to be injected');
+  }
+  if (!/const oledBlack = true;/i.test(withThemeToggle)) {
+    fail('Expected OLED black flag to be embedded in injected script');
+  }
+
+  const withThemeToggleAgain = mod.injectConvertedPageThemeToggle(withThemeToggle, {
+    ConvertedPageThemeToggleEnabled: true,
+    ConvertedPageThemeToggleOledBlack: true,
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html'
+  });
+  const themeRootCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-toggle"/gi);
+  const themeStyleCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-style"/gi);
+  const themeScriptCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-script"/gi);
+  if (themeRootCount !== 1 || themeStyleCount !== 1 || themeScriptCount !== 1) {
+    fail(`Expected idempotent converted-page theme injection, got root=${themeRootCount}, style=${themeStyleCount}, script=${themeScriptCount}`);
+  }
+
+  const nonHtmlBypass = mod.injectConvertedPageThemeToggle(baseHtml, {
+    ConvertedPageThemeToggleEnabled: true,
+    ExperimentalExportEnabled: true,
+    ExportFormat: 'markdown'
+  });
+  if (nonHtmlBypass !== baseHtml) {
+    fail('Expected converted-page theme toggle to be skipped for non-HTML export format');
   }
 
   console.log('toolbar-injector: OK');
