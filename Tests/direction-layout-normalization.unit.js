@@ -165,5 +165,30 @@ function createDoc(html) {
     assert(/\bmargin-left\s*:\s*0\.125in/i.test(firstContentStyle));
   }
 
+  {
+    const doc = createDoc('<html><body><main><div style="direction: ltr; margin-top:0; margin-left:0; width:4.475in"><div style="direction: ltr; margin-top:0; margin-left:.2166in; width:2.4708in"><h1>Test Handwriting</h1></div><div style="direction: ltr; margin-top:.0409in; margin-left:.2166in; width:1in"><p>28 February 2026</p><p>12:25</p></div><div style="direction: ltr; margin-top:.4881in; margin-left:0; width:4.475in"><img width="537" height="261" src="x.png" alt="Handwritten notes (raster image)" data-handwriting="raster"></div></div></main></body></html>');
+
+    normalizeDirectionLayoutContainers(doc, {
+      unwrapRedundantWrappers: true,
+      normalizeTopLevelPageWidths: true,
+      standardizeHeaderDatePositions: true
+    });
+
+    const titleBlock = doc.querySelector('main > div > div:nth-child(1)');
+    const dateBlock = doc.querySelector('main > div > div:nth-child(2)');
+    const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
+    assert(titleBlock);
+    assert(dateBlock);
+    assert(firstContentBlock);
+
+    const titleStyle = String(titleBlock.getAttribute('style') || '');
+    const dateStyle = String(dateBlock.getAttribute('style') || '');
+    const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
+
+    assert(/\bmargin-left\s*:\s*(?:0?\.125(?:0+)?)in/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*(?:0?\.125(?:0+)?)in/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*(?:0?\.125(?:0+)?)in/i.test(firstContentStyle));
+  }
+
   console.log('direction-layout-normalization: PASS');
 })();

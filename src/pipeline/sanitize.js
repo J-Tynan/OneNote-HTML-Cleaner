@@ -1162,6 +1162,11 @@ function isImageDominantContentBlock(block) {
   return text.length === 0;
 }
 
+function hasHandwritingRasterImage(block) {
+  if (!block || !block.querySelector) return false;
+  return Boolean(block.querySelector('img[data-handwriting="raster"]'));
+}
+
 function isStandaloneIconParagraph(paragraph) {
   if (!paragraph || !paragraph.tagName || paragraph.tagName.toLowerCase() !== 'p') return false;
   const directChildren = Array.from(paragraph.children || []);
@@ -1477,7 +1482,19 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
         return String(styleMap.get('margin-left') || '').trim();
       };
       const rootMarginLeft = readMarginLeft(rootLayout);
-      const baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
+      let baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
+      const firstContentBlockMarginLeft = readMarginLeft(firstContentBlock);
+      const firstContentBlockMarginLeftInches = parseCssLengthToInches(firstContentBlockMarginLeft);
+      if (
+        firstContentBlock &&
+        isImageDominantContentBlock(firstContentBlock) &&
+        hasHandwritingRasterImage(firstContentBlock)
+      ) {
+        const targetInches = firstContentBlockMarginLeftInches !== null && firstContentBlockMarginLeftInches > 0
+          ? Math.max(firstContentBlockMarginLeftInches, MIN_CONTENT_MARGIN_LEFT_IN)
+          : MIN_CONTENT_MARGIN_LEFT_IN;
+        baselineMarginLeft = toInchesCssValue(targetInches);
+      }
       const contentBaselineMarginLeft = loosenContentBaselineLeftMargin(baselineMarginLeft);
 
       for (const block of sectionBlocks) {
