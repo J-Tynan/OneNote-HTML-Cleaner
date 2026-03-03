@@ -134,7 +134,7 @@ All items in this section must be satisfied before tagging the first stable rele
 ### Outstanding Visual Tasks
 
 - [ ] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — currently wider than ideal; requires layout heuristic adjustments and regression fixtures.
-- [ ] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests.
+- [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
 - [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
 
@@ -148,7 +148,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
 **Immediate Next Priority**
-- **Add guardrail for oversized inlined images (P2):** Prevent very large embedded images from forcing layout/margin regressions and from inflating exported artifacts. Recommended next step: add a size threshold, surface a warning in CLI/PWA, and add regression tests. (proposed 2026-03-02)
+- **Tune left-margin for handwriting-heavy pages (P2):** Reduce residual visual gap in `Test Handwriting.html` while preserving current list/layout regression stability. (updated 2026-03-03)
 
 **Notes / Deferred items**
 - `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
@@ -275,12 +275,12 @@ Initial scope:
 
 
 ### Converted-Page Theme Toggle (HTML only)
-- [ ] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF).
-- [ ] [P2] Add dependent sub-checkbox: “Use OLED black for Dark theme” (enabled only when theme toggle option is ON).
-- [ ] [P2] Inject a simple symbol-based Light/Dark toggle into converted HTML pages (top-right corner, default Light, one click/tap toggles Dark).
-- [ ] [P2] Ensure this feature applies only to HTML exports; disable/hide and explain unavailability for `.md` / `.docx` / `.pdf` outputs.
-- [ ] [P2] Add native + Playwright smoke coverage for toggle rendering, interaction, default state, and OLED-black variant behavior.
-- [ ] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help.
+- [x] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF). (2026-03-03)
+- [x] [P2] Add dependent sub-checkbox: “Use OLED black for Dark theme” (enabled only when theme toggle option is ON). (2026-03-03)
+- [x] [P2] Inject a simple symbol-based Light/Dark toggle into converted HTML pages (top-right corner, default Light, one click/tap toggles Dark). (2026-03-03)
+- [x] [P2] Ensure this feature applies only to HTML exports; disable/hide and explain unavailability for `.md` / `.docx` / `.pdf` outputs. (2026-03-03)
+- [x] [P2] Add native + Playwright smoke coverage for toggle rendering, interaction, default state, and OLED-black variant behavior. (2026-03-03)
+- [x] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help. (2026-03-03)
 
 ### Externalized CSS for Converted Pages (HTML only)
 - [x] [P2] Add Advanced options checkbox: “Externalize CSS to separate file” (default OFF). (2026-02-27)
