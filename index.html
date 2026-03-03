@@ -86,14 +86,6 @@
             </div>
 
             <div class="flex flex-col items-end gap-2">
-              <button
-                id="downloadZip"
-                type="button"
-                class="btn-primary"
-                disabled>
-                Download ZIP
-              </button>
-
               <!-- Convert button: triggers processing when auto-convert is OFF -->
               <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
               <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
@@ -109,6 +101,14 @@
                   Auto-convert is enabled — manual Convert is disabled
                 </div>
               </div>
+
+              <button
+                id="downloadZip"
+                type="button"
+                class="btn-primary"
+                disabled>
+                Download ZIP
+              </button>
             </div>
           </div>
         </section>
