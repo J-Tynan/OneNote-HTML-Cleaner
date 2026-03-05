@@ -144,6 +144,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureListStructure(doc)));
     // defensive deduplication pass to remove any accidental clone/duplicate
     logs.push(...ensureArray(sanitize.dedupeLists(doc)));
+    logs.push(...ensureArray(sanitize.ensureCreatedWithOneNoteFooterGap(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {

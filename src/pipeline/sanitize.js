@@ -755,13 +755,98 @@ export function removeNbsp(doc) {
   while (node) {
     const value = node.nodeValue;
     if (value && value.indexOf('\u00a0') !== -1) {
-      node.nodeValue = value.replace(/\u00a0/g, ' ');
+      const parent = node.parentElement;
+      const isWhitespaceOnly = String(value).replace(/[\u00a0\s]/g, '') === '';
+      const preserveSpacerNbsp = Boolean(
+        parent
+        && /^(p|div|blockquote|li)$/i.test(String(parent.tagName || ''))
+        && isWhitespaceOnly
+        && parent.childNodes
+        && parent.childNodes.length === 1
+      );
+
+      if (preserveSpacerNbsp) {
+        // Keep one NBSP so intentionally blank block lines retain visible height.
+        node.nodeValue = '\u00a0';
+      } else {
+        node.nodeValue = value.replace(/\u00a0/g, ' ');
+      }
       updated++;
     }
     node = walker.nextNode();
   }
 
   if (updated) logs.push({ step: 'RemoveNbsp', updated });
+  return logs;
+}
+
+function isCreatedWithOneNoteFooterText(text) {
+  return /^created with onenote\.?$/i.test(cleanInlineText(text));
+}
+
+function isVisualSpacerElement(el) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName || '').toLowerCase();
+  if (tag === 'br') return true;
+  if (tag !== 'p' && tag !== 'div') return false;
+  return cleanInlineText(el.textContent || '') === '';
+}
+
+function ensureVisibleSpacerBlock(el, doc) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName || '').toLowerCase();
+  if (tag !== 'p' && tag !== 'div') return false;
+  if (cleanInlineText(el.textContent || '') !== '') return false;
+  if (el.querySelector && el.querySelector(':scope > br')) return false;
+
+  el.textContent = '';
+  el.appendChild(doc.createElement('br'));
+  return true;
+}
+
+export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const spacerText = typeof options.spacerText === 'string' ? options.spacerText : '\u00a0';
+  const footers = Array.from(doc.querySelectorAll('p,div,span')).filter(el => {
+    if (!el || !el.textContent) return false;
+    return isCreatedWithOneNoteFooterText(el.textContent);
+  });
+
+  let inserted = 0;
+  let normalized = 0;
+  let alreadyPresent = 0;
+
+  footers.forEach((footer) => {
+    const prev = footer.previousElementSibling;
+    if (isVisualSpacerElement(prev)) {
+      if (ensureVisibleSpacerBlock(prev, doc)) {
+        normalized += 1;
+      }
+      alreadyPresent += 1;
+      return;
+    }
+
+    const spacer = doc.createElement('p');
+    spacer.setAttribute('style', 'margin: 0');
+    if (spacerText) {
+      spacer.textContent = spacerText;
+    }
+    ensureVisibleSpacerBlock(spacer, doc);
+    footer.parentNode.insertBefore(spacer, footer);
+    inserted += 1;
+  });
+
+  if (inserted || normalized || alreadyPresent) {
+    logs.push({
+      step: 'EnsureCreatedWithOneNoteFooterGap',
+      inserted,
+      normalized,
+      alreadyPresent
+    });
+  }
+
   return logs;
 }
 
