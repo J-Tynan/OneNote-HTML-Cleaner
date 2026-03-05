@@ -88,6 +88,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureMainHeading(doc, {
       defaultTitle: resolvedConfig.defaultTitle || resolvedConfig.fileName || 'Document'
     })));
+    logs.push(...ensureArray(sanitize.normalizeContentBlankLineSpacers(doc)));
     if (resolvedConfig.NormalizeDirectionLayout !== false) {
       logs.push(...ensureArray(sanitize.normalizeDirectionLayoutContainers(doc, {
         unwrapRedundantWrappers: true,
@@ -145,6 +146,7 @@ export async function runPipeline(htmlString, config = {}) {
     // defensive deduplication pass to remove any accidental clone/duplicate
     logs.push(...ensureArray(sanitize.dedupeLists(doc)));
     logs.push(...ensureArray(sanitize.ensureCreatedWithOneNoteFooterGap(doc)));
+    logs.push(...ensureArray(sanitize.injectFooterSpacerCss(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {

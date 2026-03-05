@@ -792,22 +792,68 @@ function isVisualSpacerElement(el) {
   return cleanInlineText(el.textContent || '') === '';
 }
 
+function isWhitespaceOnlyParagraphLike(el) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName || '').toLowerCase();
+  if (tag !== 'p' && tag !== 'div' && tag !== 'blockquote') return false;
+  if (el.querySelector && el.querySelector(':scope > br')) return true;
+  const text = String(el.textContent || '');
+  if (!text) return true;
+  return text.replace(/[\u00a0\s]/g, '') === '';
+}
+
 function ensureVisibleSpacerBlock(el, doc) {
   if (!el || !el.tagName) return false;
   const tag = String(el.tagName || '').toLowerCase();
   if (tag !== 'p' && tag !== 'div') return false;
   if (cleanInlineText(el.textContent || '') !== '') return false;
-  if (el.querySelector && el.querySelector(':scope > br')) return false;
+  let changed = false;
 
   // Normalize spacer to a compact visible block: use a class-based
   // spacer so we avoid adding inline `style` attributes that test
   // suites treat as forbidden. The visual size is driven by a small
   // stylesheet injected into the document head.
-  el.textContent = '';
+  if (el.querySelector && !el.querySelector(':scope > br')) {
+    el.textContent = '';
+    const b = doc.createElement('br');
+    el.appendChild(b);
+    changed = true;
+  }
+  const beforeClass = String(el.getAttribute('class') || '');
   addClass(el, 'converted-page-spacer');
-  const b = doc.createElement('br');
-  el.appendChild(b);
-  return true;
+  if (String(el.getAttribute('class') || '') !== beforeClass) changed = true;
+  return changed;
+}
+
+function isContainerElement(el) {
+  if (!el || !el.tagName) return false;
+  return /^(div|section|article|main|aside|blockquote|li|td|th)$/i.test(String(el.tagName || ''));
+}
+
+function trimTrailingVisualSpacersDeep(root) {
+  if (!root || !root.lastElementChild) return 0;
+  let removed = 0;
+
+  while (root.lastElementChild) {
+    const last = root.lastElementChild;
+    if (isVisualSpacerElement(last)) {
+      last.remove();
+      removed += 1;
+      continue;
+    }
+
+    if (isContainerElement(last)) {
+      const nestedRemoved = trimTrailingVisualSpacersDeep(last);
+      removed += nestedRemoved;
+      if (nestedRemoved > 0) {
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  return removed;
 }
 
 export function injectFooterSpacerCss(doc) {
@@ -817,9 +863,38 @@ export function injectFooterSpacerCss(doc) {
   if (existing) return [];
   const style = doc.createElement('style');
   style.setAttribute('data-converted-spacer', '1');
-  style.appendChild(doc.createTextNode('.converted-page-spacer{margin:0;line-height:0.45;font-size:0.1pt;}'));
+  style.appendChild(doc.createTextNode('.converted-page-spacer{margin:0;line-height:0.95;font-size:1em;}.converted-content-spacer{margin:0;line-height:1;font-size:1em;}'));
   head.appendChild(style);
   return [{ step: 'InjectFooterSpacerCss', details: 'Inserted compact spacer stylesheet' }];
+}
+
+export function normalizeContentBlankLineSpacers(doc) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+  const main = doc.querySelector('main');
+  if (!main) return logs;
+
+  const candidates = Array.from(main.querySelectorAll('p,div,blockquote'));
+  let normalized = 0;
+
+  candidates.forEach((el) => {
+    if (!isWhitespaceOnlyParagraphLike(el)) return;
+    if (el.closest && el.closest('table,thead,tbody,tfoot,tr,td,th')) return;
+    if (el.querySelector && el.querySelector('img,svg,canvas,code,pre,ul,ol')) return;
+    if (Array.from(el.classList || []).includes('converted-page-spacer')) return;
+
+    el.textContent = '';
+    if (!el.querySelector || !el.querySelector(':scope > br')) {
+      el.appendChild(doc.createElement('br'));
+    }
+    addClass(el, 'converted-content-spacer');
+    normalized += 1;
+  });
+
+  if (normalized) {
+    logs.push({ step: 'NormalizeContentBlankLineSpacers', normalized });
+  }
+  return logs;
 }
 
 export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
@@ -827,7 +902,7 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const spacerText = typeof options.spacerText === 'string' ? options.spacerText : '\u00a0';
-  const footers = Array.from(doc.querySelectorAll('p,div,span')).filter(el => {
+  const footers = Array.from(doc.querySelectorAll('p')).filter(el => {
     if (!el || !el.textContent) return false;
     return isCreatedWithOneNoteFooterText(el.textContent);
   });
@@ -835,13 +910,30 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
   let inserted = 0;
   let normalized = 0;
   let alreadyPresent = 0;
+  let collapsed = 0;
+  let trimmedBeforeFooter = 0;
 
   footers.forEach((footer) => {
+    const container = footer.parentElement;
+    const beforeContainer = container && container.previousElementSibling;
+    if (beforeContainer) {
+      trimmedBeforeFooter += trimTrailingVisualSpacersDeep(beforeContainer);
+    }
+
     const prev = footer.previousElementSibling;
     if (isVisualSpacerElement(prev)) {
       if (ensureVisibleSpacerBlock(prev, doc)) {
         normalized += 1;
       }
+
+      // If a spacer also exists right before the footer container,
+      // collapse it so we keep just one compact gap near the footer.
+      const boundarySpacer = container && container.previousElementSibling;
+      if (isVisualSpacerElement(boundarySpacer)) {
+        boundarySpacer.remove();
+        collapsed += 1;
+      }
+
       alreadyPresent += 1;
       return;
     }
@@ -861,7 +953,9 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
       step: 'EnsureCreatedWithOneNoteFooterGap',
       inserted,
       normalized,
-      alreadyPresent
+      alreadyPresent,
+      collapsed,
+      trimmedBeforeFooter
     });
   }
 
