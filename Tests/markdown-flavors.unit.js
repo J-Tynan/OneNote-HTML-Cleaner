@@ -70,4 +70,17 @@ console.log('running markdown flavor unit tests');
   assert(adapted.includes('```js'), 'fenced code block delimiters should normalize in flavor adapters');
 }
 
+{
+  const sample = '- [x] done\n[https://example.org](https://example.org)\n';
+  const obsidian = applyMarkdownFlavor(sample, { flavor: 'obsidian' });
+  const commonmark = applyMarkdownFlavor(sample, { flavor: 'commonmark' });
+  const gfm = applyMarkdownFlavor(sample, { flavor: 'gfm' });
+
+  assert(commonmark.includes('- \\[x\\] done'), 'commonmark flavor should escape task markers to literal text');
+  assert(gfm.includes('<https://example.org>'), 'gfm flavor should emit autolink form for url-labeled links');
+  assert(obsidian.includes('[https://example.org](https://example.org)'), 'obsidian flavor should keep inline markdown links');
+  assert.notEqual(commonmark, obsidian, 'commonmark output should diverge from obsidian for feature fixtures');
+  assert.notEqual(gfm, obsidian, 'gfm output should diverge from obsidian for feature fixtures');
+}
+
 console.log('markdown-flavors: PASS');

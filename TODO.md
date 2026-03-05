@@ -258,7 +258,11 @@ Initial scope:
 - [x] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`). (2026-03-03)
 - [x] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats. (2026-03-03)
 - [x] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible (default). (2026-03-03)
-- [ ] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling.
+- [x] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling. (2026-03-04)
+- [x] [P2] Add canonical Markdown flavor standards reference with pinned upstream specs and behavior matrix in `docs/Markdown-Flavor-Standard.md`. (2026-03-04)
+- [x] [P2] Phase 2: Define 8-12 normative, per-flavor rules with pass/fail examples in `docs/Markdown-Flavor-Standard.md`. (2026-03-04)
+- [x] [P2] Phase 3: Convert normative rules into fixture-backed regression assertions for all four flavors. (2026-03-04)
+- [ ] [P3] Phase 4: Enforce PR governance checklist for flavor changes (docs + fixtures + tests updated together).
 - [x] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown. (2026-03-03)
 - [x] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing. (2026-03-03)
 - [x] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled. (2026-03-03)

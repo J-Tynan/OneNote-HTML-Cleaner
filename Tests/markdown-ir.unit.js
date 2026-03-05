@@ -53,4 +53,73 @@ console.log('running markdown IR unit tests');
   assert(/\| A \| B \|/.test(markdown), 'Rendered markdown should include table syntax');
 }
 
+{
+  const html = [
+    '<!doctype html>',
+    '<html><body>',
+    '<h1>Dental\nAppointment</h1>',
+    '<table>',
+    '  <tbody>',
+    '    <tr><th>Day</th><th>Open</th></tr>',
+    '    <tr><td>Monday\n08:30</td><td>17:30</td></tr>',
+    '  </tbody>',
+    '</table>',
+    '</body></html>'
+  ].join('');
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const markdown = renderMarkdownFromIr(createMarkdownIrFromDocument(doc));
+
+  assert(markdown.includes('# Dental Appointment'), 'Heading text should collapse embedded newlines to spaces');
+  assert(/\| Day \| Open \|/.test(markdown), 'Section-wrapped table rows should be extracted');
+  assert(!/\| Monday\n08:30 \|/.test(markdown), 'Table cell newlines should be normalized to spaces');
+  assert(/\| Monday 08:30 \| 17:30 \|/.test(markdown), 'Table cell content should remain readable after normalization');
+}
+
+{
+  const html = [
+    '<!doctype html>',
+    '<html><body>',
+    '<table>',
+    '  <tr><td>Class: Test class Files: Topic: Test topic Website: Test website</td></tr>',
+    '  <tr><td>Topic: Test topic</td></tr>',
+    '</table>',
+    '</body></html>'
+  ].join('');
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const markdown = renderMarkdownFromIr(createMarkdownIrFromDocument(doc));
+
+  assert(/\| Column 1 \|/.test(markdown), 'Non-header layout tables should remain markdown tables');
+  assert(/\| Class: Test class Files: Topic: Test topic Website: Test website \|/.test(markdown), 'Layout row content should be preserved in table cells');
+}
+
+{
+  const html = [
+    '<!doctype html>',
+    '<html><body>',
+    '<table>',
+    '  <tr><td>',
+    '    <div>',
+    '      <table class="cornell-table">',
+    '        <tr><td>Class:</td><td>Test class</td></tr>',
+    '        <tr><td>Topic:</td><td>Test topic</td></tr>',
+    '      </table>',
+    '    </div>',
+    '  </td></tr>',
+    '</table>',
+    '</body></html>'
+  ].join('');
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const markdown = renderMarkdownFromIr(createMarkdownIrFromDocument(doc));
+
+  assert(/\| Column 1 \| Column 2 \|/.test(markdown), 'Wrapper tables should unwrap nested multi-column tables');
+  assert(/\| Class: \| Test class \|/.test(markdown), 'Unwrapped rows should preserve cue and note columns');
+  assert(/\| Topic: \| Test topic \|/.test(markdown), 'Unwrapped nested table data should remain row-based');
+}
+
 console.log('markdown-ir: PASS');

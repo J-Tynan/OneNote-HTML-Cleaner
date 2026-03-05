@@ -243,6 +243,7 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 
 - Markdown export is designed as **semantic fidelity over visual parity** with OneNote layout.
 - Default flavor target is **Obsidian-compatible** output, with additional flavor adapters planned.
+- Canonical flavor behavior and phased contract roadmap are defined in `docs/Markdown-Flavor-Standard.md`.
 - Markdown conversion is architecture-guarded to run from **sanitized HTML output as the canonical source**, never directly from raw MHTML.
 - Conversion will be structure-first (headings, lists, tables, code blocks, images), not absolute-position/layout recreation.
 - Output should remain deterministic and standalone, without required CSS/JS/runtime dependencies.
