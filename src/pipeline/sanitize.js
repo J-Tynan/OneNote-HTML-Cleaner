@@ -1532,6 +1532,23 @@ function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = 
   };
 }
 
+function normalizeContentBlockToExactBaselineStyle(styleText, baselineMarginLeft = '') {
+  if (!baselineMarginLeft) {
+    return {
+      changed: false,
+      style: String(styleText || '')
+    };
+  }
+  const styleMap = styleEntriesToMap(styleText);
+  const before = styleMapToString(styleMap);
+  styleMap.set('margin-left', baselineMarginLeft);
+  const after = styleMapToString(styleMap);
+  return {
+    changed: after !== before,
+    style: after
+  };
+}
+
 function normalizeRootDocumentMarginStyle(styleText) {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
@@ -1690,6 +1707,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
 
   let positionsStandardized = 0;
   let firstContentBlockMarginsStandardized = 0;
+  let handwritingContentMarginsStandardized = 0;
   let iconParagraphsAligned = 0;
   if (standardizeHeaderDatePositions) {
     if (rootLayout) {
@@ -1730,6 +1748,8 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       const rootMarginLeft = readMarginLeft(rootLayout);
       const baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
       const contentBaselineMarginLeft = loosenContentBaselineLeftMargin(baselineMarginLeft);
+      const hasRasterHandwritingContent = sectionBlocks.some(block => hasRasterHandwritingImage(block));
+      const handwritingMarginBaseline = toInchesCssValue(HANDWRITING_CONTENT_MARGIN_LEFT_IN);
 
       for (const block of sectionBlocks) {
         if (block.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
@@ -1761,6 +1781,19 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
 
         const isTitleBlock = block === titleBlock;
         const isDateBlock = block === dateBlock;
+
+        if (!isTitleBlock && !isDateBlock && block !== firstContentBlock && hasRasterHandwritingContent) {
+          const nextHandwritingMargin = normalizeContentBlockToExactBaselineStyle(styleText, handwritingMarginBaseline);
+          if (nextHandwritingMargin.changed) {
+            if (nextHandwritingMargin.style) {
+              block.setAttribute('style', nextHandwritingMargin.style);
+            } else {
+              block.removeAttribute('style');
+            }
+            handwritingContentMarginsStandardized += 1;
+          }
+        }
+
         if (!isTitleBlock && !isDateBlock) continue;
 
         let next;
@@ -1795,6 +1828,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       widthsNormalized,
       rootMarginsStandardized,
       firstContentBlockMarginsStandardized,
+      handwritingContentMarginsStandardized,
       positionsStandardized,
       iconParagraphsAligned
     });

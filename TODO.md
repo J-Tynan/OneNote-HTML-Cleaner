@@ -153,6 +153,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 **Notes / Deferred items**
 - `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
+- Progress (2026-03-06): started follow-on content margin normalization for raster-handwriting pages and added focused direction-layout unit coverage.
 
 ### Manual Convert Button
 - [x] Convert button implemented and tested.
