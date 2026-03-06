@@ -8,6 +8,7 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Recent Success
 
+- [x] PWA homepage: add subtle spacing around `Import files` card and remove `Conversion method` copy from Advanced options (2026-03-06)
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
 - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
 - [x] Convert-button end-to-end smoke test added: `Tests/convert-button-smoke-playwright.js` (2026-02-24)
