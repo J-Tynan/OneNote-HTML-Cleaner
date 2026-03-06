@@ -384,7 +384,7 @@ async function processEntryWithWorker(entry) {
   try {
     const conversionConfig = runtime.downloadHelpers
       ? runtime.downloadHelpers.getConversionConfig()
-      : { Profile: 'cornell', TailwindCssHref: 'assets/tailwind-output.css' };
+      : { Profile: 'onenote', TailwindCssHref: 'assets/tailwind-output.css' };
     entry.conversionConfig = conversionConfig;
     const sourceKind = detectSourceKind(entry.name, entry.file.type);
     const payload = {

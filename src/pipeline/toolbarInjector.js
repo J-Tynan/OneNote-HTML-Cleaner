@@ -132,12 +132,11 @@ function buildScriptTag() {
     metadata = null;
   }
 
-  function hasCornellClass(node){
+  function hasSemanticsMarker(node){
     if (!node || !node.closest) return false;
-    const hit = node.closest('[class]');
-    if (!hit) return false;
-    const className = String(hit.className || '');
-    return /\\bcornell-/i.test(className);
+    const semanticHit = node.closest('[data-onc-table-layout],[data-onc-col-role]');
+    if (semanticHit) return true;
+    return false;
   }
 
   function editableTargets(){
@@ -145,7 +144,7 @@ function buildScriptTag() {
     return targets.filter((node) => {
       if (!node || !node.tagName) return false;
       if (node.closest('#${TOOLBAR_ROOT_ID}')) return false;
-      if (hasCornellClass(node)) return false;
+      if (hasSemanticsMarker(node)) return false;
       return true;
     });
   }

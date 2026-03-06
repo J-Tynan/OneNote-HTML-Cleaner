@@ -2,16 +2,10 @@ function normalizeText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
-function addClass(el, className) {
-  if (!el || !className) return;
-  if (typeof el.classList !== 'undefined') {
-    el.classList.add(className);
-    return;
-  }
-
-  const classes = new Set(String(el.getAttribute('class') || '').split(/\s+/).filter(Boolean));
-  classes.add(className);
-  el.setAttribute('class', Array.from(classes).join(' '));
+function setDataAttr(el, name, value) {
+  if (!el || !name) return;
+  if (value === null || value === undefined || value === '') return;
+  el.setAttribute(name, String(value));
 }
 
 function getRowCells(row) {
@@ -60,12 +54,12 @@ function classifyTable(table) {
   };
 }
 
-export function annotateCornellSemantics(doc, options = {}) {
+export function annotateTableSemantics(doc, options = {}) {
   const logs = [];
   const tables = Array.from(doc.querySelectorAll('table'));
-  let tablesTagged = 0;
-  let cueCellsTagged = 0;
-  let notesCellsTagged = 0;
+  let tablesAnnotated = 0;
+  let leadingCellsAnnotated = 0;
+  let detailCellsAnnotated = 0;
   const allowFallback = options.allowFallback !== false;
 
   tables.forEach(table => {
@@ -73,33 +67,35 @@ export function annotateCornellSemantics(doc, options = {}) {
     if (!classification) return;
     if (!allowFallback && !classification.hasDetectedHeaders) return;
 
-    addClass(table, 'cornell-table');
-    tablesTagged += 1;
+    // Keep table semantics generic and avoid legacy profile classes.
+    setDataAttr(table, 'data-onc-table-layout', 'two-column');
+    tablesAnnotated += 1;
 
     classification.rows.forEach(row => {
       const cells = getRowCells(row);
       const cueCell = cells[classification.cueIndex];
       const notesCell = cells[classification.notesIndex];
       if (cueCell) {
-        addClass(cueCell, 'cues');
-        cueCellsTagged += 1;
+        setDataAttr(cueCell, 'data-onc-col-role', 'leading');
+        leadingCellsAnnotated += 1;
       }
       if (notesCell) {
-        addClass(notesCell, 'notes');
-        notesCellsTagged += 1;
+        setDataAttr(notesCell, 'data-onc-col-role', 'detail');
+        detailCellsAnnotated += 1;
       }
     });
   });
 
-  if (tablesTagged) {
+  if (tablesAnnotated) {
     logs.push({
-      step: 'annotateCornellSemantics',
-      tablesTagged,
-      cueCellsTagged,
-      notesCellsTagged,
+      step: 'annotateTableSemantics',
+      tablesAnnotated,
+      leadingCellsAnnotated,
+      detailCellsAnnotated,
       allowFallback
     });
   }
 
   return logs;
 }
+

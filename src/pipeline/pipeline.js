@@ -3,7 +3,7 @@ import { parseHtmlToDocument, documentToHtml } from './parser.js';
 import { normalizePipelineConfig } from './config.js';
 import * as sanitize from './sanitize.js';
 import { fixLists } from './listRepair.js';
-import { annotateCornellSemantics } from './cornellSemantics.js';
+import { annotateTableSemantics } from './Semantics.js';
 import { mergeCreatedDateTimeRow } from './dateTimeLayout.js';
 import { migrateInlineStylesToUtilities } from './inlineStyleMigration.js';
 import * as images from './images.js';
@@ -64,6 +64,7 @@ export async function runPipeline(htmlString, config = {}) {
     // clean up tables: obsolete attrs, legacy xmlns, summary
     if (resolvedConfig.NormalizeTables !== false) {
       logs.push(...ensureArray(sanitize.normalizeTableAttributes(doc)));
+      logs.push(...ensureArray(sanitize.normalizeTableCellParagraphMargins(doc)));
     }
     if (resolvedConfig.OutputCleanupMode === 'safe') {
       logs.push(...ensureArray(sanitize.stripObsoleteHeadArtifacts(doc)));
@@ -97,10 +98,10 @@ export async function runPipeline(htmlString, config = {}) {
       })));
     }
 
-    const useCornellSemantics = resolvedConfig.UseCornellSemantics !== false;
-    if (useCornellSemantics) {
-      logs.push(...ensureArray(annotateCornellSemantics(doc, {
-        allowFallback: resolvedConfig.CornellHeaderFallback !== false
+    const useTableSemantics = resolvedConfig.UseTableSemantics !== false;
+    if (useTableSemantics) {
+      logs.push(...ensureArray(annotateTableSemantics(doc, {
+        allowFallback: resolvedConfig.TableHeaderFallback !== false
       })));
     }
 

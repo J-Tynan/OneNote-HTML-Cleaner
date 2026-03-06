@@ -32,7 +32,7 @@ async function main() {
     ToolbarBundleMode: 'inline',
     SourceName: 'Sample.mht',
     SourceKind: 'mht',
-    Profile: 'cornell',
+    Profile: 'onenote',
     WarningSummary: { total: 2, info: 1, warning: 1, error: 0 }
   });
 

@@ -120,8 +120,8 @@ const PROFILE_PRESETS = {
     ListMarginLeft: '0.35em',
     ListPaddingLeft: '1.2em',
     NormalizeAllListIndent: true,
-    UseCornellSemantics: true,
-    CornellHeaderFallback: true,
+    UseTableSemantics: true,
+    TableHeaderFallback: true,
     MergeCreatedDateTime: true,
     CreatedDateTimeGap: '0.75em',
     MigrateInlineStylesToUtilities: true,
@@ -152,13 +152,19 @@ const PROFILE_PRESETS = {
 function normalizeProfile(value) {
   const profile = String(value || '').trim().toLowerCase();
   if (!profile) return SINGLE_PROFILE;
-  if (profile === 'cornell' || profile === 'generic' || profile === SINGLE_PROFILE) {
+  if (profile === 'generic' || profile === 'onenote' || profile === SINGLE_PROFILE) {
     return SINGLE_PROFILE;
   }
   return SINGLE_PROFILE;
 }
 
 export function normalizePipelineConfig(rawConfig = {}) {
+  const useTableSemantics = Object.prototype.hasOwnProperty.call(rawConfig, 'UseTableSemantics')
+    ? toBoolean(rawConfig.UseTableSemantics, true)
+    : true;
+  const tableHeaderFallback = Object.prototype.hasOwnProperty.call(rawConfig, 'TableHeaderFallback')
+    ? toBoolean(rawConfig.TableHeaderFallback, true)
+    : true;
   const profile = normalizeProfile(rawConfig.Profile || rawConfig.profile);
   const preset = PROFILE_PRESETS[SINGLE_PROFILE];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
@@ -187,6 +193,8 @@ export function normalizePipelineConfig(rawConfig = {}) {
     ...normalizedExportConfig,
     ...normalizedConvertedPageThemeConfig,
     Profile: SINGLE_PROFILE,
+    UseTableSemantics: useTableSemantics,
+    TableHeaderFallback: tableHeaderFallback,
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy,
     NormalizeDirectionLayout: normalizeDirectionLayout,

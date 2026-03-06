@@ -415,6 +415,19 @@ export function normalizeAccessibleTextContrast(doc) {
 }
 
 
+function compactHeadWhitespaceNodes(head) {
+  if (!head || !head.childNodes) return 0;
+  let removed = 0;
+  Array.from(head.childNodes).forEach((node) => {
+    if (!node || node.nodeType !== 3) return;
+    if (/^\s*$/.test(node.nodeValue || '')) {
+      node.remove();
+      removed += 1;
+    }
+  });
+  return removed;
+}
+
 export function ensureHead(doc, options = {}) {
   const logs = [];
   let head = doc.querySelector('head');
@@ -424,6 +437,11 @@ export function ensureHead(doc, options = {}) {
     head = doc.createElement('head');
     html.insertBefore(head, html.firstChild);
     logs.push({ step: 'EnsureHead', details: 'Inserted missing <head>' });
+  }
+
+  const compactedHeadNodes = compactHeadWhitespaceNodes(head);
+  if (compactedHeadNodes) {
+    logs.push({ step: 'CompactHeadWhitespace', removedTextNodes: compactedHeadNodes });
   }
 
   // Ensure/normalize page-level language on <html>
@@ -595,6 +613,36 @@ export function normalizeTableAttributes(doc, options = {}) {
     }
     if (removed.length) logs.push({ step: 'NormalizeTableAttr', tag: 'TABLE', removed });
   });
+  return logs;
+}
+
+// In converted OneNote tables, paragraph margins are often omitted on <p>
+// while equivalent cells use margin:0. Browser default <p> margins then make
+// some rows taller. Normalize missing margins inside table cells to preserve
+// author-chosen row heights.
+export function normalizeTableCellParagraphMargins(doc) {
+  const logs = [];
+  const paragraphs = Array.from(doc.querySelectorAll('table td > p, table th > p'));
+  let updated = 0;
+
+  paragraphs.forEach((paragraph) => {
+    const styleText = String(paragraph.getAttribute('style') || '');
+    const entries = parseInlineStyle(styleText);
+    const hasMargin = entries.some(({ prop }) => prop === 'margin');
+    const hasMarginTop = entries.some(({ prop }) => prop === 'margin-top');
+    const hasMarginBottom = entries.some(({ prop }) => prop === 'margin-bottom');
+    if (hasMargin || hasMarginTop || hasMarginBottom) return;
+
+    entries.push({ prop: 'margin', value: '0' });
+    const nextStyle = serializeInlineStyle(entries);
+    paragraph.setAttribute('style', nextStyle);
+    updated += 1;
+  });
+
+  if (updated) {
+    logs.push({ step: 'NormalizeTableCellParagraphMargins', updated });
+  }
+
   return logs;
 }
 
@@ -1287,6 +1335,7 @@ function getNumericDimension(value) {
 }
 
 const MIN_CONTENT_MARGIN_LEFT_IN = 0.125;
+const HANDWRITING_CONTENT_MARGIN_LEFT_IN = 0.075;
 
 function parseCssLengthToInches(value) {
   const text = String(value || '').trim().toLowerCase();
@@ -1357,6 +1406,11 @@ function isImageDominantContentBlock(block) {
   Array.from(cloned.querySelectorAll('img')).forEach(img => img.remove());
   const text = cleanInlineText(cloned.textContent || '');
   return text.length === 0;
+}
+
+function hasRasterHandwritingImage(block) {
+  if (!block || !block.querySelector) return false;
+  return !!block.querySelector('img[data-handwriting="raster"]');
 }
 
 function isStandaloneIconParagraph(paragraph) {
@@ -1688,7 +1742,11 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
 
         if (block === firstContentBlock) {
           const contentMarginBaselineForBlock = isImageDominantContentBlock(block)
-            ? toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN)
+            ? toInchesCssValue(
+              hasRasterHandwritingImage(block)
+                ? HANDWRITING_CONTENT_MARGIN_LEFT_IN
+                : MIN_CONTENT_MARGIN_LEFT_IN
+            )
             : contentBaselineMarginLeft;
           const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, contentMarginBaselineForBlock);
           if (nextContentStyle.changed) {

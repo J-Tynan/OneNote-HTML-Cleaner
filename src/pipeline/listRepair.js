@@ -168,7 +168,9 @@ function addClasses(el, classNames) {
 
 function normalizeCueColumnLists(doc) {
   const logs = [];
-  const cueLists = Array.from(doc.querySelectorAll('td.cues ol, td.cues ul'));
+  const cueLists = Array.from(doc.querySelectorAll(
+    'td[data-onc-col-role="leading"] ol, td[data-onc-col-role="leading"] ul, td.cues ol, td.cues ul'
+  ));
   let updated = 0;
 
   cueLists.forEach(list => {

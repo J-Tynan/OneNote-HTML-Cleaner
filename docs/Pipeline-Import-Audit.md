@@ -16,7 +16,7 @@ Audit `src/pipeline/*` for import-time side-effects (code that runs during modul
 - `src/pipeline/images.js`
 - `src/pipeline/format.js`
 - `src/pipeline/toolbarInjector.js`
-- `src/pipeline/cornellSemantics.js`
+- `src/pipeline/Semantics.js`
 - `src/pipeline/dateTimeLayout.js`
 - `src/pipeline/config.js`
 

@@ -103,7 +103,7 @@ console.log('running markdown IR unit tests');
     '<table>',
     '  <tr><td>',
     '    <div>',
-    '      <table class="cornell-table">',
+    '      <table data-onc-table-layout="two-column">',
     '        <tr><td>Class:</td><td>Test class</td></tr>',
     '        <tr><td>Topic:</td><td>Test topic</td></tr>',
     '      </table>',

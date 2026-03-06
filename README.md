@@ -12,7 +12,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Modular pipeline layout created under `src/pipeline/`.
 - Initial test and fixture structure added.
 - ZIP export support via JSZip (requires `npm install`).
-- Tailwind utility baseline added for converted Cornell-style output (non-destructive, no preflight reset).
+- Tailwind utility baseline added for converted OneNote output (non-destructive, no preflight reset).
  - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
  - Experimental support for native OneNote files (`.one`, `.onepkg`) is available but not fully implemented; see the "Native OneNote files" section for known limitations and recommended developer workflows.
  - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and will be added in future feature branches.
@@ -108,10 +108,10 @@ The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it 
 ## Tailwind Migration (Scoped)
 
 - Tailwind runs with `preflight` disabled to avoid global resets.
-- Pipeline adds semantic classes for Cornell-style tables/cells:
-	- `table` -> `cornell-table`
-	- cue column cell -> `cues`
-	- notes column cell -> `notes`
+- Pipeline adds neutral semantic data attributes for two-column note tables/cells:
+	- `table` -> `data-onc-table-layout="two-column"`
+	- leading column cell -> `data-onc-col-role="leading"`
+	- detail column cell -> `data-onc-col-role="detail"`
 - Cue-column lists are normalized with utility classes (`list-inside`, `pl-0`) while preserving numbering.
 - Safe inline style migration maps only:
 	- `font-family`, `font-size`, `font-weight`, `margin-top`, `margin-bottom`
@@ -119,8 +119,8 @@ The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it 
 
 ## Conversion Profiles
 
-- `Cornell (tuned)`: current default in the UI, optimized for Cornell-style note pages.
-- `Generic OneNote`: broader mode for varied pages; Cornell-specific transforms are disabled, while list indentation normalization and created date/time row merge remain enabled.
+- `OneNote`: default profile in the UI, optimized for exported OneNote note pages.
+- Legacy profile alias (`generic`) is still accepted and normalizes to `onenote`.
 
 The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
 

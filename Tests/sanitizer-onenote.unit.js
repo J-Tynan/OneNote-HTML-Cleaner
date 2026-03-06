@@ -12,6 +12,7 @@ function sanitizeHtml(html) {
   const doc = dom.window.document;
   sanitize.removeOneNoteMeta(doc);
   sanitize.removeOfficeArtifacts(doc);
+  sanitize.normalizeTableCellParagraphMargins(doc);
   sanitize.sanitizeImageAttributes(doc);
   sanitize.removeNbsp(doc);
   return doc.documentElement.outerHTML;
@@ -45,6 +46,11 @@ function sanitizeHtml(html) {
       name: 'list style cleaning',
       input: '<ul style="padding-left:40px;mso-list:l0 level1 lfo1"><li>one</li></ul>',
       forbid: ['mso-list'],
+    },
+    {
+      name: 'table cell paragraph margin normalization',
+      input: '<table><tr><td><p><code style="margin:0in">Header 1</code></p></td><td><p style="margin:0in">Row 1</p></td></tr></table>',
+      expectContains: ['<p style="margin: 0"><code style="margin:0in">Header 1</code></p>', '<p style="margin:0in">Row 1</p>'],
     }
   ];
 
