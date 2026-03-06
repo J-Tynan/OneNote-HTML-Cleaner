@@ -50,14 +50,19 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
     const tolerance = 1;
     const leftAligned = leftDelta <= tolerance;
     const rightAligned = rightDelta <= tolerance;
+    const headerWithinViewport = rect.left >= -tolerance && rect.right <= (window.innerWidth + tolerance);
+    const documentHasHorizontalOverflow = document.documentElement.scrollWidth > (window.innerWidth + tolerance);
 
     return {
-      ok: leftAligned && rightAligned,
+      ok: leftAligned && rightAligned && headerWithinViewport,
       leftAligned,
       rightAligned,
+      headerWithinViewport,
+      documentHasHorizontalOverflow,
       leftDelta,
       rightDelta,
       innerWidth: window.innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
       headerRect: {
         left: rect.left,
         right: rect.right,
@@ -93,6 +98,12 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
     await desktopPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(desktopPage, 'desktop');
     await desktopContext.close();
+
+    const tabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
+    const tabletPage = await tabletContext.newPage();
+    await tabletPage.goto(url, { waitUntil: 'networkidle' });
+    await assertHeaderEdgeToEdge(tabletPage, 'tablet-layout-b');
+    await tabletContext.close();
 
     const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const mobilePage = await mobileContext.newPage();

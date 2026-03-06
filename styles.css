@@ -1,12 +1,7 @@
-/* prevent layout shift when vertical scrollbar appears/disappears */
+/* Keep horizontal overflow disabled and avoid gutter-induced edge gaps.
+   We prefer stable visual edge alignment over reserved scrollbar gutters. */
 html {
-  scrollbar-gutter: stable;
-}
-
-@supports not (scrollbar-gutter: stable) {
-  html {
-    overflow-y: scroll;
-  }
+  overflow-x: hidden;
 }
 :root {
   color-scheme: light;
@@ -98,7 +93,7 @@ details[open] > summary {
 
   /* Header follows the same surface token so it reads consistently in dark */
   header {
-    width: 100vw;
+    width: 100%;
     background-color: var(--bg-card);
     border-bottom-color: var(--border-muted);
   }
