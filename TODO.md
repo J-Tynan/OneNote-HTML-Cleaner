@@ -303,7 +303,7 @@ Initial scope:
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [ ] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
 - [ ] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
-- [ ] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name.
+- [x] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name. (2026-03-07, automated via `Tests/externalize-css-visual-parity-playwright.js`)
 - [ ] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
 - [ ] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
 - [ ] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
