@@ -153,6 +153,12 @@ All items in this section must be satisfied before tagging the first stable rele
 **Immediate Next Priority**
 - **Document External CSS behavior (P3):** finalize behavior/constraints guidance in `README.md` and in-app help. (updated 2026-03-07)
 
+Next steps (pick these up tomorrow):
+- [ ] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats.
+- [ ] Add in-app help text and tooltip copy explaining when externalized CSS is suitable and warnings for single-file downloads without assets.
+- [ ] Add a small smoke/test example (or test instruction) demonstrating per-page vs shared CSS outputs and link integrity.
+- [ ] Open a focused PR with the documentation and test updates, referencing this TODO and `PR #11` where relevant.
+
 **Notes / Deferred items**
 - `Test Handwriting.html` follow-on content baseline margin normalization shipped with regression coverage in `Tests/direction-layout-normalization.unit.js`. Keep monitoring future handwriting fixtures for edge cases. (updated 2026-03-07)
 
