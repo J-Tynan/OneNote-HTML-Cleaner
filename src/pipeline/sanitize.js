@@ -1168,6 +1168,7 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
 // cell constants for environments without global Node (e.g. Node.js/jsdom)
 const ELEMENT_NODE = typeof Node !== 'undefined' ? Node.ELEMENT_NODE : 1;
 const TEXT_NODE = typeof Node !== 'undefined' ? Node.TEXT_NODE : 3;
+const DOCUMENT_POSITION_PRECEDING = typeof Node !== 'undefined' ? Node.DOCUMENT_POSITION_PRECEDING : 2;
 
 function parseNumericFontSize(styleText = '') {
   const m = String(styleText || '').match(/font-size\s*:\s*([0-9]*\.?[0-9]+)\s*(pt|px|em|rem)/i);
@@ -1967,8 +1968,15 @@ export function ensureMainHeading(doc, options = {}) {
   // ensure there's an <h1> inside main
   let h1 = main.querySelector('h1');
   const titleLike = findOneNoteTitleElement(main);
+  const titleLikePrecedesExistingH1 = Boolean(
+    h1 &&
+    titleLike &&
+    h1 !== titleLike &&
+    (h1.compareDocumentPosition(titleLike) & DOCUMENT_POSITION_PRECEDING)
+  );
+  const shouldPromoteTitleLike = Boolean(titleLike && (!h1 || titleLikePrecedesExistingH1));
 
-  if (titleLike) {
+  if (shouldPromoteTitleLike) {
     if (titleLike.tagName && titleLike.tagName.toLowerCase() === 'h1') {
       h1 = titleLike;
       if (!main.contains(h1)) {
