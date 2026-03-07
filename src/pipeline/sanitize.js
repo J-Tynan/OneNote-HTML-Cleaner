@@ -837,6 +837,9 @@ function isVisualSpacerElement(el) {
   const tag = String(el.tagName || '').toLowerCase();
   if (tag === 'br') return true;
   if (tag !== 'p' && tag !== 'div') return false;
+  if (el.querySelector && el.querySelector('img,svg,canvas,picture,video,audio,iframe,object,embed,table,ul,ol,pre,code')) {
+    return false;
+  }
   return cleanInlineText(el.textContent || '') === '';
 }
 
@@ -1625,6 +1628,25 @@ function looksLikeTitleContainer(el) {
   return directChildren.some(child => looksLikeOneNoteTitleCandidate(child));
 }
 
+function isOneNoteFloatingFileReferencePlaceholder(el) {
+  if (!el || !el.tagName || String(el.tagName).toLowerCase() !== 'div') return false;
+  if (el.querySelector && el.querySelector('img,svg,canvas,picture,video,audio,iframe,object,embed,table,ul,ol,pre,code')) {
+    return false;
+  }
+
+  const text = cleanInlineText(el.textContent || '');
+  if (!/^<<[^<>]{1,200}>>$/.test(text)) return false;
+
+  const styleMap = styleEntriesToMap(el.getAttribute('style') || '');
+  const direction = String(styleMap.get('direction') || '').trim().toLowerCase();
+  if (direction !== 'ltr') return false;
+
+  const marginTop = parseCssLengthToInches(styleMap.get('margin-top') || '');
+  if (marginTop === null || marginTop < 1) return false;
+
+  return true;
+}
+
 export function normalizeDirectionLayoutContainers(doc, options = {}) {
   const logs = [];
   const main = doc.querySelector('main');
@@ -1709,9 +1731,21 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
   let firstContentBlockMarginsStandardized = 0;
   let handwritingContentMarginsStandardized = 0;
   let iconParagraphsAligned = 0;
+  let placeholderReferencesRemoved = 0;
   if (standardizeHeaderDatePositions) {
     if (rootLayout) {
-      const sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+      let sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+
+      sectionBlocks.forEach((block) => {
+        if (isOneNoteFloatingFileReferencePlaceholder(block)) {
+          block.remove();
+          placeholderReferencesRemoved += 1;
+        }
+      });
+      if (placeholderReferencesRemoved > 0) {
+        sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+      }
+
       let titleBlock = null;
       let dateBlock = null;
       let firstContentBlock = null;
@@ -1821,7 +1855,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
     }
   }
 
-  if (wrappersUnwrapped || widthsNormalized || rootMarginsStandardized || firstContentBlockMarginsStandardized || positionsStandardized || iconParagraphsAligned) {
+  if (wrappersUnwrapped || widthsNormalized || rootMarginsStandardized || firstContentBlockMarginsStandardized || positionsStandardized || iconParagraphsAligned || placeholderReferencesRemoved) {
     logs.push({
       step: 'NormalizeDirectionLayoutContainers',
       wrappersUnwrapped,
@@ -1830,7 +1864,8 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       firstContentBlockMarginsStandardized,
       handwritingContentMarginsStandardized,
       positionsStandardized,
-      iconParagraphsAligned
+      iconParagraphsAligned,
+      placeholderReferencesRemoved
     });
   }
 

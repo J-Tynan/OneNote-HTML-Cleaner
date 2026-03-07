@@ -86,6 +86,13 @@ details[open] > summary {
     border-color: var(--border-muted);
   }
 
+  /* Explicit fallback spacing/border for the import panel in case utility expansion is unavailable. */
+  .import-card {
+    padding: 1rem;
+    border: 1px solid var(--border-muted);
+    border-radius: 0.75rem;
+  }
+
   /* Softer contextual surface (status, diagnostics, advanced zones) */
   .card-panel--soft {
     background-color: var(--bg-soft);
@@ -166,6 +173,91 @@ details[open] > summary {
 
 .file-item:hover {
   background-color: var(--bg-soft);
+}
+
+#appStateBadge {
+  border: 1px solid var(--border-muted);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+
+#appStateBadge[data-state="queued"] {
+  background-color: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0c4a6e;
+}
+
+html.dark #appStateBadge[data-state="queued"] {
+  background-color: #082f49;
+  border-color: #0c4a6e;
+  color: #bae6fd;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-muted);
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.status-pill--queued {
+  background-color: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0c4a6e;
+}
+
+html.dark .status-pill--queued {
+  background-color: #082f49;
+  border-color: #0c4a6e;
+  color: #bae6fd;
+}
+
+.status-pill--working {
+  background-color: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+html.dark .status-pill--working {
+  background-color: #422006;
+  border-color: #92400e;
+  color: #fde68a;
+}
+
+.status-pill--success {
+  background-color: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+
+html.dark .status-pill--success {
+  background-color: #052e16;
+  border-color: #166534;
+  color: #86efac;
+}
+
+.status-pill--error {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+html.dark .status-pill--error {
+  background-color: #450a0a;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+.status-pill--unsupported,
+.status-pill--neutral {
+  background-color: var(--bg-soft);
+  border-color: var(--border-muted);
+  color: var(--text-muted);
 }
 
 /* === DROPZONE DRAG HIGHLIGHT === */

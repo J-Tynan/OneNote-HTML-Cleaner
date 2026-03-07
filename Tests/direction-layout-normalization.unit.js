@@ -189,11 +189,9 @@ function createDoc(html) {
       standardizeHeaderDatePositions: true
     });
 
-    const followOnBlock = doc.querySelector('main > div > div:nth-child(4)');
-    assert(followOnBlock);
-    const followOnStyle = String(followOnBlock.getAttribute('style') || '');
-    assert(/\bmargin-left\s*:\s*0?\.075in/i.test(followOnStyle));
-    assert(logs.some(entry => entry && entry.step === 'NormalizeDirectionLayoutContainers' && entry.handwritingContentMarginsStandardized >= 1));
+    const placeholderText = doc.querySelector('main > div > div:nth-child(4) > p');
+    assert(!placeholderText);
+    assert(logs.some(entry => entry && entry.step === 'NormalizeDirectionLayoutContainers' && entry.placeholderReferencesRemoved >= 1));
   }
 
   console.log('direction-layout-normalization: PASS');

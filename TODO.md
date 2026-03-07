@@ -8,6 +8,8 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Recent Success
 
+- [x] Fix MHT spacer regression: preserve image-only paragraphs before footer so `DevToys.mht` keeps embedded `data:image/*;base64` icons in cleaned HTML (2026-03-07)
+- [x] PWA dark theme: queue status indicators (`Queued` app badge + per-file status pills) now use explicit dark-mode-aware styling (2026-03-07)
 - [x] PWA homepage: add subtle spacing around `Import files` card and remove `Conversion method` copy from Advanced options (2026-03-06)
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
 - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
@@ -134,7 +136,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Outstanding Visual Tasks
 
-- [ ] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — currently wider than ideal; requires layout heuristic adjustments and regression fixtures.
+- [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) with follow-on content baseline normalization and regression coverage. (2026-03-06)
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
 - [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
@@ -149,11 +151,10 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
 **Immediate Next Priority**
-- **Tune left-margin for handwriting-heavy pages (P2):** Reduce residual visual gap in `Test Handwriting.html` while preserving current list/layout regression stability. (updated 2026-03-03)
+- **Externalized CSS review follow-up (P2):** Audit generated CSS, consolidate over-generated selectors, and add visual regression checks to confirm parity with embedded-style baseline. (updated 2026-03-07)
 
 **Notes / Deferred items**
-- `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
-- Progress (2026-03-06): started follow-on content margin normalization for raster-handwriting pages and added focused direction-layout unit coverage.
+- `Test Handwriting.html` follow-on content baseline margin normalization shipped with regression coverage in `Tests/direction-layout-normalization.unit.js`. Keep monitoring future handwriting fixtures for edge cases. (updated 2026-03-07)
 
 ### Manual Convert Button
 - [x] Convert button implemented and tested.

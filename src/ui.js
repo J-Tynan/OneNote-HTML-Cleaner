@@ -100,9 +100,20 @@ function updateStatusVisibility() {
     dom.appStateBadge.textContent = count === 0
       ? STATUS_EMPTY
       : `${count} queued`;
+    dom.appStateBadge.setAttribute('data-state', count === 0 ? 'empty' : 'queued');
   }
 
   updateZipButton();
+}
+
+function getStatusTone(status) {
+  const normalized = String(status || '').toLowerCase();
+  if (normalized === 'queued') return 'queued';
+  if (normalized === 'working' || normalized === 'processing' || normalized === 'in-progress') return 'working';
+  if (normalized === 'success' || normalized === 'completed' || normalized === 'done') return 'success';
+  if (normalized === 'error' || normalized === 'failed') return 'error';
+  if (normalized === 'unsupported') return 'unsupported';
+  return 'neutral';
 }
 
 /* === DIAGNOSTICS UI === */
@@ -492,6 +503,7 @@ export function renderFileList() {
     const safeName = escapeHtml(entry.name);
     const displayStatus = entry.status === 'unsupported' ? STATUS_UNSUPPORTED : (entry.status || 'queued');
     const safeStatus = escapeHtml(displayStatus);
+    const statusTone = getStatusTone(displayStatus);
     const safeSize = escapeHtml(formatBytes(entry.size));
     const safeMessage = entry.message ? escapeHtml(entry.message) : '';
     const outputFormat = getEntryOutputFormat(entry);
@@ -507,11 +519,15 @@ export function renderFileList() {
     const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
 
     return `
-      <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}">
+      <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}" data-status="${statusTone}">
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0">
             <p class="truncate text-sm font-semibold text-slate-900">${safeName}</p>
-            <p class="mt-1 text-xs text-slate-500">${safeSize} · ${safeStatus}</p>
+            <p class="mt-1 flex items-center gap-2 text-xs text-slate-500">
+              <span>${safeSize}</span>
+              <span aria-hidden="true">&middot;</span>
+              <span class="status-pill status-pill--${statusTone}">${safeStatus}</span>
+            </p>
             ${safeMessage ? `<p class="mt-1 text-xs text-muted">${safeMessage}</p>` : ''}
           </div>
           <button
