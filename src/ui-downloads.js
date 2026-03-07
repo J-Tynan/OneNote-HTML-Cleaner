@@ -1,5 +1,6 @@
 // src/ui-downloads.js
 import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
+import { normalizeExportStem, buildUniqueFilename } from './export-filenames.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
@@ -213,14 +214,9 @@ export function createDownloadHelpers(ctx, updateZipButton) {
 
       if (externalizeEnabled && cssContent) {
         if (cssMode === 'per-page') {
-          const stem = String(name || 'output.html').replace(/\.html$/i, '') || 'output';
-          let cssName = `${stem}.css`;
-          let suffix = 2;
-          while (perPageCssTaken.has(cssName)) {
-            cssName = `${stem} (${suffix}).css`;
-            suffix += 1;
-          }
-          perPageCssTaken.add(cssName);
+          const rawStem = String(name || 'output.html').replace(/\.[^./\\]+$/i, '') || 'output';
+          const stem = normalizeExportStem(rawStem, { fallback: 'converted-page' });
+          const cssName = buildUniqueFilename(stem, 'css', perPageCssTaken);
           content = ensureStylesheetLink(content, cssName);
           zip.file(cssName, `${cssContent}\n`);
         } else {
