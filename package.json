@@ -42,6 +42,7 @@
     "test:inline-style-threshold-warning": "node ./Tests/inline-style-threshold-warning.unit.js",
     "test:externalize-css": "node ./Tests/externalize-css.unit.js",
     "test:style-dependency": "node ./Tests/style-dependency.unit.js",
+    "test:externalize-css:visual": "node ./Tests/externalize-css-visual-parity-playwright.js",
     "test:export-independence": "node ./Tests/export-independence.unit.js",
     "test:idempotence": "node ./Tests/check-sanitizer-idempotence.js",
     "test:rerun-equivalence": "node ./Tests/check-rerun-equivalence.js",

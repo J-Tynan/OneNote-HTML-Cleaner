@@ -3,6 +3,55 @@ import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
+function normalizeCssToken(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function canonicalizeCssDeclaration(value) {
+  const entries = String(value || '')
+    .split(';')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const idx = part.indexOf(':');
+      if (idx === -1) return null;
+      const prop = part.slice(0, idx).trim().toLowerCase();
+      const val = normalizeCssToken(part.slice(idx + 1));
+      if (!prop) return null;
+      return { prop, val };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.prop.localeCompare(b.prop));
+
+  return entries.map(({ prop, val }) => `${prop}:${val}`).join(';');
+}
+
+// Consolidates duplicated selector+declaration rule blocks while preserving first-seen order.
+export function consolidateCssRules(cssText) {
+  const css = String(cssText || '');
+  if (!css.trim()) return '';
+
+  const rules = [];
+  const seen = new Set();
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let match;
+
+  while ((match = re.exec(css)) !== null) {
+    const selector = normalizeCssToken(match[1]);
+    const declaration = canonicalizeCssDeclaration(match[2]);
+    if (!selector || !declaration) continue;
+
+    const key = `${selector}\u0000${declaration}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    rules.push(`${selector} { ${declaration} }`);
+  }
+
+  // Fallback to original text when no parseable rule blocks are found.
+  if (!rules.length) return css.trim();
+  return rules.join('\n\n');
+}
+
 export function createDownloadHelpers(ctx, updateZipButton) {
   function normalizeExportFormat(value) {
     const normalized = String(value || '').trim().toLowerCase();
@@ -186,8 +235,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     }
 
     if (sharedCssParts.length) {
-      const uniqueParts = Array.from(new Set(sharedCssParts.filter(Boolean)));
-      zip.file(sharedCssFilename, `${uniqueParts.join('\n\n')}\n`);
+      const consolidated = consolidateCssRules(sharedCssParts.filter(Boolean).join('\n\n'));
+      zip.file(sharedCssFilename, `${consolidated}\n`);
     }
 
     if (warnings.length) {
