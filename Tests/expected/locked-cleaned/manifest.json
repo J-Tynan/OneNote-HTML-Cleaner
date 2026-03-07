@@ -1,6 +1,6 @@
 {
   "name": "locked-cleaned-fixtures",
-  "updatedAt": "2026-03-09T12:44:05.622Z",
+  "updatedAt": "2026-03-07T15:57:28.541Z",
   "source": "Tests/Cleaned",
   "requiredFiles": [
     "Communicate using Markdown.html",
@@ -22,7 +22,7 @@
     "Problematic mht-full-snippet.html": "bb86b4c7093c69876bc5f2cf8ddc35a983453bdb2a522a073e47170d03caae9c",
     "Problematic mht-sample.html": "a520c089cf98b3429301189f176a77d089eff594546d9db4075276c9fdb49d26",
     "Resolve merge conflicts.html": "c86a91b0007f93410cb3c7924d88368c412e528014b543618fc0776b978d12aa",
-    "Test Handwriting.html": "a99d5d5c3d29a30131d0d719d9ed48151b30ca6199291d0d67440bebce2ba7af",
+    "Test Handwriting.html": "ae288ffcd0645d1318b3a1d932bae40c3456479db26f1380f7132e228bdf58ff",
     "Test File.html": "c014986a0cc41cb4d66891d7bac10f9f9184036adaf6bd5752a6b96889bc81c1"
   }
 }
