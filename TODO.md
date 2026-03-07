@@ -8,6 +8,8 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Recent Success
 
+- [x] Fix MHT spacer regression: preserve image-only paragraphs before footer so `DevToys.mht` keeps embedded `data:image/*;base64` icons in cleaned HTML (2026-03-07)
+- [x] PWA dark theme: queue status indicators (`Queued` app badge + per-file status pills) now use explicit dark-mode-aware styling (2026-03-07)
 - [x] PWA homepage: add subtle spacing around `Import files` card and remove `Conversion method` copy from Advanced options (2026-03-06)
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
 - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
@@ -134,11 +136,10 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Outstanding Visual Tasks
 
-- [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — reduced residual visual gap; merged (PR #3) (2026-03-08)
+- [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) with follow-on content baseline normalization and regression coverage. (2026-03-06)
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
-- [x] Externalized CSS review follow-up: audited generated CSS, codified consolidation rules, and added representative embedded-vs-externalized parity regression coverage. (2026-03-09)
-- [x] Landed the follow-up (EXTERNALIZED-CSS-REVIEW.md, parity test, `ensureMainHeading` idempotence fix, and locked-fixture rebaseline) onto `main`. (2026-03-09)
-- [x] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives. (2026-03-09)
+- [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
+- [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
 
 ---
 
@@ -150,11 +151,10 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
 **Immediate Next Priority**
-- **Next Priority (P3):** enforce PR governance checklist for Markdown flavor changes so docs, fixtures, and tests stay in sync. (updated 2026-03-09)
+- **Externalized CSS review follow-up (P2):** Audit generated CSS, consolidate over-generated selectors, and add visual regression checks to confirm parity with embedded-style baseline. (updated 2026-03-07)
 
 **Notes / Deferred items**
-- `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
-- Progress (2026-03-06): started follow-on content margin normalization for raster-handwriting pages and added focused direction-layout unit coverage.
+- `Test Handwriting.html` follow-on content baseline margin normalization shipped with regression coverage in `Tests/direction-layout-normalization.unit.js`. Keep monitoring future handwriting fixtures for edge cases. (updated 2026-03-07)
 
 ### Manual Convert Button
 - [x] Convert button implemented and tested.
@@ -297,27 +297,21 @@ Initial scope:
 - [x] [P2] Define naming and path strategy for both modes (shared: one CSS asset per export batch; per-page: one CSS asset per converted page). (2026-02-27)
 - [x] [P2] Ensure externalized CSS output remains standalone-safe for expected usage (clear warning/help text when output is downloaded as a single HTML file without assets). (2026-02-27)
 - [x] [P2] Add regression and smoke tests for: toggle OFF parity, shared mode links, per-page mode links, and missing-asset behavior messaging. (2026-02-27)
-- [x] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help. (2026-03-08)
+- [ ] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help.
 
 #### Externalized CSS review follow-up (deferred to post-release)
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
-- [x] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability. (2026-03-08)
-- [x] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules. (2026-03-08)
-- [x] [P3] Compare visual parity against embedded-style baseline on representative fixtures and record any regressions by fixture name. (2026-03-08)
-- [x] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules. (2026-03-08)
-- [x] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling). (2026-03-08)
-- [x] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature. (2026-03-08)
-- [x] [P3] Add automated representative parity regression coverage so embedded-style and externalized outputs cannot silently diverge. (2026-03-09)
-
----
-
-## Recent Success
+- [ ] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
+- [ ] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
+- [ ] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name.
+- [ ] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
+- [ ] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
+- [ ] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
 
 ---
 
 ## Sanitization, Quality & Encoding (recommended)
- - [x] Add automated representative parity regression coverage so embedded-style and externalized outputs cannot silently diverge. (2026-03-09)
- - [x] Merge and land follow-up changes to `main` (2026-03-09): EXTERNALIZED-CSS-REVIEW.md, parity test, idempotence fix (`ensureMainHeading`), and rebaselined locked fixtures.
+
 ### Sanitization
 - [x] Remove Office/OneNote artifacts.
 - [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
@@ -369,7 +363,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 
 - [x] [P2] Document native import limitations and expected fidelity in `README.md` and release notes. (2026-02-27)
 - [x] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path. (2026-02-27)
-- [x] [P3] Polish page naming for GUID-like titles with a deterministic title strategy. (2026-03-09)
+- [ ] [P3] Polish page naming for GUID-like titles with a deterministic title strategy.
 - [x] [P2] Document Markdown export philosophy. (2026-03-03)
   - Semantic fidelity over visual parity
   - Obsidian as default flavor
