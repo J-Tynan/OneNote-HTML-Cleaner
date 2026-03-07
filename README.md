@@ -228,9 +228,13 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 ### Caveats
 
 - Optional **Externalize CSS** mode writes CSS sidecars for ZIP output; those exports remain self-contained when HTML and CSS assets stay together.
+- Exported page filenames now use a deterministic, readable strategy for downloads and ZIP entries:
+	- Prefer a meaningful source filename when available.
+	- If the source stem is GUID-like or generic, derive the name from page content (`<h1>` for HTML, first `#` heading for Markdown).
+	- Normalize to a filesystem-safe lowercase slug and apply deterministic collision suffixes (`-2`, `-3`, ...).
 - CSS sidecar naming strategy is deterministic for ZIP exports:
 	- Shared mode: always `converted-shared.css` at ZIP root.
-	- Per-page mode: `<page-stem>.css` (with ` (2)`, ` (3)`, ... suffixes on collisions).
+	- Per-page mode: `<page-stem>.css` (with `-2`, `-3`, ... suffixes on collisions).
 - Shared mode now consolidates duplicate selector+declaration rule blocks across pages during ZIP build to reduce repeated CSS in `converted-shared.css`.
 - If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
 - App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.

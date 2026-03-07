@@ -15,6 +15,7 @@
     "test:metadata:onepkg": "node ./Tests/metadata-onepkg-parser.js",
     "test:warnings:contract": "node ./Tests/warning-code-contract.js",
     "test:ui-downloads": "node ./Tests/ui-downloads-config.js",
+    "test:exported-page-naming": "node ./Tests/exported-page-naming.unit.js",
     "test:pipeline-config": "node ./Tests/pipeline-config.unit.js",
     "test:ui-download-smoke": "node ./Tests/ui-download-zip-playwright.js",
     "test:export-format-controls": "node ./Tests/export-format-controls-playwright.js",

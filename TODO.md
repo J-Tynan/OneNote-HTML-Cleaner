@@ -138,8 +138,8 @@ All items in this section must be satisfied before tagging the first stable rele
 
 - [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) with follow-on content baseline normalization and regression coverage. (2026-03-06)
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
-- [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
-- [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
+- [x] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline. (2026-03-07, via `tools/css-audit-report.js`, shared-bundle consolidation in `src/ui-downloads.js`, and `Tests/externalize-css-visual-parity-playwright.js`)
+- [x] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives. (2026-03-07, implemented via `src/export-filenames.js` with coverage in `Tests/exported-page-naming.unit.js`)
 
 ---
 
@@ -151,7 +151,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
 **Immediate Next Priority**
-- **Externalized CSS review follow-up (P2):** Audit generated CSS, consolidate over-generated selectors, and add visual regression checks to confirm parity with embedded-style baseline. (updated 2026-03-07)
+- **Document External CSS behavior (P3):** finalize behavior/constraints guidance in `README.md` and in-app help. (updated 2026-03-07)
 
 **Notes / Deferred items**
 - `Test Handwriting.html` follow-on content baseline margin normalization shipped with regression coverage in `Tests/direction-layout-normalization.unit.js`. Keep monitoring future handwriting fixtures for edge cases. (updated 2026-03-07)
@@ -301,12 +301,12 @@ Initial scope:
 
 #### Externalized CSS review follow-up (deferred to post-release)
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
-- [ ] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
-- [ ] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
+- [x] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability. (2026-03-07, automated audit report in `Tests/reports/css-audit-report.md`)
+- [x] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules. (2026-03-07, consolidation added in `src/ui-downloads.js` with unit coverage in `Tests/ui-downloads-css-consolidation.unit.js`)
 - [x] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name. (2026-03-07, automated via `Tests/externalize-css-visual-parity-playwright.js`)
 - [ ] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
 - [ ] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
-- [ ] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
+- [x] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature. (2026-03-07, published in `Tests/reports/css-audit-report.md`)
 
 ---
 
@@ -363,7 +363,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 
 - [x] [P2] Document native import limitations and expected fidelity in `README.md` and release notes. (2026-02-27)
 - [x] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path. (2026-02-27)
-- [ ] [P3] Polish page naming for GUID-like titles with a deterministic title strategy.
+- [x] [P3] Polish page naming for GUID-like titles with a deterministic title strategy. (2026-03-07, implemented via `src/export-filenames.js`)
 - [x] [P2] Document Markdown export philosophy. (2026-03-03)
   - Semantic fidelity over visual parity
   - Obsidian as default flavor

@@ -2,7 +2,8 @@
 
 import { createDownloadHelpers } from './ui-downloads.js';
 // theme variant functions now used indirectly; import removed
-import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
+import { detectSourceKind } from './importers/sourceKind.js';
+import { buildPreferredExportStem, buildUniqueFilename } from './export-filenames.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
 
 const logger = createLogger('ui');
@@ -259,21 +260,20 @@ function applyUiStyleVariant(variant) {
 
 function rebuildSuccessfulOutputs() {
   runtime.successfulOutputs.clear();
+  const usedNames = new Set();
 
   for (const entry of state.queue) {
     if (!isSuccessStatus(entry.status)) continue;
     const content = getEntryOutputContent(entry);
     if (!content) continue;
 
-    const stem = baseNameFromFile(entry.name || 'output');
     const extension = getEntryOutputFormat(entry) === 'markdown' ? 'md' : 'html';
-    let filename = `${stem}.${extension}`;
-    let index = 2;
-
-    while (runtime.successfulOutputs.has(filename)) {
-      filename = `${stem} (${index}).${extension}`;
-      index += 1;
-    }
+    const stem = buildPreferredExportStem({
+      sourceName: entry.name || 'output',
+      content,
+      format: getEntryOutputFormat(entry)
+    });
+    const filename = buildUniqueFilename(stem, extension, usedNames);
 
     runtime.successfulOutputs.set(filename, {
       content,
