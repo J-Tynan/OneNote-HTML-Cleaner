@@ -8,6 +8,7 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Recent Success
 
+- [x] PWA homepage: add subtle spacing around `Import files` card and remove `Conversion method` copy from Advanced options (2026-03-06)
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
 - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
 - [x] Convert-button end-to-end smoke test added: `Tests/convert-button-smoke-playwright.js` (2026-02-24)
@@ -128,14 +129,31 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] [P1] Add small indentation to lists (bullet, numbered). (2026-03-01)
 - [x] [P1] Move to a single OneNote parity-first conversion method (retire profile branching in UI/config). (2026-03-02)
 - [x] [P1] Loosen tight left margin on converted-page content for better OneNote visual parity. (completed 2026-03-02)
-- [x] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width. (2026-03-02)
+- [x] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width. (2026-03-06)
 - [x] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports. (2026-03-02)
 
+### Outstanding Visual Tasks
+
+- [ ] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — currently wider than ideal; requires layout heuristic adjustments and regression fixtures.
+- [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
+- [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
+- [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
+
+---
+
+## Toolbar Edit Controls
+
+- [x] Add Undo button to row of formatting tools (2026-03-03)
+- [x] Split heading control into H1–H4 buttons for explicit block styles (2026-03-03)
+- [x] Rename Hyperlink button to Link while keeping the dual-prompt flow (2026-03-03)
+- [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
+
 **Immediate Next Priority**
-- **Add guardrail for oversized inlined images (P2):** Prevent very large embedded images from forcing layout/margin regressions and from inflating exported artifacts. Recommended next step: add a size threshold, surface a warning in CLI/PWA, and add regression tests. (proposed 2026-03-02)
+- **Tune left-margin for handwriting-heavy pages (P2):** Reduce residual visual gap in `Test Handwriting.html` while preserving current list/layout regression stability. (updated 2026-03-03)
 
 **Notes / Deferred items**
 - `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
+- Progress (2026-03-06): started follow-on content margin normalization for raster-handwriting pages and added focused direction-layout unit coverage.
 
 ### Manual Convert Button
 - [x] Convert button implemented and tested.
@@ -242,7 +260,11 @@ Initial scope:
 - [x] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`). (2026-03-03)
 - [x] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats. (2026-03-03)
 - [x] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible (default). (2026-03-03)
-- [ ] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling.
+- [x] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling. (2026-03-04)
+- [x] [P2] Add canonical Markdown flavor standards reference with pinned upstream specs and behavior matrix in `docs/Markdown-Flavor-Standard.md`. (2026-03-04)
+- [x] [P2] Phase 2: Define 8-12 normative, per-flavor rules with pass/fail examples in `docs/Markdown-Flavor-Standard.md`. (2026-03-04)
+- [x] [P2] Phase 3: Convert normative rules into fixture-backed regression assertions for all four flavors. (2026-03-04)
+- [ ] [P3] Phase 4: Enforce PR governance checklist for flavor changes (docs + fixtures + tests updated together).
 - [x] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown. (2026-03-03)
 - [x] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing. (2026-03-03)
 - [x] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled. (2026-03-03)
@@ -259,12 +281,12 @@ Initial scope:
 
 
 ### Converted-Page Theme Toggle (HTML only)
-- [ ] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF).
-- [ ] [P2] Add dependent sub-checkbox: “Use OLED black for Dark theme” (enabled only when theme toggle option is ON).
-- [ ] [P2] Inject a simple symbol-based Light/Dark toggle into converted HTML pages (top-right corner, default Light, one click/tap toggles Dark).
-- [ ] [P2] Ensure this feature applies only to HTML exports; disable/hide and explain unavailability for `.md` / `.docx` / `.pdf` outputs.
-- [ ] [P2] Add native + Playwright smoke coverage for toggle rendering, interaction, default state, and OLED-black variant behavior.
-- [ ] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help.
+- [x] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF). (2026-03-03)
+- [x] [P2] Add dependent sub-checkbox: “Use OLED black for Dark theme” (enabled only when theme toggle option is ON). (2026-03-03)
+- [x] [P2] Inject a simple symbol-based Light/Dark toggle into converted HTML pages (top-right corner, default Light, one click/tap toggles Dark). (2026-03-03)
+- [x] [P2] Ensure this feature applies only to HTML exports; disable/hide and explain unavailability for `.md` / `.docx` / `.pdf` outputs. (2026-03-03)
+- [x] [P2] Add native + Playwright smoke coverage for toggle rendering, interaction, default state, and OLED-black variant behavior. (2026-03-03)
+- [x] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help. (2026-03-03)
 
 ### Externalized CSS for Converted Pages (HTML only)
 - [x] [P2] Add Advanced options checkbox: “Externalize CSS to separate file” (default OFF). (2026-02-27)

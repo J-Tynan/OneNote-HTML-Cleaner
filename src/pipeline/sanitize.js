@@ -421,6 +421,19 @@ export function normalizeAccessibleTextContrast(doc) {
 }
 
 
+function compactHeadWhitespaceNodes(head) {
+  if (!head || !head.childNodes) return 0;
+  let removed = 0;
+  Array.from(head.childNodes).forEach((node) => {
+    if (!node || node.nodeType !== 3) return;
+    if (/^\s*$/.test(node.nodeValue || '')) {
+      node.remove();
+      removed += 1;
+    }
+  });
+  return removed;
+}
+
 export function ensureHead(doc, options = {}) {
   const logs = [];
   let head = doc.querySelector('head');
@@ -430,6 +443,11 @@ export function ensureHead(doc, options = {}) {
     head = doc.createElement('head');
     html.insertBefore(head, html.firstChild);
     logs.push({ step: 'EnsureHead', details: 'Inserted missing <head>' });
+  }
+
+  const compactedHeadNodes = compactHeadWhitespaceNodes(head);
+  if (compactedHeadNodes) {
+    logs.push({ step: 'CompactHeadWhitespace', removedTextNodes: compactedHeadNodes });
   }
 
   // Ensure/normalize page-level language on <html>
@@ -604,6 +622,36 @@ export function normalizeTableAttributes(doc, options = {}) {
   return logs;
 }
 
+// In converted OneNote tables, paragraph margins are often omitted on <p>
+// while equivalent cells use margin:0. Browser default <p> margins then make
+// some rows taller. Normalize missing margins inside table cells to preserve
+// author-chosen row heights.
+export function normalizeTableCellParagraphMargins(doc) {
+  const logs = [];
+  const paragraphs = Array.from(doc.querySelectorAll('table td > p, table th > p'));
+  let updated = 0;
+
+  paragraphs.forEach((paragraph) => {
+    const styleText = String(paragraph.getAttribute('style') || '');
+    const entries = parseInlineStyle(styleText);
+    const hasMargin = entries.some(({ prop }) => prop === 'margin');
+    const hasMarginTop = entries.some(({ prop }) => prop === 'margin-top');
+    const hasMarginBottom = entries.some(({ prop }) => prop === 'margin-bottom');
+    if (hasMargin || hasMarginTop || hasMarginBottom) return;
+
+    entries.push({ prop: 'margin', value: '0' });
+    const nextStyle = serializeInlineStyle(entries);
+    paragraph.setAttribute('style', nextStyle);
+    updated += 1;
+  });
+
+  if (updated) {
+    logs.push({ step: 'NormalizeTableCellParagraphMargins', updated });
+  }
+
+  return logs;
+}
+
 export function sanitizeImageAttributes(doc) {
   const logs = [];
   const imgs = Array.from(doc.querySelectorAll('img'));
@@ -761,13 +809,210 @@ export function removeNbsp(doc) {
   while (node) {
     const value = node.nodeValue;
     if (value && value.indexOf('\u00a0') !== -1) {
-      node.nodeValue = value.replace(/\u00a0/g, ' ');
+      const parent = node.parentElement;
+      const isWhitespaceOnly = String(value).replace(/[\u00a0\s]/g, '') === '';
+      const preserveSpacerNbsp = Boolean(
+        parent
+        && /^(p|div|blockquote|li)$/i.test(String(parent.tagName || ''))
+        && isWhitespaceOnly
+        && parent.childNodes
+        && parent.childNodes.length === 1
+      );
+
+      if (preserveSpacerNbsp) {
+        // Keep one NBSP so intentionally blank block lines retain visible height.
+        node.nodeValue = '\u00a0';
+      } else {
+        node.nodeValue = value.replace(/\u00a0/g, ' ');
+      }
       updated++;
     }
     node = walker.nextNode();
   }
 
   if (updated) logs.push({ step: 'RemoveNbsp', updated });
+  return logs;
+}
+
+function isCreatedWithOneNoteFooterText(text) {
+  return /^created with onenote\.?$/i.test(cleanInlineText(text));
+}
+
+function isVisualSpacerElement(el) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName || '').toLowerCase();
+  if (tag === 'br') return true;
+  if (tag !== 'p' && tag !== 'div') return false;
+  return cleanInlineText(el.textContent || '') === '';
+}
+
+function isWhitespaceOnlyParagraphLike(el) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName || '').toLowerCase();
+  if (tag !== 'p' && tag !== 'div' && tag !== 'blockquote') return false;
+  if (el.querySelector && el.querySelector(':scope > br')) return true;
+  const text = String(el.textContent || '');
+  if (!text) return true;
+  return text.replace(/[\u00a0\s]/g, '') === '';
+}
+
+function ensureVisibleSpacerBlock(el, doc) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName || '').toLowerCase();
+  if (tag !== 'p' && tag !== 'div') return false;
+  if (cleanInlineText(el.textContent || '') !== '') return false;
+  let changed = false;
+
+  // Normalize spacer to a compact visible block: use a class-based
+  // spacer so we avoid adding inline `style` attributes that test
+  // suites treat as forbidden. The visual size is driven by a small
+  // stylesheet injected into the document head.
+  if (el.querySelector && !el.querySelector(':scope > br')) {
+    el.textContent = '';
+    const b = doc.createElement('br');
+    el.appendChild(b);
+    changed = true;
+  }
+  const beforeClass = String(el.getAttribute('class') || '');
+  addClass(el, 'converted-page-spacer');
+  if (String(el.getAttribute('class') || '') !== beforeClass) changed = true;
+  return changed;
+}
+
+function isContainerElement(el) {
+  if (!el || !el.tagName) return false;
+  return /^(div|section|article|main|aside|blockquote|li|td|th)$/i.test(String(el.tagName || ''));
+}
+
+function trimTrailingVisualSpacersDeep(root) {
+  if (!root || !root.lastElementChild) return 0;
+  let removed = 0;
+
+  while (root.lastElementChild) {
+    const last = root.lastElementChild;
+    if (isVisualSpacerElement(last)) {
+      last.remove();
+      removed += 1;
+      continue;
+    }
+
+    if (isContainerElement(last)) {
+      const nestedRemoved = trimTrailingVisualSpacersDeep(last);
+      removed += nestedRemoved;
+      if (nestedRemoved > 0) {
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  return removed;
+}
+
+export function injectFooterSpacerCss(doc) {
+  if (!doc) return [];
+  const head = doc.querySelector('head') || doc.documentElement;
+  const existing = head.querySelector('style[data-converted-spacer]');
+  if (existing) return [];
+  const style = doc.createElement('style');
+  style.setAttribute('data-converted-spacer', '1');
+  style.appendChild(doc.createTextNode('.converted-page-spacer{margin:0;line-height:0.95;font-size:1em;}.converted-content-spacer{margin:0;line-height:1;font-size:1em;}'));
+  head.appendChild(style);
+  return [{ step: 'InjectFooterSpacerCss', details: 'Inserted compact spacer stylesheet' }];
+}
+
+export function normalizeContentBlankLineSpacers(doc) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+  const main = doc.querySelector('main');
+  if (!main) return logs;
+
+  const candidates = Array.from(main.querySelectorAll('p,div,blockquote'));
+  let normalized = 0;
+
+  candidates.forEach((el) => {
+    if (!isWhitespaceOnlyParagraphLike(el)) return;
+    if (el.closest && el.closest('table,thead,tbody,tfoot,tr,td,th')) return;
+    if (el.querySelector && el.querySelector('img,svg,canvas,code,pre,ul,ol')) return;
+    if (Array.from(el.classList || []).includes('converted-page-spacer')) return;
+
+    el.textContent = '';
+    if (!el.querySelector || !el.querySelector(':scope > br')) {
+      el.appendChild(doc.createElement('br'));
+    }
+    addClass(el, 'converted-content-spacer');
+    normalized += 1;
+  });
+
+  if (normalized) {
+    logs.push({ step: 'NormalizeContentBlankLineSpacers', normalized });
+  }
+  return logs;
+}
+
+export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const spacerText = typeof options.spacerText === 'string' ? options.spacerText : '\u00a0';
+  const footers = Array.from(doc.querySelectorAll('p')).filter(el => {
+    if (!el || !el.textContent) return false;
+    return isCreatedWithOneNoteFooterText(el.textContent);
+  });
+
+  let inserted = 0;
+  let normalized = 0;
+  let alreadyPresent = 0;
+  let collapsed = 0;
+  let trimmedBeforeFooter = 0;
+
+  footers.forEach((footer) => {
+    const container = footer.parentElement;
+    const beforeContainer = container && container.previousElementSibling;
+    if (beforeContainer) {
+      trimmedBeforeFooter += trimTrailingVisualSpacersDeep(beforeContainer);
+    }
+
+    const prev = footer.previousElementSibling;
+    if (isVisualSpacerElement(prev)) {
+      if (ensureVisibleSpacerBlock(prev, doc)) {
+        normalized += 1;
+      }
+
+      // If a spacer also exists right before the footer container,
+      // collapse it so we keep just one compact gap near the footer.
+      const boundarySpacer = container && container.previousElementSibling;
+      if (isVisualSpacerElement(boundarySpacer)) {
+        boundarySpacer.remove();
+        collapsed += 1;
+      }
+
+      alreadyPresent += 1;
+      return;
+    }
+
+    const spacer = doc.createElement('p');
+    spacer.setAttribute('style', 'margin: 0');
+    if (spacerText) {
+      spacer.textContent = spacerText;
+    }
+    ensureVisibleSpacerBlock(spacer, doc);
+    footer.parentNode.insertBefore(spacer, footer);
+    inserted += 1;
+  });
+
+  if (inserted || normalized || alreadyPresent) {
+    logs.push({
+      step: 'EnsureCreatedWithOneNoteFooterGap',
+      inserted,
+      normalized,
+      alreadyPresent,
+      collapsed,
+      trimmedBeforeFooter
+    });
+  }
+
   return logs;
 }
 
@@ -1096,6 +1341,7 @@ function getNumericDimension(value) {
 }
 
 const MIN_CONTENT_MARGIN_LEFT_IN = 0.125;
+const HANDWRITING_CONTENT_MARGIN_LEFT_IN = 0.075;
 
 function parseCssLengthToInches(value) {
   const text = String(value || '').trim().toLowerCase();
@@ -1166,6 +1412,11 @@ function isImageDominantContentBlock(block) {
   Array.from(cloned.querySelectorAll('img')).forEach(img => img.remove());
   const text = cleanInlineText(cloned.textContent || '');
   return text.length === 0;
+}
+
+function hasRasterHandwritingImage(block) {
+  if (!block || !block.querySelector) return false;
+  return !!block.querySelector('img[data-handwriting="raster"]');
 }
 
 function isStandaloneIconParagraph(paragraph) {
@@ -1279,6 +1530,23 @@ function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = 
       style: before
     };
   }
+  styleMap.set('margin-left', baselineMarginLeft);
+  const after = styleMapToString(styleMap);
+  return {
+    changed: after !== before,
+    style: after
+  };
+}
+
+function normalizeContentBlockToExactBaselineStyle(styleText, baselineMarginLeft = '') {
+  if (!baselineMarginLeft) {
+    return {
+      changed: false,
+      style: String(styleText || '')
+    };
+  }
+  const styleMap = styleEntriesToMap(styleText);
+  const before = styleMapToString(styleMap);
   styleMap.set('margin-left', baselineMarginLeft);
   const after = styleMapToString(styleMap);
   return {
@@ -1445,6 +1713,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
 
   let positionsStandardized = 0;
   let firstContentBlockMarginsStandardized = 0;
+  let handwritingContentMarginsStandardized = 0;
   let iconParagraphsAligned = 0;
   if (standardizeHeaderDatePositions) {
     if (rootLayout) {
@@ -1485,6 +1754,8 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       const rootMarginLeft = readMarginLeft(rootLayout);
       const baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
       const contentBaselineMarginLeft = loosenContentBaselineLeftMargin(baselineMarginLeft);
+      const hasRasterHandwritingContent = sectionBlocks.some(block => hasRasterHandwritingImage(block));
+      const handwritingMarginBaseline = toInchesCssValue(HANDWRITING_CONTENT_MARGIN_LEFT_IN);
 
       for (const block of sectionBlocks) {
         if (block.closest('table,thead,tbody,tfoot,tr,td,th,li')) continue;
@@ -1497,7 +1768,11 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
 
         if (block === firstContentBlock) {
           const contentMarginBaselineForBlock = isImageDominantContentBlock(block)
-            ? toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN)
+            ? toInchesCssValue(
+              hasRasterHandwritingImage(block)
+                ? HANDWRITING_CONTENT_MARGIN_LEFT_IN
+                : MIN_CONTENT_MARGIN_LEFT_IN
+            )
             : contentBaselineMarginLeft;
           const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, contentMarginBaselineForBlock);
           if (nextContentStyle.changed) {
@@ -1512,6 +1787,19 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
 
         const isTitleBlock = block === titleBlock;
         const isDateBlock = block === dateBlock;
+
+        if (!isTitleBlock && !isDateBlock && block !== firstContentBlock && hasRasterHandwritingContent) {
+          const nextHandwritingMargin = normalizeContentBlockToExactBaselineStyle(styleText, handwritingMarginBaseline);
+          if (nextHandwritingMargin.changed) {
+            if (nextHandwritingMargin.style) {
+              block.setAttribute('style', nextHandwritingMargin.style);
+            } else {
+              block.removeAttribute('style');
+            }
+            handwritingContentMarginsStandardized += 1;
+          }
+        }
+
         if (!isTitleBlock && !isDateBlock) continue;
 
         let next;
@@ -1546,6 +1834,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       widthsNormalized,
       rootMarginsStandardized,
       firstContentBlockMarginsStandardized,
+      handwritingContentMarginsStandardized,
       positionsStandardized,
       iconParagraphsAligned
     });

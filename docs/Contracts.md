@@ -16,11 +16,11 @@
   "relativePath": "string",
   "html": "string",
   "config": {
-    "Profile": "cornell|generic",
+    "Profile": "onenote",
     "RepairListItemValues": "smart|mergeStyled|renumber",
     "ListPaddingLeft": "1.2em",
-    "UseCornellSemantics": true,
-    "CornellHeaderFallback": true,
+    "UseTableSemantics": true,
+    "TableHeaderFallback": true,
     "MigrateInlineStylesToUtilities": true,
     "InlineStyleMigrationSelector": "[style]",
     "InjectTailwindCss": true,
@@ -44,7 +44,7 @@
   "sourceKind": "one|onepkg",
   "bytes": "ArrayBuffer",
   "config": {
-    "Profile": "cornell|generic",
+    "Profile": "onenote",
     "ToolbarEnabled": false,
     "ToolbarEditToggleEnabled": false,
     "ToolbarMetadataToggleEnabled": false,
@@ -58,10 +58,9 @@
 - `onepkg`: OneNote notebook package (`*.onepkg`, CAB container)
 
 `Profile` is preferred for new integrations:
-- `cornell`: enables Cornell-specific semantic and layout helpers.
-- `generic`: conservative OneNote cleanup with Cornell-specific transforms disabled.
+- `onenote`: enables the default OneNote semantic and layout helpers.
 
-Legacy flags remain supported and can override profile defaults.
+Legacy profile alias (`generic`) remains supported and normalizes to `onenote`.
 
 Toolbar flags are additive and optional:
 - default OFF in all flows

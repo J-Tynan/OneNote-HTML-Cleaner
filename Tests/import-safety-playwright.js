@@ -74,7 +74,7 @@ function createStaticServer(root) {
         await import('/src/pipeline/inlineStyleMigration.js');
         await import('/src/pipeline/images.js');
         await import('/src/pipeline/toolbarInjector.js');
-        await import('/src/pipeline/cornellSemantics.js');
+        await import('/src/pipeline/Semantics.js');
         await import('/src/pipeline/dateTimeLayout.js');
         await import('/src/pipeline/config.js');
         return { ok: true };

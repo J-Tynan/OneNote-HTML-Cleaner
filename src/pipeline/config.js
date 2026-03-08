@@ -83,6 +83,25 @@ function normalizeExportConfig(rawConfig = {}) {
   };
 }
 
+function normalizeConvertedPageThemeConfig(rawConfig = {}) {
+  const toggleEnabledValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ConvertedPageThemeToggleEnabled')
+    ? rawConfig.ConvertedPageThemeToggleEnabled
+    : rawConfig.convertedPageThemeToggleEnabled;
+  const oledBlackValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ConvertedPageThemeToggleOledBlack')
+    ? rawConfig.ConvertedPageThemeToggleOledBlack
+    : rawConfig.convertedPageThemeToggleOledBlack;
+
+  const convertedPageThemeToggleEnabled = toBoolean(toggleEnabledValue, false);
+  const convertedPageThemeToggleOledBlack = convertedPageThemeToggleEnabled
+    ? toBoolean(oledBlackValue, false)
+    : false;
+
+  return {
+    ConvertedPageThemeToggleEnabled: convertedPageThemeToggleEnabled,
+    ConvertedPageThemeToggleOledBlack: convertedPageThemeToggleOledBlack
+  };
+}
+
 function normalizeToolbarConfig(rawConfig = {}) {
   return {
     ToolbarEnabled: toBoolean(rawConfig.ToolbarEnabled, false),
@@ -101,8 +120,8 @@ const PROFILE_PRESETS = {
     ListMarginLeft: '0.35em',
     ListPaddingLeft: '1.2em',
     NormalizeAllListIndent: true,
-    UseCornellSemantics: true,
-    CornellHeaderFallback: true,
+    UseTableSemantics: true,
+    TableHeaderFallback: true,
     MergeCreatedDateTime: true,
     CreatedDateTimeGap: '0.75em',
     MigrateInlineStylesToUtilities: true,
@@ -124,25 +143,34 @@ const PROFILE_PRESETS = {
     ExternalizeCssMode: 'shared',
     ExperimentalExportEnabled: false,
     ExportFormat: 'html',
-    MarkdownFlavor: 'obsidian'
+    MarkdownFlavor: 'obsidian',
+    ConvertedPageThemeToggleEnabled: false,
+    ConvertedPageThemeToggleOledBlack: false
   }
 };
 
 function normalizeProfile(value) {
   const profile = String(value || '').trim().toLowerCase();
   if (!profile) return SINGLE_PROFILE;
-  if (profile === 'cornell' || profile === 'generic' || profile === SINGLE_PROFILE) {
+  if (profile === 'generic' || profile === 'onenote' || profile === SINGLE_PROFILE) {
     return SINGLE_PROFILE;
   }
   return SINGLE_PROFILE;
 }
 
 export function normalizePipelineConfig(rawConfig = {}) {
+  const useTableSemantics = Object.prototype.hasOwnProperty.call(rawConfig, 'UseTableSemantics')
+    ? toBoolean(rawConfig.UseTableSemantics, true)
+    : true;
+  const tableHeaderFallback = Object.prototype.hasOwnProperty.call(rawConfig, 'TableHeaderFallback')
+    ? toBoolean(rawConfig.TableHeaderFallback, true)
+    : true;
   const profile = normalizeProfile(rawConfig.Profile || rawConfig.profile);
   const preset = PROFILE_PRESETS[SINGLE_PROFILE];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
   const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
   const normalizedExportConfig = normalizeExportConfig(rawConfig);
+  const normalizedConvertedPageThemeConfig = normalizeConvertedPageThemeConfig(rawConfig);
   const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
   const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
   const normalizeDirectionLayout = toBoolean(
@@ -163,7 +191,10 @@ export function normalizePipelineConfig(rawConfig = {}) {
     ...normalizedToolbarConfig,
     ...normalizedExternalCssConfig,
     ...normalizedExportConfig,
+    ...normalizedConvertedPageThemeConfig,
     Profile: SINGLE_PROFILE,
+    UseTableSemantics: useTableSemantics,
+    TableHeaderFallback: tableHeaderFallback,
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy,
     NormalizeDirectionLayout: normalizeDirectionLayout,

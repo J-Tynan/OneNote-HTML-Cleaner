@@ -135,14 +135,14 @@
     }
   },
   {
-    "name": "cornell-tailwind-migration",
-    "input": "./fixtures/cornell-tailwind-migration.html",
-    "expected": "./expected/cornell-tailwind-migration.html",
+    "name": "table-tailwind-migration",
+    "input": "./fixtures/table-tailwind-migration.html",
+    "expected": "./expected/table-tailwind-migration.html",
     "config": {
       "RepairListItemValues": "smart",
       "ListPaddingLeft": "1.2em",
-      "UseCornellSemantics": true,
-      "CornellHeaderFallback": true,
+      "UseTableSemantics": true,
+      "TableHeaderFallback": true,
       "MigrateInlineStylesToUtilities": true,
       "InjectTailwindCss": true,
       "TailwindCssHref": "assets/tailwind-output.css"

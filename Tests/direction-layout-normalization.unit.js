@@ -165,5 +165,36 @@ function createDoc(html) {
     assert(/\bmargin-left\s*:\s*0\.125in/i.test(firstContentStyle));
   }
 
+  {
+    const doc = createDoc('<html><body><main><div style="direction: ltr; margin-top:0; margin-left:0; width:4.475in"><div style="direction: ltr; margin-top:0; margin-left:.2166in; width:2.4708in"><h1>Test Handwriting</h1></div><div style="direction: ltr; margin-top:.0409in; margin-left:.2166in; width:1in"><p>28 February 2026</p><p>12:25</p></div><div style="direction: ltr; margin-top:.4881in; margin-left:0; width:4.475in"><img width="537" height="261" src="x.png" alt="Handwritten notes (raster image)" data-handwriting="raster"></div></div></main></body></html>');
+
+    normalizeDirectionLayoutContainers(doc, {
+      unwrapRedundantWrappers: true,
+      normalizeTopLevelPageWidths: true,
+      standardizeHeaderDatePositions: true
+    });
+
+    const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
+    assert(firstContentBlock);
+    const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
+    assert(/\bmargin-left\s*:\s*0?\.075in/i.test(firstContentStyle));
+  }
+
+  {
+    const doc = createDoc('<html><body><main><div style="direction: ltr; margin-top:0; margin-left:0; width:4.475in"><div style="direction: ltr; margin-top:0; margin-left:.2166in; width:2.4708in"><h1>Test Handwriting</h1></div><div style="direction: ltr; margin-top:.0409in; margin-left:.2166in; width:1in"><p>28 February 2026</p><p>12:25</p></div><div style="direction: ltr; margin-top:.4881in; margin-left:0; width:4.475in"><img width="537" height="261" src="x.png" alt="Handwritten notes (raster image)" data-handwriting="raster"></div><div style="direction: ltr; margin-top: 11.7513in; margin-left: .1951in; width: .7923in"><p>&lt;&lt;Test another.md&gt;&gt;</p></div></div></main></body></html>');
+
+    const logs = normalizeDirectionLayoutContainers(doc, {
+      unwrapRedundantWrappers: true,
+      normalizeTopLevelPageWidths: true,
+      standardizeHeaderDatePositions: true
+    });
+
+    const followOnBlock = doc.querySelector('main > div > div:nth-child(4)');
+    assert(followOnBlock);
+    const followOnStyle = String(followOnBlock.getAttribute('style') || '');
+    assert(/\bmargin-left\s*:\s*0?\.075in/i.test(followOnStyle));
+    assert(logs.some(entry => entry && entry.step === 'NormalizeDirectionLayoutContainers' && entry.handwritingContentMarginsStandardized >= 1));
+  }
+
   console.log('direction-layout-normalization: PASS');
 })();

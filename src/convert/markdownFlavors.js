@@ -46,6 +46,16 @@ function applyLineBreakPolicy(markdown, flavor) {
   return normalized;
 }
 
+function applyCommonMarkTaskPolicy(markdown) {
+  return String(markdown || '').replace(/^([ \t]*[-*+]\s+)\[(x|\s)\]\s+/gm, (match, prefix, marker) => {
+    return `${prefix}\\[${marker}\\] `;
+  });
+}
+
+function applyGfmAutolinkPolicy(markdown) {
+  return String(markdown || '').replace(/\[(https?:\/\/[^\]\s]+)\]\(\1\)/g, '<$1>');
+}
+
 export function normalizeMarkdownFlavor(flavor) {
   const normalized = String(flavor || '').trim().toLowerCase();
   if (!normalized) return DEFAULT_MARKDOWN_FLAVOR;
@@ -71,10 +81,12 @@ export function applyMarkdownFlavor(baseMarkdown, options = {}) {
   }
 
   if (flavor === 'commonmark') {
+    output = applyCommonMarkTaskPolicy(output);
     return output;
   }
 
   if (flavor === 'gfm') {
+    output = applyGfmAutolinkPolicy(output);
     return output;
   }
 

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Markdown Flavor Contract Fixture</title>
+</head>
+<body>
+  <h2>Contract Sample</h2>
+  <p>Paragraph after heading.</p>
+
+  <h3>Unordered</h3>
+  <ul>
+    <li>Alpha</li>
+    <li>Beta
+      <ul>
+        <li>Nested</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Ordered</h3>
+  <ol start="7">
+    <li>First</li>
+    <li>Second</li>
+    <li>Third</li>
+  </ol>
+
+  <h3>Tasks</h3>
+  <ul>
+    <li>[X] done</li>
+    <li>[ ] queued</li>
+  </ul>
+
+  <h3>Table</h3>
+  <table>
+    <tr><th>Name</th><th>Score</th></tr>
+    <tr><td>A</td><td>10</td></tr>
+  </table>
+
+  <h3>Code</h3>
+  <pre><code>console.log('ok');</code></pre>
+
+  <h3>Links</h3>
+  <p>See <a href="https://example.org/docs">Reference link</a>.</p>
+  <p>Literal token should not become wiki syntax: [[do-not-emit-as-link]].</p>
+</body>
+</html>

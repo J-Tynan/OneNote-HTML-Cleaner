@@ -2,27 +2,27 @@
 @tailwind utilities;
 
 @layer components {
-  .cornell-table {
+  [data-onc-table-layout='two-column'] {
     @apply w-full text-sm leading-6 text-slate-900;
   }
 
-  .cornell-table td,
-  .cornell-table th {
+  [data-onc-table-layout='two-column'] td,
+  [data-onc-table-layout='two-column'] th {
     @apply align-top;
   }
 
-  .cornell-table td.cues,
-  .cornell-table th.cues {
+  [data-onc-table-layout='two-column'] td[data-onc-col-role='leading'],
+  [data-onc-table-layout='two-column'] th[data-onc-col-role='leading'] {
     @apply w-48 pr-3 text-sm;
   }
 
-  .cornell-table td.notes,
-  .cornell-table th.notes {
+  [data-onc-table-layout='two-column'] td[data-onc-col-role='detail'],
+  [data-onc-table-layout='two-column'] th[data-onc-col-role='detail'] {
     @apply text-base leading-7;
   }
 
-  .cornell-table td.cues ol,
-  .cornell-table td.cues ul {
+  [data-onc-table-layout='two-column'] td[data-onc-col-role='leading'] ol,
+  [data-onc-table-layout='two-column'] td[data-onc-col-role='leading'] ul {
     @apply list-outside pl-5;
   }
 }

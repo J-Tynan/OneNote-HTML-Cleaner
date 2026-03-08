@@ -3,12 +3,12 @@ import { parseHtmlToDocument, documentToHtml } from './parser.js';
 import { normalizePipelineConfig } from './config.js';
 import * as sanitize from './sanitize.js';
 import { fixLists } from './listRepair.js';
-import { annotateCornellSemantics } from './cornellSemantics.js';
+import { annotateTableSemantics } from './Semantics.js';
 import { mergeCreatedDateTimeRow } from './dateTimeLayout.js';
 import { migrateInlineStylesToUtilities } from './inlineStyleMigration.js';
 import * as images from './images.js';
 import * as format from './format.js';
-import { injectOutputToolbar, summarizeWarningsBySeverity } from './toolbarInjector.js';
+import { injectConvertedPageThemeToggle, injectOutputToolbar, summarizeWarningsBySeverity } from './toolbarInjector.js';
 import { createLogger } from '../logging.js';
 const logger = createLogger('pipeline');
 
@@ -64,6 +64,7 @@ export async function runPipeline(htmlString, config = {}) {
     // clean up tables: obsolete attrs, legacy xmlns, summary
     if (resolvedConfig.NormalizeTables !== false) {
       logs.push(...ensureArray(sanitize.normalizeTableAttributes(doc)));
+      logs.push(...ensureArray(sanitize.normalizeTableCellParagraphMargins(doc)));
     }
     if (resolvedConfig.OutputCleanupMode === 'safe') {
       logs.push(...ensureArray(sanitize.stripObsoleteHeadArtifacts(doc)));
@@ -88,6 +89,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureMainHeading(doc, {
       defaultTitle: resolvedConfig.defaultTitle || resolvedConfig.fileName || 'Document'
     })));
+    logs.push(...ensureArray(sanitize.normalizeContentBlankLineSpacers(doc)));
     if (resolvedConfig.NormalizeDirectionLayout !== false) {
       logs.push(...ensureArray(sanitize.normalizeDirectionLayoutContainers(doc, {
         unwrapRedundantWrappers: true,
@@ -96,10 +98,10 @@ export async function runPipeline(htmlString, config = {}) {
       })));
     }
 
-    const useCornellSemantics = resolvedConfig.UseCornellSemantics !== false;
-    if (useCornellSemantics) {
-      logs.push(...ensureArray(annotateCornellSemantics(doc, {
-        allowFallback: resolvedConfig.CornellHeaderFallback !== false
+    const useTableSemantics = resolvedConfig.UseTableSemantics !== false;
+    if (useTableSemantics) {
+      logs.push(...ensureArray(annotateTableSemantics(doc, {
+        allowFallback: resolvedConfig.TableHeaderFallback !== false
       })));
     }
 
@@ -144,6 +146,8 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureListStructure(doc)));
     // defensive deduplication pass to remove any accidental clone/duplicate
     logs.push(...ensureArray(sanitize.dedupeLists(doc)));
+    logs.push(...ensureArray(sanitize.ensureCreatedWithOneNoteFooterGap(doc)));
+    logs.push(...ensureArray(sanitize.injectFooterSpacerCss(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {
@@ -192,19 +196,26 @@ export async function runPipeline(htmlString, config = {}) {
       WarningSummary: warningSummary
     });
 
+    const withThemeToggle = injectConvertedPageThemeToggle(withToolbar, {
+      ...resolvedConfig
+    });
+
     if (withToolbar !== normalized) {
       logs.push({ step: 'injectToolbar', level: 'info', details: 'Injected single advanced toolbar (inline bundle).' });
     }
+    if (withThemeToggle !== withToolbar) {
+      logs.push({ step: 'injectConvertedPageThemeToggle', level: 'info', details: 'Injected converted-page Light/Dark toggle (inline bundle).' });
+    }
 
     // Final sanity check: does output look like HTML?
-    const outPreview = (withToolbar || '').slice(0, 1000);
+    const outPreview = (withThemeToggle || '').slice(0, 1000);
     logger.info({ msg: 'output preview', meta: { preview: outPreview.replace(/\r?\n/g, '\\n') } });
     if (!/<!doctype|<html|<body/i.test(outPreview)) {
       logger.warn({ msg: 'output does not look like HTML; investigate earlier steps' });
       logs.push({ step: 'validateOutput', level: 'warn', details: 'output does not look like HTML' });
     }
 
-    return { output: withToolbar, logs, assets: outputAssets };
+    return { output: withThemeToggle, logs, assets: outputAssets };
   } catch (err) {
     logger.error({ msg: 'unexpected error', meta: { error: String(err) } });
     logs.push({ step: 'pipelineError', level: 'error', details: String(err) });
