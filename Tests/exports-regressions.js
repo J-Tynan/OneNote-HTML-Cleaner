@@ -24,9 +24,16 @@ function analyze(html) {
       issues.push('missing <h1> inside <main>');
     }
   }
-  // ensure no inline spacing styles in style attributes
-  if (/style\s*=\s*["'][^"']*(?:letter-spacing|word-spacing|line-height)\s*:/i.test(html)) {
-    issues.push('contains inline spacing styles');
+  // Ensure spacing guardrails only inspect inline style attributes.
+  // We intentionally allow textual-fidelity spacing (for example text-indent / line-height)
+  // and only block letter/word spacing overrides that tend to degrade readability.
+  const inlineStyleMatches = [...html.matchAll(/\bstyle\s*=\s*(["'])([\s\S]*?)\1/gi)];
+  const hasDisallowedInlineSpacing = inlineStyleMatches.some((match) => {
+    const styleText = match[2] || '';
+    return /(?:letter-spacing|word-spacing)\s*:/i.test(styleText);
+  });
+  if (hasDisallowedInlineSpacing) {
+    issues.push('contains disallowed inline spacing styles');
   }
   // OneNote/Office artifacts we want to strip: xmlns:* declarations, mso- attributes,
   // and leftover Main-File/File-List links in the body.

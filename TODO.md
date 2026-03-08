@@ -297,15 +297,22 @@ Initial scope:
 - [x] [P2] Ensure externalized CSS output remains standalone-safe for expected usage (clear warning/help text when output is downloaded as a single HTML file without assets). (2026-02-27)
 - [x] [P2] Add regression and smoke tests for: toggle OFF parity, shared mode links, per-page mode links, and missing-asset behavior messaging. (2026-02-27)
 - [ ] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help.
+ - [x] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help. (2026-03-08)
 
 #### Externalized CSS review follow-up (deferred to post-release)
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
-- [ ] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability.
-- [ ] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules.
-- [ ] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name.
-- [ ] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
-- [ ] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
-- [ ] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature.
+- [x] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability. (2026-03-08)
+- [x] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules. (2026-03-08)
+- [x] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name. (2026-03-08)
+- [x] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules. (2026-03-08)
+- [x] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling). (2026-03-08)
+- [x] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature. (2026-03-08)
+
+---
+
+## Recent Success
+
+- [x] Externalized CSS consolidation + full-fixture audit (2026-03-08) — branch `chore/externalized-css-review`, PR #5; see `Tests/reports/manual-review-findings.md`.
 
 ---
 
