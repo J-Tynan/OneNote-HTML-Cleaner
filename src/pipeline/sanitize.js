@@ -843,6 +843,11 @@ function isVisualSpacerElement(el) {
   const tag = String(el.tagName || '').toLowerCase();
   if (tag === 'br') return true;
   if (tag !== 'p' && tag !== 'div') return false;
+  // Some OneNote pages use image-only paragraphs (for example icon rows).
+  // Treat those as content so trailing spacer cleanup does not remove them.
+  if (el.querySelector && el.querySelector('img,svg,canvas,picture,video,audio,iframe,object,embed,table,ul,ol,pre,code')) {
+    return false;
+  }
   return cleanInlineText(el.textContent || '') === '';
 }
 
@@ -1946,7 +1951,21 @@ export function ensureMainHeading(doc, options = {}) {
         h1.remove();
         main.insertBefore(h1, main.firstChild);
       }
-    } else {
+    }
+
+    const existingH1LooksResolved = Boolean(
+      h1 &&
+      !h1.closest('table,td,th') &&
+      /\bconverted-page-title\b/i.test(String(h1.getAttribute('class') || ''))
+    );
+    const shouldPromoteTitleLike = Boolean(
+      titleLike &&
+      titleLike.tagName &&
+      titleLike.tagName.toLowerCase() !== 'h1' &&
+      (!h1 || h1.closest('table,td,th') || !existingH1LooksResolved)
+    );
+
+    if (shouldPromoteTitleLike) {
       const promoted = doc.createElement('h1');
       copyAttributes(titleLike, promoted);
       promoted.innerHTML = titleLike.innerHTML;

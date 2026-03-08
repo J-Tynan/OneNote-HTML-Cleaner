@@ -49,6 +49,17 @@ function analyze(html) {
   return issues;
 }
 
+function analyzeFixtureSpecific(html, fileName) {
+  const issues = [];
+  if (fileName === 'DevToys.html') {
+    const imageCount = (html.match(/<img\b/gi) || []).length;
+    if (imageCount < 3) {
+      issues.push(`expected embedded images in DevToys export (found ${imageCount})`);
+    }
+  }
+  return issues;
+}
+
 (async () => {
   const argv = process.argv.slice(2);
   // by default, validate the cleaned HTML outputs users download; allow override
@@ -62,7 +73,10 @@ function analyze(html) {
   for (const file of files) {
     const full = path.join(dir, file);
     const html = fs.readFileSync(full, 'utf8');
-    const issues = analyze(html);
+    const issues = [
+      ...analyze(html),
+      ...analyzeFixtureSpecific(html, file)
+    ];
     if (issues.length) {
       overallFail = true;
       console.log(`${file}: ${issues.join('; ')}`);
