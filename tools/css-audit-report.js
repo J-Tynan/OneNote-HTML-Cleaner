@@ -5,7 +5,7 @@ import { JSDOM } from 'jsdom';
 
 import { parseMht } from '../src/pipeline/mht.js';
 import { runPipeline } from '../src/pipeline/pipeline.js';
-import { CORE_NOTE_FIXTURES, resolveFixturePath } from '../Tests/fixtures.js';
+import { resolveFixturePath } from '../Tests/fixtures.js';
 
 const dom = new JSDOM('');
 global.DOMParser = dom.window.DOMParser;
@@ -15,6 +15,21 @@ const REPORTS_DIR = path.join('Tests', 'reports');
 const JSON_REPORT = path.join(REPORTS_DIR, 'css-audit-report.json');
 const MD_REPORT = path.join(REPORTS_DIR, 'css-audit-report.md');
 const SOURCE_MANIFEST = 'Tests/expected/locked-cleaned/manifest.json';
+
+function isFixtureLikeFileName(fileName) {
+  return /\.(mht|mhtml|eml)$/i.test(String(fileName || ''));
+}
+
+function getAllTopLevelFixtureFiles() {
+  const testsDir = path.resolve('Tests');
+  if (!fs.existsSync(testsDir)) return [];
+
+  return fs
+    .readdirSync(testsDir, { withFileTypes: true })
+    .filter(entry => entry.isFile() && isFixtureLikeFileName(entry.name))
+    .map(entry => entry.name)
+    .sort((a, b) => a.localeCompare(b));
+}
 
 function canonicalizeDeclarationBlock(text) {
   const parts = String(text || '')
@@ -266,8 +281,9 @@ function makeMarkdown(report) {
 async function main() {
   fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
+  const fixtureNames = getAllTopLevelFixtureFiles();
   const fixtures = [];
-  for (const fixtureName of CORE_NOTE_FIXTURES) {
+  for (const fixtureName of fixtureNames) {
     const shared = await renderFixtureForMode(fixtureName, 'shared');
     const perPage = await renderFixtureForMode(fixtureName, 'per-page');
 

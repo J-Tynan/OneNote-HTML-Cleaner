@@ -83,6 +83,10 @@ function dedupeInlineStyle(styleText) {
   return serializeInlineStyle(Array.from(byProp.entries()).map(([prop, value]) => ({ prop, value })));
 }
 
+function normalizeCssBlockText(cssText) {
+  return String(cssText || '').replace(/\r\n?/g, '\n').trim();
+}
+
 function normalizeZeroCssLength(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (/^0+(?:\.0+)?(?:px|pt|pc|cm|mm|in|em|rem|%)$/.test(normalized)) {
@@ -143,10 +147,12 @@ export function externalizeCss(doc, options = {}) {
   }
 
   const extractedBlocks = [];
+  const seenExtractedBlocks = new Set();
   let extractedStyleTags = 0;
   Array.from(doc.querySelectorAll('style')).forEach(styleEl => {
-    const css = String(styleEl.textContent || '').trim();
-    if (css) {
+    const css = normalizeCssBlockText(styleEl.textContent || '');
+    if (css && !seenExtractedBlocks.has(css)) {
+      seenExtractedBlocks.add(css);
       extractedBlocks.push(css);
     }
     styleEl.remove();
@@ -175,12 +181,12 @@ export function externalizeCss(doc, options = {}) {
     if (!className) {
       className = `extcss-${hashStyleSignature(signature)}`;
       let suffix = 2;
-      while (declarationsByClass.has(className) && declarationsByClass.get(className) !== normalized) {
+      while (declarationsByClass.has(className) && declarationsByClass.get(className) !== signature) {
         className = `extcss-${hashStyleSignature(signature)}-${suffix}`;
         suffix += 1;
       }
       classBySignature.set(signature, className);
-      declarationsByClass.set(className, normalized);
+      declarationsByClass.set(className, signature);
     }
 
     addClass(el, className);

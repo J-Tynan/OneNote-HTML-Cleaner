@@ -223,6 +223,14 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 - If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
 - App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.
 
+### Externalized CSS consolidation rules
+
+- Inline style declarations are canonicalized by property name (`prop:value` pairs sorted alphabetically, with last value per property winning).
+- Equivalent inline styles with different declaration order map to the same generated `extcss-*` class.
+- Generated class rules are emitted in deterministic class-name order.
+- Repeated `<style>` blocks with exactly equivalent normalized text are emitted once in extracted CSS output.
+- Consolidation is intentionally conservative: complex authored CSS inside style blocks is preserved as-is rather than aggressively rewritten.
+
 ## Handwriting export behavior
 
 - OneNote handwriting content is preserved as raster image output when exported through MHTML (`.mht`, `.mhtml`).

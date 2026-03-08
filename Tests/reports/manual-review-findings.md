@@ -94,3 +94,40 @@ Aggregate findings:
 Decision:
 - Step 1 review and Step 2 audit generation are complete for the current core fixture set.
 - Next action is to formalize consolidation/canonicalization rules and apply them in export packaging logic.
+
+---
+
+## Externalized CSS Consolidation Validation (2026-03-08)
+
+Scope:
+- Source fixtures audited (all top-level `Tests/*.mht|*.mhtml`):
+  - `Communicate using Markdown.mht`
+  - `Dental Appointment.mht`
+  - `DevToys.mht`
+  - `Problematic mht-full-snippet.mhtml`
+  - `Problematic mht-sample.mht`
+  - `Resolve merge conflicts.mht`
+  - `Test File.mht`
+  - `Test Handwriting.mht`
+- Modes audited: `shared`, `per-page`
+- Artifacts: `Tests/reports/css-audit-report.json`, `Tests/reports/css-audit-report.md`
+
+Validation outcomes:
+- Externalize CSS unit coverage passes (`npm run test:externalize-css`).
+- Shared/per-page parity passes for all fixtures (`cssHashEqualAcrossModes=true` for all 8 fixtures).
+- No missing CSS sidecar assets in either mode.
+
+Consolidation rules now applied in pipeline extraction path:
+- Canonical declaration signature (`prop:value` sorted by property) is used as class identity and emitted declaration text.
+- Equivalent inline styles in different declaration order collapse to one generated `extcss-*` class.
+- Duplicate extracted `<style>` blocks are deduplicated by normalized block text.
+- Consolidation remains conservative for authored style-block content (no aggressive rule rewriting).
+
+Aggregate metrics (latest run):
+- Fixtures: 8
+- Total CSS bytes per mode: 21,624
+- Shared bundle consolidation savings: 11,191 bytes (51.72%)
+
+Decision:
+- Consolidation/canonicalization heuristics are now defined, documented, and implemented.
+- Shared/per-page outputs pass parity checks after consolidation changes.
