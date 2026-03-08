@@ -68,5 +68,18 @@ function run(html) {
     assert.equal(h2s[0].textContent.trim(), 'Cues');
   }
 
+  // 6. Do not promote a later title-like paragraph when an h1 already exists.
+  {
+    const doc = run('<html><head><title>Test Fonts & Headings</title></head><body><main><h1 class="converted-page-title">Test Fonts & Headings</h1><p style="margin:0;font-family:&quot;Calibri Light&quot;;font-size:20.0pt" class="converted-content-spacer">Heading 1</p></main></body></html>');
+    const h1s = doc.querySelectorAll('h1');
+    const h2s = doc.querySelectorAll('h2');
+    assert.equal(h1s.length, 1);
+    assert.equal(h1s[0].textContent.trim(), 'Test Fonts & Headings');
+    assert.equal(h2s.length, 0);
+    const paragraphs = doc.querySelectorAll('p.converted-content-spacer');
+    assert.equal(paragraphs.length, 1);
+    assert.equal(paragraphs[0].textContent.trim(), 'Heading 1');
+  }
+
   console.log('main-heading: PASS');
 })();

@@ -1946,7 +1946,21 @@ export function ensureMainHeading(doc, options = {}) {
         h1.remove();
         main.insertBefore(h1, main.firstChild);
       }
-    } else {
+    }
+
+    const existingH1LooksResolved = Boolean(
+      h1 &&
+      !h1.closest('table,td,th') &&
+      /\bconverted-page-title\b/i.test(String(h1.getAttribute('class') || ''))
+    );
+    const shouldPromoteTitleLike = Boolean(
+      titleLike &&
+      titleLike.tagName &&
+      titleLike.tagName.toLowerCase() !== 'h1' &&
+      (!h1 || h1.closest('table,td,th') || !existingH1LooksResolved)
+    );
+
+    if (shouldPromoteTitleLike) {
       const promoted = doc.createElement('h1');
       copyAttributes(titleLike, promoted);
       promoted.innerHTML = titleLike.innerHTML;
