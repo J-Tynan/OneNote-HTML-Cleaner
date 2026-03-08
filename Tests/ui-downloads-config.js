@@ -22,6 +22,8 @@ async function main() {
     experimentalExportEnabled: { checked: true },
     exportFormat: { value: 'markdown' },
     markdownFlavor: { value: 'gfm' },
+    convertedPageThemeToggleEnabled: { checked: true },
+    convertedPageThemeToggleOledBlack: { checked: true },
     downloadZipButton: { disabled: false },
     successfulOutputs: new Map()
   };
@@ -41,10 +43,14 @@ async function main() {
   if (cfg.ExperimentalExportEnabled !== true) fail('Expected ExperimentalExportEnabled true');
   if (cfg.ExportFormat !== 'markdown') fail('Expected ExportFormat to be "markdown" when experimental is enabled');
   if (cfg.MarkdownFlavor !== 'gfm') fail('Expected MarkdownFlavor to be "gfm"');
+  if (cfg.ConvertedPageThemeToggleEnabled !== false) fail('Expected ConvertedPageThemeToggleEnabled false for non-HTML export format');
+  if (cfg.ConvertedPageThemeToggleOledBlack !== false) fail('Expected ConvertedPageThemeToggleOledBlack false for non-HTML export format');
 
   ctx.experimentalExportEnabled.checked = false;
   const cfgFallback = helpers.getConversionConfig();
   if (cfgFallback.ExportFormat !== 'html') fail('Expected ExportFormat fallback to "html" when experimental is disabled');
+  if (cfgFallback.ConvertedPageThemeToggleEnabled !== true) fail('Expected ConvertedPageThemeToggleEnabled true when effective export format is HTML');
+  if (cfgFallback.ConvertedPageThemeToggleOledBlack !== true) fail('Expected ConvertedPageThemeToggleOledBlack true when toggle is enabled and effective export format is HTML');
 
   console.log('ui-downloads-config: OK');
 }

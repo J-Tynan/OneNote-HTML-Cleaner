@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-27T16:23:35.812Z",
-  "url": "http://127.0.0.1:63246/Resolve%20merge%20conflicts.html",
+  "timestamp": "2026-03-06T16:01:17.188Z",
+  "url": "http://127.0.0.1:56515/Resolve%20merge%20conflicts.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1198,7 +1198,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr\">",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: 0\" class=\"mt-0\">",
           "target": [
             "main > div:nth-child(1)"
           ]
@@ -1230,9 +1230,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: 0; width: 7.602in\" class=\"mt-0\">",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: .075in\" class=\"mt-0\">",
           "target": [
-            "main > div:nth-child(1) > div"
+            "div:nth-child(1) > div:nth-child(1)"
           ]
         },
         {
@@ -1262,9 +1262,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: .075in; width: 3.1756in\" class=\"mt-0\">\n\n<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>\n\n</div>",
+          "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
           "target": [
-            "main > div:nth-child(1) > div > div:nth-child(1)"
+            "h1"
           ]
         },
         {
@@ -1294,9 +1294,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>",
+          "html": "<div style=\"direction: ltr; margin-left: .075in\">",
           "target": [
-            "div:nth-child(1) > .text-xl"
+            "div:nth-child(1) > div:nth-child(2)"
           ]
         },
         {
@@ -1326,9 +1326,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: .0409in; margin-left: .075in; width: 1.7194in\">",
+          "html": "<p style=\"margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666\" class=\"converted-page-date font-sans text-sm\">",
           "target": [
-            "div > div:nth-child(2)"
+            ".converted-page-date"
           ]
         },
         {
@@ -1358,39 +1358,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676\" class=\"font-sans text-sm\">08 October 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">10:15</span></p>",
-          "target": [
-            "div:nth-child(2) > .text-sm"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "important-letter-spacing",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
-            },
-            {
-              "id": "important-word-spacing",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
-            },
-            {
-              "id": "important-line-height",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">10:15</span>",
+          "html": "<span class=\"created-time converted-page-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666; margin-left: 0.75em\">10:15</span>",
           "target": [
             ".created-time"
           ]
@@ -1422,7 +1390,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0; width: 7.602in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0.125in; width: 7.602in\">",
           "target": [
             "div:nth-child(3)"
           ]
@@ -1582,9 +1550,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -1614,9 +1582,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -1648,7 +1616,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt; text-align: right\" class=\"font-sans text-base\"><span style=\"font-weight: bold\" class=\"font-bold\">Class:</span></p>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues > p"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"] > p"
           ]
         },
         {
@@ -1680,7 +1648,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Class:</span>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues > p > .font-bold"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -1710,9 +1678,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.9305in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>\n    </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.9305in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .notes"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -1744,7 +1712,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .notes > p"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -1998,9 +1966,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .cues"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -2032,7 +2000,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt; text-align: right\" class=\"font-sans text-base\"><span style=\"font-weight: bold\" class=\"font-bold\">Topic:</span></p>",
           "target": [
-            "tr:nth-child(2) > .cues > p"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > p"
           ]
         },
         {
@@ -2064,7 +2032,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Topic:</span>",
           "target": [
-            "tr:nth-child(2) > .cues > p > .font-bold"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -2094,9 +2062,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 3.034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>\n    </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 3.034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .notes"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -2128,7 +2096,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .notes > p"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -2382,9 +2350,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(2) > .cornell-table"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -2414,9 +2382,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -2448,7 +2416,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt; text-align: right\" class=\"font-sans text-base\"><span style=\"font-weight: bold\" class=\"font-bold\">Website:</span></p>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues > p"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"] > p"
           ]
         },
         {
@@ -2480,7 +2448,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Website:</span>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues > p > .font-bold"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -2510,9 +2478,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 6.309in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 6.309in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .notes"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -2544,7 +2512,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"><a href=\"https://github.com/skills/resolve-merge-conflicts\">https://github.com/skills/resolve-merge-conflicts</a></p>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .notes > p"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -2830,9 +2798,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -2862,9 +2830,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">\n      <h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>\n      </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">\n      <h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>\n      </td>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(1) > .cues"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -2894,9 +2862,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>",
           "target": [
-            "h1"
+            "td[data-onc-col-role=\"leading\"] > h2"
           ]
         },
         {
@@ -2926,9 +2894,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0291in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n      <h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>\n      </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0291in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n      <h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>\n      </td>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(1) > .notes"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -2960,7 +2928,7 @@
           "impact": null,
           "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>",
           "target": [
-            ".notes > h2"
+            "td[data-onc-col-role=\"detail\"] > h2"
           ]
         },
         {
@@ -2990,9 +2958,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .cues"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -3022,9 +2990,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(2) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -3056,7 +3024,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll learn?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"1\"]"
+            ".pl-5[type=\"1\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -3088,7 +3056,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll learn?</span>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"1\"] > .font-normal"
+            ".pl-5[type=\"1\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -3118,9 +3086,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .notes"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -3152,7 +3120,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">What merge\n      conflicts are, how you resolve merge conflicts, how to reduce merge\n      conflicts.</p>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .notes > p"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -3182,9 +3150,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(3) > .cues"
+            "tr:nth-child(3) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -3214,9 +3182,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(3) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(3) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -3248,7 +3216,7 @@
           "impact": null,
           "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll build?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"2\"]"
+            ".pl-5[type=\"1\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -3310,9 +3278,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9666in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n      <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">We'll work\n      with a short Markdown resume file in this course.</p>\n      </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9666in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(3) > .notes"
+            "tr:nth-child(3) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -3344,7 +3312,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">We'll work\n      with a short Markdown resume file in this course.</p>",
           "target": [
-            "tr:nth-child(3) > .notes > p"
+            "tr:nth-child(3) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -3374,9 +3342,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(4) > .cues"
+            "tr:nth-child(4) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -3406,9 +3374,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(4) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -3440,7 +3408,7 @@
           "impact": null,
           "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">In this course you will:</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"3\"]"
+            ".pl-5[type=\"1\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -3502,9 +3470,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(4) > .notes"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -3534,9 +3502,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -3568,7 +3536,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -3600,7 +3568,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -3632,7 +3600,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -3664,7 +3632,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -3696,7 +3664,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -3728,7 +3696,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -3822,9 +3790,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(5) > .cues"
+            "tr:nth-child(5) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -3854,9 +3822,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(5) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(5) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -3888,7 +3856,7 @@
           "impact": null,
           "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What is a merge conflict?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"4\"]"
+            ".pl-5[type=\"1\"] > li[value=\"4\"]"
           ]
         },
         {
@@ -3950,9 +3918,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(5) > .notes"
+            "tr:nth-child(5) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -3984,7 +3952,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">A merge\n      conflict occurs when changes are made to the same part of a file on two\n      different branches. You can usually find out about conflicts in a pull\n      request.</p>",
           "target": [
-            "tr:nth-child(5) > .notes > p"
+            "tr:nth-child(5) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -4014,9 +3982,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(6) > .cues"
+            "tr:nth-child(6) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -4046,9 +4014,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(6) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(6) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -4142,9 +4110,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(6) > .notes"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -4176,7 +4144,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge\n      conflicts can be found within pull requests, usually at the bottom of the\n      page. Look for the button 'Resolve conflicts'.</p>",
           "target": [
-            "tr:nth-child(6) > .notes > p:nth-child(1)"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -4208,7 +4176,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(6) > .notes > p:nth-child(2)"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -4238,9 +4206,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(7) > .cues"
+            "tr:nth-child(7) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -4270,9 +4238,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(7) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -4366,9 +4334,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(7) > .notes"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -4400,7 +4368,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Remove the\n      changes made on the main branch by deleting all of the content below the\n      \"=======\" and above \"&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n      main\".</p>",
           "target": [
-            "tr:nth-child(7) > .notes > p:nth-child(1)"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -4432,7 +4400,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Next remove\n      the merge conflict markers by deleting the following lines:</p>",
           "target": [
-            "tr:nth-child(7) > .notes > p:nth-child(2)"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -4462,9 +4430,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -4496,7 +4464,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -4528,7 +4496,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -4560,7 +4528,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -4592,7 +4560,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -4624,7 +4592,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -4656,7 +4624,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -4750,9 +4718,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(8) > .cues"
+            "tr:nth-child(8) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -4782,9 +4750,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(8) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(8) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -4878,9 +4846,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0777in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0777in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(8) > .notes"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -4912,7 +4880,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(8) > .notes > p:nth-child(1)"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -4944,7 +4912,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(8) > .notes > p:nth-child(2)"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -4974,9 +4942,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3166in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3166in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(9) > .cues"
+            "tr:nth-child(9) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -5006,9 +4974,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(9) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(9) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -5102,9 +5070,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(9) > .notes"
+            "tr:nth-child(9) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -5136,7 +5104,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">In this\n      activity, you created a conflict on your \"side\" branch by\n      updating the \"references.md\" file.</p>",
           "target": [
-            "tr:nth-child(9) > .notes > p"
+            "tr:nth-child(9) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -5166,9 +5134,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(10) > .cues"
+            "tr:nth-child(10) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -5198,9 +5166,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(10) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -5294,9 +5262,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(10) > .notes"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -5326,9 +5294,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -5360,7 +5328,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -5392,7 +5360,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -5424,7 +5392,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -5456,7 +5424,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -5488,7 +5456,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -5520,7 +5488,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -5678,7 +5646,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(3) > td > ul"
           ]
@@ -5806,7 +5774,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > ul"
           ]
@@ -6094,7 +6062,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(2) > td > ul"
           ]
@@ -6190,9 +6158,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0\"> </p>",
+          "html": "<p style=\"margin: 0\" class=\"converted-content-spacer converted-page-spacer\"><br></p>",
           "target": [
-            "main > div:nth-child(2) > p:nth-child(1)"
+            ".converted-content-spacer"
           ]
         },
         {
@@ -6256,15 +6224,21 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+                  "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
                   "target": [
                     "h1"
                   ]
                 },
                 {
+                  "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>",
+                  "target": [
+                    "td[data-onc-col-role=\"leading\"] > h2"
+                  ]
+                },
+                {
                   "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>",
                   "target": [
-                    ".notes > h2"
+                    "td[data-onc-col-role=\"detail\"] > h2"
                   ]
                 },
                 {
@@ -6347,9 +6321,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>",
+          "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
           "target": [
-            "div:nth-child(1) > .text-xl"
+            "h1"
           ]
         },
         {
@@ -6357,24 +6331,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#767676",
+                "fgColor": "#666666",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.54,
+                "contrastRatio": 5.74,
                 "fontSize": "10.0pt (13.3333px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.54"
+              "message": "Element has sufficient color contrast of 5.74"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676\" class=\"font-sans text-sm\">08 October 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">10:15</span></p>",
+          "html": "<p style=\"margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666\" class=\"converted-page-date font-sans text-sm\">",
           "target": [
-            "div:nth-child(2) > .text-sm"
+            ".converted-page-date"
           ]
         },
         {
@@ -6382,22 +6356,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#767676",
+                "fgColor": "#666666",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.54,
+                "contrastRatio": 5.74,
                 "fontSize": "10.0pt (13.3333px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.54"
+              "message": "Element has sufficient color contrast of 5.74"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">10:15</span>",
+          "html": "<span class=\"created-time converted-page-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666; margin-left: 0.75em\">10:15</span>",
           "target": [
             ".created-time"
           ]
@@ -6424,7 +6398,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Class:</span>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues > p > .font-bold"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -6449,7 +6423,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .notes > p"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -6524,7 +6498,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Topic:</span>",
           "target": [
-            "tr:nth-child(2) > .cues > p > .font-bold"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -6549,7 +6523,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .notes > p"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -6574,7 +6548,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Website:</span>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues > p > .font-bold"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -6599,7 +6573,7 @@
           "impact": null,
           "html": "<a href=\"https://github.com/skills/resolve-merge-conflicts\">https://github.com/skills/resolve-merge-conflicts</a>",
           "target": [
-            ".notes > p > a"
+            "td[data-onc-col-role=\"detail\"] > p > a"
           ]
         },
         {
@@ -6647,9 +6621,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>",
           "target": [
-            "h1"
+            "td[data-onc-col-role=\"leading\"] > h2"
           ]
         },
         {
@@ -6674,7 +6648,7 @@
           "impact": null,
           "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>",
           "target": [
-            ".notes > h2"
+            "td[data-onc-col-role=\"detail\"] > h2"
           ]
         },
         {
@@ -6699,7 +6673,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll learn?</span>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"1\"] > .font-normal"
+            ".pl-5[type=\"1\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -6724,7 +6698,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">What merge\n      conflicts are, how you resolve merge conflicts, how to reduce merge\n      conflicts.</p>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .notes > p"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -6774,7 +6748,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">We'll work\n      with a short Markdown resume file in this course.</p>",
           "target": [
-            "tr:nth-child(3) > .notes > p"
+            "tr:nth-child(3) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -6824,7 +6798,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -6849,7 +6823,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -6874,7 +6848,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -6949,7 +6923,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">A merge\n      conflict occurs when changes are made to the same part of a file on two\n      different branches. You can usually find out about conflicts in a pull\n      request.</p>",
           "target": [
-            "tr:nth-child(5) > .notes > p"
+            "tr:nth-child(5) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -6999,7 +6973,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge\n      conflicts can be found within pull requests, usually at the bottom of the\n      page. Look for the button 'Resolve conflicts'.</p>",
           "target": [
-            "tr:nth-child(6) > .notes > p:nth-child(1)"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -7024,7 +6998,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(6) > .notes > p:nth-child(2)"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -7074,7 +7048,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Remove the\n      changes made on the main branch by deleting all of the content below the\n      \"=======\" and above \"&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n      main\".</p>",
           "target": [
-            "tr:nth-child(7) > .notes > p:nth-child(1)"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -7099,7 +7073,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Next remove\n      the merge conflict markers by deleting the following lines:</p>",
           "target": [
-            "tr:nth-child(7) > .notes > p:nth-child(2)"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -7124,7 +7098,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -7149,7 +7123,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -7249,7 +7223,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(8) > .notes > p:nth-child(1)"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -7274,7 +7248,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(8) > .notes > p:nth-child(2)"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -7324,7 +7298,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">In this\n      activity, you created a conflict on your \"side\" branch by\n      updating the \"references.md\" file.</p>",
           "target": [
-            "tr:nth-child(9) > .notes > p"
+            "tr:nth-child(9) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -7374,7 +7348,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -7399,7 +7373,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -7424,7 +7398,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -7642,7 +7616,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
           "target": [
             "h1"
           ]
@@ -7660,9 +7634,27 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>",
+          "target": [
+            "td[data-onc-col-role=\"leading\"] > h2"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>",
           "target": [
-            ".notes > h2"
+            "td[data-onc-col-role=\"detail\"] > h2"
           ]
         },
         {
@@ -7722,25 +7714,31 @@
                 "headingOrder": [
                   {
                     "ancestry": [
-                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(1) > h1"
+                      "html > body > main > div:nth-child(1) > div:nth-child(1) > h1"
                     ],
                     "level": 1
                   },
                   {
                     "ancestry": [
-                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(2) > h2"
+                      "html > body > main > div:nth-child(1) > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(1) > h2"
                     ],
                     "level": 2
                   },
                   {
                     "ancestry": [
-                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(2) > td > h2"
+                      "html > body > main > div:nth-child(1) > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(2) > h2"
                     ],
                     "level": 2
                   },
                   {
                     "ancestry": [
-                      "html > body > main > div:nth-child(1) > div > div:nth-child(3) > div > table > tbody > tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h2"
+                      "html > body > main > div:nth-child(1) > div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td > div > table > tbody > tr:nth-child(2) > td > h2"
+                    ],
+                    "level": 2
+                  },
+                  {
+                    "ancestry": [
+                      "html > body > main > div:nth-child(1) > div:nth-child(3) > div > table > tbody > tr:nth-child(4) > td > div > table > tbody > tr:nth-child(1) > td > h2"
                     ],
                     "level": 2
                   }
@@ -7754,7 +7752,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
           "target": [
             "h1"
           ]
@@ -7772,9 +7770,27 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>",
+          "target": [
+            "td[data-onc-col-role=\"leading\"] > h2"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "heading-order",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Heading order valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>",
           "target": [
-            ".notes > h2"
+            "td[data-onc-col-role=\"detail\"] > h2"
           ]
         },
         {
@@ -8358,7 +8374,7 @@
           "impact": null,
           "html": "<a href=\"https://github.com/skills/resolve-merge-conflicts\">https://github.com/skills/resolve-merge-conflicts</a>",
           "target": [
-            ".notes > p > a"
+            "td[data-onc-col-role=\"detail\"] > p > a"
           ]
         }
       ]
@@ -8392,9 +8408,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(2) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8410,9 +8426,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(3) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(3) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8428,9 +8444,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(4) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8446,9 +8462,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -8464,9 +8480,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(5) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(5) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8482,9 +8498,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(6) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(6) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8500,9 +8516,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(7) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8518,9 +8534,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -8536,9 +8552,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(8) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(8) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8554,9 +8570,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(9) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(9) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8572,9 +8588,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(10) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -8590,9 +8606,9 @@
             }
           ],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -8608,7 +8624,7 @@
             }
           ],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(3) > td > ul"
           ]
@@ -8626,7 +8642,7 @@
             }
           ],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > ul"
           ]
@@ -8644,7 +8660,7 @@
             }
           ],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(2) > td > ul"
           ]
@@ -8682,7 +8698,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll learn?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"1\"]"
+            ".pl-5[type=\"1\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -8700,7 +8716,7 @@
           "impact": null,
           "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll build?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"2\"]"
+            ".pl-5[type=\"1\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -8718,7 +8734,7 @@
           "impact": null,
           "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">In this course you will:</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"3\"]"
+            ".pl-5[type=\"1\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -8736,7 +8752,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -8754,7 +8770,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -8772,7 +8788,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -8808,7 +8824,7 @@
           "impact": null,
           "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What is a merge conflict?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"4\"]"
+            ".pl-5[type=\"1\"] > li[value=\"4\"]"
           ]
         },
         {
@@ -8862,7 +8878,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -8880,7 +8896,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -8898,7 +8914,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -8970,7 +8986,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -8988,7 +9004,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -9006,7 +9022,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -9262,7 +9278,7 @@
               "data": null,
               "relatedNodes": [
                 {
-                  "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+                  "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
                   "target": [
                     "h1"
                   ]
@@ -9329,7 +9345,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr\">",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: 0\" class=\"mt-0\">",
           "target": [
             "main > div:nth-child(1)"
           ]
@@ -9349,9 +9365,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: 0; width: 7.602in\" class=\"mt-0\">",
+          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: .075in\" class=\"mt-0\">",
           "target": [
-            "main > div:nth-child(1) > div"
+            "div:nth-child(1) > div:nth-child(1)"
           ]
         },
         {
@@ -9369,9 +9385,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: 0; margin-left: .075in; width: 3.1756in\" class=\"mt-0\">\n\n<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>\n\n</div>",
+          "html": "<h1 style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20pt; font-weight: 400; display: inline-block; padding-right: 1in; padding-bottom: 0.08em; border-bottom: 1px solid #b7b7b7\" class=\"converted-page-title font-sans text-xl font-normal\">Resolve\nmerge conflicts</h1>",
           "target": [
-            "main > div:nth-child(1) > div > div:nth-child(1)"
+            "h1"
           ]
         },
         {
@@ -9389,9 +9405,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt\" class=\"font-sans text-xl\">Resolve\nmerge conflicts</p>",
+          "html": "<div style=\"direction: ltr; margin-left: .075in\">",
           "target": [
-            "div:nth-child(1) > .text-xl"
+            "div:nth-child(1) > div:nth-child(2)"
           ]
         },
         {
@@ -9409,9 +9425,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: .0409in; margin-left: .075in; width: 1.7194in\">",
+          "html": "<p style=\"margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666\" class=\"converted-page-date font-sans text-sm\">",
           "target": [
-            "div > div:nth-child(2)"
+            ".converted-page-date"
           ]
         },
         {
@@ -9429,27 +9445,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676\" class=\"font-sans text-sm\">08 October 2025<span class=\"created-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">10:15</span></p>",
-          "target": [
-            "div:nth-child(2) > .text-sm"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"created-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri; font-size: 10.0pt; color: #767676; margin-left: 0.75em\">10:15</span>",
+          "html": "<span class=\"created-time converted-page-time font-sans text-sm\" style=\"margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666; margin-left: 0.75em\">10:15</span>",
           "target": [
             ".created-time"
           ]
@@ -9469,7 +9465,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0; width: 7.602in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0.125in; width: 7.602in\">",
           "target": [
             "div:nth-child(3)"
           ]
@@ -9609,9 +9605,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -9631,7 +9627,7 @@
           "impact": null,
           "html": "<tbody>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody"
           ]
         },
         {
@@ -9651,7 +9647,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1)"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1)"
           ]
         },
         {
@@ -9669,9 +9665,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -9691,7 +9687,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt; text-align: right\" class=\"font-sans text-base\"><span style=\"font-weight: bold\" class=\"font-bold\">Class:</span></p>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues > p"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"] > p"
           ]
         },
         {
@@ -9711,7 +9707,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Class:</span>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .cues > p > .font-bold"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -9729,9 +9725,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.9305in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>\n    </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.9305in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .notes"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -9751,7 +9747,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>",
           "target": [
-            "div:nth-child(1) > .cornell-table > tbody > tr:nth-child(1) > .notes > p"
+            "div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -9951,7 +9947,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2)"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2)"
           ]
         },
         {
@@ -9969,9 +9965,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .cues"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -9991,7 +9987,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt; text-align: right\" class=\"font-sans text-base\"><span style=\"font-weight: bold\" class=\"font-bold\">Topic:</span></p>",
           "target": [
-            "tr:nth-child(2) > .cues > p"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > p"
           ]
         },
         {
@@ -10011,7 +10007,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Topic:</span>",
           "target": [
-            "tr:nth-child(2) > .cues > p > .font-bold"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -10029,9 +10025,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 3.034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>\n    </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 3.034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .notes"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -10051,7 +10047,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table > tbody > tr:nth-child(2) > .notes > p"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -10229,9 +10225,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(2) > .cornell-table"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -10251,7 +10247,7 @@
           "impact": null,
           "html": "<tbody>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody"
           ]
         },
         {
@@ -10271,7 +10267,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr"
           ]
         },
         {
@@ -10289,9 +10285,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: .9319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -10311,7 +10307,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt; text-align: right\" class=\"font-sans text-base\"><span style=\"font-weight: bold\" class=\"font-bold\">Website:</span></p>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues > p"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"] > p"
           ]
         },
         {
@@ -10331,7 +10327,7 @@
           "impact": null,
           "html": "<span style=\"font-weight: bold\" class=\"font-bold\">Website:</span>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .cues > p > .font-bold"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"leading\"] > p > .font-bold"
           ]
         },
         {
@@ -10349,9 +10345,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 6.309in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 6.309in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .notes"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -10371,7 +10367,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\"><a href=\"https://github.com/skills/resolve-merge-conflicts\">https://github.com/skills/resolve-merge-conflicts</a></p>",
           "target": [
-            "div:nth-child(2) > .cornell-table > tbody > tr > .notes > p"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"] > tbody > tr > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -10391,7 +10387,7 @@
           "impact": null,
           "html": "<a href=\"https://github.com/skills/resolve-merge-conflicts\">https://github.com/skills/resolve-merge-conflicts</a>",
           "target": [
-            ".notes > p > a"
+            "td[data-onc-col-role=\"detail\"] > p > a"
           ]
         },
         {
@@ -10649,9 +10645,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -10671,7 +10667,7 @@
           "impact": null,
           "html": "<tbody>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody"
           ]
         },
         {
@@ -10691,7 +10687,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(1)"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1)"
           ]
         },
         {
@@ -10709,9 +10705,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">\n      <h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>\n      </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">\n      <h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>\n      </td>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(1) > .cues"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -10729,9 +10725,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h1 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h1>",
+          "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Cues</h2>",
           "target": [
-            "h1"
+            "td[data-onc-col-role=\"leading\"] > h2"
           ]
         },
         {
@@ -10749,9 +10745,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0291in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n      <h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>\n      </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0291in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n      <h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>\n      </td>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(1) > .notes"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -10771,7 +10767,7 @@
           "impact": null,
           "html": "<h2 style=\"margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79\" class=\"font-sans text-xl\">Notes</h2>",
           "target": [
-            ".notes > h2"
+            "td[data-onc-col-role=\"detail\"] > h2"
           ]
         },
         {
@@ -10791,7 +10787,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2)"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2)"
           ]
         },
         {
@@ -10809,9 +10805,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .cues"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -10829,9 +10825,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(2) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(2) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -10851,7 +10847,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll learn?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"1\"]"
+            ".pl-5[type=\"1\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -10871,7 +10867,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll learn?</span>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"1\"] > .font-normal"
+            ".pl-5[type=\"1\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -10889,9 +10885,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .notes"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -10911,7 +10907,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">What merge\n      conflicts are, how you resolve merge conflicts, how to reduce merge\n      conflicts.</p>",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table > tbody > tr:nth-child(2) > .notes > p"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -10931,7 +10927,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            ".cornell-table > tbody > tr:nth-child(3)"
+            "table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(3)"
           ]
         },
         {
@@ -10949,9 +10945,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(3) > .cues"
+            "tr:nth-child(3) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -10969,9 +10965,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(3) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(3) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -10991,7 +10987,7 @@
           "impact": null,
           "html": "<li value=\"2\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What you'll build?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"2\"]"
+            ".pl-5[type=\"1\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -11029,9 +11025,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9666in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">\n      <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">We'll work\n      with a short Markdown resume file in this course.</p>\n      </td>",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9666in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(3) > .notes"
+            "tr:nth-child(3) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -11051,7 +11047,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">We'll work\n      with a short Markdown resume file in this course.</p>",
           "target": [
-            "tr:nth-child(3) > .notes > p"
+            "tr:nth-child(3) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -11071,7 +11067,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            ".cornell-table > tbody > tr:nth-child(4)"
+            "table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(4)"
           ]
         },
         {
@@ -11089,9 +11085,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(4) > .cues"
+            "tr:nth-child(4) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -11109,9 +11105,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(4) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -11131,7 +11127,7 @@
           "impact": null,
           "html": "<li value=\"3\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">In this course you will:</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"3\"]"
+            ".pl-5[type=\"1\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -11169,9 +11165,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(4) > .notes"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -11189,9 +11185,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -11211,7 +11207,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -11231,7 +11227,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Create a\n            pull request.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -11251,7 +11247,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -11271,7 +11267,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Resolve a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -11291,7 +11287,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span></li>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -11311,7 +11307,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Create a merge\n            conflict.</span>",
           "target": [
-            "tr:nth-child(4) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(4) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -11389,9 +11385,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(5) > .cues"
+            "tr:nth-child(5) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -11409,9 +11405,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(5) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(5) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -11431,7 +11427,7 @@
           "impact": null,
           "html": "<li value=\"4\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle; color: #2E75B5\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">What is a merge conflict?</span></li>",
           "target": [
-            ".list-decimal.pl-5[type=\"1\"] > li[value=\"4\"]"
+            ".pl-5[type=\"1\"] > li[value=\"4\"]"
           ]
         },
         {
@@ -11469,9 +11465,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(5) > .notes"
+            "tr:nth-child(5) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -11491,7 +11487,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">A merge\n      conflict occurs when changes are made to the same part of a file on two\n      different branches. You can usually find out about conflicts in a pull\n      request.</p>",
           "target": [
-            "tr:nth-child(5) > .notes > p"
+            "tr:nth-child(5) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -11529,9 +11525,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(6) > .cues"
+            "tr:nth-child(6) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -11549,9 +11545,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(6) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(6) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -11609,9 +11605,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0319in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(6) > .notes"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -11631,7 +11627,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Merge\n      conflicts can be found within pull requests, usually at the bottom of the\n      page. Look for the button 'Resolve conflicts'.</p>",
           "target": [
-            "tr:nth-child(6) > .notes > p:nth-child(1)"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -11651,7 +11647,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(6) > .notes > p:nth-child(2)"
+            "tr:nth-child(6) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -11689,9 +11685,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(7) > .cues"
+            "tr:nth-child(7) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -11709,9 +11705,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(7) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -11769,9 +11765,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(7) > .notes"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -11791,7 +11787,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Remove the\n      changes made on the main branch by deleting all of the content below the\n      \"=======\" and above \"&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n      main\".</p>",
           "target": [
-            "tr:nth-child(7) > .notes > p:nth-child(1)"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -11811,7 +11807,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Next remove\n      the merge conflict markers by deleting the following lines:</p>",
           "target": [
-            "tr:nth-child(7) > .notes > p:nth-child(2)"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -11829,9 +11825,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -11851,7 +11847,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -11871,7 +11867,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n           my-resume</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -11891,7 +11887,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -11911,7 +11907,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">=======</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -11931,7 +11927,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span></li>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -11951,7 +11947,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n           main</span>",
           "target": [
-            "tr:nth-child(7) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(7) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -12029,9 +12025,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(8) > .cues"
+            "tr:nth-child(8) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -12049,9 +12045,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(8) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(8) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -12109,9 +12105,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0777in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0777in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(8) > .notes"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -12131,7 +12127,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(8) > .notes > p:nth-child(1)"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"] > p:nth-child(1)"
           ]
         },
         {
@@ -12151,7 +12147,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">",
           "target": [
-            "tr:nth-child(8) > .notes > p:nth-child(2)"
+            "tr:nth-child(8) > td[data-onc-col-role=\"detail\"] > p:nth-child(2)"
           ]
         },
         {
@@ -12189,9 +12185,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3166in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.3166in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(9) > .cues"
+            "tr:nth-child(9) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -12209,9 +12205,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(9) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(9) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -12269,9 +12265,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 4.9736in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(9) > .notes"
+            "tr:nth-child(9) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -12291,7 +12287,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">In this\n      activity, you created a conflict on your \"side\" branch by\n      updating the \"references.md\" file.</p>",
           "target": [
-            "tr:nth-child(9) > .notes > p"
+            "tr:nth-child(9) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -12329,9 +12325,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"cues\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.225in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "tr:nth-child(10) > .cues"
+            "tr:nth-child(10) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -12349,9 +12345,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"1\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal list-decimal list-outside pl-5\">",
+          "html": "<ol type=\"1\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(10) > .cues > .list-decimal.pl-5[type=\"1\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"leading\"] > .pl-5[type=\"1\"]"
           ]
         },
         {
@@ -12409,9 +12405,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" class=\"notes\">",
+          "html": "<td style=\"border-width: 0; vertical-align: top; width: 5.0444in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">",
           "target": [
-            "tr:nth-child(10) > .notes"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -12429,9 +12425,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ol type=\"a\" style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal; margin-left: 0; padding-left: 1.2em\" class=\"mt-0 mb-0 font-sans text-base font-normal\">",
+          "html": "<ol type=\"a\" style=\"direction: ltr; unic...\" class=\"mt-0 mb-0 font-sans ...\">",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"]"
           ]
         },
         {
@@ -12451,7 +12447,7 @@
           "impact": null,
           "html": "<li value=\"1\" style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\"><span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"1\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"]"
           ]
         },
         {
@@ -12471,7 +12467,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt; font-weight: normal; font-style: normal\" class=\"font-sans text-base font-normal\">Learned why\n            merge conflicts happen.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"1\"] > .font-normal"
           ]
         },
         {
@@ -12491,7 +12487,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"2\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"2\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"]"
           ]
         },
         {
@@ -12511,7 +12507,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learned how to resolve\n            a simple merge conflict.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"2\"] > span"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"2\"] > span"
           ]
         },
         {
@@ -12531,7 +12527,7 @@
           "impact": null,
           "html": "<li style=\"margin-top: 0; margin-bottom: 0; vertical-align: middle\" class=\"mt-0 mb-0\" value=\"3\"><span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span></li>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"3\"]"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"]"
           ]
         },
         {
@@ -12551,7 +12547,7 @@
           "impact": null,
           "html": "<span style=\"font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Created a merge\n            conflict of my own and resolved that too.</span>",
           "target": [
-            "tr:nth-child(10) > .notes > ol[type=\"a\"] > li[value=\"3\"] > span"
+            "tr:nth-child(10) > td[data-onc-col-role=\"detail\"] > ol[type=\"a\"] > li[value=\"3\"] > span"
           ]
         },
         {
@@ -12689,7 +12685,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(3) > td > ul"
           ]
@@ -12809,7 +12805,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(4) > td > ul"
           ]
@@ -13089,7 +13085,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0; padding-left: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
+          "html": "<ul style=\"direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em\" class=\"list-disc list-outside mt-0 mb-0\">",
           "target": [
             "tr:nth-child(2) > td > ul"
           ]
@@ -13169,7 +13165,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n\n<p style=\"margin: 0\"> </p>\n\n<p style=\"text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
+          "html": "<div>\n\n<p style=\"margin: 0\" class=\"converted-content-spacer converted-page-spacer\"><br></p>\n\n<p style=\"text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr\" class=\"font-sans text-xs\">Created with OneNote.</p>\n\n</div>",
           "target": [
             "main > div:nth-child(2)"
           ]
@@ -13189,9 +13185,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p style=\"margin: 0\"> </p>",
+          "html": "<p style=\"margin: 0\" class=\"converted-content-spacer converted-page-spacer\"><br></p>",
           "target": [
-            "main > div:nth-child(2) > p:nth-child(1)"
+            ".converted-content-spacer"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<br>",
+          "target": [
+            "br"
           ]
         },
         {
@@ -13260,9 +13276,9 @@
             }
           ],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13278,9 +13294,9 @@
             }
           ],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(2) > .cornell-table"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13314,9 +13330,9 @@
             }
           ],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13390,9 +13406,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13408,9 +13424,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(2) > .cornell-table"
+            "div:nth-child(2) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13444,9 +13460,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13502,9 +13518,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > .cornell-table"
+            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13520,9 +13536,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" class=\"cornell-table\">",
+          "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "td > div > table > tbody > tr:nth-child(1) > td > div > .cornell-table"
+            "td > div > table > tbody > tr:nth-child(1) > td > div > table[data-onc-table-layout=\"two-column\"]"
           ]
         }
       ]

@@ -19,6 +19,9 @@ async function main() {
   if (!mod || typeof mod.injectOutputToolbar !== 'function') {
     fail('Could not import injectOutputToolbar from src/pipeline/toolbarInjector.js');
   }
+  if (typeof mod.injectConvertedPageThemeToggle !== 'function') {
+    fail('Could not import injectConvertedPageThemeToggle from src/pipeline/toolbarInjector.js');
+  }
 
   const baseHtml = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Sample</title></head><body><main><h1>Hello</h1><p>Body</p></main></body></html>';
 
@@ -29,12 +32,18 @@ async function main() {
     ToolbarBundleMode: 'inline',
     SourceName: 'Sample.mht',
     SourceKind: 'mht',
-    Profile: 'cornell',
+    Profile: 'onenote',
     WarningSummary: { total: 2, info: 1, warning: 1, error: 0 }
   });
 
   if (!/id="onenote-cleaner-toolbar"/i.test(injected)) {
     fail('Expected toolbar root to be injected once');
+  }
+  if (!/>Tools<\/span>/i.test(injected)) {
+    fail('Expected toolbar title text to be Tools');
+  }
+  if (!/id="onenote-cleaner-toolbar"[^>]*\shidden/i.test(injected)) {
+    fail('Expected injected toolbar to be hidden by default');
   }
   if (!/data-onc-action="edit-toggle"/i.test(injected)) {
     fail('Expected edit toggle control in injected toolbar');
@@ -44,6 +53,43 @@ async function main() {
   }
   if (!/data-onc-action="hide-toolbar"/i.test(injected)) {
     fail('Expected hide control in injected toolbar');
+  }
+  if (!/data-onc-action="save"/i.test(injected)) {
+    fail('Expected save control in injected toolbar');
+  }
+  if (/data-onc-action="save-as"/i.test(injected)) {
+    fail('Did not expect save-as control in injected toolbar');
+  }
+  if (!/id="onc-toolbar-show"[^>]*>Toolbar</i.test(injected)) {
+    fail('Expected toolbar reveal button label to be Toolbar');
+  }
+  if (!/data-onc-edit-command="undo"/i.test(injected)
+    || !/data-onc-edit-command="h1"/i.test(injected)
+    || !/data-onc-edit-command="h2"/i.test(injected)
+    || !/data-onc-edit-command="h3"/i.test(injected)
+    || !/data-onc-edit-command="h4"/i.test(injected)
+    || !/data-onc-edit-command="bold"/i.test(injected)
+    || !/data-onc-edit-command="italic"/i.test(injected)
+    || !/data-onc-edit-command="color"/i.test(injected)
+    || !/data-onc-edit-command="size"/i.test(injected)
+    || !/data-onc-edit-command="sub"/i.test(injected)
+    || !/data-onc-edit-command="super"/i.test(injected)
+    || !/data-onc-edit-command="bullet"/i.test(injected)
+    || !/data-onc-edit-command="number"/i.test(injected)
+    || !/data-onc-edit-command="link"/i.test(injected)) {
+    fail('Expected edit-mode formatting controls to be injected');
+  }
+  if (!/data-onc-edit-command="bold"[^>]*data-onc-active="false"[^>]*aria-pressed="false"/i.test(injected)) {
+    fail('Expected edit command buttons to include inactive active-state attributes');
+  }
+  if (!/data-onc-edit-command="link"[^>]*>Link<\/button>/i.test(injected)) {
+    fail('Expected hyperlink button label to be Link');
+  }
+  if (/>Hyperlink<\/button>/i.test(injected)) {
+    fail('Did not expect Hyperlink label in edit controls');
+  }
+  if (/Advanced features in one toolbar/i.test(injected)) {
+    fail('Did not expect helper message text in injected toolbar');
   }
 
   const injectedAgain = mod.injectOutputToolbar(injected, {
@@ -70,6 +116,48 @@ async function main() {
 
   if (disabled !== baseHtml) {
     fail('Expected disabled toolbar config to keep output unchanged');
+  }
+
+  const withThemeToggle = mod.injectConvertedPageThemeToggle(baseHtml, {
+    ConvertedPageThemeToggleEnabled: true,
+    ConvertedPageThemeToggleOledBlack: true,
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html'
+  });
+
+  if (!/id="onc-converted-theme-toggle"/i.test(withThemeToggle)) {
+    fail('Expected converted-page theme toggle button to be injected');
+  }
+  if (!/id="onc-converted-theme-style"/i.test(withThemeToggle)) {
+    fail('Expected converted-page theme toggle style to be injected');
+  }
+  if (!/id="onc-converted-theme-script"/i.test(withThemeToggle)) {
+    fail('Expected converted-page theme toggle script to be injected');
+  }
+  if (!/const oledBlack = true;/i.test(withThemeToggle)) {
+    fail('Expected OLED black flag to be embedded in injected script');
+  }
+
+  const withThemeToggleAgain = mod.injectConvertedPageThemeToggle(withThemeToggle, {
+    ConvertedPageThemeToggleEnabled: true,
+    ConvertedPageThemeToggleOledBlack: true,
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html'
+  });
+  const themeRootCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-toggle"/gi);
+  const themeStyleCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-style"/gi);
+  const themeScriptCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-script"/gi);
+  if (themeRootCount !== 1 || themeStyleCount !== 1 || themeScriptCount !== 1) {
+    fail(`Expected idempotent converted-page theme injection, got root=${themeRootCount}, style=${themeStyleCount}, script=${themeScriptCount}`);
+  }
+
+  const nonHtmlBypass = mod.injectConvertedPageThemeToggle(baseHtml, {
+    ConvertedPageThemeToggleEnabled: true,
+    ExperimentalExportEnabled: true,
+    ExportFormat: 'markdown'
+  });
+  if (nonHtmlBypass !== baseHtml) {
+    fail('Expected converted-page theme toggle to be skipped for non-HTML export format');
   }
 
   console.log('toolbar-injector: OK');

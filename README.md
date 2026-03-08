@@ -12,7 +12,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Modular pipeline layout created under `src/pipeline/`.
 - Initial test and fixture structure added.
 - ZIP export support via JSZip (requires `npm install`).
-- Tailwind utility baseline added for converted Cornell-style output (non-destructive, no preflight reset).
+- Tailwind utility baseline added for converted OneNote output (non-destructive, no preflight reset).
  - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
  - Experimental support for native OneNote files (`.one`, `.onepkg`) is available but not fully implemented; see the "Native OneNote files" section for known limitations and recommended developer workflows.
  - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and will be added in future feature branches.
@@ -108,10 +108,10 @@ The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it 
 ## Tailwind Migration (Scoped)
 
 - Tailwind runs with `preflight` disabled to avoid global resets.
-- Pipeline adds semantic classes for Cornell-style tables/cells:
-	- `table` -> `cornell-table`
-	- cue column cell -> `cues`
-	- notes column cell -> `notes`
+- Pipeline adds neutral semantic data attributes for two-column note tables/cells:
+	- `table` -> `data-onc-table-layout="two-column"`
+	- leading column cell -> `data-onc-col-role="leading"`
+	- detail column cell -> `data-onc-col-role="detail"`
 - Cue-column lists are normalized with utility classes (`list-inside`, `pl-0`) while preserving numbering.
 - Safe inline style migration maps only:
 	- `font-family`, `font-size`, `font-weight`, `margin-top`, `margin-bottom`
@@ -119,8 +119,8 @@ The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it 
 
 ## Conversion Profiles
 
-- `Cornell (tuned)`: current default in the UI, optimized for Cornell-style note pages.
-- `Generic OneNote`: broader mode for varied pages; Cornell-specific transforms are disabled, while list indentation normalization and created date/time row merge remain enabled.
+- `OneNote`: default profile in the UI, optimized for exported OneNote note pages.
+- Legacy profile alias (`generic`) is still accepted and normalizes to `onenote`.
 
 The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
 
@@ -129,6 +129,13 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 - `OutputCleanupMode` defaults to `safe` in the UI conversion path and fixture regeneration helper.
 - `UnitStrategy` now defaults to `normalize-safe` for testing and validation before merge to `main`.
 - Empty layout placeholders (for example in table/list structures) remain preserved; cleanup focuses on obsolete artifacts and conservative normalization only.
+
+### Converted-page theme toggle (HTML-only, experimental)
+
+- Advanced options include an optional converted-page theme toggle for HTML exports.
+- When enabled, converted HTML injects a symbol-based Light/Dark toggle (default Light) and remembers the chosen theme per exported file using browser local storage.
+- Optional OLED-black mode applies pure-black dark surfaces to both page background and main content area.
+- The feature is disabled for non-HTML exports (for example Markdown and docx).
 
 ## Native OneNote files (Phase 1) — Experimental
 
@@ -210,6 +217,7 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 	- Metadata panel toggle (read-only provenance)
 	- Close/hide control
 - Bundle model is self-contained inline only for standalone exported HTML compatibility.
+- When injected, the toolbar is hidden by default in converted pages; a small `Toolbar` button appears near the page theme toggle to reveal it.
 
 ## Export dependency guarantees
 
@@ -223,6 +231,14 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 - If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
 - App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.
 
+### Externalized CSS consolidation rules
+
+- Inline style declarations are canonicalized by property name (`prop:value` pairs sorted alphabetically, with last value per property winning).
+- Equivalent inline styles with different declaration order map to the same generated `extcss-*` class.
+- Generated class rules are emitted in deterministic class-name order.
+- Repeated `<style>` blocks with exactly equivalent normalized text are emitted once in extracted CSS output.
+- Consolidation is intentionally conservative: complex authored CSS inside style blocks is preserved as-is rather than aggressively rewritten.
+
 ## Handwriting export behavior
 
 - OneNote handwriting content is preserved as raster image output when exported through MHTML (`.mht`, `.mhtml`).
@@ -235,6 +251,7 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 
 - Markdown export is designed as **semantic fidelity over visual parity** with OneNote layout.
 - Default flavor target is **Obsidian-compatible** output, with additional flavor adapters planned.
+- Canonical flavor behavior and phased contract roadmap are defined in `docs/Markdown-Flavor-Standard.md`.
 - Markdown conversion is architecture-guarded to run from **sanitized HTML output as the canonical source**, never directly from raw MHTML.
 - Conversion will be structure-first (headings, lists, tables, code blocks, images), not absolute-position/layout recreation.
 - Output should remain deterministic and standalone, without required CSS/JS/runtime dependencies.

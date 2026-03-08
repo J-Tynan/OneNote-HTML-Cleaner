@@ -53,7 +53,7 @@ Allowed editable targets (initial):
 Excluded targets (initial):
 - Heading tags (`h1`-`h6`)
 - Section/layout wrappers (`main`, `section`, `table`, `thead`, `tbody`, `tr`)
-- Semantic wrappers with `cornell-*` classes
+- Semantic wrappers marked with table/column role metadata
 
 Behavior:
 - Toggle ON enables `contenteditable` only on allowed targets.
@@ -67,7 +67,7 @@ Panel is read-only and only surfaces conversion provenance.
 Initial fields:
 - Source filename (when available)
 - Source kind (`html|mht|one|onepkg` when available)
-- Conversion profile (`cornell|generic`)
+- Conversion profile (`onenote`)
 - Conversion timestamp (ISO 8601)
 - Warning summary (count by severity, when available)
 

@@ -56,7 +56,7 @@ function run(html) {
     assert.equal(doc.querySelectorAll('h1').length, 1);
   }
 
-  // 5. OneNote page-title paragraph should win over early Cornell-style h1 (e.g. "Cues")
+  // 5. OneNote page-title paragraph should win over early table-header h1 (e.g. "Cues")
   {
     const doc = run('<html><head><title>Document</title></head><body><main><div><p style="margin:0;font-family:Calibri;font-size:20.0pt">Sample Note Title</p></div><table><tr><td><h1>Cues</h1></td></tr></table></main></body></html>');
     const h1s = doc.querySelectorAll('h1');

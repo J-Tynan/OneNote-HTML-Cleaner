@@ -45,10 +45,10 @@ Allow limited editing of converted notes directly in the browser.
 - Enable `contenteditable` on:
   - Paragraphs
   - List items
-  - Table cells (especially Cornell cues/notes)
+  - Table cells (especially leading/detail note columns)
 - Explicitly exclude:
   - Structural containers (tables, sections)
-  - Semantic wrappers (`cornell-*`)
+  - Semantic wrappers (table/column role metadata)
   - Headings and layout scaffolding
 
 ### Save Model
@@ -70,7 +70,7 @@ Explore round‑trip workflows back into OneNote.
 ### Realistic First Step
 - Export **OneNote‑compatible HTML** rather than native `.one` files.
 - Target structures and styles that OneNote re‑imports cleanly.
-- Preserve Cornell semantics where possible.
+- Preserve detected table semantics where possible.
 
 ### Native Export (Long‑Term / Experimental)
 - Investigate native `.one` authoring using Microsoft’s documented file format
@@ -90,7 +90,7 @@ Add optional accessibility diagnostics to the output.
   - Heading level jumps
   - Low‑contrast text
 - Provide inline hints rather than auto‑fixing.
-- Pair well with Cornell notes used for study and revision.
+- Pair well with structured study notes used for review and revision.
 
 ---
 
