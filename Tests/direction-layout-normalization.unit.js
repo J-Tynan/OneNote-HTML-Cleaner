@@ -218,9 +218,9 @@ function createDoc(html) {
     const dateStyle = String(dateBlock.getAttribute('style') || '');
     const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
 
-    assert(/\bmargin-left\s*:\s*0?\.1951in/i.test(titleStyle));
-    assert(/\bmargin-left\s*:\s*0?\.1951in/i.test(dateStyle));
-    assert(/\bmargin-left\s*:\s*0?\.1951in/i.test(firstContentStyle));
+    assert(/\bmargin-left\s*:\s*(?:0?\.125(?:0+)?)in/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*(?:0?\.125(?:0+)?)in/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*(?:0?\.125(?:0+)?)in/i.test(firstContentStyle));
   }
 
   console.log('direction-layout-normalization: PASS');

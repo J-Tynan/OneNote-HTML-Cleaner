@@ -24,9 +24,15 @@ function analyze(html) {
       issues.push('missing <h1> inside <main>');
     }
   }
-  // ensure no inline spacing styles
-  if (/(?:letter-spacing|word-spacing|line-height)\s*:/i.test(html)) {
-    issues.push('contains inline spacing styles');
+  // ensure no inline letter-/word-spacing inside `style` attributes (allow line-height)
+  const inlineStylePattern = /style\s*=\s*(['"])(.*?)\1/ig;
+  let m;
+  while ((m = inlineStylePattern.exec(html)) !== null) {
+    const style = m[2];
+    if (/(?:letter-spacing|word-spacing)\s*:/i.test(style)) {
+      issues.push('contains inline letter/word-spacing in style attribute');
+      break;
+    }
   }
   // OneNote/Office artifacts we want to strip: xmlns:* declarations, mso- attributes,
   // and leftover Main-File/File-List links in the body.

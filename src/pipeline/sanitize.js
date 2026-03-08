@@ -1261,18 +1261,19 @@ function normalizeDateBlockPositionStyle(styleText, baselineMarginLeft = '') {
   };
 }
 
-function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = '') {
+function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = '', options = {}) {
   if (!baselineMarginLeft) {
     return {
       changed: false,
       style: String(styleText || '')
     };
   }
+  const forceExact = options.forceExact === true;
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
   const existingMarginLeft = String(styleMap.get('margin-left') || '').trim();
   const existingInches = parseCssLengthToInches(existingMarginLeft);
-  if (existingInches !== null && existingInches >= MIN_CONTENT_MARGIN_LEFT_IN) {
+  if (!forceExact && existingInches !== null && existingInches >= MIN_CONTENT_MARGIN_LEFT_IN) {
     return {
       changed: false,
       style: before
@@ -1485,15 +1486,13 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       let baselineMarginLeft = readMarginLeft(titleBlock) || readMarginLeft(dateBlock) || rootMarginLeft;
       const firstContentBlockMarginLeft = readMarginLeft(firstContentBlock);
       const firstContentBlockMarginLeftInches = parseCssLengthToInches(firstContentBlockMarginLeft);
-      if (
+      const isHandwritingImageDominant = Boolean(
         firstContentBlock &&
         isImageDominantContentBlock(firstContentBlock) &&
         hasHandwritingRasterImage(firstContentBlock)
-      ) {
-        const targetInches = firstContentBlockMarginLeftInches !== null && firstContentBlockMarginLeftInches > 0
-          ? Math.max(firstContentBlockMarginLeftInches, MIN_CONTENT_MARGIN_LEFT_IN)
-          : MIN_CONTENT_MARGIN_LEFT_IN;
-        baselineMarginLeft = toInchesCssValue(targetInches);
+      );
+      if (isHandwritingImageDominant) {
+        baselineMarginLeft = toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN);
       }
       const contentBaselineMarginLeft = loosenContentBaselineLeftMargin(baselineMarginLeft);
 
@@ -1507,10 +1506,14 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
         if (!hasDirectionLtr) continue;
 
         if (block === firstContentBlock) {
-          const contentMarginBaselineForBlock = isImageDominantContentBlock(block)
+          const contentMarginBaselineForBlock = isHandwritingImageDominant
+            ? baselineMarginLeft
+            : isImageDominantContentBlock(block)
             ? toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN)
             : contentBaselineMarginLeft;
-          const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, contentMarginBaselineForBlock);
+          const nextContentStyle = normalizeContentBlockLeftBaselineStyle(styleText, contentMarginBaselineForBlock, {
+            forceExact: isHandwritingImageDominant
+          });
           if (nextContentStyle.changed) {
             if (nextContentStyle.style) {
               block.setAttribute('style', nextContentStyle.style);
