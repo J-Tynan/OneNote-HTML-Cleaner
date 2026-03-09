@@ -68,9 +68,10 @@ function createStaticServer(root) {
     const checks = [
       'PASS: Per-file Download button rendered',
       'PASS: Per-file download blocked when CSS sidecar exists',
-      'PASS: Per-file download attempted with correct filename',
+      'PASS: Per-file download attempted with title-derived filename',
       'PASS: Download ZIP button enabled',
       'PASS: ZIP generation invoked (JSZip.generateAsync called)',
+      'PASS: ZIP uses title-derived page filenames',
       'PASS: ZIP includes externalized CSS sidecar asset',
       'PASS: ZIP includes fallback README warning for missing sidecar'
     ];

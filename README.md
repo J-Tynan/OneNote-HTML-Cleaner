@@ -27,6 +27,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - Oversized inline-image guardrail: MHT image-part decoding now applies a configurable per-asset threshold (default 2 MiB) with warning diagnostics and behavior modes (`warn-skip` default, `warn-only` optional). Diagnostics are propagated into pipeline logs and covered by `Tests/mht-inline-image-guardrail.unit.js`.
 - Export-independence checks: regression analysis now fails converted outputs that require external/CDN scripts or stylesheets, app-runtime imports (`src/`, `node_modules`, worker/app bundles), or remote CSS `@import` dependencies. Coverage includes `Tests/export-independence.unit.js` and `Tests/check-forbidden-artifacts.js` against cleaned outputs.
 - Optional export fallback hardening: single-file downloads now remain available when Externalize CSS is enabled but no CSS sidecar is produced, while ZIP exports include CSS sidecars when present and emit a `README.txt` warning when fallback is applied. Coverage includes `Tests/ui-download-zip.html` and `Tests/ui-download-zip-playwright.js`.
+- Exported page naming now prefers the resolved converted page title, sanitizes illegal filename characters, falls back away from GUID-like or placeholder names, and adds deterministic numbered suffixes when names collide within the same export batch.
 
 ## UI experience
 

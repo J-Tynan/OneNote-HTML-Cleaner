@@ -1,8 +1,8 @@
 // src/ui.js
 
-import { createDownloadHelpers } from './ui-downloads.js';
+import { buildExportFileName, createDownloadHelpers } from './ui-downloads.js';
 // theme variant functions now used indirectly; import removed
-import { baseNameFromFile, detectSourceKind } from './importers/sourceKind.js';
+import { detectSourceKind } from './importers/sourceKind.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
 
 const logger = createLogger('ui');
@@ -163,8 +163,15 @@ function getEntryOutputContent(entry) {
 }
 
 function getEntryDownloadFileName(entry) {
-  const stem = String(entry?.name || 'output').replace(/\.[^.]+$/, '');
-  return getEntryOutputFormat(entry) === 'markdown' ? `${stem}.md` : `${stem}.html`;
+  if (typeof entry?.downloadFileName === 'string' && entry.downloadFileName) {
+    return entry.downloadFileName;
+  }
+
+  return buildExportFileName({
+    entryName: entry?.name || 'output',
+    outputFormat: getEntryOutputFormat(entry),
+    outputContent: getEntryOutputContent(entry)
+  });
 }
 
 function getEntryDownloadMime(entry) {
@@ -254,15 +261,14 @@ function rebuildSuccessfulOutputs() {
     const content = getEntryOutputContent(entry);
     if (!content) continue;
 
-    const stem = baseNameFromFile(entry.name || 'output');
-    const extension = getEntryOutputFormat(entry) === 'markdown' ? 'md' : 'html';
-    let filename = `${stem}.${extension}`;
-    let index = 2;
+    const filename = buildExportFileName({
+      entryName: entry.name || 'output',
+      outputFormat: getEntryOutputFormat(entry),
+      outputContent: content,
+      takenNames: runtime.successfulOutputs
+    });
 
-    while (runtime.successfulOutputs.has(filename)) {
-      filename = `${stem} (${index}).${extension}`;
-      index += 1;
-    }
+    entry.downloadFileName = filename;
 
     runtime.successfulOutputs.set(filename, {
       content,

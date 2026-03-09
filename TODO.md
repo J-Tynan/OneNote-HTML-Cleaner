@@ -138,7 +138,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [x] Externalized CSS review follow-up: audited generated CSS, codified consolidation rules, and added representative embedded-vs-externalized parity regression coverage. (2026-03-09)
 - [x] Landed the follow-up (EXTERNALIZED-CSS-REVIEW.md, parity test, `ensureMainHeading` idempotence fix, and locked-fixture rebaseline) onto `main`. (2026-03-09)
-- [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
+- [x] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives. (2026-03-09)
 
 ---
 
@@ -150,7 +150,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
 **Immediate Next Priority**
-- **Polish exported page naming (P3):** replace GUID-like titles with a deterministic, readable naming strategy for downloads and archives. (updated 2026-03-09)
+- **Next Priority (P3):** enforce PR governance checklist for Markdown flavor changes so docs, fixtures, and tests stay in sync. (updated 2026-03-09)
 
 **Notes / Deferred items**
 - `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
@@ -369,7 +369,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 
 - [x] [P2] Document native import limitations and expected fidelity in `README.md` and release notes. (2026-02-27)
 - [x] [P2] Decide and record preferred workflow: in‑browser decoder vs companion-tool path. (2026-02-27)
-- [ ] [P3] Polish page naming for GUID-like titles with a deterministic title strategy.
+- [x] [P3] Polish page naming for GUID-like titles with a deterministic title strategy. (2026-03-09)
 - [x] [P2] Document Markdown export philosophy. (2026-03-03)
   - Semantic fidelity over visual parity
   - Obsidian as default flavor

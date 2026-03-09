@@ -49,19 +49,19 @@
     // Simulate a successfully converted file with outputHtml
     const entry = {
       id: 't-1',
-      name: 'Sample Page.mht',
+      name: '123e4567-e89b-12d3-a456-426614174000.mht',
       size: 1024,
       status: 'success',
-      outputHtml: '<!doctype html><html><body><p>ok</p></body></html>',
+      outputHtml: '<!doctype html><html><head><title>Readable Export Name</title></head><body><main><h1>Readable Export Name</h1><p>ok</p></main></body></html>',
       conversionConfig: { ExternalizeCssEnabled: true },
       outputAssets: []
     };
     const entryWithSidecar = {
       id: 't-2',
-      name: 'Styled Page.mht',
+      name: '36f1cb41-5f18-4fd7-8f52-6dca6af3a9b1.mht',
       size: 1024,
       status: 'success',
-      outputHtml: '<!doctype html><html><body><p>styled</p></body></html>',
+      outputHtml: '<!doctype html><html><head><title>Styled Export Name</title></head><body><main><h1>Styled Export Name</h1><p>styled</p></main></body></html>',
       conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
       outputAssets: [{ type: 'text/css', content: '.demo{color:red}', filename: 'converted-shared.css' }]
     };
@@ -87,8 +87,8 @@
     // Click per-file download and check anchor metadata
     perFileBtn.click();
     setTimeout(() => {
-      if (window.__lastAnchor && window.__lastAnchor.download && window.__lastAnchor.download.endsWith('.html')) {
-        pass('Per-file download attempted with correct filename');
+      if (window.__lastAnchor && window.__lastAnchor.download === 'Readable Export Name.html') {
+        pass('Per-file download attempted with title-derived filename');
       } else {
         fail('Per-file download did not create expected anchor');
       }
@@ -108,7 +108,13 @@
         if (window.__test_generateAsync_called) pass('ZIP generation invoked (JSZip.generateAsync called)');
         else fail('ZIP generation was not invoked');
 
-        if (window.__test_zip_files.some((name) => name.endsWith('.css'))) {
+        if (window.__test_zip_files.includes('Readable Export Name.html') && window.__test_zip_files.includes('Styled Export Name.html')) {
+          pass('ZIP uses title-derived page filenames');
+        } else {
+          fail('ZIP missing expected title-derived page filenames');
+        }
+
+        if (window.__test_zip_files.some((name) => name === 'converted-shared.css')) {
           pass('ZIP includes externalized CSS sidecar asset');
         } else {
           fail('ZIP missing expected CSS sidecar asset');

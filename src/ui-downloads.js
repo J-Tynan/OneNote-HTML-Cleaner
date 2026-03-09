@@ -3,6 +3,145 @@ import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
+const PLACEHOLDER_STEMS = new Set([
+  'document',
+  'untitled',
+  'output',
+  'input',
+  'converted file',
+  'converted page',
+  'page',
+  'note'
+]);
+
+function decodeHtmlEntities(text) {
+  return String(text || '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&#(\d+);/g, (_, codePoint) => String.fromCodePoint(Number(codePoint)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, codePoint) => String.fromCodePoint(parseInt(codePoint, 16)));
+}
+
+function stripHtmlTags(text) {
+  return String(text || '').replace(/<[^>]+>/g, ' ');
+}
+
+function normalizeExportStem(value) {
+  return String(value || '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^[.\s]+|[.\s]+$/g, '')
+    .slice(0, 120)
+    .trim();
+}
+
+function looksLikeGuidStem(value) {
+  const normalized = String(value || '')
+    .trim()
+    .replace(/^[{[(]+|[}\])]+$/g, '')
+    .toLowerCase();
+
+  return /^[0-9a-f]{32}$/.test(normalized)
+    || /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(normalized);
+}
+
+function isPlaceholderStem(value) {
+  const normalized = normalizeExportStem(value).toLowerCase();
+  return !normalized || PLACEHOLDER_STEMS.has(normalized);
+}
+
+function extractHtmlExportStem(content) {
+  const html = String(content || '');
+  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  if (titleMatch && titleMatch[1]) {
+    const titleStem = normalizeExportStem(decodeHtmlEntities(stripHtmlTags(titleMatch[1])));
+    if (titleStem) return titleStem;
+  }
+
+  const pageTitleMatch = html.match(/<h1[^>]*class=["'][^"']*converted-page-title[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i);
+  if (pageTitleMatch && pageTitleMatch[1]) {
+    const headingStem = normalizeExportStem(decodeHtmlEntities(stripHtmlTags(pageTitleMatch[1])));
+    if (headingStem) return headingStem;
+  }
+
+  const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  if (h1Match && h1Match[1]) {
+    const headingStem = normalizeExportStem(decodeHtmlEntities(stripHtmlTags(h1Match[1])));
+    if (headingStem) return headingStem;
+  }
+
+  return '';
+}
+
+function extractMarkdownExportStem(content) {
+  const lines = String(content || '').split(/\r\n?|\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+
+    const headingMatch = trimmed.match(/^#{1,6}\s+(.+?)\s*#*$/);
+    if (headingMatch && headingMatch[1]) {
+      const headingStem = normalizeExportStem(headingMatch[1]);
+      if (headingStem) return headingStem;
+    }
+
+    break;
+  }
+
+  return '';
+}
+
+function hasAllocatedName(takenNames, filename) {
+  if (!takenNames || !filename) return false;
+  if (typeof takenNames.has === 'function') return takenNames.has(filename);
+  if (Array.isArray(takenNames)) return takenNames.includes(filename);
+  return false;
+}
+
+function ensureUniqueFileName(filename, takenNames) {
+  const match = String(filename || '').match(/^(.*?)(\.[^.]+)$/);
+  const stem = match ? match[1] : String(filename || '');
+  const extension = match ? match[2] : '';
+  let candidate = `${stem}${extension}`;
+  let index = 2;
+
+  while (hasAllocatedName(takenNames, candidate)) {
+    candidate = `${stem} (${index})${extension}`;
+    index += 1;
+  }
+
+  return candidate;
+}
+
+export function derivePreferredExportStem({ entryName = '', outputFormat = 'html', outputContent = '' } = {}) {
+  const sourceStem = normalizeExportStem(baseNameFromFile(entryName || 'input'));
+  const extractedStem = String(outputFormat || '').toLowerCase() === 'markdown'
+    ? extractMarkdownExportStem(outputContent)
+    : extractHtmlExportStem(outputContent);
+
+  if (extractedStem && !looksLikeGuidStem(extractedStem) && !isPlaceholderStem(extractedStem)) {
+    return extractedStem;
+  }
+
+  if (sourceStem && !looksLikeGuidStem(sourceStem) && !isPlaceholderStem(sourceStem)) {
+    return sourceStem;
+  }
+
+  return 'converted-page';
+}
+
+export function buildExportFileName({ entryName = '', outputFormat = 'html', outputContent = '', takenNames } = {}) {
+  const extension = String(outputFormat || '').toLowerCase() === 'markdown' ? '.md' : '.html';
+  const stem = derivePreferredExportStem({ entryName, outputFormat, outputContent });
+  return ensureUniqueFileName(`${stem}${extension}`, takenNames);
+}
+
 export function createDownloadHelpers(ctx, updateZipButton) {
   function normalizeExportFormat(value) {
     const normalized = String(value || '').trim().toLowerCase();
