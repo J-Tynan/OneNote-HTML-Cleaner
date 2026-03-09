@@ -137,6 +137,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — reduced residual visual gap; merged (PR #3) (2026-03-08)
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [x] Externalized CSS review follow-up: audited generated CSS, codified consolidation rules, and added representative embedded-vs-externalized parity regression coverage. (2026-03-09)
+- [x] Landed the follow-up (EXTERNALIZED-CSS-REVIEW.md, parity test, `ensureMainHeading` idempotence fix, and locked-fixture rebaseline) onto `main`. (2026-03-09)
 - [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
 
 ---
@@ -312,12 +313,11 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 
 ## Recent Success
 
-- [x] Externalized CSS consolidation + full-fixture audit (2026-03-08) — branch `chore/externalized-css-review`, PR #5; see `Tests/reports/manual-review-findings.md`.
-
 ---
 
 ## Sanitization, Quality & Encoding (recommended)
-
+ - [x] Add automated representative parity regression coverage so embedded-style and externalized outputs cannot silently diverge. (2026-03-09)
+ - [x] Merge and land follow-up changes to `main` (2026-03-09): EXTERNALIZED-CSS-REVIEW.md, parity test, idempotence fix (`ensureMainHeading`), and rebaselined locked fixtures.
 ### Sanitization
 - [x] Remove Office/OneNote artifacts.
 - [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
