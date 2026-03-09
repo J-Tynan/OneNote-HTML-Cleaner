@@ -1942,7 +1942,12 @@ export function ensureMainHeading(doc, options = {}) {
 
   // ensure there's an <h1> inside main
   let h1 = main.querySelector('h1');
-  const titleLike = findOneNoteTitleElement(main);
+  const resolvedPageTitle = main.querySelector('h1.converted-page-title');
+  const titleLike = resolvedPageTitle ? null : findOneNoteTitleElement(main);
+
+  if (resolvedPageTitle) {
+    h1 = resolvedPageTitle;
+  }
 
   if (titleLike) {
     if (titleLike.tagName && titleLike.tagName.toLowerCase() === 'h1') {

@@ -1,6 +1,10 @@
 {
   "name": "locked-cleaned-fixtures",
-  "updatedAt": "2026-03-08T14:07:55.718Z",
+<<<<<<< HEAD
+  "updatedAt": "2026-03-09T09:40:44.047Z",
+=======
+  "updatedAt": "2026-03-09T09:40:44.047Z",
+>>>>>>> 4c7f34d (feat: externalize-css follow-up — parity tests, idempotence fix, rebaseline)
   "source": "Tests/Cleaned",
   "requiredFiles": [
     "Communicate using Markdown.html",
@@ -18,7 +22,11 @@
   },
   "hashes": {
     "Communicate using Markdown.html": "48ec0f1e7fc9e51d5c79ea07659b9c2396a8e99f42352dc64d6322bb74fc6a7e",
-    "DevToys.html": "b41a92fe86cc53753de4fed13bb058efc04bea41154afceac72c86ad0d4c9113",
+<<<<<<< HEAD
+    "DevToys.html": "fb822d95bfc8e40bb8a6f5dbd07c56b3689ca0f26ae716ccdf52a09e9c524a83",
+=======
+    "DevToys.html": "fb822d95bfc8e40bb8a6f5dbd07c56b3689ca0f26ae716ccdf52a09e9c524a83",
+>>>>>>> 4c7f34d (feat: externalize-css follow-up — parity tests, idempotence fix, rebaseline)
     "Problematic mht-full-snippet.html": "bb86b4c7093c69876bc5f2cf8ddc35a983453bdb2a522a073e47170d03caae9c",
     "Problematic mht-sample.html": "a520c089cf98b3429301189f176a77d089eff594546d9db4075276c9fdb49d26",
     "Resolve merge conflicts.html": "c86a91b0007f93410cb3c7924d88368c412e528014b543618fc0776b978d12aa",

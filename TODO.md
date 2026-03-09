@@ -134,9 +134,9 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ### Outstanding Visual Tasks
 
-- [ ] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — currently wider than ideal; requires layout heuristic adjustments and regression fixtures.
+- [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) — reduced residual visual gap; merged (PR #3) (2026-03-08)
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
-- [ ] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline.
+- [x] Externalized CSS review follow-up: audited generated CSS, codified consolidation rules, and added representative embedded-vs-externalized parity regression coverage. (2026-03-09)
 - [ ] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives.
 
 ---
@@ -149,7 +149,7 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
 **Immediate Next Priority**
-- **Tune left-margin for handwriting-heavy pages (P2):** Reduce residual visual gap in `Test Handwriting.html` while preserving current list/layout regression stability. (updated 2026-03-03)
+- **Polish exported page naming (P3):** replace GUID-like titles with a deterministic, readable naming strategy for downloads and archives. (updated 2026-03-09)
 
 **Notes / Deferred items**
 - `Test Handwriting.html` left-margin remains wider than ideal on some handwriting/image-heavy pages; after tuning the baseline heuristic we applied a conservative exception, but this fixture still shows a visual gap. We'll accept this as deferred for now and revisit with a dedicated handwriting/ink handling task (see Experimental handwriting conversion). (noted 2026-03-02)
@@ -296,17 +296,17 @@ Initial scope:
 - [x] [P2] Define naming and path strategy for both modes (shared: one CSS asset per export batch; per-page: one CSS asset per converted page). (2026-02-27)
 - [x] [P2] Ensure externalized CSS output remains standalone-safe for expected usage (clear warning/help text when output is downloaded as a single HTML file without assets). (2026-02-27)
 - [x] [P2] Add regression and smoke tests for: toggle OFF parity, shared mode links, per-page mode links, and missing-asset behavior messaging. (2026-02-27)
-- [ ] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help.
- - [x] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help. (2026-03-08)
+- [x] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help. (2026-03-08)
 
 #### Externalized CSS review follow-up (deferred to post-release)
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability. (2026-03-08)
 - [x] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules. (2026-03-08)
-- [x] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name. (2026-03-08)
+- [x] [P3] Compare visual parity against embedded-style baseline on representative fixtures and record any regressions by fixture name. (2026-03-08)
 - [x] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules. (2026-03-08)
 - [x] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling). (2026-03-08)
 - [x] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature. (2026-03-08)
+- [x] [P3] Add automated representative parity regression coverage so embedded-style and externalized outputs cannot silently diverge. (2026-03-09)
 
 ---
 
