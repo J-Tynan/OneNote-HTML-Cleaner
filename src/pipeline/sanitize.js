@@ -1176,6 +1176,7 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
 // cell constants for environments without global Node (e.g. Node.js/jsdom)
 const ELEMENT_NODE = typeof Node !== 'undefined' ? Node.ELEMENT_NODE : 1;
 const TEXT_NODE = typeof Node !== 'undefined' ? Node.TEXT_NODE : 3;
+const DOCUMENT_POSITION_PRECEDING = typeof Node !== 'undefined' ? Node.DOCUMENT_POSITION_PRECEDING : 2;
 
 function parseNumericFontSize(styleText = '') {
   const m = String(styleText || '').match(/font-size\s*:\s*([0-9]*\.?[0-9]+)\s*(pt|px|em|rem)/i);
@@ -1636,6 +1637,25 @@ function looksLikeTitleContainer(el) {
   return directChildren.some(child => looksLikeOneNoteTitleCandidate(child));
 }
 
+function isOneNoteFloatingFileReferencePlaceholder(el) {
+  if (!el || !el.tagName || String(el.tagName).toLowerCase() !== 'div') return false;
+  if (el.querySelector && el.querySelector('img,svg,canvas,picture,video,audio,iframe,object,embed,table,ul,ol,pre,code')) {
+    return false;
+  }
+
+  const text = cleanInlineText(el.textContent || '');
+  if (!/^<<[^<>]{1,200}>>$/.test(text)) return false;
+
+  const styleMap = styleEntriesToMap(el.getAttribute('style') || '');
+  const direction = String(styleMap.get('direction') || '').trim().toLowerCase();
+  if (direction !== 'ltr') return false;
+
+  const marginTop = parseCssLengthToInches(styleMap.get('margin-top') || '');
+  if (marginTop === null || marginTop < 1) return false;
+
+  return true;
+}
+
 export function normalizeDirectionLayoutContainers(doc, options = {}) {
   const logs = [];
   const main = doc.querySelector('main');
@@ -1720,9 +1740,21 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
   let firstContentBlockMarginsStandardized = 0;
   let handwritingContentMarginsStandardized = 0;
   let iconParagraphsAligned = 0;
+  let placeholderReferencesRemoved = 0;
   if (standardizeHeaderDatePositions) {
     if (rootLayout) {
-      const sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+      let sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+
+      sectionBlocks.forEach((block) => {
+        if (isOneNoteFloatingFileReferencePlaceholder(block)) {
+          block.remove();
+          placeholderReferencesRemoved += 1;
+        }
+      });
+      if (placeholderReferencesRemoved > 0) {
+        sectionBlocks = Array.from(rootLayout.children || []).filter(el => el.tagName && el.tagName.toLowerCase() === 'div');
+      }
+
       let titleBlock = null;
       let dateBlock = null;
       let firstContentBlock = null;
@@ -1832,7 +1864,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
     }
   }
 
-  if (wrappersUnwrapped || widthsNormalized || rootMarginsStandardized || firstContentBlockMarginsStandardized || positionsStandardized || iconParagraphsAligned) {
+  if (wrappersUnwrapped || widthsNormalized || rootMarginsStandardized || firstContentBlockMarginsStandardized || positionsStandardized || iconParagraphsAligned || placeholderReferencesRemoved) {
     logs.push({
       step: 'NormalizeDirectionLayoutContainers',
       wrappersUnwrapped,
@@ -1841,7 +1873,8 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       firstContentBlockMarginsStandardized,
       handwritingContentMarginsStandardized,
       positionsStandardized,
-      iconParagraphsAligned
+      iconParagraphsAligned,
+      placeholderReferencesRemoved
     });
   }
 
@@ -1944,12 +1977,19 @@ export function ensureMainHeading(doc, options = {}) {
   let h1 = main.querySelector('h1');
   const resolvedPageTitle = main.querySelector('h1.converted-page-title');
   const titleLike = resolvedPageTitle ? null : findOneNoteTitleElement(main);
+  const titleLikePrecedesExistingH1 = Boolean(
+    h1 &&
+    titleLike &&
+    h1 !== titleLike &&
+    (h1.compareDocumentPosition(titleLike) & DOCUMENT_POSITION_PRECEDING)
+  );
+  const shouldPromoteInitialTitleLike = Boolean(titleLike && (!h1 || titleLikePrecedesExistingH1));
 
   if (resolvedPageTitle) {
     h1 = resolvedPageTitle;
   }
 
-  if (titleLike) {
+  if (shouldPromoteInitialTitleLike) {
     if (titleLike.tagName && titleLike.tagName.toLowerCase() === 'h1') {
       h1 = titleLike;
       if (!main.contains(h1)) {
