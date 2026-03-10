@@ -48,11 +48,27 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
-## Project Scope (locked for first stable release)
+## Stable Release Checklist (active)
 
-- [ ] [P1] Keep scope centered on browser‑first parsing + conversion of MHTML to clean modern HTML.
-- [ ] [P1] Prioritize extraction fidelity and HTML structure before UI polish or advanced features.
-- [ ] [P1] Explicitly defer `.one` and `.onepkg` structural parsing to a later milestone.
+Use this section as the real go/no-go list for the first stable release.
+Items below should reach zero before tagging the first stable build.
+
+- [x] [P1] Lock first stable release scope to `.mht` / `.mhtml` input only, and reject unsupported file types clearly in the UI. (2026-03-10)
+- [ ] [P1] Run one clean release-candidate verification pass on `main`: `npm ci`, `npm run test:gate:native`, all Playwright smoke scripts, and the accessibility audits.
+- [ ] [P1] Perform manual PWA acceptance on a clean browser profile using the core fixtures (`Test File.mht`, `DevToys.mht`, `Communicate using Markdown.mht`, `Resolve merge conflicts.mht`) and confirm successful conversion plus working downloads.
+- [ ] [P1] Add a concise release go/no-go checklist to project docs covering browser support, offline/service-worker update behavior, and known limitations.
+- [ ] [P1] Prepare `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes.
+- [ ] [P1] Tag the first stable release only after CI is green on `main` and the manual acceptance pass is recorded.
+
+---
+
+## Project Scope (release policy)
+
+These are scope guardrails for the first stable release, not day-to-day completion tasks.
+
+- [P1] Keep scope centered on browser‑first parsing + conversion of MHTML to clean modern HTML.
+- [P1] Prioritize extraction fidelity and HTML structure before UI polish or advanced features.
+- [P1] Defer `.one` and `.onepkg` structural parsing until after the first stable release.
 
 Note: MHTML → modern HTML pipeline is nearing completion (core transforms and formatting largely implemented).
 
@@ -150,14 +166,14 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Rename Hyperlink button to Link while keeping the dual-prompt flow (2026-03-03)
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 
-**Immediate Next Priority**
-- **Document External CSS behavior (P3):** finalize behavior/constraints guidance in `README.md` and in-app help. (updated 2026-03-07)
+**Current Release Focus**
+- **Stabilize and verify the MHTML release path:** finish the active stable-release checklist above before reopening larger feature work.
 
 Next steps (pick these up tomorrow):
 - [x] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats. (2026-03-10)
 - [x] Add in-app help text and tooltip copy explaining when externalized CSS is suitable and warnings for single-file downloads without assets. (2026-03-10)
 - [x] Add a small smoke/test example (or test instruction) demonstrating per-page vs shared CSS outputs and link integrity. (2026-03-10)
-- [ ] Open a focused PR with the documentation and test updates, referencing this TODO and `PR #11` where relevant.
+- [x] Land the documentation and test updates on `main`. (2026-03-10)
 
 **Notes / Deferred items**
 - `Test Handwriting.html` follow-on content baseline margin normalization shipped with regression coverage in `Tests/direction-layout-normalization.unit.js`. Keep monitoring future handwriting fixtures for edge cases. (updated 2026-03-07)
@@ -271,7 +287,7 @@ Initial scope:
 - [x] [P2] Add canonical Markdown flavor standards reference with pinned upstream specs and behavior matrix in `docs/Markdown-Flavor-Standard.md`. (2026-03-04)
 - [x] [P2] Phase 2: Define 8-12 normative, per-flavor rules with pass/fail examples in `docs/Markdown-Flavor-Standard.md`. (2026-03-04)
 - [x] [P2] Phase 3: Convert normative rules into fixture-backed regression assertions for all four flavors. (2026-03-04)
-- [ ] [P3] Phase 4: Enforce PR governance checklist for flavor changes (docs + fixtures + tests updated together).
+- [ ] [P3] Phase 4: Enforce change-governance checklist for flavor changes (docs + fixtures + tests updated together).
 - [x] [P2] Add validation so Markdown flavor is disabled/ignored unless export format is Markdown. (2026-03-03)
 - [x] [P2] Add smoke tests for Markdown flavor visibility, selection behavior, and conversion-path routing. (2026-03-03)
 - [x] [P2] Keep current HTML pipeline as default/fallback when experimental export is disabled. (2026-03-03)
