@@ -18,6 +18,14 @@ function sanitizeHtml(html) {
   return doc.documentElement.outerHTML;
 }
 
+function normalizeFooterGap(html) {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
+  sanitize.normalizeContentBlankLineSpacers(doc);
+  sanitize.ensureCreatedWithOneNoteFooterGap(doc);
+  return doc.documentElement.outerHTML;
+}
+
 (function main() {
   console.log('running OneNote sanitizer unit tests');
   const cases = [
@@ -74,6 +82,24 @@ function sanitizeHtml(html) {
       }
     }
     if (!failed) console.log(`${c.name}: OK`);
+  }
+
+  const footerGapInput = `
+    <html><body><main>
+      <div>
+        <p><img src="data:image/png;base64,AAAA" width="16" height="16" alt="GemIcon"></p>
+      </div>
+      <div>
+        <p>Created with OneNote.</p>
+      </div>
+    </main></body></html>
+  `;
+  const footerGapOutput = normalizeFooterGap(footerGapInput);
+  if (!footerGapOutput.includes('data:image/png;base64,AAAA')) {
+    console.error('footer gap normalization should not remove image-only paragraphs before footer');
+    failed = true;
+  } else if (!failed) {
+    console.log('footer gap icon preservation: OK');
   }
 
   if (failed) {

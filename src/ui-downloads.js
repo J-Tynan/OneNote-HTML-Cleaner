@@ -1,145 +1,56 @@
 // src/ui-downloads.js
 import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
+import { normalizeExportStem, buildUniqueFilename } from './export-filenames.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
-const PLACEHOLDER_STEMS = new Set([
-  'document',
-  'untitled',
-  'output',
-  'input',
-  'converted file',
-  'converted page',
-  'page',
-  'note'
-]);
-
-function decodeHtmlEntities(text) {
-  return String(text || '')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'")
-    .replace(/&#(\d+);/g, (_, codePoint) => String.fromCodePoint(Number(codePoint)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, codePoint) => String.fromCodePoint(parseInt(codePoint, 16)));
+function normalizeCssToken(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
-function stripHtmlTags(text) {
-  return String(text || '').replace(/<[^>]+>/g, ' ');
+function canonicalizeCssDeclaration(value) {
+  const entries = String(value || '')
+    .split(';')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const idx = part.indexOf(':');
+      if (idx === -1) return null;
+      const prop = part.slice(0, idx).trim().toLowerCase();
+      const val = normalizeCssToken(part.slice(idx + 1));
+      if (!prop) return null;
+      return { prop, val };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.prop.localeCompare(b.prop));
+
+  return entries.map(({ prop, val }) => `${prop}:${val}`).join(';');
 }
 
-function normalizeExportStem(value) {
-  return String(value || '')
-    .replace(/\r\n?/g, '\n')
-    .replace(/[<>:"/\\|?*\x00-\x1F]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/^[.\s]+|[.\s]+$/g, '')
-    .slice(0, 120)
-    .trim();
-}
+// Consolidates duplicated selector+declaration rule blocks while preserving first-seen order.
+export function consolidateCssRules(cssText) {
+  const css = String(cssText || '');
+  if (!css.trim()) return '';
 
-function looksLikeGuidStem(value) {
-  const normalized = String(value || '')
-    .trim()
-    .replace(/^[{[(]+|[}\])]+$/g, '')
-    .toLowerCase();
+  const rules = [];
+  const seen = new Set();
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let match;
 
-  return /^[0-9a-f]{32}$/.test(normalized)
-    || /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(normalized);
-}
+  while ((match = re.exec(css)) !== null) {
+    const selector = normalizeCssToken(match[1]);
+    const declaration = canonicalizeCssDeclaration(match[2]);
+    if (!selector || !declaration) continue;
 
-function isPlaceholderStem(value) {
-  const normalized = normalizeExportStem(value).toLowerCase();
-  return !normalized || PLACEHOLDER_STEMS.has(normalized);
-}
-
-function extractHtmlExportStem(content) {
-  const html = String(content || '');
-  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-  if (titleMatch && titleMatch[1]) {
-    const titleStem = normalizeExportStem(decodeHtmlEntities(stripHtmlTags(titleMatch[1])));
-    if (titleStem) return titleStem;
+    const key = `${selector}\u0000${declaration}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    rules.push(`${selector} { ${declaration} }`);
   }
 
-  const pageTitleMatch = html.match(/<h1[^>]*class=["'][^"']*converted-page-title[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i);
-  if (pageTitleMatch && pageTitleMatch[1]) {
-    const headingStem = normalizeExportStem(decodeHtmlEntities(stripHtmlTags(pageTitleMatch[1])));
-    if (headingStem) return headingStem;
-  }
-
-  const h1Match = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
-  if (h1Match && h1Match[1]) {
-    const headingStem = normalizeExportStem(decodeHtmlEntities(stripHtmlTags(h1Match[1])));
-    if (headingStem) return headingStem;
-  }
-
-  return '';
-}
-
-function extractMarkdownExportStem(content) {
-  const lines = String(content || '').split(/\r\n?|\n/);
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-
-    const headingMatch = trimmed.match(/^#{1,6}\s+(.+?)\s*#*$/);
-    if (headingMatch && headingMatch[1]) {
-      const headingStem = normalizeExportStem(headingMatch[1]);
-      if (headingStem) return headingStem;
-    }
-
-    break;
-  }
-
-  return '';
-}
-
-function hasAllocatedName(takenNames, filename) {
-  if (!takenNames || !filename) return false;
-  if (typeof takenNames.has === 'function') return takenNames.has(filename);
-  if (Array.isArray(takenNames)) return takenNames.includes(filename);
-  return false;
-}
-
-function ensureUniqueFileName(filename, takenNames) {
-  const match = String(filename || '').match(/^(.*?)(\.[^.]+)$/);
-  const stem = match ? match[1] : String(filename || '');
-  const extension = match ? match[2] : '';
-  let candidate = `${stem}${extension}`;
-  let index = 2;
-
-  while (hasAllocatedName(takenNames, candidate)) {
-    candidate = `${stem} (${index})${extension}`;
-    index += 1;
-  }
-
-  return candidate;
-}
-
-export function derivePreferredExportStem({ entryName = '', outputFormat = 'html', outputContent = '' } = {}) {
-  const sourceStem = normalizeExportStem(baseNameFromFile(entryName || 'input'));
-  const extractedStem = String(outputFormat || '').toLowerCase() === 'markdown'
-    ? extractMarkdownExportStem(outputContent)
-    : extractHtmlExportStem(outputContent);
-
-  if (extractedStem && !looksLikeGuidStem(extractedStem) && !isPlaceholderStem(extractedStem)) {
-    return extractedStem;
-  }
-
-  if (sourceStem && !looksLikeGuidStem(sourceStem) && !isPlaceholderStem(sourceStem)) {
-    return sourceStem;
-  }
-
-  return 'converted-page';
-}
-
-export function buildExportFileName({ entryName = '', outputFormat = 'html', outputContent = '', takenNames } = {}) {
-  const extension = String(outputFormat || '').toLowerCase() === 'markdown' ? '.md' : '.html';
-  const stem = derivePreferredExportStem({ entryName, outputFormat, outputContent });
-  return ensureUniqueFileName(`${stem}${extension}`, takenNames);
+  // Fallback to original text when no parseable rule blocks are found.
+  if (!rules.length) return css.trim();
+  return rules.join('\n\n');
 }
 
 export function createDownloadHelpers(ctx, updateZipButton) {
@@ -303,14 +214,9 @@ export function createDownloadHelpers(ctx, updateZipButton) {
 
       if (externalizeEnabled && cssContent) {
         if (cssMode === 'per-page') {
-          const stem = String(name || 'output.html').replace(/\.html$/i, '') || 'output';
-          let cssName = `${stem}.css`;
-          let suffix = 2;
-          while (perPageCssTaken.has(cssName)) {
-            cssName = `${stem} (${suffix}).css`;
-            suffix += 1;
-          }
-          perPageCssTaken.add(cssName);
+          const rawStem = String(name || 'output.html').replace(/\.[^./\\]+$/i, '') || 'output';
+          const stem = normalizeExportStem(rawStem, { fallback: 'converted-page' });
+          const cssName = buildUniqueFilename(stem, 'css', perPageCssTaken);
           content = ensureStylesheetLink(content, cssName);
           zip.file(cssName, `${cssContent}\n`);
         } else {
@@ -325,8 +231,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     }
 
     if (sharedCssParts.length) {
-      const uniqueParts = Array.from(new Set(sharedCssParts.filter(Boolean)));
-      zip.file(sharedCssFilename, `${uniqueParts.join('\n\n')}\n`);
+      const consolidated = consolidateCssRules(sharedCssParts.filter(Boolean).join('\n\n'));
+      zip.file(sharedCssFilename, `${consolidated}\n`);
     }
 
     if (warnings.length) {

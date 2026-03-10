@@ -3,90 +3,103 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { JSDOM } from 'jsdom';
 
-import { parseMht } from '../src/pipeline/mht.js';
-import { runPipeline } from '../src/pipeline/pipeline.js';
-import { resolveFixturePath } from '../Tests/fixtures.js';
-
-const dom = new JSDOM('');
-global.DOMParser = dom.window.DOMParser;
-global.NodeFilter = dom.window.NodeFilter;
-
-const REPORTS_DIR = path.join('Tests', 'reports');
-const JSON_REPORT = path.join(REPORTS_DIR, 'css-audit-report.json');
-const MD_REPORT = path.join(REPORTS_DIR, 'css-audit-report.md');
-const SOURCE_MANIFEST = 'Tests/expected/locked-cleaned/manifest.json';
-
-function isFixtureLikeFileName(fileName) {
-  return /\.(mht|mhtml|eml)$/i.test(String(fileName || ''));
+if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
+  const dom = new JSDOM('');
+  global.DOMParser = dom.window.DOMParser;
+  global.NodeFilter = dom.window.NodeFilter;
 }
 
-function getAllTopLevelFixtureFiles() {
-  const testsDir = path.resolve('Tests');
-  if (!fs.existsSync(testsDir)) return [];
+const { parseMht } = await import('../src/pipeline/mht.js');
+const { runPipeline } = await import('../src/pipeline/pipeline.js');
+const { setEnabled } = await import('../src/logging.js');
+setEnabled(false);
 
-  return fs
-    .readdirSync(testsDir, { withFileTypes: true })
-    .filter(entry => entry.isFile() && isFixtureLikeFileName(entry.name))
-    .map(entry => entry.name)
-    .sort((a, b) => a.localeCompare(b));
-}
+const ROOT = process.cwd();
+const TESTS_DIR = path.join(ROOT, 'Tests');
+const LOCKED_MANIFEST_PATH = path.join(TESTS_DIR, 'expected', 'locked-cleaned', 'manifest.json');
+const REPORTS_DIR = path.join(TESTS_DIR, 'reports');
+const REPORT_MD_PATH = path.join(REPORTS_DIR, 'css-audit-report.md');
+const REPORT_JSON_PATH = path.join(REPORTS_DIR, 'css-audit-report.json');
 
-function canonicalizeDeclarationBlock(text) {
-  const parts = String(text || '')
-    .split(';')
-    .map(part => part.trim())
-    .filter(Boolean)
-    .map(part => {
-      const idx = part.indexOf(':');
-      if (idx < 0) return null;
-      const prop = part.slice(0, idx).trim().toLowerCase();
-      const value = part.slice(idx + 1).trim().replace(/\s+/g, ' ');
-      return prop && value ? [prop, value] : null;
-    })
-    .filter(Boolean);
+const MODES = ['shared', 'per-page'];
 
-  const byProp = new Map();
-  for (const [prop, value] of parts) {
-    byProp.set(prop, value);
-  }
-
-  return Array.from(byProp.entries())
-    .sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([prop, value]) => `${prop}:${value}`)
-    .join(';');
-}
-
-function parseCssRules(cssText) {
-  const rules = [];
-  const text = String(cssText || '');
-  const rx = /([^{}]+)\{([^{}]*)\}/g;
-  let match = null;
-
-  while ((match = rx.exec(text)) !== null) {
-    const rawSelector = String(match[1] || '').trim();
-    const rawDeclaration = String(match[2] || '').trim();
-    if (!rawSelector || !rawDeclaration) continue;
-
-    const selectors = rawSelector
-      .split(',')
-      .map(selector => selector.trim())
-      .filter(Boolean);
-
-    const canonicalDeclaration = canonicalizeDeclarationBlock(rawDeclaration);
-    for (const selector of selectors) {
-      rules.push({ selector, declaration: canonicalDeclaration });
-    }
-  }
-
-  return rules;
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
 function sha256(text) {
   return crypto.createHash('sha256').update(String(text || ''), 'utf8').digest('hex');
 }
 
-function topCounts(map, limit = 12) {
+function collapseSpaces(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function canonicalDeclarationBlock(text) {
+  const entries = String(text || '')
+    .split(';')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const idx = part.indexOf(':');
+      if (idx === -1) return null;
+      const prop = part.slice(0, idx).trim().toLowerCase();
+      const value = collapseSpaces(part.slice(idx + 1));
+      if (!prop) return null;
+      return { prop, value };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.prop.localeCompare(b.prop));
+
+  if (!entries.length) return '';
+  return entries.map(({ prop, value }) => `${prop}:${value}`).join(';');
+}
+
+function consolidateCssRulesForBundle(cssText) {
+  const rules = [];
+  const seen = new Set();
+  const css = String(cssText || '');
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let match;
+
+  while ((match = re.exec(css)) !== null) {
+    const selector = collapseSpaces(match[1]);
+    const declaration = canonicalDeclarationBlock(match[2]);
+    if (!selector || !declaration) continue;
+    const key = `${selector}\u0000${declaration}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    rules.push(`${selector} { ${declaration.replace(/;/g, '; ').replace(/:\s*/g, ': ').trim()} }`);
+  }
+
+  if (!rules.length) return css.trim();
+  return rules.join('\n\n');
+}
+
+function parseCssRules(cssText) {
+  const rules = [];
+  const css = String(cssText || '');
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let match;
+  while ((match = re.exec(css)) !== null) {
+    const selectorText = collapseSpaces(match[1]);
+    const declarationText = collapseSpaces(match[2]);
+    if (!selectorText) continue;
+    const selectors = selectorText.split(',').map((part) => part.trim()).filter(Boolean);
+    const declarationSignature = canonicalDeclarationBlock(declarationText);
+    rules.push({
+      selectorText,
+      selectors,
+      declarationText,
+      declarationSignature
+    });
+  }
+  return rules;
+}
+
+function countMapToSortedArray(map, minCount = 1, limit = 12) {
   return Array.from(map.entries())
+    .filter(([, count]) => count >= minCount)
     .sort((a, b) => {
       if (b[1] !== a[1]) return b[1] - a[1];
       return a[0].localeCompare(b[0]);
@@ -95,247 +108,324 @@ function topCounts(map, limit = 12) {
     .map(([key, count]) => ({ key, count }));
 }
 
-function computeCssMetrics(cssText) {
+function summarizeCss(cssText) {
   const rules = parseCssRules(cssText);
   const selectorCounts = new Map();
   const declarationCounts = new Map();
 
-  for (const rule of rules) {
-    selectorCounts.set(rule.selector, (selectorCounts.get(rule.selector) || 0) + 1);
-    declarationCounts.set(rule.declaration, (declarationCounts.get(rule.declaration) || 0) + 1);
-  }
+  rules.forEach((rule) => {
+    if (rule.declarationSignature) {
+      declarationCounts.set(
+        rule.declarationSignature,
+        (declarationCounts.get(rule.declarationSignature) || 0) + 1
+      );
+    }
 
-  const extcssSelectors = Array.from(selectorCounts.keys()).filter(s => /^\.extcss-/i.test(s));
-  const singleUseExtcssSelectorCount = extcssSelectors.filter(s => selectorCounts.get(s) === 1).length;
+    rule.selectors.forEach((selector) => {
+      selectorCounts.set(selector, (selectorCounts.get(selector) || 0) + 1);
+    });
+  });
+
+  const uniqueSelectors = Array.from(selectorCounts.keys());
+  const extcssSelectors = uniqueSelectors.filter((selector) => /^\.extcss-[a-z0-9-]+$/i.test(selector));
+  const singleUseExtcssSelectors = extcssSelectors.filter((selector) => (selectorCounts.get(selector) || 0) === 1);
 
   return {
     cssBytes: Buffer.byteLength(String(cssText || ''), 'utf8'),
-    cssSha256: sha256(cssText || ''),
+    cssSha256: sha256(cssText),
     ruleCount: rules.length,
-    selectorCount: rules.length,
-    uniqueSelectorCount: selectorCounts.size,
+    selectorCount: rules.reduce((sum, rule) => sum + rule.selectors.length, 0),
+    uniqueSelectorCount: uniqueSelectors.length,
     uniqueDeclarationCount: declarationCounts.size,
     extcssSelectorCount: extcssSelectors.length,
-    singleUseExtcssSelectorCount,
-    singleUseExtcssRatio: extcssSelectors.length ? Number((singleUseExtcssSelectorCount / extcssSelectors.length).toFixed(4)) : 0,
-    topRepeatedSelectors: topCounts(selectorCounts).filter(entry => entry.count > 1),
-    topRepeatedDeclarations: topCounts(declarationCounts).filter(entry => entry.count > 1),
-    selectorCounts: Object.fromEntries(Array.from(selectorCounts.entries()).filter(([, count]) => count > 1)),
-    declarationCounts: Object.fromEntries(Array.from(declarationCounts.entries()).filter(([, count]) => count > 1))
+    singleUseExtcssSelectorCount: singleUseExtcssSelectors.length,
+    singleUseExtcssRatio: extcssSelectors.length
+      ? Number((singleUseExtcssSelectors.length / extcssSelectors.length).toFixed(4))
+      : 0,
+    topRepeatedSelectors: countMapToSortedArray(selectorCounts, 2, 10),
+    topRepeatedDeclarations: countMapToSortedArray(declarationCounts, 2, 10),
+    selectorCounts,
+    declarationCounts
   };
 }
 
-function summarizeMode(fixtures, mode) {
-  const modeRows = fixtures.map(entry => entry.modes[mode]).filter(Boolean);
-  const selectorCounts = new Map();
-  const declarationCounts = new Map();
+function resolveFixtureSource(cleanedHtmlName) {
+  const stem = cleanedHtmlName.replace(/\.html$/i, '');
+  const candidates = [
+    `${stem}.mht`,
+    `${stem}.mhtml`
+  ];
 
-  let missingCssAssets = 0;
-  let totalCssBytes = 0;
-  let totalRules = 0;
-  let totalUniqueSelectors = 0;
-  let totalExtcssSelectors = 0;
-  let singleUseRatioTotal = 0;
-
-  for (const row of modeRows) {
-    if (!row.hasCssAsset) {
-      missingCssAssets += 1;
-      continue;
-    }
-
-    totalCssBytes += row.metrics.cssBytes;
-    totalRules += row.metrics.ruleCount;
-    totalUniqueSelectors += row.metrics.uniqueSelectorCount;
-    totalExtcssSelectors += row.metrics.extcssSelectorCount;
-    singleUseRatioTotal += row.metrics.singleUseExtcssRatio;
-
-    const rules = parseCssRules(row.cssText);
-    for (const rule of rules) {
-      selectorCounts.set(rule.selector, (selectorCounts.get(rule.selector) || 0) + 1);
-      declarationCounts.set(rule.declaration, (declarationCounts.get(rule.declaration) || 0) + 1);
+  for (const candidate of candidates) {
+    const candidatePath = path.join(TESTS_DIR, candidate);
+    if (fs.existsSync(candidatePath)) {
+      return { fileName: candidate, filePath: candidatePath };
     }
   }
 
-  return {
-    fixtures: modeRows.length,
-    missingCssAssets,
-    totalCssBytes,
-    totalRules,
-    totalUniqueSelectors,
-    totalExtcssSelectors,
-    avgSingleUseExtcssRatio: modeRows.length ? Number((singleUseRatioTotal / modeRows.length).toFixed(4)) : 0,
-    topSelectors: topCounts(selectorCounts),
-    topDeclarations: topCounts(declarationCounts)
-  };
+  return null;
 }
 
-function consolidateBundleCss(cssParts) {
-  const ordered = [];
-  const seen = new Set();
-
-  for (const cssText of cssParts) {
-    const rules = parseCssRules(cssText);
-    for (const rule of rules) {
-      const key = `${rule.selector}|${rule.declaration}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      ordered.push(`
-${rule.selector}{${rule.declaration}}`);
-    }
-  }
-
-  return ordered.join('').trim();
-}
-
-async function renderFixtureForMode(fileName, mode) {
-  const fixturePath = resolveFixturePath(fileName);
-  const raw = fs.readFileSync(fixturePath, 'latin1');
+async function convertFixtureWithMode(sourcePath, mode) {
+  const raw = fs.readFileSync(sourcePath, 'latin1');
   const parsed = parseMht(raw, { EnableCharsetFallback: true, EnableMapping: true });
-
-  const result = await runPipeline(parsed.html || '', {
-    imageMap: parsed.imageMap || {},
+  const config = {
+    EnableCharsetFallback: true,
     OutputCleanupMode: 'safe',
     UnitStrategy: 'normalize-safe',
     ExternalizeCssEnabled: true,
-    ExternalizeCssMode: mode
-  });
+    ExternalizeCssMode: mode,
+    imageMap: parsed.imageMap || {}
+  };
 
-  const assets = Array.isArray(result.assets) ? result.assets : [];
-  const cssAsset = assets.find(asset => asset && asset.type === 'text/css' && typeof asset.content === 'string');
-  const cssText = cssAsset ? String(cssAsset.content || '') : '';
+  const result = await runPipeline(parsed.html || '', config);
+  const cssAsset = (result.assets || []).find((asset) => asset && asset.type === 'text/css' && typeof asset.content === 'string');
 
   return {
     mode,
-    outputLength: String(result.output || '').length,
-    assetCount: assets.length,
-    cssAssetFileName: cssAsset ? cssAsset.filename || (mode === 'per-page' ? 'converted-page.css' : 'converted-shared.css') : '',
-    cssText,
-    hasCssAsset: Boolean(cssAsset && cssText.trim()),
-    metrics: computeCssMetrics(cssText)
+    outputLength: Buffer.byteLength(String(result.output || ''), 'utf8'),
+    assetCount: Array.isArray(result.assets) ? result.assets.length : 0,
+    cssAssetFileName: cssAsset ? String(cssAsset.filename || '') : '',
+    cssText: cssAsset ? String(cssAsset.content || '') : '',
+    hasCssAsset: Boolean(cssAsset && cssAsset.content)
   };
 }
 
-function toCleanedHtmlName(sourceFixtureName) {
-  const parsed = path.parse(sourceFixtureName);
-  return `${parsed.name}.html`;
+function aggregateModeSummaries(fixtureRows, mode) {
+  const rows = fixtureRows.map((row) => row.modes[mode]).filter(Boolean);
+  const summary = {
+    fixtures: rows.length,
+    missingCssAssets: rows.filter((row) => !row.hasCssAsset).length,
+    totalCssBytes: rows.reduce((sum, row) => sum + row.metrics.cssBytes, 0),
+    totalRules: rows.reduce((sum, row) => sum + row.metrics.ruleCount, 0),
+    totalUniqueSelectors: rows.reduce((sum, row) => sum + row.metrics.uniqueSelectorCount, 0),
+    totalExtcssSelectors: rows.reduce((sum, row) => sum + row.metrics.extcssSelectorCount, 0),
+    avgSingleUseExtcssRatio: rows.length
+      ? Number((rows.reduce((sum, row) => sum + row.metrics.singleUseExtcssRatio, 0) / rows.length).toFixed(4))
+      : 0
+  };
+
+  const repeatedSelectors = new Map();
+  const repeatedDeclarations = new Map();
+
+  rows.forEach((row) => {
+    row.metrics.selectorCounts.forEach((count, selector) => {
+      repeatedSelectors.set(selector, (repeatedSelectors.get(selector) || 0) + count);
+    });
+    row.metrics.declarationCounts.forEach((count, declaration) => {
+      repeatedDeclarations.set(declaration, (repeatedDeclarations.get(declaration) || 0) + count);
+    });
+  });
+
+  summary.topSelectors = countMapToSortedArray(repeatedSelectors, 3, 12);
+  summary.topDeclarations = countMapToSortedArray(repeatedDeclarations, 3, 12);
+
+  if (mode === 'shared') {
+    const rawBundle = rows.map((row) => String(row.cssText || '').trim()).filter(Boolean).join('\n\n');
+    const consolidatedBundle = consolidateCssRulesForBundle(rawBundle);
+    const rawBundleBytes = Buffer.byteLength(rawBundle, 'utf8');
+    const consolidatedBundleBytes = Buffer.byteLength(consolidatedBundle, 'utf8');
+    const savingsBytes = Math.max(0, rawBundleBytes - consolidatedBundleBytes);
+    summary.sharedBundleRawBytes = rawBundleBytes;
+    summary.sharedBundleConsolidatedBytes = consolidatedBundleBytes;
+    summary.sharedBundleSavingsBytes = savingsBytes;
+    summary.sharedBundleSavingsRatio = rawBundleBytes
+      ? Number((savingsBytes / rawBundleBytes).toFixed(4))
+      : 0;
+  }
+
+  return summary;
 }
 
-function formatPercent(value) {
-  return `${(value * 100).toFixed(2)}%`;
+function toPercent(value) {
+  return `${(Number(value || 0) * 100).toFixed(1)}%`;
 }
 
-function makeMarkdown(report) {
-  const shared = report.modeSummaries.shared;
-  const perPage = report.modeSummaries['per-page'];
+function renderModeSummaryTable(modeSummaries) {
+  const lines = [];
+  lines.push('| Mode | Fixtures | Missing CSS Assets | Total CSS Bytes | Total Rules | Total Unique Selectors | Total `extcss-*` Selectors | Avg Single-Use `extcss-*` Ratio |');
+  lines.push('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |');
+  MODES.forEach((mode) => {
+    const s = modeSummaries[mode];
+    lines.push(`| ${mode} | ${s.fixtures} | ${s.missingCssAssets} | ${s.totalCssBytes} | ${s.totalRules} | ${s.totalUniqueSelectors} | ${s.totalExtcssSelectors} | ${toPercent(s.avgSingleUseExtcssRatio)} |`);
+  });
+  return lines.join('\n');
+}
 
+function renderFixtureTable(fixtureRows) {
+  const lines = [];
+  lines.push('| Fixture | Source | Shared CSS Bytes | Shared Rules | Shared Unique Selectors | Shared `extcss` (single-use ratio) | Per-page CSS Bytes | Per-page Rules | Per-page Unique Selectors | Per-page `extcss` (single-use ratio) | CSS Hash Equal Across Modes |');
+  lines.push('| --- | --- | ---: | ---: | ---: | --- | ---: | ---: | ---: | --- | --- |');
+
+  fixtureRows.forEach((row) => {
+    const shared = row.modes.shared;
+    const perPage = row.modes['per-page'];
+    lines.push(
+      `| ${row.cleanedHtmlName} | ${row.sourceFixtureName} | ${shared.metrics.cssBytes} | ${shared.metrics.ruleCount} | ${shared.metrics.uniqueSelectorCount} | ${shared.metrics.extcssSelectorCount} (${toPercent(shared.metrics.singleUseExtcssRatio)}) | ${perPage.metrics.cssBytes} | ${perPage.metrics.ruleCount} | ${perPage.metrics.uniqueSelectorCount} | ${perPage.metrics.extcssSelectorCount} (${toPercent(perPage.metrics.singleUseExtcssRatio)}) | ${row.cssHashEqualAcrossModes ? 'Yes' : 'No'} |`
+    );
+  });
+
+  return lines.join('\n');
+}
+
+function renderTopList(title, rows) {
+  const lines = [];
+  lines.push(`#### ${title}`);
+  if (!rows.length) {
+    lines.push('- None');
+    return lines.join('\n');
+  }
+  rows.forEach((row) => {
+    lines.push(`- \`${row.key}\` (${row.count})`);
+  });
+  return lines.join('\n');
+}
+
+function buildMarkdownReport(payload) {
   const lines = [];
   lines.push('# CSS Audit Report');
   lines.push('');
-  lines.push(`Generated: ${report.generatedAt}`);
-  lines.push(`Fixtures audited: ${report.fixtures.length}`);
-  lines.push('Modes: `shared`, `per-page`');
+  lines.push(`Generated: ${payload.generatedAt}`);
   lines.push('');
-
-  lines.push('## Branch Summary');
+  lines.push('## Scope');
   lines.push('');
-  lines.push(`- Shared total CSS bytes: ${shared.totalCssBytes}`);
-  lines.push(`- Per-page total CSS bytes: ${perPage.totalCssBytes}`);
-  lines.push(`- Shared bundle raw bytes: ${shared.sharedBundleRawBytes}`);
-  lines.push(`- Shared bundle consolidated bytes: ${shared.sharedBundleConsolidatedBytes}`);
-  lines.push(`- Shared bundle savings: ${shared.sharedBundleSavingsBytes} (${formatPercent(shared.sharedBundleSavingsRatio)})`);
-  lines.push(`- Avg single-use extcss ratio (shared): ${formatPercent(shared.avgSingleUseExtcssRatio)}`);
-  lines.push(`- Avg single-use extcss ratio (per-page): ${formatPercent(perPage.avgSingleUseExtcssRatio)}`);
+  lines.push('- Source of truth fixtures: `Tests/expected/locked-cleaned/manifest.json`');
+  lines.push('- Conversion source directory: `Tests/` (`.mht`/`.mhtml`)');
+  lines.push('- Conversion modes audited: `shared`, `per-page`');
+  lines.push('- Pipeline config: `ExternalizeCssEnabled=true`, `OutputCleanupMode=safe`, `UnitStrategy=normalize-safe`, charset fallback enabled');
   lines.push('');
-
-  lines.push('## Fixture Review');
+  lines.push('## Mode Summary');
   lines.push('');
-  lines.push('| Fixture | Shared bytes | Shared rules | Per-page bytes | Hash equal across modes |');
-  lines.push('| --- | ---: | ---: | ---: | :---: |');
-  for (const fixture of report.fixtures) {
-    lines.push(`| ${fixture.sourceFixtureName} | ${fixture.modes.shared.metrics.cssBytes} | ${fixture.modes.shared.metrics.ruleCount} | ${fixture.modes['per-page'].metrics.cssBytes} | ${fixture.cssHashEqualAcrossModes ? 'Yes' : 'No'} |`);
+  lines.push(renderModeSummaryTable(payload.modeSummaries));
+  lines.push('');
+  if (payload.modeSummaries.shared && Number.isFinite(payload.modeSummaries.shared.sharedBundleRawBytes)) {
+    const shared = payload.modeSummaries.shared;
+    lines.push('## Shared Bundle Consolidation Impact');
+    lines.push('');
+    lines.push(`- Raw shared bundle bytes (naive concatenation): ${shared.sharedBundleRawBytes}`);
+    lines.push(`- Consolidated shared bundle bytes (deduped rules): ${shared.sharedBundleConsolidatedBytes}`);
+    lines.push(`- Estimated savings: ${shared.sharedBundleSavingsBytes} (${toPercent(shared.sharedBundleSavingsRatio)})`);
+    lines.push('');
   }
+
+  lines.push('## Fixture-Level Metrics');
+  lines.push('');
+  lines.push(renderFixtureTable(payload.fixtures));
   lines.push('');
 
-  lines.push('## Top Repeated Selectors (shared mode)');
+  MODES.forEach((mode) => {
+    const summary = payload.modeSummaries[mode];
+    lines.push(`### Mode: ${mode}`);
+    lines.push('');
+    lines.push(renderTopList('Top Repeated Selectors', summary.topSelectors));
+    lines.push('');
+    lines.push(renderTopList('Top Repeated Declaration Blocks', summary.topDeclarations));
+    lines.push('');
+  });
+
+  const mismatched = payload.fixtures.filter((fixture) => fixture.cssHashEqualAcrossModes !== true);
+  lines.push('## Cross-Mode Equivalence');
   lines.push('');
-  for (const row of shared.topSelectors.slice(0, 12)) {
-    lines.push(`- \`${row.key}\`: ${row.count}`);
+  if (!mismatched.length) {
+    lines.push('- All fixtures produced identical CSS content between `shared` and `per-page` modes (asset naming differs by mode at packaging stage).');
+  } else {
+    lines.push('- Some fixtures produced different CSS across modes:');
+    mismatched.forEach((item) => {
+      lines.push(`  - ${item.cleanedHtmlName}`);
+    });
   }
-  lines.push('');
 
-  lines.push('## Top Repeated Declaration Blocks (shared mode)');
   lines.push('');
-  for (const row of shared.topDeclarations.slice(0, 12)) {
-    lines.push(`- \`${row.key}\`: ${row.count}`);
+  lines.push('## Initial Consolidation Signals');
+  lines.push('');
+  const highSingleUse = payload.fixtures
+    .map((fixture) => ({
+      fixture: fixture.cleanedHtmlName,
+      ratio: fixture.modes.shared.metrics.singleUseExtcssRatio,
+      extcssCount: fixture.modes.shared.metrics.extcssSelectorCount
+    }))
+    .filter((row) => row.extcssCount > 0)
+    .sort((a, b) => b.ratio - a.ratio)
+    .slice(0, 5);
+
+  if (!highSingleUse.length) {
+    lines.push('- No `extcss-*` selectors were generated; no consolidation signal from hash-class extraction.');
+  } else {
+    lines.push('- Highest single-use `extcss-*` ratios (shared mode):');
+    highSingleUse.forEach((item) => {
+      lines.push(`  - ${item.fixture}: ${toPercent(item.ratio)} single-use across ${item.extcssCount} extcss selectors`);
+    });
   }
-  lines.push('');
 
-  lines.push('## Notes');
   lines.push('');
-  lines.push('- This report audits extracted CSS emitted by the pipeline with `ExternalizeCssEnabled=true`.');
-  lines.push('- Shared/per-page mode differences are packaging/linking concerns; CSS extraction content is expected to match across modes.');
+  lines.push('## Next Actions');
+  lines.push('');
+  lines.push('- Implement selector/declaration consolidation rules focused on top repeated declaration blocks.');
+  lines.push('- Add visual parity Playwright checks comparing embedded baseline vs externalized outputs for this fixture set.');
+  lines.push('- Validate deterministic CSS naming/path behavior at ZIP packaging level (`converted-shared.css` vs per-page naming).');
+  lines.push('');
 
   return `${lines.join('\n')}\n`;
 }
 
 async function main() {
-  fs.mkdirSync(REPORTS_DIR, { recursive: true });
+  if (!fs.existsSync(LOCKED_MANIFEST_PATH)) {
+    throw new Error(`Missing manifest: ${LOCKED_MANIFEST_PATH}`);
+  }
 
-  const fixtureNames = getAllTopLevelFixtureFiles();
+  const manifest = readJson(LOCKED_MANIFEST_PATH);
+  const requiredFiles = Array.isArray(manifest.requiredFiles) ? manifest.requiredFiles : [];
+  if (!requiredFiles.length) {
+    throw new Error('Locked manifest requiredFiles is empty.');
+  }
+
   const fixtures = [];
-  for (const fixtureName of fixtureNames) {
-    const shared = await renderFixtureForMode(fixtureName, 'shared');
-    const perPage = await renderFixtureForMode(fixtureName, 'per-page');
+
+  for (const cleanedHtmlName of requiredFiles) {
+    const source = resolveFixtureSource(cleanedHtmlName);
+    if (!source) {
+      throw new Error(`Could not resolve source fixture for ${cleanedHtmlName}`);
+    }
+
+    const modes = {};
+    for (const mode of MODES) {
+      const conversion = await convertFixtureWithMode(source.filePath, mode);
+      const metrics = summarizeCss(conversion.cssText);
+      modes[mode] = {
+        ...conversion,
+        metrics
+      };
+    }
 
     fixtures.push({
-      cleanedHtmlName: toCleanedHtmlName(fixtureName),
-      sourceFixtureName: fixtureName,
-      modes: {
-        shared,
-        'per-page': perPage
-      },
-      cssHashEqualAcrossModes: shared.metrics.cssSha256 === perPage.metrics.cssSha256
+      cleanedHtmlName,
+      sourceFixtureName: source.fileName,
+      modes,
+      cssHashEqualAcrossModes: modes.shared.metrics.cssSha256 === modes['per-page'].metrics.cssSha256
     });
   }
 
   const modeSummaries = {
-    shared: summarizeMode(fixtures, 'shared'),
-    'per-page': summarizeMode(fixtures, 'per-page')
+    shared: aggregateModeSummaries(fixtures, 'shared'),
+    'per-page': aggregateModeSummaries(fixtures, 'per-page')
   };
 
-  const sharedCssParts = fixtures
-    .map(entry => entry.modes.shared.cssText)
-    .filter(Boolean);
-
-  const sharedRaw = sharedCssParts.join('\n\n').trim();
-  const sharedConsolidated = consolidateBundleCss(sharedCssParts);
-  const rawBytes = Buffer.byteLength(sharedRaw, 'utf8');
-  const consolidatedBytes = Buffer.byteLength(sharedConsolidated, 'utf8');
-  const savingsBytes = Math.max(rawBytes - consolidatedBytes, 0);
-  const savingsRatio = rawBytes > 0 ? Number((savingsBytes / rawBytes).toFixed(4)) : 0;
-
-  modeSummaries.shared.sharedBundleRawBytes = rawBytes;
-  modeSummaries.shared.sharedBundleConsolidatedBytes = consolidatedBytes;
-  modeSummaries.shared.sharedBundleSavingsBytes = savingsBytes;
-  modeSummaries.shared.sharedBundleSavingsRatio = savingsRatio;
-
-  const report = {
+  const payload = {
     generatedAt: new Date().toISOString(),
-    sourceManifest: SOURCE_MANIFEST,
+    sourceManifest: path.relative(ROOT, LOCKED_MANIFEST_PATH).replace(/\\/g, '/'),
     fixtures,
     modeSummaries
   };
 
-  fs.writeFileSync(JSON_REPORT, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
-  fs.writeFileSync(MD_REPORT, makeMarkdown(report), 'utf8');
+  fs.mkdirSync(REPORTS_DIR, { recursive: true });
+  fs.writeFileSync(REPORT_JSON_PATH, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  fs.writeFileSync(REPORT_MD_PATH, buildMarkdownReport(payload), 'utf8');
 
-  console.log(`wrote ${JSON_REPORT}`);
-  console.log(`wrote ${MD_REPORT}`);
-  console.log(`fixtures: ${fixtures.length}`);
-  console.log(`shared bundle savings: ${savingsBytes} bytes (${formatPercent(savingsRatio)})`);
+  console.log(`wrote ${path.relative(ROOT, REPORT_JSON_PATH)}`);
+  console.log(`wrote ${path.relative(ROOT, REPORT_MD_PATH)}`);
 }
 
-main().catch((error) => {
-  console.error(error);
+main().catch((err) => {
+  console.error(err && err.stack ? err.stack : String(err));
   process.exit(1);
 });
