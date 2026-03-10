@@ -154,9 +154,9 @@ All items in this section must be satisfied before tagging the first stable rele
 - **Document External CSS behavior (P3):** finalize behavior/constraints guidance in `README.md` and in-app help. (updated 2026-03-07)
 
 Next steps (pick these up tomorrow):
-- [ ] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats.
-- [ ] Add in-app help text and tooltip copy explaining when externalized CSS is suitable and warnings for single-file downloads without assets.
-- [ ] Add a small smoke/test example (or test instruction) demonstrating per-page vs shared CSS outputs and link integrity.
+- [x] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats. (2026-03-10)
+- [x] Add in-app help text and tooltip copy explaining when externalized CSS is suitable and warnings for single-file downloads without assets. (2026-03-10)
+- [x] Add a small smoke/test example (or test instruction) demonstrating per-page vs shared CSS outputs and link integrity. (2026-03-10)
 - [ ] Open a focused PR with the documentation and test updates, referencing this TODO and `PR #11` where relevant.
 
 **Notes / Deferred items**
@@ -303,7 +303,7 @@ Initial scope:
 - [x] [P2] Define naming and path strategy for both modes (shared: one CSS asset per export batch; per-page: one CSS asset per converted page). (2026-02-27)
 - [x] [P2] Ensure externalized CSS output remains standalone-safe for expected usage (clear warning/help text when output is downloaded as a single HTML file without assets). (2026-02-27)
 - [x] [P2] Add regression and smoke tests for: toggle OFF parity, shared mode links, per-page mode links, and missing-asset behavior messaging. (2026-02-27)
-- [ ] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help.
+- [x] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help. (2026-03-10)
 
 #### Externalized CSS review follow-up (deferred to post-release)
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.

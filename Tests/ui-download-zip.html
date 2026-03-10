@@ -12,124 +12,145 @@
   <div id="out"></div>
 
   <!-- Minimal DOM hooks used by src/ui.js -->
+  <div id="dropzone"></div>
+  <button id="importButton" type="button">Browse</button>
+  <input id="fileInput" type="file" />
   <button id="downloadZip" type="button" disabled>Download ZIP</button>
+  <div class="convert-button-wrapper" tabindex="0">
+    <button id="convertButton" type="button">Convert</button>
+    <div id="convertTooltip" role="tooltip" class="hidden" aria-hidden="true"></div>
+  </div>
   <div id="fileList"></div>
   <div id="statusPanel" class="hidden"></div>
   <span id="appStateBadge">Empty</span>
+  <div id="autoConvertNotice" class="hidden"></div>
+  <div id="diagnosticsPanel" class="hidden"><span id="diagnosticsCount"></span><div id="diagnosticsList"></div></div>
+  <button id="helpButton" type="button" aria-expanded="false">Help</button>
+  <div id="helpModal" class="hidden"><button id="helpCloseButton" type="button">Close</button></div>
 
   <!-- Advanced options (minimal hooks) -->
+  <input id="autoConvertEnabled" type="checkbox" checked />
   <select id="conversionProfile"><option value="onenote">OneNote</option></select>
+  <input id="externalizeCssEnabled" type="checkbox" />
+  <select id="externalizeCssMode"><option value="shared">Shared stylesheet for all converted pages</option><option value="per-page">One stylesheet per converted page</option></select>
+  <input id="experimentalExportEnabled" type="checkbox" />
+  <select id="exportFormat"><option value="html">HTML (.html)</option><option value="markdown">Markdown (.md)</option></select>
+  <p id="exportFormatHelp"></p>
+  <div id="markdownFlavorContainer" class="hidden"><select id="markdownFlavor"><option value="obsidian">Obsidian-compatible</option></select></div>
+  <input id="convertedPageThemeToggleEnabled" type="checkbox" />
+  <input id="convertedPageThemeToggleOledBlack" type="checkbox" />
+  <p id="convertedPageThemeHelp"></p>
   <input id="toolbarEnabled" type="checkbox" />
   <input id="toolbarEditToggleEnabled" type="checkbox" />
   <input id="toolbarMetadataToggleEnabled" type="checkbox" />
 
   <script type="module">
-    import { initUI, state, renderFileList } from '../src/ui.js';
-
     function pass(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:green">PASS: ${msg}</div>`; }
     function fail(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:red">FAIL: ${msg}</div>`; }
 
-    // Stub JSZip so we can detect ZIP generation without performing a download
-    window.__test_generateAsync_called = false;
-    window.__test_zip_files = [];
-    window.__test_zip_readme = '';
-    window.JSZip = function () {
-      this._files = {};
-      this.file = (name, content) => { this._files[name] = content; return this; };
-      this.generateAsync = (opts) => {
-        window.__test_generateAsync_called = true;
-        window.__test_zip_files = Object.keys(this._files);
-        window.__test_zip_readme = String(this._files['README.txt'] || '');
-        return Promise.resolve(new Blob([]));
+    async function main() {
+      const { initUI, state, renderFileList } = await import('../src/ui.js');
+
+      // Stub JSZip so we can detect ZIP generation without performing a download
+      window.__test_generateAsync_called = false;
+      window.__test_zip_files = [];
+      window.__test_zip_readme = '';
+      window.JSZip = function () {
+        this._files = {};
+        this.file = (name, content) => { this._files[name] = content; return this; };
+        this.generateAsync = () => {
+          window.__test_generateAsync_called = true;
+          window.__test_zip_files = Object.keys(this._files);
+          window.__test_zip_readme = String(this._files['README.txt'] || '');
+          return Promise.resolve(new Blob([]));
+        };
       };
-    };
 
-    initUI();
+      initUI();
 
-    // Simulate a successfully converted file with outputHtml
-    const entry = {
-      id: 't-1',
-      name: '123e4567-e89b-12d3-a456-426614174000.mht',
-      size: 1024,
-      status: 'success',
-      outputHtml: '<!doctype html><html><head><title>Readable Export Name</title></head><body><main><h1>Readable Export Name</h1><p>ok</p></main></body></html>',
-      conversionConfig: { ExternalizeCssEnabled: true },
-      outputAssets: []
-    };
-    const entryWithSidecar = {
-      id: 't-2',
-      name: '36f1cb41-5f18-4fd7-8f52-6dca6af3a9b1.mht',
-      size: 1024,
-      status: 'success',
-      outputHtml: '<!doctype html><html><head><title>Styled Export Name</title></head><body><main><h1>Styled Export Name</h1><p>styled</p></main></body></html>',
-      conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
-      outputAssets: [{ type: 'text/css', content: '.demo{color:red}', filename: 'converted-shared.css' }]
-    };
-    state.queue.push(entry, entryWithSidecar);
-    renderFileList();
+      // Simulate a successfully converted file with outputHtml
+      const entry = {
+        id: 't-1',
+        name: '123e4567-e89b-12d3-a456-426614174000.mht',
+        size: 1024,
+        status: 'success',
+        outputHtml: '<!doctype html><html><head><title>Readable Export Name</title></head><body><main><h1>Readable Export Name</h1><p>ok</p></main></body></html>',
+        conversionConfig: { ExternalizeCssEnabled: true },
+        outputAssets: []
+      };
+      const entryWithSidecar = {
+        id: 't-2',
+        name: '36f1cb41-5f18-4fd7-8f52-6dca6af3a9b1.mht',
+        size: 1024,
+        status: 'success',
+        outputHtml: '<!doctype html><html><head><title>Styled Export Name</title></head><body><main><h1>Styled Export Name</h1><p>styled</p></main></body></html>',
+        conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
+        outputAssets: [{ type: 'text/css', content: '.demo{color:red}', filename: 'converted-shared.css' }]
+      };
+      state.queue.push(entry, entryWithSidecar);
+      renderFileList();
 
-    // Verify per-file download button exists
-    const perFileBtn = document.querySelector('[data-download-id="t-1"]');
-    if (perFileBtn) pass('Per-file Download button rendered'); else fail('Per-file Download button not rendered');
+      const perFileBtn = document.querySelector('[data-download-id="t-1"]');
+      if (perFileBtn) pass('Per-file Download button rendered'); else fail('Per-file Download button not rendered');
 
-    const sidecarBlockedBtn = document.querySelector('[data-download-id="t-2"]');
-    if (!sidecarBlockedBtn) pass('Per-file download blocked when CSS sidecar exists');
-    else fail('Per-file download should be blocked when CSS sidecar exists');
+      const sidecarBlockedBtn = document.querySelector('[data-download-id="t-2"]');
+      if (!sidecarBlockedBtn) pass('Per-file download blocked when CSS sidecar exists');
+      else fail('Per-file download should be blocked when CSS sidecar exists');
 
-    // Intercept anchor creation to assert download filename on per-file click
-    const realCreate = Document.prototype.createElement;
-    Document.prototype.createElement = function(tag) {
-      const el = realCreate.call(this, tag);
-      if (tag.toLowerCase() === 'a') window.__lastAnchor = el;
-      return el;
-    };
+      const realCreate = Document.prototype.createElement;
+      Document.prototype.createElement = function(tag) {
+        const el = realCreate.call(this, tag);
+        if (tag.toLowerCase() === 'a') window.__lastAnchor = el;
+        return el;
+      };
 
-    // Click per-file download and check anchor metadata
-    perFileBtn.click();
-    setTimeout(() => {
-      if (window.__lastAnchor && window.__lastAnchor.download === 'Readable Export Name.html') {
-        pass('Per-file download attempted with title-derived filename');
-      } else {
-        fail('Per-file download did not create expected anchor');
-      }
-
-      // Now verify ZIP button enabled and building ZIP triggers JSZip.generateAsync()
-      const zipBtn = document.getElementById('downloadZip');
-      if (!zipBtn.disabled) {
-        pass('Download ZIP button enabled');
-      } else {
-        fail('Download ZIP button still disabled');
-      }
-
-      // Trigger ZIP click
-      zipBtn.click();
-
+      perFileBtn.click();
       setTimeout(() => {
-        if (window.__test_generateAsync_called) pass('ZIP generation invoked (JSZip.generateAsync called)');
-        else fail('ZIP generation was not invoked');
-
-        if (window.__test_zip_files.includes('Readable Export Name.html') && window.__test_zip_files.includes('Styled Export Name.html')) {
-          pass('ZIP uses title-derived page filenames');
+        if (window.__lastAnchor && window.__lastAnchor.download === 'readable-export-name.html') {
+          pass('Per-file download attempted with title-derived filename');
         } else {
-          fail('ZIP missing expected title-derived page filenames');
+          fail('Per-file download did not create expected anchor');
         }
 
-        if (window.__test_zip_files.some((name) => name === 'converted-shared.css')) {
-          pass('ZIP includes externalized CSS sidecar asset');
+        const zipBtn = document.getElementById('downloadZip');
+        if (!zipBtn.disabled) {
+          pass('Download ZIP button enabled');
         } else {
-          fail('ZIP missing expected CSS sidecar asset');
+          fail('Download ZIP button still disabled');
         }
 
-        if (window.__test_zip_files.includes('README.txt') && /Falling back to HTML output as-is/i.test(window.__test_zip_readme)) {
-          pass('ZIP includes fallback README warning for missing sidecar');
-        } else {
-          fail('ZIP missing fallback README warning');
-        }
+        zipBtn.click();
 
-        // Restore createElement
-        Document.prototype.createElement = realCreate;
-      }, 200);
-    }, 50);
+        setTimeout(() => {
+          if (window.__test_generateAsync_called) pass('ZIP generation invoked (JSZip.generateAsync called)');
+          else fail('ZIP generation was not invoked');
+
+          if (window.__test_zip_files.includes('readable-export-name.html') && window.__test_zip_files.includes('styled-export-name.html')) {
+            pass('ZIP uses title-derived page filenames');
+          } else {
+            fail('ZIP missing expected title-derived page filenames');
+          }
+
+          if (window.__test_zip_files.some((name) => name === 'converted-shared.css')) {
+            pass('ZIP includes externalized CSS sidecar asset');
+          } else {
+            fail('ZIP missing expected CSS sidecar asset');
+          }
+
+          if (window.__test_zip_files.includes('README.txt') && /Falling back to HTML output as-is/i.test(window.__test_zip_readme)) {
+            pass('ZIP includes fallback README warning for missing sidecar');
+          } else {
+            fail('ZIP missing fallback README warning');
+          }
+
+          Document.prototype.createElement = realCreate;
+        }, 200);
+      }, 50);
+    }
+
+    main().catch((err) => {
+      fail(`Smoke bootstrap failed: ${err && err.stack ? err.stack : err}`);
+    });
   </script>
 </body>
 </html>

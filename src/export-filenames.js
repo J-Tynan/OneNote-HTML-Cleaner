@@ -130,3 +130,21 @@ export function buildUniqueFilename(stem, extension, takenNames) {
   used.add(candidate);
   return candidate;
 }
+
+export function buildExportFileName({ entryName = '', outputFormat = 'html', outputContent = '', takenNames } = {}) {
+  const format = String(outputFormat || 'html').toLowerCase() === 'markdown' ? 'markdown' : 'html';
+  const extension = format === 'markdown' ? 'md' : 'html';
+  const stem = buildPreferredExportStem({
+    sourceName: entryName,
+    content: outputContent,
+    format
+  });
+
+  const usedNames = takenNames instanceof Map
+    ? new Set(takenNames.keys())
+    : takenNames instanceof Set
+      ? takenNames
+      : new Set();
+
+  return buildUniqueFilename(stem, extension, usedNames);
+}

@@ -153,11 +153,12 @@
                     <input
                       id="externalizeCssEnabled"
                       type="checkbox"
+                      title="Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together."
                       class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
                     <span>
                       Externalize CSS in separate file
                       <span class="block text-xs text-muted">
-                        Moves converted-page styling into CSS assets for ZIP export.
+                        Moves converted-page styling into CSS assets for ZIP export. Best when the HTML and CSS files will stay together.
                       </span>
                     </span>
                   </label>
@@ -167,13 +168,14 @@
                     <select
                       id="externalizeCssMode"
                       disabled
+                      title="Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file."
                       class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed"
                       aria-describedby="externalizeCssModeHelp">
                       <option value="shared" selected>Shared stylesheet for all converted pages</option>
                       <option value="per-page">One stylesheet per converted page</option>
                     </select>
                     <p id="externalizeCssModeHelp" class="text-xs text-muted">
-                      Single-file HTML download is disabled only when a CSS sidecar is produced; otherwise safe fallback download remains available.
+                      Shared mode writes one ZIP-root stylesheet. Per-page mode writes one stylesheet per exported HTML page. If a sidecar is produced, use Download ZIP so the links stay intact.
                     </p>
                   </div>
 
@@ -387,7 +389,7 @@
             The app converts the file locally in your browser and provides a download link when finished.
           </p>
           <p class="mt-3 text-sm text-slate-700">
-            Converted pages are validated to avoid required CDN/app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together.
+            Converted pages are validated to avoid required CDN/app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together. Shared mode writes one stylesheet for the ZIP; per-page mode writes one stylesheet per exported HTML page.
           </p>
           <p class="mt-3 text-sm text-slate-700">
             Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.

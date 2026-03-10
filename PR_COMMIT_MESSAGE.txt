@@ -1,9 +1,0 @@
-feat: externalize-css follow-up — parity tests, idempotence fix, rebaseline
-
-- Add EXTERNALIZED-CSS-REVIEW.md and parity test (Tests/externalize-css-parity.unit.js)
-- Fix sanitizer idempotence by preferring existing h1.converted-page-title in ensureMainHeading
-- Rebaseline locked cleaned fixtures under Tests/expected/locked-cleaned/
-
-Tests: Ran local gate (`npm run test:gate:native`) — green after fix and rebaseline
-
-Reviewers: @docs-owner @pipeline-owner

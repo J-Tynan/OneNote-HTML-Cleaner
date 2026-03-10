@@ -240,6 +240,44 @@ This phase establishes native file routing, hierarchy handling, and section-leve
 - If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
 - App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.
 
+### Externalize CSS: when to use it
+
+- Leave **Externalize CSS** off when you want the simplest standalone HTML download. Embedded styles remain the safest option for ad-hoc sharing because everything stays inside the HTML file.
+- Turn **Externalize CSS** on when you are exporting a ZIP and expect the HTML files to stay with their CSS assets. This is the intended workflow for the feature.
+- Both modes preserve the same HTML structure and emit content-identical CSS; the difference is how ZIP packaging names and links the CSS asset.
+
+#### Mode guide
+
+- **Shared stylesheet for all converted pages**: best for batch exports where every HTML file will live together. ZIP packaging writes a single `converted-shared.css` file at the ZIP root and links each exported HTML page to that shared asset.
+- **One stylesheet per converted page**: best when pages may be split up after export. ZIP packaging writes one CSS file per exported HTML page using the page stem (for example `meeting-notes.css`), with deterministic suffixes on collisions.
+
+#### Download behavior and constraints
+
+- When a page has an externalized CSS sidecar, per-file HTML download is intentionally disabled in the queue UI. Use **Download ZIP** so the HTML and CSS asset stay together.
+- If externalization is enabled but no CSS sidecar is produced for a page, the app keeps the single-file HTML download available and records the ZIP fallback in `README.txt`.
+- Shared and per-page modes are packaging choices, not styling choices. Existing parity checks verify that both modes preserve the same semantic structure as embedded-style output.
+
+#### Recommended workflow
+
+1. Enable **Externalize CSS in separate file** only when you plan to download a ZIP.
+2. Choose **Shared stylesheet** for one bundle with many related pages, or **One stylesheet per converted page** when pages may be redistributed individually.
+3. Download the ZIP and keep the exported HTML files with their CSS assets.
+4. If you need a single portable file, leave Externalize CSS off and use the default embedded-style HTML output.
+
+#### Verification
+
+Use the focused checks below when changing Externalize CSS behavior or documentation:
+
+```powershell
+npm run test:externalize-css
+npm run test:externalize-css-parity
+npm run test:ui-download-smoke
+```
+
+- `test:externalize-css` verifies CSS extraction behavior and fallback conditions.
+- `test:externalize-css-parity` verifies shared and per-page modes preserve the same semantic output and CSS content contract.
+- `test:ui-download-smoke` verifies ZIP packaging, title-derived filenames, CSS sidecar inclusion, and fallback README warnings.
+
 ### Externalized CSS consolidation rules
 
 - Inline style declarations are canonicalized by property name (`prop:value` pairs sorted alphabetically, with last value per property winning).

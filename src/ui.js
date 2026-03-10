@@ -1,6 +1,7 @@
 // src/ui.js
 
-import { buildExportFileName, createDownloadHelpers } from './ui-downloads.js';
+import { buildExportFileName } from './export-filenames.js';
+import { createDownloadHelpers } from './ui-downloads.js';
 // theme variant functions now used indirectly; import removed
 import { detectSourceKind } from './importers/sourceKind.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
