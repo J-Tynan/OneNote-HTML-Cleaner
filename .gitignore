@@ -56,6 +56,9 @@ Tests/OneNote originals/*.jpeg
 Tests/OneNote originals/*.gif
 Tests/screenshots/
 
+# Untracked generated exports used during local test runs
+Tests/exports-processed/
+
 # Playwright / headless test artifacts
 playwright-report/
 .playwright/

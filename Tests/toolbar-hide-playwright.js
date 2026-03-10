@@ -90,9 +90,22 @@ function assert(condition, message) {
     await page.click('[data-onc-action="edit-toggle"]');
     const editToolsState = await page.evaluate(() => {
       const editTools = document.querySelector('[data-onc-role="edit-tools"]');
-      return { visible: Boolean(editTools && !editTools.hidden) };
+      const editToggle = document.querySelector('[data-onc-action="edit-toggle"]');
+      const hideButton = document.querySelector('[data-onc-action="hide-toolbar"]');
+      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
+      return {
+        visible: Boolean(editTools && !editTools.hidden),
+        editLabel: editToggle ? (editToggle.textContent || '').trim() : '',
+        hideLabel: hideButton ? (hideButton.textContent || '').trim() : '',
+        styleDisabled: styleSelect ? styleSelect.disabled : true,
+        styleOptions: styleSelect ? Array.from(styleSelect.options).map((option) => ({ value: option.value, label: option.textContent || '' })) : []
+      };
     });
     assert(editToolsState.visible === true, 'Expected edit formatting tools to show when edit mode is enabled');
+    assert(editToolsState.editLabel === 'Disable edit', `Expected edit toggle label to switch to Disable edit, got ${editToolsState.editLabel}`);
+    assert(editToolsState.hideLabel === 'Hide', `Expected hide button label to be Hide, got ${editToolsState.hideLabel}`);
+    assert(editToolsState.styleDisabled === false, 'Expected styles dropdown to be enabled in edit mode');
+    assert(JSON.stringify(editToolsState.styleOptions.map((option) => option.value)) === JSON.stringify(['page-title', 'heading-1', 'heading-2', 'heading-3', 'heading-4', 'heading-5', 'heading-6', 'citation', 'quote', 'code', 'normal']), `Expected OneNote-style dropdown values, got ${JSON.stringify(editToolsState.styleOptions)}`);
 
     await page.click('p[data-onc-editable="1"]');
 
@@ -119,11 +132,7 @@ function assert(condition, message) {
         if (normalized === 'bold') commandState.bold = !commandState.bold;
         if (normalized === 'italic') commandState.italic = !commandState.italic;
         if (normalized === 'formatblock') {
-          if (normalizedValue === commandState.formatBlock) {
-            commandState.formatBlock = 'p';
-          } else {
-            commandState.formatBlock = normalizedValue;
-          }
+          commandState.formatBlock = normalizedValue || 'p';
         }
         window.__oncEditProbe.execCalls.push({ command: String(command || ''), value: value == null ? '' : String(value), state: { ...commandState } });
         return true;
@@ -193,44 +202,83 @@ function assert(condition, message) {
     assert(independentOffState.bold === 'false', `Expected bold to toggle off independently, got ${independentOffState.bold}`);
     assert(independentOffState.italic === 'true', `Expected italic to remain enabled when bold toggles off, got ${independentOffState.italic}`);
 
-    await page.click('[data-onc-edit-command="h2"]');
-    const headingH2State = await page.evaluate(() => {
-      const h2 = document.querySelector('[data-onc-edit-command="h2"]');
-      const h3 = document.querySelector('[data-onc-edit-command="h3"]');
+    await page.selectOption('[data-onc-role="style-select"]', 'heading-2');
+    const heading2State = await page.evaluate(() => {
+      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
+      const probe = window.__oncEditProbe || { execCalls: [] };
+      const lastFormatBlock = Array.isArray(probe.execCalls)
+        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
+        : null;
       return {
-        h2: h2 ? h2.getAttribute('aria-pressed') : null,
-        h3: h3 ? h3.getAttribute('aria-pressed') : null
+        value: styleSelect ? styleSelect.value : null,
+        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
       };
     });
-    assert(headingH2State.h2 === 'true', `Expected H2 to be active after click, got ${headingH2State.h2}`);
-    assert(headingH2State.h3 === 'false', `Expected H3 to be inactive while H2 is active, got ${headingH2State.h3}`);
+    assert(heading2State.value === 'heading-2', `Expected styles dropdown to show heading-2, got ${heading2State.value}`);
+    assert(heading2State.lastFormatBlock === 'h2', `Expected formatBlock command to use h2, got ${heading2State.lastFormatBlock}`);
 
-    await page.click('[data-onc-edit-command="h3"]');
-    const headingH3State = await page.evaluate(() => {
-      const h2 = document.querySelector('[data-onc-edit-command="h2"]');
-      const h3 = document.querySelector('[data-onc-edit-command="h3"]');
+    await page.selectOption('[data-onc-role="style-select"]', 'quote');
+    const quoteState = await page.evaluate(() => {
+      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
+      const probe = window.__oncEditProbe || { execCalls: [] };
+      const lastFormatBlock = Array.isArray(probe.execCalls)
+        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
+        : null;
       return {
-        h2: h2 ? h2.getAttribute('aria-pressed') : null,
-        h3: h3 ? h3.getAttribute('aria-pressed') : null
+        value: styleSelect ? styleSelect.value : null,
+        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
       };
     });
-    assert(headingH3State.h2 === 'false', `Expected H2 to turn off when H3 is selected, got ${headingH3State.h2}`);
-    assert(headingH3State.h3 === 'true', `Expected H3 to be active after selection, got ${headingH3State.h3}`);
+    assert(quoteState.value === 'quote', `Expected styles dropdown to show quote, got ${quoteState.value}`);
+    assert(quoteState.lastFormatBlock === 'blockquote', `Expected formatBlock command to use blockquote, got ${quoteState.lastFormatBlock}`);
 
-    await page.click('[data-onc-edit-command="h3"]');
-    const headingOffState = await page.evaluate(() => {
-      const h1 = document.querySelector('[data-onc-edit-command="h1"]');
-      const h2 = document.querySelector('[data-onc-edit-command="h2"]');
-      const h3 = document.querySelector('[data-onc-edit-command="h3"]');
-      const h4 = document.querySelector('[data-onc-edit-command="h4"]');
+    await page.selectOption('[data-onc-role="style-select"]', 'code');
+    const codeState = await page.evaluate(() => {
+      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
+      const probe = window.__oncEditProbe || { execCalls: [] };
+      const lastFormatBlock = Array.isArray(probe.execCalls)
+        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
+        : null;
       return {
-        h1: h1 ? h1.getAttribute('aria-pressed') : null,
-        h2: h2 ? h2.getAttribute('aria-pressed') : null,
-        h3: h3 ? h3.getAttribute('aria-pressed') : null,
-        h4: h4 ? h4.getAttribute('aria-pressed') : null
+        value: styleSelect ? styleSelect.value : null,
+        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
       };
     });
-    assert(headingOffState.h1 === 'false' && headingOffState.h2 === 'false' && headingOffState.h3 === 'false' && headingOffState.h4 === 'false', 'Expected second click on active heading to turn all heading buttons off');
+    assert(codeState.value === 'code', `Expected styles dropdown to show code, got ${codeState.value}`);
+    assert(codeState.lastFormatBlock === 'pre', `Expected formatBlock command to use pre, got ${codeState.lastFormatBlock}`);
+
+    await page.selectOption('[data-onc-role="style-select"]', 'normal');
+    const normalState = await page.evaluate(() => {
+      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
+      const probe = window.__oncEditProbe || { execCalls: [] };
+      const lastFormatBlock = Array.isArray(probe.execCalls)
+        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
+        : null;
+      return {
+        value: styleSelect ? styleSelect.value : null,
+        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
+      };
+    });
+    assert(normalState.value === 'normal', `Expected styles dropdown to return to Normal, got ${normalState.value}`);
+    assert(normalState.lastFormatBlock === 'p', `Expected formatBlock command to return to paragraph, got ${normalState.lastFormatBlock}`);
+
+    await page.click('[data-onc-edit-command="color"]');
+    await page.evaluate(() => {
+      const colorInput = document.querySelector('[data-onc-role="color-input"]');
+      if (!colorInput) return;
+      colorInput.value = '#ff0000';
+      colorInput.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    const colorProbe = await page.evaluate(() => {
+      const probe = window.__oncEditProbe || { execCalls: [] };
+      const foreColor = Array.isArray(probe.execCalls)
+        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'forecolor')
+        : null;
+      return {
+        value: foreColor ? String(foreColor.value || '').toLowerCase() : ''
+      };
+    });
+    assert(colorProbe.value === '#ff0000', `Expected color picker to apply foreColor #ff0000, got ${colorProbe.value}`);
 
     await page.click('[data-onc-edit-command="link"]');
     const linkProbe = await page.evaluate(() => {
@@ -254,6 +302,23 @@ function assert(condition, message) {
         window.__oncEditProbe.restore();
       }
     });
+
+    await page.click('[data-onc-action="metadata-toggle"]');
+    const metadataState = await page.evaluate(() => {
+      const panel = document.querySelector('[data-onc-role="metadata-panel"]');
+      const pageTitle = panel ? panel.querySelector('[data-onc-field="page-title"]') : null;
+      const exportFormat = panel ? panel.querySelector('[data-onc-field="export-format"]') : null;
+      return {
+        visible: Boolean(panel && !panel.hidden),
+        text: panel ? String(panel.textContent || '') : '',
+        pageTitle: pageTitle ? String(pageTitle.textContent || '').trim() : '',
+        exportFormat: exportFormat ? String(exportFormat.textContent || '').trim() : ''
+      };
+    });
+    assert(metadataState.visible === true, 'Expected metadata panel to open');
+    assert(!/Profile/i.test(metadataState.text) && !/Warnings/i.test(metadataState.text), 'Did not expect Profile or Warnings entries in metadata panel');
+    assert(metadataState.pageTitle === 'Toolbar', `Expected metadata panel to show page title Toolbar, got ${metadataState.pageTitle}`);
+    assert(metadataState.exportFormat === 'html', `Expected metadata panel to show export format html, got ${metadataState.exportFormat}`);
 
     const helperText = await page.textContent('#onenote-cleaner-toolbar');
     assert(!/Advanced features in one toolbar/i.test(String(helperText || '')), 'Did not expect removed helper message to be present');

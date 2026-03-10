@@ -106,7 +106,7 @@
 
       perFileBtn.click();
       setTimeout(() => {
-        if (window.__lastAnchor && window.__lastAnchor.download === 'readable-export-name.html') {
+        if (window.__lastAnchor && window.__lastAnchor.download === 'Readable Export Name.html') {
           pass('Per-file download attempted with title-derived filename');
         } else {
           fail('Per-file download did not create expected anchor');
@@ -125,7 +125,7 @@
           if (window.__test_generateAsync_called) pass('ZIP generation invoked (JSZip.generateAsync called)');
           else fail('ZIP generation was not invoked');
 
-          if (window.__test_zip_files.includes('readable-export-name.html') && window.__test_zip_files.includes('styled-export-name.html')) {
+          if (window.__test_zip_files.includes('Readable Export Name.html') && window.__test_zip_files.includes('Styled Export Name.html')) {
             pass('ZIP uses title-derived page filenames');
           } else {
             fail('ZIP missing expected title-derived page filenames');

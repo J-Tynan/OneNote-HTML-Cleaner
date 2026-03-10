@@ -94,6 +94,68 @@ export function extractReadableTitle(content, format = 'html') {
   return '';
 }
 
+function sanitizeReadableExportStem(value, options = {}) {
+  const maxLength = Number.isInteger(options.maxLength) && options.maxLength > 8
+    ? options.maxLength
+    : 80;
+
+  const fallback = String(options.fallback || 'Converted Page').trim() || 'Converted Page';
+
+  let stem = String(value || '')
+    .normalize('NFKC')
+    .replace(/[\x00-\x1F\x7F]/g, ' ')
+    .replace(/[<>:"/\\|?*]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/[. ]+$/g, '');
+
+  if (stem.length > maxLength) {
+    stem = stem.slice(0, maxLength).trim().replace(/[. ]+$/g, '');
+  }
+
+  if (!stem) stem = fallback;
+
+  if (WINDOWS_RESERVED_NAMES.has(stem.toLowerCase())) {
+    stem = `${stem} page`;
+  }
+
+  return stem || 'Converted Page';
+}
+
+function buildPreferredReadableExportStem({ sourceName = '', content = '', format = 'html' } = {}) {
+  const sourceStemRaw = baseNameFromFile(sourceName);
+  const sourceStem = sanitizeReadableExportStem(sourceStemRaw, { fallback: 'Converted Page' });
+  const title = extractReadableTitle(content, format);
+  const titleStem = sanitizeReadableExportStem(title, { fallback: sourceStem });
+
+  if (!title) {
+    return looksGuidLike(sourceStemRaw) ? 'Converted Page' : sourceStem;
+  }
+
+  if (looksGuidLike(sourceStemRaw) || isGenericSourceStem(sourceStemRaw)) {
+    return titleStem;
+  }
+
+  return sourceStem;
+}
+
+function buildUniqueReadableFilename(stem, extension, takenNames) {
+  const safeExt = String(extension || '').replace(/^\./, '').trim().toLowerCase() || 'html';
+  const safeStem = sanitizeReadableExportStem(stem, { fallback: 'Converted Page' });
+  const used = takenNames instanceof Set ? takenNames : new Set();
+  const usedKeys = new Set(Array.from(used, (name) => String(name || '').toLowerCase()));
+
+  let suffix = 1;
+  let candidate = `${safeStem}.${safeExt}`;
+  while (usedKeys.has(candidate.toLowerCase())) {
+    suffix += 1;
+    candidate = `${safeStem}-${suffix}.${safeExt}`;
+  }
+
+  used.add(candidate);
+  return candidate;
+}
+
 export function buildPreferredExportStem({ sourceName = '', content = '', format = 'html' } = {}) {
   const sourceStemRaw = baseNameFromFile(sourceName);
   const sourceStem = normalizeExportStem(sourceStemRaw, { fallback: 'converted-page' });
@@ -134,7 +196,7 @@ export function buildUniqueFilename(stem, extension, takenNames) {
 export function buildExportFileName({ entryName = '', outputFormat = 'html', outputContent = '', takenNames } = {}) {
   const format = String(outputFormat || 'html').toLowerCase() === 'markdown' ? 'markdown' : 'html';
   const extension = format === 'markdown' ? 'md' : 'html';
-  const stem = buildPreferredExportStem({
+  const stem = buildPreferredReadableExportStem({
     sourceName: entryName,
     content: outputContent,
     format
@@ -146,5 +208,5 @@ export function buildExportFileName({ entryName = '', outputFormat = 'html', out
       ? takenNames
       : new Set();
 
-  return buildUniqueFilename(stem, extension, usedNames);
+  return buildUniqueReadableFilename(stem, extension, usedNames);
 }

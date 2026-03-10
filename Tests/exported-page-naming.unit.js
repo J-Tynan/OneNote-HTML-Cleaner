@@ -3,7 +3,8 @@ import {
   normalizeExportStem,
   extractReadableTitle,
   buildPreferredExportStem,
-  buildUniqueFilename
+  buildUniqueFilename,
+  buildExportFileName
 } from '../src/export-filenames.js';
 
 console.log('running exported page naming unit tests');
@@ -53,6 +54,45 @@ console.log('running exported page naming unit tests');
   const cssTwo = buildUniqueFilename('weekly-notes', 'css', used);
   assert.equal(cssOne, 'weekly-notes.css');
   assert.equal(cssTwo, 'weekly-notes-2.css');
+}
+
+{
+  const html = '<!doctype html><html><head><title>Readable Export Name</title></head><body><main><h1>Readable Export Name</h1></main></body></html>';
+  const fileName = buildExportFileName({
+    entryName: '123e4567-e89b-12d3-a456-426614174000.mht',
+    outputFormat: 'html',
+    outputContent: html
+  });
+  assert.equal(fileName, 'Readable Export Name.html', 'expected user-facing export filenames to preserve readable casing and spaces');
+}
+
+{
+  const used = new Set();
+  const html = '<!doctype html><html><head><title>Readable Export Name</title></head><body><main><h1>Readable Export Name</h1></main></body></html>';
+  const first = buildExportFileName({
+    entryName: '123e4567-e89b-12d3-a456-426614174000.mht',
+    outputFormat: 'html',
+    outputContent: html,
+    takenNames: used
+  });
+  const second = buildExportFileName({
+    entryName: '36f1cb41-5f18-4fd7-8f52-6dca6af3a9b1.mht',
+    outputFormat: 'html',
+    outputContent: html,
+    takenNames: used
+  });
+  assert.equal(first, 'Readable Export Name.html');
+  assert.equal(second, 'Readable Export Name-2.html');
+}
+
+{
+  const html = '<!doctype html><html><head><title>Different Title</title></head><body><main><h1>Different Title</h1></main></body></html>';
+  const fileName = buildExportFileName({
+    entryName: 'Test File.mht',
+    outputFormat: 'html',
+    outputContent: html
+  });
+  assert.equal(fileName, 'Test File.html', 'expected readable source filenames to preserve spaces and casing');
 }
 
 console.log('exported-page-naming: PASS');

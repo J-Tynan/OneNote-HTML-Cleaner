@@ -8,6 +8,166 @@ const CONVERTED_THEME_ROOT_ID = 'onc-converted-theme-toggle';
 const CONVERTED_THEME_STYLE_ID = 'onc-converted-theme-style';
 const CONVERTED_THEME_SCRIPT_ID = 'onc-converted-theme-script';
 const CONVERTED_THEME_VERSION = 'v1';
+const EDIT_STYLE_OPTIONS = [
+  {
+    key: 'page-title',
+    label: 'Page Title',
+    blockTag: 'p',
+    blockStyles: {
+      margin: '0',
+      fontFamily: '"Calibri Light", Calibri, sans-serif',
+      fontSize: '20.0pt',
+      color: '#000000',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'heading-1',
+    label: 'Heading 1',
+    blockTag: 'h1',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '16.0pt',
+      color: '#1E4E79',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'heading-2',
+    label: 'Heading 2',
+    blockTag: 'h2',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '14.0pt',
+      color: '#2E75B5',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'heading-3',
+    label: 'Heading 3',
+    blockTag: 'h3',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '12.0pt',
+      color: '#5B9BD5',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'heading-4',
+    label: 'Heading 4',
+    blockTag: 'h4',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '12.0pt',
+      color: '#5B9BD5',
+      fontStyle: 'italic',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'heading-5',
+    label: 'Heading 5',
+    blockTag: 'h5',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '11.0pt',
+      color: '#2E75B5',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'heading-6',
+    label: 'Heading 6',
+    blockTag: 'h6',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '11.0pt',
+      color: '#2E75B5',
+      fontStyle: 'italic',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'citation',
+    label: 'Citation',
+    blockTag: 'p',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '9.0pt',
+      color: '#595959',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'quote',
+    label: 'Quote',
+    blockTag: 'blockquote',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '11.0pt',
+      color: '#595959',
+      fontStyle: 'italic',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  },
+  {
+    key: 'code',
+    label: 'Code',
+    blockTag: 'pre',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Consolas, "Courier New", monospace',
+      fontSize: '11.0pt',
+      color: '#111827',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0',
+      whiteSpace: 'pre-wrap',
+      backgroundColor: '#f3f4f6',
+      padding: '.35rem .5rem',
+      borderRadius: '.25rem'
+    }
+  },
+  {
+    key: 'normal',
+    label: 'Normal',
+    blockTag: 'p',
+    blockStyles: {
+      margin: '0',
+      fontFamily: 'Calibri, sans-serif',
+      fontSize: '11.0pt',
+      color: '#000000',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      textIndent: '0'
+    }
+  }
+];
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (ch) => ({
@@ -34,18 +194,13 @@ function normalizeWarningSummary(summary = {}) {
   return { total, info, warning, error };
 }
 
-function buildWarningSummaryText(summary) {
-  return `total ${summary.total} · info ${summary.info} · warning ${summary.warning} · error ${summary.error}`;
-}
-
 function buildMetadata(options = {}) {
-  const warningSummary = normalizeWarningSummary(options.WarningSummary || options.warningSummary || {});
   return {
     sourceName: String(options.SourceName || options.sourceName || options.fileName || 'Unknown source'),
     sourceKind: normalizeSourceKind(options.SourceKind || options.sourceKind || 'html'),
-    profile: String(options.Profile || options.profile || 'generic'),
-    timestamp: String(options.ConversionTimestamp || options.conversionTimestamp || new Date().toISOString()),
-    warningSummary
+    pageTitle: String(options.PageTitle || options.pageTitle || ''),
+    exportFormat: normalizeExportFormat(options.ExportFormat || options.exportFormat || 'html'),
+    timestamp: String(options.ConversionTimestamp || options.conversionTimestamp || new Date().toISOString())
   };
 }
 
@@ -81,6 +236,8 @@ function buildStyleTag() {
     '#onenote-cleaner-toolbar [data-onc-role="edit-tools"][hidden]{display:none !important;}' +
     '#onenote-cleaner-toolbar .onc-title{font-weight:600;margin-right:.25rem;}' +
     '#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{border:1px solid #b7c0cc;background:#fff;color:#1f2a37;border-radius:.35rem;padding:.3rem .55rem;cursor:pointer;font:inherit;}' +
+    '#onenote-cleaner-toolbar .onc-select{min-width:9.5rem;}' +
+    '#onenote-cleaner-toolbar .onc-color-input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none;}' +
     '#onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:#eef5ff;border-color:#7ea5e0;}' +
     '#onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{background:#eef5ff;border-color:#7ea5e0;}' +
     '#onenote-cleaner-toolbar .onc-btn:focus-visible,#onc-toolbar-show:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px;}' +
@@ -100,6 +257,7 @@ function buildStyleTag() {
 }
 
 function buildScriptTag() {
+  const serializedEditStyles = JSON.stringify(EDIT_STYLE_OPTIONS).replace(/</g, '\\u003c');
   const script = `(function(){
   function init(){
   const root = document.getElementById('${TOOLBAR_ROOT_ID}');
@@ -115,10 +273,13 @@ function buildScriptTag() {
   const metadataToggle = root.querySelector('[data-onc-action="metadata-toggle"]');
   const hideButton = root.querySelector('[data-onc-action="hide-toolbar"]');
   const saveButton = root.querySelector('[data-onc-action="save"]');
+  const styleSelect = root.querySelector('[data-onc-role="style-select"]');
+  const colorInput = root.querySelector('[data-onc-role="color-input"]');
   const metadataScript = document.getElementById('${TOOLBAR_METADATA_ID}');
   const canEdit = root.dataset.oncEditEnabled === 'true';
   const canMetadata = root.dataset.oncMetadataEnabled === 'true';
-  const editCommandButtons = Array.from(root.querySelectorAll('[data-onc-edit-command]'));
+  const editCommandButtons = Array.from(root.querySelectorAll('button[data-onc-edit-command]'));
+  const editStyles = ${serializedEditStyles};
   let lastCommandHint = '';
 
   if (!canEdit && editToggle) editToggle.hidden = true;
@@ -254,9 +415,11 @@ function buildScriptTag() {
     });
     root.dataset.oncEditing = enabled ? 'true' : 'false';
     if (editTools) editTools.hidden = !enabled;
+    if (styleSelect) styleSelect.disabled = !enabled;
     if (editToggle) {
       editToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');
-      editToggle.textContent = enabled ? 'Disable edit mode' : 'Enable edit mode';
+      editToggle.textContent = enabled ? 'Disable edit' : 'Enable edit';
+      editToggle.title = enabled ? 'Disable edit' : 'Enable edit';
     }
     document.body.setAttribute('data-onc-editing', enabled ? 'true' : 'false');
   }
@@ -268,15 +431,80 @@ function buildScriptTag() {
     target.setAttribute('aria-pressed', active ? 'true' : 'false');
   }
 
-  function getCurrentHeadingCommand(){
+  function getEditStyleDefinition(key){
+    const normalized = String(key || '').trim().toLowerCase();
+    return editStyles.find((style) => style && String(style.key || '').toLowerCase() === normalized) || null;
+  }
+
+  function getSelectionAnchorElement(){
+    const selection = window.getSelection ? window.getSelection() : null;
+    const anchorNode = selection && selection.anchorNode ? selection.anchorNode : null;
+    if (anchorNode && anchorNode.nodeType === Node.ELEMENT_NODE) return anchorNode;
+    if (anchorNode && anchorNode.parentElement) return anchorNode.parentElement;
+    const active = document.activeElement;
+    if (active && active.closest && !active.closest('#${TOOLBAR_ROOT_ID}')) return active;
+    return null;
+  }
+
+  function getCurrentBlockElement(){
+    const anchor = getSelectionAnchorElement();
+    if (!anchor || !anchor.closest) return null;
+    return anchor.closest('p, li, td, h1, h2, h3, h4, h5, h6, blockquote, pre');
+  }
+
+  function clearBlockStyleState(block){
+    if (!block || !block.style) return;
+    block.removeAttribute('data-onc-style-key');
+    [
+      'margin',
+      'fontFamily',
+      'fontSize',
+      'color',
+      'fontStyle',
+      'fontWeight',
+      'textIndent',
+      'whiteSpace',
+      'backgroundColor',
+      'padding',
+      'borderRadius'
+    ].forEach((property) => {
+      block.style[property] = '';
+    });
+  }
+
+  function applyBlockStyleDefinition(block, style){
+    if (!block || !style) return;
+    clearBlockStyleState(block);
+    block.setAttribute('data-onc-style-key', String(style.key || 'normal'));
+    const blockStyles = style.blockStyles || {};
+    Object.keys(blockStyles).forEach((property) => {
+      if (blockStyles[property] == null) return;
+      block.style[property] = String(blockStyles[property]);
+    });
+  }
+
+  function getCurrentStyleKey(){
+    const block = getCurrentBlockElement();
+    const explicitKey = block ? String(block.getAttribute('data-onc-style-key') || '').trim().toLowerCase() : '';
+    if (explicitKey) return explicitKey;
     try {
       const value = String(document.queryCommandValue('formatBlock') || '').toLowerCase();
-      if (value === 'h1' || value === '<h1>') return 'h1';
-      if (value === 'h2' || value === '<h2>') return 'h2';
-      if (value === 'h3' || value === '<h3>') return 'h3';
-      if (value === 'h4' || value === '<h4>') return 'h4';
+      if (value === 'h1' || value === '<h1>') return 'heading-1';
+      if (value === 'h2' || value === '<h2>') return 'heading-2';
+      if (value === 'h3' || value === '<h3>') return 'heading-3';
+      if (value === 'h4' || value === '<h4>') return 'heading-4';
+      if (value === 'h5' || value === '<h5>') return 'heading-5';
+      if (value === 'h6' || value === '<h6>') return 'heading-6';
+      if (value === 'blockquote' || value === '<blockquote>') return 'quote';
+      if (value === 'pre' || value === '<pre>') return 'code';
     } catch (_err) {}
-    return '';
+    return 'normal';
+  }
+
+  function syncStyleSelect(){
+    if (!styleSelect) return;
+    const current = getCurrentStyleKey();
+    styleSelect.value = current || 'normal';
   }
 
   function syncEditCommandState(){
@@ -285,6 +513,7 @@ function buildScriptTag() {
         btn.setAttribute('data-onc-active', 'false');
         btn.setAttribute('aria-pressed', 'false');
       });
+      syncStyleSelect();
       return;
     }
 
@@ -301,9 +530,7 @@ function buildScriptTag() {
     editCommandButtons.forEach((btn) => {
       const command = String(btn.getAttribute('data-onc-edit-command') || '');
       let active = false;
-      if (command === 'h1' || command === 'h2' || command === 'h3' || command === 'h4') {
-        active = getCurrentHeadingCommand() === command;
-      } else if (statefulMap[command]) {
+      if (statefulMap[command]) {
         try {
           active = document.queryCommandState(statefulMap[command]) === true;
         } catch (_err) {
@@ -316,6 +543,7 @@ function buildScriptTag() {
       btn.setAttribute('data-onc-active', active ? 'true' : 'false');
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
+    syncStyleSelect();
   }
 
   function escapeHtmlFragment(value){
@@ -340,15 +568,14 @@ function buildScriptTag() {
     if (root.dataset.oncEditing !== 'true') return;
     if (!document || typeof document.execCommand !== 'function') return;
     const cmd = String(action || '').toLowerCase();
-    if (cmd === 'h1' || cmd === 'h2' || cmd === 'h3' || cmd === 'h4') {
-      const current = getCurrentHeadingCommand();
-      if (current === cmd) {
-        runEditCommand('formatBlock', 'p');
-        lastCommandHint = '';
-      } else {
-        runEditCommand('formatBlock', cmd);
-        lastCommandHint = cmd;
+    const selectedStyle = getEditStyleDefinition(cmd);
+    if (selectedStyle) {
+      runEditCommand('formatBlock', String(selectedStyle.blockTag || 'p'));
+      const block = getCurrentBlockElement();
+      if (block) {
+        applyBlockStyleDefinition(block, selectedStyle);
       }
+      lastCommandHint = selectedStyle.key === 'normal' ? '' : selectedStyle.key;
       syncEditCommandState();
       return;
     }
@@ -373,12 +600,9 @@ function buildScriptTag() {
       return;
     }
     if (cmd === 'color') {
-      const color = window.prompt('Enter text color (name or hex)', '#2563eb');
-      if (!color) return;
-      runEditCommand('foreColor', color);
-      lastCommandHint = 'color';
-      setEditButtonActive('color', true);
-      syncEditCommandState();
+      if (colorInput) {
+        colorInput.click();
+      }
       return;
     }
     if (cmd === 'size') {
@@ -425,6 +649,27 @@ function buildScriptTag() {
     lastCommandHint = cmd;
     setEditButtonActive(cmd, true);
     syncEditCommandState();
+  }
+
+  if (styleSelect) {
+    styleSelect.addEventListener('change', () => {
+      if (root.dataset.oncEditing !== 'true') return;
+      applyEditCommand(styleSelect.value || 'normal');
+    });
+  }
+
+  if (colorInput) {
+    const applyPickedColor = () => {
+      if (root.dataset.oncEditing !== 'true') return;
+      const color = String(colorInput.value || '').trim();
+      if (!color) return;
+      runEditCommand('foreColor', color);
+      lastCommandHint = 'color';
+      setEditButtonActive('color', true);
+      syncEditCommandState();
+    };
+    colorInput.addEventListener('input', applyPickedColor);
+    colorInput.addEventListener('change', applyPickedColor);
   }
 
   if (editToggle) {
@@ -492,17 +737,14 @@ function buildScriptTag() {
   if (!metadata || !metadataPanel) return true;
   const sourceName = metadataPanel.querySelector('[data-onc-field="source-name"]');
   const sourceKind = metadataPanel.querySelector('[data-onc-field="source-kind"]');
-  const profile = metadataPanel.querySelector('[data-onc-field="profile"]');
+  const pageTitle = metadataPanel.querySelector('[data-onc-field="page-title"]');
+  const exportFormat = metadataPanel.querySelector('[data-onc-field="export-format"]');
   const timestamp = metadataPanel.querySelector('[data-onc-field="timestamp"]');
-  const warningSummary = metadataPanel.querySelector('[data-onc-field="warning-summary"]');
   if (sourceName) sourceName.textContent = metadata.sourceName || 'Unknown source';
   if (sourceKind) sourceKind.textContent = metadata.sourceKind || 'html';
-  if (profile) profile.textContent = metadata.profile || 'generic';
+  if (pageTitle) pageTitle.textContent = metadata.pageTitle || document.title || 'Untitled page';
+  if (exportFormat) exportFormat.textContent = metadata.exportFormat || 'html';
   if (timestamp) timestamp.textContent = formatTimestamp(metadata.timestamp || '');
-  if (warningSummary && metadata.warningSummary) {
-    const ws = metadata.warningSummary;
-    warningSummary.textContent = 'total ' + (ws.total || 0) + ' · info ' + (ws.info || 0) + ' · warning ' + (ws.warning || 0) + ' · error ' + (ws.error || 0);
-  }
   setToolbarVisible(false);
   syncEditCommandState();
   syncFloatingControls();
@@ -525,26 +767,26 @@ function buildMetadataTag(metadata) {
 function buildToolbarMarkup(metadata, options = {}) {
   const editEnabled = options.ToolbarEditToggleEnabled === true;
   const metadataEnabled = options.ToolbarMetadataToggleEnabled === true;
-  const warningSummaryText = buildWarningSummaryText(metadata.warningSummary);
+  const styleOptionsMarkup = EDIT_STYLE_OPTIONS
+    .map((style) => `<option value="${escapeHtml(style.key)}">${escapeHtml(style.label)}</option>`)
+    .join('');
 
   return [
     `<div id="${TOOLBAR_ROOT_ID}" data-onc-toolbar="${TOOLBAR_VERSION}" data-onc-edit-enabled="${editEnabled}" data-onc-metadata-enabled="${metadataEnabled}" tabindex="-1" aria-label="OneNote Cleaner toolbar" hidden>`,
     '<div class="onc-toolbar-row">',
     '<span class="onc-title">Tools</span>',
-    `<button type="button" class="onc-btn" data-onc-action="edit-toggle" aria-pressed="false" title="Enable edit mode"${editEnabled ? '' : ' hidden'}>Enable edit mode</button>`,
+    `<button type="button" class="onc-btn" data-onc-action="edit-toggle" aria-pressed="false" title="Enable edit"${editEnabled ? '' : ' hidden'}>Enable edit</button>`,
     `<button type="button" class="onc-btn" data-onc-action="metadata-toggle" aria-pressed="false" title="Show metadata"${metadataEnabled ? '' : ' hidden'}>Show metadata</button>`,
     '<button type="button" class="onc-btn" data-onc-action="save" title="Save current page">Save</button>',
-    '<button type="button" class="onc-btn" data-onc-action="hide-toolbar" title="Hide toolbar">Hide toolbar</button>',
+    '<button type="button" class="onc-btn" data-onc-action="hide-toolbar" title="Hide toolbar">Hide</button>',
     '</div>',
     '<div class="onc-toolbar-row onc-edit-tools" data-onc-role="edit-tools" hidden>',
     '<button type="button" class="onc-btn" data-onc-edit-command="undo" data-onc-active="false" aria-pressed="false" title="Undo">Undo</button>',
-    '<button type="button" class="onc-btn" data-onc-edit-command="h1" data-onc-active="false" aria-pressed="false" title="Heading 1">H1</button>',
-    '<button type="button" class="onc-btn" data-onc-edit-command="h2" data-onc-active="false" aria-pressed="false" title="Heading 2">H2</button>',
-    '<button type="button" class="onc-btn" data-onc-edit-command="h3" data-onc-active="false" aria-pressed="false" title="Heading 3">H3</button>',
-    '<button type="button" class="onc-btn" data-onc-edit-command="h4" data-onc-active="false" aria-pressed="false" title="Heading 4">H4</button>',
+    `<select class="onc-btn onc-select" data-onc-role="style-select" title="Styles" aria-label="Styles" disabled>${styleOptionsMarkup}</select>`,
     '<button type="button" class="onc-btn" data-onc-edit-command="bold" data-onc-active="false" aria-pressed="false" title="Bold">B</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="italic" data-onc-active="false" aria-pressed="false" title="Italic">I</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="color" data-onc-active="false" aria-pressed="false" title="Text color">Color</button>',
+    '<input type="color" class="onc-color-input" data-onc-role="color-input" value="#2563eb" aria-label="Pick text color">',
     '<button type="button" class="onc-btn" data-onc-edit-command="size" data-onc-active="false" aria-pressed="false" title="Text size">Size</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="sub" data-onc-active="false" aria-pressed="false" title="Subscript">Sub</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="super" data-onc-active="false" aria-pressed="false" title="Superscript">Super</button>',
@@ -556,9 +798,9 @@ function buildToolbarMarkup(metadata, options = {}) {
     '<dl>',
     `<dt>Source</dt><dd data-onc-field="source-name">${escapeHtml(metadata.sourceName)}</dd>`,
     `<dt>Kind</dt><dd data-onc-field="source-kind">${escapeHtml(metadata.sourceKind)}</dd>`,
-    `<dt>Profile</dt><dd data-onc-field="profile">${escapeHtml(metadata.profile)}</dd>`,
+    `<dt>Page title</dt><dd data-onc-field="page-title">${escapeHtml(metadata.pageTitle)}</dd>`,
+    `<dt>Format</dt><dd data-onc-field="export-format">${escapeHtml(metadata.exportFormat)}</dd>`,
     `<dt>Timestamp</dt><dd data-onc-field="timestamp">${escapeHtml(metadata.timestamp)}</dd>`,
-    `<dt>Warnings</dt><dd data-onc-field="warning-summary">${escapeHtml(warningSummaryText)}</dd>`,
     '</dl>',
     '</aside>',
     '</div>',

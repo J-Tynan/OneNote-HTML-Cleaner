@@ -64,13 +64,11 @@ async function main() {
     fail('Expected toolbar reveal button label to be Toolbar');
   }
   if (!/data-onc-edit-command="undo"/i.test(injected)
-    || !/data-onc-edit-command="h1"/i.test(injected)
-    || !/data-onc-edit-command="h2"/i.test(injected)
-    || !/data-onc-edit-command="h3"/i.test(injected)
-    || !/data-onc-edit-command="h4"/i.test(injected)
+    || !/data-onc-role="style-select"/i.test(injected)
     || !/data-onc-edit-command="bold"/i.test(injected)
     || !/data-onc-edit-command="italic"/i.test(injected)
     || !/data-onc-edit-command="color"/i.test(injected)
+    || !/data-onc-role="color-input"/i.test(injected)
     || !/data-onc-edit-command="size"/i.test(injected)
     || !/data-onc-edit-command="sub"/i.test(injected)
     || !/data-onc-edit-command="super"/i.test(injected)
@@ -85,8 +83,23 @@ async function main() {
   if (!/data-onc-edit-command="link"[^>]*>Link<\/button>/i.test(injected)) {
     fail('Expected hyperlink button label to be Link');
   }
+  if (!/data-onc-role="style-select"[^>]*>.*Page Title.*Heading 1.*Heading 2.*Heading 3.*Heading 4.*Heading 5.*Heading 6.*Citation.*Quote.*Code.*Normal.*<\/select>/is.test(injected)) {
+    fail('Expected styles dropdown to include the full OneNote-style option set');
+  }
+  if (!/data-onc-action="edit-toggle"[^>]*>Enable edit<\/button>/i.test(injected)) {
+    fail('Expected edit toggle label to be Enable edit');
+  }
+  if (!/data-onc-action="hide-toolbar"[^>]*>Hide<\/button>/i.test(injected)) {
+    fail('Expected hide button label to be Hide');
+  }
   if (/>Hyperlink<\/button>/i.test(injected)) {
     fail('Did not expect Hyperlink label in edit controls');
+  }
+  if (/data-onc-field="profile"/i.test(injected) || /data-onc-field="warning-summary"/i.test(injected)) {
+    fail('Did not expect Profile or Warnings metadata fields in injected toolbar');
+  }
+  if (!/data-onc-field="page-title"/i.test(injected) || !/data-onc-field="export-format"/i.test(injected)) {
+    fail('Expected Page title and Format metadata fields in injected toolbar');
   }
   if (/Advanced features in one toolbar/i.test(injected)) {
     fail('Did not expect helper message text in injected toolbar');
