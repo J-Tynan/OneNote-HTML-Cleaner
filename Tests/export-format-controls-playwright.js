@@ -71,7 +71,7 @@ function createStaticServer(root) {
       'PASS: Markdown flavor hidden/disabled for non-Markdown format',
       'PASS: Converted-page theme toggle disabled for non-HTML export format',
       'PASS: Converted-page theme toggle HTML-only help text shown for non-HTML formats',
-      'PASS: DOCX help text shown for unsupported format',
+      'PASS: Homepage help text reflects HTML and Markdown experimental choices',
       'PASS: OLED option enabled when converted-page theme toggle is checked',
       'PASS: Converted-page theme helper text remains stable when toggles are changed',
       'PASS: Export format falls back to HTML when experimental is OFF',

@@ -12,7 +12,7 @@
 
   <div id="dropzone" tabindex="0"></div>
   <button id="importButton" type="button">Import</button>
-  <input id="fileInput" type="file" />
+  <input id="fileInput" type="file" title="Import files" />
   <div id="fileList"></div>
   <div id="statusPanel" class="hidden"></div>
   <span id="appStateBadge">Empty</span>
@@ -20,19 +20,16 @@
   <div class="convert-button-wrapper" tabindex="0"><button id="convertButton" type="button" disabled>Convert</button></div>
   <div id="convertTooltip" class="hidden" aria-hidden="true"></div>
 
-  <input id="toolbarEnabled" type="checkbox" />
-  <input id="toolbarEditToggleEnabled" type="checkbox" />
-  <input id="toolbarMetadataToggleEnabled" type="checkbox" />
-  <input id="autoConvertEnabled" type="checkbox" checked />
-  <input id="externalizeCssEnabled" type="checkbox" />
-  <select id="externalizeCssMode"><option value="shared">shared</option></select>
+  <input id="toolbarEnabled" type="checkbox" title="Toolbar enabled" />
+  <input id="autoConvertEnabled" type="checkbox" checked title="Auto convert enabled" />
+  <input id="externalizeCssEnabled" type="checkbox" title="Externalize CSS enabled" />
+  <select id="externalizeCssMode" title="Externalize CSS mode"><option value="shared">shared</option></select>
   <p id="autoConvertNotice"></p>
 
-  <input id="experimentalExportEnabled" type="checkbox" />
+  <input id="experimentalExportEnabled" type="checkbox" title="Experimental export enabled" />
   <select id="exportFormat" class="hidden" disabled>
     <option value="html" selected>HTML</option>
     <option value="markdown">Markdown</option>
-    <option value="docx">DOCX</option>
   </select>
   <div id="markdownFlavorContainer" class="hidden">
     <select id="markdownFlavor" disabled>
@@ -44,17 +41,17 @@
   </div>
   <p id="exportFormatHelp"></p>
 
-  <input id="convertedPageThemeToggleEnabled" type="checkbox" />
-  <input id="convertedPageThemeToggleOledBlack" type="checkbox" disabled />
+  <input id="convertedPageThemeToggleEnabled" type="checkbox" title="Converted page theme toggle enabled" />
+  <input id="convertedPageThemeToggleOledBlack" type="checkbox" disabled title="Converted page OLED black enabled" />
   <p id="convertedPageThemeHelp"></p>
 
   <details id="diagnosticsPanel" class="hidden"></details>
   <ul id="diagnosticsList"></ul>
   <span id="diagnosticsCount"></span>
 
-  <button id="helpButton" type="button"></button>
+  <button id="helpButton" type="button" title="Help">Help</button>
   <div id="helpModal" class="hidden"></div>
-  <button id="helpCloseButton" type="button"></button>
+  <button id="helpCloseButton" type="button" title="Close help">Close</button>
 
   <script type="module">
     import { initUI } from '../src/ui.js';
@@ -97,20 +94,17 @@
     if (!flavorContainer.classList.contains('hidden') && !flavor.disabled) pass('Markdown flavor shown/enabled when Markdown format selected');
     else fail('Markdown flavor should be shown/enabled for Markdown format');
 
-    exportFormat.value = 'docx';
-    exportFormat.dispatchEvent(new Event('change', { bubbles: true }));
-
-    if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled for non-Markdown format');
-    else fail('Markdown flavor should be hidden/disabled for non-Markdown format');
-
     if (convertedThemeToggle.disabled) pass('Converted-page theme toggle disabled for non-HTML export format');
     else fail('Converted-page theme toggle should be disabled for non-HTML export format');
 
     if (/available only for html/i.test(convertedThemeHelp.textContent || '')) pass('Converted-page theme toggle HTML-only help text shown for non-HTML formats');
     else fail('Expected converted-page theme HTML-only help text for non-HTML formats');
 
-    if (/not yet implemented/i.test(help.textContent || '')) pass('DOCX help text shown for unsupported format');
-    else fail('Expected DOCX unsupported help text');
+    exportFormat.value = 'html';
+    exportFormat.dispatchEvent(new Event('change', { bubbles: true }));
+
+    if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled for non-Markdown format');
+    else fail('Markdown flavor should be hidden/disabled for non-Markdown format');
 
     experimental.checked = false;
     experimental.dispatchEvent(new Event('change', { bubbles: true }));
@@ -128,6 +122,9 @@
     const helpAfterToggle = convertedThemeHelp.textContent || '';
     if (helpBeforeToggle === helpAfterToggle) pass('Converted-page theme helper text remains stable when toggles are changed');
     else fail('Converted-page theme helper text should remain stable when toggles are changed');
+
+    if (/choose html or markdown output/i.test(help.textContent || '')) pass('Homepage help text reflects HTML and Markdown experimental choices');
+    else fail('Expected homepage help text to mention HTML and Markdown choices');
 
     const cfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
     if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');

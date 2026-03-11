@@ -161,15 +161,16 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const selectedFlavor = normalizeMarkdownFlavor(ctx.markdownFlavor ? String(ctx.markdownFlavor.value || 'obsidian') : 'obsidian');
     const convertedPageThemeToggleEnabled = Boolean(ctx.convertedPageThemeToggleEnabled && ctx.convertedPageThemeToggleEnabled.checked);
     const convertedPageThemeToggleOledBlack = Boolean(ctx.convertedPageThemeToggleOledBlack && ctx.convertedPageThemeToggleOledBlack.checked);
+    const toolbarEnabled = Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked);
 
     return {
       Profile: 'onenote',
       OutputCleanupMode: 'safe',
       UnitStrategy: 'normalize-safe',
       TailwindCssHref: 'assets/tailwind-output.css',
-      ToolbarEnabled: Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked),
-      ToolbarEditToggleEnabled: Boolean(ctx.toolbarEditToggleEnabled && ctx.toolbarEditToggleEnabled.checked),
-      ToolbarMetadataToggleEnabled: Boolean(ctx.toolbarMetadataToggleEnabled && ctx.toolbarMetadataToggleEnabled.checked),
+      ToolbarEnabled: toolbarEnabled,
+      ToolbarEditToggleEnabled: toolbarEnabled,
+      ToolbarMetadataToggleEnabled: toolbarEnabled,
       ExternalizeCssEnabled: Boolean(ctx.externalizeCssEnabled && ctx.externalizeCssEnabled.checked),
       ExternalizeCssMode: ctx.externalizeCssMode ? String(ctx.externalizeCssMode.value || 'shared') : 'shared',
       ExperimentalExportEnabled: experimentalEnabled,

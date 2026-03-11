@@ -24,8 +24,6 @@ const dom = {
   convertButtonWrapper: null,
   // uiStyleVariant temporary dropdown removed after Phase 1
   toolbarEnabled: null,
-  toolbarEditToggleEnabled: null,
-  toolbarMetadataToggleEnabled: null,
   autoConvertEnabled: null,
   externalizeCssEnabled: null,
   externalizeCssMode: null,
@@ -219,9 +217,7 @@ function updateExportFormatControls() {
   }
   if (dom.exportFormatHelp) {
     if (!experimentalEnabled) {
-      dom.exportFormatHelp.textContent = 'Enable experimental export formats to choose output type.';
-    } else if (selectedFormat === 'docx') {
-      dom.exportFormatHelp.textContent = 'Document (.docx) export is not yet implemented. Choose HTML or Markdown.';
+      dom.exportFormatHelp.textContent = 'Enable experimental export formats to choose HTML or Markdown output.';
     } else if (selectedFormat === 'markdown') {
       dom.exportFormatHelp.textContent = 'Markdown export is structure-first (layout not preserved).';
     } else {
@@ -723,8 +719,6 @@ function bindEvents() {
   dom.convertButton?.addEventListener('click', onConvertClick);
   // light-theme testing dropdown removed; no listener attached
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
-  dom.toolbarEditToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
-  dom.toolbarMetadataToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssMode?.addEventListener('change', onAdvancedOptionsChange);
   dom.experimentalExportEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -796,8 +790,6 @@ export function initUI(workerManager, options = {}) {
   dom.convertButton = document.getElementById('convertButton');
   dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
-  dom.toolbarEditToggleEnabled = document.getElementById('toolbarEditToggleEnabled');
-  dom.toolbarMetadataToggleEnabled = document.getElementById('toolbarMetadataToggleEnabled');
   dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
   dom.externalizeCssEnabled = document.getElementById('externalizeCssEnabled');
   dom.externalizeCssMode = document.getElementById('externalizeCssMode');
@@ -867,8 +859,6 @@ export function initUI(workerManager, options = {}) {
     successfulOutputs: runtime.successfulOutputs,
     downloadZipButton: dom.downloadZip,
     toolbarEnabled: dom.toolbarEnabled,
-    toolbarEditToggleEnabled: dom.toolbarEditToggleEnabled,
-    toolbarMetadataToggleEnabled: dom.toolbarMetadataToggleEnabled,
     externalizeCssEnabled: dom.externalizeCssEnabled,
     externalizeCssMode: dom.externalizeCssMode,
     experimentalExportEnabled: dom.experimentalExportEnabled,

@@ -197,13 +197,12 @@
                     <select
                       id="exportFormat"
                       disabled
-                      class="hidden mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed">
+                      class="hidden mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed">
                       <option value="html" selected>HTML (.html)</option>
                       <option value="markdown">Markdown (.md)</option>
-                      <option value="docx">Document (.docx)</option>
                     </select>
                     <p id="exportFormatHelp" class="text-xs text-muted">
-                      Enable experimental export formats to choose output type.
+                      Enable experimental export formats to choose HTML or Markdown output.
                     </p>
                   </div>
 
@@ -252,24 +251,12 @@
                       id="toolbarEnabled"
                       type="checkbox"
                       class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                    <span>Add optional toolbar to exported pages</span>
+                    <span>Add toolbar to exported pages</span>
                   </label>
 
-                  <label class="checkbox-option flex items-start gap-3" for="toolbarEditToggleEnabled">
-                    <input
-                      id="toolbarEditToggleEnabled"
-                      type="checkbox"
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                    <span>Allow editing mode toggle in toolbar</span>
-                  </label>
-
-                  <label class="checkbox-option flex items-start gap-3" for="toolbarMetadataToggleEnabled">
-                    <input
-                      id="toolbarMetadataToggleEnabled"
-                      type="checkbox"
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                    <span>Allow metadata visibility toggle in toolbar</span>
-                  </label>
+                  <p class="text-xs text-muted">
+                    When enabled, the exported toolbar includes both the edit mode toggle and the metadata visibility toggle automatically.
+                  </p>
 
                 </div>
               </section>

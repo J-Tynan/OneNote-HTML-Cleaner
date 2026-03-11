@@ -765,8 +765,9 @@ function buildMetadataTag(metadata) {
 }
 
 function buildToolbarMarkup(metadata, options = {}) {
-  const editEnabled = options.ToolbarEditToggleEnabled === true;
-  const metadataEnabled = options.ToolbarMetadataToggleEnabled === true;
+  const toolbarEnabled = options.ToolbarEnabled === true;
+  const editEnabled = toolbarEnabled || options.ToolbarEditToggleEnabled === true;
+  const metadataEnabled = toolbarEnabled || options.ToolbarMetadataToggleEnabled === true;
   const styleOptionsMarkup = EDIT_STYLE_OPTIONS
     .map((style) => `<option value="${escapeHtml(style.key)}">${escapeHtml(style.label)}</option>`)
     .join('');

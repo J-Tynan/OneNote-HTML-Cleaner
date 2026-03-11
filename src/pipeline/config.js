@@ -103,10 +103,11 @@ function normalizeConvertedPageThemeConfig(rawConfig = {}) {
 }
 
 function normalizeToolbarConfig(rawConfig = {}) {
+  const toolbarEnabled = toBoolean(rawConfig.ToolbarEnabled, false);
   return {
-    ToolbarEnabled: toBoolean(rawConfig.ToolbarEnabled, false),
-    ToolbarEditToggleEnabled: toBoolean(rawConfig.ToolbarEditToggleEnabled, false),
-    ToolbarMetadataToggleEnabled: toBoolean(rawConfig.ToolbarMetadataToggleEnabled, false),
+    ToolbarEnabled: toolbarEnabled,
+    ToolbarEditToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarEditToggleEnabled, false),
+    ToolbarMetadataToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarMetadataToggleEnabled, false),
     ToolbarBundleMode: normalizeToolbarBundleMode(rawConfig.ToolbarBundleMode)
   };
 }

@@ -131,6 +131,7 @@ All items in this section must be satisfied before tagging the first stable rele
 1. Harden MHTML‑to‑HTML pipeline against edge‑case fixtures.
 2. Expand targeted fixture tests (tables, lists, whitespace, inline resources).
 3. Verify toolbar/config behavior remains stable and document acceptance gates.
+4. Implement Microsoft Word-compatible `.docx` export from the stabilized HTML pipeline.
 
 ---
 
@@ -294,6 +295,16 @@ Initial scope:
 - [x] [P2] Add UX validation and disabled-state messaging for unsupported/unfinished formats. (2026-03-03)
 - [x] [P2] Add smoke tests for export-format selection behavior. (2026-03-03)
 - [x] [P3] Document feature as experimental in `README.md` and in-app help text. (2026-03-03)
+
+#### Document export (`.docx`) (post-release)
+
+Note: the UI surface for `Document (.docx)` may remain visible as experimental/unfinished guidance, but full Word-compatible export work is deferred until after the first stable MHTML release.
+
+- [ ] [P3] Define the canonical HTML-to-`.docx` conversion contract and supported feature set (headings, paragraphs, lists, tables, images, metadata).
+- [ ] [P3] Implement Word-compatible `.docx` export from sanitized HTML rather than from raw MHTML.
+- [ ] [P3] Decide packaging strategy for images, links, and document metadata inside generated `.docx` files.
+- [ ] [P3] Add regression fixtures and smoke tests for `.docx` export generation, download flow, and basic Word compatibility.
+- [ ] [P3] Document `.docx` export limitations, fidelity expectations, and supported workflows in `README.md` and in-app help.
 
 #### Markdown export UX
 

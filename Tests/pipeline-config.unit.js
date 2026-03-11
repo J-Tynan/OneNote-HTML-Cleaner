@@ -39,7 +39,7 @@ async function main() {
 
   assert(normalizedProfile.Profile === 'onenote', 'Expected Profile to normalize to onenote');
   assert(normalizedProfile.ToolbarEnabled === true, 'Expected ToolbarEnabled true');
-  assert(normalizedProfile.ToolbarEditToggleEnabled === false, 'Expected ToolbarEditToggleEnabled false');
+  assert(normalizedProfile.ToolbarEditToggleEnabled === true, 'Expected ToolbarEditToggleEnabled true when toolbar is enabled');
   assert(normalizedProfile.ToolbarMetadataToggleEnabled === true, 'Expected ToolbarMetadataToggleEnabled true');
   assert(normalizedProfile.ToolbarBundleMode === 'inline', 'Expected ToolbarBundleMode fallback to inline');
   assert(normalizedProfile.ExternalizeCssEnabled === true, 'Expected ExternalizeCssEnabled true');
