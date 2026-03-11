@@ -1,3 +1,8 @@
+import {
+  parseCssNumericValue,
+  parseStyleDeclarations
+} from '../pipeline/styleUtils.js';
+
 function normalizeLineBreaks(value) {
   return String(value || '').replace(/\r\n?/g, '\n');
 }
@@ -178,27 +183,8 @@ function looksLikeCitationParagraph(node) {
   return false;
 }
 
-function parseStyleDeclarations(styleText) {
-  const declarations = {};
-  const source = String(styleText || '');
-  for (const chunk of source.split(';')) {
-    const separator = chunk.indexOf(':');
-    if (separator < 0) continue;
-    const key = chunk.slice(0, separator).trim().toLowerCase();
-    const value = chunk.slice(separator + 1).trim();
-    if (!key) continue;
-    declarations[key] = value;
-  }
-  return declarations;
-}
-
 function parseCssLength(value) {
-  const source = String(value || '').trim();
-  if (!source) return null;
-  const match = source.match(/^-?\d+(?:\.\d+)?/);
-  if (!match) return null;
-  const parsed = Number(match[0]);
-  return Number.isFinite(parsed) ? parsed : null;
+  return parseCssNumericValue(value);
 }
 
 function getReadingOrderHint(node, index) {

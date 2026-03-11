@@ -4,6 +4,12 @@ export const FONT_WEIGHT_RE = /^font-weight$/i;
 export const MARGIN_TOP_RE = /^margin-top$/i;
 export const MARGIN_BOTTOM_RE = /^margin-bottom$/i;
 
+import {
+  cssLengthToPx,
+  parseStyleDeclarationEntries,
+  serializeStyleDeclarationEntries
+} from './styleUtils.js';
+
 const FONT_SIZE_MAP = [
   { maxPx: 12, className: 'text-xs' },
   { maxPx: 14, className: 'text-sm' },
@@ -41,36 +47,15 @@ function addClass(el, className) {
 }
 
 function parseStyle(styleText) {
-  return String(styleText || '')
-    .split(';')
-    .map(part => part.trim())
-    .filter(Boolean)
-    .map(part => {
-      const idx = part.indexOf(':');
-      if (idx === -1) return null;
-      const prop = part.slice(0, idx).trim();
-      const value = part.slice(idx + 1).trim();
-      if (!prop) return null;
-      return { prop, value };
-    })
-    .filter(Boolean);
+  return parseStyleDeclarationEntries(styleText);
 }
 
 function toStyleText(entries) {
-  return entries.map(({ prop, value }) => `${prop}: ${value}`).join('; ');
+  return serializeStyleDeclarationEntries(entries);
 }
 
 function cssToPx(value) {
-  const v = String(value || '').trim().toLowerCase();
-  const match = v.match(/^(-?\d*\.?\d+)\s*(px|pt|em|rem)?$/i);
-  if (!match) return null;
-  const amount = parseFloat(match[1]);
-  if (Number.isNaN(amount)) return null;
-  const unit = (match[2] || 'px').toLowerCase();
-  if (unit === 'px') return amount;
-  if (unit === 'pt') return amount * (96 / 72);
-  if (unit === 'em' || unit === 'rem') return amount * 16;
-  return null;
+  return cssLengthToPx(value);
 }
 
 function mapFontSize(value) {
