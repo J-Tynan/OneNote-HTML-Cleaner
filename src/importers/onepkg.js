@@ -451,7 +451,7 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
         ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
         SourceName: `${notebookName}/${entryPath}`,
         SourceKind: 'onepkg',
-        Profile: options.Profile || 'generic'
+        Profile: options.Profile || 'onenote'
       });
       if (sectionResult && Array.isArray(sectionResult.pages) && sectionResult.pages.length > 0) {
         const mappedPages = sectionResult.pages.map((page) => {
@@ -685,7 +685,7 @@ export async function importOnePackage(arrayBuffer, options = {}) {
       ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
       SourceName: page.path || options.fileName || notebookName,
       SourceKind: 'onepkg',
-      Profile: options.Profile || 'generic',
+      Profile: options.Profile || 'onenote',
       WarningSummary: warningSummary
     })
   }));

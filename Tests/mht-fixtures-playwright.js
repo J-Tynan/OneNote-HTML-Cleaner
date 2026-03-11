@@ -131,10 +131,10 @@ function assertNoUnresolvedResourceRefs(html, caseName) {
       const config = tc.config || {};
       const expectedStructuralTokens = collectStructuralTokens(rawExpected);
 
-      // default to the 'generic' profile for fixture comparisons unless the
+      // default to the canonical 'onenote' profile for fixture comparisons unless the
       // case explicitly sets a Profile — expected files assume no Tailwind
       // injection in most fixture outputs.
-      const configForRun = Object.assign({ Profile: 'generic' }, config || {});
+      const configForRun = Object.assign({ Profile: 'onenote' }, config || {});
 
       const res = await page.evaluate(async (args) => {
         const { caseName, rawInput, rawExpected, config, canonicalizeFn } = args;

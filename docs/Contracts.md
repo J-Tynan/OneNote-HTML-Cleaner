@@ -60,8 +60,6 @@
 `Profile` is preferred for new integrations:
 - `onenote`: enables the default OneNote semantic and layout helpers.
 
-Legacy profile alias (`generic`) remains supported and normalizes to `onenote`.
-
 Toolbar flags are additive and optional:
 - default OFF in all flows
 - `ToolbarBundleMode` is currently `inline` only

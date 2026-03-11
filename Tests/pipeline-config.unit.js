@@ -31,7 +31,7 @@ async function main() {
   }
 
   const normalizedProfile = mod.normalizePipelineConfig({
-    Profile: 'generic',
+    Profile: 'onenote',
     ToolbarEnabled: 'true',
     ToolbarEditToggleEnabled: 'false',
     ToolbarMetadataToggleEnabled: 'true',
@@ -68,8 +68,8 @@ async function main() {
 
   const normalizedFallback = mod.normalizePipelineConfig({
     Profile: 'unknown-profile',
-    externalizeCssEnabled: 'false',
-    externalizeCssMode: 'invalid',
+    ExternalizeCssEnabled: 'false',
+    ExternalizeCssMode: 'invalid',
     OutputCleanupMode: 'unexpected-mode',
     UnitStrategy: 'invalid-unit-strategy',
     ExperimentalExportEnabled: 'false',
@@ -79,8 +79,8 @@ async function main() {
     ConvertedPageThemeToggleOledBlack: 'true'
   });
 
-  assert(normalizedFallback.Profile === 'onenote', 'Expected unknown Profile to fallback to onenote');
-  assert(normalizedFallback.ExternalizeCssEnabled === false, 'Expected camelCase externalizeCssEnabled false to be respected');
+  assert(normalizedFallback.Profile === 'onenote', 'Expected Profile to remain fixed to onenote');
+  assert(normalizedFallback.ExternalizeCssEnabled === false, 'Expected ExternalizeCssEnabled false');
   assert(normalizedFallback.ExternalizeCssMode === 'shared', 'Expected invalid ExternalizeCssMode to fallback to shared');
   assert(normalizedFallback.OutputCleanupMode === 'off', 'Expected invalid OutputCleanupMode to fallback to off');
   assert(normalizedFallback.UnitStrategy === 'preserve', 'Expected invalid UnitStrategy to fallback to preserve');

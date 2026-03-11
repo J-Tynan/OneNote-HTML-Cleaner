@@ -1241,7 +1241,7 @@ export function importOneSection(arrayBuffer, options = {}) {
     ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
     SourceName: options.SourceName || options.fileName || sectionName,
     SourceKind: options.SourceKind || 'one',
-    Profile: options.Profile || 'generic',
+    Profile: options.Profile || 'onenote',
     WarningSummary: warningSummary
   };
 

@@ -83,9 +83,9 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 
 ### Bucket 2 findings: Config normalization and single-profile legacy
 
-- [ ] [P1] Remove dead single-profile indirection from `src/pipeline/config.js` (`normalizeProfile`, `PROFILE_PRESETS`, and the unused local `profile` path) so config normalization reflects the actual one-profile release design.
-- [ ] [P1] Decide whether camelCase config aliases in `src/pipeline/config.js` are still required for external callers; if not, remove them and simplify tests/docs to the canonical config shape.
-- [ ] [P1] Remove the remaining `generic` profile legacy from tests, docs, and native importer defaults (`Tests/mht-fixtures-playwright.js`, `docs/Contracts.md`, `src/importers/one.js`, `src/importers/onepkg.js`) unless a specific backwards-compatibility requirement is documented.
+- [x] [P1] Remove dead single-profile indirection from `src/pipeline/config.js` (`normalizeProfile`, `PROFILE_PRESETS`, and the unused local `profile` path) so config normalization reflects the actual one-profile release design. (2026-03-11)
+- [x] [P1] Decide whether camelCase config aliases in `src/pipeline/config.js` are still required for external callers; if not, remove them and simplify tests/docs to the canonical config shape. (2026-03-11)
+- [x] [P1] Remove the remaining `generic` profile legacy from tests, docs, and native importer defaults (`Tests/mht-fixtures-playwright.js`, `docs/Contracts.md`, `src/importers/one.js`, `src/importers/onepkg.js`) unless a specific backwards-compatibility requirement is documented. (2026-03-11)
 
 ### Bucket 3 findings: Pipeline sanitization and style-helper duplication
 

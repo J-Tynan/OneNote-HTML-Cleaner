@@ -34,6 +34,40 @@ function normalizeExternalizeCssMode(value) {
   return normalized === 'per-page' ? 'per-page' : 'shared';
 }
 
+const DEFAULT_PIPELINE_CONFIG = {
+  Profile: 'onenote',
+  RepairListItemValues: 'smart',
+  ListMarginLeft: '0.35em',
+  ListPaddingLeft: '1.2em',
+  NormalizeAllListIndent: true,
+  UseTableSemantics: true,
+  TableHeaderFallback: true,
+  MergeCreatedDateTime: true,
+  CreatedDateTimeGap: '0.75em',
+  MigrateInlineStylesToUtilities: true,
+  RemoveMigratedInlineDeclarations: false,
+  InlineStyleMigrationSelector: '[style]',
+  InlineStyleWarningEnabled: true,
+  InlineStyleWarningMaxNodes: 250,
+  InlineStyleWarningMaxChars: 24000,
+  HandwritingDetectionEnabled: true,
+  HandwritingRasterAltText: 'Handwritten notes (raster image)',
+  InjectTailwindCss: true,
+  TailwindCssHref: 'assets/tailwind-output.css',
+  CollapseInlineStyles: false,
+  OutputCleanupMode: 'off',
+  UnitStrategy: 'normalize-safe',
+  NormalizeDirectionLayout: true,
+  NormalizeTopLevelPageWidths: true,
+  ExternalizeCssEnabled: false,
+  ExternalizeCssMode: 'shared',
+  ExperimentalExportEnabled: false,
+  ExportFormat: 'html',
+  MarkdownFlavor: 'obsidian',
+  ConvertedPageThemeToggleEnabled: false,
+  ConvertedPageThemeToggleOledBlack: false
+};
+
 export function normalizeExportFormat(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (normalized === 'markdown') return normalized;
@@ -49,32 +83,16 @@ export function normalizeMarkdownFlavor(value) {
 }
 
 function normalizeExternalCssConfig(rawConfig = {}) {
-  const enabledValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExternalizeCssEnabled')
-    ? rawConfig.ExternalizeCssEnabled
-    : rawConfig.externalizeCssEnabled;
-  const modeValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExternalizeCssMode')
-    ? rawConfig.ExternalizeCssMode
-    : rawConfig.externalizeCssMode;
   return {
-    ExternalizeCssEnabled: toBoolean(enabledValue, false),
-    ExternalizeCssMode: normalizeExternalizeCssMode(modeValue)
+    ExternalizeCssEnabled: toBoolean(rawConfig.ExternalizeCssEnabled, false),
+    ExternalizeCssMode: normalizeExternalizeCssMode(rawConfig.ExternalizeCssMode)
   };
 }
 
 export function normalizeExportConfig(rawConfig = {}) {
-  const experimentalEnabled = Object.prototype.hasOwnProperty.call(rawConfig, 'ExperimentalExportEnabled')
-    ? rawConfig.ExperimentalExportEnabled
-    : rawConfig.experimentalExportEnabled;
-  const exportFormatValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ExportFormat')
-    ? rawConfig.ExportFormat
-    : rawConfig.exportFormat;
-  const markdownFlavorValue = Object.prototype.hasOwnProperty.call(rawConfig, 'MarkdownFlavor')
-    ? rawConfig.MarkdownFlavor
-    : rawConfig.markdownFlavor;
-
-  const normalizedExperimental = toBoolean(experimentalEnabled, false);
-  const normalizedFormat = normalizeExportFormat(exportFormatValue);
-  const normalizedFlavor = normalizeMarkdownFlavor(markdownFlavorValue);
+  const normalizedExperimental = toBoolean(rawConfig.ExperimentalExportEnabled, false);
+  const normalizedFormat = normalizeExportFormat(rawConfig.ExportFormat);
+  const normalizedFlavor = normalizeMarkdownFlavor(rawConfig.MarkdownFlavor);
 
   return {
     ExperimentalExportEnabled: normalizedExperimental,
@@ -88,16 +106,9 @@ export function isHtmlExportEnabled(rawConfig = {}) {
 }
 
 function normalizeConvertedPageThemeConfig(rawConfig = {}) {
-  const toggleEnabledValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ConvertedPageThemeToggleEnabled')
-    ? rawConfig.ConvertedPageThemeToggleEnabled
-    : rawConfig.convertedPageThemeToggleEnabled;
-  const oledBlackValue = Object.prototype.hasOwnProperty.call(rawConfig, 'ConvertedPageThemeToggleOledBlack')
-    ? rawConfig.ConvertedPageThemeToggleOledBlack
-    : rawConfig.convertedPageThemeToggleOledBlack;
-
-  const convertedPageThemeToggleEnabled = toBoolean(toggleEnabledValue, false);
+  const convertedPageThemeToggleEnabled = toBoolean(rawConfig.ConvertedPageThemeToggleEnabled, false);
   const convertedPageThemeToggleOledBlack = convertedPageThemeToggleEnabled
-    ? toBoolean(oledBlackValue, false)
+    ? toBoolean(rawConfig.ConvertedPageThemeToggleOledBlack, false)
     : false;
 
   return {
@@ -133,53 +144,6 @@ export function buildOutputDecorationConfig(rawConfig = {}) {
   };
 }
 
-const SINGLE_PROFILE = 'onenote';
-
-const PROFILE_PRESETS = {
-  [SINGLE_PROFILE]: {
-    Profile: SINGLE_PROFILE,
-    RepairListItemValues: 'smart',
-    ListMarginLeft: '0.35em',
-    ListPaddingLeft: '1.2em',
-    NormalizeAllListIndent: true,
-    UseTableSemantics: true,
-    TableHeaderFallback: true,
-    MergeCreatedDateTime: true,
-    CreatedDateTimeGap: '0.75em',
-    MigrateInlineStylesToUtilities: true,
-    RemoveMigratedInlineDeclarations: false,
-    InlineStyleMigrationSelector: '[style]',
-    InlineStyleWarningEnabled: true,
-    InlineStyleWarningMaxNodes: 250,
-    InlineStyleWarningMaxChars: 24000,
-    HandwritingDetectionEnabled: true,
-    HandwritingRasterAltText: 'Handwritten notes (raster image)',
-    InjectTailwindCss: true,
-    TailwindCssHref: 'assets/tailwind-output.css',
-    CollapseInlineStyles: false,
-    OutputCleanupMode: 'off',
-    UnitStrategy: 'normalize-safe',
-    NormalizeDirectionLayout: true,
-    NormalizeTopLevelPageWidths: true,
-    ExternalizeCssEnabled: false,
-    ExternalizeCssMode: 'shared',
-    ExperimentalExportEnabled: false,
-    ExportFormat: 'html',
-    MarkdownFlavor: 'obsidian',
-    ConvertedPageThemeToggleEnabled: false,
-    ConvertedPageThemeToggleOledBlack: false
-  }
-};
-
-function normalizeProfile(value) {
-  const profile = String(value || '').trim().toLowerCase();
-  if (!profile) return SINGLE_PROFILE;
-  if (profile === 'generic' || profile === 'onenote' || profile === SINGLE_PROFILE) {
-    return SINGLE_PROFILE;
-  }
-  return SINGLE_PROFILE;
-}
-
 export function normalizePipelineConfig(rawConfig = {}) {
   const useTableSemantics = Object.prototype.hasOwnProperty.call(rawConfig, 'UseTableSemantics')
     ? toBoolean(rawConfig.UseTableSemantics, true)
@@ -187,34 +151,32 @@ export function normalizePipelineConfig(rawConfig = {}) {
   const tableHeaderFallback = Object.prototype.hasOwnProperty.call(rawConfig, 'TableHeaderFallback')
     ? toBoolean(rawConfig.TableHeaderFallback, true)
     : true;
-  const profile = normalizeProfile(rawConfig.Profile || rawConfig.profile);
-  const preset = PROFILE_PRESETS[SINGLE_PROFILE];
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
   const normalizedExternalCssConfig = normalizeExternalCssConfig(rawConfig);
   const normalizedExportConfig = normalizeExportConfig(rawConfig);
   const normalizedConvertedPageThemeConfig = normalizeConvertedPageThemeConfig(rawConfig);
-  const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || rawConfig.outputCleanupMode || preset.OutputCleanupMode);
-  const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || rawConfig.unitStrategy || preset.UnitStrategy);
+  const outputCleanupMode = normalizeOutputCleanupMode(rawConfig.OutputCleanupMode || DEFAULT_PIPELINE_CONFIG.OutputCleanupMode);
+  const unitStrategy = normalizeUnitStrategy(rawConfig.UnitStrategy || DEFAULT_PIPELINE_CONFIG.UnitStrategy);
   const normalizeDirectionLayout = toBoolean(
     Object.prototype.hasOwnProperty.call(rawConfig, 'NormalizeDirectionLayout')
       ? rawConfig.NormalizeDirectionLayout
-      : rawConfig.normalizeDirectionLayout,
-    preset.NormalizeDirectionLayout !== false
+      : DEFAULT_PIPELINE_CONFIG.NormalizeDirectionLayout,
+    DEFAULT_PIPELINE_CONFIG.NormalizeDirectionLayout !== false
   );
   const normalizeTopLevelPageWidths = toBoolean(
     Object.prototype.hasOwnProperty.call(rawConfig, 'NormalizeTopLevelPageWidths')
       ? rawConfig.NormalizeTopLevelPageWidths
-      : rawConfig.normalizeTopLevelPageWidths,
-    preset.NormalizeTopLevelPageWidths !== false
+      : DEFAULT_PIPELINE_CONFIG.NormalizeTopLevelPageWidths,
+    DEFAULT_PIPELINE_CONFIG.NormalizeTopLevelPageWidths !== false
   );
   return {
-    ...preset,
+    ...DEFAULT_PIPELINE_CONFIG,
     ...rawConfig,
     ...normalizedToolbarConfig,
     ...normalizedExternalCssConfig,
     ...normalizedExportConfig,
     ...normalizedConvertedPageThemeConfig,
-    Profile: SINGLE_PROFILE,
+    Profile: DEFAULT_PIPELINE_CONFIG.Profile,
     UseTableSemantics: useTableSemantics,
     TableHeaderFallback: tableHeaderFallback,
     OutputCleanupMode: outputCleanupMode,
