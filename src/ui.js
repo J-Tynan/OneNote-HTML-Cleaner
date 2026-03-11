@@ -2,7 +2,7 @@
 
 import { buildExportFileName } from './export-filenames.js';
 import { createDownloadHelpers } from './ui-downloads.js';
-// theme variant functions now used indirectly; import removed
+import { buildAdvancedOptionsState } from './ui-options.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
 
@@ -22,7 +22,6 @@ const dom = {
   downloadZip: null,
   convertButton: null,
   convertButtonWrapper: null,
-  // uiStyleVariant temporary dropdown removed after Phase 1
   toolbarEnabled: null,
   autoConvertEnabled: null,
   externalizeCssEnabled: null,
@@ -42,8 +41,7 @@ const runtime = {
   listenersBound: false,
   workerManager: null,
   successfulOutputs: new Map(),
-  downloadHelpers: null
-  ,
+  downloadHelpers: null,
   autoConvertEnabled: true
 };
 
@@ -200,37 +198,34 @@ function updateExternalCssControls() {
 }
 
 function updateExportFormatControls() {
-  const experimentalEnabled = Boolean(dom.experimentalExportEnabled && dom.experimentalExportEnabled.checked);
-  const selectedFormat = dom.exportFormat ? String(dom.exportFormat.value || 'html').toLowerCase() : 'html';
-  const markdownSelected = experimentalEnabled && selectedFormat === 'markdown';
-  const effectiveFormat = experimentalEnabled ? selectedFormat : 'html';
+  const advancedOptionsState = buildAdvancedOptionsState(dom);
 
   if (dom.exportFormat) {
-    dom.exportFormat.disabled = !experimentalEnabled;
-    dom.exportFormat.classList.toggle('hidden', !experimentalEnabled);
+    dom.exportFormat.disabled = !advancedOptionsState.experimentalEnabled;
+    dom.exportFormat.classList.toggle('hidden', !advancedOptionsState.experimentalEnabled);
   }
   if (dom.markdownFlavorContainer) {
-    dom.markdownFlavorContainer.classList.toggle('hidden', !markdownSelected);
+    dom.markdownFlavorContainer.classList.toggle('hidden', !advancedOptionsState.markdownSelected);
   }
   if (dom.markdownFlavor) {
-    dom.markdownFlavor.disabled = !markdownSelected;
+    dom.markdownFlavor.disabled = !advancedOptionsState.markdownSelected;
   }
   if (dom.exportFormatHelp) {
-    if (!experimentalEnabled) {
+    if (!advancedOptionsState.experimentalEnabled) {
       dom.exportFormatHelp.textContent = 'Enable experimental export formats to choose HTML or Markdown output.';
-    } else if (selectedFormat === 'markdown') {
+    } else if (advancedOptionsState.selectedExportFormat === 'markdown') {
       dom.exportFormatHelp.textContent = 'Markdown export is structure-first (layout not preserved).';
     } else {
       dom.exportFormatHelp.textContent = 'HTML export keeps the existing parity-first conversion path.';
     }
   }
 
-  updateConvertedPageThemeControls(effectiveFormat);
+  updateConvertedPageThemeControls(advancedOptionsState);
 }
 
-function updateConvertedPageThemeControls(effectiveFormat = 'html') {
-  const htmlSelected = String(effectiveFormat || 'html').toLowerCase() === 'html';
-  const toggleEnabled = Boolean(dom.convertedPageThemeToggleEnabled && dom.convertedPageThemeToggleEnabled.checked);
+function updateConvertedPageThemeControls(advancedOptionsState = buildAdvancedOptionsState(dom)) {
+  const htmlSelected = advancedOptionsState.htmlSelected;
+  const toggleEnabled = advancedOptionsState.convertedPageThemeToggleChecked;
 
   if (dom.convertedPageThemeToggleEnabled) {
     dom.convertedPageThemeToggleEnabled.disabled = !htmlSelected;
@@ -249,16 +244,12 @@ function updateConvertedPageThemeControls(effectiveFormat = 'html') {
   }
 }
 
-function applyUiStyleVariant(variant) {
-  try {
-    if (variant && variant !== 'default') {
-      document.documentElement.setAttribute('data-ui-style', String(variant));
-    } else {
-      document.documentElement.removeAttribute('data-ui-style');
-    }
-  } catch (e) {
-    // noop
+function getActiveConversionConfig() {
+  if (!runtime.downloadHelpers || typeof runtime.downloadHelpers.getConversionConfig !== 'function') {
+    throw new Error('Download helpers are not initialized.');
   }
+
+  return runtime.downloadHelpers.getConversionConfig();
 }
 
 function rebuildSuccessfulOutputs() {
@@ -396,9 +387,7 @@ function readFileAsArrayBuffer(file) {
 
 async function processEntryWithWorker(entry) {
   try {
-    const conversionConfig = runtime.downloadHelpers
-      ? runtime.downloadHelpers.getConversionConfig()
-      : { Profile: 'onenote', TailwindCssHref: 'assets/tailwind-output.css' };
+    const conversionConfig = getActiveConversionConfig();
     entry.conversionConfig = conversionConfig;
     const sourceKind = detectSourceKind(entry.name, entry.file.type);
     const payload = {
@@ -456,9 +445,7 @@ async function processEntryWithWorker(entry) {
 
 function processEntry(entry) {
   updateEntryStatus(entry.id, 'working');
-  if (runtime.downloadHelpers && typeof runtime.downloadHelpers.getConversionConfig === 'function') {
-    entry.conversionConfig = runtime.downloadHelpers.getConversionConfig();
-  }
+  entry.conversionConfig = getActiveConversionConfig();
 
   if (runtime.workerManager) {
     void processEntryWithWorker(entry);
@@ -717,7 +704,6 @@ function bindEvents() {
   dom.fileList?.addEventListener('click', onFileListClick);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
-  // light-theme testing dropdown removed; no listener attached
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssMode?.addEventListener('change', onAdvancedOptionsChange);
@@ -734,9 +720,6 @@ function bindEvents() {
     e.preventDefault();
     openHelpModal();
   });
-
-  // dark-variant selector (testing only)
-
 
   dom.helpCloseButton?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -822,16 +805,6 @@ export function initUI(workerManager, options = {}) {
 
   runtime.workerManager = workerManager || null;
 
-  // Ensure the UI uses the Rounded CTA variant by default
-  try { applyUiStyleVariant('rounded-cta'); } catch (err) {}
-
-  // Apply any saved Light theme testing selection from sessionStorage (no-op now)
-  try {
-    // nothing to restore for Phase 2
-  } catch (err) {}
-
-  // no variant initialization required now that dropdown is gone
-
 
   // Expose a test helper to read worker-manager diagnostics from page context
   try { window.__getWorkerManagerDiagnostics = () => (runtime.workerManager ? runtime.workerManager.getDiagnostics() : []); } catch (ignore) {}
@@ -878,7 +851,6 @@ export function initUI(workerManager, options = {}) {
   setDropzoneActive(false);
   updateExternalCssControls();
   updateExportFormatControls();
-  // previous phase-1 testing dropdown has been removed; default variant applied in styles
 
   bindEvents();
   renderFileList();

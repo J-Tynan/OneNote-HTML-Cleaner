@@ -77,9 +77,9 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 
 ### Bucket 1 findings: App/UI option wiring
 
-- [ ] [P1] Remove retired UI style-variant/testing scaffolding from `src/ui.js` (`applyUiStyleVariant`, removed-dropdown comments, and no-op restore blocks) so the shipped UI no longer carries dead experiment-era code.
-- [ ] [P1] Consolidate Advanced options state derivation so UI control enable/disable rules and conversion payload generation share one source of truth instead of duplicating export-format/theme-toggle logic across `src/ui.js` and `src/ui-downloads.js`.
-- [ ] [P1] Remove or centralize the fallback conversion-config branch in `src/ui.js` so new Advanced options cannot drift from `runtime.downloadHelpers.getConversionConfig()`.
+- [x] [P1] Remove retired UI style-variant/testing scaffolding from `src/ui.js` (`applyUiStyleVariant`, removed-dropdown comments, and no-op restore blocks) so the shipped UI no longer carries dead experiment-era code. (2026-03-11)
+- [x] [P1] Consolidate Advanced options state derivation so UI control enable/disable rules and conversion payload generation share one source of truth instead of duplicating export-format/theme-toggle logic across `src/ui.js` and `src/ui-downloads.js`. (2026-03-11)
+- [x] [P1] Remove or centralize the fallback conversion-config branch in `src/ui.js` so new Advanced options cannot drift from `runtime.downloadHelpers.getConversionConfig()`. (2026-03-11)
 
 ### Bucket 2 findings: Config normalization and single-profile legacy
 
