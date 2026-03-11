@@ -89,8 +89,8 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 
 ### Bucket 3 findings: Pipeline sanitization and style-helper duplication
 
-- [ ] [P1] Consolidate repeated style declaration parsing/serialization helpers across `src/pipeline/sanitize.js`, `src/pipeline/inlineStyleMigration.js`, `src/pipeline/listRepair.js`, and `src/convert/markdownIr.js` into a shared utility module with one canonical behavior.
-- [ ] [P1] Consolidate CSS length parsing/conversion helpers (`px`/`pt`/`em`/`rem`/`in` handling) so list repair, sanitization, and Markdown conversion do not maintain divergent unit logic.
+- [x] [P1] Extract shared style declaration parsing/serialization and CSS length helpers into `src/pipeline/styleUtils.js`, and rewire `src/pipeline/inlineStyleMigration.js` plus `src/convert/markdownIr.js` to use the shared implementation. (2026-03-11)
+- [ ] [P1] Finish migrating the remaining style declaration and CSS length call sites in `src/pipeline/sanitize.js` and `src/pipeline/listRepair.js` so the shared utility module becomes the only implementation path.
 - [ ] [P1] Split OneNote-specific layout normalization from general sanitization in `src/pipeline/sanitize.js` so placeholder removal, header/date positioning, handwriting margin logic, and icon-paragraph alignment are easier to review and test independently.
 - [ ] [P1] Reassess `collapseInlineStyleDuplicates()` in `src/pipeline/sanitize.js` versus `migrateInlineStylesToUtilities()` in `src/pipeline/inlineStyleMigration.js` and remove overlapping mapping logic where the two paths duplicate class-derivation behavior.
 
