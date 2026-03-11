@@ -1,3 +1,5 @@
+import { isHtmlExportEnabled, normalizeExportConfig } from './config.js';
+
 const TOOLBAR_ROOT_ID = 'onenote-cleaner-toolbar';
 const TOOLBAR_VERSION = 'v1';
 const TOOLBAR_STYLE_ID = 'onc-toolbar-style';
@@ -195,11 +197,12 @@ function normalizeWarningSummary(summary = {}) {
 }
 
 function buildMetadata(options = {}) {
+  const normalizedExportConfig = normalizeExportConfig(options);
   return {
     sourceName: String(options.SourceName || options.sourceName || options.fileName || 'Unknown source'),
     sourceKind: normalizeSourceKind(options.SourceKind || options.sourceKind || 'html'),
     pageTitle: String(options.PageTitle || options.pageTitle || ''),
-    exportFormat: normalizeExportFormat(options.ExportFormat || options.exportFormat || 'html'),
+    exportFormat: normalizedExportConfig.ExportFormat,
     timestamp: String(options.ConversionTimestamp || options.conversionTimestamp || new Date().toISOString())
   };
 }
@@ -214,18 +217,6 @@ function hasConvertedThemeToggleRoot(html = '') {
   const hasId = new RegExp(`id=["']${CONVERTED_THEME_ROOT_ID}["']`, 'i').test(html);
   const hasMarker = /data-onc-converted-theme-toggle=["']v1["']/i.test(html);
   return hasId && hasMarker;
-}
-
-function normalizeExportFormat(value = '') {
-  const normalized = String(value || '').trim().toLowerCase();
-  if (normalized === 'markdown' || normalized === 'docx') return normalized;
-  return 'html';
-}
-
-function isHtmlExportEnabled(options = {}) {
-  const experimentalEnabled = options.ExperimentalExportEnabled === true;
-  const format = normalizeExportFormat(options.ExportFormat || 'html');
-  return !experimentalEnabled || format === 'html';
 }
 
 function buildStyleTag() {

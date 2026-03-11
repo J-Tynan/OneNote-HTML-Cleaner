@@ -34,13 +34,13 @@ function normalizeExternalizeCssMode(value) {
   return normalized === 'per-page' ? 'per-page' : 'shared';
 }
 
-function normalizeExportFormat(value) {
+export function normalizeExportFormat(value) {
   const normalized = String(value || '').trim().toLowerCase();
-  if (normalized === 'markdown' || normalized === 'docx') return normalized;
+  if (normalized === 'markdown') return normalized;
   return 'html';
 }
 
-function normalizeMarkdownFlavor(value) {
+export function normalizeMarkdownFlavor(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (normalized === 'commonmark' || normalized === 'gfm' || normalized === 'markdown-extra') {
     return normalized;
@@ -61,7 +61,7 @@ function normalizeExternalCssConfig(rawConfig = {}) {
   };
 }
 
-function normalizeExportConfig(rawConfig = {}) {
+export function normalizeExportConfig(rawConfig = {}) {
   const experimentalEnabled = Object.prototype.hasOwnProperty.call(rawConfig, 'ExperimentalExportEnabled')
     ? rawConfig.ExperimentalExportEnabled
     : rawConfig.experimentalExportEnabled;
@@ -81,6 +81,10 @@ function normalizeExportConfig(rawConfig = {}) {
     ExportFormat: normalizedExperimental ? normalizedFormat : 'html',
     MarkdownFlavor: normalizedFlavor
   };
+}
+
+export function isHtmlExportEnabled(rawConfig = {}) {
+  return normalizeExportConfig(rawConfig).ExportFormat === 'html';
 }
 
 function normalizeConvertedPageThemeConfig(rawConfig = {}) {
@@ -109,6 +113,23 @@ function normalizeToolbarConfig(rawConfig = {}) {
     ToolbarEditToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarEditToggleEnabled, false),
     ToolbarMetadataToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarMetadataToggleEnabled, false),
     ToolbarBundleMode: normalizeToolbarBundleMode(rawConfig.ToolbarBundleMode)
+  };
+}
+
+export function buildOutputDecorationConfig(rawConfig = {}) {
+  const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
+  const normalizedExportConfig = normalizeExportConfig(rawConfig);
+  const normalizedConvertedPageThemeConfig = normalizeConvertedPageThemeConfig(rawConfig);
+
+  return {
+    ...normalizedToolbarConfig,
+    ...normalizedExportConfig,
+    ConvertedPageThemeToggleEnabled: normalizedExportConfig.ExportFormat === 'html'
+      ? normalizedConvertedPageThemeConfig.ConvertedPageThemeToggleEnabled
+      : false,
+    ConvertedPageThemeToggleOledBlack: normalizedExportConfig.ExportFormat === 'html'
+      ? normalizedConvertedPageThemeConfig.ConvertedPageThemeToggleOledBlack
+      : false
   };
 }
 

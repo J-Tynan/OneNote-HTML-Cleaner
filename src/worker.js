@@ -9,9 +9,14 @@ const logger = createLogger('worker');
 // from `init()` so import-time evaluation of heavy modules is avoided.
 let _runPipeline = null;
 let _parseMht = null;
-let _convertSanitizedHtmlToMarkdown = null;
+let _finalizePipelineOutput = null;
 let _importOneSection = null;
 let _importOnePackage = null;
+
+const UNSUPPORTED_CODES = {
+  NATIVE_DISABLED: 'native-disabled',
+  WORKER_DOM_UNAVAILABLE: 'worker-dom-unavailable'
+};
 
 export async function init() {
   try {
@@ -29,13 +34,13 @@ export async function init() {
     const imports = await Promise.allSettled([
       import('./pipeline/pipeline.js'),
       import('./pipeline/mht.js'),
-      import('./convert/markdownCore.js')
+      import('./convert/exportFinalizer.js')
     ]);
 
     // Assign successful imports to module-scoped variables
     if (imports[0].status === 'fulfilled') _runPipeline = imports[0].value.runPipeline;
     if (imports[1].status === 'fulfilled') _parseMht = imports[1].value.parseMht;
-    if (imports[2].status === 'fulfilled') _convertSanitizedHtmlToMarkdown = imports[2].value.convertSanitizedHtmlToMarkdown;
+    if (imports[2].status === 'fulfilled') _finalizePipelineOutput = imports[2].value.finalizePipelineOutput;
 
     // Report any import failures for diagnostics (but still post ready so
     // the wrapper can surface structured diagnostics to the UI).
@@ -103,7 +108,6 @@ self.onmessage = async (e) => {
   const config = payload && payload.config ? payload.config : {};
   const experimentalEnabled = config && config.ExperimentalExportEnabled === true;
   const exportFormat = experimentalEnabled ? String(config.ExportFormat || 'html').toLowerCase() : 'html';
-  const markdownFlavor = String(config.MarkdownFlavor || 'obsidian');
 
   logger.info({ id, msg: 'received job', meta: { fileName } });
 
@@ -113,12 +117,12 @@ self.onmessage = async (e) => {
     // surface the correct message and we avoid loading native importers.
     if (sourceKind === 'one' || sourceKind === 'onepkg') {
       logger.warn({ id, msg: 'native importers disabled', meta: { sourceKind } });
-      self.postMessage({ id, status: 'unsupported', reason: 'native importers disabled in this release' });
-      return;
-    }
-
-    if (exportFormat === 'docx') {
-      self.postMessage({ id, status: 'error', error: 'Experimental export format "docx" is not implemented yet.' });
+      self.postMessage({
+        id,
+        status: 'unsupported',
+        code: UNSUPPORTED_CODES.NATIVE_DISABLED,
+        reason: 'native importers disabled in this release'
+      });
       return;
     }
 
@@ -126,7 +130,12 @@ self.onmessage = async (e) => {
     logger.info({ id, msg: 'DOMParser availability', meta: { hasDOMParser } });
 
     if (!hasDOMParser) {
-      self.postMessage({ id, status: 'unsupported', reason: 'DOMParser not available in worker' });
+      self.postMessage({
+        id,
+        status: 'unsupported',
+        code: UNSUPPORTED_CODES.WORKER_DOM_UNAVAILABLE,
+        reason: 'DOMParser not available in worker'
+      });
       return;
     }
 
@@ -173,37 +182,20 @@ self.onmessage = async (e) => {
       SourceKind: sourceKind
     }));
 
-    if (exportFormat === 'markdown') {
-      if (typeof _convertSanitizedHtmlToMarkdown !== 'function') {
-        self.postMessage({ id, status: 'error', error: 'Markdown converter is not available in worker.' });
-        return;
-      }
-      const outputMarkdown = _convertSanitizedHtmlToMarkdown(result.output || '', {
-        flavor: markdownFlavor
-      });
-      logger.info({ id, msg: 'job done (markdown)', meta: { outputLength: String(outputMarkdown.length), flavor: markdownFlavor } });
-      self.postMessage({
-        id,
-        status: 'done',
-        outputText: outputMarkdown,
-        outputFormat: 'markdown',
-        outputAssets: [],
-        relativePath: payload.relativePath || payload.fileName,
-        logs: result.logs || []
-      });
+    if (typeof _finalizePipelineOutput !== 'function') {
+      self.postMessage({ id, status: 'error', error: 'Export finalizer is not available in worker.' });
       return;
     }
 
-    logger.info({ id, msg: 'job done (html)', meta: { outputLength: String((result.output || '').length) } });
-    self.postMessage({
-      id,
-      status: 'done',
-      outputHtml: result.output,
-      outputFormat: 'html',
-      outputAssets: Array.isArray(result.assets) ? result.assets : [],
-      relativePath: payload.relativePath || payload.fileName,
-      logs: result.logs || []
-    });
+    const response = _finalizePipelineOutput({ id, payload, result });
+
+    if (response.outputFormat === 'markdown') {
+      logger.info({ id, msg: 'job done (markdown)', meta: { outputLength: String((response.outputText || '').length) } });
+    } else {
+      logger.info({ id, msg: 'job done (html)', meta: { outputLength: String((response.outputHtml || '').length) } });
+    }
+    self.postMessage(response);
+
   } catch (err) {
     logger.error({ id, msg: 'job error', meta: { error: String(err && err.message ? err.message : String(err)), stack: err && err.stack } });
     try { postDiagnostic({ id, status: 'error', phase: 'job', msg: String(err && err.message ? err.message : String(err)), meta: { stack: err && err.stack } }); } catch (ignore) {}

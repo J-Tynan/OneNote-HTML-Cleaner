@@ -62,6 +62,75 @@ Items below should reach zero before tagging the first stable build.
 
 ---
 
+## Pre-Release Redundant Code Review (active)
+
+Audit the codebase in bounded passes before the clean release-candidate verification pass. This initiative is audit-first: confirm issues, log cleanup tasks, then decide what must land before RC.
+
+- [x] [P1] Audit app/UI option wiring for stale branches, duplicated state handling, and retired-profile remnants. (2026-03-11)
+- [x] [P1] Audit config normalization for legacy aliases and unnecessary single-profile compatibility paths. (2026-03-11)
+- [x] [P1] Audit pipeline sanitization/style helpers for duplication, fixture-specific logic, and extractable modules. (2026-03-11)
+- [x] [P1] Audit native importer code paths against first stable release scope and log explicit defer/gate decisions. (2026-03-11)
+- [x] [P1] Audit Markdown and experimental export paths for redundant logic and coupling to the default HTML path. (2026-03-11)
+- [x] [P1] Audit worker diagnostics/initialization for unnecessary complexity and test-driven production branches. (2026-03-11)
+- [x] [P1] Audit test infrastructure for fixture coupling, duplicated helpers, and production code that exists only for tests. (2026-03-11)
+- [ ] [P1] Convert confirmed review findings into prioritized cleanup tasks before the release-candidate verification pass.
+
+### Bucket 1 findings: App/UI option wiring
+
+- [ ] [P1] Remove retired UI style-variant/testing scaffolding from `src/ui.js` (`applyUiStyleVariant`, removed-dropdown comments, and no-op restore blocks) so the shipped UI no longer carries dead experiment-era code.
+- [ ] [P1] Consolidate Advanced options state derivation so UI control enable/disable rules and conversion payload generation share one source of truth instead of duplicating export-format/theme-toggle logic across `src/ui.js` and `src/ui-downloads.js`.
+- [ ] [P1] Remove or centralize the fallback conversion-config branch in `src/ui.js` so new Advanced options cannot drift from `runtime.downloadHelpers.getConversionConfig()`.
+
+### Bucket 2 findings: Config normalization and single-profile legacy
+
+- [ ] [P1] Remove dead single-profile indirection from `src/pipeline/config.js` (`normalizeProfile`, `PROFILE_PRESETS`, and the unused local `profile` path) so config normalization reflects the actual one-profile release design.
+- [ ] [P1] Decide whether camelCase config aliases in `src/pipeline/config.js` are still required for external callers; if not, remove them and simplify tests/docs to the canonical config shape.
+- [ ] [P1] Remove the remaining `generic` profile legacy from tests, docs, and native importer defaults (`Tests/mht-fixtures-playwright.js`, `docs/Contracts.md`, `src/importers/one.js`, `src/importers/onepkg.js`) unless a specific backwards-compatibility requirement is documented.
+
+### Bucket 3 findings: Pipeline sanitization and style-helper duplication
+
+- [ ] [P1] Consolidate repeated style declaration parsing/serialization helpers across `src/pipeline/sanitize.js`, `src/pipeline/inlineStyleMigration.js`, `src/pipeline/listRepair.js`, and `src/convert/markdownIr.js` into a shared utility module with one canonical behavior.
+- [ ] [P1] Consolidate CSS length parsing/conversion helpers (`px`/`pt`/`em`/`rem`/`in` handling) so list repair, sanitization, and Markdown conversion do not maintain divergent unit logic.
+- [ ] [P1] Split OneNote-specific layout normalization from general sanitization in `src/pipeline/sanitize.js` so placeholder removal, header/date positioning, handwriting margin logic, and icon-paragraph alignment are easier to review and test independently.
+- [ ] [P1] Reassess `collapseInlineStyleDuplicates()` in `src/pipeline/sanitize.js` versus `migrateInlineStylesToUtilities()` in `src/pipeline/inlineStyleMigration.js` and remove overlapping mapping logic where the two paths duplicate class-derivation behavior.
+
+### Bucket 4 findings: Native importer scope drift
+
+- [ ] [P1] Decide whether native `.one` / `.onepkg` detection should remain in shared runtime helpers (`src/importers/sourceKind.js`, `src/ui.js`, `src/worker.js`) during the first stable release, or be gated behind an explicit non-release flag.
+- [ ] [P1] Align docs and tests with the actual release behavior for native formats: `README.md`, `docs/Architecture.md`, `docs/Contracts.md`, and native test scripts currently describe a more active native path than the worker now ships.
+- [ ] [P1] Contain native importer implementation debt (`src/importers/one.js`, `src/importers/onepkg.js`, `src/importers/warnings.js`) behind a documented post-release plan so deferred code does not keep leaking into release-facing contracts and defaults.
+
+### Bucket 5 findings: Experimental export paths
+
+- [ ] [P1] Unify export-format and Markdown-flavor normalization so `src/ui-downloads.js`, `src/pipeline/config.js`, and `src/pipeline/toolbarInjector.js` do not each maintain their own accepted-format logic.
+- [ ] [P1] Remove duplicate Markdown conversion routing between `src/worker.js` and `src/worker-wrapper.js` so experimental export behavior has one canonical execution path.
+- [ ] [P1] Remove or quarantine remaining `.docx` normalization/error branches from shared runtime code if the first stable release is HTML + Markdown only; otherwise document exactly why that dormant path must stay live.
+- [ ] [P1] Reassess whether export metadata concerns in `src/pipeline/toolbarInjector.js` should depend on experimental export settings, or be fed by a smaller normalized export-state object from one shared source.
+
+### Bucket 6 findings: Worker diagnostics and test-driven runtime branches
+
+- [ ] [P1] Simplify diagnostic buffering and dispatch in `src/worker-wrapper.js` so handshake timeout, unmatched-message, duplicate-response, and worker-origin diagnostics all flow through one implementation path instead of partially duplicating push/trim/event logic.
+- [ ] [P1] Decide whether `window.__getWorkerManagerDiagnostics`, `window.__getRuntime`, and other test-facing globals in `src/ui.js` should remain in production builds; if they stay, document them as explicit dev hooks rather than leaving them as ad hoc test affordances.
+- [ ] [P1] Reassess whether the current worker-wrapper fallback/diagnostic surface is testing implementation details rather than product behavior, especially around duplicate-response and unmatched-message handling in `src/worker-wrapper.js` and the corresponding Playwright tests.
+- [ ] [P1] Review handshake and callback timeout policy in `src/worker-wrapper.js` so the 5-second handshake timer, 120-second job timeout, and `maxPendingCallbacks` cap are either documented product decisions or simplified out of the release path.
+- [ ] [P1] Remove remaining deprecated `debugWorker` compatibility scaffolding from `src/worker-globals.js` once no import-time callers rely on it.
+
+### Bucket 7 findings: Test infrastructure and fixture coupling
+
+- [ ] [P1] Extract a shared Playwright/static-server helper for the repeated `createStaticServer()` pattern used across the browser smoke tests so server setup changes do not require editing dozens of files.
+- [ ] [P1] Consolidate fixture discovery on top of `Tests/fixtures.js` and remove ad hoc `fs.readdirSync('Tests')` scans from regression scripts so the suite has one canonical fixture policy.
+- [ ] [P1] Extract shared Node-test setup helpers for logging suppression, JSDOM/DOMParser bootstrapping, and common assertion utilities instead of repeating `setEnabled(false)` and local polyfills across many unit scripts.
+- [ ] [P1] Reduce test dependence on production globals such as `window.__getRuntime` and `window.__getWorkerManagerDiagnostics` by introducing explicit test harness helpers or dev-only adapters.
+- [ ] [P1] Review browser test coverage for stale assumptions, including the old `generic` profile default in `Tests/mht-fixtures-playwright.js`, so fixture comparisons align with the actual release path.
+
+### Pre-RC cleanup triage
+
+- [ ] [P1] Decide which confirmed findings must be fixed before the clean release-candidate verification pass versus explicitly deferred to post-release.
+- [ ] [P1] Treat these as likely pre-RC candidates unless new evidence changes priority: native-scope docs/contracts drift, duplicated Markdown routing between `src/worker.js` and `src/worker-wrapper.js`, stale UI/test scaffolding in `src/ui.js`, and single-profile/config legacy that still leaks into tests and release-facing docs.
+- [ ] [P2] Treat these as likely post-RC structural cleanup unless they are tied to a live bug: style-helper consolidation, deep `sanitize.js` extraction, broad worker diagnostics simplification, and test-harness deduplication.
+
+---
+
 ## Project Scope (release policy)
 
 These are scope guardrails for the first stable release, not day-to-day completion tasks.

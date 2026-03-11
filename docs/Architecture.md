@@ -5,7 +5,7 @@
 - Pipeline modules under `src/pipeline/`
 - UI communicates with worker via `postMessage` using Contracts.md shapes
 - Output: per-file cleaned HTML and optional ZIP export (JSZip later)
-- Import flow: file picker and drag/drop accept `.mht`, `.mhtml`, `.html`, `.htm`, `.one`, `.onepkg`
+- Import flow: file picker and drag/drop may receive `.mht`, `.mhtml`, `.html`, `.htm`, `.one`, `.onepkg`, but the stable runtime only processes the MHTML path and marks native formats unsupported.
 
 ## Pipeline flow
 1. MHT parsing: extract HTML and build an image map.
@@ -15,17 +15,15 @@
 5. Embed images using the image map.
 6. Serialize without collapsing whitespace.
 
-## Native OneNote import flow (in progress)
-1. UI detects source kind (`html`, `mht`, `one`, `onepkg`) and reads native files as `ArrayBuffer`.
-2. Worker routes native payloads to `src/importers/` adapters:
-	- `one.js`: validates OneNote section signature and derives page titles for per-page HTML generation.
-	- `onepkg.js`: validates CAB signature (`MSCF`), parses CAB folder/file tables, attempts section-byte extraction for uncompressed folders, and falls back to section placeholders for compressed folders.
-3. UI renders returned hierarchy and parser warnings.
-4. Full page-content extraction for compressed CAB folders (e.g., LZX) is planned next.
+## Native OneNote import flow (deferred)
+1. UI still detects source kind (`html`, `mht`, `one`, `onepkg`) so unsupported native files can be identified clearly.
+2. Stable runtime behavior stops at that boundary: `.one` and `.onepkg` are marked unsupported and are not routed through the shipped worker pipeline.
+3. Importer modules under `src/importers/` remain as deferred implementation work for a future native-enabled release.
+4. Full page-content extraction for compressed CAB folders (e.g., LZX) remains planned work, not active architecture in the stable release.
 
 ## Windows companion extraction
 - `tools/Extract-OnePkg.ps1` uses `expand.exe` to unpack compressed `.onepkg` files into section files (`*.one`).
-- Extracted sections can be imported directly through the existing native `.one` flow for richer conversion output.
+- Extracted sections are useful for deferred native importer development, but they are not part of the current stable app flow.
 
 ## Optional injected toolbar architecture (Phase 0 locked)
 
@@ -42,7 +40,7 @@ Contract reference: `docs/Toolbar-Phase0-Spec.md`
 2. UI controls and payload construction
 	- `src/ui.js`
 	- `index.html`
-3. Worker message pass-through for both processing types
+3. Worker message pass-through for the stable processing type plus deferred native contracts
 	- `src/worker.js`
 4. Pipeline output injection path
 	- `src/pipeline/pipeline.js`

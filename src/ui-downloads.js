@@ -1,6 +1,7 @@
 // src/ui-downloads.js
 import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
 import { normalizeExportStem, buildUniqueFilename } from './export-filenames.js';
+import { buildOutputDecorationConfig } from './pipeline/config.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
@@ -54,20 +55,6 @@ export function consolidateCssRules(cssText) {
 }
 
 export function createDownloadHelpers(ctx, updateZipButton) {
-  function normalizeExportFormat(value) {
-    const normalized = String(value || '').trim().toLowerCase();
-    if (normalized === 'markdown' || normalized === 'docx') return normalized;
-    return 'html';
-  }
-
-  function normalizeMarkdownFlavor(value) {
-    const normalized = String(value || '').trim().toLowerCase();
-    if (normalized === 'commonmark' || normalized === 'gfm' || normalized === 'markdown-extra') {
-      return normalized;
-    }
-    return 'obsidian';
-  }
-
   function getSuccessfulOutputRecord(value) {
     if (value && typeof value === 'object' && typeof value.content === 'string') {
       return {
@@ -155,32 +142,35 @@ export function createDownloadHelpers(ctx, updateZipButton) {
   }
 
   function getConversionConfig() {
-    const experimentalEnabled = Boolean(ctx.experimentalExportEnabled && ctx.experimentalExportEnabled.checked);
-    const selectedFormat = normalizeExportFormat(ctx.exportFormat ? String(ctx.exportFormat.value || 'html') : 'html');
-    const effectiveFormat = experimentalEnabled ? selectedFormat : 'html';
-    const selectedFlavor = normalizeMarkdownFlavor(ctx.markdownFlavor ? String(ctx.markdownFlavor.value || 'obsidian') : 'obsidian');
+    const outputDecorationConfig = buildOutputDecorationConfig({
+      ToolbarEnabled: Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked),
+      ToolbarEditToggleEnabled: Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked),
+      ToolbarMetadataToggleEnabled: Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked),
+      ExperimentalExportEnabled: Boolean(ctx.experimentalExportEnabled && ctx.experimentalExportEnabled.checked),
+      ExportFormat: ctx.exportFormat ? String(ctx.exportFormat.value || 'html') : 'html',
+      MarkdownFlavor: ctx.markdownFlavor ? String(ctx.markdownFlavor.value || 'obsidian') : 'obsidian',
+      ConvertedPageThemeToggleEnabled: Boolean(ctx.convertedPageThemeToggleEnabled && ctx.convertedPageThemeToggleEnabled.checked),
+      ConvertedPageThemeToggleOledBlack: Boolean(ctx.convertedPageThemeToggleOledBlack && ctx.convertedPageThemeToggleOledBlack.checked)
+    });
     const convertedPageThemeToggleEnabled = Boolean(ctx.convertedPageThemeToggleEnabled && ctx.convertedPageThemeToggleEnabled.checked);
     const convertedPageThemeToggleOledBlack = Boolean(ctx.convertedPageThemeToggleOledBlack && ctx.convertedPageThemeToggleOledBlack.checked);
-    const toolbarEnabled = Boolean(ctx.toolbarEnabled && ctx.toolbarEnabled.checked);
 
     return {
       Profile: 'onenote',
       OutputCleanupMode: 'safe',
       UnitStrategy: 'normalize-safe',
       TailwindCssHref: 'assets/tailwind-output.css',
-      ToolbarEnabled: toolbarEnabled,
-      ToolbarEditToggleEnabled: toolbarEnabled,
-      ToolbarMetadataToggleEnabled: toolbarEnabled,
+      ToolbarEnabled: outputDecorationConfig.ToolbarEnabled,
+      ToolbarEditToggleEnabled: outputDecorationConfig.ToolbarEditToggleEnabled,
+      ToolbarMetadataToggleEnabled: outputDecorationConfig.ToolbarMetadataToggleEnabled,
       ExternalizeCssEnabled: Boolean(ctx.externalizeCssEnabled && ctx.externalizeCssEnabled.checked),
       ExternalizeCssMode: ctx.externalizeCssMode ? String(ctx.externalizeCssMode.value || 'shared') : 'shared',
-      ExperimentalExportEnabled: experimentalEnabled,
-      ExportFormat: effectiveFormat,
-      MarkdownFlavor: selectedFlavor,
-      ConvertedPageThemeToggleEnabled: effectiveFormat === 'html' ? convertedPageThemeToggleEnabled : false,
-      ConvertedPageThemeToggleOledBlack: effectiveFormat === 'html' && convertedPageThemeToggleEnabled
-        ? convertedPageThemeToggleOledBlack
-        : false,
-      ToolbarBundleMode: 'inline'
+      ExperimentalExportEnabled: outputDecorationConfig.ExperimentalExportEnabled,
+      ExportFormat: outputDecorationConfig.ExportFormat,
+      MarkdownFlavor: outputDecorationConfig.MarkdownFlavor,
+      ConvertedPageThemeToggleEnabled: outputDecorationConfig.ConvertedPageThemeToggleEnabled,
+      ConvertedPageThemeToggleOledBlack: outputDecorationConfig.ConvertedPageThemeToggleOledBlack,
+      ToolbarBundleMode: outputDecorationConfig.ToolbarBundleMode
     };
   }
 

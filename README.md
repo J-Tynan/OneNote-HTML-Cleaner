@@ -14,7 +14,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - ZIP export support via JSZip (requires `npm install`).
 - Tailwind utility baseline added for converted OneNote output (non-destructive, no preflight reset).
  - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
- - Experimental support for native OneNote files (`.one`, `.onepkg`) is available but not fully implemented; see the "Native OneNote files" section for known limitations and recommended developer workflows.
+ - Native OneNote file support (`.one`, `.onepkg`) is deferred for the first stable release; current runtime behavior is to mark those files unsupported in the app while importer work continues out of band.
  - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and will be added in future feature branches.
 
 ### Recent Fixes
@@ -136,22 +136,25 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 - Advanced options include an optional converted-page theme toggle for HTML exports.
 - When enabled, converted HTML injects a symbol-based Light/Dark toggle (default Light) and remembers the chosen theme per exported file using browser local storage.
 - Optional OLED-black mode applies pure-black dark surfaces to both page background and main content area.
-- The feature is disabled for non-HTML exports (for example Markdown and docx).
+- The feature is disabled for non-HTML exports (for example Markdown).
 
-## Native OneNote files (Phase 1) — Experimental
+## Native OneNote files (Deferred after stable release)
 
-- Note: native `.one` and `.onepkg` handling is experimental and partial. The app accepts these files in the picker and via drag/drop, but full in-browser extraction for all compressed notebooks is not yet implemented. Some flows will fall back to placeholder exports or require developer-side preprocessing.
+- Current stable-release behavior: native `.one` and `.onepkg` files are detected and surfaced as unsupported in the app queue. They are not sent through the shipped conversion pipeline.
+- Importer code remains in the repository for post-release work, but it is not part of the first stable runtime contract.
+- Use `.mht` / `.mhtml` for production conversion in the current release.
+- Use the notes below only for developer planning and exploratory branch work, not as a description of current shipped behavior.
 
-- `.one` processing (experimental/partial):
-	- Attempts to validate native section signatures when possible.
-	- Tries to extract page-title candidates and canonicalize basic metadata (`title`, `author`, `createdAt`, `modifiedAt`).
-	- Produces per-page HTML placeholders and metadata sidecars (`*.metadata.json`) for ZIP exports when full content extraction isn’t available.
+- Deferred `.one` work:
+	- Validate native section signatures when possible.
+	- Extract page-title candidates and canonicalize basic metadata (`title`, `author`, `createdAt`, `modifiedAt`).
+	- Produce per-page HTML placeholders and metadata sidecars (`*.metadata.json`) for ZIP exports when full content extraction is unavailable.
 
-- `.onepkg` processing (experimental/partial):
-	- Detects CAB container signature (`MSCF`) and enumerates archive entries to derive notebook hierarchy.
-	- May decode uncompressed section payloads and reuse `.one` extraction logic, but compressed payloads (for example, LZX) are not fully decoded in-browser yet.
-	- For compressed notebooks, the pipeline currently falls back to per-section placeholders or recommends exporting to `.one`/`.mht` and importing those files for richer conversion.
-	- ZIP exports include generated pages and metadata when possible, but exact fidelity varies with archive compression.
+- Deferred `.onepkg` work:
+	- Detect CAB container signature (`MSCF`) and enumerate archive entries to derive notebook hierarchy.
+	- Decode uncompressed section payloads and reuse `.one` extraction logic where possible.
+	- Handle compressed payloads (for example, LZX) without relying on placeholder-only fallbacks.
+	- Reintroduce native ZIP export output only after the browser path is stable enough to ship.
 
 ### Windows helper for compressed `.onepkg`
 
@@ -193,21 +196,19 @@ npm run build:libmspack:wasm:wsl:check
 	- `libmspack-core.js`
 	- `libmspack-core.wasm`
 
-This phase establishes native file routing, hierarchy handling, and section-level native downloads. Full fidelity page-content extraction for native formats is still in progress.
+Native importer work remains a post-release track. Full fidelity page-content extraction for native formats is still in progress and is not part of the current shipped runtime.
 
 ### Expected fidelity (current)
 
 - `.mht` / `.mhtml` (primary release path): highest fidelity and the only stable-release target.
-- `.one` (experimental): metadata and routing are partially available; content extraction varies by section content.
-- `.onepkg` (experimental): best-effort hierarchy and placeholder output when compressed payloads cannot be decoded in-browser.
-- Exports from native formats may differ from OneNote visual parity; this is expected in the current milestone.
+- `.one` / `.onepkg`: deferred in the stable app runtime; use only in dedicated development work until the native path is explicitly re-enabled.
 
 ### Preferred workflow (current)
 
 1. Prefer exporting from OneNote to `.mht` / `.mhtml` for production conversion.
-2. Use `.one` / `.onepkg` imports only for exploratory or developer workflows.
-3. For compressed `.onepkg`, extract sections locally first (for example with `tools/Extract-OnePkg.ps1`), then import resulting `.one` files.
-4. Run `npm run test:gate:native` after pipeline changes before accepting regression updates.
+2. Treat `.one` / `.onepkg` work as deferred developer-only work until the runtime contract is re-enabled.
+3. For compressed `.onepkg`, extract sections locally first (for example with `tools/Extract-OnePkg.ps1`) when working on native importer development branches.
+4. Run `npm run test:gate:native` only when intentionally changing deferred native importer code or its experimental contracts.
 
 ## Optional injected toolbar (experimental)
 
@@ -311,7 +312,6 @@ npm run test:ui-download-smoke
 - When enabled, **Export format** can be set to:
 	- HTML (`.html`) — default/stable path
 	- Markdown (`.md`) — structure-first conversion from sanitized HTML + flavor adapter
-	- Document (`.docx`) — currently not implemented (UI shows disabled-state guidance)
 - Markdown flavor selection is shown only when Markdown export is selected and defaults to **Obsidian-compatible**.
 - When experimental export is disabled, conversion always falls back to the existing HTML pipeline.
 

@@ -34,7 +34,7 @@
 }
 ```
 
-## Worker request (native OneNote)
+## Worker request (native OneNote, deferred)
 ```json
 {
   "id": "string",
@@ -53,7 +53,7 @@
 }
 ```
 
-`process-native-file` is the binary-safe path for OneNote native containers:
+`process-native-file` is a deferred contract for future native OneNote support. It is not used by the current stable app runtime:
 - `one`: OneNote section (`*.one`)
 - `onepkg`: OneNote notebook package (`*.onepkg`, CAB container)
 
@@ -78,7 +78,7 @@ Toolbar flags are additive and optional:
 }
 ```
 
-## Worker response (done, native)
+## Worker response (done, native, deferred)
 ```json
 {
   "id": "string",
@@ -109,7 +109,7 @@ Toolbar flags are additive and optional:
 
 Toolbar injection is optional and controlled by config; response shapes do not change when toolbar is enabled.
 
-Phase-1 implementation validates native signatures and returns hierarchy plus generated downloadable pages (heuristic for `.one`). For `.onepkg`, the importer parses CAB metadata, attempts section-byte extraction for uncompressed folders, and falls back to placeholders for compressed folders (for example `lzx`). Full page-content extraction for compressed section payloads is staged next.
+Current stable runtime behavior does not emit native `done` responses. Native `.one` / `.onepkg` inputs are surfaced as unsupported while importer work remains deferred. The response shape above is retained only as a design/development contract for future native re-enablement.
 ---
 ## Progress message
 ```json

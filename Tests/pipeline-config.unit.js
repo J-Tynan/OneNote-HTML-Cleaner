@@ -17,6 +17,18 @@ async function main() {
   if (!mod || typeof mod.normalizePipelineConfig !== 'function') {
     fail('normalizePipelineConfig not exported from src/pipeline/config.js');
   }
+  if (typeof mod.normalizeExportConfig !== 'function') {
+    fail('normalizeExportConfig not exported from src/pipeline/config.js');
+  }
+  if (typeof mod.normalizeExportFormat !== 'function') {
+    fail('normalizeExportFormat not exported from src/pipeline/config.js');
+  }
+  if (typeof mod.normalizeMarkdownFlavor !== 'function') {
+    fail('normalizeMarkdownFlavor not exported from src/pipeline/config.js');
+  }
+  if (typeof mod.buildOutputDecorationConfig !== 'function') {
+    fail('buildOutputDecorationConfig not exported from src/pipeline/config.js');
+  }
 
   const normalizedProfile = mod.normalizePipelineConfig({
     Profile: 'generic',
@@ -79,6 +91,35 @@ async function main() {
   assert(normalizedFallback.MarkdownFlavor === 'obsidian', 'Expected invalid MarkdownFlavor to fallback to obsidian');
   assert(normalizedFallback.ConvertedPageThemeToggleEnabled === false, 'Expected ConvertedPageThemeToggleEnabled false');
   assert(normalizedFallback.ConvertedPageThemeToggleOledBlack === false, 'Expected ConvertedPageThemeToggleOledBlack false when toggle disabled');
+
+  const normalizedExport = mod.normalizeExportConfig({
+    ExperimentalExportEnabled: 'true',
+    ExportFormat: 'DOCX',
+    MarkdownFlavor: 'CommonMark'
+  });
+
+  assert(normalizedExport.ExperimentalExportEnabled === true, 'Expected normalizeExportConfig ExperimentalExportEnabled true');
+  assert(normalizedExport.ExportFormat === 'html', 'Expected normalizeExportConfig ExportFormat to fall back to html for unsupported formats');
+  assert(normalizedExport.MarkdownFlavor === 'commonmark', 'Expected normalizeExportConfig MarkdownFlavor to normalize to commonmark');
+
+  const outputDecorationConfig = mod.buildOutputDecorationConfig({
+    ToolbarEnabled: 'true',
+    ToolbarEditToggleEnabled: 'false',
+    ToolbarMetadataToggleEnabled: 'false',
+    ExperimentalExportEnabled: 'true',
+    ExportFormat: 'markdown',
+    MarkdownFlavor: 'GFM',
+    ConvertedPageThemeToggleEnabled: 'true',
+    ConvertedPageThemeToggleOledBlack: 'true'
+  });
+
+  assert(outputDecorationConfig.ToolbarEnabled === true, 'Expected buildOutputDecorationConfig ToolbarEnabled true');
+  assert(outputDecorationConfig.ToolbarEditToggleEnabled === true, 'Expected buildOutputDecorationConfig ToolbarEditToggleEnabled true when toolbar enabled');
+  assert(outputDecorationConfig.ToolbarMetadataToggleEnabled === true, 'Expected buildOutputDecorationConfig ToolbarMetadataToggleEnabled true when toolbar enabled');
+  assert(outputDecorationConfig.ExportFormat === 'markdown', 'Expected buildOutputDecorationConfig ExportFormat markdown');
+  assert(outputDecorationConfig.MarkdownFlavor === 'gfm', 'Expected buildOutputDecorationConfig MarkdownFlavor gfm');
+  assert(outputDecorationConfig.ConvertedPageThemeToggleEnabled === false, 'Expected buildOutputDecorationConfig to disable theme toggle for non-HTML exports');
+  assert(outputDecorationConfig.ConvertedPageThemeToggleOledBlack === false, 'Expected buildOutputDecorationConfig to disable OLED black for non-HTML exports');
 
   console.log('pipeline-config: PASS');
 }

@@ -2,6 +2,10 @@
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
 const logger = createLogger('worker-wrapper');
 
+const UNSUPPORTED_FALLBACK_CODES = new Set([
+  'worker-dom-unavailable'
+]);
+
 export default class WorkerManager {
   constructor(workerPath = './worker.js') {
     try { setLogEnabled(typeof window !== 'undefined' && window && window.LOGGING_ENABLED !== false); } catch (_) {}
@@ -232,13 +236,26 @@ export default class WorkerManager {
       } else if (msg.status === 'progress' && cb.onprogress) {
         cb.onprogress(msg);
       } else if (msg.status === 'unsupported') {
+        if (!this.canFallbackFromUnsupported(msg)) {
+          if (this._wrapperToOriginal.has(msg.id)) {
+            msg.originalId = this._wrapperToOriginal.get(msg.id);
+            this._wrapperToOriginal.delete(msg.id);
+          }
+          cb.reject(msg);
+          this.callbacks.delete(msg.id);
+          this._recentlyHandled.add(msg.id);
+          setTimeout(() => this._recentlyHandled.delete(msg.id), 30000);
+          logger.info({ msg: 'worker unsupported without fallback', meta: { code: msg.code, reason: msg.reason } });
+          return;
+        }
         // Worker cannot run DOM-based pipeline. Fallback to main-thread processing.
         try {
           logger.warn({ msg: 'worker unsupported, falling back to main thread', meta: { reason: msg.reason } });
           // Dynamically import pipeline and mht parser in main thread
-          const [pipelineMod, mhtMod] = await Promise.all([
+          const [pipelineMod, mhtMod, exportFinalizerMod] = await Promise.all([
             import('./pipeline/pipeline.js'),
-            import('./pipeline/mht.js')
+            import('./pipeline/mht.js'),
+            import('./convert/exportFinalizer.js')
           ]);
           const payload = cb.payload;
           let htmlInput = payload.html || '';
@@ -268,43 +285,7 @@ export default class WorkerManager {
             SourceName: fileName || payload.relativePath || 'Converted file',
             SourceKind: sourceKind
           }));
-          const experimentalEnabled = payload && payload.config && payload.config.ExperimentalExportEnabled === true;
-          const exportFormat = experimentalEnabled
-            ? String(payload.config.ExportFormat || 'html').toLowerCase()
-            : 'html';
-
-          if (exportFormat === 'markdown') {
-            const markdownMod = await import('./convert/markdownCore.js');
-            const outputMarkdown = markdownMod.convertSanitizedHtmlToMarkdown(result.output || '', {
-              flavor: payload && payload.config ? payload.config.MarkdownFlavor : undefined
-            });
-            const markdownResponse = {
-              id: msg.id,
-              status: 'done',
-              outputText: outputMarkdown,
-              outputFormat: 'markdown',
-              outputAssets: [],
-              relativePath: payload.relativePath || payload.fileName,
-              logs: result.logs
-            };
-            if (this._wrapperToOriginal.has(msg.id)) {
-              markdownResponse.originalId = this._wrapperToOriginal.get(msg.id);
-              this._wrapperToOriginal.delete(msg.id);
-            }
-            cb.resolve(markdownResponse);
-            this.callbacks.delete(msg.id);
-            return;
-          }
-
-          const response = {
-            id: msg.id,
-            status: 'done',
-            outputHtml: result.output,
-            outputFormat: 'html',
-            outputAssets: Array.isArray(result.assets) ? result.assets : [],
-            relativePath: payload.relativePath || payload.fileName,
-            logs: result.logs
-          };
+          const response = exportFinalizerMod.finalizePipelineOutput({ id: msg.id, payload, result });
           // preserve original id mapping if available
           if (this._wrapperToOriginal.has(msg.id)) {
             response.originalId = this._wrapperToOriginal.get(msg.id);
@@ -409,6 +390,12 @@ export default class WorkerManager {
   // number of currently unresolved callbacks
   getPendingCount() {
     return this.callbacks.size;
+  }
+
+  canFallbackFromUnsupported(msg) {
+    if (!msg || typeof msg !== 'object') return false;
+    if (msg.code && UNSUPPORTED_FALLBACK_CODES.has(msg.code)) return true;
+    return msg.reason === 'DOMParser not available in worker';
   }
 
   enqueue(payload, onprogress, transferList = [], timeoutMs = this.defaultTimeoutMs) {

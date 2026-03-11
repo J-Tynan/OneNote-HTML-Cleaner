@@ -1,6 +1,6 @@
 // src/pipeline/pipeline.js
 import { parseHtmlToDocument, documentToHtml } from './parser.js';
-import { normalizePipelineConfig } from './config.js';
+import { buildOutputDecorationConfig, normalizePipelineConfig } from './config.js';
 import * as sanitize from './sanitize.js';
 import { fixLists } from './listRepair.js';
 import { annotateTableSemantics } from './Semantics.js';
@@ -189,15 +189,17 @@ export async function runPipeline(htmlString, config = {}) {
         .map((item) => ({ severity: item.level === 'warn' ? 'warning' : item.level }))
     );
 
+    const outputDecorationConfig = buildOutputDecorationConfig(resolvedConfig);
+
     const withToolbar = injectOutputToolbar(normalized, {
-      ...resolvedConfig,
+      ...outputDecorationConfig,
       SourceName: resolvedConfig.SourceName || resolvedConfig.fileName || 'Converted file',
       SourceKind: resolvedConfig.SourceKind || resolvedConfig.sourceKind || 'html',
       WarningSummary: warningSummary
     });
 
     const withThemeToggle = injectConvertedPageThemeToggle(withToolbar, {
-      ...resolvedConfig
+      ...outputDecorationConfig
     });
 
     if (withToolbar !== normalized) {
