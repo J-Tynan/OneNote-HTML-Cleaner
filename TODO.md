@@ -107,11 +107,11 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
  - [x] [P1] Quarantine dormant `.docx` runtime branches at the config boundary and update docs (2026-03-12).
  - [x] [P1] Refactor toolbar injector to consume an explicit normalized `exportState` and rewire callers (2026-03-12).
 
-- [ ] [P1] Simplify diagnostic buffering and dispatch in `src/worker-wrapper.js` so handshake timeout, unmatched-message, duplicate-response, and worker-origin diagnostics all flow through one implementation path instead of partially duplicating push/trim/event logic.
-- [ ] [P1] Decide whether `window.__getWorkerManagerDiagnostics`, `window.__getRuntime`, and other test-facing globals in `src/ui.js` should remain in production builds; if they stay, document them as explicit dev hooks rather than leaving them as ad hoc test affordances.
-- [ ] [P1] Reassess whether the current worker-wrapper fallback/diagnostic surface is testing implementation details rather than product behavior, especially around duplicate-response and unmatched-message handling in `src/worker-wrapper.js` and the corresponding Playwright tests.
-- [ ] [P1] Review handshake and callback timeout policy in `src/worker-wrapper.js` so the 5-second handshake timer, 120-second job timeout, and `maxPendingCallbacks` cap are either documented product decisions or simplified out of the release path.
-- [ ] [P1] Remove remaining deprecated `debugWorker` compatibility scaffolding from `src/worker-globals.js` once no import-time callers rely on it.
+- [x] [P1] Simplify diagnostic buffering and dispatch in `src/worker-wrapper.js` so handshake timeout, unmatched-message, duplicate-response, and worker-origin diagnostics all flow through one implementation path instead of partially duplicating push/trim/event logic. (2026-03-12)
+- [x] [P1] Decide whether `window.__getWorkerManagerDiagnostics`, `window.__getRuntime`, and other test-facing globals in `src/ui.js` should remain in production builds; if they stay, document them as explicit dev hooks rather than leaving them as ad hoc test affordances. (2026-03-12)
+- [x] [P1] Reassess whether the current worker-wrapper fallback/diagnostic surface is testing implementation details rather than product behavior, especially around duplicate-response and unmatched-message handling in `src/worker-wrapper.js` and the corresponding Playwright tests. (2026-03-12)
+- [x] [P1] Review handshake and callback timeout policy in `src/worker-wrapper.js` so the 5-second handshake timer, 120-second job timeout, and `maxPendingCallbacks` cap are either documented product decisions or simplified out of the release path. (2026-03-12)
+- [x] [P1] Remove remaining deprecated `debugWorker` compatibility scaffolding from `src/worker-globals.js` once no import-time callers rely on it. (2026-03-12)
 
 ### Bucket 7 findings: Test infrastructure and fixture coupling
 

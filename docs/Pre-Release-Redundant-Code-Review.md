@@ -97,8 +97,13 @@ Confirmed findings:
 
 - `src/worker-wrapper.js` contains multiple diagnostic paths that partially duplicate push/trim/event-dispatch behavior.
 - The wrapper carries a 5-second handshake timeout, a 120-second job timeout, duplicate-response tracking, unmatched-message diagnostics, and a capped in-memory buffer, all in the production path.
-- `src/ui.js` exposes test-facing globals such as `window.__getWorkerManagerDiagnostics` and `window.__getRuntime`.
-- `src/worker-globals.js` still contains deprecated `debugWorker` compatibility scaffolding.
+- `src/ui.js` exposes test-facing globals such as `window.__getWorkerManagerDiagnostics` and `window.__getRuntime`; current decision is to keep them as explicit documented dev hooks until broader test-harness cleanup lands.
+- Deprecated `debugWorker` compatibility scaffolding in `src/worker-globals.js` has been removed now that no callers depend on it.
+
+Decision update:
+
+- Keep the current worker-wrapper timing/cap values as documented release-path guardrails for now: 5-second handshake timeout, 120-second job timeout, 1000 pending-callback cap, and 30-second duplicate-response retention window.
+- Treat duplicate-response and unmatched-message diagnostics as release-path support signals worth testing directly, but avoid tests reaching into wrapper-private hooks when the same behavior can be exercised through public configuration. The handshake-timeout coverage has been shifted toward constructor-configured behavior instead of direct private-method triggering.
 
 Follow-up tasks:
 
@@ -106,7 +111,7 @@ Follow-up tasks:
 - Decide whether test-facing globals in `src/ui.js` should remain in production builds.
 - Reassess whether current worker tests are overfitted to implementation details.
 - Review handshake and timeout policy so it is either documented or simplified.
-- Remove deprecated `debugWorker` compatibility once no callers depend on it.
+- Remove deprecated `debugWorker` compatibility once no callers depend on it. Completed 2026-03-12.
 
 ### 7. Test infrastructure and fixture coupling
 

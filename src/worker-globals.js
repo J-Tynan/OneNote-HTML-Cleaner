@@ -1,7 +1,4 @@
 // src/worker-globals.js
-// Ensure a safe global `debugWorker` exists early during module evaluation.
-// Some imported modules may reference `debugWorker` at top-level; defining
-// this noop prevents ReferenceError during worker/bootstrap.
 const _workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
   || (typeof self !== 'undefined' && self)
   || (typeof window !== 'undefined' && window)
@@ -9,22 +6,6 @@ const _workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
 
 import { createLogger } from './logging.js';
 const logger = createLogger('worker-globals');
-
-if (_workerGlobal && typeof _workerGlobal.debugWorker === 'undefined') {
-  // Keep an import-time-safe noop for backward compatibility, but mark it
-  // deprecated so callers migrate to the structured `postDiagnostic()` API.
-  // This prevents ReferenceError during top-level imports while steering
-  // runtime usage toward the new helper.
-  _workerGlobal.debugWorker = function debugWorker(..._args) {
-    try {
-      if (!_workerGlobal.__debugWorkerDeprecatedShown) {
-        logger.warn({ msg: 'debugWorker() is deprecated — use postDiagnostic() instead.' });
-        _workerGlobal.__debugWorkerDeprecatedShown = true;
-      }
-    } catch (ignore) { /* swallow */ }
-    /* noop for compatibility */
-  };
-}
 
 // Short stable fingerprint for the worker module (used in diagnostics).
 function _shortHexHash(s) {
@@ -73,10 +54,9 @@ try {
   }
 } catch (ignore) { /* defensive */ }
 
-// A safe, structured diagnostic helper callers should use instead of the
-// legacy `debugWorker()` global. This is available at import-time via a
-// named export and will safely fall back to console debugging when
-// `postMessage` is unavailable.
+// A safe, structured diagnostic helper available at import-time via a named
+// export. It will safely fall back to logger output when `postMessage` is
+// unavailable.
 export function postDiagnostic(detail = {}) {
   try {
     const status = detail.status || 'info';

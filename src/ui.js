@@ -64,6 +64,28 @@ function logLayoutMode() {
   logger.info({ msg: `Active layout: ${mode} (${width}px)`, meta: { width, mode } });
 }
 
+function getWorkerManagerDiagnostics() {
+  return runtime.workerManager ? runtime.workerManager.getDiagnostics() : [];
+}
+
+function registerDevHooks() {
+  if (typeof window === 'undefined' || !window) {
+    return;
+  }
+
+  const hooks = {
+    version: 1,
+    getRuntime: () => runtime,
+    getWorkerManagerDiagnostics
+  };
+
+  // Keep these explicit for tests and local debugging until a dedicated
+  // test harness replaces direct runtime access.
+  try { window.__ONC_DEV_HOOKS = hooks; } catch (ignore) {}
+  try { window.__getRuntime = hooks.getRuntime; } catch (ignore) {}
+  try { window.__getWorkerManagerDiagnostics = hooks.getWorkerManagerDiagnostics; } catch (ignore) {}
+}
+
 /* === UTILITIES === */
 
 function escapeHtml(value) {
@@ -804,12 +826,7 @@ export function initUI(workerManager, options = {}) {
   }
 
   runtime.workerManager = workerManager || null;
-
-
-  // Expose a test helper to read worker-manager diagnostics from page context
-  try { window.__getWorkerManagerDiagnostics = () => (runtime.workerManager ? runtime.workerManager.getDiagnostics() : []); } catch (ignore) {}
-  // Expose runtime object for debugging/tests (avoid name collision in prod)
-  try { window.__getRuntime = () => runtime; } catch (ignore) {}
+  registerDevHooks();
 
   // Diagnostics polling: reflect any worker diagnostics in the UI diagnostics panel
   if (runtime._diagnosticsPoll) {

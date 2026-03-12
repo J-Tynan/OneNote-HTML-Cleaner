@@ -116,6 +116,16 @@ Current stable runtime behavior does not emit native `done` responses. Native `.
 { "id":"string", "status":"progress", "step":"Sanitize", "percent":40 }
 ```
 
+## UI dev hooks (debug/test contract)
+
+The app currently exposes explicit browser-side dev hooks for local debugging and Playwright coverage:
+
+- `window.__ONC_DEV_HOOKS.getRuntime()` returns the current UI runtime object.
+- `window.__ONC_DEV_HOOKS.getWorkerManagerDiagnostics()` returns the current `WorkerManager` diagnostics buffer or an empty array.
+- `window.__getRuntime()` and `window.__getWorkerManagerDiagnostics()` remain as legacy aliases for the same hooks while the test suite still references them directly.
+
+These hooks are not end-user features and should be treated as dev/test affordances only. They remain in the shipped build for the current release because several browser tests still depend on them; replacing those direct runtime accesses is tracked as later test-harness cleanup.
+
 ## Toolbar Phase 0 reference
 
 See `docs/Toolbar-Phase0-Spec.md` for the locked toolbar injection contract, idempotency rule, and day-one behavior boundaries.

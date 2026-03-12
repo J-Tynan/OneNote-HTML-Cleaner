@@ -73,18 +73,14 @@ function createStaticServer(root) {
       // Import the WorkerManager class and instantiate with fake worker URL
       const mod = await import('/src/worker-wrapper.js');
       const WM = mod.default;
-      const wm = new WM(fakeUrl);
-      wm.handshakeTimeoutMs = 250; // keep meta for diagnostics
+      const wm = new WM(fakeUrl, { handshakeTimeoutMs: 50 });
 
       const payload = { id: 'timeout-test-1', fileName: 'test.mht', html: 'dummy', sourceKind: 'mht' };
 
-      // Start enqueue and then trigger handshake timeout handler explicitly
+      // Start enqueue and wait for the configured handshake timeout to reject.
       const enqueuePromise = wm.enqueue(payload, null, [], 2000)
         .then(() => ({ ok: false, error: 'enqueue unexpectedly resolved' }))
         .catch((err) => ({ ok: true, error: String(err && err.error ? err.error : err) }));
-
-      // Trigger the wrapper's handshake-timeout immediately so the promise rejects
-      setTimeout(() => { try { wm._onHandshakeTimeout(); } catch (e) { /* ignore */ } }, 50);
 
       const res = await enqueuePromise;
       // Give wrapper a moment to record diagnostics

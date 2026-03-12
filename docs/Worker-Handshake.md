@@ -57,6 +57,14 @@ This page documents the startup handshake between the main thread (`WorkerManage
 - Wrapper handshake timeout:
   - If the wrapper's handshake timer expires, it emits the reserved `__diag__` diagnostic and rejects queued payloads with a deterministic error object `{ id, status: 'error', error: 'Worker handshake timeout' }`.
 
+**Current release guardrails**
+- Handshake timeout: 5000 ms. This is intentional for the current release path so a broken worker bootstrap fails fast instead of leaving the app in indefinite buffering.
+- Job timeout: 120000 ms per queued callback. This keeps long conversions viable while still bounding hung worker jobs.
+- Pending callback cap: 1000 unresolved callbacks. This is a memory-safety guardrail so the wrapper does not grow unbounded if jobs are queued faster than they complete.
+- Duplicate-response retention window: 30000 ms. The wrapper keeps recently handled IDs for a short period so duplicate terminal responses are classified as diagnostics instead of silently treated as unmatched noise.
+
+These values are treated as current release-path product guardrails, not accidental implementation details. If they change, update both this document and any tests that intentionally assert timeout-related behavior.
+
 **Testing notes**
 - Add Playwright tests that assert ordering: wrapper sends `init` → worker posts `ready` → wrapper posts job messages. The existing `Tests/worker-init-playwright.js` covers this flow.
 - Add an init-failure test that forces a dynamic-import rejection (or injects a failing stub) and asserts the worker posts a diagnostic with `phase: 'init-imports'` and that the wrapper rejects queued jobs.
