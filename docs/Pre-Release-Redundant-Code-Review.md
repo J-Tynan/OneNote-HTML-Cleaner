@@ -81,14 +81,14 @@ Confirmed findings:
 
 - Export-format and Markdown-flavor normalization is duplicated across `src/ui-downloads.js`, `src/pipeline/config.js`, and `src/pipeline/toolbarInjector.js`.
 - Markdown conversion routing exists in both `src/worker.js` and `src/worker-wrapper.js`.
-- Shared runtime code still recognizes `.docx` even though the homepage option was removed and implementation remains deferred.
+- Shared runtime code still needs an explicit unsupported-format fallback for `.docx`, but the stable release should keep that behavior quarantined at the config boundary rather than implying a live export path.
 - Export metadata concerns in `src/pipeline/toolbarInjector.js` depend on the same normalized export state that is already derived elsewhere.
 
 Follow-up tasks:
 
 - Unify export-format and Markdown-flavor normalization.
 - Remove duplicate Markdown conversion routing between `src/worker.js` and `src/worker-wrapper.js`.
-- Remove or quarantine dormant `.docx` runtime branches unless explicitly required.
+- Quarantine dormant `.docx` handling at the config/documentation boundary unless a release-path requirement proves a deeper runtime branch is necessary.
 - Feed toolbar/export metadata from a smaller shared normalized export-state object.
 
 ### 6. Worker diagnostics and test-driven runtime branches

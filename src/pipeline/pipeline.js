@@ -194,16 +194,23 @@ export async function runPipeline(htmlString, config = {}) {
     );
 
     const outputDecorationConfig = buildOutputDecorationConfig(resolvedConfig);
+    const exportState = {
+      ExperimentalExportEnabled: outputDecorationConfig.ExperimentalExportEnabled,
+      ExportFormat: outputDecorationConfig.ExportFormat,
+      MarkdownFlavor: outputDecorationConfig.MarkdownFlavor
+    };
 
     const withToolbar = injectOutputToolbar(normalized, {
       ...outputDecorationConfig,
+      exportState,
       SourceName: resolvedConfig.SourceName || resolvedConfig.fileName || 'Converted file',
       SourceKind: resolvedConfig.SourceKind || resolvedConfig.sourceKind || 'html',
       WarningSummary: warningSummary
     });
 
     const withThemeToggle = injectConvertedPageThemeToggle(withToolbar, {
-      ...outputDecorationConfig
+      ...outputDecorationConfig,
+      exportState
     });
 
     if (withToolbar !== normalized) {

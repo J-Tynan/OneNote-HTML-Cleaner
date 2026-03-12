@@ -173,6 +173,37 @@ async function main() {
     fail('Expected converted-page theme toggle to be skipped for non-HTML export format');
   }
 
+  const injectedViaExportState = mod.injectOutputToolbar(baseHtml, {
+    ToolbarEnabled: true,
+    ToolbarEditToggleEnabled: true,
+    ToolbarMetadataToggleEnabled: true,
+    ToolbarBundleMode: 'inline',
+    ExportFormat: 'html',
+    SourceName: 'Sample.mht',
+    SourceKind: 'mht',
+    exportState: {
+      ExperimentalExportEnabled: true,
+      ExportFormat: 'markdown',
+      MarkdownFlavor: 'gfm'
+    }
+  });
+  if (!/data-onc-field="export-format">markdown<\/dd>/i.test(injectedViaExportState)) {
+    fail('Expected explicit exportState to control toolbar metadata export format');
+  }
+
+  const nonHtmlBypassViaExportState = mod.injectConvertedPageThemeToggle(baseHtml, {
+    ConvertedPageThemeToggleEnabled: true,
+    ExportFormat: 'html',
+    exportState: {
+      ExperimentalExportEnabled: true,
+      ExportFormat: 'markdown',
+      MarkdownFlavor: 'gfm'
+    }
+  });
+  if (nonHtmlBypassViaExportState !== baseHtml) {
+    fail('Expected explicit exportState to control non-HTML theme toggle bypass');
+  }
+
   console.log('toolbar-injector: OK');
 }
 

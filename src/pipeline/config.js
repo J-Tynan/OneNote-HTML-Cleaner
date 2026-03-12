@@ -70,9 +70,14 @@ const DEFAULT_PIPELINE_CONFIG = {
   ConvertedPageThemeToggleOledBlack: false
 };
 
+const SUPPORTED_EXPORT_FORMATS = new Set(['html', 'markdown']);
+
 export function normalizeExportFormat(value) {
   const normalized = String(value || '').trim().toLowerCase();
-  if (normalized === 'markdown') return normalized;
+  // Stable-release contract: only HTML and Markdown are live export formats.
+  // Unsupported or deferred formats such as .docx intentionally collapse to HTML
+  // here so downstream code can stay binary until post-release work begins.
+  if (SUPPORTED_EXPORT_FORMATS.has(normalized)) return normalized;
   return 'html';
 }
 

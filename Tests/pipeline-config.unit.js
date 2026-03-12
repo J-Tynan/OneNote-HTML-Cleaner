@@ -73,6 +73,7 @@ async function main() {
     OutputCleanupMode: 'unexpected-mode',
     UnitStrategy: 'invalid-unit-strategy',
     ExperimentalExportEnabled: 'false',
+    // Unsupported or deferred formats should never escape the config boundary.
     ExportFormat: 'docx',
     MarkdownFlavor: 'not-a-flavor',
     ConvertedPageThemeToggleEnabled: 'false',
@@ -94,6 +95,7 @@ async function main() {
 
   const normalizedExport = mod.normalizeExportConfig({
     ExperimentalExportEnabled: 'true',
+    // Even with experimental export enabled, deferred formats stay quarantined.
     ExportFormat: 'DOCX',
     MarkdownFlavor: 'CommonMark'
   });

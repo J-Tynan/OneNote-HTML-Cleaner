@@ -7,6 +7,7 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { importOneSection } from './one.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
+import { normalizeExportConfig } from '../pipeline/config.js';
 import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';
 import { inflateSync } from '../../node_modules/fflate/esm/browser.js';
 
@@ -681,6 +682,7 @@ export async function importOnePackage(arrayBuffer, options = {}) {
 
   const warnings = toWarningMessages(warningDetails);
   const warningSummary = summarizeWarningsBySeverity(warningDetails);
+  const exportState = normalizeExportConfig(options);
 
   const pagesWithToolbar = pages.map((page) => ({
     ...page,
@@ -689,6 +691,7 @@ export async function importOnePackage(arrayBuffer, options = {}) {
       ToolbarEditToggleEnabled: options.ToolbarEditToggleEnabled === true,
       ToolbarMetadataToggleEnabled: options.ToolbarMetadataToggleEnabled === true,
       ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
+      exportState,
       SourceName: page.path || options.fileName || notebookName,
       SourceKind: 'onepkg',
       Profile: options.Profile || 'onenote',

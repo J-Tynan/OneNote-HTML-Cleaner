@@ -1,4 +1,4 @@
-import { isHtmlExportEnabled, normalizeExportConfig } from './config.js';
+import { normalizeExportConfig } from './config.js';
 
 const TOOLBAR_ROOT_ID = 'onenote-cleaner-toolbar';
 const TOOLBAR_VERSION = 'v1';
@@ -196,13 +196,19 @@ function normalizeWarningSummary(summary = {}) {
   return { total, info, warning, error };
 }
 
-function buildMetadata(options = {}) {
-  const normalizedExportConfig = normalizeExportConfig(options);
+function resolveExportState(options = {}) {
+  const candidate = options && typeof options.exportState === 'object'
+    ? options.exportState
+    : options;
+  return normalizeExportConfig(candidate);
+}
+
+function buildMetadata(options = {}, exportState = resolveExportState(options)) {
   return {
     sourceName: String(options.SourceName || options.sourceName || options.fileName || 'Unknown source'),
     sourceKind: normalizeSourceKind(options.SourceKind || options.sourceKind || 'html'),
     pageTitle: String(options.PageTitle || options.pageTitle || ''),
-    exportFormat: normalizedExportConfig.ExportFormat,
+    exportFormat: exportState.ExportFormat,
     timestamp: String(options.ConversionTimestamp || options.conversionTimestamp || new Date().toISOString())
   };
 }
@@ -827,6 +833,7 @@ function injectIntoBody(html, insert) {
 export function injectOutputToolbar(html, options = {}) {
   const input = String(html || '');
   if (!input) return input;
+  const exportState = resolveExportState(options);
 
   const toolbarEnabled = options.ToolbarEnabled === true;
   const toolbarBundleMode = String(options.ToolbarBundleMode || 'inline').toLowerCase();
@@ -838,7 +845,7 @@ export function injectOutputToolbar(html, options = {}) {
     return input;
   }
 
-  const metadata = buildMetadata(options);
+  const metadata = buildMetadata(options, exportState);
   const headInsert = `${buildStyleTag()}${buildMetadataTag(metadata)}${buildScriptTag()}`;
   const bodyInsert = buildToolbarMarkup(metadata, options);
 
@@ -929,12 +936,13 @@ function buildConvertedThemeToggleMarkup() {
 export function injectConvertedPageThemeToggle(html, options = {}) {
   const input = String(html || '');
   if (!input) return input;
+  const exportState = resolveExportState(options);
 
   if (options.ConvertedPageThemeToggleEnabled !== true) {
     return input;
   }
 
-  if (!isHtmlExportEnabled(options)) {
+  if (exportState.ExportFormat !== 'html') {
     return input;
   }
 

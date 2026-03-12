@@ -14,6 +14,7 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - ZIP export support via JSZip (requires `npm install`).
 - Tailwind utility baseline added for converted OneNote output (non-destructive, no preflight reset).
  - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
+ - Experimental export controls in the shipped app currently expose HTML and Markdown only; `.docx` export remains deferred until after the first stable MHTML release.
  - Native OneNote file support (`.one`, `.onepkg`) is deferred for the first stable release; current runtime behavior is to detect those files only so the app can label them unsupported, not to route them through conversion.
  - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and are not part of the shipped conversion contract.
 
