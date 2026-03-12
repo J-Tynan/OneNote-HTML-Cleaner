@@ -102,12 +102,10 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 
 ### Bucket 5 findings: Experimental export paths
 
-- [ ] [P1] Unify export-format and Markdown-flavor normalization so `src/ui-downloads.js`, `src/pipeline/config.js`, and `src/pipeline/toolbarInjector.js` do not each maintain their own accepted-format logic.
-- [ ] [P1] Remove duplicate Markdown conversion routing between `src/worker.js` and `src/worker-wrapper.js` so experimental export behavior has one canonical execution path.
-- [ ] [P1] Remove or quarantine remaining `.docx` normalization/error branches from shared runtime code if the first stable release is HTML + Markdown only; otherwise document exactly why that dormant path must stay live.
-- [ ] [P1] Reassess whether export metadata concerns in `src/pipeline/toolbarInjector.js` should depend on experimental export settings, or be fed by a smaller normalized export-state object from one shared source.
-
-### Bucket 6 findings: Worker diagnostics and test-driven runtime branches
+ [x] [P1] Unify export-format and Markdown-flavor normalization so `src/ui-downloads.js`, `src/pipeline/config.js`, and `src/pipeline/toolbarInjector.js` do not each maintain their own accepted-format logic.
+ [x] [P1] Remove duplicate Markdown conversion routing between `src/worker.js` and `src/worker-wrapper.js` so experimental export behavior has one canonical execution path.
+ - [x] [P1] Quarantine dormant `.docx` runtime branches at the config boundary and update docs (2026-03-12).
+ - [x] [P1] Refactor toolbar injector to consume an explicit normalized `exportState` and rewire callers (2026-03-12).
 
 - [ ] [P1] Simplify diagnostic buffering and dispatch in `src/worker-wrapper.js` so handshake timeout, unmatched-message, duplicate-response, and worker-origin diagnostics all flow through one implementation path instead of partially duplicating push/trim/event logic.
 - [ ] [P1] Decide whether `window.__getWorkerManagerDiagnostics`, `window.__getRuntime`, and other test-facing globals in `src/ui.js` should remain in production builds; if they stay, document them as explicit dev hooks rather than leaving them as ad hoc test affordances.
@@ -386,7 +384,7 @@ Initial scope:
 
 ### Experimental Export Formats
 - [x] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default). (2026-03-03)
-- [x] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`), Markdown (`.md`), Document (`.docx`). (2026-03-03)
+- [x] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`) and Markdown (`.md`) in the shipped app, while keeping `Document (.docx)` deferred post-release. (2026-03-03; clarified 2026-03-12)
 - [x] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats. (2026-03-03)
 - [x] [P2] Add 3-4 Markdown flavor options (for example: CommonMark, GitHub Flavored Markdown, Markdown Extra, Obsidian-compatible (default). (2026-03-03)
 - [x] [P2] Define flavor-specific conversion behavior for lists, tables, fenced code blocks, task lists, and line-break handling. (2026-03-04)
@@ -403,7 +401,7 @@ Initial scope:
 
 #### Document export (`.docx`) (post-release)
 
-Note: the UI surface for `Document (.docx)` may remain visible as experimental/unfinished guidance, but full Word-compatible export work is deferred until after the first stable MHTML release.
+Note: the shipped UI now exposes HTML and Markdown only. Full Word-compatible `Document (.docx)` export work remains deferred until after the first stable MHTML release.
 
 - [ ] [P3] Define the canonical HTML-to-`.docx` conversion contract and supported feature set (headings, paragraphs, lists, tables, images, metadata).
 - [ ] [P3] Implement Word-compatible `.docx` export from sanitized HTML rather than from raw MHTML.
