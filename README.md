@@ -14,8 +14,8 @@ OneNote HTML Cleaner is being refactored from a single PowerShell script into a 
 - ZIP export support via JSZip (requires `npm install`).
 - Tailwind utility baseline added for converted OneNote output (non-destructive, no preflight reset).
  - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
- - Native OneNote file support (`.one`, `.onepkg`) is deferred for the first stable release; current runtime behavior is to mark those files unsupported in the app while importer work continues out of band.
- - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and will be added in future feature branches.
+ - Native OneNote file support (`.one`, `.onepkg`) is deferred for the first stable release; current runtime behavior is to detect those files only so the app can label them unsupported, not to route them through conversion.
+ - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and are not part of the shipped conversion contract.
 
 ### Recent Fixes
 
@@ -140,8 +140,8 @@ The conversion profile is selected in the app UI and passed to the pipeline as `
 
 ## Native OneNote files (Deferred after stable release)
 
-- Current stable-release behavior: native `.one` and `.onepkg` files are detected and surfaced as unsupported in the app queue. They are not sent through the shipped conversion pipeline.
-- Importer code remains in the repository for post-release work, but it is not part of the first stable runtime contract.
+- Current stable-release behavior: native `.one` and `.onepkg` files may be detected at intake time so the queue can label them unsupported, but they are not routed through the shipped conversion pipeline.
+- Importer code remains in the repository for post-release work, but it is not part of the first stable runtime contract and should not be treated as a partially supported path.
 - Use `.mht` / `.mhtml` for production conversion in the current release.
 - Use the notes below only for developer planning and exploratory branch work, not as a description of current shipped behavior.
 
@@ -196,19 +196,19 @@ npm run build:libmspack:wasm:wsl:check
 	- `libmspack-core.js`
 	- `libmspack-core.wasm`
 
-Native importer work remains a post-release track. Full fidelity page-content extraction for native formats is still in progress and is not part of the current shipped runtime.
+Native importer work remains a post-release track. Full-fidelity page-content extraction for native formats is still in progress and is not part of the current shipped runtime.
 
 ### Expected fidelity (current)
 
 - `.mht` / `.mhtml` (primary release path): highest fidelity and the only stable-release target.
-- `.one` / `.onepkg`: deferred in the stable app runtime; use only in dedicated development work until the native path is explicitly re-enabled.
+- `.one` / `.onepkg`: deferred in the stable app runtime; detection exists only to surface a clear unsupported status, and conversion remains disabled until the native path is explicitly re-enabled.
 
 ### Preferred workflow (current)
 
 1. Prefer exporting from OneNote to `.mht` / `.mhtml` for production conversion.
 2. Treat `.one` / `.onepkg` work as deferred developer-only work until the runtime contract is re-enabled.
 3. For compressed `.onepkg`, extract sections locally first (for example with `tools/Extract-OnePkg.ps1`) when working on native importer development branches.
-4. Run `npm run test:gate:native` only when intentionally changing deferred native importer code or its experimental contracts.
+4. Run `npm run test:gate:native` when changing the shipped MHTML path, and run native-importer-specific checks separately when intentionally changing deferred native importer code or its design contracts.
 
 ## Optional injected toolbar (experimental)
 

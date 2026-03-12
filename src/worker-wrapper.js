@@ -1,5 +1,6 @@
 // src/worker-wrapper.js
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
+import { preparePipelineInputFromPayload } from './pipeline/mhtPayloadPreparation.js';
 const logger = createLogger('worker-wrapper');
 
 const UNSUPPORTED_FALLBACK_CODES = new Set([
@@ -258,27 +259,26 @@ export default class WorkerManager {
             import('./convert/exportFinalizer.js')
           ]);
           const payload = cb.payload;
-          let htmlInput = payload.html || '';
-          let imageMap = (payload.config && payload.config.imageMap) || {};
-          let parseWarnings = [];
+          const {
+            fileName,
+            sourceKind,
+            htmlInput,
+            imageMap,
+            parseWarnings,
+            mhtPreparation
+          } = preparePipelineInputFromPayload({
+            payload,
+            parseMht: mhtMod.parseMht
+          });
 
-          const fileName = payload.fileName || payload.relativePath || '';
-          if (/\.(mht|mhtml)$/i.test(fileName) || (payload.mimetype && /multipart\/related/i.test(payload.mimetype))) {
+          if (mhtPreparation.attempted) {
             logger.info({ msg: 'main-thread parseMht for', meta: { fileName } });
-            const parsed = mhtMod.parseMht(htmlInput, payload.config || {});
-            if (parsed && parsed.html) {
-              htmlInput = parsed.html;
-              imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-              if (Array.isArray(parsed.imageDiagnostics) && parsed.imageDiagnostics.length) {
-                parseWarnings = parseWarnings.concat(parsed.imageDiagnostics);
-              }
+            if (mhtPreparation.parsed) {
               logger.info({ msg: 'parseMht produced html length', meta: { htmlLength: htmlInput.length } });
             } else {
               logger.warn({ msg: 'parseMht returned no HTML; proceeding with original payload.html' });
             }
           }
-
-          const sourceKind = payload.sourceKind || (/\.(mht|mhtml)$/i.test(fileName) ? 'mht' : 'html');
           const result = await pipelineMod.runPipeline(htmlInput, Object.assign({}, payload.config || {}, {
             imageMap,
             ParseWarnings: parseWarnings,

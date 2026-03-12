@@ -1,3 +1,9 @@
+// DEFERRED: Phase 2 native importer work.
+// The first stable release is MHT/MHTML-only. The worker rejects `.onepkg`
+// inputs before native importers are loaded, so this package importer remains
+// in-repo for planned post-release work and is not part of the current
+// stable runtime path.
+
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { importOneSection } from './one.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';

@@ -1,6 +1,7 @@
 // src/worker.js
 import { postDiagnostic } from './worker-globals.js';
 import { detectSourceKind } from './importers/sourceKind.js';
+import { preparePipelineInputFromPayload } from './pipeline/mhtPayloadPreparation.js';
 // logging helper allows consistent formatting across UI, wrapper, and worker
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
 const logger = createLogger('worker');
@@ -106,8 +107,6 @@ self.onmessage = async (e) => {
   const fileName = payload.fileName || payload.relativePath || 'unknown';
   const sourceKind = payload.sourceKind || detectSourceKind(fileName, payload.mimetype);
   const config = payload && payload.config ? payload.config : {};
-  const experimentalEnabled = config && config.ExperimentalExportEnabled === true;
-  const exportFormat = experimentalEnabled ? String(config.ExportFormat || 'html').toLowerCase() : 'html';
 
   logger.info({ id, msg: 'received job', meta: { fileName } });
 
@@ -139,31 +138,27 @@ self.onmessage = async (e) => {
       return;
     }
 
-    let htmlInput = payload.html || '';
-    let imageMap = (payload.config && payload.config.imageMap) || {};
-    let parseWarnings = [];
+    const {
+      htmlInput,
+      imageMap,
+      parseWarnings,
+      mhtPreparation
+    } = preparePipelineInputFromPayload({
+      payload,
+      parseMht: _parseMht,
+      enableCharsetLogging: () => {
+        try { globalThis.MHT_CHARSET_LOG = true; } catch (_) {}
+      }
+    });
 
-    // If filename indicates MHT/MHTML, attempt to parse it here in the worker
-    if (sourceKind === 'mht') {
+    if (mhtPreparation.attempted) {
       logger.info({ id, msg: 'detected MHT input, attempting parseMht' });
-      if (typeof _parseMht !== 'function') {
+      if (!mhtPreparation.parseAvailable) {
         logger.warn({ id, msg: 'parseMht not available (module not loaded)' });
+      } else if (mhtPreparation.parsed) {
+        logger.info({ id, msg: 'parseMht result', meta: { htmlLength: htmlInput.length, parts: mhtPreparation.partsCount, boundary: mhtPreparation.boundary } });
       } else {
-        // enable charset logging if requested by the caller (test harness)
-        if (payload && payload.debug && payload.debug.mhtCharsetLogging) {
-          try { globalThis.MHT_CHARSET_LOG = true; } catch {};
-        }
-        const parsed = _parseMht(htmlInput, payload.config || {});
-        if (parsed && parsed.html) {
-          htmlInput = parsed.html;
-          imageMap = Object.assign({}, imageMap, parsed.imageMap || {});
-          if (Array.isArray(parsed.imageDiagnostics) && parsed.imageDiagnostics.length) {
-            parseWarnings = parseWarnings.concat(parsed.imageDiagnostics);
-          }
-          logger.info({ id, msg: 'parseMht result', meta: { htmlLength: htmlInput.length, parts: parsed.parts.length, boundary: parsed.boundary } });
-        } else {
-          logger.warn({ id, msg: 'parseMht did not return HTML; proceeding with original payload.html' });
-        }
+        logger.warn({ id, msg: 'parseMht did not return HTML; proceeding with original payload.html' });
       }
     }
 

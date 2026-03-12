@@ -1,6 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+// Deferred native-development coverage for Phase 2 package-import work.
+// This test inspects `.onepkg` compression details directly and is not part of
+// the shipped stable-runtime conversion path.
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

@@ -1,3 +1,5 @@
+import { normalizeMarkdownFlavor } from '../convert/markdownFlavors.js';
+
 export const pipelineConfig = {
   version: '0.2.0'
 };
@@ -74,13 +76,7 @@ export function normalizeExportFormat(value) {
   return 'html';
 }
 
-export function normalizeMarkdownFlavor(value) {
-  const normalized = String(value || '').trim().toLowerCase();
-  if (normalized === 'commonmark' || normalized === 'gfm' || normalized === 'markdown-extra') {
-    return normalized;
-  }
-  return 'obsidian';
-}
+export { normalizeMarkdownFlavor };
 
 function normalizeExternalCssConfig(rawConfig = {}) {
   return {

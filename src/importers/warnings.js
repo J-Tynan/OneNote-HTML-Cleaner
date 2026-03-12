@@ -1,3 +1,8 @@
+// DEFERRED: Phase 2 native importer work.
+// These warning codes support the deferred `.one` / `.onepkg` importer path.
+// They remain defined so post-release native work can keep a stable warning
+// surface, but they are not part of the shipped stable conversion flow.
+
 export const WARNING_CODES = {
   one: {
     signatureValidated: 'ONE_SIGNATURE_VALIDATED',

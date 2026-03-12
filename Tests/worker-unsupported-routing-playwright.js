@@ -3,6 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
+// Stable-release behavior: native source kinds remain detectable so the worker
+// wrapper can preserve an explicit unsupported response without attempting
+// native conversion.
+
 function createStaticServer(root) {
   return http.createServer((req, res) => {
     try {

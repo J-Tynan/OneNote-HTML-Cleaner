@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+// Mixed contract coverage: the stable release relies on the unsupported-file
+// behavior, while part of `WARNING_CODES` remains reserved for deferred native
+// importer work that is kept stable for future re-enablement.
+
 function fail(message) {
   console.error(message);
   process.exit(1);

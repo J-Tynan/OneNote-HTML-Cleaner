@@ -70,9 +70,10 @@ Confirmed findings:
 
 Follow-up tasks:
 
-- Decide whether native `.one` / `.onepkg` detection should remain in shared runtime helpers during the first stable release.
-- Align docs and tests with the actual shipped release behavior for native formats.
-- Contain native importer implementation debt behind a documented post-release plan.
+- Decision: keep native `.one` / `.onepkg` detection exposed in shared runtime helpers so the app can label unsupported files precisely, while keeping conversion blocked in `src/ui.js` and `src/worker.js` for the stable release.
+- Align docs and release-path tests to that boundary: native files are recognized, surfaced as unsupported, and rejected before conversion.
+- Treat parser/compression coverage for `src/importers/one.js`, `src/importers/onepkg.js`, and `src/importers/warnings.js` as deferred native-development coverage rather than active stable-runtime behavior.
+- Keep the remaining native importer work on a post-release track: request/response re-enablement, `.one` parser maturation, compressed `.onepkg` extraction, warning-code stability, and any later test-suite regrouping.
 
 ### 5. Experimental export paths
 

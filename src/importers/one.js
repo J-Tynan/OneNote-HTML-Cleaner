@@ -1,3 +1,9 @@
+// DEFERRED: Phase 2 native importer work.
+// The first stable release is MHT/MHTML-only. The worker rejects `.one`
+// inputs before native importers are loaded, so this module is kept in-repo
+// for planned post-release work and should not be treated as active runtime
+// surface for the current release.
+
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
 import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';

@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+// Deferred native-development coverage for Phase 2 importer work.
+// This test validates `src/importers/onepkg.js` directly and is not part of the
+// shipped stable-runtime conversion path.
+
 function fail(message) {
   console.error(message);
   process.exit(1);

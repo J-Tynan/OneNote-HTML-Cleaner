@@ -96,9 +96,9 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 
 ### Bucket 4 findings: Native importer scope drift
 
-- [ ] [P1] Decide whether native `.one` / `.onepkg` detection should remain in shared runtime helpers (`src/importers/sourceKind.js`, `src/ui.js`, `src/worker.js`) during the first stable release, or be gated behind an explicit non-release flag.
-- [ ] [P1] Align docs and tests with the actual release behavior for native formats: `README.md`, `docs/Architecture.md`, `docs/Contracts.md`, and native test scripts currently describe a more active native path than the worker now ships.
-- [ ] [P1] Contain native importer implementation debt (`src/importers/one.js`, `src/importers/onepkg.js`, `src/importers/warnings.js`) behind a documented post-release plan so deferred code does not keep leaking into release-facing contracts and defaults.
+- [x] [P1] Decide whether native `.one` / `.onepkg` detection should remain in shared runtime helpers (`src/importers/sourceKind.js`, `src/ui.js`, `src/worker.js`) during the first stable release, or be gated behind an explicit non-release flag. (2026-03-12, decided to keep detection exposed for unsupported-file messaging while conversion remains blocked in the shipped UI/worker path.)
+- [x] [P1] Align docs and tests with the actual release behavior for native formats: `README.md`, `docs/Architecture.md`, `docs/Contracts.md`, and native test scripts currently describe a more active native path than the worker now ships. (2026-03-12)
+- [x] [P1] Contain native importer implementation debt (`src/importers/one.js`, `src/importers/onepkg.js`, `src/importers/warnings.js`) behind a documented post-release plan so deferred code does not keep leaking into release-facing contracts and defaults. (2026-03-12)
 
 ### Bucket 5 findings: Experimental export paths
 
@@ -128,6 +128,42 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 - [ ] [P1] Decide which confirmed findings must be fixed before the clean release-candidate verification pass versus explicitly deferred to post-release.
 - [ ] [P1] Treat these as likely pre-RC candidates unless new evidence changes priority: native-scope docs/contracts drift, duplicated Markdown routing between `src/worker.js` and `src/worker-wrapper.js`, stale UI/test scaffolding in `src/ui.js`, and single-profile/config legacy that still leaks into tests and release-facing docs.
 - [ ] [P2] Treat these as likely post-RC structural cleanup unless they are tied to a live bug: style-helper consolidation, deep `sanitize.js` extraction, broad worker diagnostics simplification, and test-harness deduplication.
+
+### Recommended Stable-Release Execution Order
+
+Work the remaining items in this sequence so the release-candidate pass validates the intended product rather than an outdated or still-shifting scope.
+
+1. Complete pre-RC triage first.
+  - Convert the confirmed audit findings above into explicit cleanup tasks.
+  - Mark each finding as either pre-RC or post-release before taking on more cleanup work.
+2. Freeze first-release scope and remove contract drift.
+  - Decide whether native `.one` / `.onepkg` detection stays visible in shared runtime helpers for the stable build.
+  - Align `README.md`, `docs/Architecture.md`, `docs/Contracts.md`, and native-facing tests with the actual shipped behavior.
+  - Record deferred native importer work as post-release implementation debt.
+3. Close the pre-RC export-path inconsistencies.
+  - Unify export-format and Markdown-flavor normalization.
+  - Remove duplicate Markdown routing between `src/worker.js` and `src/worker-wrapper.js`.
+  - Quarantine or explicitly justify dormant `.docx` branches that still affect shared runtime code.
+4. Limit worker/test cleanup to release-relevant fixes.
+  - Only pull in Bucket 6 and Bucket 7 work that materially improves release confidence or test accuracy.
+  - Defer broad diagnostics refactors and large test-harness deduplication unless they expose a live bug.
+5. Finish release-facing documentation.
+  - Add the concise go/no-go checklist.
+  - Prepare `RELEASE_NOTES.md` with supported scope, limitations, and upgrade notes.
+6. Run the clean release-candidate verification pass on `main`.
+  - `npm ci`
+  - `npm run test:gate:native`
+  - all Playwright smoke scripts
+  - accessibility audits
+7. Perform the manual PWA acceptance pass on a clean browser profile using the locked core fixtures.
+8. Tag the first stable release only after the automated pass is green and the manual acceptance pass is recorded.
+
+### Explicit Deferrals Unless New Evidence Appears
+
+- Treat broad worker-diagnostics simplification as post-release unless it fixes a verified release-path bug.
+- Treat broad test-harness deduplication as post-release unless it blocks accurate RC verification.
+- Treat `.docx` implementation work as post-release; only quarantine or document its dormant runtime branches before stable.
+- Treat further externalized-CSS review follow-up as post-release unless fidelity evidence says otherwise.
 
 ---
 

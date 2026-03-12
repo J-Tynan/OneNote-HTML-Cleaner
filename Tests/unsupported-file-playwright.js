@@ -62,7 +62,8 @@ function createStaticServer(root) {
 
     await page.goto(url, { waitUntil: 'networkidle' });
 
-    // Upload a .one file via the hidden file input — UI should mark it Unsupported
+    // Stable-release behavior: `.one` is recognized at intake, but the UI must
+    // surface it as Unsupported rather than routing it through conversion.
     await page.setInputFiles('#fileInput', {
       name: 'test.one',
       mimeType: 'application/octet-stream',
