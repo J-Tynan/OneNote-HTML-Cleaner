@@ -5,6 +5,10 @@ import * as sanitize from './sanitize.js';
 import { fixLists } from './listRepair.js';
 import { annotateTableSemantics } from './Semantics.js';
 import { mergeCreatedDateTimeRow } from './dateTimeLayout.js';
+import {
+  enforceHeaderDateTimeStyles,
+  normalizeDirectionLayoutContainers
+} from './layoutNormalization.js';
 import { migrateInlineStylesToUtilities } from './inlineStyleMigration.js';
 import * as images from './images.js';
 import * as format from './format.js';
@@ -91,7 +95,7 @@ export async function runPipeline(htmlString, config = {}) {
     })));
     logs.push(...ensureArray(sanitize.normalizeContentBlankLineSpacers(doc)));
     if (resolvedConfig.NormalizeDirectionLayout !== false) {
-      logs.push(...ensureArray(sanitize.normalizeDirectionLayoutContainers(doc, {
+      logs.push(...ensureArray(normalizeDirectionLayoutContainers(doc, {
         unwrapRedundantWrappers: true,
         normalizeTopLevelPageWidths: resolvedConfig.NormalizeTopLevelPageWidths !== false,
         standardizeHeaderDatePositions: true
@@ -111,7 +115,7 @@ export async function runPipeline(htmlString, config = {}) {
         gap: resolvedConfig.CreatedDateTimeGap || '0.75em'
       })));
     }
-    logs.push(...ensureArray(sanitize.enforceHeaderDateTimeStyles(doc)));
+    logs.push(...ensureArray(enforceHeaderDateTimeStyles(doc)));
 
     const collapseInlineStyles = resolvedConfig.CollapseInlineStyles !== false;
     if (collapseInlineStyles) {

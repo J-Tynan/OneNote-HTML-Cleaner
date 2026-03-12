@@ -6,7 +6,7 @@ export function parseStyleDeclarationEntries(styleText) {
     .map((part) => {
       const separator = part.indexOf(':');
       if (separator < 0) return null;
-      const prop = part.slice(0, separator).trim();
+      const prop = part.slice(0, separator).trim().toLowerCase();
       const value = part.slice(separator + 1).trim();
       if (!prop) return null;
       return { prop, value };

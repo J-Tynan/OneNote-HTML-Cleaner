@@ -10,6 +10,8 @@ if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined')
 
 // import migration helpers
 const {
+  getUtilityClassForDeclaration,
+  isUtilityMappableProperty,
   migrateInlineStylesToUtilities,
   parseStyle,
 } = await import('../src/pipeline/inlineStyleMigration.js');
@@ -42,6 +44,18 @@ console.log('running inline-style-normalization unit tests');
   assert(results[1].some(e => e.prop === 'color' && e.value === 'red'));
   assert(!results[1].some(e => e.prop === 'invalid')); // invalid entry ignored
   assert(results[2].length === 1 && results[2][0].prop === 'font-family');
+}
+
+// shared declaration-to-class mapping contract
+{
+  assert.equal(getUtilityClassForDeclaration('font-family', 'Calibri'), 'font-sans');
+  assert.equal(getUtilityClassForDeclaration('font-size', '16px'), 'text-base');
+  assert.equal(getUtilityClassForDeclaration('font-weight', '700'), 'font-bold');
+  assert.equal(getUtilityClassForDeclaration('margin-top', '8px'), 'mt-2');
+  assert.equal(getUtilityClassForDeclaration('margin-bottom', '4px'), 'mb-1');
+  assert.equal(getUtilityClassForDeclaration('color', 'blue'), null);
+  assert.equal(isUtilityMappableProperty('font-size'), true);
+  assert.equal(isUtilityMappableProperty('color'), false);
 }
 
 // migration without removing declarations

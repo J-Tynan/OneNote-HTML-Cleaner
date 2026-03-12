@@ -1,6 +1,7 @@
 import assert from 'node:assert';
 import { JSDOM } from 'jsdom';
-import { ensureMainHeading, enforceHeaderDateTimeStyles } from '../src/pipeline/sanitize.js';
+import { ensureMainHeading } from '../src/pipeline/sanitize.js';
+import { enforceHeaderDateTimeStyles } from '../src/pipeline/layoutNormalization.js';
 import { mergeCreatedDateTimeRow } from '../src/pipeline/dateTimeLayout.js';
 
 function createDoc(html) {

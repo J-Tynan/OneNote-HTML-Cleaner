@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { JSDOM } from 'jsdom';
-import { normalizeDirectionLayoutContainers } from '../src/pipeline/sanitize.js';
+import { normalizeDirectionLayoutContainers } from '../src/pipeline/layoutNormalization.js';
 
 function createDoc(html) {
   const dom = new JSDOM(html);

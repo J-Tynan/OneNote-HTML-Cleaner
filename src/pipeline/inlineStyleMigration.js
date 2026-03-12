@@ -58,6 +58,17 @@ function cssToPx(value) {
   return cssLengthToPx(value);
 }
 
+function isUtilityMappableProperty(prop) {
+  const normalizedProp = String(prop || '').trim().toLowerCase();
+  return (
+    FONT_FAMILY_RE.test(normalizedProp)
+    || FONT_SIZE_RE.test(normalizedProp)
+    || FONT_WEIGHT_RE.test(normalizedProp)
+    || MARGIN_TOP_RE.test(normalizedProp)
+    || MARGIN_BOTTOM_RE.test(normalizedProp)
+  );
+}
+
 function mapFontSize(value) {
   const px = cssToPx(value);
   if (px === null) return null;
@@ -83,6 +94,32 @@ function mapMarginClass(prefix, value) {
   return `${prefix}-${token}`;
 }
 
+export function getUtilityClassForDeclaration(prop, value) {
+  const normalizedProp = String(prop || '').trim().toLowerCase();
+
+  if (FONT_FAMILY_RE.test(normalizedProp)) {
+    return 'font-sans';
+  }
+
+  if (FONT_SIZE_RE.test(normalizedProp)) {
+    return mapFontSize(value);
+  }
+
+  if (FONT_WEIGHT_RE.test(normalizedProp)) {
+    return mapFontWeight(value);
+  }
+
+  if (MARGIN_TOP_RE.test(normalizedProp)) {
+    return mapMarginClass('mt', value);
+  }
+
+  if (MARGIN_BOTTOM_RE.test(normalizedProp)) {
+    return mapMarginClass('mb', value);
+  }
+
+  return null;
+}
+
 export function migrateInlineStylesToUtilities(doc, options = {}) {
   const logs = [];
   const selector = options.selector || '[style]';
@@ -100,68 +137,15 @@ export function migrateInlineStylesToUtilities(doc, options = {}) {
     let changed = false;
 
     declarations.forEach(({ prop, value }) => {
-      const normalizedProp = prop.toLowerCase();
-
-      if (FONT_FAMILY_RE.test(normalizedProp)) {
-        addClass(node, 'font-sans');
+      const className = getUtilityClassForDeclaration(prop, value);
+      if (className) {
+        addClass(node, className);
         declarationsMigrated += 1;
         changed = true;
         if (!removeMigratedDeclarations) {
           kept.push({ prop, value });
         }
         return;
-      }
-
-      if (FONT_SIZE_RE.test(normalizedProp)) {
-        const className = mapFontSize(value);
-        if (className) {
-          addClass(node, className);
-          declarationsMigrated += 1;
-          changed = true;
-          if (!removeMigratedDeclarations) {
-            kept.push({ prop, value });
-          }
-          return;
-        }
-      }
-
-      if (FONT_WEIGHT_RE.test(normalizedProp)) {
-        const className = mapFontWeight(value);
-        if (className) {
-          addClass(node, className);
-          declarationsMigrated += 1;
-          changed = true;
-          if (!removeMigratedDeclarations) {
-            kept.push({ prop, value });
-          }
-          return;
-        }
-      }
-
-      if (MARGIN_TOP_RE.test(normalizedProp)) {
-        const className = mapMarginClass('mt', value);
-        if (className) {
-          addClass(node, className);
-          declarationsMigrated += 1;
-          changed = true;
-          if (!removeMigratedDeclarations) {
-            kept.push({ prop, value });
-          }
-          return;
-        }
-      }
-
-      if (MARGIN_BOTTOM_RE.test(normalizedProp)) {
-        const className = mapMarginClass('mb', value);
-        if (className) {
-          addClass(node, className);
-          declarationsMigrated += 1;
-          changed = true;
-          if (!removeMigratedDeclarations) {
-            kept.push({ prop, value });
-          }
-          return;
-        }
       }
 
       kept.push({ prop, value });
@@ -192,4 +176,4 @@ export function migrateInlineStylesToUtilities(doc, options = {}) {
 }
 
 // helpers exported for unit testing
-export { parseStyle, cssToPx, mapFontSize, mapFontWeight, mapMarginClass };
+export { parseStyle, cssToPx, isUtilityMappableProperty, mapFontSize, mapFontWeight, mapMarginClass };

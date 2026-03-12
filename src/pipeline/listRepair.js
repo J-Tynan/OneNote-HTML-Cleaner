@@ -2,6 +2,12 @@
 // Implements three modes: mergeStyled, renumber, smart
 // This module operates on a Document and returns logs.
 
+import {
+  cssLengthToPx,
+  parseStyleDeclarationEntries,
+  serializeStyleDeclarationEntries
+} from './styleUtils.js';
+
 function getLiNodesFromOl(ol) {
   return Array.from(ol.querySelectorAll(':scope > li'));
 }
@@ -92,60 +98,27 @@ const ONE_NOTE_STYLE_HINT_KEYS = ['mso-list', 'mso-level-number-format', 'mso-le
 const DEFAULT_LIST_PADDING_LEFT = '1.2em';
 const DEFAULT_LIST_MARGIN_LEFT = '0.35em';
 
-function parseStyleDeclarations(styleText) {
-  return String(styleText || '')
-    .split(';')
-    .map(part => part.trim())
-    .filter(Boolean)
-    .map(part => {
-      const idx = part.indexOf(':');
-      if (idx === -1) return null;
-      const prop = part.slice(0, idx).trim().toLowerCase();
-      const value = part.slice(idx + 1).trim();
-      if (!prop) return null;
-      return { prop, value };
-    })
-    .filter(Boolean);
-}
-
-function serializeStyleDeclarations(entries) {
-  return entries.map(({ prop, value }) => `${prop}: ${value}`).join('; ');
-}
-
 function removeStyleKeys(styleText, keysToRemove) {
   const removeSet = new Set(keysToRemove.map(k => String(k || '').toLowerCase()));
-  const entries = parseStyleDeclarations(styleText).filter(({ prop }) => !removeSet.has(prop));
-  return serializeStyleDeclarations(entries);
+  const entries = parseStyleDeclarationEntries(styleText).filter(({ prop }) => !removeSet.has(prop));
+  return serializeStyleDeclarationEntries(entries);
 }
 
 function upsertStyleKey(styleText, key, value) {
   const normalizedKey = String(key || '').toLowerCase();
-  const entries = parseStyleDeclarations(styleText).filter(({ prop }) => prop !== normalizedKey);
+  const entries = parseStyleDeclarationEntries(styleText).filter(({ prop }) => prop !== normalizedKey);
   entries.push({ prop: normalizedKey, value: String(value || '').trim() });
-  return serializeStyleDeclarations(entries);
-}
-
-function parseCssLengthToPx(rawValue) {
-  const value = String(rawValue || '').trim().toLowerCase();
-  const match = value.match(/^(-?\d*\.?\d+)\s*(px|pt|em|rem)?$/i);
-  if (!match) return null;
-  const amount = parseFloat(match[1]);
-  const unit = (match[2] || 'px').toLowerCase();
-  if (Number.isNaN(amount)) return null;
-  if (unit === 'px') return amount;
-  if (unit === 'pt') return amount * (96 / 72);
-  if (unit === 'em' || unit === 'rem') return amount * 16;
-  return null;
+  return serializeStyleDeclarationEntries(entries);
 }
 
 function hasOneNoteOrExcessiveIndent(styleText) {
-  const entries = parseStyleDeclarations(styleText);
+  const entries = parseStyleDeclarationEntries(styleText);
   if (!entries.length) return false;
 
   for (const { prop, value } of entries) {
     if (ONE_NOTE_STYLE_HINT_KEYS.includes(prop)) return true;
     if (!LIST_INDENT_STYLE_KEYS.includes(prop)) continue;
-    const px = parseCssLengthToPx(value);
+    const px = cssLengthToPx(value);
     if (px !== null && Math.abs(px) >= 24) {
       return true;
     }
