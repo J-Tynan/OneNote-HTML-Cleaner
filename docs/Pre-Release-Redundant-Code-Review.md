@@ -121,33 +121,43 @@ Confirmed findings:
 - Several regression scripts still scan fixtures ad hoc with `fs.readdirSync(...)` rather than using `Tests/fixtures.js`.
 - Many Node tests repeat logging suppression and JSDOM/DOMParser setup.
 - Some tests depend on production globals such as `window.__getRuntime` and `window.__getWorkerManagerDiagnostics`.
-- `Tests/mht-fixtures-playwright.js` still defaults to the legacy `generic` profile path.
+- The earlier `generic` profile concern in `Tests/mht-fixtures-playwright.js` has been corrected; the file now defaults fixture comparisons to `onenote`, and a 2026-03-26 triage search found no remaining `generic` test defaults under `Tests/`.
 
 Follow-up tasks:
 
-- Extract a shared Playwright/static-server helper.
-- Consolidate fixture discovery on top of `Tests/fixtures.js`.
-- Extract shared Node-test setup helpers.
-- Reduce test dependence on production globals.
-- Remove stale profile assumptions from test coverage.
+- Post-release: extract a shared Playwright/static-server helper.
+- Post-release: consolidate fixture discovery on top of `Tests/fixtures.js`.
+- Post-release: extract shared Node-test setup helpers.
+- Post-release: reduce test dependence on production globals.
+- Completed 2026-03-26: review stale profile assumptions in browser coverage. No remaining `generic` test defaults were found under `Tests/`.
 
-## Likely Pre-RC Cleanup Candidates
+## Final Pre-RC Triage Decision
 
-These items currently look like the best candidates to fix before the clean release-candidate verification pass:
+Triage completed on 2026-03-26.
 
-- native-scope docs/contracts drift
-- duplicated Markdown routing between `src/worker.js` and `src/worker-wrapper.js`
-- stale UI/test scaffolding in `src/ui.js`
-- single-profile/config legacy that still leaks into tests and release-facing docs
+Decision:
 
-## Likely Post-RC Structural Cleanup
+- No additional audit-derived cleanup remains mandatory before the clean release-candidate verification pass.
+- The previously likely pre-RC candidates were already addressed by completed backlog items in Buckets 1, 2, 4, and 5.
+- The remaining open audit items are structural test-harness cleanup items that do not currently change release-path correctness or invalidate RC verification.
 
-These items currently look safer to defer unless they are tied to a live bug:
+## Final Post-Release Structural Cleanup
+
+These items are explicitly deferred post-release unless new release-path bug evidence appears:
 
 - style-helper consolidation
 - deep `sanitize.js` extraction
 - broad worker diagnostics simplification
 - test-harness deduplication
+
+## Next Executable Task
+
+With triage complete, the next executable task is the clean release-candidate verification pass recorded in `TODO.md`:
+
+- `npm ci`
+- `npm run test:gate:native`
+- all Playwright smoke scripts
+- accessibility audits
 
 ## Source Of Truth
 

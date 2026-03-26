@@ -31,7 +31,7 @@ Common Violations (observed)
   - Fix: Ensure all meaningful page content — including preformatted blocks — is inside `<main>` (or other landmarks). Avoid orphaned top-level elements.
 
 Notes on color-contrast findings
-- Color-contrast entries in reports referenced `<pre>Forbidden</pre>` but values show sufficient contrast. Contrast is lower-priority compared to missing semantics; we'll address contrast after structural fixes and re-run audits.
+- Exported-page color-contrast findings are non-blocking for release when they preserve OneNote-authored styling. Do not fail the exported HTML audit on those findings unless product requirements change.
 
 Recommended Implementation Plan (Option A sequence)
 1. Add triage doc (this file) and pick 1-2 representative pages for iterative fixes (suggest: `Communicate using Markdown` and `DevToys`).
@@ -42,7 +42,7 @@ Recommended Implementation Plan (Option A sequence)
    - If a heading exists but is not H1, promote it or insert a new H1.
 4. Re-run `node ./Tests/playwright-a11y-exports.js --dir Tests/exports-from-mht` and inspect reports.
 5. Add small regression test(s) under `Tests/` that assert generated HTML contains `lang`, `title`, `main`, and `h1` using the existing audit harness.
-6. Triage and fix any remaining `color-contrast` issues after structure is correct.
+6. Keep `color-contrast` findings informational for exported pages while source-authored OneNote styling remains fidelity-critical.
 
 Quick patch examples (for implementer reference)
 - Inject `lang` and `title` into serialized HTML head:

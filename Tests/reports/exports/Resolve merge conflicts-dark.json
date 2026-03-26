@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-03-06T16:46:52.586Z",
-  "url": "http://127.0.0.1:58716/Resolve%20merge%20conflicts.html",
+  "timestamp": "2026-03-26T18:43:45.172Z",
+  "url": "http://127.0.0.1:57325/Resolve%20merge%20conflicts.html",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1390,9 +1390,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0.125in; width: 7.602in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0.125in; width: 7.602in\" class=\"mt-6\">",
           "target": [
-            "div:nth-child(3)"
+            ".mt-6"
           ]
         },
         {
@@ -1424,7 +1424,7 @@
           "impact": null,
           "html": "<div style=\"direction: ltr\">",
           "target": [
-            "div:nth-child(3) > div"
+            ".mt-6 > div"
           ]
         },
         {
@@ -1456,7 +1456,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
-            "div:nth-child(3) > div > table"
+            ".mt-6 > div > table"
           ]
         },
         {
@@ -1488,7 +1488,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.7048in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td"
           ]
         },
         {
@@ -1520,7 +1520,7 @@
           "impact": null,
           "html": "<div style=\"direction: ltr\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1)"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1)"
           ]
         },
         {
@@ -1552,7 +1552,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -1584,7 +1584,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -1680,7 +1680,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.9305in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -1968,7 +1968,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -2064,7 +2064,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 3.034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -2096,7 +2096,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -2544,7 +2544,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.5916in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(2) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(2) > td"
           ]
         },
         {
@@ -2640,7 +2640,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.5166in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(3) > td"
           ]
         },
         {
@@ -5872,7 +5872,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.468in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(4) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(4) > td"
           ]
         },
         {
@@ -6523,7 +6523,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -9465,9 +9465,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0.125in; width: 7.602in\">",
+          "html": "<div style=\"direction: ltr; margin-top: .1826in; margin-left: 0.125in; width: 7.602in\" class=\"mt-6\">",
           "target": [
-            "div:nth-child(3)"
+            ".mt-6"
           ]
         },
         {
@@ -9487,7 +9487,7 @@
           "impact": null,
           "html": "<div style=\"direction: ltr\">",
           "target": [
-            "div:nth-child(3) > div"
+            ".mt-6 > div"
           ]
         },
         {
@@ -9507,7 +9507,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
-            "div:nth-child(3) > div > table"
+            ".mt-6 > div > table"
           ]
         },
         {
@@ -9527,7 +9527,7 @@
           "impact": null,
           "html": "<tbody>",
           "target": [
-            "div:nth-child(3) > div > table > tbody"
+            ".mt-6 > div > table > tbody"
           ]
         },
         {
@@ -9547,7 +9547,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1)"
+            ".mt-6 > div > table > tbody > tr:nth-child(1)"
           ]
         },
         {
@@ -9567,7 +9567,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.7048in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td"
           ]
         },
         {
@@ -9587,7 +9587,7 @@
           "impact": null,
           "html": "<div style=\"direction: ltr\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1)"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1)"
           ]
         },
         {
@@ -9607,7 +9607,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -9627,7 +9627,7 @@
           "impact": null,
           "html": "<tbody>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody"
           ]
         },
         {
@@ -9647,7 +9647,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1)"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1)"
           ]
         },
         {
@@ -9667,7 +9667,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -9727,7 +9727,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 2.9305in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Skills for\n    GitHub</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(1) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -9947,7 +9947,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2)"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2)"
           ]
         },
         {
@@ -9967,7 +9967,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: .9298in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"leading\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"leading\"]"
           ]
         },
         {
@@ -10027,7 +10027,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 3.034in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\" data-onc-col-role=\"detail\">\n    <p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>\n    </td>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"]"
           ]
         },
         {
@@ -10047,7 +10047,7 @@
           "impact": null,
           "html": "<p style=\"margin: 0; font-family: Calibri; font-size: 11.0pt\" class=\"font-sans text-base\">Learn why\n    conflicts happen and how to resolve them.</p>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"] > tbody > tr:nth-child(2) > td[data-onc-col-role=\"detail\"] > p"
           ]
         },
         {
@@ -10407,7 +10407,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(2)"
+            ".mt-6 > div > table > tbody > tr:nth-child(2)"
           ]
         },
         {
@@ -10427,7 +10427,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.5916in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(2) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(2) > td"
           ]
         },
         {
@@ -10487,7 +10487,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(3)"
+            ".mt-6 > div > table > tbody > tr:nth-child(3)"
           ]
         },
         {
@@ -10507,7 +10507,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.5166in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(3) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(3) > td"
           ]
         },
         {
@@ -12887,7 +12887,7 @@
           "impact": null,
           "html": "<tr>",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(4)"
+            ".mt-6 > div > table > tbody > tr:nth-child(4)"
           ]
         },
         {
@@ -12907,7 +12907,7 @@
           "impact": null,
           "html": "<td style=\"border-width: 0; vertical-align: top; width: 7.468in; padding: 2.0pt 3.0pt 2.0pt 3.0pt\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(4) > td"
+            ".mt-6 > div > table > tbody > tr:nth-child(4) > td"
           ]
         },
         {
@@ -13260,7 +13260,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
-            "div:nth-child(3) > div > table"
+            ".mt-6 > div > table"
           ]
         },
         {
@@ -13278,7 +13278,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13390,7 +13390,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\">",
           "target": [
-            "div:nth-child(3) > div > table"
+            ".mt-6 > div > table"
           ]
         },
         {
@@ -13408,7 +13408,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {
@@ -13520,7 +13520,7 @@
           "impact": null,
           "html": "<table style=\"direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 0\" title=\"\" data-legacy-summary=\"\" data-onc-table-layout=\"two-column\">",
           "target": [
-            "div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
+            ".mt-6 > div > table > tbody > tr:nth-child(1) > td > div:nth-child(1) > table[data-onc-table-layout=\"two-column\"]"
           ]
         },
         {

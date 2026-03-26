@@ -1,335 +1,190 @@
-# [WIP] OneNote HTML Cleaner
+# OneNote HTML Cleaner
 
-Status: PWA tested — conversion and test updates
+Clean, readable HTML from OneNote MHTML exports in a browser-based workflow that works offline after the first load.
 
-This project has an updated PWA scaffold and the test suite was recently converted to ES modules (ESM). The PWA and core conversion pipeline have been tested locally (Playwright + native smoke tests) and are currently working. See "Project Notes" below for developer-facing changes that may affect local setup or CI.
+OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path is focused on MHTML input and a straightforward conversion flow that works well for first-time users as well as repeat batch use.
 
-OneNote HTML Cleaner is being refactored from a single PowerShell script into a framework-free Progressive Web App (PWA). The goal is to provide an offline-capable, browser-based workflow for cleaning exported OneNote HTML with a modular, testable pipeline.
+## Screenshots
 
-## Current Status
+| Main App | Converted Output |
+| --- | --- |
+| Screenshot placeholder: import panel, queue, and convert/download actions | Screenshot placeholder: converted page output in browser |
 
-- PWA scaffold in place (HTML, CSS, manifest, service worker).
-- Modular pipeline layout created under `src/pipeline/`.
-- Initial test and fixture structure added.
-- ZIP export support via JSZip (requires `npm install`).
-- Tailwind utility baseline added for converted OneNote output (non-destructive, no preflight reset).
- - MHTML → modern HTML conversion pipeline: nearly complete (core transforms and formatting mostly implemented).
- - Experimental export controls in the shipped app currently expose HTML and Markdown only; `.docx` export remains deferred until after the first stable MHTML release.
- - Native OneNote file support (`.one`, `.onepkg`) is deferred for the first stable release; current runtime behavior is to detect those files only so the app can label them unsupported, not to route them through conversion.
- - Release note: The first stable release targets MHTML files only (`.mht`, `.mhtml`). Other formats (plain `.html`, `.one`, `.onepkg`, etc.) are intentionally out of scope for the initial release and are not part of the shipped conversion contract.
+| Advanced Options | Batch Export |
+| --- | --- |
+| Screenshot placeholder: advanced options expanded with export settings | Screenshot placeholder: ZIP export result and readable filenames |
 
-### Recent Fixes
+## Why Use It
 
-- List duplication regression: fixed an issue where explicit bullet glyphs and trivial nested list wrappers produced duplicated bullets in cleaned exports. The sanitizer now strips leading glyph characters from `li` text nodes and collapses single-child nested lists when safe, preserving semantic lists while removing artifacts introduced by certain OneNote exports.
-  * `fixLists` was hardened to avoid cloning list items and to be idempotent when run multiple times.
-  * A new defensive `dedupeLists` pass runs during every pipeline invocation to remove any accidentally duplicated `<li>` elements. This step runs after `ensureListStructure` and has no effect on well-formed lists.
-- Playwright checks: added lightweight Playwright smoke tests (`Tests/ui-phase1-theme.spec.js`, `Tests/ui-phase1-convert-tooltip.spec.js`) to verify Phase 1 UI tokens and the `Convert` button behavior. Both tests passed locally during verification.
-- Worker messaging hardening: the wrapper now issues its own UUIDs for every request, maintains a mapping to caller-supplied ids, detects duplicate responses, logs unmatched messages, and records detailed diagnostics including pending‑callback counts. Diagnostics schema is enforced and exposed to the UI; new tests verify these behaviors (`Tests/worker-duplicate-response-playwright.js`, `Tests/worker-unmatched-message-playwright.js`, `Tests/diagnostic-schema.js`, extended existing id/handshake tests`).
-- Oversized inline-image guardrail: MHT image-part decoding now applies a configurable per-asset threshold (default 2 MiB) with warning diagnostics and behavior modes (`warn-skip` default, `warn-only` optional). Diagnostics are propagated into pipeline logs and covered by `Tests/mht-inline-image-guardrail.unit.js`.
-- Export-independence checks: regression analysis now fails converted outputs that require external/CDN scripts or stylesheets, app-runtime imports (`src/`, `node_modules`, worker/app bundles), or remote CSS `@import` dependencies. Coverage includes `Tests/export-independence.unit.js` and `Tests/check-forbidden-artifacts.js` against cleaned outputs.
-- Optional export fallback hardening: single-file downloads now remain available when Externalize CSS is enabled but no CSS sidecar is produced, while ZIP exports include CSS sidecars when present and emit a `README.txt` warning when fallback is applied. Coverage includes `Tests/ui-download-zip.html` and `Tests/ui-download-zip-playwright.js`.
-- Exported page naming now prefers the resolved converted page title, sanitizes illegal filename characters, falls back away from GUID-like or placeholder names, and adds deterministic numbered suffixes when names collide within the same export batch.
+- Convert exported OneNote MHTML files into cleaner HTML with a simpler reading experience.
+- Run entirely in the browser with offline capability after the first load.
+- Process one file quickly or batch multiple files into a ZIP download.
+- Keep the default experience simple while still offering advanced export controls when needed.
+- Preserve important note content such as headings, lists, tables, images, and handwriting rasters.
 
-## UI experience
+## Quick Start
 
-- The front-end now follows a lightweight state machine: the import panel is always the dominant action, the status panel describes Empty → Processing → Completed/Partial, and diagnostics only appear when work is underway or issues occur.
-- Advanced controls live in a collapsed `<details>` block labeled “Advanced options (Optional)” so the surface stays calm while still letting power users tweak conversion profile, native toolbar toggles, and status filters.
-- Semantic layout (`header`, `main`, `section`, `footer`) plus Tailwind utility spacing/typography keep the experience accessible without extra frameworks, matching the offline-first promise of the app.
-- The UI now includes a Light / Dark theme toggle (top-right). It defaults to Light on first visit and records that choice to `localStorage`; subsequent toggles persist the user's preference.
- - The app enforces an MHTML-only intake for the stable release: non-MHTML files are shown as "Unsupported" in the queue and are not sent to the conversion pipeline (no partial conversions, no silent failures).
- - Advanced options now include an "Automatically convert files when added to the queue" toggle. When disabled, files remain in the queue until the user starts conversion manually; the preference persists across sessions.
+This is the fastest path for someone using the app once.
 
- - A new **Convert** button appears beside the Download ZIP control in the import panel. It is always visible but becomes disabled whenever auto‑convert is enabled. Hovering or focusing the button while it is disabled reveals a tooltip explaining that manual conversion is unavailable when auto‑convert is active. Clicking the button when enabled processes all queued files immediately and produces downloadable output; the convert state is driven by the same queue logic used for the automatic pipeline.
- 
- - **Dark theme variants** are implemented via `html.dark[data-variant="..."]` CSS token overrides and can be toggled via developer console or storage; they are purely optional UI changes and do not affect exported HTML. Available experimental variants: Blue tint, Charcoal, Mono, Blue contrast, Warm ink, Deep indigo, and Soft contrast.
+1. Open the app in your browser.
+2. Drag in your exported OneNote `.mht` or `.mhtml` files, or use the file picker.
+3. Leave Advanced options collapsed unless you specifically need Markdown export or externalized CSS.
+4. Let the app convert automatically, or click `Convert` if you have disabled auto-convert.
+5. Download a single converted file or use `Download ZIP` for multi-file exports.
 
-New: in-app Help and keyboard shortcut
+If your goal is simply to clean and save an exported OneNote page, the default settings are intended to be enough.
 
-- A compact Help button was added to the header that opens a small usage modal with brief instructions and a link to the GitHub repository.
-- The Help modal can be toggled with the `?` key (Shift+/) and closed with `Escape` or the Close button. The modal has been styled for responsive layout and accessible focus outlines.
+## First-Time User Notes
 
-## Project Structure
+- The stable release supports OneNote MHTML exports only: `.mht` and `.mhtml`.
+- Unsupported files such as `.one` and `.onepkg` are detected and labeled clearly instead of being partially processed.
+- The app includes a Light / Dark UI theme toggle and remembers your choice in the browser.
+- In-app help is available from the Help button, and the help panel can also be opened with `?`.
+- If you only need HTML output, you can ignore most advanced settings.
 
-- `index.html`, `styles.css`, `manifest.json`, `service-worker.js`: PWA shell.
-- `src/app.js`, `src/ui.js`: UI wiring and application entry points.
-- `src/worker.js`, `src/worker-wrapper.js`: future background processing. Worker startup is now explicit — the wrapper posts an `{ type: 'init' }` message after installing handlers; the worker performs lazy/dynamic imports during `init()` and then posts a `{ type: 'ready' }` handshake. This makes startup deterministic and improves diagnostic reporting.
-- `src/pipeline/`: parsing, sanitization, and formatting stages.
-- `tests/fixtures/`: sample inputs for regression coverage.
-- `package.json`: dependencies for ZIP export.
+## Key Features
 
-## Local Setup
+### Offline-Capable PWA
 
-1. Run `npm install` to fetch JSZip for ZIP exports.
-2. Run `npm run build:tailwind` to generate `assets/tailwind-output.css`.
-3. Serve the project with a local web server that can access `node_modules/`.
+The app runs as a progressive web app so the conversion workflow remains available in the browser without requiring a desktop installation. After the first load, the app can continue working offline using cached app assets.
 
-Developer note: the Help modal lives in `index.html` as `#helpModal`. Styles for modal rounding, responsive max-width, and focus outlines are in `styles.css` so you can tweak visuals without changing HTML markup.
+Screenshot placeholder: app home screen showing clean import workflow
 
-## Testing
+### Clean HTML Output
 
-- Automated tests include lightweight Node checks and Playwright smoke tests. Current Playwright smoke tests cover theme initialization/toggling and ZIP/download flows (`Tests/theme-playwright.js`, `Tests/ui-download-zip-playwright.js`).
-- Additions: there are unit tests for download helpers and other pipeline contracts under `Tests/`.
- - New: a Playwright test `Tests/worker-init-playwright.js` validates the init → ready → job ordering, and the wrapper now sends the explicit init message to the worker during startup.
+Converted output is designed to be more readable and easier to reuse than raw exported OneNote HTML. The project standard targets semantic HTML5 structure, UTF-8 encoding, and predictable document organization for exported pages.
 
-### Regenerating cleaned fixtures
+### Batch Conversion And ZIP Export
 
-The project keeps `Tests/Cleaned/` out of version control; those HTML files are generated artifacts produced by the regression helper script. When you need to update or recreate them (for example, after modifying the conversion pipeline), run the helper from the workspace root:
+You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share.
+
+Screenshot placeholder: multi-file queue and ZIP download workflow
+
+### Simple Default Flow, Advanced Controls When Needed
+
+Advanced options stay collapsed by default so first-time users are not forced through configuration before converting a file. When needed, advanced settings can enable optional behaviors such as:
+
+- manual convert mode
+- Markdown export
+- externalized CSS for ZIP exports
+- converted-page theme toggle options for HTML output
+
+### Optional Markdown Export
+
+The app can also export Markdown through the experimental export controls. Obsidian-compatible output is the default Markdown flavor, with additional supported flavors available for users who need a different target.
+
+### Optional Externalized CSS For ZIP Exports
+
+For HTML batch exports, styles can be written to separate CSS files instead of staying embedded in each HTML file. This is useful when exported files will remain together as a ZIP package.
+
+### Preserved Rich Content
+
+The conversion path preserves important note structures such as headings, lists, tables, images, and handwriting rendered as raster content from the original export.
+
+## What’s Supported
+
+### Supported Input
+
+- `.mht`
+- `.mhtml`
+
+### Supported Output
+
+- HTML
+- Markdown through the experimental export controls
+
+### Built-In User Controls
+
+- drag and drop or file-picker import
+- automatic conversion or manual conversion
+- single download or ZIP download
+- Light / Dark UI theme toggle
+- in-app Help modal with keyboard shortcut support
+
+## Release Scope
+
+The first stable release is intentionally narrow.
+
+- Supported production conversion path: OneNote MHTML exports only
+- Native OneNote files such as `.one` and `.onepkg` are not supported in this release
+- `.docx` export is not part of this release
+- Other input formats are intentionally outside the current shipped conversion contract
+
+This narrower scope is deliberate. It keeps the app focused on the path that is already validated and ready for day-to-day use.
+
+## Optional Advanced Features
+
+These features are available for users who need more control, but they are not required for the main HTML workflow.
+
+### Markdown Export
+
+Enable experimental export formats in Advanced options to export Markdown instead of HTML.
+
+### Externalized CSS
+
+Use externalized CSS when you plan to keep exported HTML and CSS files together, typically in a ZIP download.
+
+### Manual Convert Mode
+
+Disable auto-convert if you want to queue files first and trigger conversion manually with the `Convert` button.
+
+## Roadmap
+
+The roadmap is focused on expanding the product carefully without weakening the stable MHTML workflow.
+
+### Near-Term Direction
+
+- continue refining the MHTML conversion path for reliability and output quality
+- improve export workflows around HTML and Markdown packaging
+- expand the first-time-user experience with clearer visual guidance and polished UI flows
+
+### Planned Product Expansion
+
+- broader export capabilities after the stable MHTML release is established
+- optional toolbar enhancements for converted pages
+- future investigation of richer support for native OneNote formats such as `.one` and `.onepkg`
+
+The roadmap should be read as direction, not as a delivery promise.
+
+## Known Limitations
+
+- The stable release supports only `.mht` and `.mhtml` input files.
+- Native `.one` and `.onepkg` files may be detected, but they are not converted in the shipped runtime.
+- Markdown export is available through experimental export controls rather than the default path.
+- Handwriting from MHTML exports is preserved as raster content rather than editable vector ink.
+- Externalized CSS is intended for ZIP workflows where the HTML and CSS assets remain together.
+
+## Help
+
+- Use the in-app Help button for a short usage guide.
+- Press `?` to open Help from the keyboard.
+- Use the repository issue tracker for bug reports and product feedback.
+
+## For Developers
+
+The README is intentionally user-first. If you are working on the project itself, start with the documents below.
+
+- [docs/Architecture.md](docs/Architecture.md)
+- [docs/HTML-Output-Standard.md](docs/HTML-Output-Standard.md)
+- [docs/Markdown-Flavor-Standard.md](docs/Markdown-Flavor-Standard.md)
+- [docs/Service-Worker-Updates.md](docs/Service-Worker-Updates.md)
+- [docs/Toolbar-Phase0-Spec.md](docs/Toolbar-Phase0-Spec.md)
+
+### Local Setup
+
+1. Run `npm install`.
+2. Run `npm run build:tailwind`.
+3. Serve the project from a local web server and open the app in a browser.
+
+### Useful Commands
 
 ```powershell
-npm run tools:regen-cleaned
-# or directly:
-node tools/regenerate-cleaned.js
-```
-
-After regeneration you can verify the results with the built-in smoke and regression runners:
-
-```powershell
-npm run test:exports:regressions
-npm run test:locked-fixtures
-npm run test:smoke:native
-npm run test:forbidden-artifacts
-npm run test:charset
-npm run test:charset-fallback
-npm run test:utf8-encoding
-# all-in-one native gate:
 npm run test:gate:native
-```
-
-If conversion changes are intentional and should become the new locked baseline, update the committed fixture snapshots:
-
-```powershell
 npm run fixtures:rebaseline
 ```
 
-Then re-run `npm run test:gate:native` before committing.
-
-These commands check the current `Tests/*.mht` fixtures and ensure output matches expectations. If you add or remove `.mht` fixtures, update `Tests/expected/native-regression.json` accordingly so the native smoke test knows which files to validate.
-
-The `Tests/Cleaned` directory is intentionally ignored by `.gitignore`; keep it local and regenerate as needed. See the project README and TODO for more details.
-
-## Tailwind Migration (Scoped)
-
-- Tailwind runs with `preflight` disabled to avoid global resets.
-- Pipeline adds neutral semantic data attributes for two-column note tables/cells:
-	- `table` -> `data-onc-table-layout="two-column"`
-	- leading column cell -> `data-onc-col-role="leading"`
-	- detail column cell -> `data-onc-col-role="detail"`
-- Cue-column lists are normalized with utility classes (`list-inside`, `pl-0`) while preserving numbering.
-- Safe inline style migration maps only:
-	- `font-family`, `font-size`, `font-weight`, `margin-top`, `margin-bottom`
-- Layout-critical width/structure styles are kept inline for fidelity.
-
-## Conversion Profiles
-
-- `OneNote`: default profile in the UI, optimized for exported OneNote note pages.
-- Legacy profile alias (`generic`) is still accepted and normalizes to `onenote`.
-
-The conversion profile is selected in the app UI and passed to the pipeline as `config.Profile`.
-
-### Output cleanup defaults (current testing configuration)
-
-- `OutputCleanupMode` defaults to `safe` in the UI conversion path and fixture regeneration helper.
-- `UnitStrategy` now defaults to `normalize-safe` for testing and validation before merge to `main`.
-- Empty layout placeholders (for example in table/list structures) remain preserved; cleanup focuses on obsolete artifacts and conservative normalization only.
-
-### Converted-page theme toggle (HTML-only, experimental)
-
-- Advanced options include an optional converted-page theme toggle for HTML exports.
-- When enabled, converted HTML injects a symbol-based Light/Dark toggle (default Light) and remembers the chosen theme per exported file using browser local storage.
-- Optional OLED-black mode applies pure-black dark surfaces to both page background and main content area.
-- The feature is disabled for non-HTML exports (for example Markdown).
-
-## Native OneNote files (Deferred after stable release)
-
-- Current stable-release behavior: native `.one` and `.onepkg` files may be detected at intake time so the queue can label them unsupported, but they are not routed through the shipped conversion pipeline.
-- Importer code remains in the repository for post-release work, but it is not part of the first stable runtime contract and should not be treated as a partially supported path.
-- Use `.mht` / `.mhtml` for production conversion in the current release.
-- Use the notes below only for developer planning and exploratory branch work, not as a description of current shipped behavior.
-
-- Deferred `.one` work:
-	- Validate native section signatures when possible.
-	- Extract page-title candidates and canonicalize basic metadata (`title`, `author`, `createdAt`, `modifiedAt`).
-	- Produce per-page HTML placeholders and metadata sidecars (`*.metadata.json`) for ZIP exports when full content extraction is unavailable.
-
-- Deferred `.onepkg` work:
-	- Detect CAB container signature (`MSCF`) and enumerate archive entries to derive notebook hierarchy.
-	- Decode uncompressed section payloads and reuse `.one` extraction logic where possible.
-	- Handle compressed payloads (for example, LZX) without relying on placeholder-only fallbacks.
-	- Reintroduce native ZIP export output only after the browser path is stable enough to ship.
-
-### Windows helper for compressed `.onepkg`
-
-Use the included helper script to extract compressed notebook packages locally (see `tools/Extract-OnePkg.ps1`).
-
-> Note: extraction is a local developer operation — run the tool on your machine and import the resulting `*.one` section files into the app.
-
-The script writes an `*.extracted` folder (or your custom output path) with section files (`*.one`). You can then import those `.one` files into this app for richer conversion.
-
-### Build `libmspack` WASM artifact (optional)
-
-If you want to experiment with a dedicated CAB/LZX decoder path, you can build a reproducible `libmspack` WASM module:
-
-```powershell
-npm run build:libmspack:wasm
-```
-
-On Windows, this command now auto-falls back to the WSL build runner when native `bash`/`make` are not available.
-
-Or run fully inside WSL from PowerShell (recommended on Windows):
-
-```powershell
-npm run build:libmspack:wasm:wsl
-```
-
-Notes:
-
-- Requires Emscripten SDK (`emcc`) installed locally.
-- Requires POSIX build tools (`bash` + `make`) because `libmspack` uses autotools.
-- WSL variant requirements are checked with:
-
-```powershell
-npm run build:libmspack:wasm:wsl:check
-```
-
-- If `emcc` is not globally available in your shell, pass the SDK location directly by running the local build helper `tools/Build-LibmspackWasm.ps1` (run it from PowerShell on your development machine).
-
-- Output artifacts are written to `assets/wasm/` as:
-	- `libmspack-core.js`
-	- `libmspack-core.wasm`
-
-Native importer work remains a post-release track. Full-fidelity page-content extraction for native formats is still in progress and is not part of the current shipped runtime.
-
-### Expected fidelity (current)
-
-- `.mht` / `.mhtml` (primary release path): highest fidelity and the only stable-release target.
-- `.one` / `.onepkg`: deferred in the stable app runtime; detection exists only to surface a clear unsupported status, and conversion remains disabled until the native path is explicitly re-enabled.
-
-### Preferred workflow (current)
-
-1. Prefer exporting from OneNote to `.mht` / `.mhtml` for production conversion.
-2. Treat `.one` / `.onepkg` work as deferred developer-only work until the runtime contract is re-enabled.
-3. For compressed `.onepkg`, extract sections locally first (for example with `tools/Extract-OnePkg.ps1`) when working on native importer development branches.
-4. Run `npm run test:gate:native` when changing the shipped MHTML path, and run native-importer-specific checks separately when intentionally changing deferred native importer code or its design contracts.
-
-## Optional injected toolbar (experimental)
-
-- An opt-in single injected output toolbar is planned and currently spec-locked in `docs/Toolbar-Phase0-Spec.md`.
-- Default is OFF to preserve output parity and test stability.
-- Day-one scope includes multiple feature toggles within that single toolbar:
-	- Edit mode toggle (text-focused and reversible)
-	- Metadata panel toggle (read-only provenance)
-	- Close/hide control
-- Bundle model is self-contained inline only for standalone exported HTML compatibility.
-- When injected, the toolbar is hidden by default in converted pages; a small `Toolbar` button appears near the page theme toggle to reveal it.
-
-## Export dependency guarantees
-
-- Default exported HTML is checked to avoid required remote dependencies (no CDN script/style requirements in converted output).
-- Regression checks fail exports that include remote script/style references, app-runtime imports (`src/`, `node_modules`, worker/app bundles), or remote CSS `@import` declarations.
-- Local links authored in note content (for example normal `http(s)` links inside `<a href>`) are preserved and are not treated as runtime dependencies.
-
-### Caveats
-
-- Optional **Externalize CSS** mode writes CSS sidecars for ZIP output; those exports remain self-contained when HTML and CSS assets stay together.
-- Exported page filenames now use a deterministic, readable strategy for downloads and ZIP entries:
-	- Prefer a meaningful source filename when available.
-	- If the source stem is GUID-like or generic, derive the name from page content (`<h1>` for HTML, first `#` heading for Markdown).
-	- Normalize to a filesystem-safe lowercase slug and apply deterministic collision suffixes (`-2`, `-3`, ...).
-- CSS sidecar naming strategy is deterministic for ZIP exports:
-	- Shared mode: always `converted-shared.css` at ZIP root.
-	- Per-page mode: `<page-stem>.css` (with `-2`, `-3`, ... suffixes on collisions).
-- Shared mode now consolidates duplicate selector+declaration rule blocks across pages during ZIP build to reduce repeated CSS in `converted-shared.css`.
-- If externalization is enabled but no CSS sidecar is produced for a page, the app falls back safely to HTML-as-is and records the fallback in ZIP `README.txt`.
-- App shell dependencies (for running this tool itself in the browser) are separate from converted export dependencies.
-
-### Externalize CSS: when to use it
-
-- Leave **Externalize CSS** off when you want the simplest standalone HTML download. Embedded styles remain the safest option for ad-hoc sharing because everything stays inside the HTML file.
-- Turn **Externalize CSS** on when you are exporting a ZIP and expect the HTML files to stay with their CSS assets. This is the intended workflow for the feature.
-- Both modes preserve the same HTML structure and emit content-identical CSS; the difference is how ZIP packaging names and links the CSS asset.
-
-#### Mode guide
-
-- **Shared stylesheet for all converted pages**: best for batch exports where every HTML file will live together. ZIP packaging writes a single `converted-shared.css` file at the ZIP root and links each exported HTML page to that shared asset.
-- **One stylesheet per converted page**: best when pages may be split up after export. ZIP packaging writes one CSS file per exported HTML page using the page stem (for example `meeting-notes.css`), with deterministic suffixes on collisions.
-
-#### Download behavior and constraints
-
-- When a page has an externalized CSS sidecar, per-file HTML download is intentionally disabled in the queue UI. Use **Download ZIP** so the HTML and CSS asset stay together.
-- If externalization is enabled but no CSS sidecar is produced for a page, the app keeps the single-file HTML download available and records the ZIP fallback in `README.txt`.
-- Shared and per-page modes are packaging choices, not styling choices. Existing parity checks verify that both modes preserve the same semantic structure as embedded-style output.
-
-#### Recommended workflow
-
-1. Enable **Externalize CSS in separate file** only when you plan to download a ZIP.
-2. Choose **Shared stylesheet** for one bundle with many related pages, or **One stylesheet per converted page** when pages may be redistributed individually.
-3. Download the ZIP and keep the exported HTML files with their CSS assets.
-4. If you need a single portable file, leave Externalize CSS off and use the default embedded-style HTML output.
-
-#### Verification
-
-Use the focused checks below when changing Externalize CSS behavior or documentation:
-
-```powershell
-npm run test:externalize-css
-npm run test:externalize-css-parity
-npm run test:ui-download-smoke
-```
-
-- `test:externalize-css` verifies CSS extraction behavior and fallback conditions.
-- `test:externalize-css-parity` verifies shared and per-page modes preserve the same semantic output and CSS content contract.
-- `test:ui-download-smoke` verifies ZIP packaging, title-derived filenames, CSS sidecar inclusion, and fallback README warnings.
-
-### Externalized CSS consolidation rules
-
-- Inline style declarations are canonicalized by property name (`prop:value` pairs sorted alphabetically, with last value per property winning).
-- Equivalent inline styles with different declaration order map to the same generated `extcss-*` class.
-- Generated class rules are emitted in deterministic class-name order.
-- Repeated `<style>` blocks with exactly equivalent normalized text are emitted once in extracted CSS output.
-- Consolidation is intentionally conservative: complex authored CSS inside style blocks is preserved as-is rather than aggressively rewritten.
-
-## Handwriting export behavior
-
-- OneNote handwriting content is preserved as raster image output when exported through MHTML (`.mht`, `.mhtml`).
-- The resulting handwriting appearance depends on the active OneNote theme and rendering at export time.
-- Vector ink primitives are not exposed by the current MHTML path, so editable vector ink is not available in converted HTML.
-- Current pipeline behavior detects handwriting-like raster assets and annotates them conservatively (`data-handwriting="raster"`) with accessibility-first alt text.
-- Future enhancements may include optional vectorization workflows, but these are post-release and experimental.
-
-## Markdown export philosophy (planned)
-
-- Markdown export is designed as **semantic fidelity over visual parity** with OneNote layout.
-- Default flavor target is **Obsidian-compatible** output, with additional flavor adapters planned.
-- Canonical flavor behavior and phased contract roadmap are defined in `docs/Markdown-Flavor-Standard.md`.
-- Markdown conversion is architecture-guarded to run from **sanitized HTML output as the canonical source**, never directly from raw MHTML.
-- Conversion will be structure-first (headings, lists, tables, code blocks, images), not absolute-position/layout recreation.
-- Output should remain deterministic and standalone, without required CSS/JS/runtime dependencies.
-- Guardrails prohibit raw inline HTML emission (`<div>`, `<span>`, `<table>`) in default Markdown output.
-- Known limitation versus HTML export: Markdown will intentionally flatten free-form positioned content to a stable reading order.
-
-## Experimental export formats (in-app)
-
-- Advanced options now include an **Enable experimental export formats** toggle (OFF by default).
-- When enabled, **Export format** can be set to:
-	- HTML (`.html`) — default/stable path
-	- Markdown (`.md`) — structure-first conversion from sanitized HTML + flavor adapter
-- Markdown flavor selection is shown only when Markdown export is selected and defaults to **Obsidian-compatible**.
-- When experimental export is disabled, conversion always falls back to the existing HTML pipeline.
-
-## Refactor Goals
-
-1. Preserve the existing PowerShell script behavior while improving portability.
-2. Separate parsing, cleanup, and formatting into explicit pipeline stages.
-3. Add automated tests around edge cases from real OneNote exports.
-4. Provide a simple, offline-capable UI for drop-in HTML cleaning.
-
-## Planned Next Steps
-
-- Implement the pipeline stages with OneNote-specific rules.
-- Add worker-based processing for large documents.
-- Create a minimal UI for file import and preview.
-- Expand fixtures and add test runner integration.
-
-## PowerShell Legacy Script
-
-The original script is still present for reference and parity checks until the PWA pipeline fully matches its output.
+### Current Development Notes
+
+- The shipped release path is MHTML-first.
+- Native OneNote importer work remains deferred beyond the first stable release.
+- The repository still contains deeper technical notes for pipeline, export, and worker behavior in the `docs/` folder.

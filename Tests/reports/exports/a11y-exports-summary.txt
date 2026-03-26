@@ -1,1 +1,9 @@
+Communicate using Markdown.html: OK
+Dental Appointment.html: OK
+DevToys.html: OK
+Problematic mht-full-snippet.html: OK
+Problematic mht-sample.html: OK
+Resolve merge conflicts.html: OK
+Test File.html: OK
 Test Fonts & Headings.html: OK
+Test Handwriting.html: OK

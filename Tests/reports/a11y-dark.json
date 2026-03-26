@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-02-25T11:51:14.435Z",
-  "url": "http://127.0.0.1:53226/",
+  "timestamp": "2026-03-26T18:17:21.405Z",
+  "url": "http://127.0.0.1:49206/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -922,7 +922,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -948,9 +948,9 @@
             }
           ],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -1145,7 +1145,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"helpModal\" class=\"hidden fixed inset-0 z-50 flex items-center justify-center px-4\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
+          "html": "<div id=\"helpModal\" class=\"hidden fixed inset-0 z-50 items-center justify-center px-4\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
           "target": [
             "#helpModal"
           ]
@@ -1199,7 +1199,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -1217,9 +1217,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -1505,7 +1505,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -1523,9 +1523,9 @@
             }
           ],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -1833,7 +1833,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -1865,9 +1865,9 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -2079,7 +2079,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -2097,9 +2097,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -2309,27 +2309,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "button-has-visible-text",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Element has inner text that is visible to screen readers"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n                Download ZIP\n              </button>",
-          "target": [
-            "#downloadZip"
           ]
         },
         {
@@ -2355,6 +2337,24 @@
           "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert\n                </button>",
           "target": [
             "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n                Download ZIP\n              </button>",
+          "target": [
+            "#downloadZip"
           ]
         },
         {
@@ -2437,7 +2437,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html lang=\"en\" data-ui-style=\"rounded-cta\" class=\"dark\">",
+          "html": "<html lang=\"en\" class=\"dark\">",
           "target": [
             "html"
           ]
@@ -2685,27 +2685,7 @@
           "impact": null,
           "html": "<span class=\"text-xs text-muted\">Optional</span>",
           "target": [
-            "#advancedOptions > summary > .text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "messageKey": "hidden"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element is hidden"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<select id=\"conversionProfile\" class=\"mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500\" aria-describedby=\"conversionProfileHelp\">",
-          "target": [
-            "#conversionProfile"
+            "summary > span:nth-child(2)"
           ]
         },
         {
@@ -2741,7 +2721,7 @@
                 "fgColor": "#e1e4e6",
                 "bgColor": "#06080a",
                 "contrastRatio": 15.7,
-                "fontSize": "12.6pt (16.8px)",
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -2887,7 +2867,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html lang=\"en\" data-ui-style=\"rounded-cta\" class=\"dark\">",
+          "html": "<html lang=\"en\" class=\"dark\">",
           "target": [
             "html"
           ]
@@ -2950,60 +2930,6 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "conversionProfileLabel",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<h3 id=\"conversionProfileLabel\" class=\"text-sm font-medium text-slate-900\">\n                  Conversion profile\n                </h3>",
-          "target": [
-            "#conversionProfileLabel"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "conversionProfile",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<select id=\"conversionProfile\" class=\"mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500\" aria-describedby=\"conversionProfileHelp\">",
-          "target": [
-            "#conversionProfile"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "conversionProfileHelp",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p id=\"conversionProfileHelp\" class=\"text-xs text-muted\">\n                  Controls how aggressively OneNote‑specific structures are normalized.\n                </p>",
-          "target": [
-            "#conversionProfileHelp"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
               "data": "conversionTweaksLabel",
               "relatedNodes": [],
               "impact": "critical",
@@ -3040,6 +2966,150 @@
           "any": [
             {
               "id": "duplicate-id-aria",
+              "data": "externalizeCssEnabled",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"externalizeCssEnabled\" type=\"checkbox\" title=\"Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together.\" class=\"mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500\">",
+          "target": [
+            "#externalizeCssEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "externalizeCssMode",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes o...\" class=\"mt-1 block w-full ro...\" aria-describedby=\"externalizeCssModeHe...\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "externalizeCssModeHelp",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"externalizeCssModeHelp\" class=\"text-xs text-muted\">\n                      Shared mode writes one ZIP-root stylesheet. Per-page mode writes one stylesheet per exported HTML page. If a sidecar is produced, use Download ZIP so the links stay intact.\n                    </p>",
+          "target": [
+            "#externalizeCssModeHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "experimentalExportEnabled",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500\">",
+          "target": [
+            "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "exportFormat",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"exportFormat\" disabled=\"\" class=\"hidden mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed\">",
+          "target": [
+            "#exportFormat"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "markdownFlavor",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"markdownFlavor\" disabled=\"\" class=\"mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed\">",
+          "target": [
+            "#markdownFlavor"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "convertedPageThemeToggleEnabled",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500\">",
+          "target": [
+            "#convertedPageThemeToggleEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "convertedPageThemeToggleOledBlack",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleOledBlack\" type=\"checkbox\" disabled=\"\" class=\"mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed\">",
+          "target": [
+            "#convertedPageThemeToggleOledBlack"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
               "data": "toolbarEnabled",
               "relatedNodes": [],
               "impact": "critical",
@@ -3058,42 +3128,6 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "toolbarEditToggleEnabled",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"toolbarEditToggleEnabled\" type=\"checkbox\" class=\"mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500\">",
-          "target": [
-            "#toolbarEditToggleEnabled"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "toolbarMetadataToggleEnabled",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"toolbarMetadataToggleEnabled\" type=\"checkbox\" class=\"mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500\">",
-          "target": [
-            "#toolbarMetadataToggleEnabled"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
               "data": "helpModal",
               "relatedNodes": [],
               "impact": "critical",
@@ -3103,7 +3137,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"helpModal\" class=\"hidden fixed inset-0 z-50 flex items-center justify-center px-4\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
+          "html": "<div id=\"helpModal\" class=\"hidden fixed inset-0 z-50 items-center justify-center px-4\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
           "target": [
             "#helpModal"
           ]
@@ -3311,7 +3345,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<html lang=\"en\" data-ui-style=\"rounded-cta\" class=\"dark\">",
+          "html": "<html lang=\"en\" class=\"dark\">",
           "target": [
             "html"
           ]
@@ -3350,7 +3384,7 @@
             }
           ],
           "impact": null,
-          "html": "<html lang=\"en\" data-ui-style=\"rounded-cta\" class=\"dark\">",
+          "html": "<html lang=\"en\" class=\"dark\">",
           "target": [
             "html"
           ]
@@ -3660,7 +3694,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<html lang=\"en\" data-ui-style=\"rounded-cta\" class=\"dark\">",
+          "html": "<html lang=\"en\" class=\"dark\">",
           "target": [
             "html"
           ]
@@ -3736,9 +3770,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -4012,27 +4046,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "no-focusable-content",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element does not have focusable descendants"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n                Download ZIP\n              </button>",
-          "target": [
-            "#downloadZip"
           ]
         },
         {
@@ -4051,6 +4067,24 @@
           "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert\n                </button>",
           "target": [
             "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n                Download ZIP\n              </button>",
+          "target": [
+            "#downloadZip"
           ]
         },
         {
@@ -4122,7 +4156,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<html lang=\"en\" data-ui-style=\"rounded-cta\" class=\"dark\">",
+          "html": "<html lang=\"en\" class=\"dark\">",
           "target": [
             "html"
           ]
@@ -4337,7 +4371,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center gap-2 rounded px-2 py-1 text-sm\" aria-pressed=\"true\" aria-label=\"Toggle color theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -4437,9 +4471,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"card-panel space-y-4\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"card-panel import-card m-1 space-y-4\" aria-labelledby=\"importHeading\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"]"
+            ".import-card"
           ]
         },
         {
@@ -4459,7 +4493,7 @@
           "impact": null,
           "html": "<div class=\"flex items-start justify-between gap-4\">",
           "target": [
-            "section[aria-labelledby=\"importHeading\"] > .gap-4.justify-between.items-start"
+            ".import-card > .gap-4.justify-between.items-start"
           ]
         },
         {
@@ -4479,7 +4513,7 @@
           "impact": null,
           "html": "<div>",
           "target": [
-            "section[aria-labelledby=\"importHeading\"] > .gap-4.justify-between.items-start > div:nth-child(1)"
+            ".import-card > .gap-4.justify-between.items-start > div:nth-child(1)"
           ]
         },
         {
@@ -4617,26 +4651,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n                Download ZIP\n              </button>",
-          "target": [
-            "#downloadZip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
           "target": [
             ".convert-button-wrapper"
@@ -4680,6 +4694,26 @@
           "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
           "target": [
             "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n                Download ZIP\n              </button>",
+          "target": [
+            "#downloadZip"
           ]
         },
         {
@@ -4779,7 +4813,7 @@
           "impact": null,
           "html": "<span class=\"text-xs text-muted\">Optional</span>",
           "target": [
-            "#advancedOptions > summary > .text-muted.text-xs"
+            "summary > span:nth-child(2)"
           ]
         },
         {
