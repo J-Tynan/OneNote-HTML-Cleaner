@@ -1,4 +1,4 @@
-# OneNote HTML Cleaner
+# [WIP] OneNote HTML Cleaner
 
 Clean, readable HTML from OneNote MHTML exports in a browser-based workflow that works offline after the first load.
 
