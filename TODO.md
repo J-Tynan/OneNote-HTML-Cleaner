@@ -57,9 +57,13 @@ Items below should reach zero before tagging the first stable build.
 - [x] [P1] Run one clean release-candidate verification pass on `main`: `npm ci`, `npm run test:gate:native`, all Playwright smoke scripts, and the accessibility audits. (2026-03-26)
 - [x] [P1] Accept locked cleaned-fixture drift for regenerated test outputs and rebaseline the locked fixtures when expected HTML changes are intentional. (2026-03-26)
 - [x] [P1] Keep preserved OneNote-authored exported color styling non-blocking in `test:playwright:a11y-exports`; exported-page contrast findings should remain informational when fidelity is the higher priority. (2026-03-26)
+- [ ] [P1] Implement one small exported-HTML layout tweak on a short-lived branch and validate it against the locked fixtures before final screenshot capture.
 - [ ] [P1] Perform manual PWA acceptance on a clean browser profile using the core fixtures (`Test File.mht`, `DevToys.mht`, `Communicate using Markdown.mht`, `Resolve merge conflicts.mht`) and confirm successful conversion plus working downloads.
+- [ ] [P1] Capture hero, converted page, Advanced options, and ZIP screenshots on a clean browser profile.
+- [ ] [P1] Add screenshot captions and alt text for the README and release page assets.
 - [ ] [P1] Add a concise release go/no-go checklist to project docs covering browser support, offline/service-worker update behavior, and known limitations.
-- [ ] [P1] Prepare `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes.
+- [ ] [P1] Draft `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes.
+- [ ] [P1] Run one final clean release-candidate verification pass on `main` and record the results after release-doc and screenshot-prep changes land.
 - [ ] [P1] Tag the first stable release only after CI is green on `main` and the manual acceptance pass is recorded.
 
 ---

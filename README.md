@@ -1,8 +1,14 @@
 # [WIP] OneNote HTML Cleaner
 
-Clean, readable HTML from OneNote MHTML exports in a browser-based workflow that works offline after the first load.
+Convert OneNote MHTML exports into clean, portable HTML and optional Markdown — entirely in your browser.
 
 OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path is focused on MHTML input and a straightforward conversion flow that works well for first-time users as well as repeat batch use.
+
+## v1.0 Release Highlights
+
+- Stable MHTML -> HTML conversion with deterministic output and offline PWA support.
+- Experimental Markdown export (Obsidian default) and optional externalized CSS for ZIP exports.
+- Handwriting preserved as raster images; vector ink extraction planned post-release.
 
 ## Screenshots
 
@@ -41,6 +47,7 @@ If your goal is simply to clean and save an exported OneNote page, the default s
 - The app includes a Light / Dark UI theme toggle and remembers your choice in the browser.
 - In-app help is available from the Help button, and the help panel can also be opened with `?`.
 - If you only need HTML output, you can ignore most advanced settings.
+- Tested locally with automated browser coverage on Chromium 145 for Windows; files are processed locally in your browser and are not uploaded.
 
 ## Key Features
 
@@ -148,17 +155,29 @@ The roadmap should be read as direction, not as a delivery promise.
 
 ## Known Limitations
 
-- The stable release supports only `.mht` and `.mhtml` input files.
+- The stable release supports only `.mht` and `.mhtml` input files. If a converted page does not match the source note closely enough, see [Report Fidelity Problems](#report-fidelity-problems).
 - Native `.one` and `.onepkg` files may be detected, but they are not converted in the shipped runtime.
 - Markdown export is available through experimental export controls rather than the default path.
 - Handwriting from MHTML exports is preserved as raster content rather than editable vector ink.
 - Externalized CSS is intended for ZIP workflows where the HTML and CSS assets remain together.
 
+## Report Fidelity Problems
+
+If you hit a layout or styling problem in converted output, open a repository issue and include enough detail to make the problem reproducible:
+
+- the source file type and a short description of the note content
+- the browser and version you used
+- what you expected to see
+- what the converted output did instead
+- screenshots of the source and converted result when possible
+
+Use the repository issue tracker for fidelity problems and include the word `fidelity` in the title so the report is easy to triage.
+
 ## Help
 
 - Use the in-app Help button for a short usage guide.
 - Press `?` to open Help from the keyboard.
-- Use the repository issue tracker for bug reports and product feedback.
+- Use the repository issue tracker for bug reports, fidelity reports, and product feedback.
 
 ## For Developers
 
