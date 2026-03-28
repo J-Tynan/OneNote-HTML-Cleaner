@@ -125,6 +125,7 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 - [ ] [P2] Post-release: consolidate fixture discovery on top of `Tests/fixtures.js` and remove ad hoc `fs.readdirSync('Tests')` scans from regression scripts so the suite has one canonical fixture policy. (triaged 2026-03-26)
 - [ ] [P2] Post-release: extract shared Node-test setup helpers for logging suppression, JSDOM/DOMParser bootstrapping, and common assertion utilities instead of repeating `setEnabled(false)` and local polyfills across many unit scripts. (triaged 2026-03-26)
 - [ ] [P2] Post-release: reduce test dependence on production globals such as `window.__getRuntime` and `window.__getWorkerManagerDiagnostics` by introducing explicit test harness helpers or dev-only adapters. (triaged 2026-03-26)
+- [ ] [P2] Post-release investigate HTML cleaning tools such as "HTML Tidy" to improve your HTML cleanup pipeline.
 - [x] [P1] Review browser test coverage for stale assumptions, including the old `generic` profile default in `Tests/mht-fixtures-playwright.js`, so fixture comparisons align with the actual release path. (2026-03-26, triage confirmed `Tests/mht-fixtures-playwright.js` now defaults to `onenote` and no remaining `generic` test defaults were found under `Tests/`.)
 
 ### Pre-RC cleanup triage
