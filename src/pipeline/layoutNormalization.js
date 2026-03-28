@@ -251,14 +251,7 @@ function normalizeTitleBlockPositionStyle(styleText, baselineMarginLeft = '') {
     styleMap.delete('width');
   }
 
-  if (baselineMarginLeft) {
-    styleMap.set('margin-left', baselineMarginLeft);
-  } else {
-    const marginTop = styleMap.get('margin-top');
-    if (marginTop) {
-      styleMap.set('margin-left', marginTop);
-    }
-  }
+  styleMap.set('margin-left', '0');
 
   const after = styleMapToString(styleMap);
   return {
@@ -277,11 +270,7 @@ function normalizeDateBlockPositionStyle(styleText, baselineMarginLeft = '') {
   }
 
   styleMap.delete('margin-top');
-  if (baselineMarginLeft) {
-    styleMap.set('margin-left', baselineMarginLeft);
-  } else {
-    styleMap.delete('margin-left');
-  }
+  styleMap.set('margin-left', '0');
 
   const after = styleMapToString(styleMap);
   return {
@@ -291,23 +280,9 @@ function normalizeDateBlockPositionStyle(styleText, baselineMarginLeft = '') {
 }
 
 function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = '') {
-  if (!baselineMarginLeft) {
-    return {
-      changed: false,
-      style: String(styleText || '')
-    };
-  }
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
-  const existingMarginLeft = String(styleMap.get('margin-left') || '').trim();
-  const existingInches = parseCssLengthToInches(existingMarginLeft);
-  if (existingInches !== null && existingInches >= MIN_CONTENT_MARGIN_LEFT_IN) {
-    return {
-      changed: false,
-      style: before
-    };
-  }
-  styleMap.set('margin-left', baselineMarginLeft);
+  styleMap.set('margin-left', '0');
   const after = styleMapToString(styleMap);
   return {
     changed: after !== before,
@@ -335,15 +310,8 @@ function normalizeContentBlockToExactBaselineStyle(styleText, baselineMarginLeft
 function normalizeRootDocumentMarginStyle(styleText) {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
-  const marginTop = styleMap.get('margin-top');
-  if (!marginTop) {
-    return {
-      changed: false,
-      style: before
-    };
-  }
-
-  styleMap.set('margin-left', marginTop);
+  styleMap.set('margin-top', '2rem');
+  styleMap.set('margin-left', '2rem');
 
   const after = styleMapToString(styleMap);
   return {

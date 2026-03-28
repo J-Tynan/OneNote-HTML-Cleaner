@@ -67,16 +67,16 @@ function createDoc(html) {
     const titleStyle = String(titleBlock.getAttribute('style') || '');
     const dateStyle = String(dateBlock.getAttribute('style') || '');
     const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
-    assert(/\bmargin-top\s*:\s*\.2in/i.test(rootStyle));
-    assert(/\bmargin-left\s*:\s*\.2in/i.test(rootStyle));
+    assert(/\bmargin-top\s*:\s*2rem/i.test(rootStyle));
+    assert(/\bmargin-left\s*:\s*2rem/i.test(rootStyle));
     assert(/\bmargin-top\s*:\s*0\b/i.test(titleStyle));
-    assert(/\bmargin-left\s*:\s*\.2in/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(titleStyle));
     assert(!/\bwidth\s*:/i.test(titleStyle));
-    assert(/\bmargin-left\s*:\s*\.2in/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(dateStyle));
     assert(!/\bwidth\s*:/i.test(dateStyle));
     assert(!/\bmargin-top\s*:/i.test(dateStyle));
     assert(/\bmargin-top\s*:\s*\.1826in/i.test(firstContentStyle));
-    assert(/\bmargin-left\s*:\s*\.2in/i.test(firstContentStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(firstContentStyle));
 
     assert(logs.some(entry => entry && entry.step === 'NormalizeDirectionLayoutContainers' && entry.positionsStandardized >= 2));
   }
@@ -120,9 +120,9 @@ function createDoc(html) {
     const dateStyle = String(dateBlock.getAttribute('style') || '');
     const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
 
-    assert(/\bmargin-left\s*:\s*\.075in/i.test(titleStyle));
-    assert(/\bmargin-left\s*:\s*\.075in/i.test(dateStyle));
-    assert(/\bmargin-left\s*:\s*0\.125in/i.test(firstContentStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(firstContentStyle));
   }
 
   {
@@ -145,9 +145,9 @@ function createDoc(html) {
     const dateStyle = String(dateBlock.getAttribute('style') || '');
     const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
 
-    assert(/\bmargin-left\s*:\s*\.2166in/i.test(titleStyle));
-    assert(/\bmargin-left\s*:\s*\.2166in/i.test(dateStyle));
-    assert(/\bmargin-left\s*:\s*\.1951in/i.test(firstContentStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(titleStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(dateStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(firstContentStyle));
   }
 
   {
@@ -162,7 +162,7 @@ function createDoc(html) {
     const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
     assert(firstContentBlock);
     const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
-    assert(/\bmargin-left\s*:\s*0\.125in/i.test(firstContentStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(firstContentStyle));
   }
 
   {
@@ -177,7 +177,7 @@ function createDoc(html) {
     const firstContentBlock = doc.querySelector('main > div > div:nth-child(3)');
     assert(firstContentBlock);
     const firstContentStyle = String(firstContentBlock.getAttribute('style') || '');
-    assert(/\bmargin-left\s*:\s*0?\.075in/i.test(firstContentStyle));
+    assert(/\bmargin-left\s*:\s*0\b/i.test(firstContentStyle));
   }
 
   {
