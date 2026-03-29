@@ -315,6 +315,38 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] [P3] Add export options (HTML summary, Markdown summary).
 - [ ] [P3] Add a small demo dataset and link from README.
 
+### OneNote Tag System — Design & Research (post‑release)
+
+#### Phase 0 — Research Capture (now)
+- [ ] Record Option A (emoji) and Option B (Heroicons) findings in docs.
+- [ ] Decide on a single canonical tag data model independent of rendering.
+- [ ] Define required tag metadata: type, label, priority, completion state.
+
+#### Phase 1 — Canonical Tag Model
+- [ ] Define canonical HTML structure for tags (`data-tag`, `data-label`, etc.).
+- [ ] Add minimal CSS for tag containers (spacing, alignment, accessibility).
+- [ ] Add regression fixtures containing parsed OneNote tags.
+
+#### Phase 2 — Emoji Renderer (Option A)
+- [ ] Define emoji mapping for all default OneNote tags.
+- [ ] Add CSS to normalize emoji size and baseline alignment.
+- [ ] Use emoji renderer for:
+      - Markdown export
+      - Summarize Tags tool
+      - Plain‑text fallback
+
+#### Phase 3 — SVG Renderer (Option B)
+- [ ] Define Heroicons mapping for all default OneNote tags.
+- [ ] Add SVG renderer for:
+      - Edit Mode toolbar
+      - Converted HTML output
+- [ ] Ensure SVG renderer can be swapped for emoji renderer without markup changes.
+
+#### Phase 4 — Summarize Tags Tool
+- [ ] Build standalone HTML tool for drag‑and‑drop tag summaries.
+- [ ] Default to emoji renderer for portability.
+- [ ] Add filters by tag type, page, and completion state.
+
 **Current Release Focus**
 - **Stabilize and verify the MHTML release path:** finish the active stable-release checklist above before reopening larger feature work.
 
