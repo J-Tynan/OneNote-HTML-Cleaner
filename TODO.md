@@ -275,6 +275,10 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [x] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline. (2026-03-07, via `tools/css-audit-report.js`, shared-bundle consolidation in `src/ui-downloads.js`, and `Tests/externalize-css-visual-parity-playwright.js`)
 - [x] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives. (2026-03-07, implemented via `src/export-filenames.js` with coverage in `Tests/exported-page-naming.unit.js`)
+- [ ] [P1] Polish primary action buttons for screenshot readiness: increase button size, label padding, and contrast so they read clearly across matte laptop, OLED phone, and IPS desktop displays.
+- [ ] [P1] Run a consistency pass on secondary/icon controls so Help, theme, remove, and similar buttons use clearer sizing, spacing, and visibility.
+- [ ] [P1] Refactor the Help pop-up content into easier-to-scan native collapsible sections using built-in browser features where practical (for example, `details` / `summary`).
+- [ ] [P1] Do a cross-display UI polish review before screenshots and record any remaining readability or contrast fixes needed for the PWA.
 
 ---
 
