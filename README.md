@@ -151,6 +151,12 @@ The roadmap is focused on expanding the product carefully without weakening the 
 - optional toolbar enhancements for converted pages
 - future investigation of richer support for native OneNote formats such as `.one` and `.onepkg`
 
+### Planned Tag Features
+
+- Improved parsing of OneNote tags (To‑Do, Important, Question, etc.)
+- Toolbar insertion of OneNote-style tags in Edit Mode
+- A standalone “Summarize Tags” tool for aggregating tags across multiple pages
+
 The roadmap should be read as direction, not as a delivery promise.
 
 ## Known Limitations

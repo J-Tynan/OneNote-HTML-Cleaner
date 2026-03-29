@@ -291,6 +291,30 @@ All items in this section must be satisfied before tagging the first stable rele
 - [ ] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux.
 - [ ] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release.
 
+### OneNote Tag Support (post‑release)
+
+#### Phase 1 — Tag Parsing Improvements
+- [ ] [P2] Expand MHTML → HTML sanitizer to detect OneNote tag glyphs and map them to semantic tag types.
+- [ ] [P2] Define canonical HTML representation for tags (for example, `<span class="onenote-tag" data-tag="todo">`).
+- [ ] [P2] Add regression fixtures containing all built‑in OneNote tag types.
+- [ ] [P2] Add Markdown export rules for tags (Obsidian-compatible checkboxes, emoji, or text markers).
+
+#### Phase 2 — Edit Mode Tag Insertion
+- [ ] [P2] Add tag insertion controls to Edit Mode toolbar (To‑Do, Important, Question, Idea, etc.).
+- [ ] [P2] Ensure inserted tags use the same canonical HTML representation as parsed tags.
+- [ ] [P2] Add Playwright coverage for tag insertion, toggling, and deletion.
+- [ ] [P2] Add visual variants for tag icons depending on toolbar UI style (Office‑97, Ribbon, MacOS, Linux).
+
+#### Phase 3 — Tag Summary Tool
+- [ ] [P3] Create standalone `summarize-tags.html` tool for drag‑and‑drop analysis of converted HTML/Markdown.
+- [ ] [P3] Parse tags across multiple files and group by:
+  - tag type
+  - page/file
+  - completion state (for To‑Do)
+- [ ] [P3] Add filters for tag type, page, and completion.
+- [ ] [P3] Add export options (HTML summary, Markdown summary).
+- [ ] [P3] Add a small demo dataset and link from README.
+
 **Current Release Focus**
 - **Stabilize and verify the MHTML release path:** finish the active stable-release checklist above before reopening larger feature work.
 
