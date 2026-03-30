@@ -63,6 +63,7 @@ Current adapters apply these shared transformations for every flavor:
 - task list marker normalization (`[X]` -> `[x]`)
 - table delimiter normalization (pipe table delimiter row consistency)
 - fenced code normalization (`~~~` -> `````)
+- canonical OneNote tags in sanitized HTML render as markdown text without inline HTML
 
 ### Flavor-specific behavior currently implemented
 
@@ -78,10 +79,21 @@ Current adapters apply these shared transformations for every flavor:
 | Flavor selectable in UI | Yes | Yes | Yes | Yes |
 | Flavor normalized/fallback to default | Yes | Yes | Yes | Yes |
 | Task list marker normalization | Yes | Yes | Yes | Yes |
+| Canonical todo-family OneNote tags become task items | Yes | Escaped per CommonMark task policy | Yes | Yes |
+| Canonical non-task OneNote tags become emoji-prefixed text | Yes | Yes | Yes | Yes |
 | Table delimiter normalization | Yes | Yes | Yes | Yes |
 | Fenced code delimiter normalization | Yes | Yes | Yes | Yes |
 | Extra blank-line collapse policy | No | No | No | Yes |
 | Flavor-specific syntax divergence (beyond above) | Not yet | Not yet | Not yet | Limited |
+
+## Canonical OneNote Tag Rendering
+
+When sanitized HTML contains canonical `.onenote-tag` elements:
+
+- `todo` and `todo-priority-1` render as markdown task items.
+- `commonmark` continues to escape those task markers as literal text per the existing task policy.
+- Non-task built-in tags render as emoji-prefixed markdown text using the repository mapping research.
+- Markdown output must remain free of raw structural inline HTML such as `<span>` wrappers.
 
 ## Test Artifact Map
 

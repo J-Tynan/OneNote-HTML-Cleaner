@@ -15,6 +15,16 @@
 5. Embed images using the image map.
 6. Serialize without collapsing whitespace.
 
+## Deferred tag parsing flow (post-release)
+
+- The stable release does not yet perform semantic OneNote tag parsing.
+- Post-release tag work should add a dedicated tag-annotation pass in `src/pipeline/pipeline.js` after `sanitize.removeNbsp(doc)` and before later semantic/layout normalization.
+- The first tag-parser scope is limited to built-in default OneNote tags detected at block-leading positions in exported MHTML/HTML.
+- Canonical output for that future pass should use public `onenote-tag` markup rather than internal-only `data-onc-*` attributes.
+- Renderer concerns such as emoji, SVG icons, toolbar insertion, and summaries remain separate follow-on work after the semantic contract is in place.
+
+Reference: `docs/OneNote Tag Parsing Research.md`
+
 ## Native OneNote import flow (deferred)
 1. UI still detects source kind (`html`, `mht`, `one`, `onepkg`) so unsupported native files can be identified clearly.
 2. Stable runtime behavior stops at that intake boundary: `.one` and `.onepkg` are marked unsupported and are not routed through the shipped worker pipeline.

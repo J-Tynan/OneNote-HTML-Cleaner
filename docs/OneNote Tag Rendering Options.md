@@ -67,4 +67,9 @@ This principle allows emoji and SVG icons to coexist without refactoring and kee
 - SVG icons (Heroicons) can be layered in where visual polish matters most.
 - Both approaches plug into the same canonical tag schema.
 
+## Parser note
+
+- Parser work should target exported OneNote tag markers in MHTML/HTML, not assume unicode glyphs.
+- The locked pre-release semantic contract and export-evidence notes live in `docs/OneNote Tag Parsing Research.md`.
+
 This keeps the system flexible, legally safe, and future‑proof.

@@ -67,6 +67,7 @@ Any appearance of the above is considered a **conversion defect**.
   - Accessibility information
   - Required behavior
 - Visual fidelity must not depend on authoring‑tool‑specific styles.
+- When canonical OneNote tags are emitted, they must use stable semantic `.onenote-tag` markup and may rely on shared stylesheet rules only for minimal spacing, alignment, and state readability.
 
 The pipeline may remove or normalize styles that exist solely for layout or editor‑specific rendering.
 
@@ -93,6 +94,7 @@ The pipeline guarantees a minimal accessibility baseline:
 - Exactly one page‑level `<h1>`.
 - Presence of a `<main>` landmark.
 - Non‑decorative images must include `alt` text.
+- Canonical OneNote tags remain non‑interactive inline text content unless a later contract explicitly promotes them to controls.
 
 This baseline does not aim for full WCAG compliance, but avoids introducing accessibility regressions.
 

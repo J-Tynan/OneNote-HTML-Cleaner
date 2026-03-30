@@ -7,6 +7,34 @@
 - Keep HTML structure stable unless a specific repair rule requires adjustment.
 - Optional migration may convert safe inline typography/margins to utility classes.
 
+## Canonical OneNote tag contract
+
+The pipeline now normalizes supported built-in OneNote tags into canonical semantic HTML.
+
+The public tag contract is:
+
+```html
+<span class="onenote-tag" data-tag="todo" data-label="To Do" data-state="unchecked">
+  <span class="tag-label">To Do</span>
+</span>
+```
+
+Contract notes:
+
+- `data-tag` is required and carries the stable semantic ID.
+- `data-label` is required and carries the readable label.
+- `data-state` is optional and is used only for stateful tags.
+- `data-variant` is reserved for future use when a tag family needs additional specificity.
+- For the built-in tag set, priority is modeled in `data-tag` rather than a separate `data-priority` field.
+- The current parser scope is limited to built-in default tags detected at block-leading positions in exported MHTML/HTML.
+- `.onenote-tag` and `.tag-label` are stable public hooks for styling and downstream export logic.
+- Tags are emitted as semantic inline content, not as interactive controls.
+- Converted HTML injects a minimal inline fallback stylesheet for canonical tags so standalone files keep tag rendering even when no packaged CSS asset is present.
+- Shared output CSS also provides the same spacing, alignment, checked-state readability, and emoji rendering baseline; the canonical HTML contract stays unchanged.
+- Markdown export may render canonical tags as task markers or emoji-prefixed text while keeping the underlying HTML tag contract unchanged.
+
+No tag-specific worker config keys are part of the stable shipped contract yet.
+
 ## Worker request
 ```json
 {
@@ -129,3 +157,5 @@ These hooks are not end-user features and should be treated as dev/test affordan
 ## Toolbar Phase 0 reference
 
 See `docs/Toolbar-Phase0-Spec.md` for the locked toolbar injection contract, idempotency rule, and day-one behavior boundaries.
+
+For deferred OneNote tag parsing design notes, see `docs/OneNote Tag Parsing Research.md`.
