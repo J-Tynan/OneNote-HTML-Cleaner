@@ -3,6 +3,13 @@
 html {
   overflow-x: hidden;
 }
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: light;
 
@@ -21,8 +28,8 @@ html {
   --dropzone-highlight: #e0f2fe;
   /* Button tokens */
   --btn-radius: 0.375rem; /* 6px */
-  --btn-padding-x: 1rem; /* 16px */
-  --btn-padding-y: 0.5rem; /* 8px */
+  --btn-padding-x: 1.25rem; /* more left/right space */
+  --btn-padding-y: 0.75rem; /* more top/bottom space */
   --btn-shadow: 0 1px 2px rgba(2,6,23,0.06);
   --btn-focus-ring: rgba(14,165,179,0.12);
 }
@@ -50,6 +57,10 @@ p {
   line-height: 1.6;
 }
 
+.text-secondary {
+  color: var(--text-help);
+}
+
 .text-muted {
   color: var(--text-muted);
 }
@@ -69,8 +80,23 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* Improve stability when expanding details (especially mobile) */
-details[open] > summary {
+.surface-card {
+  background-color: var(--bg-card);
+}
+
+.surface-soft {
+  background-color: var(--bg-soft);
+}
+
+.border-default {
+  border-color: var(--border-muted);
+}
+  right: 0;
+  left: auto;
+  transform: none;
+  width: max-content;
+  max-width: min(28rem, calc(100vw - 2rem));
+  white-space: normal;
   margin-bottom: 0.5rem;
 }
 
@@ -80,10 +106,11 @@ details[open] > summary {
 
   /* Primary surface (desktop workbench panels) */
   .card-panel {
-    @apply rounded-2xl border p-5 sm:p-6
-           transition-colors duration-150;
+    border: 1px solid var(--border-muted);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
     background-color: var(--bg-card);
-    border-color: var(--border-muted);
   }
 
   /* Explicit fallback spacing/border for the import panel in case utility expansion is unavailable. */
@@ -107,67 +134,138 @@ details[open] > summary {
 
   /* Sub-panels inside cards */
   .card-section {
-    @apply rounded-xl p-4
-           transition-colors duration-150;
+    border: 1px solid var(--border-muted);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
     background-color: var(--bg-soft);
-    border-color: var(--border-muted);
   }
 
   /* Option group panels */
   .option-panel {
-    @apply space-y-3 rounded-lg p-4
-           transition-colors duration-150;
+    border: 1px solid var(--border-muted);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
     background-color: var(--bg-card);
-    border-color: var(--border-muted);
+  }
+
+  .option-panel > * + * {
+    margin-top: 0.75rem;
   }
 
   /* Checkbox rows */
   .checkbox-option {
-    @apply flex items-start gap-3 text-sm cursor-pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    cursor: pointer;
     color: var(--text-primary);
   }
 
   .checkbox-input {
-    @apply mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center
-           rounded border border-slate-300 bg-white text-white
-           peer-checked:border-sky-600 peer-checked:bg-sky-600
-           peer-focus:ring-2 peer-focus:ring-sky-500 peer-focus:ring-offset-1;
+    margin-top: 0.125rem;
+    display: inline-flex;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    border: 1px solid var(--border-muted);
+    background-color: var(--bg-card);
+    color: var(--cta-text);
   }
 
   /* === PRIMARY ACTION BUTTON === */
   .btn-primary {
-      @apply inline-flex items-center justify-center
-        text-sm font-medium
-        shadow-sm
-        transition-colors
-        focus:outline-none
-        focus:ring-2 focus:ring-offset-2
-        disabled:cursor-not-allowed
-        disabled:opacity-50;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-appearance: none;
+      appearance: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background-color 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+      outline: none;
       background-color: var(--cta-bg);
       color: var(--cta-text);
       border: none;
       border-radius: var(--btn-radius);
+      line-height: 1.25;
       padding: var(--btn-padding-y) var(--btn-padding-x);
       box-shadow: var(--btn-shadow);
   }
+    .btn-primary:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
     .btn-primary:hover { background-color: var(--cta-bg-hover); }
     .btn-primary:active { background-color: var(--cta-bg-active); }
     .btn-primary:focus { box-shadow: 0 0 0 4px var(--btn-focus-ring); }
 
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-appearance: none;
+    appearance: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: background-color 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+    outline: none;
+    background-color: var(--bg-card);
+    color: var(--text-help);
+    border: 1px solid var(--border-muted);
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.625rem;
+  }
+  .btn-secondary:hover { background-color: var(--bg-soft); }
+  .btn-secondary:focus { box-shadow: 0 0 0 4px var(--btn-focus-ring); }
+
   /* Ghost button (used for theme toggle) */
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded px-2 py-1 text-sm;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
     background: transparent;
     color: var(--text-primary);
     border: 1px solid transparent;
   }
   .btn-ghost:hover { background-color: rgba(2,6,23,0.04); }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border-muted);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    outline: none;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+  }
+  .form-control:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.18);
+  }
+  .form-control:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 }
 
 /* === STATUS / QUEUE ITEMS === */
 
 .file-item {
+  border-color: var(--border-muted);
+  background-color: var(--bg-card);
   transition: background-color 120ms ease, border-color 120ms ease;
 }
 
@@ -283,6 +381,10 @@ html.dark .status-pill--error {
 
 @media (max-width: 639px) {
 
+  .convert-button-wrapper .tooltip {
+    max-width: calc(100vw - 1.5rem);
+  }
+
   .card-panel {
     padding: 1rem;
     border-radius: 1rem;
@@ -323,6 +425,7 @@ html.dark .status-pill--error {
 
 .layout-debug {
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -343,12 +446,7 @@ html.dark {
   --cta-bg-active: #e65a00;
   --cta-text: #ffffff;
   --dropzone-highlight: #071217;
-  /* Button tokens (dark) */
-  --btn-radius: 0.375rem; /* 6px */
-  --btn-padding-x: 1rem; /* 16px */
-  --btn-padding-y: 0.5rem; /* 8px */
   --btn-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  --btn-focus-ring: rgba(14,165,179,0.12);
 }
 
 /* === Dark theme VARIANTS (Phase 3 testing hooks) ===
@@ -450,33 +548,10 @@ html.dark[data-variant="soft-contrast"] {
 
 
 
-/* Dark-mode utility overrides for existing Tailwind classes in markup */
-html.dark body.bg-slate-50 {
-  background-color: var(--bg-page) !important;
-}
-
-html.dark body.text-slate-900 {
-  color: var(--text-primary) !important;
-}
-
-html.dark .bg-white {
-  background-color: var(--bg-card) !important;
-}
-
-html.dark .bg-slate-50 {
-  background-color: var(--bg-soft) !important;
-}
-
+/* Dark-mode utility overrides retained only for controls still using Tailwind utilities */
 html.dark .border-slate-200,
 html.dark .border-slate-300 {
   border-color: var(--border-muted) !important;
-}
-
-html.dark .text-slate-900,
-html.dark .text-slate-700,
-html.dark .text-slate-600,
-html.dark .text-slate-500 {
-  color: var(--text-primary) !important;
 }
 
 html.dark .text-help,
@@ -508,52 +583,6 @@ html.dark .btn-ghost:hover {
   background-color: rgba(148, 163, 184, 0.16);
 }
 
-/* Base button utility to ensure token usage across variants */
-.btn {
-  border-radius: var(--btn-radius);
-  padding: var(--btn-padding-y) var(--btn-padding-x);
-  transition: box-shadow 160ms ease, transform 120ms ease;
-}
-
-/* UI style variants (testing-only) */
-:root[data-ui-style="rounded-cta"] {
-  --btn-radius: 0.75rem; /* 12px */
-  --btn-padding-x: 1.125rem; /* 18px */
-  --btn-padding-y: 0.625rem; /* 10px */
-  --btn-shadow: 0 6px 18px rgba(2,6,23,0.12);
-}
-
-:root[data-ui-style="rounded-cta"] #convertButton {
-  padding: calc(var(--btn-padding-y) * 1) calc(var(--btn-padding-x) * 1);
-  font-size: 1.05rem;
-  min-width: 7.5rem;
-}
-:root[data-ui-style="rounded-cta"] #downloadZip {
-  padding: calc(var(--btn-padding-y) * 1.15) calc(var(--btn-padding-x) * 1.15);
-  font-size: 1.05rem;
-  min-width: 7.5rem;
-}
-
-:root[data-ui-style="rounded-cta"] #importButton {
-  padding: calc(var(--btn-padding-y) * 1) calc(var(--btn-padding-x) * 1);
-  font-size: 1.05rem;
-  min-width: 7.5rem;
-}
-
-:root[data-ui-style="compact"] {
-  --btn-radius: 0.25rem; /* 4px */
-  --btn-padding-x: 0.625rem; /* 10px */
-  --btn-padding-y: 0.375rem; /* 6px */
-  --btn-shadow: 0 1px 1px rgba(2,6,23,0.04);
-}
-
-:root[data-ui-style="spacious"] {
-  --btn-radius: 1rem; /* 16px */
-  --btn-padding-x: 1.25rem; /* 20px */
-  --btn-padding-y: 0.75rem; /* 12px */
-  --btn-shadow: 0 10px 30px rgba(2,6,23,0.14);
-}
-
 /* Tooltip for Convert button when manual action is disabled */
 .convert-button-wrapper {
   position: relative;
@@ -563,9 +592,12 @@ html.dark .btn-ghost:hover {
 .convert-button-wrapper .tooltip {
   position: absolute;
   top: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
+  right: 0;
+  left: auto;
+  transform: none;
+  width: max-content;
+  max-width: min(28rem, calc(100vw - 2rem));
+  white-space: normal;
   background: var(--bg-card);
   color: var(--text-primary);
   border-radius: 0.5rem;

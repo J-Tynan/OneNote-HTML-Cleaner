@@ -3,8 +3,7 @@ module.exports = {
   content: [
     './index.html',
     './src/**/*.{js,html}',
-    './Tests/**/*.{html,mht}',
-    './node_modules/flowbite/**/*.js'
+    './Tests/**/*.{html,mht}'
   ],
 
   // Enable class-based dark mode so the app can toggle theme at runtime
@@ -82,7 +81,5 @@ module.exports = {
     }
   },
 
-  plugins: [
-    require('flowbite/plugin')
-  ]
+  plugins: []
 };

@@ -143,7 +143,7 @@ function formatDiagnosticForList(d) {
     const kind = escapeHtml(d.kind || (d.payload && d.payload.type) || 'diag');
     const brief = d.payload && d.payload.type ? escapeHtml(String(d.payload.type)) : '';
     const details = escapeHtml(JSON.stringify(d.payload || {}));
-    return `<div class="mb-2 text-xs text-slate-700"><strong>[${time}] ${kind}</strong> ${brief}<div class="mt-1 text-[11px] text-muted">${details}</div></div>`;
+    return `<div class="mb-2 text-xs text-secondary"><strong>[${time}] ${kind}</strong> ${brief}<div class="mt-1 text-[11px] text-muted">${details}</div></div>`;
   } catch (e) {
     return `<div class="text-xs text-muted">diagnostic</div>`;
   }
@@ -531,11 +531,11 @@ export function renderFileList() {
     const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
 
     return `
-      <div class="file-item rounded-xl border border-slate-200 bg-white p-4" data-id="${entry.id}" data-status="${statusTone}">
+      <div class="file-item rounded-xl border p-4" data-id="${entry.id}" data-status="${statusTone}">
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0">
-            <p class="truncate text-sm font-semibold text-slate-900">${safeName}</p>
-            <p class="mt-1 flex items-center gap-2 text-xs text-slate-500">
+            <p class="truncate text-sm font-semibold">${safeName}</p>
+            <p class="mt-1 flex items-center gap-2 text-xs text-muted">
               <span>${safeSize}</span>
               <span aria-hidden="true">&middot;</span>
               <span class="status-pill status-pill--${statusTone}">${safeStatus}</span>
@@ -544,7 +544,7 @@ export function renderFileList() {
           </div>
           <button
             type="button"
-            class="remove-item inline-flex items-center rounded-md border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+            class="remove-item btn-secondary"
             data-remove-id="${entry.id}"
             aria-label="Remove ${safeName}">
             Remove
@@ -555,7 +555,7 @@ export function renderFileList() {
           <div class="mt-3">
             <button
               type="button"
-              class="btn-primary text-xs px-3 py-1.5"
+              class="btn-primary"
               data-download-id="${entry.id}">
               ${downloadLabel}
             </button>

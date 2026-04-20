@@ -107,6 +107,7 @@ function contrastRatio(rgbA, rgbB){
         localStorage.setItem('themeVariant', vv);
       }, v);
       await page.waitForFunction((vv) => document.documentElement.dataset.variant === vv, v);
+      await page.waitForTimeout(200);
 
       // grab computed colors for a representative element
       const colors = await page.evaluate(() => {

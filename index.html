@@ -8,17 +8,13 @@
   <!-- Tailwind (compiled) -->
   <link rel="stylesheet" href="assets/tailwind-output.css" />
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Flowbite -->
-  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js" defer></script>
 </head>
 
-<body class="min-h-screen bg-slate-50 text-slate-900">
+<body class="min-h-screen">
 
   <!-- Header -->
-  <header class="border-b border-slate-200 bg-white">
-    <div class="mx-auto max-w-6xl px-4 py-6 md:px-8">
+  <header class="border-b">
+    <div class="mx-auto max-w-6xl px-4 py-4 md:px-8">
       <div class="flex items-start justify-between gap-4">
         <div>
           <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
@@ -71,7 +67,7 @@
           <div class="flex items-start justify-between gap-4">
             <div>
               <h2 id="importHeading" class="text-lg font-medium">Import files</h2>
-              <p class="mt-1 text-sm leading-6 text-slate-700">
+              <p class="mt-1 text-sm leading-6 text-secondary">
                 Choose how files should be converted, then add them to the queue.
               </p>
               <p class="mt-2 text-xs text-muted">
@@ -129,7 +125,7 @@
 
               <!-- Conversion tweaks -->
               <section class="option-panel" aria-labelledby="conversionTweaksLabel">
-                <h3 id="conversionTweaksLabel" class="text-sm font-medium text-slate-900">
+                <h3 id="conversionTweaksLabel" class="text-sm font-medium">
                   Conversion tweaks
                 </h3>
 
@@ -169,7 +165,7 @@
                       id="externalizeCssMode"
                       disabled
                       title="Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file."
-                      class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                      class="form-control mt-1"
                       aria-describedby="externalizeCssModeHelp">
                       <option value="shared" selected>Shared stylesheet for all converted pages</option>
                       <option value="per-page">One stylesheet per converted page</option>
@@ -197,7 +193,7 @@
                     <select
                       id="exportFormat"
                       disabled
-                      class="hidden mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed">
+                      class="form-control hidden mt-1">
                       <option value="html" selected>HTML (.html)</option>
                       <option value="markdown">Markdown (.md)</option>
                     </select>
@@ -211,7 +207,7 @@
                     <select
                       id="markdownFlavor"
                       disabled
-                      class="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed">
+                      class="form-control mt-1">
                       <option value="obsidian" selected>Obsidian-compatible (default)</option>
                       <option value="commonmark">CommonMark</option>
                       <option value="gfm">GitHub Flavored Markdown</option>
@@ -269,7 +265,7 @@
         <section id="controls" class="card-panel">
           <div
             id="dropzone"
-            class="rounded-2xl border-2 border-dashed bg-slate-50 p-6 transition-colors"
+            class="surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors"
             role="region"
             aria-label="Add files to conversion queue"
             tabindex="0">
@@ -316,12 +312,12 @@
             <h2 class="text-lg font-medium">Status and results</h2>
             <span
               id="appStateBadge"
-              class="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase">
+              class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase">
               Empty
             </span>
           </div>
 
-          <p id="statusSummary" class="text-sm text-slate-700">
+          <p id="statusSummary" class="text-sm text-secondary">
             No files in the queue yet. Add files to begin conversion.
           </p>
 
@@ -329,14 +325,14 @@
 
           <details
             id="diagnosticsPanel"
-            class="hidden mt-4 rounded-lg border bg-slate-50 p-3">
+            class="surface-soft border-default hidden mt-4 rounded-lg border p-3">
             <summary class="cursor-pointer text-sm font-medium">
               Diagnostics and conversion details
               <span id="diagnosticsCount" class="text-xs text-muted">(0)</span>
             </summary>
             <ul
               id="diagnosticsList"
-              class="mt-2 list-disc pl-5 text-sm text-slate-700"></ul>
+              class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
           </details>
 
         </section>
@@ -367,33 +363,33 @@
     aria-modal="true"
     aria-labelledby="helpModalTitle">
     <div class="absolute inset-0 bg-black/40"></div>
-    <div class="relative max-w-xl rounded bg-white p-6 shadow-lg">
+    <div class="surface-card relative max-w-xl rounded p-6 shadow-lg">
       <div class="flex items-start justify-between gap-4">
         <div>
           <h3 id="helpModalTitle" class="text-lg font-medium">How to use OneNote HTML Cleaner</h3>
-          <p class="mt-2 text-sm text-slate-700">
+          <p class="mt-2 text-sm text-secondary">
             Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone.
             The app converts the file locally in your browser and provides a download link when finished.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             Converted pages are validated to avoid required CDN/app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together. Shared mode writes one stylesheet for the ZIP; per-page mode writes one stylesheet per exported HTML page.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             Planned Markdown export follows a structure-first approach (semantic fidelity over visual parity), with Obsidian-compatible output as the default flavor.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             Experimental export controls are available in Advanced options. HTML remains the default stable path, and Markdown is available with selectable flavor.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light/Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             If toolbar injection is enabled for converted pages, the toolbar starts hidden by default; use the small Toolbar button beside the page theme toggle to reveal it.
           </p>
-          <p class="mt-3 text-sm text-slate-700">
+          <p class="mt-3 text-sm text-secondary">
             Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>
           </p>
         </div>

@@ -54,7 +54,7 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
     const documentHasHorizontalOverflow = document.documentElement.scrollWidth > (window.innerWidth + tolerance);
 
     return {
-      ok: leftAligned && rightAligned && headerWithinViewport,
+      ok: leftAligned && rightAligned && headerWithinViewport && !documentHasHorizontalOverflow,
       leftAligned,
       rightAligned,
       headerWithinViewport,
