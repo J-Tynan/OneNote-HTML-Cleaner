@@ -6,6 +6,7 @@
 - UI communicates with worker via `postMessage` using Contracts.md shapes
 - Output: per-file cleaned HTML and optional ZIP export (JSZip later)
 - Import flow: file picker and drag/drop may receive `.mht`, `.mhtml`, `.html`, `.htm`, `.one`, `.onepkg`, but the stable runtime only processes the MHTML path. Native `.one` / `.onepkg` detection is retained only so unsupported files can be surfaced clearly in the UI.
+- Styling stack: Tailwind CSS is retained for utility classes and layout, while shared component styling is owned by the app in `styles.css`; no third-party Tailwind UI library is part of the current architecture.
 
 ## Pipeline flow
 1. MHT parsing: extract HTML and build an image map.

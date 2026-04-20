@@ -2,52 +2,112 @@
 
 Purpose: capture a small, low-risk map for polishing the homepage PWA UI before screenshots.
 
-Status: planning only. No code changes are implied by this document.
+Status: living design note. This document should track the current homepage shell, the current runtime states, and the safest polish moves for screenshot preparation.
 
-## How to read this guide
+## Scope
 
-There are two different ways the homepage UI is styled in this repo:
+- Homepage PWA only: header, import column, advanced options, dropzone, status/results panel, footer, and help modal.
+- Focus on visual polish, layout rhythm, state clarity, and screenshot readiness.
+- Keep the current product contract intact: MHTML-first flow, local/offline messaging, accessible controls, and responsive stability.
+- Do not treat this guide as a redesign plan or a request to add a third-party UI library.
 
-1. Plain CSS in `styles.css`
-	 - Best when you want to change the shared look of several controls at once.
-	 - Example: changing the primary button background for `Convert`, `Download ZIP`, and `Browse files` together.
+## Screenshot States To Design For
 
-2. Tailwind utility classes in `index.html`
-	 - Best when you want to change one specific element.
-	 - Example: making just the Help button larger with `w-10 h-10`.
+### 1. Empty/default state
+
+- Header visible with Help and theme actions.
+- Import card visible with `Convert` and `Download ZIP` disabled.
+- Advanced options collapsed.
+- Dropzone visible with `Browse files` as the main CTA.
+- No status/results panel yet.
+
+### 2. Advanced options state
+
+- Advanced options expanded.
+- Conversion controls, selects, and helper copy visible.
+- Still reads as approachable for a first-time user.
+
+### 3. Queue/results state
+
+- Status panel visible with multiple generated file rows.
+- Badge, status pills, remove buttons, and per-file download actions all readable.
+- Diagnostics panel optional, but only if it improves the screenshot narrative.
+
+### 4. Optional help-modal state
+
+- Use only if a documentation/help screenshot is needed.
+- Modal should feel like part of the same product rather than a separate visual style.
+
+## Current Homepage Model
+
+### Static shell in `index.html`
+
+- Header: title, supporting copy, Help button, theme toggle.
+- Left column: import summary card, advanced options card, dropzone card.
+- Right column: status/results panel, hidden until files exist.
+- Footer: local-processing reassurance and documentation link.
+- Help modal: hidden by default, opened from the Help button or `?`.
+
+### Runtime-generated UI in `src/ui.js`
+
+- `#statusPanel` is hidden until the queue has items.
+- `#appStateBadge` switches between `Empty` and `<count> queued`.
+- `renderFileList()` creates each `.file-item` row, status pill, remove button, and per-file download button.
+- `#diagnosticsPanel` stays hidden until diagnostics exist.
+- `#convertTooltip` is shown only when manual convert is unavailable.
+
+### Layout model
+
+- Layout A: desktop workbench (`>= 1024px`).
+- Layout B: tablet/laptop (`640px` to `1023px`).
+- Layout C: mobile (`< 640px`).
+- Recent responsive fixes intentionally prevent horizontal overflow in Layout B and Layout C.
+
+## Styling Stack
+
+There are three styling layers on the homepage now:
+
+1. Tailwind utility classes in `index.html`
+   - Used for grid, spacing, widths, responsive layout, and a few local one-off adjustments.
+   - Best for per-element changes that should not affect the rest of the UI.
+
+2. App-owned semantic classes in `styles.css`
+   - Used for the shared visual system.
+   - Main classes include `.card-panel`, `.card-panel--soft`, `.card-section`, `.option-panel`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.form-control`, `.surface-soft`, and `.surface-card`.
+
+3. Runtime state classes and attributes
+   - Generated or toggled by `src/ui.js`.
+   - Main examples: `.file-item`, `.status-pill--*`, `#appStateBadge[data-state]`, `.tooltip.hidden`, and the `hidden` state on panels and modal containers.
 
 Simple rule:
-- Use `styles.css` for shared button colors, spacing, radius, borders, and shadows.
-- Use `index.html` Tailwind classes for one-off sizing, spacing, width, and layout tweaks.
 
-## Primary edit locations
+- Use `styles.css` when the change should affect the shared visual language.
+- Use `index.html` Tailwind utilities when the change should affect only one specific control or one specific container.
+- Touch `src/ui.js` only when the polish target is runtime-generated markup or state behavior.
 
-The main place to tweak homepage UI appearance is `styles.css`.
-That file contains the shared button styling and the light/dark theme color tokens.
+Important note:
 
-Relevant files:
+- The project uses Tailwind CSS for utilities and layout.
+- The project does not use a third-party Tailwind UI library.
+
+## Primary Edit Locations
+
 - `styles.css`
+  - Main source of truth for tokens, shared surfaces, buttons, status pills, tooltip styling, and help-modal polish.
 - `index.html`
+  - Main source of truth for layout, responsive container spacing, per-element utilities, and the static homepage shell.
+- `src/ui.js`
+  - Edit only if the screenshot target depends on the generated queue rows, diagnostics visibility, or state presentation.
 - `src/styles/tailwind.css`
+  - Tailwind entry file that imports `../../styles.css`.
 - `package.json`
+  - Build commands only.
 
-## Important beginner note: CSS tokens vs Tailwind classes
+Do not edit `assets/tailwind-output.css` directly.
 
-The homepage buttons mix both systems:
+## Current Shared UI Tokens And Components
 
-- Shared primary buttons use the `.btn-primary` class from `styles.css`.
-- Shared icon buttons use the `.btn-ghost` class from `styles.css`.
-- Some sizing still comes from Tailwind classes in `index.html`.
-
-That means:
-
-- If you edit `.btn-primary`, all three main action buttons change together.
-- If you edit `#helpButton` or `#themeToggle` classes in `index.html`, only those buttons change.
-- If you add new Tailwind classes, rebuild Tailwind so the generated CSS includes them.
-
-## Current values at a glance
-
-### Shared primary button tokens in `styles.css`
+### Shared primary action tokens in `styles.css`
 
 Current light-theme values:
 
@@ -55,496 +115,294 @@ Current light-theme values:
 - `--cta-bg-hover: #0891b2`
 - `--cta-bg-active: #056b6d`
 - `--btn-radius: 0.375rem`
-- `--btn-padding-x: 1rem`
-- `--btn-padding-y: 0.5rem`
+- `--btn-padding-x: 1.25rem`
+- `--btn-padding-y: 0.75rem`
 - `--btn-shadow: 0 1px 2px rgba(2,6,23,0.06)`
 - `--btn-focus-ring: rgba(14,165,179,0.12)`
 
-### Shared primary button rule in `styles.css`
+### Shared primary action scope
 
-Current `.btn-primary` uses:
+`.btn-primary` now affects more than the three static homepage buttons.
 
-- `text-sm`
-- `font-medium`
-- `focus:ring-2`
-- `focus:ring-offset-2`
-- `border: none`
-- `padding: var(--btn-padding-y) var(--btn-padding-x)`
-- `box-shadow: var(--btn-shadow)`
-
-Important detail:
-- The visible button shadow is mainly controlled by `--btn-shadow`, because the rule sets `box-shadow` directly.
-- The visible focus glow is mainly controlled by `--btn-focus-ring`, because `.btn-primary:focus` also sets `box-shadow` directly.
-
-### Shared ghost button rule in `styles.css`
-
-Current `.btn-ghost` uses:
-
-- `rounded`
-- `px-2 py-1`
-- `text-sm`
-- `background: transparent`
-- `border: 1px solid transparent`
-- hover background: `rgba(2,6,23,0.04)`
-
-### Current homepage button classes in `index.html`
-
-Current header buttons:
-
-- `#helpButton`: `btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm`
-- `#themeToggle`: `btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none`
-
-Current main action buttons:
-
-- `#convertButton`: `btn-primary`
-- `#downloadZip`: `btn-primary`
-- `#importButton`: `btn-primary`
-
-## Small Change Map
-
-### 1. Strengthen the main button colors first
-
-Edit the light-theme CTA tokens in `styles.css`:
-
-- `--cta-bg`
-- `--cta-bg-hover`
-- `--cta-bg-active`
-
-Current values:
-
-- `--cta-bg: #0ea5b3`
-- `--cta-bg-hover: #0891b2`
-- `--cta-bg-active: #056b6d`
-
-Why:
-
-- This is the fastest way to improve contrast for `Convert`, `Download ZIP`, and `Browse files` all at once.
-
-Plain CSS options:
-
-- Very small change: keep the same hue, just darken a little.
-	- `--cta-bg: #0891b2`
-	- `--cta-bg-hover: #0e7490`
-	- `--cta-bg-active: #155e75`
-- More blue and slightly less teal:
-	- `--cta-bg: #0284c7`
-	- `--cta-bg-hover: #0369a1`
-	- `--cta-bg-active: #075985`
-- More teal and less pastel:
-	- `--cta-bg: #0f766e`
-	- `--cta-bg-hover: #115e59`
-	- `--cta-bg-active: #134e4a`
-
-Tailwind equivalents if you want to test a direction mentally:
-
-- Current color is close to a cyan/teal family.
-- Small darker step: `bg-cyan-600 hover:bg-cyan-700 active:bg-cyan-800`
-- More blue: `bg-sky-600 hover:bg-sky-700 active:bg-sky-800`
-- More teal: `bg-teal-600 hover:bg-teal-700 active:bg-teal-800`
-
-Recommendation:
-
-- For this project, prefer editing the CSS tokens rather than adding one-off Tailwind background classes to each primary button.
-- That keeps the three main action buttons consistent.
-
-### 2. Increase button padding
-
-Edit these button tokens in `styles.css`:
-
-- `--btn-padding-x`
-- `--btn-padding-y`
-- optionally `--btn-radius`
-
-Current values:
-
-- `--btn-padding-x: 1rem`
-- `--btn-padding-y: 0.5rem`
-- `--btn-radius: 0.375rem`
-
-Why:
-
-- This gives bigger buttons and more breathing room around labels without changing layout too aggressively.
-
-Plain CSS options:
-
-- Safe first tweak:
-	- `--btn-padding-x: 1.125rem`
-	- `--btn-padding-y: 0.625rem`
-	- keep `--btn-radius: 0.375rem`
-- Slightly bolder:
-	- `--btn-padding-x: 1.25rem`
-	- `--btn-padding-y: 0.75rem`
-	- `--btn-radius: 0.5rem`
-- Rounder screenshot look:
-	- `--btn-padding-x: 1.25rem`
-	- `--btn-padding-y: 0.75rem`
-	- `--btn-radius: 0.625rem`
-
-Tailwind equivalents:
-
-- Current values are roughly:
-	- `px-4`
-	- `py-2`
-	- `rounded-md`
-- Slightly larger:
-	- `px-[1.125rem]` or `px-5`
-	- `py-2.5`
-	- `rounded-lg`
-- Larger again:
-	- `px-5`
-	- `py-3`
-	- `rounded-[0.625rem]`
-
-Recommendation:
-
-- For all primary buttons together, edit the CSS tokens.
-- Use Tailwind padding classes only if one specific button needs to be different.
-
-### 3. Make the main buttons feel more solid
-
-Edit the `.btn-primary` rule in `styles.css`.
-
-Current shared values:
-
-- text weight: `font-medium`
-- shadow token: `--btn-shadow: 0 1px 2px rgba(2,6,23,0.06)`
-- border: `none`
-- focus glow token: `--btn-focus-ring: rgba(14,165,179,0.12)`
-
-Why:
-
-- If the UI feels washed out on matte displays, this matters almost as much as the color tokens.
-
-Best small knobs:
-
-- text weight
-- shadow
-- focus ring
-- border
-
-Plain CSS options:
-
-- Text weight:
-	- change `font-medium` to `font-semibold`
-- Shadow:
-	- `--btn-shadow: 0 4px 10px rgba(2,6,23,0.10)`
-	- or `--btn-shadow: 0 6px 16px rgba(2,6,23,0.12)` for a more obvious screenshot look
-- Border:
-	- replace `border: none` with something subtle like `border: 1px solid rgba(15,23,42,0.08)`
-- Focus ring:
-	- slightly stronger glow, for example `rgba(14,165,179,0.18)`
-
-Tailwind equivalents:
-
-- `font-medium` -> `font-semibold`
-- `shadow-sm` -> `shadow-md` or `shadow-lg`
-- border option: `border border-slate-300/50`
-- stronger focus feel: `focus:ring-4`
-
-Important note:
-
-- In this codebase, the direct `box-shadow` in `.btn-primary` matters more than the Tailwind `shadow-sm` utility.
-- So if the goal is to deepen the shared shadow, change `--btn-shadow` first.
-
-Recommendation:
-
-- Best low-risk first pass:
-	- `font-medium` -> `font-semibold`
-	- deepen `--btn-shadow` slightly
-	- leave the border alone unless the button still feels too soft
-
-### 4. Enlarge the header icon buttons
-
-Edit the Help and theme-toggle button classes in `index.html`.
-
-Current classes:
-
-- `#helpButton`: `... rounded w-8 h-8 text-sm`
-- `#themeToggle`: `... w-8 h-8 p-0 text-2xl leading-none`
-
-Current size:
-
-- `w-8 h-8` means `2rem x 2rem`
-
-Good first tweak:
-
-- `w-8 h-8` -> `w-10 h-10`
-
-Other options:
-
-- `w-9 h-9` for a very small increase
-- `w-10 h-10` for the recommended touch target improvement
-- `w-11 h-11` if screenshots still look cramped
-
-Tailwind-only examples:
-
-- Help button:
-	- `class="btn-ghost inline-flex items-center justify-center rounded w-10 h-10 text-sm"`
-- Theme toggle:
-	- `class="btn-ghost inline-flex items-center justify-center w-10 h-10 p-0 text-2xl leading-none"`
-
-Optional tweak for the theme icon if it looks small after the button grows:
-
-- keep `text-2xl`
-- or try `text-[1.75rem]`
-
-Recommendation:
-
-- This is a good Tailwind change because it is very local and easy to read in the HTML.
-
-### 5. Give the three main homepage actions a minimum width if needed
-
-Apply this only if the actions still feel visually weak after token changes.
-
-Targets in `index.html`:
+Static controls:
 
 - `#convertButton`
 - `#downloadZip`
 - `#importButton`
 
-Current state:
+Runtime-generated controls:
 
-- no explicit minimum width is applied
-- button width is currently based on label text and padding
+- per-file download buttons created in `renderFileList()` inside `src/ui.js`
 
-Why:
+That means any shared `.btn-primary` change should be judged both in the empty homepage shell and in the populated queue/results state.
 
-- This makes the action area feel more deliberate and helps screenshots look cleaner.
+### Shared secondary action scope
 
-Tailwind options:
+- `.btn-ghost` affects Help, theme toggle, and Help-modal close.
+- `.btn-secondary` affects generated Remove buttons in the file list.
 
-- `min-w-[9rem]`
-- `min-w-[10rem]`
-- if you want the stacked `Convert` and `Download ZIP` buttons to align neatly, give both the same `min-w-*`
+### Shared surface system
 
-Plain CSS option:
+- `.card-panel` is the main shell panel.
+- `.card-panel--soft` softens contextual regions like advanced options and status/results.
+- `.card-section` and `.option-panel` create nested hierarchy inside the advanced-options flow.
+- `.surface-soft` and `.border-default` are used directly on the dropzone and diagnostics panel.
 
-- You could add a shared rule in `styles.css`, but that would affect every `.btn-primary`.
-- Because this change is usually visual and per-button, Tailwind is the cleaner choice here.
+## Small Change Map For The Current PWA
 
-Recommendation:
+### 1. Strengthen CTA hierarchy
 
-- Prefer Tailwind for this one.
-- Start with `min-w-[9rem]` before trying `min-w-[10rem]`.
+Edit in: `styles.css`
 
-### 6. Tune secondary button styling
-
-Edit `.btn-ghost` in `styles.css`.
-
-Current values:
-
-- `px-2 py-1`
-- `background: transparent`
-- `border: 1px solid transparent`
-- hover background: `rgba(2,6,23,0.04)`
-
-Why:
-
-- This is the right place if secondary controls are readable on OLED but too faint on the laptop.
-
-Best small tweaks:
-
-- add a visible border instead of transparent
-- slightly stronger hover background
-- a bit more padding
-
-Plain CSS options:
-
-- Border:
-	- `border: 1px solid var(--border-muted)`
-- Hover background:
-	- change `rgba(2,6,23,0.04)` to `rgba(2,6,23,0.07)` or `rgba(2,6,23,0.08)`
-- Padding:
-	- change `px-2 py-1` equivalent to something closer to `px-3 py-2`
-
-Tailwind equivalents:
-
-- `border border-slate-200`
-- `hover:bg-slate-100`
-- `px-3 py-2`
-
-Recommendation:
-
-- If you want all ghost buttons to improve together, change `.btn-ghost` in `styles.css`.
-- If you only want the Help button stronger, add Tailwind classes on that button alone.
-
-### 7. Improve surface contrast if the page still looks washed out
-
-Edit these tokens in `styles.css`:
-
-- `--bg-page`
-- `--bg-card`
-- `--bg-soft`
-- `--border-muted`
-
-Current light values:
-
-- `--bg-page: #f8fafc`
-- `--bg-card: #ffffff`
-- `--bg-soft: #f8fafc`
-- `--border-muted: #e2e8f0`
-
-Why:
-
-- Sometimes the real issue is weak contrast between buttons and surrounding surfaces, not the button colors alone.
-
-Suggested direction:
-
-- keep cards a touch whiter
-- make borders slightly stronger
-- if needed, make soft panels slightly darker than the page so sections separate more clearly
-
-Plain CSS options:
-
-- Very safe contrast bump:
-	- keep `--bg-card: #ffffff`
-	- change `--bg-soft: #f1f5f9`
-	- change `--border-muted: #cbd5e1`
-- Slightly stronger overall separation:
-	- `--bg-page: #f5f7fb`
-	- `--bg-card: #ffffff`
-	- `--bg-soft: #eef2f7`
-	- `--border-muted: #cbd5e1`
-
-Tailwind equivalents:
-
-- `#f8fafc` is close to `bg-slate-50`
-- `#ffffff` is `bg-white`
-- stronger soft surface is close to `bg-slate-100`
-- stronger border is close to `border-slate-300`
-
-Recommendation:
-
-- This is usually a second-pass tweak, not the first thing to change.
-- Try the CTA and padding changes before touching the page surfaces.
-
-### 8. Review dark mode separately
-
-If light mode looks good but dark mode feels weak, edit the dark token set in `styles.css`:
+Best knobs:
 
 - `--cta-bg`
 - `--cta-bg-hover`
 - `--cta-bg-active`
 - `--btn-shadow`
+- `--btn-focus-ring`
 
-Current dark values:
+Why this is low risk:
 
-- `--cta-bg: #ff8a00`
-- `--cta-bg-hover: #ff6a00`
-- `--cta-bg-active: #e65a00`
-- `--btn-shadow: 0 1px 2px rgba(0,0,0,0.6)`
+- It improves the most important actions without changing layout structure.
+- It automatically updates both static actions and runtime file-download actions.
 
-Why:
+Watch-outs:
 
-- Dark-mode button contrast is controlled independently from the light theme.
+- If the primary buttons get too visually heavy, the queue/results screenshot can start to look noisy because every successful row inherits that stronger treatment.
 
-Plain CSS options:
+### 2. Improve header affordance
 
-- More depth without changing hue too much:
-	- `--btn-shadow: 0 4px 14px rgba(0,0,0,0.55)`
-- Slightly brighter default CTA if the orange feels flat:
-	- `--cta-bg: #ff950f`
-	- `--cta-bg-hover: #ff7a1a`
-	- `--cta-bg-active: #e85f0c`
-- Slightly deeper orange if the button looks too neon:
-	- `--cta-bg: #f97316`
-	- `--cta-bg-hover: #ea580c`
-	- `--cta-bg-active: #c2410c`
+Edit in: `index.html` for size changes, `styles.css` for shared `.btn-ghost` styling.
 
-Tailwind equivalents:
+Current controls:
 
-- brighter orange direction: `bg-orange-500 hover:bg-orange-600 active:bg-orange-700`
-- deeper orange direction: `bg-orange-600 hover:bg-orange-700 active:bg-orange-800`
+- `#helpButton`: `btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm`
+- `#themeToggle`: `btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none`
 
-Recommendation:
+Low-risk moves:
 
-- Review dark mode after light mode is settled.
-- It is easier to judge one theme at a time.
+- Increase `w-8 h-8` to `w-10 h-10` for better screenshot balance and touch-target feel.
+- Slightly strengthen `.btn-ghost` hover or border only if the header actions feel too faint.
 
-## Practical edit order
+Watch-outs:
 
-Use this sequence for the biggest visible improvement with the least code churn:
+- Keep the header light and compact. Oversized icon buttons can overpower the title block.
 
-1. CTA colors
-2. Button padding
-3. Button font weight and shadow
-4. Header icon size
-5. Minimum width on main actions
-6. Ghost button polish
-7. Surface contrast
-8. Dark mode review
+### 3. Tighten panel rhythm and hierarchy
 
-## Current code map
+Edit in: `styles.css` and, if needed, container utilities in `index.html`
 
-### Shared button tokens and styles
+Current shared panel spacing:
 
-In `styles.css`:
+- `.card-panel`: `padding: 1.25rem`
+- `.card-section`: `padding: 1rem`
+- `.option-panel`: `padding: 1rem`
+- Mobile overrides reduce nested panel padding to `1rem` and `0.75rem`
 
-- Light CTA colors: `--cta-bg`, `--cta-bg-hover`, `--cta-bg-active`
-- Button shape and spacing: `--btn-radius`, `--btn-padding-x`, `--btn-padding-y`
-- Button shadow and focus: `--btn-shadow`, `--btn-focus-ring`
-- Shared primary button class: `.btn-primary`
-- Shared secondary/icon button class: `.btn-ghost`
+Low-risk moves:
 
-### Homepage buttons in markup
+- Slightly strengthen border contrast before increasing panel shadows.
+- Adjust internal spacing so the import card, advanced options card, and dropzone feel intentionally related rather than independently padded.
+- If the page feels vertically cramped, consider adjusting the header container or main container spacing in `index.html` before touching every component class.
 
-In `index.html`:
+Watch-outs:
 
-- `#helpButton`
-- `#themeToggle`
-- `#convertButton`
-- `#downloadZip`
-- `#importButton`
+- Do not introduce padding or width changes that bring back horizontal overflow in Layout B or Layout C.
 
-These are the places to edit if one specific control needs a per-button size or width tweak.
+### 4. Increase dropzone emphasis
 
-### Dark theme token area
+Edit in: `index.html` and `styles.css`
 
-In `styles.css`, the dark token set should be reviewed separately if the homepage looks fine in light mode but still weak in dark mode.
+Current structure:
 
-## Build note
+- `#dropzone` uses `surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors`
+- `#importButton` is the main dropzone CTA.
+- Supporting copy reinforces local processing.
 
-Do not edit `assets/tailwind-output.css` directly.
+Low-risk moves:
 
-Source pipeline:
+- Increase visual separation between the dropzone border and surrounding panel surface.
+- Slightly deepen the drag-highlight state using `--dropzone-highlight` if the active state feels too subtle.
+- Increase the dropzone’s perceived importance through spacing before adding more decorative styling.
 
-- `src/styles/tailwind.css` imports `../../styles.css`
-- build commands live in `package.json`
+Watch-outs:
 
-Relevant scripts:
+- Preserve the privacy/local-processing message. It is part of the product story, not filler copy.
 
-- `npm run build:tailwind`
-- `npm run watch:tailwind`
+### 5. Improve advanced-options scannability
 
-Beginner reminder:
+Edit in: `styles.css` first, `index.html` second
 
-- If you change `styles.css`, rebuild Tailwind so the generated output stays current.
-- If you add new Tailwind utility classes in `index.html`, rebuild Tailwind so those utilities are emitted into `assets/tailwind-output.css`.
+Current model:
 
-## Suggested next step
+- The whole area is a `.card-panel card-panel--soft` container.
+- `details#advancedOptions` uses `.card-section`.
+- Each group inside uses `.option-panel`.
+- Selects use `.form-control`.
+- Checkboxes still rely partly on local Tailwind utility classes in the markup.
 
-When implementation starts, prefer a very small first pass using only 5 edits:
+Low-risk moves:
 
-1. Darken the primary CTA colors a little in `styles.css`.
-2. Increase `--btn-padding-x`.
-3. Increase `--btn-padding-y`.
-4. Change `.btn-primary` from `font-medium` to `font-semibold`.
-5. Enlarge Help/theme icon buttons from `w-8 h-8` to `w-10 h-10` in `index.html`.
+- Improve separation between headings, help text, and grouped controls.
+- Tighten muted-copy rhythm so the panel reads clearly in screenshots.
+- Strengthen the summary/header row only if the expanded state does not read clearly enough.
 
-## Recommended Tailwind-only tweaks worth considering
+Watch-outs:
 
-These are the most useful Tailwind changes for this page because they are local, low-risk, and easy to undo:
+- Avoid turning advanced options into the visual hero of the homepage. It should stay secondary to the import/dropzone flow.
 
-- Header icon buttons:
-	- `w-10 h-10` on `#helpButton` and `#themeToggle`
-- Main action width:
-	- `min-w-[9rem]` on `#convertButton`, `#downloadZip`, and `#importButton`
-- If the import area still feels small:
-	- increase dropzone padding in `index.html` from `p-6` to `p-7` or `p-8`
-- If the heading area feels cramped:
-	- increase header container spacing from `py-6` to `py-7`
+### 6. Improve queue/results screenshot readiness
 
-Recommendation:
+Edit in: `styles.css`, and `src/ui.js` only if generated markup structure must change
 
-- Prefer Tailwind for per-element spacing and sizing.
-- Prefer `styles.css` for shared color and button-style decisions.
+Current runtime-generated pieces:
+
+- `.file-item`
+- `.status-pill`
+- `.status-pill--queued`
+- `.status-pill--working`
+- `.status-pill--success`
+- `.status-pill--error`
+- `.status-pill--unsupported`
+- `.btn-secondary` for Remove
+- `.btn-primary` for per-file download
+
+Low-risk moves:
+
+- Increase contrast between file rows and the surrounding status panel.
+- Improve badge and pill readability before changing layout structure.
+- If queue rows feel soft, strengthen `.file-item` hover or border treatment before adding extra controls.
+
+Watch-outs:
+
+- `#appStateBadge` only has shell-level `empty` and `queued` states right now. Do not document or style it as if it reflected every per-file status.
+
+### 7. Keep the convert tooltip polished and contained
+
+Edit in: `styles.css` and `src/ui.js` only if behavior changes are required
+
+Current model:
+
+- `#convertButton` sits inside `.convert-button-wrapper`.
+- `#convertTooltip` is hidden/shown by runtime conditions.
+- Tooltip is right-aligned and constrained to the viewport to avoid overflow.
+
+Low-risk moves:
+
+- Improve tooltip surface contrast or copy rhythm if it looks cramped.
+- Keep it visually aligned with the button stack.
+
+Watch-outs:
+
+- Do not undo the right-aligned placement or viewport max-width guardrails that were added to stop horizontal overflow.
+
+### 8. Review help-modal polish separately
+
+Edit in: `styles.css` and `index.html`
+
+Current model:
+
+- Modal shell uses `.surface-card`.
+- Width and padding are already tuned per breakpoint.
+- Focus styling is explicitly handled in `styles.css`.
+
+Low-risk moves:
+
+- Improve spacing and readability of long-form help copy.
+- Refine modal surface contrast and close-button balance if the help screenshot is part of the capture set.
+
+Watch-outs:
+
+- Keep accessibility visible. Focus treatment and readable copy are part of the value here.
+
+### 9. Review dark mode only after light mode is settled
+
+Edit in: `styles.css`
+
+Current dark base tokens live under `html.dark`.
+Additional variants exist for testing, but they are not the primary homepage UI surface.
+
+Low-risk moves:
+
+- Tune dark CTA contrast.
+- Tune dark shadows and panel separation.
+- Confirm that status pills still separate clearly in dark mode.
+
+Watch-outs:
+
+- Do not start the polish pass in dark mode first. Light mode is the clearest baseline for screenshot work on this screen.
+
+## Screenshot-Specific Guidance
+
+### Main app screenshot
+
+Prioritize:
+
+- header balance
+- import card clarity
+- dropzone emphasis
+- primary CTA contrast
+
+Keep hidden:
+
+- status/results panel if the goal is the first-time-user shell
+- diagnostics panel
+
+### Advanced options screenshot
+
+Prioritize:
+
+- summary row clarity
+- nested panel hierarchy
+- form-control readability
+- helper copy rhythm
+
+Avoid:
+
+- making advanced options visually heavier than the import path
+
+### Queue/results screenshot
+
+Prioritize:
+
+- row contrast
+- status-pill readability
+- balance between Remove and Download actions
+- clear spacing between file rows
+
+Avoid:
+
+- over-styling successful rows so the screen becomes too visually loud
+
+## Guardrails
+
+- Preserve the PWA/local-processing identity. The UI should still read as local, private, and utility-focused.
+- Preserve responsive stability. No new horizontal overflow in Layout B or Layout C.
+- Preserve the disabled/manual-convert tooltip behavior and viewport containment.
+- Preserve the hidden-until-needed behavior for `#statusPanel`, `#diagnosticsPanel`, and `#helpModal`.
+- Preserve accessible focus treatment rather than removing it for cleaner screenshots.
+- Do not reintroduce Flowbite or another UI library just for visual polish.
+
+## Build And Confidence Checks
+
+After UI-polish code changes:
+
+1. Run `npm run build:tailwind`.
+2. If layout or spacing changed, run `npm run test:header-edge`.
+3. If theme polish changed tokens or dark mode, run `npm run test:theme`.
+
+Reminder:
+
+- If you change `styles.css`, rebuild Tailwind so `assets/tailwind-output.css` stays current.
+- If you add new Tailwind utility classes in `index.html`, rebuild Tailwind so those utilities are emitted.
+
+## Suggested First Pass
+
+Use this sequence for the biggest visible improvement with the least product risk:
+
+1. Slightly deepen the shared CTA tokens and shadow in `styles.css`.
+2. Increase Help and theme-toggle button size in `index.html` from `w-8 h-8` to `w-10 h-10`.
+3. If needed, add a minimum width to the three static primary actions so the empty-state screenshot feels more deliberate.
+4. Strengthen queue-row and status-pill contrast for the results screenshot.
+5. Tighten advanced-options spacing and helper-text hierarchy without changing the control set.
