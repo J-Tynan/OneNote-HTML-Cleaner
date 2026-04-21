@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer theme, base, components, utilities;
 
-/* Your component overrides should come after generated utilities so they win */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+/* Explicit sources avoid scanning markdown docs that contain Tailwind examples. */
+@source "../../index.html";
+@source "../../src";
+@source "../../Tests/Cleaned";
+
 @import "../../styles.css";

@@ -1,7 +1,5 @@
-import path from 'node:path';
 import fs from 'node:fs';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import path from 'node:path';
 
 function fail(msg) {
   console.error(msg);
@@ -9,14 +7,27 @@ function fail(msg) {
 }
 
 async function main() {
-  const cfgPath = (function(){
-    const cjs = path.resolve(process.cwd(), 'tailwind.config.cjs');
-    return fs.existsSync(cjs) ? cjs : path.resolve(process.cwd(), 'tailwind.config.js');
-  })();
-  const cfg = require(cfgPath);
-  if (!cfg || cfg.darkMode !== 'class') {
-    fail('tailwind.config.js must set darkMode: "class"');
+  const cssPath = path.resolve(process.cwd(), 'src/styles/tailwind.css');
+  const css = fs.readFileSync(cssPath, 'utf8');
+
+  if (!css.includes('@custom-variant dark (&:where(.dark, .dark *));')) {
+    fail('src/styles/tailwind.css must define the class-based dark variant');
   }
+
+  if (!css.includes('@import "tailwindcss/utilities.css" layer(utilities) source(none);')) {
+    fail('src/styles/tailwind.css must disable automatic source detection for explicit Tailwind v4 scanning');
+  }
+
+  for (const requiredSource of ['../../index.html', '../../src', '../../Tests/Cleaned']) {
+    if (!css.includes(`@source "${requiredSource}";`)) {
+      fail(`src/styles/tailwind.css must register ${requiredSource} as a Tailwind source`);
+    }
+  }
+
+  if (css.includes('preflight.css') || css.includes('@import "tailwindcss"')) {
+    fail('src/styles/tailwind.css must keep Tailwind preflight disabled');
+  }
+
   console.log('tailwind-darkmode: OK');
 }
 

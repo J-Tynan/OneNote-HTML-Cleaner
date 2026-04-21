@@ -79,23 +79,30 @@ function createStaticServer(root) {
       buffer: Buffer.from('dummy')
     });
 
-    // Wait for the expected sequence: init sent -> init() started -> imports failed -> ready -> job error
+    // Wait for the expected sequence: init sent -> init() started -> imports failed -> ready -> job error.
+    // The current worker contract also records an init-import diagnostic in the wrapper buffer.
     const start = Date.now();
     let passed = false;
     while (Date.now() - start < 10000) {
+      const diagnostics = await page.evaluate(() => {
+        return typeof window.__getWorkerManagerDiagnostics === 'function'
+          ? window.__getWorkerManagerDiagnostics()
+          : [];
+      });
       const sentInitIndex = logs.findIndex(l => /\[worker-wrapper\].*sending init to worker/.test(l));
-      const initStartedIndex = logs.findIndex(l => /\[worker\] init\(\) — DOMParser available:/.test(l));
+      const initStartedIndex = logs.findIndex(l => /\[worker\].*init\(\)/.test(l));
       const importsFailedIndex = logs.findIndex(l => /imports failed during init\(\)/.test(l));
       const readyIndex = logs.findIndex(l => /\[worker\] posted ready/.test(l) || /\[worker-wrapper\].*received ready/.test(l));
-      const jobErrorIndex = logs.findIndex(l => /pipeline not available in worker/.test(l) || /simulated import failure/.test(l) || /worker processing error/.test(l));
+      const jobErrorIndex = logs.findIndex(l => /pipeline not available in worker/.test(l) || /worker processing error/.test(l));
+      const initImportDiagnostic = diagnostics.find((d) => d && d.payload && d.payload.phase === 'init-imports');
 
-      if (sentInitIndex >= 0 && initStartedIndex >= 0 && importsFailedIndex >= 0 && readyIndex >= 0 && jobErrorIndex >= 0) {
+      if (sentInitIndex >= 0 && initStartedIndex >= 0 && importsFailedIndex >= 0 && readyIndex >= 0 && jobErrorIndex >= 0 && initImportDiagnostic) {
         // Ensure ordering: sentInit < initStarted < importsFailed < ready < jobError
         if (sentInitIndex < initStartedIndex && initStartedIndex < importsFailedIndex && importsFailedIndex < readyIndex && readyIndex < jobErrorIndex) {
           passed = true;
           break;
         } else {
-          throw new Error('Observed logs but ordering incorrect:\n' + logs.join('\n'));
+          throw new Error('Observed init-failure signals but ordering incorrect:\n' + logs.join('\n'));
         }
       }
       await new Promise(r => setTimeout(r, 100));

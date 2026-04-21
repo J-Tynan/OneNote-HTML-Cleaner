@@ -211,6 +211,6 @@ npm run fixtures:rebaseline
 ### Current Development Notes
 
 - The shipped release path is MHTML-first.
-- Tailwind CSS is used for utilities and layout, while shared component styling lives in `styles.css`; the project does not use a third-party Tailwind UI library.
+- Tailwind CSS v4 is used for utilities and layout via the CSS-first entry in `src/styles/tailwind.css`; shared component styling lives in `styles.css`, the project does not use a third-party Tailwind UI library, preflight stays disabled, and Tailwind sources are registered explicitly to avoid scanning markdown docs.
 - Native OneNote importer work remains deferred beyond the first stable release.
 - The repository still contains deeper technical notes for pipeline, export, and worker behavior in the `docs/` folder.

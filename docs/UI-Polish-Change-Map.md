@@ -99,7 +99,7 @@ Important note:
 - `src/ui.js`
   - Edit only if the screenshot target depends on the generated queue rows, diagnostics visibility, or state presentation.
 - `src/styles/tailwind.css`
-  - Tailwind entry file that imports `../../styles.css`.
+  - Tailwind v4 CSS-first entry file that imports `../../styles.css`, keeps preflight disabled, and registers explicit scan sources.
 - `package.json`
   - Build commands only.
 

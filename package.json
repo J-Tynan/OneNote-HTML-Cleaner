@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:tailwind": "tailwindcss -c tailwind.config.cjs -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --minify",
-    "watch:tailwind": "tailwindcss -c tailwind.config.cjs -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --watch",
+    "build:tailwind": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --minify",
+    "watch:tailwind": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --watch",
     "tools:regen-cleaned": "node ./tools/regenerate-cleaned.js",
     "fixtures:rebaseline": "node ./tools/rebaseline-locked-fixtures.js",
-  "test:gate:native": "npm run tools:regen-cleaned && npm run test:charset && npm run test:charset-fallback && npm run test:utf8-encoding && npm run test:idempotence && npm run test:rerun-equivalence && npm run test:obsolete-attrs && npm run test:inline-style-collapse && npm run test:inline-style-normalization && npm run test:contrast-colors && npm run test:externalize-css && npm run test:externalize-css-parity && npm run test:style-dependency && npm run test:export-independence && npm run test:pipeline-config && npm run test:toolbar && npm run test:ui-downloads && npm run test:exported-page-naming && npm run test:markdown-contract && npm run test:exports:regressions && npm run test:locked-fixtures && npm run test:image-alt && npm run test:smoke:native && npm run test:forbidden-artifacts",
+    "test:gate:native": "npm run tools:regen-cleaned && npm run test:charset && npm run test:charset-fallback && npm run test:utf8-encoding && npm run test:idempotence && npm run test:rerun-equivalence && npm run test:obsolete-attrs && npm run test:inline-style-collapse && npm run test:inline-style-normalization && npm run test:contrast-colors && npm run test:externalize-css && npm run test:externalize-css-parity && npm run test:style-dependency && npm run test:export-independence && npm run test:pipeline-config && npm run test:toolbar && npm run test:ui-downloads && npm run test:exported-page-naming && npm run test:markdown-contract && npm run test:exports:regressions && npm run test:locked-fixtures && npm run test:image-alt && npm run test:smoke:native && npm run test:forbidden-artifacts",
     "test:smoke:native": "node ./Tests/smoke-native.js",
     "test:toolbar": "node ./Tests/toolbar-injector.js",
     "test:semantic:native": "node ./Tests/semantic-native-parser.js",
@@ -77,10 +77,14 @@
     "libarchive.js": "^2.0.2"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.2.0",
     "@axe-core/playwright": "^4.6.2",
     "@playwright/test": "^1.58.2",
     "jsdom": "^28.1.0",
     "playwright": "^1.58.2",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.2.0"
+  },
+  "overrides": {
+    "undici": "^7.24.0"
   }
 }

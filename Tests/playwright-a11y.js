@@ -47,6 +47,21 @@ function createStaticServer(root) {
   });
 }
 
+async function loadTheme(page, url, theme, axePath) {
+  await page.goto(url, { waitUntil: 'networkidle' });
+  await page.evaluate((nextTheme) => {
+    localStorage.setItem('theme', nextTheme);
+    localStorage.removeItem('themeVariant');
+  }, theme);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForFunction((expectedDark) => {
+    const btn = document.getElementById('themeToggle');
+    return document.documentElement.classList.contains('dark') === expectedDark
+      && (!btn || btn.getAttribute('aria-pressed') === String(expectedDark));
+  }, theme === 'dark');
+  await page.addScriptTag({ path: axePath });
+}
+
 (async () => {
   const root = process.cwd();
   const server = createStaticServer(root);
@@ -82,45 +97,11 @@ function createStaticServer(root) {
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     page.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
 
-    // load page and clear any previous state
-    await page.goto(url, { waitUntil: 'networkidle' });
-    await page.evaluate(() => {
-      localStorage.removeItem('themeVariant');
-      document.documentElement.removeAttribute('data-variant');
-    });
-
-    // ensure dark mode is active
-    const isDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
-    if (!isDark) {
-      await page.click('#themeToggle');
-      await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
-    }
-
-    // load axe once (script tag) so it's available for each variant
     const axePath = require.resolve('axe-core/axe.min.js');
-    await page.addScriptTag({ path: axePath });
 
     for (const theme of themes) {
       console.log('Auditing theme:', theme);
-      // apply light or dark state
-      await page.evaluate((t) => {
-        if (t === 'light') {
-          document.documentElement.classList.remove('dark');
-          document.documentElement.removeAttribute('data-variant');
-          localStorage.removeItem('theme');
-          localStorage.removeItem('themeVariant');
-        } else {
-          document.documentElement.classList.add('dark');
-          document.documentElement.removeAttribute('data-variant');
-          localStorage.setItem('theme', 'dark');
-          localStorage.removeItem('themeVariant');
-        }
-      }, theme);
-      if (theme === 'light') {
-        await page.waitForFunction(() => !document.documentElement.classList.contains('dark'));
-      } else {
-        await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
-      }
+      await loadTheme(page, url, theme, axePath);
 
       // disable any color transitions to ensure axe sees the final style
       await page.evaluate(() => {

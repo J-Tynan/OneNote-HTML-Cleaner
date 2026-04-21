@@ -43,6 +43,22 @@ function createStaticServer(root) {
   });
 }
 
+function closeServer(server) {
+  return new Promise((resolve, reject) => {
+    if (!server || !server.listening) {
+      resolve();
+      return;
+    }
+    server.close((err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
 function isBlockingExportViolation(violation) {
   if (!violation || (violation.impact !== 'serious' && violation.impact !== 'critical')) {
     return false;
@@ -154,111 +170,124 @@ async function auditPage(url, reportBase) {
   let targetDir = null;
   let mhtDir = null;
   let enableFallback = false;
-  for (let i = 0; i < argv.length; i++) {
-    if ((argv[i] === '--dir' || argv[i] === '-d') && argv[i+1]) {
-      targetDir = argv[++i];
+  let mainServer = null;
+
+  try {
+    for (let i = 0; i < argv.length; i++) {
+      if ((argv[i] === '--dir' || argv[i] === '-d') && argv[i+1]) {
+        targetDir = argv[++i];
+      }
+      if ((argv[i] === '--mhtDir' || argv[i] === '--mht') && argv[i+1]) {
+        mhtDir = argv[++i];
+      }
+      if (argv[i] === '--enable-fallback' || argv[i] === '--fallback') {
+        enableFallback = true;
+      }
     }
-    if ((argv[i] === '--mhtDir' || argv[i] === '--mht') && argv[i+1]) {
-      mhtDir = argv[++i];
+    if (mhtDir) {
+      if (!fs.existsSync(mhtDir) || !fs.statSync(mhtDir).isDirectory()) {
+        console.error('MHT directory not found:', mhtDir);
+        process.exit(1);
+      }
     }
-    if (argv[i] === '--enable-fallback' || argv[i] === '--fallback') {
-      enableFallback = true;
-    }
-  }
-  if (mhtDir) {
-    if (!fs.existsSync(mhtDir) || !fs.statSync(mhtDir).isDirectory()) {
-      console.error('MHT directory not found:', mhtDir);
+    if (!targetDir && !mhtDir) {
+      console.error('Specify either --dir <html-folder> or --mhtDir <mht-folder>');
       process.exit(1);
     }
-  }
-  if (!targetDir && !mhtDir) {
-    console.error('Specify either --dir <html-folder> or --mhtDir <mht-folder>');
-    process.exit(1);
-  }
-  if (targetDir && (!fs.existsSync(targetDir) || !fs.statSync(targetDir).isDirectory())) {
-    console.error('Target directory not found:', targetDir);
-    process.exit(1);
-  }
-  // when auditing an existing HTML directory (not MHT conversion), run the pipeline
-  // start server for app resources (needed for pipeline imports)
-  const root = process.cwd();
-  const mainServer = createStaticServer(root);
-  await new Promise((r) => mainServer.listen(0, '127.0.0.1', r));
-  const mainPort = mainServer.address().port;
-  const mainUrl = `http://127.0.0.1:${mainPort}/`;
-
-  let files;
-  if (mhtDir) {
-    // convert MHTs to HTML in a temp folder
-    const outDir = path.join('Tests', 'exports-from-mht');
-    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-    // use a browser page for conversion
-    const browser = await chromium.launch();
-    const ctx = await browser.newContext();
-    const page = await ctx.newPage();
-    // load app so module imports resolve
-    await page.goto(mainUrl, { waitUntil: 'networkidle' });
-    const mhtFiles = fs.readdirSync(mhtDir).filter(f => f.toLowerCase().endsWith('.mht') || f.toLowerCase().endsWith('.mhtml'));
-    for (const mht of mhtFiles) {
-      console.log('converting', mht);
-      const raw = fs.readFileSync(path.join(mhtDir, mht), 'utf8');
-      const base = path.basename(mht, path.extname(mht));
-      const html = await page.evaluate(async (opts) => {
-        const mht = await import('/src/pipeline/mht.js');
-        const pipeline = await import('/src/pipeline/pipeline.js');
-        const parsed = mht.parseMht(opts.rawInput || '', { EnableCharsetFallback: opts.enableFallback });
-        const html = parsed && parsed.html ? parsed.html : opts.rawInput;
-        const run = await pipeline.runPipeline(html, {
-          imageMap: parsed && parsed.imageMap ? parsed.imageMap : {},
-          defaultTitle: opts.defaultTitle,
-          defaultLang: 'en',
-          EnableCharsetFallback: opts.enableFallback
-        });
-        return run.output || '';
-      }, { rawInput: raw, defaultTitle: base, enableFallback });
-      const name = base + '.html';
-      fs.writeFileSync(path.join(outDir, name), html, 'utf8');
+    if (targetDir && (!fs.existsSync(targetDir) || !fs.statSync(targetDir).isDirectory())) {
+      console.error('Target directory not found:', targetDir);
+      process.exit(1);
     }
-    await browser.close();
-    targetDir = outDir;
-    console.log('converted MHTs to', targetDir);
-  }
-  files = fs.readdirSync(targetDir).filter(f => f.match(/\.html?$/i));
-  if (files.length === 0) {
-    console.error('No HTML files found in', targetDir);
+    // when auditing an existing HTML directory (not MHT conversion), run the pipeline
+    // start server for app resources (needed for pipeline imports)
+    const root = process.cwd();
+    mainServer = createStaticServer(root);
+    await new Promise((r) => mainServer.listen(0, '127.0.0.1', r));
+    const mainPort = mainServer.address().port;
+    const mainUrl = `http://127.0.0.1:${mainPort}/`;
+
+    let files;
+    if (mhtDir) {
+      // convert MHTs to HTML in a temp folder
+      const outDir = path.join('Tests', 'exports-from-mht');
+      if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+      // use a browser page for conversion
+      const browser = await chromium.launch();
+      const ctx = await browser.newContext();
+      const page = await ctx.newPage();
+      // load app so module imports resolve
+      await page.goto(mainUrl, { waitUntil: 'networkidle' });
+      const mhtFiles = fs.readdirSync(mhtDir).filter(f => f.toLowerCase().endsWith('.mht') || f.toLowerCase().endsWith('.mhtml'));
+      for (const mht of mhtFiles) {
+        console.log('converting', mht);
+        const raw = fs.readFileSync(path.join(mhtDir, mht), 'utf8');
+        const base = path.basename(mht, path.extname(mht));
+        const html = await page.evaluate(async (opts) => {
+          const mht = await import('/src/pipeline/mht.js');
+          const pipeline = await import('/src/pipeline/pipeline.js');
+          const parsed = mht.parseMht(opts.rawInput || '', { EnableCharsetFallback: opts.enableFallback });
+          const html = parsed && parsed.html ? parsed.html : opts.rawInput;
+          const run = await pipeline.runPipeline(html, {
+            imageMap: parsed && parsed.imageMap ? parsed.imageMap : {},
+            defaultTitle: opts.defaultTitle,
+            defaultLang: 'en',
+            EnableCharsetFallback: opts.enableFallback
+          });
+          return run.output || '';
+        }, { rawInput: raw, defaultTitle: base, enableFallback });
+        const name = base + '.html';
+        fs.writeFileSync(path.join(outDir, name), html, 'utf8');
+      }
+      await browser.close();
+      targetDir = outDir;
+      console.log('converted MHTs to', targetDir);
+    }
+    files = fs.readdirSync(targetDir).filter(f => f.match(/\.html?$/i));
+    if (files.length === 0) {
+      console.error('No HTML files found in', targetDir);
+      process.exit(1);
+    }
+
+    const reportDir = path.join('Tests', 'reports', 'exports');
+    if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true });
+
+    let overallFail = false;
+    const summaryLines = [];
+
+    for (const file of files) {
+      const base = path.basename(file, path.extname(file));
+      const server = createStaticServer(targetDir);
+      let failed = false;
+      try {
+        await new Promise((r) => server.listen(0, '127.0.0.1', () => r()));
+        const port = server.address().port;
+        const url = `http://127.0.0.1:${port}/${encodeURIComponent(file)}`;
+
+        const reportBase = path.join(reportDir, base);
+        console.log('=== auditing', file, '===');
+        failed = await auditPage(url, reportBase);
+        if (failed) overallFail = true;
+      } finally {
+        await closeServer(server);
+      }
+
+      summaryLines.push(`${file}: ${failed ? 'FAIL' : 'OK'}`);
+    }
+
+    fs.writeFileSync(path.join(reportDir, 'a11y-exports-summary.txt'), summaryLines.join('\n'));
+
+    if (overallFail) {
+      console.error('Some exported pages had blocking serious/critical violations');
+      await closeServer(mainServer);
+      process.exit(1);
+    }
+
+    console.log('Exported HTML audit: complete');
+    await closeServer(mainServer);
+    process.exit(0);
+  } catch (err) {
+    await closeServer(mainServer);
+    console.error('playwright-a11y-exports: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }
-
-  const reportDir = path.join('Tests', 'reports', 'exports');
-  if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true });
-
-  let overallFail = false;
-  const summaryLines = [];
-
-  for (const file of files) {
-    const base = path.basename(file, path.extname(file));
-    // start a server for this directory
-    const server = createStaticServer(targetDir);
-    await new Promise((r, e) => server.listen(0, '127.0.0.1', () => r()));
-    const port = server.address().port;
-    const url = `http://127.0.0.1:${port}/${encodeURIComponent(file)}`;
-
-    const reportBase = path.join(reportDir, base);
-    console.log('=== auditing', file, '===');
-    const failed = await auditPage(url, reportBase);
-    if (failed) overallFail = true;
-
-    server.close();
-    // add summary marker
-    summaryLines.push(`${file}: ${failed ? 'FAIL' : 'OK'}`);
-  }
-
-  fs.writeFileSync(path.join(reportDir, 'a11y-exports-summary.txt'), summaryLines.join('\n'));
-
-  if (overallFail) {
-    console.error('Some exported pages had blocking serious/critical violations');
-    process.exit(1);
-  }
-
-  console.log('Exported HTML audit: complete');
 })();

@@ -21,9 +21,9 @@ html {
   --text-muted: #64748b; /* original muted text color; light/dark overrides handle contrast */
   --text-help: #475569;
   --border-muted: #e2e8f0;
-  --cta-bg: #0ea5b3;
-  --cta-bg-hover: #0891b2;
-  --cta-bg-active: #056b6d;
+  --cta-bg: #0b7285;
+  --cta-bg-hover: #095f70;
+  --cta-bg-active: #074a58;
   --cta-text: #ffffff;
   --dropzone-highlight: #e0f2fe;
   /* Button tokens */
@@ -90,14 +90,6 @@ summary::-webkit-details-marker {
 
 .border-default {
   border-color: var(--border-muted);
-}
-  right: 0;
-  left: auto;
-  transform: none;
-  width: max-content;
-  max-width: min(28rem, calc(100vw - 2rem));
-  white-space: normal;
-  margin-bottom: 0.5rem;
 }
 
 /* === UI SURFACE SYSTEM === */
@@ -444,7 +436,7 @@ html.dark {
   --cta-bg: #ff8a00;
   --cta-bg-hover: #ff6a00;
   --cta-bg-active: #e65a00;
-  --cta-text: #ffffff;
+  --cta-text: #1b1206;
   --dropzone-highlight: #071217;
   --btn-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }

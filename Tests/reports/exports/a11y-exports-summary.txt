@@ -7,3 +7,4 @@ Resolve merge conflicts.html: OK
 Test File.html: OK
 Test Fonts & Headings.html: OK
 Test Handwriting.html: OK
+Test Tag List.html: OK
