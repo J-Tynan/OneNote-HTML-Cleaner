@@ -599,6 +599,13 @@ Questions that should be resolved before moving into implementation:
 4. Should the help system remain a modal, or should the homepage move some guidance inline and reserve the modal for deeper help?
 5. How much explanatory copy can the homepage carry before it starts to feel heavy rather than reassuring?
 
+## Answers to Open UI Questions.
+1. The homepage should stay closer to a compact workbench layout.
+2. Main card body.
+3. De-emphasized.
+4. Move some guidance inline and reserve the modal for deeper help.
+5. Try to keep the explanatory copy lightweight, with no emojis.
+
 ## Recommended Next Document
 
 After this UI research, the next most useful artifact is a homepage layout/wireframe specification that defines:

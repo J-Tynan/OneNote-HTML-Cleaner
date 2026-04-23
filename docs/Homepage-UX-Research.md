@@ -279,7 +279,7 @@ This section records the important questions that should guide the redesign disc
 ### Product strategy questions
 
 1. Who is the homepage really for: one-off users, repeat users, or both equally?
-2. What single user outcome should the homepage optimize for?
+2. What single user outcome should the homepage optimize for? 
 3. Which product qualities most need to be communicated on first impression?
 4. What do we want a user to believe about the product within the first 5 to 10 seconds?
 
@@ -426,6 +426,47 @@ The following decisions should be treated as the current working baseline:
 5. Action hierarchy: import first, results second, contextual exports after success.
 6. Trust hierarchy: support scope and privacy should be visible near the main action.
 7. Experimental hierarchy: HTML stable path first, experimental export paths second.
+
+## Answers to "Questions The UX Work Must Answer"
+
+This section records answers to the important questions that should guide the redesign discussion.
+
+### Product strategy questions
+
+1. Both equally.
+2. Shortest path to the user downloading the converted file(s).
+3. Trustworthiness, ease-of-use.
+4. What do we want a user to believe about the product within the first 5 to 10 seconds? We want the user to believe this product can be used immediately without any hurdles.
+
+### Workflow questions
+
+1. Yes
+2. Visible but de-emphasised.
+3. Move closer to results.
+4. The homepage should show a prepared empty-state panel from the start.
+5. Batch workflows should differ visually.
+
+### Trust questions
+
+1. Near the top and in the "Help" info modal.
+2. Display where the user adds/browses files.
+3. Stable features can stay in the "Advanced Options" card. Experimental features can be moved to a separate "Experimental Options" card.
+4. The app should reject unsupported file types gracefully. We have planned support for OneNote-based filetypes, for this we can advise the user this file type is currently not supported but soon will be.
+
+### Onboarding questions
+
+1. The help modal should contain detailed instructions on how to use this tool. Each advanced option (and experimental option) should contain 2 or 3 sentences with advice.
+2. (WIP) Convert OneNote MHTML exports into clean and portable HTML (or Markdown) — entirely in your browser, with no install, no login and no uploads.
+3. Users need to understand ZIP export before their first successful conversion.
+4. The homepage explicitly explain auto-convert.
+
+### Accessibility and clarity questions
+
+1. Yes but I'm happy to rewrite any control label.
+2. The disabled manual-convert state should remain visible and de-emphasised. If the user places their mouse over the button, a tooltip will appear.
+3. I'm unsure. We can add colour to our design where needed.
+4. Many website have a one-click theme control, represented by symbols of the Sun and Moon, so I think our similar implementation is suitable.
+
 
 ## Suggested Next Artifact
 
