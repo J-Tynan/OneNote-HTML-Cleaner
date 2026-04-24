@@ -278,7 +278,7 @@ This section records the important questions that should guide the redesign disc
 
 ### Product strategy questions
 
-1. Who is the homepage really for: one-off users, repeat users, or both equally?
+1. Who is the homepage really for: one-off users, repeat users, or both equally? Primary is one-off users. Secondary is repeat/batch users.
 2. What single user outcome should the homepage optimize for? 
 3. Which product qualities most need to be communicated on first impression?
 4. What do we want a user to believe about the product within the first 5 to 10 seconds?
@@ -433,7 +433,7 @@ This section records answers to the important questions that should guide the re
 
 ### Product strategy questions
 
-1. Primary audience is one-off users. Secondary audience is repeat/batch users..
+1. Primary audience is one-off users. Secondary audience is repeat/batch users. Primary is one-off users. Secondary is repeat/batch users.
 2. Shortest path to the user downloading the converted file(s).
 3. Trustworthiness, ease-of-use.
 4. What do we want a user to believe about the product within the first 5 to 10 seconds? We want the user to believe this product can be used immediately without any hurdles.
