@@ -433,7 +433,7 @@ This section records answers to the important questions that should guide the re
 
 ### Product strategy questions
 
-1. Both equally.
+1. Primary audience is one-off users. Secondary audience is repeat/batch users..
 2. Shortest path to the user downloading the converted file(s).
 3. Trustworthiness, ease-of-use.
 4. What do we want a user to believe about the product within the first 5 to 10 seconds? We want the user to believe this product can be used immediately without any hurdles.
@@ -450,12 +450,12 @@ This section records answers to the important questions that should guide the re
 
 1. Near the top and in the "Help" info modal.
 2. Display where the user adds/browses files.
-3. Stable features can stay in the "Advanced Options" card. Experimental features can be moved to a separate "Experimental Options" card.
+3. Keep "Advanced Options" card with appropriate grouping of stable and experimental features. If needed, we can change this after our first wireframe pass.
 4. The app should reject unsupported file types gracefully. We have planned support for OneNote-based filetypes, for this we can advise the user this file type is currently not supported but soon will be.
 
 ### Onboarding questions
 
-1. The help modal should contain detailed instructions on how to use this tool. Each advanced option (and experimental option) should contain 2 or 3 sentences with advice.
+1. The homepage copy should be lightweight with 1 or 2 sentences per feature. We can keep detailed instructions in the popup help info modal.
 2. (WIP) Convert OneNote MHTML exports into clean and portable HTML (or Markdown) — entirely in your browser, with no install, no login and no uploads.
 3. Users need to understand ZIP export before their first successful conversion.
 4. The homepage explicitly explain auto-convert.
