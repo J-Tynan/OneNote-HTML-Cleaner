@@ -108,18 +108,98 @@ function formatBytes(size) {
 
 /* === STATUS VISIBILITY === */
 
-function updateStatusVisibility() {
-  const count = state.queue.length;
+function buildStatusSummary(counts) {
+  const segments = [];
 
-  if (dom.statusPanel) {
-    dom.statusPanel.classList.toggle('hidden', count === 0);
+  if (counts.working > 0) {
+    segments.push(`${counts.working} working`);
+  }
+  if (counts.queued > 0) {
+    segments.push(`${counts.queued} queued`);
+  }
+  if (counts.success > 0) {
+    segments.push(`${counts.success} complete`);
+  }
+  if (counts.unsupported > 0) {
+    segments.push(`${counts.unsupported} unsupported`);
+  }
+  if (counts.error > 0) {
+    segments.push(`${counts.error} error`);
+  }
+
+  if (segments.length === 0) {
+    return 'Added files will appear here with progress, status, and downloads.';
+  }
+
+  return `${segments.join(', ')}.`;
+}
+
+function getBadgeState(counts) {
+  if (counts.working > 0) {
+    return {
+      label: counts.working === 1 ? 'Working' : `${counts.working} working`,
+      tone: 'working'
+    };
+  }
+
+  if (counts.queued > 0) {
+    return {
+      label: counts.queued === 1 ? 'Queued' : `${counts.queued} queued`,
+      tone: 'queued'
+    };
+  }
+
+  if (counts.error > 0) {
+    return {
+      label: counts.error === 1 ? 'Error' : `${counts.error} errors`,
+      tone: 'error'
+    };
+  }
+
+  if (counts.unsupported > 0) {
+    return {
+      label: counts.unsupported === 1 ? STATUS_UNSUPPORTED : `${counts.unsupported} unsupported`,
+      tone: 'unsupported'
+    };
+  }
+
+  if (counts.success > 0) {
+    return {
+      label: counts.success === 1 ? 'Ready' : `${counts.success} ready`,
+      tone: 'success'
+    };
+  }
+
+  return {
+    label: STATUS_EMPTY,
+    tone: 'empty'
+  };
+}
+
+function updateStatusVisibility() {
+  const counts = {
+    queued: 0,
+    working: 0,
+    success: 0,
+    unsupported: 0,
+    error: 0
+  };
+
+  for (const entry of state.queue) {
+    const tone = getStatusTone(entry.status || 'queued');
+    if (tone in counts) {
+      counts[tone] += 1;
+    }
+  }
+
+  if (dom.statusSummary) {
+    dom.statusSummary.textContent = buildStatusSummary(counts);
   }
 
   if (dom.appStateBadge) {
-    dom.appStateBadge.textContent = count === 0
-      ? STATUS_EMPTY
-      : `${count} queued`;
-    dom.appStateBadge.setAttribute('data-state', count === 0 ? 'empty' : 'queued');
+    const badge = getBadgeState(counts);
+    dom.appStateBadge.textContent = badge.label;
+    dom.appStateBadge.setAttribute('data-state', badge.tone);
   }
 
   updateZipButton();

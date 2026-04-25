@@ -107,9 +107,12 @@ summary::-webkit-details-marker {
 
   /* Explicit fallback spacing/border for the import panel in case utility expansion is unavailable. */
   .import-card {
-    padding: 1rem;
+    padding: 1.5rem;
     border: 1px solid var(--border-muted);
-    border-radius: 0.75rem;
+    border-radius: 1rem;
+    background:
+      linear-gradient(180deg, rgba(11, 114, 133, 0.05), rgba(11, 114, 133, 0))
+      var(--bg-card);
   }
 
   /* Softer contextual surface (status, diagnostics, advanced zones) */
@@ -216,6 +219,13 @@ summary::-webkit-details-marker {
   .btn-secondary:hover { background-color: var(--bg-soft); }
   .btn-secondary:focus { box-shadow: 0 0 0 4px var(--btn-focus-ring); }
 
+  .homepage-convert-button {
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
   /* Ghost button (used for theme toggle) */
   .btn-ghost {
     display: inline-flex;
@@ -271,6 +281,12 @@ summary::-webkit-details-marker {
   color: var(--text-primary);
 }
 
+#appStateBadge[data-state="empty"] {
+  background-color: var(--bg-card);
+  border-color: var(--border-muted);
+  color: var(--text-muted);
+}
+
 #appStateBadge[data-state="queued"] {
   background-color: #e0f2fe;
   border-color: #bae6fd;
@@ -281,6 +297,71 @@ html.dark #appStateBadge[data-state="queued"] {
   background-color: #082f49;
   border-color: #0c4a6e;
   color: #bae6fd;
+}
+
+#appStateBadge[data-state="working"] {
+  background-color: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+html.dark #appStateBadge[data-state="working"] {
+  background-color: #422006;
+  border-color: #92400e;
+  color: #fde68a;
+}
+
+#appStateBadge[data-state="success"] {
+  background-color: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+
+html.dark #appStateBadge[data-state="success"] {
+  background-color: #052e16;
+  border-color: #166534;
+  color: #86efac;
+}
+
+#appStateBadge[data-state="error"] {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+html.dark #appStateBadge[data-state="error"] {
+  background-color: #450a0a;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+#appStateBadge[data-state="unsupported"] {
+  background-color: var(--bg-soft);
+  border-color: var(--border-muted);
+  color: var(--text-muted);
+}
+
+#controls {
+  padding: 0.75rem;
+}
+
+#dropzone {
+  min-height: 15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#statusPanel {
+  min-height: 100%;
+}
+
+#fileList:empty {
+  display: none;
+}
+
+#downloadZip:disabled {
+  opacity: 0.45;
 }
 
 .status-pill {
@@ -375,6 +456,11 @@ html.dark .status-pill--error {
 
   .convert-button-wrapper .tooltip {
     max-width: calc(100vw - 1.5rem);
+  }
+
+  .homepage-convert-button,
+  .convert-button-wrapper {
+    width: 100%;
   }
 
   .card-panel {
@@ -565,6 +651,12 @@ html.dark #dropzone {
   border-color: #475569 !important;
 }
 
+html.dark .import-card {
+  background:
+    linear-gradient(180deg, rgba(255, 138, 0, 0.12), rgba(255, 138, 0, 0))
+    var(--bg-card);
+}
+
 html.dark #dropzone p,
 html.dark #dropzone .text-base,
 html.dark #dropzone .text-xs {
@@ -578,7 +670,8 @@ html.dark .btn-ghost:hover {
 /* Tooltip for Convert button when manual action is disabled */
 .convert-button-wrapper {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  max-width: 100%;
 }
 
 .convert-button-wrapper .tooltip {
