@@ -13,10 +13,10 @@
 <body class="min-h-screen">
 
   <!-- Header -->
-  <header class="border-b">
-    <div class="mx-auto max-w-6xl px-4 py-3 md:px-8">
-      <div class="flex flex-wrap items-start justify-between gap-4 md:flex-nowrap md:items-center">
-        <div class="max-w-3xl">
+  <header class="home-header border-b">
+    <div class="page-shell mx-auto max-w-6xl px-4 py-3 md:px-8">
+      <div class="home-header__inner flex flex-wrap items-start justify-between gap-4 md:flex-nowrap md:items-center">
+        <div class="home-header__identity max-w-3xl">
           <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
           <p class="mt-2 text-sm text-help">
             Convert exported OneNote pages into clean HTML locally in your browser.
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Theme toggle -->
-        <div class="flex items-center gap-3">
+        <div class="home-header__actions flex items-center gap-3">
           <!-- Help button: opens small usage popup -->
           <button
             id="helpButton"
@@ -55,15 +55,16 @@
     </div>
   </header>
 
-  <main class="mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
+  <main class="home-main">
+    <div class="page-shell mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
 
-    <div class="grid gap-6 md:gap-8 lg:grid-cols-12">
+      <div class="home-layout grid gap-6 md:gap-8 lg:grid-cols-12">
 
-      <!-- LEFT COLUMN -->
-      <div class="space-y-6 lg:col-span-7">
+        <!-- LEFT COLUMN -->
+        <div class="home-layout__primary space-y-6 lg:col-span-7">
 
-        <!-- Start card -->
-        <section class="card-panel import-card m-1 space-y-5" aria-labelledby="importHeading">
+          <!-- Start card -->
+          <section class="home-start-card card-panel import-card m-1 space-y-5" aria-labelledby="importHeading">
           <div class="space-y-3">
             <div>
               <h2 id="importHeading" class="text-lg font-medium">Convert exported OneNote pages</h2>
@@ -108,10 +109,10 @@
               </div>
             </div>
           </div>
-        </section>
+          </section>
 
-        <!-- Advanced Options -->
-        <section class="card-panel card-panel--soft m-1 space-y-4">
+          <!-- Advanced Options -->
+          <section class="home-advanced-card card-panel card-panel--soft m-1 space-y-4">
           <details id="advancedOptions" class="card-section">
             <summary class="flex items-center justify-between text-sm font-medium cursor-pointer">
               <span>Advanced options</span>
@@ -260,10 +261,10 @@
 
             </div>
           </details>
-        </section>
+          </section>
 
-        <!-- Dropzone -->
-        <section id="controls" class="card-panel" aria-labelledby="dropzoneHeading">
+          <!-- Dropzone -->
+          <section id="controls" class="home-dropzone-card card-panel" aria-labelledby="dropzoneHeading">
           <div
             id="dropzone"
             class="surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors"
@@ -291,16 +292,16 @@
               aria-label="Select files to import"
               accept=".mht,.mhtml" />
           </div>
-        </section>
+          </section>
 
-      </div>
+        </div>
 
-      <!-- RIGHT COLUMN -->
-      <div class="space-y-6 lg:col-span-5">
+        <!-- RIGHT COLUMN -->
+        <aside class="home-results-column space-y-6 lg:col-span-5">
 
-        <section
+          <section
           id="statusPanel"
-          class="card-panel card-panel--soft space-y-4"
+          class="home-results-card card-panel card-panel--soft space-y-4"
           aria-live="polite"
           aria-label="Processing status">
 
@@ -341,18 +342,21 @@
               class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
           </details>
 
-        </section>
+          </section>
+
+        </aside>
 
       </div>
-
     </div>
   </main>
 
-  <footer class="mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
-    <p>
-      Offline‑capable local processing. Files stay on your device.
-      <a href="README.md" class="underline">Documentation</a>
-    </p>
+  <footer class="home-footer">
+    <div class="page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
+      <p>
+        Offline‑capable local processing. Files stay on your device.
+        <a href="README.md" class="underline">Documentation</a>
+      </p>
+    </div>
   </footer>
 
   <!-- UI logic -->
