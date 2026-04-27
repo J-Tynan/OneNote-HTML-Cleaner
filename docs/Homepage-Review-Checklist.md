@@ -119,4 +119,52 @@ Baseline references:
 - Pass with notes is acceptable for small spacing or copy refinements if the page still meets the approved implementation intent.
 - Treat any blocker above as a follow-up issue before merge.
 
+## Note Template
+
+Use this shorthand when recording review notes:
+
+Observation -> Impact -> Suggestion
+
+Optional severity labels:
+- Blocker
+- Follow-up
+- Polish
+
+### Short Note Format
+
+- Observation:
+- Impact:
+- Suggestion:
+- Severity:
+
+### Example Notes
+
+- Observation: The light theme palette feels too muted and the start card blends into the page.
+  Impact: The homepage feels flatter than intended and the primary action loses emphasis.
+  Suggestion: Increase contrast between the page background and the key card surfaces, especially around the start card.
+  Severity: Polish
+
+- Observation: The primary button does not stand out enough compared with nearby controls.
+  Impact: First-time users may not immediately identify the main action.
+  Suggestion: Strengthen CTA contrast, size, or visual separation from secondary actions.
+  Severity: Follow-up
+
+- Observation: The empty results state still feels visually unfinished on mobile.
+  Impact: The results area can read as inactive or broken before files are added.
+  Suggestion: Increase empty-state framing and improve spacing in the results card at small widths.
+  Severity: Follow-up
+
+- Observation: Dark theme card surfaces look slightly inconsistent after reload.
+  Impact: The page feels less polished and could reduce trust.
+  Suggestion: Recheck dark theme token consistency across header, start card, and results card.
+  Severity: Blocker
+
+### Reviewer Note Rules
+
+- Keep notes short and factual.
+- Describe what you saw before suggesting a fix.
+- Prefer one issue per note.
+- Mark something as Blocker only if it should stop merge or further rollout.
+- Use Polish for minor visual improvements that do not block approval.
+
 <!-- markdownlint-enable MD022 MD024 MD032 -->
