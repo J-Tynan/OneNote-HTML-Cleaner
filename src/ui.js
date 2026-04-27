@@ -19,6 +19,7 @@ const dom = {
   fileList: null,
   statusPanel: null,
   appStateBadge: null,
+  statusSummary: null,
   downloadZip: null,
   convertButton: null,
   convertButtonWrapper: null,
@@ -177,6 +178,7 @@ function getBadgeState(counts) {
 }
 
 function updateStatusVisibility() {
+  const totalCount = state.queue.length;
   const counts = {
     queued: 0,
     working: 0,
@@ -190,6 +192,10 @@ function updateStatusVisibility() {
     if (tone in counts) {
       counts[tone] += 1;
     }
+  }
+
+  if (dom.statusPanel) {
+    dom.statusPanel.classList.toggle('home-results-card--empty', totalCount === 0);
   }
 
   if (dom.statusSummary) {
@@ -871,6 +877,7 @@ export function initUI(workerManager, options = {}) {
   dom.fileList = document.getElementById('fileList');
   dom.statusPanel = document.getElementById('statusPanel');
   dom.appStateBadge = document.getElementById('appStateBadge');
+  dom.statusSummary = document.getElementById('statusSummary');
   dom.downloadZip = document.getElementById('downloadZip');
   dom.convertButton = document.getElementById('convertButton');
   dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');

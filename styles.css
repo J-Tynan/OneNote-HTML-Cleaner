@@ -92,6 +92,76 @@ summary::-webkit-details-marker {
   border-color: var(--border-muted);
 }
 
+/* === HOMEPAGE SECTIONS === */
+
+.page-shell {
+  width: 100%;
+}
+
+.home-header {
+  position: relative;
+}
+
+.home-header__inner {
+  min-height: 4.5rem;
+}
+
+.home-header__actions {
+  flex: none;
+}
+
+.home-main {
+  padding-bottom: 1.5rem;
+}
+
+.home-layout {
+  align-items: start;
+}
+
+.home-layout__primary,
+.home-results-column {
+  align-self: start;
+}
+
+.home-start-card {
+  box-shadow: 0 10px 24px rgba(11, 114, 133, 0.08);
+}
+
+.home-results-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 22rem;
+}
+
+.home-results-card--empty #statusSummary {
+  max-width: 30ch;
+}
+
+.home-results-card--empty #fileList:empty {
+  display: block;
+  min-height: 9rem;
+  border: 1px dashed var(--border-muted);
+  border-radius: 0.875rem;
+  background: linear-gradient(180deg, rgba(11, 114, 133, 0.04), rgba(11, 114, 133, 0)) var(--bg-card);
+}
+
+.home-results-card--empty #fileList:empty::before {
+  content: 'Results will populate here after you add files.';
+  display: block;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.home-results-card--empty #downloadZip:disabled {
+  border: 1px solid var(--border-muted);
+  background-color: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
 /* === UI SURFACE SYSTEM === */
 
 @layer components {
@@ -454,6 +524,35 @@ html.dark .status-pill--error {
 
 @media (max-width: 639px) {
 
+  .home-layout {
+    gap: 1rem;
+  }
+
+  .home-start-card {
+    box-shadow: 0 6px 16px rgba(11, 114, 133, 0.07);
+  }
+
+  .import-card {
+    padding: 1.25rem;
+  }
+
+  #controls {
+    padding: 0.625rem;
+  }
+
+  #dropzone {
+    min-height: 10.5rem;
+    padding: 1.25rem;
+  }
+
+  .home-results-card--empty #fileList:empty::before {
+    padding: 1.75rem 0.875rem;
+  }
+
+  #downloadZip {
+    width: 100%;
+  }
+
   .convert-button-wrapper .tooltip {
     max-width: calc(100vw - 1.5rem);
   }
@@ -485,6 +584,10 @@ html.dark .status-pill--error {
 
 @media (min-width: 640px) and (max-width: 1023px) {
 
+  .home-layout {
+    gap: 1.5rem;
+  }
+
   .card-panel {
     box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
   }
@@ -493,6 +596,14 @@ html.dark .status-pill--error {
 /* === DESKTOP WORKBENCH (Layout A) === */
 
 @media (min-width: 1024px) {
+
+  .home-layout {
+    gap: 2rem;
+  }
+
+  .home-results-card {
+    min-height: 24rem;
+  }
 
   .card-panel {
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
@@ -655,6 +766,14 @@ html.dark .import-card {
   background:
     linear-gradient(180deg, rgba(255, 138, 0, 0.12), rgba(255, 138, 0, 0))
     var(--bg-card);
+}
+
+html.dark .home-start-card {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+}
+
+html.dark .home-results-card--empty #fileList:empty {
+  background: linear-gradient(180deg, rgba(255, 138, 0, 0.08), rgba(255, 138, 0, 0)) var(--bg-card);
 }
 
 html.dark #dropzone p,
