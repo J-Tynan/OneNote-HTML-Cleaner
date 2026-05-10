@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-05-10T11:44:39.421Z",
-  "url": "http://127.0.0.1:61203/",
+  "timestamp": "2026-05-10T16:28:35.369Z",
+  "url": "http://127.0.0.1:63087/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1045,7 +1045,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1146,7 +1146,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1164,7 +1164,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"helpModal\" class=\"hidden fixed inset-0 z-50 items-center justify-center px-4\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
+          "html": "<div id=\"helpModal\" class=\"fixed inset-0 z-50 items-center justify-center px-4 hidden\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
           "target": [
             "#helpModal"
           ]
@@ -1326,7 +1326,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1416,7 +1416,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1668,7 +1668,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1758,7 +1758,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1840,7 +1840,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2116,7 +2116,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2342,7 +2342,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2427,7 +2427,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2749,56 +2749,6 @@
                 "fgColor": "#0f172a",
                 "bgColor": "#eef3f7",
                 "contrastRatio": 15.98,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.98"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Advanced options</span>",
-          "target": [
-            ".advanced-options-summary > span:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#586c82",
-                "bgColor": "#eef3f7",
-                "contrastRatio": 4.84,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.84"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"text-xs text-muted\">Optional</span>",
-          "target": [
-            ".advanced-options-summary > .text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#0f172a",
-                "bgColor": "#eef3f7",
-                "contrastRatio": 15.98,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
@@ -2838,7 +2788,7 @@
           "impact": null,
           "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
           "target": [
-            ".max-w-sm > .text-secondary.text-sm"
+            ".max-w-sm > .text-secondary"
           ]
         },
         {
@@ -2884,6 +2834,56 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0f172a",
+                "bgColor": "#eef3f7",
+                "contrastRatio": 15.98,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 15.98"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Advanced options</span>",
+          "target": [
+            ".advanced-options-summary > span:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#586c82",
+                "bgColor": "#eef3f7",
+                "contrastRatio": 4.84,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.84"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"text-xs text-muted\">Optional</span>",
+          "target": [
+            ".advanced-options-summary > .text-muted.text-xs"
           ]
         },
         {
@@ -3108,6 +3108,24 @@
           "any": [
             {
               "id": "duplicate-id-aria",
+              "data": "dropzoneHeading",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "target": [
+            "#dropzoneHeading"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
               "data": "conversionTweaksLabel",
               "relatedNodes": [],
               "impact": "critical",
@@ -3306,24 +3324,6 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "dropzoneHeading",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
-          "target": [
-            "#dropzoneHeading"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
               "data": "helpModal",
               "relatedNodes": [],
               "impact": "critical",
@@ -3333,7 +3333,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"helpModal\" class=\"hidden fixed inset-0 z-50 items-center justify-center px-4\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
+          "html": "<div id=\"helpModal\" class=\"fixed inset-0 z-50 items-center justify-center px-4 hidden\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
           "target": [
             "#helpModal"
           ]
@@ -3512,7 +3512,7 @@
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(3) > div > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(2) > div > div:nth-child(1) > h2:nth-child(1)"
                     ],
                     "level": 2
                   },
@@ -4125,7 +4125,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -5173,6 +5173,146 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
+          "target": [
+            "#controls"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "target": [
+            "#dropzone"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"mx-auto max-w-sm text-center space-y-3\">",
+          "target": [
+            ".max-w-sm"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "target": [
+            "#dropzoneHeading"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
+          "target": [
+            ".max-w-sm > .text-secondary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-xs text-muted\">\n                Local browser processing only.\n              </p>",
+          "target": [
+            ".max-w-sm > .text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#fileInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<section class=\"home-advanced-card card-panel card-panel--soft m-1 space-y-4\">",
           "target": [
             ".home-advanced-card"
@@ -5256,146 +5396,6 @@
           "html": "<span class=\"text-xs text-muted\">Optional</span>",
           "target": [
             ".advanced-options-summary > .text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
-          "target": [
-            "#dropzone"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"mx-auto max-w-sm text-center space-y-3\">",
-          "target": [
-            ".max-w-sm"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
-          "target": [
-            "#dropzoneHeading"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
-          "target": [
-            ".max-w-sm > .text-secondary.text-sm"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                Local browser processing only.\n              </p>",
-          "target": [
-            ".max-w-sm > .text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
-          "target": [
-            "#fileInput"
           ]
         },
         {
@@ -5780,7 +5780,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
