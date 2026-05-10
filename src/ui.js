@@ -240,7 +240,6 @@ function renderDiagnostics() {
   const diags = (runtime.workerManager && typeof runtime.workerManager.getDiagnostics === 'function')
     ? runtime.workerManager.getDiagnostics()
     : [];
-  try { logger.info({ msg: 'renderDiagnostics — count', meta: { count: diags.length } }); } catch (ignore) {}
 
   dom.diagnosticsList.innerHTML = diags.map(formatDiagnosticForList).join('\n') || '';
   if (dom.diagnosticsCount) dom.diagnosticsCount.textContent = `(${diags.length})`;
