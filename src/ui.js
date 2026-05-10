@@ -22,6 +22,14 @@ const AUTO_CONVERT_NOTICE_COPY = {
   }
 };
 
+const DRAFT_DB_NAME = 'onc-homepage-drafts';
+const DRAFT_STORE_NAME = 'drafts';
+const DRAFT_SESSION_KEY = 'oncHomepageDraftInstance';
+const DRAFT_SESSION_SNAPSHOT_KEY = 'oncHomepageDraftSnapshot';
+const DRAFT_SAVE_DEBOUNCE_MS = 120;
+const DRAFT_STALE_AGE_MS = 24 * 60 * 60 * 1000;
+const RESTORE_FILE_MISSING_MESSAGE = 'Original file data was not available after the page was restored. Please add the file again.';
+
 const dom = {
   dropzone: null,
   importButton: null,
@@ -53,12 +61,359 @@ const runtime = {
   workerManager: null,
   successfulOutputs: new Map(),
   downloadHelpers: null,
-  autoConvertEnabled: true
+  autoConvertEnabled: true,
+  draftInstanceId: null,
+  draftDbPromise: null,
+  draftSaveTimer: null,
+  restoringDraft: false,
+  draftHasStoredEntries: false
 };
 
 export const state = {
   queue: []
 };
+
+function createDraftInstanceId() {
+  if (typeof crypto !== 'undefined' && crypto && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `draft-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getDraftInstanceId() {
+  try {
+    let instanceId = sessionStorage.getItem(DRAFT_SESSION_KEY);
+    if (!instanceId) {
+      instanceId = createDraftInstanceId();
+      sessionStorage.setItem(DRAFT_SESSION_KEY, instanceId);
+    }
+    return instanceId;
+  } catch (_) {
+    return null;
+  }
+}
+
+function cloneSerializable(value) {
+  if (!value || typeof value !== 'object') return null;
+  try {
+    return JSON.parse(JSON.stringify(value));
+  } catch (_) {
+    return null;
+  }
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function serializeDraftAsset(asset) {
+  if (!asset || typeof asset !== 'object') return null;
+
+  const serialized = {
+    path: typeof asset.path === 'string' ? asset.path : '',
+    type: typeof asset.type === 'string' ? asset.type : '',
+    content: typeof asset.content === 'string' ? asset.content : ''
+  };
+
+  if (asset.bytes instanceof Uint8Array) {
+    serialized.bytes = Array.from(asset.bytes);
+  } else if (asset.bytes instanceof ArrayBuffer) {
+    serialized.bytes = Array.from(new Uint8Array(asset.bytes));
+  }
+
+  return serialized;
+}
+
+function deserializeDraftAsset(asset) {
+  if (!asset || typeof asset !== 'object') return null;
+
+  const restored = {
+    path: typeof asset.path === 'string' ? asset.path : '',
+    type: typeof asset.type === 'string' ? asset.type : '',
+    content: typeof asset.content === 'string' ? asset.content : ''
+  };
+
+  if (Array.isArray(asset.bytes)) {
+    restored.bytes = new Uint8Array(asset.bytes);
+  }
+
+  return restored;
+}
+
+function serializeQueueEntry(entry) {
+  const normalizedStatus = entry.status === 'working' ? 'queued' : (entry.status || 'queued');
+  return {
+    id: entry.id,
+    name: entry.name || 'unnamed',
+    size: Number.isFinite(entry.size) ? entry.size : 0,
+    status: normalizedStatus,
+    file: entry.file instanceof File ? entry.file : null,
+    fileType: entry.file instanceof File && typeof entry.file.type === 'string' ? entry.file.type : '',
+    fileText: typeof entry.fileText === 'string' ? entry.fileText : '',
+    sourceKind: entry.sourceKind || detectSourceKind(entry.name, entry.file?.type),
+    message: typeof entry.message === 'string' ? entry.message : '',
+    outputHtml: typeof entry.outputHtml === 'string' ? entry.outputHtml : '',
+    outputText: typeof entry.outputText === 'string' ? entry.outputText : '',
+    outputFormat: getEntryOutputFormat(entry),
+    outputAssets: Array.isArray(entry.outputAssets) ? entry.outputAssets.map(serializeDraftAsset).filter(Boolean) : [],
+    conversionConfig: cloneSerializable(entry.conversionConfig),
+    downloadFileName: typeof entry.downloadFileName === 'string' ? entry.downloadFileName : ''
+  };
+}
+
+function serializeSessionQueueEntry(entry) {
+  const serialized = serializeQueueEntry(entry);
+  serialized.file = null;
+  return serialized;
+}
+
+function deserializeQueueEntry(entry) {
+  let restoredFile = entry.file instanceof File ? entry.file : null;
+  if (!(restoredFile instanceof File) && typeof entry.fileText === 'string' && entry.fileText.length > 0) {
+    restoredFile = new File([entry.fileText], entry.name || 'restored.mht', {
+      type: typeof entry.fileType === 'string' && entry.fileType ? entry.fileType : 'multipart/related'
+    });
+  }
+
+  const restored = {
+    id: entry.id || createDraftInstanceId(),
+    name: entry.name || 'unnamed',
+    size: Number.isFinite(entry.size) ? entry.size : 0,
+    status: entry.status === 'working' ? 'queued' : (entry.status || 'queued'),
+    file: restoredFile,
+    fileText: typeof entry.fileText === 'string' ? entry.fileText : '',
+    sourceKind: entry.sourceKind || detectSourceKind(entry.name, restoredFile?.type),
+    message: typeof entry.message === 'string' ? entry.message : '',
+    outputHtml: typeof entry.outputHtml === 'string' ? entry.outputHtml : '',
+    outputText: typeof entry.outputText === 'string' ? entry.outputText : '',
+    outputFormat: entry.outputFormat === 'markdown' ? 'markdown' : 'html',
+    outputAssets: Array.isArray(entry.outputAssets) ? entry.outputAssets.map(deserializeDraftAsset).filter(Boolean) : [],
+    conversionConfig: cloneSerializable(entry.conversionConfig),
+    downloadFileName: typeof entry.downloadFileName === 'string' ? entry.downloadFileName : ''
+  };
+
+  if (!(restored.file instanceof File) && restored.status === 'queued' && isSupportedSourceKind(restored.sourceKind)) {
+    restored.status = 'error';
+    restored.message = RESTORE_FILE_MISSING_MESSAGE;
+  }
+
+  return restored;
+}
+
+function openDraftDb() {
+  if (runtime.draftDbPromise) return runtime.draftDbPromise;
+
+  runtime.draftDbPromise = new Promise((resolve) => {
+    try {
+      if (typeof indexedDB === 'undefined') {
+        resolve(null);
+        return;
+      }
+
+      const request = indexedDB.open(DRAFT_DB_NAME, 1);
+
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(DRAFT_STORE_NAME)) {
+          db.createObjectStore(DRAFT_STORE_NAME, { keyPath: 'id' });
+        }
+      };
+
+      request.onsuccess = () => {
+        const db = request.result;
+        try {
+          const tx = db.transaction(DRAFT_STORE_NAME, 'readwrite');
+          const store = tx.objectStore(DRAFT_STORE_NAME);
+          const staleBefore = Date.now() - DRAFT_STALE_AGE_MS;
+          const cursorRequest = store.openCursor();
+          cursorRequest.onsuccess = () => {
+            const cursor = cursorRequest.result;
+            if (!cursor) return;
+            const value = cursor.value;
+            if (value && typeof value.updatedAt === 'number' && value.updatedAt < staleBefore) {
+              cursor.delete();
+            }
+            cursor.continue();
+          };
+        } catch (_) {
+          // best-effort cleanup only
+        }
+
+        resolve(db);
+      };
+
+      request.onerror = () => resolve(null);
+    } catch (_) {
+      resolve(null);
+    }
+  });
+
+  return runtime.draftDbPromise;
+}
+
+function getDraftRecord(db, id) {
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(DRAFT_STORE_NAME, 'readonly');
+      const request = tx.objectStore(DRAFT_STORE_NAME).get(id);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => resolve(null);
+    } catch (_) {
+      resolve(null);
+    }
+  });
+}
+
+function putDraftRecord(db, value) {
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(DRAFT_STORE_NAME, 'readwrite');
+      tx.objectStore(DRAFT_STORE_NAME).put(value);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+      tx.onabort = () => resolve(false);
+    } catch (_) {
+      resolve(false);
+    }
+  });
+}
+
+function deleteDraftRecord(db, id) {
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(DRAFT_STORE_NAME, 'readwrite');
+      tx.objectStore(DRAFT_STORE_NAME).delete(id);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+      tx.onabort = () => resolve(false);
+    } catch (_) {
+      resolve(false);
+    }
+  });
+}
+
+async function persistDraftStateNow() {
+  if (runtime.restoringDraft) return false;
+  if (!runtime.draftInstanceId) return false;
+
+  const db = await openDraftDb();
+  if (!db) return false;
+
+  if (state.queue.length === 0) {
+    try { sessionStorage.removeItem(DRAFT_SESSION_SNAPSHOT_KEY); } catch (_) {}
+
+    if (!runtime.draftHasStoredEntries) {
+      return true;
+    }
+
+    const deleted = await deleteDraftRecord(db, runtime.draftInstanceId);
+    if (deleted) {
+      runtime.draftHasStoredEntries = false;
+    }
+    return deleted;
+  }
+
+  try {
+    sessionStorage.setItem(DRAFT_SESSION_SNAPSHOT_KEY, JSON.stringify({
+      updatedAt: Date.now(),
+      autoConvertEnabled: runtime.autoConvertEnabled,
+      queue: state.queue.map(serializeSessionQueueEntry)
+    }));
+  } catch (_) {
+    // best-effort same-tab backup only
+  }
+
+  const saved = await putDraftRecord(db, {
+    id: runtime.draftInstanceId,
+    updatedAt: Date.now(),
+    autoConvertEnabled: runtime.autoConvertEnabled,
+    queue: state.queue.map(serializeQueueEntry)
+  });
+
+  if (saved) {
+    runtime.draftHasStoredEntries = true;
+  }
+
+  return saved;
+}
+
+function scheduleDraftPersist() {
+  if (runtime.restoringDraft) return;
+  if (runtime.draftSaveTimer) {
+    clearTimeout(runtime.draftSaveTimer);
+  }
+
+  runtime.draftSaveTimer = setTimeout(() => {
+    runtime.draftSaveTimer = null;
+    void persistDraftStateNow();
+  }, DRAFT_SAVE_DEBOUNCE_MS);
+}
+
+async function flushDraftPersist() {
+  if (runtime.draftSaveTimer) {
+    clearTimeout(runtime.draftSaveTimer);
+    runtime.draftSaveTimer = null;
+  }
+  return persistDraftStateNow();
+}
+
+async function restoreDraftState() {
+  if (!runtime.draftInstanceId) return false;
+
+  const db = await openDraftDb();
+  if (!db) return false;
+
+  let draft = null;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    draft = await getDraftRecord(db, runtime.draftInstanceId);
+    if (draft && Array.isArray(draft.queue) && draft.queue.length > 0) {
+      break;
+    }
+    draft = null;
+    if (attempt < 4) {
+      await delay(75);
+    }
+  }
+
+  if (!draft) {
+    try {
+      const raw = sessionStorage.getItem(DRAFT_SESSION_SNAPSHOT_KEY);
+      draft = raw ? JSON.parse(raw) : null;
+    } catch (_) {
+      draft = null;
+    }
+  }
+
+  if (!draft || !Array.isArray(draft.queue) || draft.queue.length === 0) {
+    return false;
+  }
+
+  runtime.restoringDraft = true;
+  runtime.draftHasStoredEntries = true;
+  try {
+    state.queue = draft.queue.map(deserializeQueueEntry);
+    if (typeof draft.autoConvertEnabled === 'boolean') {
+      runtime.autoConvertEnabled = draft.autoConvertEnabled;
+      if (dom.autoConvertEnabled) {
+        dom.autoConvertEnabled.checked = runtime.autoConvertEnabled;
+      }
+      updateAutoConvertNotice();
+    }
+    return true;
+  } finally {
+    runtime.restoringDraft = false;
+  }
+}
+
+function onDocumentVisibilityChange() {
+  if (document.visibilityState === 'hidden') {
+    void flushDraftPersist();
+  }
+}
+
+function onWindowPageHide() {
+  void flushDraftPersist();
+}
 
 /* === DEV / CONFIDENCE HELPERS === */
 
@@ -448,6 +803,7 @@ function setAutoConvertEnabled(value) {
   updateAutoConvertNotice();
   // convert button state and tooltip depend on auto-convert toggles
   updateConvertButton();
+  scheduleDraftPersist();
 }
 
 function updateAutoConvertNotice() {
@@ -514,6 +870,18 @@ function readFileAsArrayBuffer(file) {
   });
 }
 
+async function primeEntryDraftFileText(entry) {
+  if (!entry || typeof entry !== 'object') return;
+  if (entry.fileText || !(entry.file instanceof File) || !isSupportedSourceKind(entry.sourceKind)) return;
+
+  try {
+    entry.fileText = await readFileAsText(entry.file);
+    scheduleDraftPersist();
+  } catch (_) {
+    // best-effort backup only
+  }
+}
+
 async function processEntryWithWorker(entry) {
   try {
     const conversionConfig = getActiveConversionConfig();
@@ -535,6 +903,7 @@ async function processEntryWithWorker(entry) {
       transferList = [bytes];
     } else {
       payload.html = await readFileAsText(entry.file);
+      entry.fileText = payload.html;
     }
 
     logger.info({ id: entry.id, msg: 'Dispatching entry to worker', meta: { name: entry.name } });
@@ -679,6 +1048,7 @@ export function renderFileList() {
   rebuildSuccessfulOutputs();
   updateStatusVisibility();
   updateConvertButton();
+  scheduleDraftPersist();
 }
 
 /* === QUEUE MUTATION === */
@@ -720,6 +1090,10 @@ export function addFilesToQueue(files) {
 
   state.queue = [...state.queue, ...addedEntries];
   renderFileList();
+
+  for (const entry of processableEntries) {
+    void primeEntryDraftFileText(entry);
+  }
 
   if (runtime.autoConvertEnabled) {
     logger.info({ msg: 'autoConvertEnabled=true — starting processing', meta: { count: processableEntries.length } });
@@ -883,6 +1257,8 @@ function bindEvents() {
   });
 
   window.addEventListener('resize', logLayoutMode);
+  document.addEventListener('visibilitychange', onDocumentVisibilityChange);
+  window.addEventListener('pagehide', onWindowPageHide);
 
   runtime.listenersBound = true;
 }
@@ -890,7 +1266,7 @@ function bindEvents() {
 
 /* === INIT === */
 
-export function initUI(workerManager, options = {}) {
+export async function initUI(workerManager, options = {}) {
   try { setLogEnabled(typeof window !== 'undefined' && window && window.LOGGING_ENABLED !== false); } catch (_) {}
   dom.dropzone = document.getElementById('dropzone');
   dom.importButton = document.getElementById('importButton');
@@ -933,6 +1309,7 @@ export function initUI(workerManager, options = {}) {
   updateAutoConvertNotice();
 
   runtime.workerManager = workerManager || null;
+  runtime.draftInstanceId = getDraftInstanceId();
   registerDevHooks();
 
   // Diagnostics polling: reflect any worker diagnostics in the UI diagnostics panel
@@ -977,8 +1354,12 @@ export function initUI(workerManager, options = {}) {
   updateExportFormatControls();
 
   bindEvents();
+  const restoredDraft = await restoreDraftState();
   renderFileList();
   updateConvertButton();
+  if (restoredDraft && runtime.autoConvertEnabled) {
+    processQueue();
+  }
   logLayoutMode();
 }
 

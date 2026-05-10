@@ -8,7 +8,7 @@ const logger = createLogger('app');
 const AUTO_CONVERT_STORAGE_KEY = 'autoConvertEnabled';
 const DEFAULT_AUTO_CONVERT = true;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Apply persisted or system theme preference before rendering UI
   initTheme();
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   logger.info({ msg: 'WorkerManager created' });
 
   // Initialise UI with resolved preferences
-  initUI(wm, {
+  await initUI(wm, {
     autoConvertEnabled
   });
 });
