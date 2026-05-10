@@ -89,21 +89,21 @@ Baseline references:
 
 ## Accessibility And Keyboard Flow
 
-- [ ] Help is reachable by keyboard.
-- [ ] Theme toggle is reachable by keyboard.
-- [ ] Browse files is reachable by keyboard.
-- [ ] Advanced options can be focused and expanded by keyboard.
-- [ ] The dropzone remains usable and discoverable by keyboard.
-- [ ] The results area does not create a confusing focus trap.
-- [ ] Focus order feels natural from top to bottom.
+- [x] Help is reachable by keyboard.
+- [x] Theme toggle is reachable by keyboard.
+- [x] Browse files is reachable by keyboard.
+- [x] Advanced options can be focused and expanded by keyboard.
+- [x] The dropzone remains usable and discoverable by keyboard.
+- [x] The results area does not create a confusing focus trap.
+- [x] Focus order feels natural from top to bottom.
 
 ## Behavior Checks
 
-- [ ] Adding a file updates the queue and results area correctly.
-- [ ] Manual convert still works when auto-convert is disabled.
-- [ ] ZIP download still appears in the results area when output exists.
-- [ ] The homepage still passes the existing smoke flow after the redesign.
-- [ ] Console output remains free of new warnings or errors during the review flow.
+- [x] Adding a file updates the queue and results area correctly.
+- [x] Manual convert still works when auto-convert is disabled.
+- [x] ZIP download still appears in the results area when output exists.
+- [x] The homepage still passes the existing smoke flow after the redesign.
+- [x] Console output remains free of new warnings or errors during the review flow.
 
 ## Blockers
 
@@ -163,6 +163,21 @@ You can change this behaviour in Advanced options."
   Impact: Users may have difficulty distinguishing different sections and buttons, leading to a poor user experience.
   Suggestion: Increase the contrast between cards, sections, and buttons in the Light theme to improve visibility.
   Severity: Follow-up
+
+- Observation: When navigating the homepage with keyboard shortcurts in Dark theme, buttons have a gentle highlight instead of a strong highlight.
+  Impact: Users may have difficulty identifying the currently focused button, leading to a poor user experience.
+  Suggestion: Increase the highlight intensity for focused buttons in Dark theme to improve visibility.
+  Severity: Follow-up
+
+- Observation: Sometimes when the browser window is not in focus, the list of queued files/converted files refreshes and the user loses their work.
+  Impact: Users may lose their progress and have to re-add files, leading to frustration and potential data loss.
+  Suggestion: Implement a mechanism to preserve the state of the queue and converted files when the browser window is not in focus.
+  Severity: Blocker
+
+- Observation: 
+  Impact: 
+  Suggestion: 
+  Severity: 
 
 - Observation: 
   Impact: 
