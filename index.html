@@ -13,18 +13,18 @@
 <body class="min-h-screen">
 
   <!-- Header -->
-  <header class="border-b">
-    <div class="mx-auto max-w-6xl px-2 py-2 md:px-8">
-      <div class="flex items-start justify-between gap-4">
-        <div>
+  <header class="home-header border-b">
+    <div class="page-shell mx-auto max-w-6xl px-4 py-3 md:px-8">
+      <div class="home-header__inner flex flex-wrap items-start justify-between gap-4 md:flex-nowrap md:items-center">
+        <div class="home-header__identity max-w-3xl">
           <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
-          <p class="mt-2 max-w-3xl text-sm text-help">
-            Convert OneNote exports into clean, standalone HTML using local, offline processing and conservative defaults.
+          <p class="mt-2 text-sm text-help">
+            Convert exported OneNote pages into clean HTML locally in your browser.
           </p>
         </div>
 
         <!-- Theme toggle -->
-        <div class="flex items-center gap-3">
+        <div class="home-header__actions flex items-center gap-3">
           <!-- Help button: opens small usage popup -->
           <button
             id="helpButton"
@@ -55,64 +55,95 @@
     </div>
   </header>
 
-  <main class="mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
+  <main class="home-main">
+    <div class="page-shell mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
 
-    <div class="grid gap-6 md:gap-8 lg:grid-cols-12">
+      <div class="home-layout grid gap-6 md:gap-8 lg:grid-cols-12">
 
-      <!-- LEFT COLUMN -->
-      <div class="space-y-6 lg:col-span-5">
+        <!-- LEFT COLUMN -->
+        <div class="home-layout__primary space-y-6 lg:col-span-7">
 
-        <!-- Import files -->
-        <section class="card-panel import-card m-1 space-y-4" aria-labelledby="importHeading">
-          <div class="flex items-start justify-between gap-4">
+          <!-- Start card -->
+          <section class="home-start-card card-panel import-card space-y-5" aria-labelledby="importHeading">
+          <div class="space-y-3">
             <div>
-              <h2 id="importHeading" class="text-lg font-medium">Import files</h2>
-              <p class="mt-1 text-sm leading-6 text-secondary">
-                Choose how files should be converted, then add them to the queue.
-              </p>
-              <p class="mt-2 text-xs text-muted">
-                Supported in this release: MHTML (.mht, .mhtml)
-              </p>
-              <p id="autoConvertNotice" class="mt-1 text-xs text-muted">
-                Files are converted automatically when added to the queue.
-                <span class="block">
-                  You can change this behaviour in Advanced options.
-                </span>
+              <h2 id="importHeading" class="text-lg font-medium">Convert exported OneNote pages</h2>
+              <p class="mt-1 max-w-2xl text-sm leading-6 text-secondary">
+                Add one or more MHT or MHTML files to clean and export them locally.
               </p>
             </div>
 
-            <div class="flex flex-col items-end gap-2">
+            <div class="space-y-1 text-xs text-muted">
+              <p>Supported input: .mht, .mhtml</p>
               <!-- Convert button: triggers processing when auto-convert is OFF -->
+              <p>Files stay on your device</p>
+              <p id="autoConvertNotice" class="auto-convert-notice">
+                <span id="autoConvertNoticeLead">Files are converted automatically when added to the queue.</span>
+                <span id="autoConvertNoticeDetail">You can change this behaviour in Advanced options.</span>
+              </p>
+            </div>
+
+            <div class="homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch">
+              <button
+                id="importButton"
+                type="button"
+                class="btn-primary homepage-import-button">
+                Browse files
+              </button>
+
               <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
               <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
                 <button
                   id="convertButton"
                   type="button"
-                  class="btn-primary"
+                  class="btn-secondary homepage-convert-button"
                   aria-label="Convert queued files"
                   disabled>
-                  Convert
+                  Convert queued files
                 </button>
                 <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
                   Auto-convert is enabled — manual Convert is disabled
                 </div>
               </div>
-
-              <button
-                id="downloadZip"
-                type="button"
-                class="btn-primary"
-                disabled>
-                Download ZIP
-              </button>
             </div>
           </div>
-        </section>
+          </section>
 
-        <!-- Advanced Options -->
-        <section class="card-panel card-panel--soft m-1 space-y-4">
+          <!-- Dropzone -->
+          <section id="controls" class="home-dropzone-card card-panel" aria-labelledby="dropzoneHeading">
+          <div
+            id="dropzone"
+            class="surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
+            role="region"
+            aria-label="Add files to conversion queue"
+            tabindex="0">
+
+            <div class="mx-auto max-w-sm text-center space-y-3">
+              <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
+
+              <p class="text-sm text-secondary">
+                Drop exported OneNote pages here to start conversion.
+              </p>
+
+              <p class="text-xs text-muted">
+                Local browser processing only.
+              </p>
+            </div>
+
+            <input
+              id="fileInput"
+              class="sr-only"
+              type="file"
+              multiple
+              aria-label="Select files to import"
+              accept=".mht,.mhtml" />
+          </div>
+          </section>
+
+          <!-- Advanced Options -->
+          <section class="home-advanced-card card-panel card-panel--soft m-1 space-y-4">
           <details id="advancedOptions" class="card-section">
-            <summary class="flex items-center justify-between text-sm font-medium cursor-pointer">
+            <summary class="advanced-options-summary text-sm font-medium cursor-pointer">
               <span>Advanced options</span>
               <span class="text-xs text-muted">Optional</span>
             </summary>
@@ -131,12 +162,12 @@
 
                 <div class="space-y-3">
 
-                  <label class="checkbox-option flex items-start gap-3" for="autoConvertEnabled">
+                  <label class="checkbox-option" for="autoConvertEnabled">
                     <input
                       id="autoConvertEnabled"
                       type="checkbox"
                       checked
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                      class="checkbox-input" />
                     <span>
                       Automatically convert files when added to the queue
                       <span class="block text-xs text-muted">
@@ -145,12 +176,12 @@
                     </span>
                   </label>
 
-                  <label class="checkbox-option flex items-start gap-3" for="externalizeCssEnabled">
+                  <label class="checkbox-option" for="externalizeCssEnabled">
                     <input
                       id="externalizeCssEnabled"
                       type="checkbox"
                       title="Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together."
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                      class="checkbox-input" />
                     <span>
                       Externalize CSS in separate file
                       <span class="block text-xs text-muted">
@@ -159,7 +190,7 @@
                     </span>
                   </label>
 
-                  <div class="pl-7">
+                  <div class="option-subgroup">
                     <label for="externalizeCssMode" class="block text-xs text-muted">External CSS mode</label>
                     <select
                       id="externalizeCssMode"
@@ -175,11 +206,11 @@
                     </p>
                   </div>
 
-                  <label class="checkbox-option flex items-start gap-3" for="experimentalExportEnabled">
+                  <label class="checkbox-option" for="experimentalExportEnabled">
                     <input
                       id="experimentalExportEnabled"
                       type="checkbox"
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                      class="checkbox-input" />
                     <span>
                       Enable experimental export formats
                       <span class="block text-xs text-muted">
@@ -188,7 +219,7 @@
                     </span>
                   </label>
 
-                  <div class="pl-7 space-y-2">
+                  <div class="option-subgroup option-subgroup--compact">
                     <label for="exportFormat" class="block text-xs text-muted">Export format</label>
                     <select
                       id="exportFormat"
@@ -202,7 +233,7 @@
                     </p>
                   </div>
 
-                  <div id="markdownFlavorContainer" class="hidden pl-7">
+                  <div id="markdownFlavorContainer" class="option-subgroup hidden">
                     <label for="markdownFlavor" class="block text-xs text-muted">Markdown flavor</label>
                     <select
                       id="markdownFlavor"
@@ -215,11 +246,11 @@
                     </select>
                   </div>
 
-                  <label class="checkbox-option flex items-start gap-3" for="convertedPageThemeToggleEnabled">
+                  <label class="checkbox-option" for="convertedPageThemeToggleEnabled">
                     <input
                       id="convertedPageThemeToggleEnabled"
                       type="checkbox"
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+                      class="checkbox-input" />
                     <span>
                       Add theme toggle (Light/Dark) to converted pages
                       <span class="block text-xs text-muted">
@@ -228,13 +259,13 @@
                     </span>
                   </label>
 
-                  <div class="pl-7 space-y-2">
-                    <label class="checkbox-option flex items-start gap-3" for="convertedPageThemeToggleOledBlack">
+                  <div class="option-subgroup option-subgroup--compact">
+                    <label class="checkbox-option" for="convertedPageThemeToggleOledBlack">
                       <input
                         id="convertedPageThemeToggleOledBlack"
                         type="checkbox"
                         disabled
-                        class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 disabled:opacity-60 disabled:cursor-not-allowed" />
+                        class="checkbox-input" />
                       <span>Use OLED black for Dark theme</span>
                     </label>
                     <p id="convertedPageThemeHelp" class="text-xs text-muted">
@@ -242,74 +273,39 @@
                     </p>
                   </div>
 
-                  <label class="checkbox-option flex items-start gap-3" for="toolbarEnabled">
+                  <label class="checkbox-option" for="toolbarEnabled">
                     <input
                       id="toolbarEnabled"
                       type="checkbox"
-                      class="mt-0.5 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                    <span>Add toolbar to exported pages</span>
+                      class="checkbox-input" />
+                    <span>
+                      Add toolbar to exported pages
+                      <span class="block text-xs text-muted">
+                        When enabled, the exported toolbar includes both the edit mode toggle and the metadata visibility toggle automatically.
+                      </span>
+                    </span>
                   </label>
-
-                  <p class="text-xs text-muted">
-                    When enabled, the exported toolbar includes both the edit mode toggle and the metadata visibility toggle automatically.
-                  </p>
 
                 </div>
               </section>
 
             </div>
           </details>
-        </section>
+          </section>
 
-        <!-- Dropzone -->
-        <section id="controls" class="card-panel">
-          <div
-            id="dropzone"
-            class="surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors"
-            role="region"
-            aria-label="Add files to conversion queue"
-            tabindex="0">
+        </div>
 
-            <div class="mx-auto max-w-sm text-center space-y-3">
-              <p class="text-base font-medium">
-                Click the button below<br />or drag files here to add them to the queue.
-              </p>
+        <!-- RIGHT COLUMN -->
+        <aside class="home-results-column space-y-6 lg:col-span-5">
 
-              <button
-                id="importButton"
-                type="button"
-                class="btn-primary">
-                Browse files
-              </button>
-
-              <p class="text-xs text-muted">
-                Files are processed locally in your browser. Nothing is uploaded.
-              </p>
-            </div>
-
-            <input
-              id="fileInput"
-              class="sr-only"
-              type="file"
-              multiple
-              aria-label="Select files to import"
-              accept=".mht,.mhtml" />
-          </div>
-        </section>
-
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div class="space-y-6 lg:col-span-7">
-
-        <section
+          <section
           id="statusPanel"
-          class="hidden card-panel card-panel--soft space-y-4"
+          class="home-results-card card-panel card-panel--soft space-y-4"
           aria-live="polite"
           aria-label="Processing status">
 
           <div class="flex items-center justify-between gap-3">
-            <h2 class="text-lg font-medium">Status and results</h2>
+            <h2 class="text-lg font-medium">Conversion results</h2>
             <span
               id="appStateBadge"
               class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase">
@@ -318,8 +314,18 @@
           </div>
 
           <p id="statusSummary" class="text-sm text-secondary">
-            No files in the queue yet. Add files to begin conversion.
+            Added files will appear here with progress, status, and downloads.
           </p>
+
+          <div class="flex justify-start">
+            <button
+              id="downloadZip"
+              type="button"
+              class="btn-primary"
+              disabled>
+              Download ZIP
+            </button>
+          </div>
 
           <div id="fileList" class="space-y-3"></div>
 
@@ -335,18 +341,21 @@
               class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
           </details>
 
-        </section>
+          </section>
+
+        </aside>
 
       </div>
-
     </div>
   </main>
 
-  <footer class="mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
-    <p>
-      Offline‑capable local processing. Files stay on your device.
-      <a href="README.md" class="underline">Documentation</a>
-    </p>
+  <footer class="home-footer">
+    <div class="page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
+      <p>
+        Offline‑capable local processing. Files stay on your device.
+        <a href="README.md" class="underline">Documentation</a>
+      </p>
+    </div>
   </footer>
 
   <!-- UI logic -->
@@ -365,33 +374,70 @@
     <div class="absolute inset-0 bg-black/40"></div>
     <div class="surface-card relative max-w-xl rounded p-6 shadow-lg">
       <div class="flex items-start justify-between gap-4">
-        <div>
+        <div class="help-modal__content min-w-0 flex-1">
           <h3 id="helpModalTitle" class="text-lg font-medium">How to use OneNote HTML Cleaner</h3>
           <p class="mt-2 text-sm text-secondary">
-            Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone.
-            The app converts the file locally in your browser and provides a download link when finished.
+            This tool converts exported OneNote MHTML files locally in your browser. Expand the sections below for the parts you need.
           </p>
-          <p class="mt-3 text-sm text-secondary">
-            Converted pages are validated to avoid required CDN/app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together. Shared mode writes one stylesheet for the ZIP; per-page mode writes one stylesheet per exported HTML page.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Planned Markdown export follows a structure-first approach (semantic fidelity over visual parity), with Obsidian-compatible output as the default flavor.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Experimental export controls are available in Advanced options. HTML remains the default stable path, and Markdown is available with selectable flavor.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light/Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            If toolbar injection is enabled for converted pages, the toolbar starts hidden by default; use the small Toolbar button beside the page theme toggle to reveal it.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>
-          </p>
+
+          <div class="help-sections mt-4 space-y-3">
+            <details class="help-section" open>
+              <summary class="help-section__summary text-sm font-medium">Start a conversion</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone. The app converts the file locally in your browser and provides a download link when finished.
+                </p>
+                <p class="text-sm text-secondary">
+                  Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">HTML output and ZIP export</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Converted pages are validated to avoid required CDN or app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together.
+                </p>
+                <p class="text-sm text-secondary">
+                  Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML page.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">Export formats</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Experimental export controls are available in Advanced options. HTML remains the default stable path, and Markdown is available with selectable flavor.
+                </p>
+                <p class="text-sm text-secondary">
+                  Planned Markdown export follows a structure-first approach, with Obsidian-compatible output as the default flavor.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">Converted-page options</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light or Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
+                </p>
+                <p class="text-sm text-secondary">
+                  If toolbar injection is enabled for converted pages, the toolbar starts hidden by default. Use the small Toolbar button beside the page theme toggle to reveal it.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">Project links</summary>
+              <div class="help-section__body">
+                <p class="text-sm text-secondary">
+                  Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>
+                </p>
+              </div>
+            </details>
+          </div>
         </div>
         <div class="flex items-start">
           <button id="helpCloseButton" type="button" class="ml-4 btn-ghost" aria-label="Close help">Close</button>

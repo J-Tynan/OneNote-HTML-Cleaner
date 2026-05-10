@@ -55,6 +55,19 @@ function createStaticServer(root) {
   try {
     browser = await chromium.launch({ headless: true });
 
+    // --- verify fresh-load default keeps auto-convert ON ---
+    const freshContext = await browser.newContext();
+    const freshPage = await freshContext.newPage();
+    freshPage.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+    freshPage.on('pageerror', (err) => console.log('PAGE ERROR:', err && err.stack ? err.stack : err));
+
+    await freshPage.goto(url, { waitUntil: 'networkidle' });
+    await freshPage.waitForSelector('#autoConvertEnabled', { state: 'attached' });
+    const autoConvertCheckedByDefault = await freshPage.$eval('#autoConvertEnabled', (el) => el.checked);
+    if (!autoConvertCheckedByDefault) throw new Error('Expected auto-convert to be checked by default on a fresh load');
+    await freshPage.waitForSelector('#autoConvertNotice[data-mode="auto"]', { timeout: 5000 });
+    await freshPage.close();
+
     // --- verify tooltip when auto-convert is ON using a fresh context ---
     const ctx1 = await browser.newContext();
     await ctx1.addInitScript(() => {

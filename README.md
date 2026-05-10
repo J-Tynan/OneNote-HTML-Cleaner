@@ -45,7 +45,7 @@ If your goal is simply to clean and save an exported OneNote page, the default s
 - The stable release supports OneNote MHTML exports only: `.mht` and `.mhtml`.
 - Unsupported files such as `.one` and `.onepkg` are detected and labeled clearly instead of being partially processed.
 - The app includes a Light / Dark UI theme toggle and remembers your choice in the browser.
-- In-app help is available from the Help button, and the help panel can also be opened with `?`.
+- In-app help is available from the Help button, and keyboard support is built in for Help, importing, and the main controls.
 - If you only need HTML output, you can ignore most advanced settings.
 - Tested locally with automated browser coverage on Chromium 145 for Windows; files are processed locally in your browser and are not uploaded.
 
@@ -106,7 +106,23 @@ The conversion path preserves important note structures such as headings, lists,
 - automatic conversion or manual conversion
 - single download or ZIP download
 - Light / Dark UI theme toggle
-- in-app Help modal with keyboard shortcut support
+- in-app Help modal with keyboard support
+
+## Keyboard Shortcuts And Keyboard Controls
+
+The app supports a small set of explicit keyboard shortcuts and a broader set of keyboard-operable controls.
+
+### Keyboard Shortcuts
+
+- Press `?` to open or close the Help panel when focus is not inside an input, textarea, or editable field. On many keyboards this is `Shift+/`.
+- Press `Escape` to close the Help panel.
+
+### Keyboard Controls
+
+- Use `Tab` and `Shift+Tab` to move through the homepage controls in a natural top-to-bottom order.
+- Press `Enter` or `Space` on the focused import dropzone to open the file picker.
+- Press `Enter` or `Space` on focused buttons such as `Browse Files`, `Convert`, `Download`, and the theme toggle.
+- Focus the Advanced options summary and use its native keyboard behavior to expand or collapse the section.
 
 ## Release Scope
 
@@ -182,7 +198,8 @@ Use the repository issue tracker for fidelity problems and include the word `fid
 ## Help
 
 - Use the in-app Help button for a short usage guide.
-- Press `?` to open Help from the keyboard.
+- Press `?` to open or close Help from the keyboard.
+- Press `Escape` to close Help when it is open.
 - Use the repository issue tracker for bug reports, fidelity reports, and product feedback.
 
 ## For Developers
