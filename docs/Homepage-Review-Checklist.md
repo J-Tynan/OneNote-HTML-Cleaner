@@ -26,6 +26,7 @@ Baseline references:
 - [x] `Convert queued files` is visible but clearly secondary.
 - [x] The header feels compact and reassuring rather than heavy.
 - [x] Help and theme controls are visible without competing with the main action.
+- [x] Footer content is visible and links to documentation.
 
 ## Start Card
 
@@ -90,6 +91,7 @@ Baseline references:
 ## Accessibility And Keyboard Flow
 
 - [x] Help is reachable by keyboard.
+- [x] Help popup closes with keyboard.
 - [x] Theme toggle is reachable by keyboard.
 - [x] Browse files is reachable by keyboard.
 - [x] Advanced options can be focused and expanded by keyboard.
