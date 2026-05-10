@@ -47,7 +47,7 @@ Baseline references:
 
 - [x] The dropzone feels supportive rather than like a second primary CTA.
 - [x] The dropzone text is short and clear.
-- [ ] The dropzone height feels reasonable on desktop and mobile.
+- [x] The dropzone height feels reasonable on desktop and mobile.
 - [x] The dropzone does not overpower the start card.
 
 ## Results Card
@@ -68,13 +68,13 @@ Baseline references:
 - [x] The left column carries setup and import.
 - [x] The right column carries results and progress.
 - [x] The results column does not feel detached from the main flow.
-- [ ] The card spacing feels consistent from top to bottom.
+- [x] The card spacing feels consistent from top to bottom.
 - [x] There is no horizontal overflow.
 
 ## Mobile Layout
 
 - [x] The order remains correct on small screens: header, start card, advanced options, dropzone, results, footer.
-- [ ] No section feels unusually large or crowded on mobile.
+- [x] No section feels unusually large or crowded on mobile.
 - [x] The header wraps cleanly and stays readable.
 - [x] The results card still feels stable and intentional on mobile.
 - [x] The dropzone remains supportive and does not dominate the viewport.
@@ -121,7 +121,7 @@ Baseline references:
 - Observation: The Browse and Convert buttons stack badly on desktop layout (`Layout A · Desktop`). The `Browse files` button is bigger than the `Convert queued files` button.
   Impact: First impression this looks unprofessional.
   Suggestion: Make the Browse and Convert buttons the same size on `Layout A · Desktop`.
-  Severity: Blocker
+  Severity: Follow-up
 
 - Observation: The Convert button tooltip appears beneath the Start card.
   Impact: First impression this looks unprofessional.
@@ -174,15 +174,15 @@ You can change this behaviour in Advanced options."
   Suggestion: Implement a mechanism to preserve the state of the queue and converted files when the browser window is not in focus.
   Severity: Blocker
 
-- Observation: 
-  Impact: 
-  Suggestion: 
-  Severity: 
+- Observation: In both the Light theme and the Dark theme, the buttons `Browse files` and `Download ZIP` have the same colour and style but the colours are too contrasty/saturated compared to the rest of the page.
+  Impact: The buttons may draw too much attention and disrupt the visual hierarchy of the page.
+  Suggestion: Adjust the button colours to be more harmonious with the overall page design while maintaining sufficient contrast for accessibility.
+  Severity: Follow-up
 
-- Observation: 
-  Impact: 
-  Suggestion: 
-  Severity: 
+- Observation: The "Help" popup shows too much text and is visually overwhelming.
+  Impact: Lack of clarity in the Help section may discourage users from seeking assistance, leading to a poor user experience.
+  Suggestion: Minor redesign of the "Help" popup text. Perhaps use collapsable sections (using CSS or HTML details/summary elements) to break down the information into more digestible parts.
+  Severity: Follow-up.
 
 ## Note Template
 
