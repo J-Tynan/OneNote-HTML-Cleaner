@@ -60,8 +60,40 @@ function createStaticServer(root) {
   const widthAfter = await page.evaluate(() => document.body.clientWidth);
   console.log('width after details:', widthAfter);
 
+  const beforeToggle = await page.evaluate(() => {
+    const importButton = document.getElementById('importButton');
+    const notice = document.getElementById('autoConvertNotice');
+    return {
+      buttonTop: importButton ? importButton.getBoundingClientRect().top : 0,
+      noticeHeight: notice ? notice.getBoundingClientRect().height : 0,
+      noticeText: notice ? notice.textContent.replace(/\s+/g, ' ').trim() : ''
+    };
+  });
+  console.log('before auto-convert toggle:', beforeToggle);
+
+  await page.click('#autoConvertEnabled');
+  await page.waitForFunction(() => {
+    const notice = document.getElementById('autoConvertNotice');
+    return notice && notice.textContent.includes('convert them manually');
+  });
+
+  const afterToggle = await page.evaluate(() => {
+    const importButton = document.getElementById('importButton');
+    const notice = document.getElementById('autoConvertNotice');
+    return {
+      buttonTop: importButton ? importButton.getBoundingClientRect().top : 0,
+      noticeHeight: notice ? notice.getBoundingClientRect().height : 0,
+      noticeText: notice ? notice.textContent.replace(/\s+/g, ' ').trim() : ''
+    };
+  });
+  console.log('after auto-convert toggle:', afterToggle);
+
   await browser.close();
   server.close();
 
-  process.exit(widthBefore === widthAfter ? 0 : 1);
+  const widthStable = widthBefore === widthAfter;
+  const buttonTopStable = Math.abs(beforeToggle.buttonTop - afterToggle.buttonTop) <= 1;
+  const noticeStillVisible = afterToggle.noticeHeight > 0;
+
+  process.exit(widthStable && buttonTopStable && noticeStillVisible ? 0 : 1);
 })();

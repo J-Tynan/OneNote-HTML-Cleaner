@@ -11,6 +11,16 @@ const logger = createLogger('ui');
 const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
 const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current release.';
+const AUTO_CONVERT_NOTICE_COPY = {
+  enabled: {
+    lead: 'Files are converted automatically when added to the queue.',
+    detail: 'You can change this behaviour in Advanced options.'
+  },
+  disabled: {
+    lead: 'Files stay in the queue until you convert them manually.',
+    detail: "When you're ready, click Convert queued files."
+  }
+};
 
 const dom = {
   dropzone: null,
@@ -435,11 +445,23 @@ function setAutoConvertEnabled(value) {
   } catch (err) {
     // best-effort persistence
   }
-  if (dom.autoConvertNotice) {
-    dom.autoConvertNotice.classList.toggle('hidden', !runtime.autoConvertEnabled);
-  }
+  updateAutoConvertNotice();
   // convert button state and tooltip depend on auto-convert toggles
   updateConvertButton();
+}
+
+function updateAutoConvertNotice() {
+  if (!dom.autoConvertNotice || !dom.autoConvertNoticeLead || !dom.autoConvertNoticeDetail) {
+    return;
+  }
+
+  const copy = runtime.autoConvertEnabled
+    ? AUTO_CONVERT_NOTICE_COPY.enabled
+    : AUTO_CONVERT_NOTICE_COPY.disabled;
+
+  dom.autoConvertNotice.dataset.mode = runtime.autoConvertEnabled ? 'auto' : 'manual';
+  dom.autoConvertNoticeLead.textContent = copy.lead;
+  dom.autoConvertNoticeDetail.textContent = copy.detail;
 }
 
 function onAutoConvertChange(event) {
@@ -893,6 +915,8 @@ export function initUI(workerManager, options = {}) {
   dom.convertedPageThemeToggleOledBlack = document.getElementById('convertedPageThemeToggleOledBlack');
   dom.convertedPageThemeHelp = document.getElementById('convertedPageThemeHelp');
   dom.autoConvertNotice = document.getElementById('autoConvertNotice');
+  dom.autoConvertNoticeLead = document.getElementById('autoConvertNoticeLead');
+  dom.autoConvertNoticeDetail = document.getElementById('autoConvertNoticeDetail');
   dom.diagnosticsPanel = document.getElementById('diagnosticsPanel');
   dom.diagnosticsList = document.getElementById('diagnosticsList');
   dom.diagnosticsCount = document.getElementById('diagnosticsCount');
@@ -906,10 +930,7 @@ export function initUI(workerManager, options = {}) {
   if (dom.autoConvertEnabled) {
     dom.autoConvertEnabled.checked = runtime.autoConvertEnabled;
   }
-  // Ensure the notice visibility matches initial runtime state
-  if (dom.autoConvertNotice) {
-    dom.autoConvertNotice.classList.toggle('hidden', !runtime.autoConvertEnabled);
-  }
+  updateAutoConvertNotice();
 
   runtime.workerManager = workerManager || null;
   registerDevHooks();
