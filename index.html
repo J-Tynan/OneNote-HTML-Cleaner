@@ -109,6 +109,37 @@
           </div>
           </section>
 
+          <!-- Dropzone -->
+          <section id="controls" class="home-dropzone-card card-panel" aria-labelledby="dropzoneHeading">
+          <div
+            id="dropzone"
+            class="surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors"
+            role="region"
+            aria-label="Add files to conversion queue"
+            tabindex="0">
+
+            <div class="mx-auto max-w-sm text-center space-y-3">
+              <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
+
+              <p class="text-sm text-secondary">
+                Drop exported OneNote pages here to start conversion.
+              </p>
+
+              <p class="text-xs text-muted">
+                Local browser processing only.
+              </p>
+            </div>
+
+            <input
+              id="fileInput"
+              class="sr-only"
+              type="file"
+              multiple
+              aria-label="Select files to import"
+              accept=".mht,.mhtml" />
+          </div>
+          </section>
+
           <!-- Advanced Options -->
           <section class="home-advanced-card card-panel card-panel--soft m-1 space-y-4">
           <details id="advancedOptions" class="card-section">
@@ -261,37 +292,6 @@
           </details>
           </section>
 
-          <!-- Dropzone -->
-          <section id="controls" class="home-dropzone-card card-panel" aria-labelledby="dropzoneHeading">
-          <div
-            id="dropzone"
-            class="surface-soft border-default rounded-2xl border-2 border-dashed p-6 transition-colors"
-            role="region"
-            aria-label="Add files to conversion queue"
-            tabindex="0">
-
-            <div class="mx-auto max-w-sm text-center space-y-3">
-              <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
-
-              <p class="text-sm text-secondary">
-                Drop exported OneNote pages here to start conversion.
-              </p>
-
-              <p class="text-xs text-muted">
-                Local browser processing only.
-              </p>
-            </div>
-
-            <input
-              id="fileInput"
-              class="sr-only"
-              type="file"
-              multiple
-              aria-label="Select files to import"
-              accept=".mht,.mhtml" />
-          </div>
-          </section>
-
         </div>
 
         <!-- RIGHT COLUMN -->
@@ -373,33 +373,70 @@
     <div class="absolute inset-0 bg-black/40"></div>
     <div class="surface-card relative max-w-xl rounded p-6 shadow-lg">
       <div class="flex items-start justify-between gap-4">
-        <div>
+        <div class="help-modal__content min-w-0 flex-1">
           <h3 id="helpModalTitle" class="text-lg font-medium">How to use OneNote HTML Cleaner</h3>
           <p class="mt-2 text-sm text-secondary">
-            Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone.
-            The app converts the file locally in your browser and provides a download link when finished.
+            This tool converts exported OneNote MHTML files locally in your browser. Expand the sections below for the parts you need.
           </p>
-          <p class="mt-3 text-sm text-secondary">
-            Converted pages are validated to avoid required CDN/app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together. Shared mode writes one stylesheet for the ZIP; per-page mode writes one stylesheet per exported HTML page.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Planned Markdown export follows a structure-first approach (semantic fidelity over visual parity), with Obsidian-compatible output as the default flavor.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Experimental export controls are available in Advanced options. HTML remains the default stable path, and Markdown is available with selectable flavor.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light/Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            If toolbar injection is enabled for converted pages, the toolbar starts hidden by default; use the small Toolbar button beside the page theme toggle to reveal it.
-          </p>
-          <p class="mt-3 text-sm text-secondary">
-            Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>
-          </p>
+
+          <div class="help-sections mt-4 space-y-3">
+            <details class="help-section" open>
+              <summary class="help-section__summary text-sm font-medium">Start a conversion</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone. The app converts the file locally in your browser and provides a download link when finished.
+                </p>
+                <p class="text-sm text-secondary">
+                  Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">HTML output and ZIP export</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Converted pages are validated to avoid required CDN or app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together.
+                </p>
+                <p class="text-sm text-secondary">
+                  Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML page.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">Export formats</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Experimental export controls are available in Advanced options. HTML remains the default stable path, and Markdown is available with selectable flavor.
+                </p>
+                <p class="text-sm text-secondary">
+                  Planned Markdown export follows a structure-first approach, with Obsidian-compatible output as the default flavor.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">Converted-page options</summary>
+              <div class="help-section__body space-y-3">
+                <p class="text-sm text-secondary">
+                  Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light or Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
+                </p>
+                <p class="text-sm text-secondary">
+                  If toolbar injection is enabled for converted pages, the toolbar starts hidden by default. Use the small Toolbar button beside the page theme toggle to reveal it.
+                </p>
+              </div>
+            </details>
+
+            <details class="help-section">
+              <summary class="help-section__summary text-sm font-medium">Project links</summary>
+              <div class="help-section__body">
+                <p class="text-sm text-secondary">
+                  Project and source code: <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer" class="underline">GitHub</a>
+                </p>
+              </div>
+            </details>
+          </div>
         </div>
         <div class="flex items-start">
           <button id="helpCloseButton" type="button" class="ml-4 btn-ghost" aria-label="Close help">Close</button>

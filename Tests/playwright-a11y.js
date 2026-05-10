@@ -62,6 +62,39 @@ async function loadTheme(page, url, theme, axePath) {
   await page.addScriptTag({ path: axePath });
 }
 
+async function assertHelpModalKeyboardFlow(page, theme) {
+  await page.evaluate(() => {
+    const button = document.getElementById('helpButton');
+    if (button) button.focus();
+  });
+  await page.keyboard.press('Enter');
+
+  await page.waitForFunction(() => {
+    const modal = document.getElementById('helpModal');
+    return modal && !modal.classList.contains('hidden');
+  });
+
+  const firstSectionOpen = await page.locator('#helpModal details').first().evaluate((el) => el.open);
+  if (!firstSectionOpen) {
+    throw new Error(`Expected first Help section to be open by default in ${theme} theme`);
+  }
+
+  const secondSection = page.locator('#helpModal details').nth(1);
+  await secondSection.locator('summary').focus();
+  await page.keyboard.press('Enter');
+
+  const secondSectionOpen = await secondSection.evaluate((el) => el.open);
+  if (!secondSectionOpen) {
+    throw new Error(`Expected second Help section to open from keyboard in ${theme} theme`);
+  }
+
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => {
+    const modal = document.getElementById('helpModal');
+    return modal && modal.classList.contains('hidden');
+  });
+}
+
 (async () => {
   const root = process.cwd();
   const server = createStaticServer(root);
@@ -102,6 +135,7 @@ async function loadTheme(page, url, theme, axePath) {
     for (const theme of themes) {
       console.log('Auditing theme:', theme);
       await loadTheme(page, url, theme, axePath);
+      await assertHelpModalKeyboardFlow(page, theme);
 
       // disable any color transitions to ensure axe sees the final style
       await page.evaluate(() => {

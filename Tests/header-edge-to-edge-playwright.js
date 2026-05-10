@@ -77,6 +77,40 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
   }
 }
 
+async function assertPrimaryColumnOrder(page, viewportLabel) {
+  const result = await page.evaluate(() => {
+    const dropzone = document.getElementById('controls');
+    const advanced = document.getElementById('advancedOptions');
+    const importButton = document.getElementById('importButton');
+    if (!dropzone || !advanced || !importButton) {
+      return { ok: false, reason: 'required homepage elements missing' };
+    }
+
+    const snapshot = () => ({
+      importTop: importButton.getBoundingClientRect().top,
+      dropzoneTop: dropzone.getBoundingClientRect().top,
+      advancedTop: advanced.getBoundingClientRect().top
+    });
+
+    const before = snapshot();
+    advanced.open = true;
+    const after = snapshot();
+
+    return {
+      before,
+      after,
+      ok: before.importTop < before.dropzoneTop
+        && before.dropzoneTop < before.advancedTop
+        && after.importTop < after.dropzoneTop
+        && after.dropzoneTop < after.advancedTop
+    };
+  });
+
+  if (!result.ok) {
+    throw new Error(`${viewportLabel}: unexpected homepage order. details=${JSON.stringify(result)}`);
+  }
+}
+
 (async () => {
   const root = process.cwd();
   const server = createStaticServer(root);
@@ -97,18 +131,21 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
     const desktopPage = await desktopContext.newPage();
     await desktopPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(desktopPage, 'desktop');
+    await assertPrimaryColumnOrder(desktopPage, 'desktop');
     await desktopContext.close();
 
     const tabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
     const tabletPage = await tabletContext.newPage();
     await tabletPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(tabletPage, 'tablet-layout-b');
+    await assertPrimaryColumnOrder(tabletPage, 'tablet-layout-b');
     await tabletContext.close();
 
     const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const mobilePage = await mobileContext.newPage();
     await mobilePage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(mobilePage, 'mobile');
+    await assertPrimaryColumnOrder(mobilePage, 'mobile');
     await mobileContext.close();
 
     console.log('header-edge-to-edge-playwright: OK');
