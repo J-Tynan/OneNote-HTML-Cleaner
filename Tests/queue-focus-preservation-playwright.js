@@ -45,7 +45,9 @@ async function snapshotQueue(page) {
     hasFocus: document.hasFocus(),
     visibilityState: document.visibilityState,
     badge: document.getElementById('appStateBadge')?.textContent?.trim() || '',
-    rows: Array.from(document.querySelectorAll('.file-item')).map((row) => row.textContent.replace(/\s+/g, ' ').trim())
+    rows: Array.from(document.querySelectorAll('.file-item')).map((row) => row.textContent.replace(/\s+/g, ' ').trim()),
+    lifecycleEvents: Array.isArray(window.__queueProbeEvents) ? [...window.__queueProbeEvents] : [],
+    navigationType: performance.getEntriesByType('navigation')[0]?.type || 'unknown'
   }));
 }
 
@@ -70,7 +72,24 @@ async function snapshotQueue(page) {
     });
 
     const page = await context.newPage();
+    const lifecycleEvents = [];
+    page.on('framenavigated', (frame) => {
+      if (frame === page.mainFrame()) lifecycleEvents.push(`playwright:framenavigated:${frame.url()}`);
+    });
+    page.on('load', () => lifecycleEvents.push('playwright:load'));
+    page.on('domcontentloaded', () => lifecycleEvents.push('playwright:domcontentloaded'));
+
     await page.goto(url, { waitUntil: 'networkidle' });
+    await page.evaluate(() => {
+      window.__queueProbeEvents = [];
+      const record = (eventName) => {
+        window.__queueProbeEvents.push(`${eventName}:${document.visibilityState}:${document.hasFocus()}`);
+      };
+      ['visibilitychange', 'focus', 'blur', 'pageshow', 'pagehide', 'beforeunload', 'unload'].forEach((eventName) => {
+        window.addEventListener(eventName, () => record(eventName), { capture: true });
+      });
+      record('probe-ready');
+    });
     await page.waitForSelector('#fileInput');
     await page.setInputFiles('#fileInput', {
       name: 'focus-probe.mht',
@@ -103,7 +122,7 @@ async function snapshotQueue(page) {
       throw new Error(`Queue changed across blur/focus. before=${beforeRows} after=${afterRows} beforeBadge=${before.badge} afterBadge=${after.badge}`);
     }
 
-    console.log('queue-focus-preservation-playwright: OK', JSON.stringify({ before, blurred, after }));
+    console.log('queue-focus-preservation-playwright: OK', JSON.stringify({ before, blurred, after, lifecycleEvents }));
     await browser.close();
     server.close();
     process.exit(0);

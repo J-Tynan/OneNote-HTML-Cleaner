@@ -929,11 +929,14 @@ html.dark .btn-ghost:hover {
 #helpModal > .relative {
   width: 100%;
   max-width: min(92vw, 720px);
+  max-height: calc(100vh - 2rem);
   border-radius: 0.75rem; /* 12px */
   box-shadow: 0 12px 40px rgba(2, 6, 23, 0.18);
   padding: 1.25rem; /* 20px */
   box-sizing: border-box;
   background-clip: padding-box;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .help-modal__content {
@@ -983,6 +986,7 @@ html.dark .btn-ghost:hover {
 @media (max-width: 639px) {
   #helpModal > .relative {
     max-width: 92vw;
+    max-height: calc(100vh - 1.5rem);
     border-radius: 0.5rem; /* 8px */
     padding: 1rem; /* 16px */
   }
