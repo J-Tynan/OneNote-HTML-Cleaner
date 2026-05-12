@@ -6,8 +6,20 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
+## Release Roadmap
+
+- `v0.1` Stable release: ship the browser-first `.mht` / `.mhtml` conversion path with polished UI, release screenshots, release notes, and a final recorded acceptance pass.
+- `v0.2` Bug-fix and polish release: focus on real-world bug fixes, release hardening, visual polish, and deferred test-harness cleanup after `v0.1` lands.
+- `v1.0` Full-featured release: add stable `.one` / `.onepkg` processing and promote deferred feature work into a broader, full-featured release.
+
+Until `v0.1` ships, new work should stay tightly scoped to release readiness unless a verified bug or release blocker requires broader changes.
+
+---
+
 ## Recent Success
 
+- [x] Homepage polish pass: aligned the Start/Results cards, normalized Advanced options helper text, and improved Help popup readability and scanability. (2026-05-10)
+- [x] Preserve same-tab queue state across unexpected reload/discard and add focused regression coverage in `Tests/queue-reload-restore-playwright.js`. (2026-05-10)
 - [x] Fix MHT spacer regression: preserve image-only paragraphs before footer so `DevToys.mht` keeps embedded `data:image/*;base64` icons in cleaned HTML (2026-03-07)
 - [x] PWA dark theme: queue status indicators (`Queued` app badge + per-file status pills) now use explicit dark-mode-aware styling (2026-03-07)
 - [x] PWA homepage: add subtle spacing around `Import files` card and remove `Conversion method` copy from Advanced options (2026-03-06)
@@ -48,9 +60,9 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
-## Stable Release Checklist (active)
+## Version 0.1 Stable Release Checklist (active)
 
-Use this section as the real go/no-go list for the first stable release.
+Use this section as the real go/no-go list for `v0.1`.
 Items below should reach zero before tagging the first stable build.
 
 - [x] [P1] Lock first stable release scope to `.mht` / `.mhtml` input only, and reject unsupported file types clearly in the UI. (2026-03-10)
@@ -58,7 +70,7 @@ Items below should reach zero before tagging the first stable build.
 - [x] [P1] Accept locked cleaned-fixture drift for regenerated test outputs and rebaseline the locked fixtures when expected HTML changes are intentional. (2026-03-26)
 - [x] [P1] Keep preserved OneNote-authored exported color styling non-blocking in `test:playwright:a11y-exports`; exported-page contrast findings should remain informational when fidelity is the higher priority. (2026-03-26)
 - [x] [P1] Implement one small exported-HTML layout tweak on a short-lived branch and validate it against the locked fixtures before final screenshot capture. (2026-03-28)
-- [ ] [P1] Perform manual PWA acceptance on a clean browser profile using the core fixtures (`Test File.mht`, `DevToys.mht`, `Communicate using Markdown.mht`, `Resolve merge conflicts.mht`) and confirm successful conversion plus working downloads.
+- [x] [P1] Perform manual PWA acceptance on a clean browser profile using the core fixtures (`Test File.mht`, `DevToys.mht`, `Communicate using Markdown.mht`, `Resolve merge conflicts.mht`) and confirm successful conversion plus working downloads. (2026-05-12)
 - [ ] [P1] Capture hero screenshot on a clean browser profile: import panel + queued file + convert button visible.
 - [ ] [P1] Capture converted page screenshot on a clean browser profile: show a page with headings, lists, a table, and a handwriting raster (caption: “Handwriting preserved as raster image”).
 - [ ] [P1] Capture Advanced options screenshot on a clean browser profile: show Export format = Markdown and Markdown flavor = Obsidian selected.
@@ -72,9 +84,9 @@ Items below should reach zero before tagging the first stable build.
 
 ---
 
-## Pre-Release Redundant Code Review (active)
+## Pre-Release Redundant Code Review (triaged)
 
-Audit the codebase in bounded passes before the clean release-candidate verification pass. This initiative is audit-first: confirm issues, log cleanup tasks, then decide what must land before RC.
+This audit pass is complete. Keep this section as historical context for what was reviewed, what was fixed for release, and what was explicitly deferred.
 
 - [x] [P1] Audit app/UI option wiring for stale branches, duplicated state handling, and retired-profile remnants. (2026-03-11)
 - [x] [P1] Audit config normalization for legacy aliases and unnecessary single-profile compatibility paths. (2026-03-11)
@@ -83,7 +95,7 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 - [x] [P1] Audit Markdown and experimental export paths for redundant logic and coupling to the default HTML path. (2026-03-11)
 - [x] [P1] Audit worker diagnostics/initialization for unnecessary complexity and test-driven production branches. (2026-03-11)
 - [x] [P1] Audit test infrastructure for fixture coupling, duplicated helpers, and production code that exists only for tests. (2026-03-11)
-- [ ] [P1] Convert confirmed review findings into prioritized cleanup tasks before the release-candidate verification pass.
+- [x] [P1] Convert confirmed review findings into prioritized cleanup tasks before the release-candidate verification pass. (2026-03-26, completed through the triage decisions and bucketed follow-up items below.)
 
 ### Bucket 1 findings: App/UI option wiring
 
@@ -140,36 +152,23 @@ Audit the codebase in bounded passes before the clean release-candidate verifica
 
 ### Post-triage next task
 
-- Next executable task is the existing Stable Release Checklist item: run one clean release-candidate verification pass on `main` (`npm ci`, `npm run test:gate:native`, all Playwright smoke scripts, and the accessibility audits).
+- Current next release task is to finish the remaining `v0.1` checklist items above, then rerun the final clean release-candidate verification pass on `main`.
 
-### Recommended Stable-Release Execution Order
+### Recommended Version 0.1 Close-Out Order
 
-Work the remaining items in this sequence so the release-candidate pass validates the intended product rather than an outdated or still-shifting scope.
+Work the remaining `v0.1` items in this sequence so the final RC pass validates the intended release rather than an outdated or still-shifting scope.
 
-1. Complete pre-RC triage first.
-  - Convert the confirmed audit findings above into explicit cleanup tasks.
-  - Mark each finding as either pre-RC or post-release before taking on more cleanup work.
-2. Freeze first-release scope and remove contract drift.
-  - Decide whether native `.one` / `.onepkg` detection stays visible in shared runtime helpers for the stable build.
-  - Align `README.md`, `docs/Architecture.md`, `docs/Contracts.md`, and native-facing tests with the actual shipped behavior.
-  - Record deferred native importer work as post-release implementation debt.
-3. Close the pre-RC export-path inconsistencies.
-  - Unify export-format and Markdown-flavor normalization.
-  - Remove duplicate Markdown routing between `src/worker.js` and `src/worker-wrapper.js`.
-  - Quarantine or explicitly justify dormant `.docx` branches that still affect shared runtime code.
-4. Limit worker/test cleanup to release-relevant fixes.
-  - Only pull in Bucket 6 and Bucket 7 work that materially improves release confidence or test accuracy.
-  - Defer broad diagnostics refactors and large test-harness deduplication unless they expose a live bug.
-5. Finish release-facing documentation.
+1. Finish release-facing documentation.
   - Add the concise go/no-go checklist.
   - Prepare `RELEASE_NOTES.md` with supported scope, limitations, and upgrade notes.
-6. Run the clean release-candidate verification pass on `main`.
+2. Capture the release screenshot set and captions.
+3. Perform the manual PWA acceptance pass on a clean browser profile using the locked core fixtures.
+4. Run the final clean release-candidate verification pass on `main`.
   - `npm ci`
   - `npm run test:gate:native`
   - all Playwright smoke scripts
   - accessibility audits
-7. Perform the manual PWA acceptance pass on a clean browser profile using the locked core fixtures.
-8. Tag the first stable release only after the automated pass is green and the manual acceptance pass is recorded.
+5. Tag `v0.1` only after CI is green on `main` and the manual acceptance pass is recorded.
 
 ### Explicit Deferrals Unless New Evidence Appears
 
@@ -243,13 +242,23 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ---
 
-## Next Milestone — MHTML Release
-## Post‑Release Roadmap (v1.x) The following items are explicitly deferred until after the first stable release. They are exploratory or additive features that build on the now‑stable HTML pipeline.
+## Version 0.2 — Bug Fixes And Polish (post-`v0.1`)
+
+Use this track for verified bug fixes, release hardening, and cleanup work that should follow the first stable release without expanding scope too aggressively.
 
 1. Harden MHTML‑to‑HTML pipeline against edge‑case fixtures.
 2. Expand targeted fixture tests (tables, lists, whitespace, inline resources).
 3. Verify toolbar/config behavior remains stable and document acceptance gates.
-4. Implement Microsoft Word-compatible `.docx` export from the stabilized HTML pipeline.
+4. Rewrite the Help info popup copy for clearer wording, better scanability, and a more polished first-time-user experience.
+5. Add a clear-results button so users can empty the converted files list without removing entries one by one.
+
+## Version 1.0 — Full-Featured Release (after `.one` / `.onepkg` support)
+
+Use this track for the first broader feature-complete release after native OneNote file processing is ready and stable.
+
+1. Implement stable `.one` / `.onepkg` processing in the shipped product.
+2. Promote deferred native-import and richer feature work into a fully documented, broadly supported release.
+3. Reassess larger feature families such as `.docx` export, advanced toolbar variants, and tag tooling once the native import path is stable.
 
 ---
 
@@ -275,12 +284,9 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [x] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline. (2026-03-07, via `tools/css-audit-report.js`, shared-bundle consolidation in `src/ui-downloads.js`, and `Tests/externalize-css-visual-parity-playwright.js`)
 - [x] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives. (2026-03-07, implemented via `src/export-filenames.js` with coverage in `Tests/exported-page-naming.unit.js`)
-- [ ] [P1] Next session: review `docs/Homepage-UI-Research.md` for wording quality, tone consistency, content hierarchy, and any homepage copy that should be tightened before Step 1 begins.
-- [ ] [P1] Next session: review `docs/Homepage-UX-Research.md` for the described UX flow, default-path decisions, action hierarchy, and whether the one-off-user-first direction still reads as correct before Step 1 begins.
-- [ ] [P1] Next session: record any wording or UX-flow corrections discovered during the review in the two homepage research docs, then confirm the research baseline is approved before starting Step 1.
 - [ ] [P1] Polish primary action buttons for screenshot readiness: increase button size, label padding, and contrast so they read clearly across matte laptop, OLED phone, and IPS desktop displays.
 - [ ] [P1] Run a consistency pass on secondary/icon controls so Help, theme, remove, and similar buttons use clearer sizing, spacing, and visibility.
-- [ ] [P1] Refactor the Help pop-up content into easier-to-scan native collapsible sections using built-in browser features where practical (for example, `details` / `summary`).
+- [x] [P1] Refactor the Help pop-up content into easier-to-scan native collapsible sections using built-in browser features where practical (for example, `details` / `summary`). (2026-05-10)
 - [ ] [P1] Do a cross-display UI polish review before screenshots and record any remaining readability or contrast fixes needed for the PWA.
 
 ---
@@ -353,7 +359,7 @@ All items in this section must be satisfied before tagging the first stable rele
 **Current Release Focus**
 - **Stabilize and verify the MHTML release path:** finish the active stable-release checklist above before reopening larger feature work.
 
-Next steps (pick these up tomorrow):
+Completed follow-up work from this milestone:
 - [x] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats. (2026-03-10)
 - [x] Add in-app help text and tooltip copy explaining when externalized CSS is suitable and warnings for single-file downloads without assets. (2026-03-10)
 - [x] Add a small smoke/test example (or test instruction) demonstrating per-page vs shared CSS outputs and link integrity. (2026-03-10)
