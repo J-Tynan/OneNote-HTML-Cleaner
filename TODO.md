@@ -77,8 +77,8 @@ Items below should reach zero before tagging the first stable build.
 - [ ] [P1] Capture ZIP export screenshot on a clean browser profile: show ZIP contents with readable filenames.
 - [ ] [P1] Add accessibility note screenshot/caption: exported HTML includes `<main>` and a single page-level `h1`.
 - [ ] [P1] Add screenshot captions and alt text for the README and release page assets.
-- [ ] [P1] Add a concise release go/no-go checklist to project docs covering browser support, offline/service-worker update behavior, and known limitations.
-- [ ] [P1] Draft `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes.
+- [x] [P1] Add a concise release go/no-go checklist to project docs covering browser support, offline/service-worker update behavior, and known limitations. (2026-05-12)
+- [x] [P1] Draft `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes. (2026-05-12)
 - [ ] [P1] Run one final clean release-candidate verification pass on `main` and record the results after release-doc and screenshot-prep changes land.
 - [ ] [P1] Tag the first stable release only after CI is green on `main` and the manual acceptance pass is recorded.
 

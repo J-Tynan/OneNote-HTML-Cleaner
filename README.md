@@ -1,24 +1,27 @@
-# [WIP] OneNote HTML Cleaner
+# OneNote HTML Cleaner
 
 Convert OneNote MHTML exports into clean, portable HTML and optional Markdown — entirely in your browser.
 
 OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path is focused on MHTML input and a straightforward conversion flow that works well for first-time users as well as repeat batch use.
 
-## v1.0 Release Highlights
+## v0.1 Release Highlights
 
 - Stable MHTML -> HTML conversion with deterministic output and offline PWA support.
-- Experimental Markdown export (Obsidian default) and optional externalized CSS for ZIP exports.
-- Handwriting preserved as raster images; vector ink extraction planned post-release.
+- Optional Markdown export (Obsidian default) and optional externalized CSS for ZIP exports.
+- Handwriting preserved as raster images; vector ink extraction remains post-release work.
+- Native `.one` and `.onepkg` files are surfaced clearly as unsupported instead of being partially processed.
 
 ## Screenshots
 
 | Main App | Converted Output |
 | --- | --- |
-| Screenshot placeholder: import panel, queue, and convert/download actions | Screenshot placeholder: converted page output in browser |
+| Release screenshot target: import panel with queued file and Convert action visible | Release screenshot target: converted page with headings, lists, table, and handwriting raster |
 
 | Advanced Options | Batch Export |
 | --- | --- |
-| Screenshot placeholder: advanced options expanded with export settings | Screenshot placeholder: ZIP export result and readable filenames |
+| Release screenshot target: Advanced options expanded with Markdown and Obsidian selected | Release screenshot target: ZIP export result with readable filenames |
+
+Accessibility note asset target: exported HTML with a single page-level `h1` and a `<main>` landmark.
 
 ## Why Use It
 
@@ -46,6 +49,7 @@ If your goal is simply to clean and save an exported OneNote page, the default s
 - Unsupported files such as `.one` and `.onepkg` are detected and labeled clearly instead of being partially processed.
 - The app includes a Light / Dark UI theme toggle and remembers your choice in the browser.
 - In-app help is available from the Help button, and keyboard support is built in for Help, importing, and the main controls.
+- Exported HTML targets one page-level `h1` and a `<main>` landmark for a cleaner accessibility baseline.
 - If you only need HTML output, you can ignore most advanced settings.
 - Tested locally with automated browser coverage on Chromium 145 for Windows; files are processed locally in your browser and are not uploaded.
 
@@ -54,6 +58,8 @@ If your goal is simply to clean and save an exported OneNote page, the default s
 ### Offline-Capable PWA
 
 The app runs as a progressive web app so the conversion workflow remains available in the browser without requiring a desktop installation. After the first load, the app can continue working offline using cached app assets.
+
+If a newly deployed build appears stale, reload first. If the older service worker still persists, unregister it and reload.
 
 Screenshot placeholder: app home screen showing clean import workflow
 
@@ -78,7 +84,7 @@ Advanced options stay collapsed by default so first-time users are not forced th
 
 ### Optional Markdown Export
 
-The app can also export Markdown through the experimental export controls. Obsidian-compatible output is the default Markdown flavor, with additional supported flavors available for users who need a different target.
+The app can also export Markdown through the advanced export controls. Obsidian-compatible output is the default Markdown flavor, with additional supported flavors available for users who need a different target.
 
 ### Optional Externalized CSS For ZIP Exports
 
@@ -98,7 +104,7 @@ The conversion path preserves important note structures such as headings, lists,
 ### Supported Output
 
 - HTML
-- Markdown through the experimental export controls
+- Markdown through the advanced export controls
 
 ### Built-In User Controls
 
@@ -179,7 +185,7 @@ The roadmap should be read as direction, not as a delivery promise.
 
 - The stable release supports only `.mht` and `.mhtml` input files. If a converted page does not match the source note closely enough, see [Report Fidelity Problems](#report-fidelity-problems).
 - Native `.one` and `.onepkg` files may be detected, but they are not converted in the shipped runtime.
-- Markdown export is available through experimental export controls rather than the default path.
+- Markdown export is available through advanced export controls rather than the default path.
 - Handwriting from MHTML exports is preserved as raster content rather than editable vector ink.
 - Externalized CSS is intended for ZIP workflows where the HTML and CSS assets remain together.
 
