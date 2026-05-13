@@ -71,15 +71,15 @@ Items below should reach zero before tagging the first stable build.
 - [x] [P1] Keep preserved OneNote-authored exported color styling non-blocking in `test:playwright:a11y-exports`; exported-page contrast findings should remain informational when fidelity is the higher priority. (2026-03-26)
 - [x] [P1] Implement one small exported-HTML layout tweak on a short-lived branch and validate it against the locked fixtures before final screenshot capture. (2026-03-28)
 - [x] [P1] Perform manual PWA acceptance on a clean browser profile using the core fixtures (`Test File.mht`, `DevToys.mht`, `Communicate using Markdown.mht`, `Resolve merge conflicts.mht`) and confirm successful conversion plus working downloads. (2026-05-12)
-- [ ] [P1] Capture hero screenshot on a clean browser profile: import panel + queued file + convert button visible.
-- [ ] [P1] Capture converted page screenshot on a clean browser profile: show a page with headings, lists, a table, and a handwriting raster (caption: “Handwriting preserved as raster image”).
-- [ ] [P1] Capture Advanced options screenshot on a clean browser profile: show Export format = Markdown and Markdown flavor = Obsidian selected.
-- [ ] [P1] Capture ZIP export screenshot on a clean browser profile: show ZIP contents with readable filenames.
-- [ ] [P1] Add accessibility note screenshot/caption: exported HTML includes `<main>` and a single page-level `h1`.
-- [ ] [P1] Add screenshot captions and alt text for the README and release page assets.
+- [x] [P1] Capture hero screenshot on a clean browser profile: import panel + queued file + convert button visible. (2026-05-13)
+- [x] [P1] Capture converted page screenshot on a clean browser profile: show a page with headings, lists, a table, and a handwriting raster (caption: “Handwriting preserved as raster image”). (2026-05-13)
+- [x] [P1] Capture Advanced options screenshot on a clean browser profile: show Export format = Markdown and Markdown flavor = Obsidian selected. (2026-05-13)
+- [x] [P1] Capture ZIP export screenshot on a clean browser profile: show ZIP contents with readable filenames. (2026-05-13)
+- [x] [P1] Add accessibility note screenshot/caption: exported HTML includes `<main>` and a single page-level `h1`. (2026-05-13)
+- [x] [P1] Add screenshot captions and alt text for the README and release page assets. (2026-05-13)
 - [x] [P1] Add a concise release go/no-go checklist to project docs covering browser support, offline/service-worker update behavior, and known limitations. (2026-05-12)
 - [x] [P1] Draft `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes. (2026-05-12)
-- [ ] [P1] Run one final clean release-candidate verification pass on `main` and record the results after release-doc and screenshot-prep changes land.
+- [x] [P1] Run one final clean release-candidate verification pass on `main` and record the results after release-doc and screenshot-prep changes land. (2026-05-13; `npm ci`, `npm run test:gate:native`, Playwright smoke coverage, `npm run test:playwright:a11y`, `npm run test:playwright:a11y-exports`.)
 - [ ] [P1] Tag the first stable release only after CI is green on `main` and the manual acceptance pass is recorded.
 
 ---

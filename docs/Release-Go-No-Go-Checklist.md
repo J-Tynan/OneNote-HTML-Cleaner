@@ -15,15 +15,15 @@ The goal is to confirm that the shipped contract, public-facing assets, and fina
 
 ## Release Sign-Off Checklist
 
-- [ ] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` all describe the same shipped v0.1 scope.
-- [ ] Public docs describe Markdown export as optional/advanced rather than the default workflow.
-- [ ] Public docs describe native `.one` and `.onepkg` files as unsupported in the shipped runtime.
-- [ ] Public docs avoid broader browser-compatibility claims than the final RC pass actually verifies.
-- [ ] Service-worker update guidance is present: reload first, then unregister and reload only if stale assets persist.
-- [ ] Known limitations are stated clearly and consistently.
-- [ ] Screenshot assets are captured and placed in the release-facing docs.
-- [ ] Screenshot captions and alt text are final.
-- [ ] Final RC verification results are recorded after the release-facing docs and screenshot assets land.
+- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` all describe the same shipped v0.1 scope.
+- [x] Public docs describe Markdown export as optional/advanced rather than the default workflow.
+- [x] Public docs describe native `.one` and `.onepkg` files as unsupported in the shipped runtime.
+- [x] Public docs avoid broader browser-compatibility claims than the final RC pass actually verifies.
+- [x] Service-worker update guidance is present: reload first, then unregister and reload only if stale assets persist.
+- [x] Known limitations are stated clearly and consistently.
+- [x] Screenshot assets are captured and placed in the release-facing docs.
+- [x] Screenshot captions and alt text are final.
+- [x] Final RC verification results are recorded after the release-facing docs and screenshot assets land.
 - [ ] `v0.1.0` tag is created only after `main` is green.
 
 ## Browser And Runtime Verification Notes
@@ -34,6 +34,8 @@ The goal is to confirm that the shipped contract, public-facing assets, and fina
 - Confirm that a fresh reload picks up the current service-worker-managed assets.
 
 ## Screenshot Inventory
+
+Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, save location, and capture order.
 
 ### 1. Main import workflow
 
@@ -69,11 +71,13 @@ The goal is to confirm that the shipped contract, public-facing assets, and fina
 
 Complete this section only after the release-facing docs and screenshots are landed.
 
-- [ ] `npm ci`
-- [ ] `npm run test:gate:native`
-- [ ] Playwright smoke coverage
-- [ ] Accessibility audits
-- [ ] Manual acceptance already recorded for the locked core fixtures
+- [x] `npm ci`
+- [x] `npm run test:gate:native`
+- [x] Playwright smoke coverage
+- [x] Accessibility audits
+- [x] Manual acceptance already recorded for the locked core fixtures
+
+Recorded on `2026-05-13` against `main` after the release docs and screenshot assets landed.
 
 ## Release Decision
 

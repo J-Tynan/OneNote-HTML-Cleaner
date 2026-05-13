@@ -13,15 +13,38 @@ OneNote HTML Cleaner is a progressive web app for people who need a practical wa
 
 ## Screenshots
 
-| Main App | Converted Output |
-| --- | --- |
-| Release screenshot target: import panel with queued file and Convert action visible | Release screenshot target: converted page with headings, lists, table, and handwriting raster |
+<table>
+	<tr>
+		<td width="50%">
+			<img src="assets/release/release-import-workflow.png" alt="Homepage showing the import panel, one queued MHTML file, and the convert action.">
+		</td>
+		<td width="50%">
+			<img src="assets/release/release-converted-output.png" alt="Converted page showing headings, lists, a table, and preserved handwriting as a raster image.">
+		</td>
+	</tr>
+	<tr>
+		<td><strong>Main App</strong><br>Import MHTML files, review the queue, and convert in a single browser-first workflow.</td>
+		<td><strong>Converted Output</strong><br>Converted output preserves document structure, tables, and handwriting as raster content.</td>
+	</tr>
+	<tr>
+		<td width="50%">
+			<img src="assets/release/release-advanced-options-markdown.png" alt="Advanced options expanded with Markdown export selected and Obsidian chosen as the Markdown flavor.">
+		</td>
+		<td width="50%">
+			<img src="assets/release/release-zip-export.png" alt="ZIP export result showing multiple converted files with readable filenames.">
+		</td>
+	</tr>
+	<tr>
+		<td><strong>Advanced Options</strong><br>Advanced options expose optional Markdown export controls without changing the default HTML workflow.</td>
+		<td><strong>Batch Export</strong><br>Batch exports produce readable filenames that are easier to store and share.</td>
+	</tr>
+</table>
 
-| Advanced Options | Batch Export |
-| --- | --- |
-| Release screenshot target: Advanced options expanded with Markdown and Obsidian selected | Release screenshot target: ZIP export result with readable filenames |
+<p>
+	<img src="assets/release/release-accessibility-structure.png" alt="Exported HTML structure highlighting a single page-level h1 and a main landmark.">
+</p>
 
-Accessibility note asset target: exported HTML with a single page-level `h1` and a `<main>` landmark.
+<p><strong>Accessibility Note</strong><br>Exported HTML keeps a single page-level heading and a main landmark for a cleaner accessibility baseline.</p>
 
 ## Why Use It
 
@@ -61,8 +84,6 @@ The app runs as a progressive web app so the conversion workflow remains availab
 
 If a newly deployed build appears stale, reload first. If the older service worker still persists, unregister it and reload.
 
-Screenshot placeholder: app home screen showing clean import workflow
-
 ### Clean HTML Output
 
 Converted output is designed to be more readable and easier to reuse than raw exported OneNote HTML. The project standard targets semantic HTML5 structure, UTF-8 encoding, and predictable document organization for exported pages.
@@ -70,8 +91,6 @@ Converted output is designed to be more readable and easier to reuse than raw ex
 ### Batch Conversion And ZIP Export
 
 You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share.
-
-Screenshot placeholder: multi-file queue and ZIP download workflow
 
 ### Simple Default Flow, Advanced Controls When Needed
 
