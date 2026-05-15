@@ -39,6 +39,12 @@ async function main() {
   if (!/id="onenote-cleaner-toolbar"/i.test(injected)) {
     fail('Expected toolbar root to be injected once');
   }
+  if (!/id="onenote-cleaner-toolbar"[^>]*data-onc-toolbar-preset="compact"/i.test(injected)) {
+    fail('Expected compact toolbar preset marker on default injected toolbar');
+  }
+  if (!/id="onc-toolbar-style"[^>]*data-onc-toolbar-preset="compact"/i.test(injected)) {
+    fail('Expected compact toolbar preset marker on injected toolbar style tag');
+  }
   if (!/>Tools<\/span>/i.test(injected)) {
     fail('Expected toolbar title text to be Tools');
   }
@@ -118,6 +124,31 @@ async function main() {
 
   if (rootCount !== 1 || styleCount !== 1 || scriptCount !== 1) {
     fail(`Expected idempotent injection (root/style/script exactly once), got root=${rootCount}, style=${styleCount}, script=${scriptCount}`);
+  }
+
+  const classicInjected = mod.injectOutputToolbar(baseHtml, {
+    ToolbarEnabled: true,
+    ToolbarEditToggleEnabled: true,
+    ToolbarMetadataToggleEnabled: true,
+    ToolbarBundleMode: 'inline',
+    ToolbarStyle: 'classic'
+  });
+  if (!/id="onenote-cleaner-toolbar"[^>]*data-onc-toolbar-preset="classic"/i.test(classicInjected)) {
+    fail('Expected classic toolbar preset marker on classic injected toolbar');
+  }
+  if (!/id="onc-toolbar-style"[^>]*data-onc-toolbar-preset="classic"/i.test(classicInjected)) {
+    fail('Expected classic toolbar preset marker on classic injected toolbar style tag');
+  }
+
+  const fallbackPreset = mod.injectOutputToolbar(baseHtml, {
+    ToolbarEnabled: true,
+    ToolbarEditToggleEnabled: true,
+    ToolbarMetadataToggleEnabled: true,
+    ToolbarBundleMode: 'inline',
+    ToolbarStyle: 'retro-office'
+  });
+  if (!/id="onenote-cleaner-toolbar"[^>]*data-onc-toolbar-preset="compact"/i.test(fallbackPreset)) {
+    fail('Expected invalid toolbar preset values to fallback to compact');
   }
 
   const disabled = mod.injectOutputToolbar(baseHtml, {

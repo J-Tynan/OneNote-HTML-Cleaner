@@ -23,14 +23,26 @@ Toolbar config keys (passed in worker request `config`):
 - `ToolbarEditToggleEnabled: boolean` (default `false`)
 - `ToolbarMetadataToggleEnabled: boolean` (default `false`)
 - `ToolbarBundleMode: "inline"` (default `"inline"`; only supported value in this phase)
+- `ToolbarStyle: "compact" | "classic"` (default `"compact"`; invalid values fall back to `"compact"`)
+
+## Toolbar preset contract (Slice A)
+
+- Toolbar styling is preset-based, but toolbar markup and script behavior remain shared.
+- Slice A ships two HTML-only presets:
+  - `compact` — default fallback and smallest general-purpose toolbar skin.
+  - `classic` — denser, Office-97-inspired toolbar chrome.
+- Only the selected preset's CSS may be embedded in converted output.
+- Additional presets such as Ribbon Lite, Mac, or Linux remain out of scope for this slice.
 
 ## DOM contract
 
 - Inject exactly one toolbar root element at top of `<body>`:
   - `id="onenote-cleaner-toolbar"`
   - `data-onc-toolbar="v1"`
+  - `data-onc-toolbar-preset="compact|classic"`
 - Toolbar must reserve space and avoid overlapping converted content.
 - Toolbar markup and script must be namespaced under `onc-` prefixed classes/data attributes.
+- Inject exactly one inline toolbar style block carrying both the toolbar version marker and the selected preset marker.
 
 ## Idempotency rule
 
@@ -67,9 +79,9 @@ Panel is read-only and only surfaces conversion provenance.
 Initial fields:
 - Source filename (when available)
 - Source kind (`html|mht|one|onepkg` when available)
-- Conversion profile (`onenote`)
+- Page title (when available)
+- Export format (`html|markdown`)
 - Conversion timestamp (ISO 8601)
-- Warning summary (count by severity, when available)
 
 ### Close/hide
 
@@ -103,3 +115,4 @@ Initial fields:
 - Advanced accessibility auditing overlays.
 - Multi-theme/view switching UI.
 - Persistent cross-file toolbar preferences.
+- Additional toolbar skins beyond `compact` and `classic`.

@@ -21,6 +21,10 @@
   <div id="convertTooltip" class="hidden" aria-hidden="true"></div>
 
   <input id="toolbarEnabled" type="checkbox" title="Toolbar enabled" />
+  <select id="toolbarStyle" disabled title="Toolbar style">
+    <option value="compact" selected>Compact</option>
+    <option value="classic">Classic</option>
+  </select>
   <input id="autoConvertEnabled" type="checkbox" checked title="Auto convert enabled" />
   <input id="externalizeCssEnabled" type="checkbox" title="Externalize CSS enabled" />
   <select id="externalizeCssMode" title="Externalize CSS mode"><option value="shared">shared</option></select>
@@ -66,9 +70,23 @@
     const flavorContainer = document.getElementById('markdownFlavorContainer');
     const flavor = document.getElementById('markdownFlavor');
     const help = document.getElementById('exportFormatHelp');
+    const toolbarEnabled = document.getElementById('toolbarEnabled');
+    const toolbarStyle = document.getElementById('toolbarStyle');
     const convertedThemeToggle = document.getElementById('convertedPageThemeToggleEnabled');
     const convertedThemeOled = document.getElementById('convertedPageThemeToggleOledBlack');
     const convertedThemeHelp = document.getElementById('convertedPageThemeHelp');
+
+    if (toolbarStyle.disabled) pass('Toolbar style disabled by default when toolbar is OFF');
+    else fail('Toolbar style should be disabled by default when toolbar is OFF');
+
+    toolbarEnabled.checked = true;
+    toolbarEnabled.dispatchEvent(new Event('change', { bubbles: true }));
+
+    if (!toolbarStyle.disabled) pass('Toolbar style enabled when toolbar injection is ON');
+    else fail('Toolbar style should be enabled when toolbar injection is ON');
+
+    toolbarStyle.value = 'classic';
+    toolbarStyle.dispatchEvent(new Event('change', { bubbles: true }));
 
     if (exportFormat.disabled && exportFormat.classList.contains('hidden')) pass('Export format hidden/disabled by default');
     else fail('Export format should be hidden/disabled by default');
@@ -129,6 +147,9 @@
     const cfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
     if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');
     else fail('Export format should fallback to HTML when experimental is OFF');
+
+    if (cfg && cfg.ToolbarStyle === 'classic') pass('Toolbar style is passed in conversion config when toolbar is enabled');
+    else fail('Toolbar style should be present in conversion config when toolbar is enabled');
 
     if (cfg && cfg.ConvertedPageThemeToggleEnabled === true) pass('Converted-page theme toggle is passed in conversion config for HTML output');
     else fail('Converted-page theme toggle should be present in conversion config for HTML output');

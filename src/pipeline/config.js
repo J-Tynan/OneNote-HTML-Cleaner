@@ -19,6 +19,11 @@ function normalizeToolbarBundleMode(value) {
   return normalized === 'inline' ? 'inline' : 'inline';
 }
 
+function normalizeToolbarStyle(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === 'classic' ? 'classic' : 'compact';
+}
+
 function normalizeOutputCleanupMode(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (normalized === 'safe') return 'safe';
@@ -67,7 +72,8 @@ const DEFAULT_PIPELINE_CONFIG = {
   ExportFormat: 'html',
   MarkdownFlavor: 'obsidian',
   ConvertedPageThemeToggleEnabled: false,
-  ConvertedPageThemeToggleOledBlack: false
+  ConvertedPageThemeToggleOledBlack: false,
+  ToolbarStyle: 'compact'
 };
 
 const SUPPORTED_EXPORT_FORMATS = new Set(['html', 'markdown']);
@@ -124,7 +130,8 @@ function normalizeToolbarConfig(rawConfig = {}) {
     ToolbarEnabled: toolbarEnabled,
     ToolbarEditToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarEditToggleEnabled, false),
     ToolbarMetadataToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarMetadataToggleEnabled, false),
-    ToolbarBundleMode: normalizeToolbarBundleMode(rawConfig.ToolbarBundleMode)
+    ToolbarBundleMode: normalizeToolbarBundleMode(rawConfig.ToolbarBundleMode),
+    ToolbarStyle: normalizeToolbarStyle(rawConfig.ToolbarStyle)
   };
 }
 

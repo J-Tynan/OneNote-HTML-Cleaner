@@ -225,31 +225,53 @@ function hasConvertedThemeToggleRoot(html = '') {
   return hasId && hasMarker;
 }
 
-function buildStyleTag() {
-  return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}">` +
-    '#onenote-cleaner-toolbar{position:sticky;top:0;z-index:9999;background:#fff;border-bottom:1px solid #d7dce2;padding:.5rem .75rem;font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}' +
-    '#onenote-cleaner-toolbar .onc-toolbar-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;}' +
+function resolveToolbarStyle(options = {}) {
+  const normalized = String(options.ToolbarStyle || '').trim().toLowerCase();
+  return normalized === 'classic' ? 'classic' : 'compact';
+}
+
+function buildBaseStyleCss() {
+  return '#onenote-cleaner-toolbar{position:sticky;top:0;z-index:9999;background:var(--onc-toolbar-bg,#fff);color:var(--onc-toolbar-fg,#1f2a37);border-bottom:1px solid var(--onc-toolbar-border,#d7dce2);padding:var(--onc-toolbar-padding,.45rem .65rem);font:var(--onc-toolbar-font,13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}' +
+    '#onenote-cleaner-toolbar .onc-toolbar-row{display:flex;flex-wrap:wrap;gap:var(--onc-toolbar-gap,.4rem);align-items:center;}' +
     '#onenote-cleaner-toolbar .onc-edit-tools{margin-top:.35rem;}' +
     '#onenote-cleaner-toolbar [data-onc-role="edit-tools"][hidden]{display:none !important;}' +
     '#onenote-cleaner-toolbar .onc-title{font-weight:600;margin-right:.25rem;}' +
-    '#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{border:1px solid #b7c0cc;background:#fff;color:#1f2a37;border-radius:.35rem;padding:.3rem .55rem;cursor:pointer;font:inherit;}' +
-    '#onenote-cleaner-toolbar .onc-select{min-width:9.5rem;}' +
+    '#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{border:1px solid var(--onc-toolbar-btn-border,#b7c0cc);background:var(--onc-toolbar-btn-bg,#fff);color:inherit;border-radius:var(--onc-toolbar-radius,.35rem);padding:var(--onc-toolbar-btn-padding,.24rem .48rem);cursor:pointer;font:inherit;box-shadow:var(--onc-toolbar-btn-shadow,none);}' +
+    '#onenote-cleaner-toolbar .onc-select{min-width:var(--onc-toolbar-select-width,9rem);max-width:100%;}' +
     '#onenote-cleaner-toolbar .onc-color-input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none;}' +
-    '#onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:#eef5ff;border-color:#7ea5e0;}' +
-    '#onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{background:#eef5ff;border-color:#7ea5e0;}' +
+    '#onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:var(--onc-toolbar-active-bg,#eef5ff);border-color:var(--onc-toolbar-active-border,#7ea5e0);}' +
+    '#onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{background:var(--onc-toolbar-active-bg,#eef5ff);border-color:var(--onc-toolbar-active-border,#7ea5e0);}' +
     '#onenote-cleaner-toolbar .onc-btn:focus-visible,#onc-toolbar-show:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px;}' +
     '#onenote-cleaner-toolbar .onc-muted{font-size:12px;color:#4b5563;}' +
-    '#onenote-cleaner-toolbar .onc-panel{margin-top:.5rem;border:1px solid #d7dce2;border-radius:.35rem;padding:.5rem;background:#f8fafc;}' +
+    '#onenote-cleaner-toolbar .onc-panel{margin-top:.5rem;border:1px solid var(--onc-toolbar-panel-border,#d7dce2);border-radius:var(--onc-toolbar-radius,.35rem);padding:.5rem;background:var(--onc-toolbar-panel-bg,#f8fafc);}' +
     '#onenote-cleaner-toolbar .onc-panel dl{display:grid;grid-template-columns:max-content 1fr;gap:.25rem .5rem;margin:0;}' +
     '#onenote-cleaner-toolbar .onc-panel dt{font-weight:600;}' +
     '#onenote-cleaner-toolbar .onc-panel dd{margin:0;word-break:break-word;}' +
-    '#onc-toolbar-show{position:fixed;right:3.35rem;top:var(--onc-floating-top,.75rem);bottom:auto;z-index:10000;font-size:12px;padding:.2rem .45rem;}' +
+    '#onc-toolbar-show{position:fixed;right:3.35rem;top:var(--onc-floating-top,.75rem);bottom:auto;z-index:10000;font-size:11px;padding:var(--onc-toolbar-show-padding,.18rem .42rem);}' +
+    '@media (max-width: 640px){#onenote-cleaner-toolbar{padding:var(--onc-toolbar-mobile-padding,.375rem .5rem);font:var(--onc-toolbar-mobile-font,12px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}#onenote-cleaner-toolbar .onc-toolbar-row{gap:var(--onc-toolbar-mobile-gap,.3rem);}#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{padding:var(--onc-toolbar-mobile-btn-padding,.18rem .34rem);}#onenote-cleaner-toolbar .onc-select{min-width:7.25rem;}}' +
     'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar{background:var(--onc-converted-bg,#1f1f1f);color:var(--onc-converted-fg,#e6e6e6);border-bottom-color:rgba(148,163,184,.35);}' +
-    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn,html[data-onc-converted-theme="dark"] #onc-toolbar-show{background:rgba(15,23,42,.38);color:var(--onc-converted-fg,#e6e6e6);border-color:rgba(148,163,184,.45);}' +
+    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn,html[data-onc-converted-theme="dark"] #onc-toolbar-show{background:rgba(15,23,42,.38);color:var(--onc-converted-fg,#e6e6e6);border-color:rgba(148,163,184,.45);box-shadow:none;}' +
     'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:rgba(59,130,246,.22);border-color:rgba(125,177,255,.7);}' +
     'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-panel{background:rgba(15,23,42,.32);border-color:rgba(148,163,184,.35);}' +
     'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-muted{color:#cbd5e1;}' +
-    '[data-onc-editing="true"] [data-onc-editable="1"]{outline:1px dashed #7ea5e0;outline-offset:2px;}' +
+    '[data-onc-editing="true"] [data-onc-editable="1"]{outline:1px dashed #7ea5e0;outline-offset:2px;}';
+}
+
+function buildToolbarSkinCss(toolbarStyle) {
+  if (toolbarStyle === 'classic') {
+    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="classic"]{--onc-toolbar-bg:#d4d0c8;--onc-toolbar-fg:#1f1f1f;--onc-toolbar-border:#808080;--onc-toolbar-padding:.35rem .5rem;--onc-toolbar-mobile-padding:.35rem .5rem;--onc-toolbar-gap:.3rem;--onc-toolbar-mobile-gap:.3rem;--onc-toolbar-btn-bg:#ece9d8;--onc-toolbar-btn-border:#7a7a70;--onc-toolbar-radius:.15rem;--onc-toolbar-btn-padding:.18rem .4rem;--onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);--onc-toolbar-panel-bg:#ece9d8;--onc-toolbar-panel-border:#808080;--onc-toolbar-show-padding:.14rem .32rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;}' +
+      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="classic"] .onc-title{font-size:11px;letter-spacing:.02em;text-transform:uppercase;}' +
+      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="classic"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="classic"] .onc-btn[data-onc-active="true"]{background:#d6def4;border-color:#51607a;}' +
+      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="classic"] .onc-btn:hover,#onenote-cleaner-toolbar[data-onc-toolbar-preset="classic"] #onc-toolbar-show:hover{filter:brightness(.98);}';
+  }
+
+  return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="compact"]{--onc-toolbar-bg:#fff;--onc-toolbar-fg:#1f2a37;--onc-toolbar-border:#d7dce2;--onc-toolbar-padding:.3rem .45rem;--onc-toolbar-mobile-padding:.24rem .36rem;--onc-toolbar-gap:.25rem;--onc-toolbar-mobile-gap:.2rem;--onc-toolbar-font:12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-mobile-font:11px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-btn-bg:#fff;--onc-toolbar-btn-border:#b7c0cc;--onc-toolbar-radius:.3rem;--onc-toolbar-btn-padding:.16rem .34rem;--onc-toolbar-panel-bg:#f8fafc;--onc-toolbar-panel-border:#d7dce2;--onc-toolbar-show-padding:.12rem .28rem;--onc-toolbar-mobile-btn-padding:.12rem .24rem;--onc-toolbar-select-width:8rem;}';
+}
+
+function buildStyleTag(toolbarStyle = 'compact') {
+  return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}">` +
+    buildBaseStyleCss() +
+    buildToolbarSkinCss(toolbarStyle) +
     '</style>';
 }
 
@@ -765,12 +787,13 @@ function buildToolbarMarkup(metadata, options = {}) {
   const toolbarEnabled = options.ToolbarEnabled === true;
   const editEnabled = toolbarEnabled || options.ToolbarEditToggleEnabled === true;
   const metadataEnabled = toolbarEnabled || options.ToolbarMetadataToggleEnabled === true;
+  const toolbarStyle = resolveToolbarStyle(options);
   const styleOptionsMarkup = EDIT_STYLE_OPTIONS
     .map((style) => `<option value="${escapeHtml(style.key)}">${escapeHtml(style.label)}</option>`)
     .join('');
 
   return [
-    `<div id="${TOOLBAR_ROOT_ID}" data-onc-toolbar="${TOOLBAR_VERSION}" data-onc-edit-enabled="${editEnabled}" data-onc-metadata-enabled="${metadataEnabled}" tabindex="-1" aria-label="OneNote Cleaner toolbar" hidden>`,
+    `<div id="${TOOLBAR_ROOT_ID}" data-onc-toolbar="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}" data-onc-edit-enabled="${editEnabled}" data-onc-metadata-enabled="${metadataEnabled}" tabindex="-1" aria-label="OneNote Cleaner toolbar" hidden>`,
     '<div class="onc-toolbar-row">',
     '<span class="onc-title">Tools</span>',
     `<button type="button" class="onc-btn" data-onc-action="edit-toggle" aria-pressed="false" title="Enable edit"${editEnabled ? '' : ' hidden'}>Enable edit</button>`,
@@ -834,6 +857,7 @@ export function injectOutputToolbar(html, options = {}) {
   const input = String(html || '');
   if (!input) return input;
   const exportState = resolveExportState(options);
+  const toolbarStyle = resolveToolbarStyle(options);
 
   const toolbarEnabled = options.ToolbarEnabled === true;
   const toolbarBundleMode = String(options.ToolbarBundleMode || 'inline').toLowerCase();
@@ -846,8 +870,8 @@ export function injectOutputToolbar(html, options = {}) {
   }
 
   const metadata = buildMetadata(options, exportState);
-  const headInsert = `${buildStyleTag()}${buildMetadataTag(metadata)}${buildScriptTag()}`;
-  const bodyInsert = buildToolbarMarkup(metadata, options);
+  const headInsert = `${buildStyleTag(toolbarStyle)}${buildMetadataTag(metadata)}${buildScriptTag()}`;
+  const bodyInsert = buildToolbarMarkup(metadata, { ...options, ToolbarStyle: toolbarStyle });
 
   const withHead = injectIntoHead(input, headInsert);
   return injectIntoBody(withHead, bodyInsert);

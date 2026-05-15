@@ -8,11 +8,12 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Release Roadmap
 
-- `v0.1` Stable release: ship the browser-first `.mht` / `.mhtml` conversion path with polished UI, release screenshots, release notes, and a final recorded acceptance pass.
-- `v0.2` Bug-fix and polish release: focus on real-world bug fixes, release hardening, visual polish, and deferred test-harness cleanup after `v0.1` lands.
-- `v1.0` Full-featured release: add stable `.one` / `.onepkg` processing and promote deferred feature work into a broader, full-featured release.
+- `v0.1` Stable release: shipped the browser-first `.mht` / `.mhtml` conversion path with polished UI, release screenshots, release notes, and a recorded acceptance pass. Tagged as `v0.1.0` on 2026-05-15.
+- `v0.2` Stabilization and polish release: focus on real-world bug fixes, release hardening, UI consistency, deferred test-harness cleanup, and early launch/messaging assets that sharpen the current product story.
+- `v1.0` Native `.one` release: add clearly scoped, documented `.one` processing with representative fixture coverage, understandable failure modes, and release-quality UX.
+- `v1.1` Native-support hardening and launch-assets release: fix early `.one` issues, expand compatibility coverage, and finish richer screenshots, short feature descriptions, and shareable launch material.
 
-Until `v0.1` ships, new work should stay tightly scoped to release readiness unless a verified bug or release blocker requires broader changes.
+With `v0.1.0` tagged, new work should center on `v0.2` stabilization while defining a strict support contract for `v1.0` native `.one` processing before broader feature expansion.
 
 ---
 
@@ -80,7 +81,7 @@ Items below should reach zero before tagging the first stable build.
 - [x] [P1] Add a concise release go/no-go checklist to project docs covering browser support, offline/service-worker update behavior, and known limitations. (2026-05-12)
 - [x] [P1] Draft `RELEASE_NOTES.md` for the first stable release with supported scope, known limitations, and upgrade notes. (2026-05-12)
 - [x] [P1] Run one final clean release-candidate verification pass on `main` and record the results after release-doc and screenshot-prep changes land. (2026-05-13; `npm ci`, `npm run test:gate:native`, Playwright smoke coverage, `npm run test:playwright:a11y`, `npm run test:playwright:a11y-exports`.)
-- [ ] [P1] Tag the first stable release only after CI is green on `main` and the manual acceptance pass is recorded.
+- [x] [P1] Tag the first stable release only after CI is green on `main` and the manual acceptance pass is recorded. (2026-05-15, tagged as `v0.1.0` after green `main` CI.)
 
 ---
 
@@ -152,22 +153,16 @@ This audit pass is complete. Keep this section as historical context for what wa
 
 ### Post-triage next task
 
-- Current next release task is to finish the remaining `v0.1` checklist items above, then rerun the final clean release-candidate verification pass on `main`.
+- Current next release task is to execute the `v0.2` stabilization plan, then define the narrow support contract that will gate `v1.0` native `.one` work.
 
-### Recommended Version 0.1 Close-Out Order
+### Version 0.1 Close-Out Order (historical)
 
-Work the remaining `v0.1` items in this sequence so the final RC pass validates the intended release rather than an outdated or still-shifting scope.
+This close-out sequence was completed for `v0.1.0` and remains here as release-process history.
 
 1. Finish release-facing documentation.
-  - Add the concise go/no-go checklist.
-  - Prepare `RELEASE_NOTES.md` with supported scope, limitations, and upgrade notes.
 2. Capture the release screenshot set and captions.
 3. Perform the manual PWA acceptance pass on a clean browser profile using the locked core fixtures.
 4. Run the final clean release-candidate verification pass on `main`.
-  - `npm ci`
-  - `npm run test:gate:native`
-  - all Playwright smoke scripts
-  - accessibility audits
 5. Tag `v0.1` only after CI is green on `main` and the manual acceptance pass is recorded.
 
 ### Explicit Deferrals Unless New Evidence Appears
@@ -244,21 +239,60 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ## Version 0.2 — Bug Fixes And Polish (post-`v0.1`)
 
-Use this track for verified bug fixes, release hardening, and cleanup work that should follow the first stable release without expanding scope too aggressively.
+Use this track to make the shipped browser-first MHTML workflow calmer, more reliable, and easier to present before native-file support expands the scope.
 
-1. Harden MHTML‑to‑HTML pipeline against edge‑case fixtures.
-2. Expand targeted fixture tests (tables, lists, whitespace, inline resources).
-3. Verify toolbar/config behavior remains stable and document acceptance gates.
-4. Rewrite the Help info popup copy for clearer wording, better scanability, and a more polished first-time-user experience.
-5. Add a clear-results button so users can empty the converted files list without removing entries one by one.
+Release goal:
+- Reduce avoidable bugs and release friction in the current `.mht` / `.mhtml` path.
 
-## Version 1.0 — Full-Featured Release (after `.one` / `.onepkg` support)
+Success criteria:
+- Real-world MHTML regressions are addressed faster because the test harness is easier to trust and maintain.
+- High-visibility UI controls feel consistent and screenshot-ready across desktop and mobile displays.
+- The current feature set has clearer acceptance gates, sharper docs, and reusable launch material that can carry into later releases.
 
-Use this track for the first broader feature-complete release after native OneNote file processing is ready and stable.
+First-pass tasks:
+1. Harden the MHTML-to-HTML pipeline against edge-case fixtures and expand targeted regression coverage for tables, lists, whitespace, and inline resources.
+2. Tackle deferred post-release test-harness cleanup that directly improves confidence and delivery speed, especially repeated static-server setup and shared browser-test helpers.
+3. Run a consistency pass on high-visibility controls and current features, including primary/secondary button polish, toolbar/config stability, and the clear-results workflow.
+4. Rewrite or tighten high-traffic product copy where it still feels provisional, including Help content, feature descriptions, and acceptance-gate documentation.
+5. Start reusable launch assets early: capture refreshed screenshots as the UI improves, draft short feature blurbs, and keep comparison notes that will help later release announcements.
 
-1. Implement stable `.one` / `.onepkg` processing in the shipped product.
-2. Promote deferred native-import and richer feature work into a fully documented, broadly supported release.
-3. Reassess larger feature families such as `.docx` export, advanced toolbar variants, and tag tooling once the native import path is stable.
+## Version 1.0 — Native `.one` Release
+
+Use this track for the first stable native OneNote-file release, with scope defined by a narrow support contract rather than by every deferred feature that could attach itself to native import.
+
+Release goal:
+- Ship `.one` processing as a credible product capability, not just a parser milestone.
+
+Success criteria:
+- Supported `.one` scenarios are explicitly documented and backed by representative fixtures.
+- Failure modes are understandable in the UI and do not leave users guessing whether a file, feature, or workflow is unsupported.
+- Native import behavior is stable enough that release notes can describe known limitations clearly without apologizing for the core workflow.
+
+First-pass tasks:
+1. Define the `v1.0` native support contract: what kinds of `.one` files are in scope, what is intentionally unsupported, and what quality bar counts as release-ready.
+2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
+3. Implement the minimal release-quality native pipeline, including import UX, warnings, failure messaging, and deterministic output expectations.
+4. Document native workflow limitations, expected fidelity, and troubleshooting paths in product docs and in-app help.
+5. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
+
+## Version 1.1 — Native Support Hardening And Launch Assets
+
+Use this track for the first post-`v1.0` hardening release: absorb real-world feedback from native `.one` usage, improve compatibility, and package the product more clearly for wider adoption.
+
+Release goal:
+- Make the native-file story dependable in practice and easier to communicate externally.
+
+Success criteria:
+- Early `.one` bugs and compatibility gaps are reduced based on real post-release evidence.
+- Release assets are strong enough to explain the product quickly to new users without improvising from scratch.
+- Marketing and release-prep work becomes a maintained asset library rather than a one-off scramble.
+
+First-pass tasks:
+1. Prioritize and fix the first wave of `.one` regressions, unsupported-content surprises, and fidelity gaps found after `v1.0` ships.
+2. Expand compatibility fixtures and troubleshooting documentation using real sample diversity rather than only synthetic happy paths.
+3. Produce a maintained screenshot set for homepage, import flow, converted output, native `.one` scenarios, and key options.
+4. Draft short feature descriptions, release blurbs, and a lightweight social-media/thread outline that can be reused across release notes, README updates, and launch posts.
+5. Review whether additional downstream packaging work is needed for broader promotion, such as clearer comparison tables, known-limitation summaries, or demo-ready sample files.
 
 ---
 
@@ -357,7 +391,7 @@ Use this track for the first broader feature-complete release after native OneNo
 - [ ] Add filters by tag type, page, and completion state.
 
 **Current Release Focus**
-- **Stabilize and verify the MHTML release path:** finish the active stable-release checklist above before reopening larger feature work.
+- **Stabilize the shipped MHTML path for `v0.2` while defining the narrow `v1.0` `.one` support contract and collecting reusable launch assets along the way.**
 
 Completed follow-up work from this milestone:
 - [x] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats. (2026-03-10)

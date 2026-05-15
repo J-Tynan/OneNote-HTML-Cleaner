@@ -42,6 +42,7 @@ const dom = {
   convertButton: null,
   convertButtonWrapper: null,
   toolbarEnabled: null,
+  toolbarStyle: null,
   autoConvertEnabled: null,
   externalizeCssEnabled: null,
   externalizeCssMode: null,
@@ -669,6 +670,12 @@ function updateExternalCssControls() {
   dom.externalizeCssMode.disabled = !enabled;
 }
 
+function updateToolbarStyleControls() {
+  if (!dom.toolbarStyle) return;
+  const enabled = dom.toolbarEnabled?.checked === true;
+  dom.toolbarStyle.disabled = !enabled;
+}
+
 function updateExportFormatControls() {
   const advancedOptionsState = buildAdvancedOptionsState(dom);
 
@@ -1186,6 +1193,7 @@ async function onDownloadZipClick() {
 }
 
 function onAdvancedOptionsChange() {
+  updateToolbarStyleControls();
   updateExternalCssControls();
   updateExportFormatControls();
   rebuildSuccessfulOutputs();
@@ -1208,6 +1216,7 @@ function bindEvents() {
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
+  dom.toolbarStyle?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssMode?.addEventListener('change', onAdvancedOptionsChange);
   dom.experimentalExportEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -1279,6 +1288,7 @@ export async function initUI(workerManager, options = {}) {
   dom.convertButton = document.getElementById('convertButton');
   dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
+  dom.toolbarStyle = document.getElementById('toolbarStyle');
   dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
   dom.externalizeCssEnabled = document.getElementById('externalizeCssEnabled');
   dom.externalizeCssMode = document.getElementById('externalizeCssMode');
@@ -1333,6 +1343,7 @@ export async function initUI(workerManager, options = {}) {
     successfulOutputs: runtime.successfulOutputs,
     downloadZipButton: dom.downloadZip,
     toolbarEnabled: dom.toolbarEnabled,
+    toolbarStyle: dom.toolbarStyle,
     externalizeCssEnabled: dom.externalizeCssEnabled,
     externalizeCssMode: dom.externalizeCssMode,
     experimentalExportEnabled: dom.experimentalExportEnabled,
@@ -1350,6 +1361,7 @@ export async function initUI(workerManager, options = {}) {
 
   runtime.dragCounter = 0;
   setDropzoneActive(false);
+  updateToolbarStyleControls();
   updateExternalCssControls();
   updateExportFormatControls();
 

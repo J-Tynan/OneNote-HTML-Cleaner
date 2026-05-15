@@ -62,6 +62,8 @@ function createStaticServer(root) {
 
     const text = await page.evaluate(() => document.body.innerText || '');
     const checks = [
+      'PASS: Toolbar style disabled by default when toolbar is OFF',
+      'PASS: Toolbar style enabled when toolbar injection is ON',
       'PASS: Export format hidden/disabled by default',
       'PASS: Markdown flavor hidden/disabled by default',
       'PASS: Converted-page theme toggle enabled by default for HTML output',
@@ -75,6 +77,7 @@ function createStaticServer(root) {
       'PASS: OLED option enabled when converted-page theme toggle is checked',
       'PASS: Converted-page theme helper text remains stable when toggles are changed',
       'PASS: Export format falls back to HTML when experimental is OFF',
+      'PASS: Toolbar style is passed in conversion config when toolbar is enabled',
       'PASS: Converted-page theme toggle is passed in conversion config for HTML output'
     ];
 

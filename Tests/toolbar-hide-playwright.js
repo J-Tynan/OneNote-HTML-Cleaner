@@ -13,29 +13,42 @@ function assert(condition, message) {
 
   const base = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Toolbar</title></head><body><main><h1 data-onc-editable="1">Converted</h1><p data-onc-editable="1">Body</p></main></body></html>';
 
-  const withToolbar = injector.injectOutputToolbar(base, {
-    ToolbarEnabled: true,
-    ToolbarEditToggleEnabled: true,
-    ToolbarMetadataToggleEnabled: true,
-    ToolbarBundleMode: 'inline',
-    SourceName: 'Sample.mht',
-    SourceKind: 'mht',
-    Profile: 'onenote',
-    WarningSummary: { total: 0, info: 0, warning: 0, error: 0 }
-  });
+  function buildToolbarPage(toolbarStyle) {
+    const withToolbar = injector.injectOutputToolbar(base, {
+      ToolbarEnabled: true,
+      ToolbarEditToggleEnabled: true,
+      ToolbarMetadataToggleEnabled: true,
+      ToolbarBundleMode: 'inline',
+      ToolbarStyle: toolbarStyle,
+      SourceName: 'Sample.mht',
+      SourceKind: 'mht',
+      Profile: 'onenote',
+      WarningSummary: { total: 0, info: 0, warning: 0, error: 0 }
+    });
 
-  const withToolbarAndTheme = injector.injectConvertedPageThemeToggle(withToolbar, {
-    ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: false,
-    ExperimentalExportEnabled: false,
-    ExportFormat: 'html'
-  });
+    return injector.injectConvertedPageThemeToggle(withToolbar, {
+      ConvertedPageThemeToggleEnabled: true,
+      ConvertedPageThemeToggleOledBlack: false,
+      ExperimentalExportEnabled: false,
+      ExportFormat: 'html'
+    });
+  }
+
+  const compactToolbarPage = buildToolbarPage('compact');
+  const classicToolbarPage = buildToolbarPage('classic');
+
+  const withToolbar = classicToolbarPage;
 
   const server = http.createServer((req, res) => {
     const url = (req.url || '/').split('?')[0];
     if (url === '/toolbar') {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(withToolbarAndTheme);
+      res.end(withToolbar);
+      return;
+    }
+    if (url === '/toolbar-compact') {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(compactToolbarPage);
       return;
     }
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -54,6 +67,42 @@ function assert(condition, message) {
   try {
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    async function readToolbarMetrics(urlPath) {
+      await page.goto(`${baseUrl}${urlPath}`, { waitUntil: 'networkidle' });
+      await page.waitForSelector('#onenote-cleaner-toolbar', { state: 'attached' });
+      await page.waitForSelector('#onc-converted-theme-toggle');
+      await page.waitForFunction(() => {
+        const root = document.getElementById('onenote-cleaner-toolbar');
+        return Boolean(root && root.dataset && root.dataset.oncInitialized === '1');
+      });
+
+      return page.evaluate(() => {
+        const root = document.getElementById('onenote-cleaner-toolbar');
+        const firstButton = document.querySelector('#onenote-cleaner-toolbar .onc-btn');
+        const toolbarStyle = root ? getComputedStyle(root) : null;
+        const buttonStyle = firstButton ? getComputedStyle(firstButton) : null;
+        return {
+          preset: root ? root.getAttribute('data-onc-toolbar-preset') : '',
+          toolbarPaddingTop: toolbarStyle ? parseFloat(toolbarStyle.paddingTop || '0') : 0,
+          toolbarPaddingLeft: toolbarStyle ? parseFloat(toolbarStyle.paddingLeft || '0') : 0,
+          buttonFontSize: buttonStyle ? parseFloat(buttonStyle.fontSize || '0') : 0,
+          buttonPaddingLeft: buttonStyle ? parseFloat(buttonStyle.paddingLeft || '0') : 0,
+          buttonPaddingRight: buttonStyle ? parseFloat(buttonStyle.paddingRight || '0') : 0
+        };
+      });
+    }
+
+    const compactMetrics = await readToolbarMetrics('/toolbar-compact');
+    const classicMetrics = await readToolbarMetrics('/toolbar');
+    assert(compactMetrics.preset === 'compact', `Expected compact preset marker on compact toolbar root, got ${compactMetrics.preset}`);
+    assert(classicMetrics.preset === 'classic', `Expected classic preset marker on classic toolbar root, got ${classicMetrics.preset}`);
+    assert(compactMetrics.toolbarPaddingTop > 0 && compactMetrics.toolbarPaddingTop < classicMetrics.toolbarPaddingTop, `Expected compact toolbar top padding to be smaller than classic, got compact=${compactMetrics.toolbarPaddingTop} classic=${classicMetrics.toolbarPaddingTop}`);
+    assert(compactMetrics.toolbarPaddingLeft > 0 && compactMetrics.toolbarPaddingLeft < classicMetrics.toolbarPaddingLeft, `Expected compact toolbar side padding to be smaller than classic, got compact=${compactMetrics.toolbarPaddingLeft} classic=${classicMetrics.toolbarPaddingLeft}`);
+    assert(compactMetrics.buttonFontSize > 0 && compactMetrics.buttonFontSize <= classicMetrics.buttonFontSize, `Expected compact toolbar button font size to be no larger than classic, got compact=${compactMetrics.buttonFontSize} classic=${classicMetrics.buttonFontSize}`);
+    assert(compactMetrics.buttonPaddingLeft > 0 && compactMetrics.buttonPaddingLeft < classicMetrics.buttonPaddingLeft, `Expected compact toolbar button padding-left to be smaller than classic, got compact=${compactMetrics.buttonPaddingLeft} classic=${classicMetrics.buttonPaddingLeft}`);
+    assert(compactMetrics.buttonPaddingRight > 0 && compactMetrics.buttonPaddingRight < classicMetrics.buttonPaddingRight, `Expected compact toolbar button padding-right to be smaller than classic, got compact=${compactMetrics.buttonPaddingRight} classic=${classicMetrics.buttonPaddingRight}`);
 
     await page.goto(`${baseUrl}/toolbar`, { waitUntil: 'networkidle' });
     await page.waitForSelector('#onenote-cleaner-toolbar', { state: 'attached' });
@@ -66,13 +115,23 @@ function assert(condition, message) {
     const initialState = await page.evaluate(() => {
       const root = document.getElementById('onenote-cleaner-toolbar');
       const showButton = document.getElementById('onc-toolbar-show');
+      const firstButton = document.querySelector('#onenote-cleaner-toolbar .onc-btn');
+      const firstButtonStyle = firstButton ? getComputedStyle(firstButton) : null;
       return {
         toolbarHidden: Boolean(root && root.hidden),
-        showVisible: Boolean(showButton && !showButton.hidden)
+        showVisible: Boolean(showButton && !showButton.hidden),
+        preset: root ? root.getAttribute('data-onc-toolbar-preset') : '',
+        buttonFontSize: firstButtonStyle ? parseFloat(firstButtonStyle.fontSize || '0') : 0,
+        buttonPaddingLeft: firstButtonStyle ? parseFloat(firstButtonStyle.paddingLeft || '0') : 0,
+        buttonPaddingRight: firstButtonStyle ? parseFloat(firstButtonStyle.paddingRight || '0') : 0
       };
     });
     assert(initialState.toolbarHidden === true, 'Expected toolbar to be hidden by default');
     assert(initialState.showVisible === true, 'Expected Toolbar reveal button visible by default');
+    assert(initialState.preset === 'classic', `Expected classic preset marker on toolbar root, got ${initialState.preset}`);
+    assert(initialState.buttonFontSize > 0 && initialState.buttonFontSize <= 12.5, `Expected classic toolbar font size on narrow viewport, got ${initialState.buttonFontSize}`);
+    assert(initialState.buttonPaddingLeft > 0 && initialState.buttonPaddingLeft <= 6.5, `Expected classic toolbar button padding-left on narrow viewport, got ${initialState.buttonPaddingLeft}`);
+    assert(initialState.buttonPaddingRight > 0 && initialState.buttonPaddingRight <= 6.5, `Expected classic toolbar button padding-right on narrow viewport, got ${initialState.buttonPaddingRight}`);
 
     await page.click('#onc-toolbar-show');
 
