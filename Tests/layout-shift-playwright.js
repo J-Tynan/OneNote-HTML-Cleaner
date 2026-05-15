@@ -64,7 +64,8 @@ function createStaticServer(root) {
     const importButton = document.getElementById('importButton');
     const notice = document.getElementById('autoConvertNotice');
     return {
-      buttonTop: importButton ? importButton.getBoundingClientRect().top : 0,
+      buttonTop: importButton ? importButton.getBoundingClientRect().top + window.scrollY : 0,
+      scrollY: window.scrollY,
       noticeHeight: notice ? notice.getBoundingClientRect().height : 0,
       noticeText: notice ? notice.textContent.replace(/\s+/g, ' ').trim() : ''
     };
@@ -81,7 +82,8 @@ function createStaticServer(root) {
     const importButton = document.getElementById('importButton');
     const notice = document.getElementById('autoConvertNotice');
     return {
-      buttonTop: importButton ? importButton.getBoundingClientRect().top : 0,
+      buttonTop: importButton ? importButton.getBoundingClientRect().top + window.scrollY : 0,
+      scrollY: window.scrollY,
       noticeHeight: notice ? notice.getBoundingClientRect().height : 0,
       noticeText: notice ? notice.textContent.replace(/\s+/g, ' ').trim() : ''
     };
