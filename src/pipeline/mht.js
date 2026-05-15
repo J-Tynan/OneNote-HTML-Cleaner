@@ -33,9 +33,15 @@ export function decodeQuotedPrintable(text, opts = {}) {
   for (let i = 0; i < text.length; i++) {
     const ch = text[i];
     // soft line break ="=\r?\n"; skip these bytes entirely
-    if (ch === '=' && i + 1 < text.length && text[i+1] === '\r' && text[i+2] === '\n') {
-      i += 2;
-      continue;
+    if (ch === '=' && i + 1 < text.length) {
+      if (text[i + 1] === '\n') {
+        i += 1;
+        continue;
+      }
+      if (text[i + 1] === '\r' && i + 2 < text.length && text[i + 2] === '\n') {
+        i += 2;
+        continue;
+      }
     }
     if (ch === '=' && i + 2 < text.length) {
       const hex = text.slice(i + 1, i + 3);
