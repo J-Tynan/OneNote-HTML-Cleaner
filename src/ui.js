@@ -38,6 +38,7 @@ const dom = {
   statusPanel: null,
   appStateBadge: null,
   statusSummary: null,
+  clearFilesButton: null,
   downloadZip: null,
   convertButton: null,
   convertButtonWrapper: null,
@@ -575,6 +576,7 @@ function updateStatusVisibility() {
   }
 
   updateZipButton();
+  updateClearFilesButton();
 }
 
 function getStatusTone(status) {
@@ -662,6 +664,11 @@ function getEntryDownloadMime(entry) {
 function updateZipButton() {
   if (!dom.downloadZip) return;
   dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
+}
+
+function updateClearFilesButton() {
+  if (!dom.clearFilesButton) return;
+  dom.clearFilesButton.disabled = state.queue.length === 0;
 }
 
 function updateExternalCssControls() {
@@ -855,6 +862,13 @@ function updateEntryStatus(id, status) {
   if (!entry) return;
   entry.status = status;
   renderFileList();
+}
+
+export function clearQueue() {
+  if (state.queue.length === 0) return;
+  state.queue = [];
+  renderFileList();
+  void flushDraftPersist();
 }
 
 /* === PROCESSING === */
@@ -1192,6 +1206,10 @@ async function onDownloadZipClick() {
   await runtime.downloadHelpers.downloadZip();
 }
 
+function onClearFilesClick() {
+  clearQueue();
+}
+
 function onAdvancedOptionsChange() {
   updateToolbarStyleControls();
   updateExternalCssControls();
@@ -1213,6 +1231,7 @@ function bindEvents() {
   dom.importButton?.addEventListener('click', onImportButtonClick);
   dom.fileInput?.addEventListener('change', onFileInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
+  dom.clearFilesButton?.addEventListener('click', onClearFilesClick);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -1284,6 +1303,7 @@ export async function initUI(workerManager, options = {}) {
   dom.statusPanel = document.getElementById('statusPanel');
   dom.appStateBadge = document.getElementById('appStateBadge');
   dom.statusSummary = document.getElementById('statusSummary');
+  dom.clearFilesButton = document.getElementById('clearFilesButton');
   dom.downloadZip = document.getElementById('downloadZip');
   dom.convertButton = document.getElementById('convertButton');
   dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');
