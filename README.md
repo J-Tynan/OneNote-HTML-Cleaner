@@ -4,6 +4,22 @@ Convert OneNote MHTML exports into clean, portable HTML and optional Markdown â€
 
 OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path is focused on MHTML input and a straightforward conversion flow that works well for first-time users as well as repeat batch use.
 
+## Why Not Open The OneNote Export Directly?
+
+For many first-time users, the most convincing comparison is not feature depth but the difference between opening a default OneNote `.mhtml` export directly in the browser and opening a cleaned page produced by this app.
+
+The section below is prepared for a side-by-side example using the same note in two states:
+
+- Before: the default OneNote MHTML export opened directly in the browser
+- After: the cleaned result produced by OneNote HTML Cleaner
+
+| Before | After |
+| --- | --- |
+| [![Before screenshot showing the raw OneNote MHTML export with browser warnings and broken layout](<assets/release/thumbnails/before (thumbnail).png>)](<assets/release/before.png>) | [![After screenshot showing the cleaned OneNote HTML Cleaner output with corrected layout](<assets/release/thumbnails/after (thumbnail).png>)](<assets/release/after.png>) |
+| Default OneNote MHTML export opened directly in the browser. In testing, the raw export took more than 1 second to load, showed compatibility warnings, broke parts of the note layout, and could inhibit browser extensions from working as expected, including cases where page-level dark mode was unavailable. | Cleaned output from OneNote HTML Cleaner. The cleaned page restores a more readable layout, removes the browser warning path, behaves more like normal HTML in the browser, and can optionally expose dark-mode-friendly viewing through the converted-page theme toggle. |
+
+This comparison is intended to show a real exported note with a clean, reasonable before-and-after example rather than a dramatized marketing comparison.
+
 ## v0.1 Release Highlights
 
 - Stable MHTML -> HTML conversion with deterministic output and offline PWA support.
