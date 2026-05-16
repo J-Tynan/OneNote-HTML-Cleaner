@@ -337,6 +337,7 @@ First-pass tasks:
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 - [ ] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux.
 - [ ] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release.
+- [ ] [P2] Investigate minifying the injected toolbar assets after the toolbar feature set is implemented so adding a toolbar does not nearly double exported file size.
 
 ### OneNote Tag Support (post‑release)
 
