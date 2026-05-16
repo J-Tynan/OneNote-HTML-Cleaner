@@ -82,6 +82,15 @@ This is the fastest path for someone using the app once.
 
 If your goal is simply to clean and save an exported OneNote page, the default settings are intended to be enough.
 
+## Security & Privacy
+
+The app's privacy model is intentionally simple: files are processed locally in your browser and are not uploaded by this app.
+
+- Conversion runs in the browser using the shipped app code rather than a server-side upload workflow.
+- After the first load, the PWA can keep working offline using cached app assets.
+- Because offline support depends on browser-managed caching, your browser may keep local app assets until that site data is refreshed or cleared.
+- This section describes the app's local-processing model, not a broader promise about browser-vendor security features, encryption, or secure deletion on your device.
+
 ## First-Time User Notes
 
 - The stable release supports OneNote MHTML exports only: `.mht` and `.mhtml`.
@@ -90,7 +99,7 @@ If your goal is simply to clean and save an exported OneNote page, the default s
 - In-app help is available from the Help button, and keyboard support is built in for Help, importing, and the main controls.
 - Exported HTML targets one page-level `h1` and a `<main>` landmark for a cleaner accessibility baseline.
 - If you only need HTML output, you can ignore most advanced settings.
-- Tested locally with automated browser coverage on Chromium 145 for Windows; files are processed locally in your browser and are not uploaded.
+- Tested locally with automated browser coverage on Chromium 145 for Windows.
 
 ## Key Features
 
@@ -148,6 +157,15 @@ The conversion path preserves important note structures such as headings, lists,
 - single download or ZIP download
 - Light / Dark UI theme toggle
 - in-app Help modal with keyboard support
+
+## What This Tool Is Not
+
+This project is intentionally narrow in the current stable release. It is useful because it stays focused on one validated conversion path rather than promising every OneNote-related workflow.
+
+- It is not a native `.one` or `.onepkg` converter in the shipped runtime.
+- It is not a general-purpose document conversion tool for arbitrary input formats.
+- It is not a `.docx` export workflow in the current stable release.
+- It is not a promise that every converted page will match the source export perfectly across every browser; the goal is cleaner, more reusable output from exported OneNote MHTML.
 
 ## Keyboard Shortcuts And Keyboard Controls
 
@@ -223,6 +241,42 @@ The roadmap should be read as direction, not as a delivery promise.
 - Markdown export is available through advanced export controls rather than the default path.
 - Handwriting from MHTML exports is preserved as raster content rather than editable vector ink.
 - Externalized CSS is intended for ZIP workflows where the HTML and CSS assets remain together.
+
+## Troubleshooting
+
+Most first-time issues fall into a small number of categories: source-export fidelity, conversion state, or stale cached app assets.
+
+### Why does my converted page look different?
+
+OneNote's exported MHTML can already contain browser-specific layout quirks, and this app intentionally rewrites that export toward cleaner, more reusable HTML. That means some pages may look different from the raw export, especially when the original note relied on layout details that do not translate cleanly.
+
+If the result is not close enough to the source note, treat it as a fidelity issue and include the source file type, browser version, expected result, actual result, and screenshots when you report it.
+
+### Why does the ZIP button appear only after conversion?
+
+`Download ZIP` packages converted output, so it becomes useful only after at least one file has finished converting. If you have imported files but do not see ZIP output yet, wait for conversion to complete or click `Convert` if you have disabled auto-convert.
+
+### Why does the service worker show an old version?
+
+Reload the page first. If a stale build still appears after reload, unregister the existing service worker and reload again so the browser fetches the current cached asset set.
+
+For deeper service-worker update guidance, see [docs/Service-Worker-Updates.md](docs/Service-Worker-Updates.md).
+
+## Performance Notes
+
+This README sets expectations for browser-side behavior, not benchmark promises.
+
+### How big of a file can I convert?
+
+The current docs do not publish a fixed maximum file size. Practical limits depend on the browser, available memory, the complexity of the exported note, and how many large inline resources it contains.
+
+### Does it work offline?
+
+Yes, after the first load. The app is a PWA, so the browser can cache the app assets needed to reopen it offline. Offline support means the app shell can remain available without a network connection; it does not imply identical performance on every device or browser state.
+
+### Does it use memory proportional to file size?
+
+Conversion happens locally in the browser, so larger files and larger embedded resources generally require more browser memory during parsing and cleanup. The exact amount depends on document structure, embedded images, and batch size, so this README does not promise a fixed memory ratio.
 
 ## Report Fidelity Problems
 

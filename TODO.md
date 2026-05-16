@@ -323,6 +323,7 @@ First-pass tasks:
 - [x] [P1] Refactor the Help pop-up content into easier-to-scan native collapsible sections using built-in browser features where practical (for example, `details` / `summary`). (2026-05-10)
 - [ ] [P1] Do a cross-display UI polish review before screenshots and record any remaining readability or contrast fixes needed for the PWA.
 - [x] [P1] Add a README Before/After comparison using the same note in raw OneNote MHTML form and cleaned app output, with concise captions covering warning banner, load delay, layout fixes, and optional dark-mode-friendly viewing. (2026-05-16)
+- [x] [P2] Add first-time-user README support sections for scope/trust questions: `What This Tool Is Not`, `Troubleshooting`, `Performance Notes`, and `Security & Privacy`. (2026-05-16)
 - [x] [P2] Add a clear-files button so users can quickly empty the queued file list before starting a new conversion batch. (2026-05-15)
 - [ ] [P2] Keep the Conversion results action row stable so Clear files and Download ZIP do not shift position when the status text above them changes.
 
