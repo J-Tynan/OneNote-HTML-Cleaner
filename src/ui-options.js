@@ -44,6 +44,7 @@ export function buildAdvancedOptionsState(dom = {}) {
     experimentalEnabled,
     selectedExportFormat,
     effectiveExportFormat,
+    toolbarEnabledChecked: rawConfig.ToolbarEnabled === true,
     markdownSelected: experimentalEnabled && selectedExportFormat === 'markdown',
     htmlSelected: effectiveExportFormat === 'html',
     convertedPageThemeToggleChecked: rawConfig.ConvertedPageThemeToggleEnabled === true

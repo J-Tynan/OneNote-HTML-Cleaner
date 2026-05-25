@@ -318,14 +318,15 @@ First-pass tasks:
 - [x] Implement Converted-Page Theme Toggle (HTML only): add UI option, inject toggle into converted pages, support OLED-black option, and add Playwright smoke tests. (2026-03-03)
 - [x] Externalized CSS review follow-up: audit generated CSS, consolidate over-generated selectors, and add visual regression checks to ensure parity with embedded-style baseline. (2026-03-07, via `tools/css-audit-report.js`, shared-bundle consolidation in `src/ui-downloads.js`, and `Tests/externalize-css-visual-parity-playwright.js`)
 - [x] Polish exported page naming: replace GUID-like titles with a deterministic, readable naming strategy for downloads/archives. (2026-03-07, implemented via `src/export-filenames.js` with coverage in `Tests/exported-page-naming.unit.js`)
-- [ ] [P1] Polish primary action buttons for screenshot readiness: increase button size, label padding, and contrast so they read clearly across matte laptop, OLED phone, and IPS desktop displays.
-- [ ] [P1] Run a consistency pass on secondary/icon controls so Help, theme, remove, and similar buttons use clearer sizing, spacing, and visibility.
+- [x] [P1] Polish primary action buttons for screenshot readiness: increase button size, label padding, and contrast so they read clearly across matte laptop, OLED phone, and IPS desktop displays. (2026-05-25)
+- [x] [P1] Run a consistency pass on secondary/icon controls so Help, theme, remove, and similar buttons use clearer sizing, spacing, and visibility. (2026-05-25)
 - [x] [P1] Refactor the Help pop-up content into easier-to-scan native collapsible sections using built-in browser features where practical (for example, `details` / `summary`). (2026-05-10)
 - [ ] [P1] Do a cross-display UI polish review before screenshots and record any remaining readability or contrast fixes needed for the PWA.
 - [x] [P1] Add a README Before/After comparison using the same note in raw OneNote MHTML form and cleaned app output, with concise captions covering warning banner, load delay, layout fixes, and optional dark-mode-friendly viewing. (2026-05-16)
 - [x] [P2] Add first-time-user README support sections for scope/trust questions: `What This Tool Is Not`, `Troubleshooting`, `Performance Notes`, and `Security & Privacy`. (2026-05-16)
 - [x] [P2] Add a clear-files button so users can quickly empty the queued file list before starting a new conversion batch. (2026-05-15)
-- [ ] [P2] Keep the Conversion results action row stable so Clear files and Download ZIP do not shift position when the status text above them changes.
+- [x] [P2] Keep the Conversion results action row stable so Clear files and Download ZIP do not shift position when the status text above them changes. (2026-05-25)
+- [x] [P2] Reduce spacing and visual bulk in the homepage converted-files list so larger batches are easier to scan and navigate. (2026-05-25)
 
 ---
 
@@ -335,8 +336,8 @@ First-pass tasks:
 - [x] Split heading control into H1–H4 buttons for explicit block styles (2026-03-03)
 - [x] Rename Hyperlink button to Link while keeping the dual-prompt flow (2026-03-03)
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
-- [ ] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux.
-- [ ] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release.
+- [x] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux. (2026-05-25)
+- [x] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release. (2026-05-25)
 - [ ] [P2] Investigate minifying the injected toolbar assets after the toolbar feature set is implemented so adding a toolbar does not nearly double exported file size.
 
 ### OneNote Tag Support (post‑release)

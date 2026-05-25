@@ -23,23 +23,27 @@ Toolbar config keys (passed in worker request `config`):
 - `ToolbarEditToggleEnabled: boolean` (default `false`)
 - `ToolbarMetadataToggleEnabled: boolean` (default `false`)
 - `ToolbarBundleMode: "inline"` (default `"inline"`; only supported value in this phase)
-- `ToolbarStyle: "compact" | "classic"` (default `"compact"`; invalid values fall back to `"compact"`)
+- `ToolbarStyle: "compact" | "office-97" | "ribbon" | "macos" | "linux"` (default `"compact"`; invalid values fall back to `"compact"`)
+- Legacy compatibility: `"classic"` is accepted as an alias for `"office-97"`.
 
 ## Toolbar preset contract (Slice A)
 
 - Toolbar styling is preset-based, but toolbar markup and script behavior remain shared.
-- Slice A ships two HTML-only presets:
+- Slice A ships five HTML-only presets:
   - `compact` — default fallback and smallest general-purpose toolbar skin.
-  - `classic` — denser, Office-97-inspired toolbar chrome.
+  - `office-97` — denser Office-97-inspired toolbar chrome.
+  - `ribbon` — brighter ribbon-like chrome with larger grouped controls.
+  - `macos` — rounded, lighter native-app-inspired chrome.
+  - `linux` — flatter dark desktop chrome.
 - Only the selected preset's CSS may be embedded in converted output.
-- Additional presets such as Ribbon Lite, Mac, or Linux remain out of scope for this slice.
+- Additional presets beyond the list above remain out of scope for this slice.
 
 ## DOM contract
 
 - Inject exactly one toolbar root element at top of `<body>`:
   - `id="onenote-cleaner-toolbar"`
   - `data-onc-toolbar="v1"`
-  - `data-onc-toolbar-preset="compact|classic"`
+  - `data-onc-toolbar-preset="compact|office-97|ribbon|macos|linux"`
 - Toolbar must reserve space and avoid overlapping converted content.
 - Toolbar markup and script must be namespaced under `onc-` prefixed classes/data attributes.
 - Inject exactly one inline toolbar style block carrying both the toolbar version marker and the selected preset marker.
@@ -58,16 +62,19 @@ Toolbar config keys (passed in worker request `config`):
 Edit mode is limited to text-focused nodes and must not alter structural semantics.
 
 Allowed editable targets (initial):
+
 - `p`
 - `li`
 - `td`
 
 Excluded targets (initial):
+
 - Heading tags (`h1`-`h6`)
 - Section/layout wrappers (`main`, `section`, `table`, `thead`, `tbody`, `tr`)
 - Semantic wrappers marked with table/column role metadata
 
 Behavior:
+
 - Toggle ON enables `contenteditable` only on allowed targets.
 - Toggle OFF restores non-editable state.
 - No irreversible transforms; no mutation of structural wrappers.
@@ -77,6 +84,7 @@ Behavior:
 Panel is read-only and only surfaces conversion provenance.
 
 Initial fields:
+
 - Source filename (when available)
 - Source kind (`html|mht|one|onepkg` when available)
 - Page title (when available)
@@ -115,4 +123,4 @@ Initial fields:
 - Advanced accessibility auditing overlays.
 - Multi-theme/view switching UI.
 - Persistent cross-file toolbar preferences.
-- Additional toolbar skins beyond `compact` and `classic`.
+- Additional toolbar skins beyond `compact`, `office-97`, `ribbon`, `macos`, and `linux`.

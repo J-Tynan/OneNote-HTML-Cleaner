@@ -104,6 +104,12 @@ async function main() {
   assert(normalizedExport.ExportFormat === 'html', 'Expected normalizeExportConfig ExportFormat to fall back to html for unsupported formats');
   assert(normalizedExport.MarkdownFlavor === 'commonmark', 'Expected normalizeExportConfig MarkdownFlavor to normalize to commonmark');
 
+  const toolbarStyleAliases = mod.normalizePipelineConfig({ ToolbarStyle: 'classic' });
+  assert(toolbarStyleAliases.ToolbarStyle === 'office-97', 'Expected legacy classic toolbar style to normalize to office-97');
+
+  const toolbarStyleVariants = mod.normalizePipelineConfig({ ToolbarStyle: 'MACOS' });
+  assert(toolbarStyleVariants.ToolbarStyle === 'macos', 'Expected ToolbarStyle to normalize to macos');
+
   const outputDecorationConfig = mod.buildOutputDecorationConfig({
     ToolbarEnabled: 'true',
     ToolbarEditToggleEnabled: 'false',
@@ -115,9 +121,9 @@ async function main() {
     ConvertedPageThemeToggleOledBlack: 'true'
   });
 
-  assert(outputDecorationConfig.ToolbarEnabled === true, 'Expected buildOutputDecorationConfig ToolbarEnabled true');
-  assert(outputDecorationConfig.ToolbarEditToggleEnabled === true, 'Expected buildOutputDecorationConfig ToolbarEditToggleEnabled true when toolbar enabled');
-  assert(outputDecorationConfig.ToolbarMetadataToggleEnabled === true, 'Expected buildOutputDecorationConfig ToolbarMetadataToggleEnabled true when toolbar enabled');
+  assert(outputDecorationConfig.ToolbarEnabled === false, 'Expected buildOutputDecorationConfig to disable toolbar for non-HTML exports');
+  assert(outputDecorationConfig.ToolbarEditToggleEnabled === false, 'Expected buildOutputDecorationConfig to disable edit toggle for non-HTML exports');
+  assert(outputDecorationConfig.ToolbarMetadataToggleEnabled === false, 'Expected buildOutputDecorationConfig to disable metadata toggle for non-HTML exports');
   assert(outputDecorationConfig.ExportFormat === 'markdown', 'Expected buildOutputDecorationConfig ExportFormat markdown');
   assert(outputDecorationConfig.MarkdownFlavor === 'gfm', 'Expected buildOutputDecorationConfig MarkdownFlavor gfm');
   assert(outputDecorationConfig.ConvertedPageThemeToggleEnabled === false, 'Expected buildOutputDecorationConfig to disable theme toggle for non-HTML exports');

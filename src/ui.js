@@ -43,6 +43,7 @@ const dom = {
   convertButton: null,
   convertButtonWrapper: null,
   toolbarEnabled: null,
+  toolbarStyleContainer: null,
   toolbarStyle: null,
   autoConvertEnabled: null,
   externalizeCssEnabled: null,
@@ -52,6 +53,7 @@ const dom = {
   markdownFlavor: null,
   markdownFlavorContainer: null,
   exportFormatHelp: null,
+  toolbarStyleHelp: null,
   convertedPageThemeToggleEnabled: null,
   convertedPageThemeToggleOledBlack: null,
   convertedPageThemeHelp: null
@@ -677,10 +679,33 @@ function updateExternalCssControls() {
   dom.externalizeCssMode.disabled = !enabled;
 }
 
-function updateToolbarStyleControls() {
+function updateToolbarStyleControls(advancedOptionsState = buildAdvancedOptionsState(dom)) {
   if (!dom.toolbarStyle) return;
-  const enabled = dom.toolbarEnabled?.checked === true;
-  dom.toolbarStyle.disabled = !enabled;
+  const htmlSelected = advancedOptionsState.htmlSelected;
+  const toolbarChecked = advancedOptionsState.toolbarEnabledChecked;
+  const styleVisible = htmlSelected && toolbarChecked;
+
+  if (dom.toolbarEnabled) {
+    dom.toolbarEnabled.disabled = !htmlSelected;
+  }
+
+  if (dom.toolbarStyleContainer) {
+    dom.toolbarStyleContainer.classList.toggle('hidden', !styleVisible);
+  }
+
+  if (dom.toolbarStyle) {
+    dom.toolbarStyle.disabled = !styleVisible;
+  }
+
+  if (dom.toolbarStyleHelp) {
+    if (!htmlSelected) {
+      dom.toolbarStyleHelp.textContent = 'Toolbar presets are available only for HTML export.';
+    } else if (!toolbarChecked) {
+      dom.toolbarStyleHelp.textContent = 'Enable toolbar injection to choose a toolbar chrome preset before conversion.';
+    } else {
+      dom.toolbarStyleHelp.textContent = 'Compact keeps controls small for narrow screens. Office-97, Ribbon, MacOS, and Linux adjust only the injected toolbar chrome.';
+    }
+  }
 }
 
 function updateExportFormatControls() {
@@ -707,6 +732,7 @@ function updateExportFormatControls() {
   }
 
   updateConvertedPageThemeControls(advancedOptionsState);
+  updateToolbarStyleControls(advancedOptionsState);
 }
 
 function updateConvertedPageThemeControls(advancedOptionsState = buildAdvancedOptionsState(dom)) {
@@ -1028,7 +1054,7 @@ export function renderFileList() {
     const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
 
     return `
-      <div class="file-item rounded-xl border p-4" data-id="${entry.id}" data-status="${statusTone}">
+      <div class="file-item rounded-xl border p-3" data-id="${entry.id}" data-status="${statusTone}">
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0">
             <p class="truncate text-sm font-semibold">${safeName}</p>
@@ -1041,7 +1067,7 @@ export function renderFileList() {
           </div>
           <button
             type="button"
-            class="remove-item btn-secondary"
+            class="remove-item btn-secondary secondary-action-button file-item__remove-button"
             data-remove-id="${entry.id}"
             aria-label="Remove ${safeName}">
             Remove
@@ -1049,7 +1075,7 @@ export function renderFileList() {
         </div>
 
         ${canDownload ? `
-          <div class="mt-3">
+          <div class="mt-2">
             <button
               type="button"
               class="btn-primary"
@@ -1059,7 +1085,7 @@ export function renderFileList() {
           </div>
         ` : ''}
         ${hasOutput && singleDownloadBlocked ? `
-          <p class="mt-3 text-xs text-muted">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
+          <p class="mt-2 text-xs text-muted">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
         ` : ''}
       </div>
     `;
@@ -1308,6 +1334,7 @@ export async function initUI(workerManager, options = {}) {
   dom.convertButton = document.getElementById('convertButton');
   dom.convertButtonWrapper = document.querySelector('.convert-button-wrapper');
   dom.toolbarEnabled = document.getElementById('toolbarEnabled');
+  dom.toolbarStyleContainer = document.getElementById('toolbarStyleContainer');
   dom.toolbarStyle = document.getElementById('toolbarStyle');
   dom.autoConvertEnabled = document.getElementById('autoConvertEnabled');
   dom.externalizeCssEnabled = document.getElementById('externalizeCssEnabled');
@@ -1317,6 +1344,7 @@ export async function initUI(workerManager, options = {}) {
   dom.markdownFlavor = document.getElementById('markdownFlavor');
   dom.markdownFlavorContainer = document.getElementById('markdownFlavorContainer');
   dom.exportFormatHelp = document.getElementById('exportFormatHelp');
+  dom.toolbarStyleHelp = document.getElementById('toolbarStyleHelp');
   dom.convertedPageThemeToggleEnabled = document.getElementById('convertedPageThemeToggleEnabled');
   dom.convertedPageThemeToggleOledBlack = document.getElementById('convertedPageThemeToggleOledBlack');
   dom.convertedPageThemeHelp = document.getElementById('convertedPageThemeHelp');

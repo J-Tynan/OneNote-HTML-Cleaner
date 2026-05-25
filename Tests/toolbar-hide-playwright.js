@@ -7,6 +7,22 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+const PRESETS = ['compact', 'office-97', 'ribbon', 'macos', 'linux'];
+const VIEWPORTS = [
+  { name: 'narrow-phone', width: 320, height: 740 },
+  { name: 'mobile', width: 390, height: 844 },
+  { name: 'tablet', width: 768, height: 1024 },
+  { name: 'desktop', width: 1440, height: 960 }
+];
+const STYLE_VALUES = ['page-title', 'heading-1', 'heading-2', 'heading-3', 'heading-4', 'heading-5', 'heading-6', 'citation', 'quote', 'code', 'normal'];
+
+function isDarkRgb(color) {
+  const match = String(color || '').match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+  if (!match) return false;
+  const parts = match.slice(1, 4).map((value) => Number.parseInt(value, 10));
+  return parts.every((value) => Number.isFinite(value)) && ((parts[0] + parts[1] + parts[2]) / 3) < 120;
+}
+
 (async () => {
   const injectorPath = path.resolve(process.cwd(), 'src', 'pipeline', 'toolbarInjector.js');
   const injector = await import(pathToFileURL(injectorPath).href);
@@ -34,26 +50,175 @@ function assert(condition, message) {
     });
   }
 
-  const compactToolbarPage = buildToolbarPage('compact');
-  const classicToolbarPage = buildToolbarPage('classic');
-
-  const withToolbar = classicToolbarPage;
+  const presetPages = Object.fromEntries(PRESETS.map((preset) => [preset, buildToolbarPage(preset)]));
 
   const server = http.createServer((req, res) => {
     const url = (req.url || '/').split('?')[0];
     if (url === '/toolbar') {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(withToolbar);
+      res.end(presetPages['office-97']);
       return;
     }
-    if (url === '/toolbar-compact') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(compactToolbarPage);
-      return;
+    if (url.startsWith('/toolbar/')) {
+      const preset = decodeURIComponent(url.slice('/toolbar/'.length)).toLowerCase();
+      if (presetPages[preset]) {
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(presetPages[preset]);
+        return;
+      }
     }
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Not found');
   });
+
+  async function waitForToolbarReady(page) {
+    await page.waitForSelector('#onenote-cleaner-toolbar', { state: 'attached' });
+    await page.waitForSelector('#onc-converted-theme-toggle');
+    await page.waitForFunction(() => {
+      const root = document.getElementById('onenote-cleaner-toolbar');
+      return Boolean(root && root.dataset && root.dataset.oncInitialized === '1');
+    });
+  }
+
+  async function getInitialState(page) {
+    return page.evaluate(() => {
+      const root = document.getElementById('onenote-cleaner-toolbar');
+      const showButton = document.getElementById('onc-toolbar-show');
+      return {
+        preset: root ? root.getAttribute('data-onc-toolbar-preset') : '',
+        toolbarHidden: Boolean(root && root.hidden),
+        showVisible: Boolean(showButton && !showButton.hidden)
+      };
+    });
+  }
+
+  async function getVisibleMetrics(page) {
+    return page.evaluate(() => {
+      const root = document.getElementById('onenote-cleaner-toolbar');
+      const firstButton = document.querySelector('#onenote-cleaner-toolbar .onc-btn');
+      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
+      const editTools = document.querySelector('[data-onc-role="edit-tools"]');
+      const metadataToggle = document.querySelector('[data-onc-action="metadata-toggle"]');
+      const themeToggle = document.getElementById('onc-converted-theme-toggle');
+      const rootStyle = root ? getComputedStyle(root) : null;
+      const buttonStyle = firstButton ? getComputedStyle(firstButton) : null;
+      const rootRect = root ? root.getBoundingClientRect() : null;
+      const styleRect = styleSelect ? styleSelect.getBoundingClientRect() : null;
+      return {
+        preset: root ? root.getAttribute('data-onc-toolbar-preset') : '',
+        toolbarHidden: Boolean(root && root.hidden),
+        editToolsVisible: Boolean(editTools && !editTools.hidden),
+        metadataToggleVisible: Boolean(metadataToggle && !metadataToggle.hidden),
+        themeToggleVisible: Boolean(themeToggle && !themeToggle.hidden),
+        styleDisabled: styleSelect ? styleSelect.disabled : true,
+        styleWidth: styleRect ? styleRect.width : 0,
+        styleValues: styleSelect ? Array.from(styleSelect.options).map((option) => option.value) : [],
+        toolbarPaddingTop: rootStyle ? parseFloat(rootStyle.paddingTop || '0') : 0,
+        toolbarPaddingLeft: rootStyle ? parseFloat(rootStyle.paddingLeft || '0') : 0,
+        toolbarBackgroundColor: rootStyle ? rootStyle.backgroundColor : '',
+        toolbarBackgroundImage: rootStyle ? rootStyle.backgroundImage : '',
+        toolbarColor: rootStyle ? rootStyle.color : '',
+        toolbarLeft: rootRect ? rootRect.left : 0,
+        toolbarRight: rootRect ? rootRect.right : 0,
+        buttonFontSize: buttonStyle ? parseFloat(buttonStyle.fontSize || '0') : 0,
+        buttonPaddingLeft: buttonStyle ? parseFloat(buttonStyle.paddingLeft || '0') : 0,
+        buttonPaddingRight: buttonStyle ? parseFloat(buttonStyle.paddingRight || '0') : 0,
+        buttonRadius: buttonStyle ? parseFloat(buttonStyle.borderRadius || '0') : 0
+      };
+    });
+  }
+
+  async function getMetadataState(page) {
+    return page.evaluate(() => {
+      const panel = document.querySelector('[data-onc-role="metadata-panel"]');
+      const pageTitle = panel ? panel.querySelector('[data-onc-field="page-title"]') : null;
+      const exportFormat = panel ? panel.querySelector('[data-onc-field="export-format"]') : null;
+      return {
+        visible: Boolean(panel && !panel.hidden),
+        text: panel ? String(panel.textContent || '') : '',
+        pageTitle: pageTitle ? String(pageTitle.textContent || '').trim() : '',
+        exportFormat: exportFormat ? String(exportFormat.textContent || '').trim() : ''
+      };
+    });
+  }
+
+  async function getHiddenState(page) {
+    return page.evaluate(() => {
+      const root = document.getElementById('onenote-cleaner-toolbar');
+      const showButton = document.getElementById('onc-toolbar-show');
+      const themeToggle = document.getElementById('onc-converted-theme-toggle');
+      const showRect = showButton ? showButton.getBoundingClientRect() : null;
+      const toggleRect = themeToggle ? themeToggle.getBoundingClientRect() : null;
+      const scrollY = window.scrollY || 0;
+      return {
+        toolbarHidden: Boolean(root && root.hidden),
+        showVisible: Boolean(showButton && !showButton.hidden),
+        showLabel: showButton ? String(showButton.textContent || '').trim() : '',
+        showTop: showRect ? Math.round(showRect.top + scrollY) : -1,
+        toggleTop: toggleRect ? Math.round(toggleRect.top + scrollY) : -1,
+        showRight: showRect ? Math.round(showRect.right) : -1,
+        toggleRight: toggleRect ? Math.round(toggleRect.right) : -1
+      };
+    });
+  }
+
+  async function verifyPresetAcrossViewport(page, baseUrl, preset, viewport) {
+    await page.goto(`${baseUrl}/toolbar/${preset}`, { waitUntil: 'networkidle' });
+    await waitForToolbarReady(page);
+
+    const initialState = await getInitialState(page);
+    assert(initialState.preset === preset, `Expected ${preset} preset marker before interactions at ${viewport.name}, got ${initialState.preset}`);
+    assert(initialState.toolbarHidden === true, `Expected toolbar to start hidden for ${preset} at ${viewport.name}`);
+    assert(initialState.showVisible === true, `Expected reveal button visible for ${preset} at ${viewport.name}`);
+
+    await page.click('#onc-toolbar-show');
+    await page.click('[data-onc-action="edit-toggle"]');
+
+    const metrics = await getVisibleMetrics(page);
+    assert(metrics.preset === preset, `Expected ${preset} preset marker after showing toolbar at ${viewport.name}, got ${metrics.preset}`);
+    assert(metrics.toolbarHidden === false, `Expected visible toolbar for ${preset} at ${viewport.name}`);
+    assert(metrics.editToolsVisible === true, `Expected edit tools visible for ${preset} at ${viewport.name}`);
+    assert(metrics.metadataToggleVisible === true, `Expected metadata toggle visible for ${preset} at ${viewport.name}`);
+    assert(metrics.themeToggleVisible === true, `Expected converted theme toggle visible for ${preset} at ${viewport.name}`);
+    assert(metrics.styleDisabled === false, `Expected styles dropdown enabled for ${preset} at ${viewport.name}`);
+    assert(metrics.styleWidth > 80, `Expected non-trivial styles dropdown width for ${preset} at ${viewport.name}, got ${metrics.styleWidth}`);
+    assert(JSON.stringify(metrics.styleValues) === JSON.stringify(STYLE_VALUES), `Expected styles dropdown values for ${preset} at ${viewport.name}, got ${JSON.stringify(metrics.styleValues)}`);
+    assert(metrics.toolbarPaddingTop > 0, `Expected positive top padding for ${preset} at ${viewport.name}`);
+    assert(metrics.toolbarPaddingLeft > 0, `Expected positive side padding for ${preset} at ${viewport.name}`);
+    assert(metrics.buttonFontSize > 0, `Expected positive toolbar button font size for ${preset} at ${viewport.name}`);
+    assert(metrics.buttonPaddingLeft > 0 && metrics.buttonPaddingRight > 0, `Expected positive toolbar button padding for ${preset} at ${viewport.name}`);
+    assert(metrics.toolbarLeft >= -1, `Expected toolbar to remain onscreen on the left for ${preset} at ${viewport.name}, got ${metrics.toolbarLeft}`);
+    assert(metrics.toolbarRight <= viewport.width + 2, `Expected toolbar to remain within viewport width for ${preset} at ${viewport.name}, got right=${metrics.toolbarRight} viewport=${viewport.width}`);
+
+    await page.click('[data-onc-action="metadata-toggle"]');
+    const metadataOpen = await getMetadataState(page);
+    assert(metadataOpen.visible === true, `Expected metadata panel to open for ${preset} at ${viewport.name}`);
+    assert(!/Profile/i.test(metadataOpen.text) && !/Warnings/i.test(metadataOpen.text), `Did not expect Profile or Warnings entries in metadata panel for ${preset} at ${viewport.name}`);
+    assert(metadataOpen.pageTitle === 'Toolbar', `Expected metadata page title for ${preset} at ${viewport.name}, got ${metadataOpen.pageTitle}`);
+    assert(metadataOpen.exportFormat === 'html', `Expected metadata export format html for ${preset} at ${viewport.name}, got ${metadataOpen.exportFormat}`);
+
+    await page.click('[data-onc-action="metadata-toggle"]');
+    const metadataClosed = await getMetadataState(page);
+    assert(metadataClosed.visible === false, `Expected metadata panel to close for ${preset} at ${viewport.name}`);
+
+    const helperText = await page.textContent('#onenote-cleaner-toolbar');
+    assert(!/Advanced features in one toolbar/i.test(String(helperText || '')), `Did not expect removed helper message to be present for ${preset} at ${viewport.name}`);
+
+    await page.click('[data-onc-action="hide-toolbar"]');
+    const hiddenState = await getHiddenState(page);
+    assert(hiddenState.toolbarHidden === true, `Expected toolbar hidden after hide action for ${preset} at ${viewport.name}`);
+    assert(hiddenState.showVisible === true, `Expected reveal button visible after hiding toolbar for ${preset} at ${viewport.name}`);
+    assert(hiddenState.showLabel === 'Toolbar', `Expected reveal button label Toolbar for ${preset} at ${viewport.name}, got ${hiddenState.showLabel}`);
+    assert(Math.abs(hiddenState.showTop - hiddenState.toggleTop) <= 6, `Expected reveal button vertical alignment near theme toggle for ${preset} at ${viewport.name}, got show=${hiddenState.showTop} toggle=${hiddenState.toggleTop}`);
+    assert(hiddenState.showRight < hiddenState.toggleRight, `Expected reveal button left of theme toggle for ${preset} at ${viewport.name}, got showRight=${hiddenState.showRight} toggleRight=${hiddenState.toggleRight}`);
+
+    await page.click('#onc-toolbar-show');
+    const restoredState = await getInitialState(page);
+    assert(restoredState.toolbarHidden === false, `Expected toolbar restored after show action for ${preset} at ${viewport.name}`);
+    assert(restoredState.showVisible === false, `Expected reveal button hidden while toolbar visible for ${preset} at ${viewport.name}`);
+
+    return metrics;
+  }
 
   await new Promise((resolve, reject) => {
     server.listen(0, '127.0.0.1', resolve);
@@ -67,359 +232,38 @@ function assert(condition, message) {
   try {
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
-    await page.setViewportSize({ width: 390, height: 844 });
+    const metricsByViewport = new Map();
 
-    async function readToolbarMetrics(urlPath) {
-      await page.goto(`${baseUrl}${urlPath}`, { waitUntil: 'networkidle' });
-      await page.waitForSelector('#onenote-cleaner-toolbar', { state: 'attached' });
-      await page.waitForSelector('#onc-converted-theme-toggle');
-      await page.waitForFunction(() => {
-        const root = document.getElementById('onenote-cleaner-toolbar');
-        return Boolean(root && root.dataset && root.dataset.oncInitialized === '1');
-      });
-
-      return page.evaluate(() => {
-        const root = document.getElementById('onenote-cleaner-toolbar');
-        const firstButton = document.querySelector('#onenote-cleaner-toolbar .onc-btn');
-        const toolbarStyle = root ? getComputedStyle(root) : null;
-        const buttonStyle = firstButton ? getComputedStyle(firstButton) : null;
-        return {
-          preset: root ? root.getAttribute('data-onc-toolbar-preset') : '',
-          toolbarPaddingTop: toolbarStyle ? parseFloat(toolbarStyle.paddingTop || '0') : 0,
-          toolbarPaddingLeft: toolbarStyle ? parseFloat(toolbarStyle.paddingLeft || '0') : 0,
-          buttonFontSize: buttonStyle ? parseFloat(buttonStyle.fontSize || '0') : 0,
-          buttonPaddingLeft: buttonStyle ? parseFloat(buttonStyle.paddingLeft || '0') : 0,
-          buttonPaddingRight: buttonStyle ? parseFloat(buttonStyle.paddingRight || '0') : 0
-        };
-      });
+    for (const viewport of VIEWPORTS) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      const viewportMetrics = {};
+      for (const preset of PRESETS) {
+        viewportMetrics[preset] = await verifyPresetAcrossViewport(page, baseUrl, preset, viewport);
+      }
+      metricsByViewport.set(viewport.name, viewportMetrics);
     }
 
-    const compactMetrics = await readToolbarMetrics('/toolbar-compact');
-    const classicMetrics = await readToolbarMetrics('/toolbar');
-    assert(compactMetrics.preset === 'compact', `Expected compact preset marker on compact toolbar root, got ${compactMetrics.preset}`);
-    assert(classicMetrics.preset === 'classic', `Expected classic preset marker on classic toolbar root, got ${classicMetrics.preset}`);
-    assert(compactMetrics.toolbarPaddingTop > 0 && compactMetrics.toolbarPaddingTop < classicMetrics.toolbarPaddingTop, `Expected compact toolbar top padding to be smaller than classic, got compact=${compactMetrics.toolbarPaddingTop} classic=${classicMetrics.toolbarPaddingTop}`);
-    assert(compactMetrics.toolbarPaddingLeft > 0 && compactMetrics.toolbarPaddingLeft < classicMetrics.toolbarPaddingLeft, `Expected compact toolbar side padding to be smaller than classic, got compact=${compactMetrics.toolbarPaddingLeft} classic=${classicMetrics.toolbarPaddingLeft}`);
-    assert(compactMetrics.buttonFontSize > 0 && compactMetrics.buttonFontSize <= classicMetrics.buttonFontSize, `Expected compact toolbar button font size to be no larger than classic, got compact=${compactMetrics.buttonFontSize} classic=${classicMetrics.buttonFontSize}`);
-    assert(compactMetrics.buttonPaddingLeft > 0 && compactMetrics.buttonPaddingLeft < classicMetrics.buttonPaddingLeft, `Expected compact toolbar button padding-left to be smaller than classic, got compact=${compactMetrics.buttonPaddingLeft} classic=${classicMetrics.buttonPaddingLeft}`);
-    assert(compactMetrics.buttonPaddingRight > 0 && compactMetrics.buttonPaddingRight < classicMetrics.buttonPaddingRight, `Expected compact toolbar button padding-right to be smaller than classic, got compact=${compactMetrics.buttonPaddingRight} classic=${classicMetrics.buttonPaddingRight}`);
+    for (const viewport of VIEWPORTS) {
+      const viewportMetrics = metricsByViewport.get(viewport.name);
+      const compact = viewportMetrics.compact;
+      const office = viewportMetrics['office-97'];
+      const ribbon = viewportMetrics.ribbon;
+      const macos = viewportMetrics.macos;
+      const linux = viewportMetrics.linux;
 
-    await page.goto(`${baseUrl}/toolbar`, { waitUntil: 'networkidle' });
-    await page.waitForSelector('#onenote-cleaner-toolbar', { state: 'attached' });
-    await page.waitForSelector('#onc-converted-theme-toggle');
-    await page.waitForFunction(() => {
-      const root = document.getElementById('onenote-cleaner-toolbar');
-      return Boolean(root && root.dataset && root.dataset.oncInitialized === '1');
-    });
-
-    const initialState = await page.evaluate(() => {
-      const root = document.getElementById('onenote-cleaner-toolbar');
-      const showButton = document.getElementById('onc-toolbar-show');
-      const firstButton = document.querySelector('#onenote-cleaner-toolbar .onc-btn');
-      const firstButtonStyle = firstButton ? getComputedStyle(firstButton) : null;
-      return {
-        toolbarHidden: Boolean(root && root.hidden),
-        showVisible: Boolean(showButton && !showButton.hidden),
-        preset: root ? root.getAttribute('data-onc-toolbar-preset') : '',
-        buttonFontSize: firstButtonStyle ? parseFloat(firstButtonStyle.fontSize || '0') : 0,
-        buttonPaddingLeft: firstButtonStyle ? parseFloat(firstButtonStyle.paddingLeft || '0') : 0,
-        buttonPaddingRight: firstButtonStyle ? parseFloat(firstButtonStyle.paddingRight || '0') : 0
-      };
-    });
-    assert(initialState.toolbarHidden === true, 'Expected toolbar to be hidden by default');
-    assert(initialState.showVisible === true, 'Expected Toolbar reveal button visible by default');
-    assert(initialState.preset === 'classic', `Expected classic preset marker on toolbar root, got ${initialState.preset}`);
-    assert(initialState.buttonFontSize > 0 && initialState.buttonFontSize <= 12.5, `Expected classic toolbar font size on narrow viewport, got ${initialState.buttonFontSize}`);
-    assert(initialState.buttonPaddingLeft > 0 && initialState.buttonPaddingLeft <= 6.5, `Expected classic toolbar button padding-left on narrow viewport, got ${initialState.buttonPaddingLeft}`);
-    assert(initialState.buttonPaddingRight > 0 && initialState.buttonPaddingRight <= 6.5, `Expected classic toolbar button padding-right on narrow viewport, got ${initialState.buttonPaddingRight}`);
-
-    await page.click('#onc-toolbar-show');
-
-    const shownFirstState = await page.evaluate(() => {
-      const root = document.getElementById('onenote-cleaner-toolbar');
-      const showButton = document.getElementById('onc-toolbar-show');
-      return {
-        toolbarHidden: Boolean(root && root.hidden),
-        showVisible: Boolean(showButton && !showButton.hidden)
-      };
-    });
-    assert(shownFirstState.toolbarHidden === false, 'Expected toolbar to appear when clicking Toolbar reveal button');
-    assert(shownFirstState.showVisible === false, 'Expected Toolbar reveal button to hide when toolbar is visible');
-
-    await page.click('[data-onc-action="edit-toggle"]');
-    const editToolsState = await page.evaluate(() => {
-      const editTools = document.querySelector('[data-onc-role="edit-tools"]');
-      const editToggle = document.querySelector('[data-onc-action="edit-toggle"]');
-      const hideButton = document.querySelector('[data-onc-action="hide-toolbar"]');
-      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
-      return {
-        visible: Boolean(editTools && !editTools.hidden),
-        editLabel: editToggle ? (editToggle.textContent || '').trim() : '',
-        hideLabel: hideButton ? (hideButton.textContent || '').trim() : '',
-        styleDisabled: styleSelect ? styleSelect.disabled : true,
-        styleOptions: styleSelect ? Array.from(styleSelect.options).map((option) => ({ value: option.value, label: option.textContent || '' })) : []
-      };
-    });
-    assert(editToolsState.visible === true, 'Expected edit formatting tools to show when edit mode is enabled');
-    assert(editToolsState.editLabel === 'Disable edit', `Expected edit toggle label to switch to Disable edit, got ${editToolsState.editLabel}`);
-    assert(editToolsState.hideLabel === 'Hide', `Expected hide button label to be Hide, got ${editToolsState.hideLabel}`);
-    assert(editToolsState.styleDisabled === false, 'Expected styles dropdown to be enabled in edit mode');
-    assert(JSON.stringify(editToolsState.styleOptions.map((option) => option.value)) === JSON.stringify(['page-title', 'heading-1', 'heading-2', 'heading-3', 'heading-4', 'heading-5', 'heading-6', 'citation', 'quote', 'code', 'normal']), `Expected OneNote-style dropdown values, got ${JSON.stringify(editToolsState.styleOptions)}`);
-
-    await page.click('p[data-onc-editable="1"]');
-
-    await page.evaluate(() => {
-      window.__oncEditProbe = { prompts: [], execCalls: [] };
-      const nativePrompt = window.prompt.bind(window);
-      const nativeExec = document.execCommand.bind(document);
-      const nativeQueryState = document.queryCommandState ? document.queryCommandState.bind(document) : null;
-      const nativeQueryValue = document.queryCommandValue ? document.queryCommandValue.bind(document) : null;
-      const commandState = {
-        bold: false,
-        italic: false,
-        formatBlock: 'p'
-      };
-      window.prompt = (message, defaultValue) => {
-        window.__oncEditProbe.prompts.push({ message: String(message || ''), defaultValue: String(defaultValue || '') });
-        if (/display text/i.test(String(message || ''))) return 'Example Link';
-        if (/url/i.test(String(message || ''))) return 'https://example.com';
-        return nativePrompt(message, defaultValue);
-      };
-      document.execCommand = (command, ui, value) => {
-        const normalized = String(command || '').toLowerCase();
-        const normalizedValue = value == null ? '' : String(value).toLowerCase();
-        if (normalized === 'bold') commandState.bold = !commandState.bold;
-        if (normalized === 'italic') commandState.italic = !commandState.italic;
-        if (normalized === 'formatblock') {
-          commandState.formatBlock = normalizedValue || 'p';
-        }
-        window.__oncEditProbe.execCalls.push({ command: String(command || ''), value: value == null ? '' : String(value), state: { ...commandState } });
-        return true;
-      };
-      document.queryCommandState = (command) => {
-        const normalized = String(command || '').toLowerCase();
-        if (normalized === 'bold') return commandState.bold;
-        if (normalized === 'italic') return commandState.italic;
-        return false;
-      };
-      document.queryCommandValue = (command) => {
-        if (String(command || '').toLowerCase() === 'formatblock') return commandState.formatBlock;
-        return '';
-      };
-      window.__oncEditProbe.restore = () => {
-        window.prompt = nativePrompt;
-        document.execCommand = nativeExec;
-        if (nativeQueryState) document.queryCommandState = nativeQueryState;
-        if (nativeQueryValue) document.queryCommandValue = nativeQueryValue;
-      };
-    });
-
-    await page.click('[data-onc-edit-command="bold"]');
-    const boldState = await page.evaluate(() => {
-      const boldButton = document.querySelector('[data-onc-edit-command="bold"]');
-      return {
-        ariaPressed: boldButton ? boldButton.getAttribute('aria-pressed') : null,
-        activeFlag: boldButton ? boldButton.getAttribute('data-onc-active') : null
-      };
-    });
-    assert(boldState.ariaPressed === 'true', `Expected bold button aria-pressed=true after click, got ${boldState.ariaPressed}`);
-    assert(boldState.activeFlag === 'true', `Expected bold button data-onc-active=true after click, got ${boldState.activeFlag}`);
-
-    await page.click('[data-onc-edit-command="bold"]');
-    const boldOffState = await page.evaluate(() => {
-      const boldButton = document.querySelector('[data-onc-edit-command="bold"]');
-      return {
-        ariaPressed: boldButton ? boldButton.getAttribute('aria-pressed') : null,
-        activeFlag: boldButton ? boldButton.getAttribute('data-onc-active') : null
-      };
-    });
-    assert(boldOffState.ariaPressed === 'false', `Expected bold button aria-pressed=false after second click, got ${boldOffState.ariaPressed}`);
-    assert(boldOffState.activeFlag === 'false', `Expected bold button data-onc-active=false after second click, got ${boldOffState.activeFlag}`);
-
-    await page.click('[data-onc-edit-command="bold"]');
-    await page.click('[data-onc-edit-command="italic"]');
-    const independentState = await page.evaluate(() => {
-      const boldButton = document.querySelector('[data-onc-edit-command="bold"]');
-      const italicButton = document.querySelector('[data-onc-edit-command="italic"]');
-      return {
-        bold: boldButton ? boldButton.getAttribute('aria-pressed') : null,
-        italic: italicButton ? italicButton.getAttribute('aria-pressed') : null
-      };
-    });
-    assert(independentState.bold === 'true', `Expected bold to remain enabled when italic is enabled, got ${independentState.bold}`);
-    assert(independentState.italic === 'true', `Expected italic to enable independently, got ${independentState.italic}`);
-
-    await page.click('[data-onc-edit-command="bold"]');
-    const independentOffState = await page.evaluate(() => {
-      const boldButton = document.querySelector('[data-onc-edit-command="bold"]');
-      const italicButton = document.querySelector('[data-onc-edit-command="italic"]');
-      return {
-        bold: boldButton ? boldButton.getAttribute('aria-pressed') : null,
-        italic: italicButton ? italicButton.getAttribute('aria-pressed') : null
-      };
-    });
-    assert(independentOffState.bold === 'false', `Expected bold to toggle off independently, got ${independentOffState.bold}`);
-    assert(independentOffState.italic === 'true', `Expected italic to remain enabled when bold toggles off, got ${independentOffState.italic}`);
-
-    await page.selectOption('[data-onc-role="style-select"]', 'heading-2');
-    const heading2State = await page.evaluate(() => {
-      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
-      const probe = window.__oncEditProbe || { execCalls: [] };
-      const lastFormatBlock = Array.isArray(probe.execCalls)
-        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
-        : null;
-      return {
-        value: styleSelect ? styleSelect.value : null,
-        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
-      };
-    });
-    assert(heading2State.value === 'heading-2', `Expected styles dropdown to show heading-2, got ${heading2State.value}`);
-    assert(heading2State.lastFormatBlock === 'h2', `Expected formatBlock command to use h2, got ${heading2State.lastFormatBlock}`);
-
-    await page.selectOption('[data-onc-role="style-select"]', 'quote');
-    const quoteState = await page.evaluate(() => {
-      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
-      const probe = window.__oncEditProbe || { execCalls: [] };
-      const lastFormatBlock = Array.isArray(probe.execCalls)
-        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
-        : null;
-      return {
-        value: styleSelect ? styleSelect.value : null,
-        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
-      };
-    });
-    assert(quoteState.value === 'quote', `Expected styles dropdown to show quote, got ${quoteState.value}`);
-    assert(quoteState.lastFormatBlock === 'blockquote', `Expected formatBlock command to use blockquote, got ${quoteState.lastFormatBlock}`);
-
-    await page.selectOption('[data-onc-role="style-select"]', 'code');
-    const codeState = await page.evaluate(() => {
-      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
-      const probe = window.__oncEditProbe || { execCalls: [] };
-      const lastFormatBlock = Array.isArray(probe.execCalls)
-        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
-        : null;
-      return {
-        value: styleSelect ? styleSelect.value : null,
-        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
-      };
-    });
-    assert(codeState.value === 'code', `Expected styles dropdown to show code, got ${codeState.value}`);
-    assert(codeState.lastFormatBlock === 'pre', `Expected formatBlock command to use pre, got ${codeState.lastFormatBlock}`);
-
-    await page.selectOption('[data-onc-role="style-select"]', 'normal');
-    const normalState = await page.evaluate(() => {
-      const styleSelect = document.querySelector('[data-onc-role="style-select"]');
-      const probe = window.__oncEditProbe || { execCalls: [] };
-      const lastFormatBlock = Array.isArray(probe.execCalls)
-        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'formatblock')
-        : null;
-      return {
-        value: styleSelect ? styleSelect.value : null,
-        lastFormatBlock: lastFormatBlock ? String(lastFormatBlock.value || '').toLowerCase() : ''
-      };
-    });
-    assert(normalState.value === 'normal', `Expected styles dropdown to return to Normal, got ${normalState.value}`);
-    assert(normalState.lastFormatBlock === 'p', `Expected formatBlock command to return to paragraph, got ${normalState.lastFormatBlock}`);
-
-    await page.click('[data-onc-edit-command="color"]');
-    await page.evaluate(() => {
-      const colorInput = document.querySelector('[data-onc-role="color-input"]');
-      if (!colorInput) return;
-      colorInput.value = '#ff0000';
-      colorInput.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-    const colorProbe = await page.evaluate(() => {
-      const probe = window.__oncEditProbe || { execCalls: [] };
-      const foreColor = Array.isArray(probe.execCalls)
-        ? [...probe.execCalls].reverse().find((item) => item.command.toLowerCase() === 'forecolor')
-        : null;
-      return {
-        value: foreColor ? String(foreColor.value || '').toLowerCase() : ''
-      };
-    });
-    assert(colorProbe.value === '#ff0000', `Expected color picker to apply foreColor #ff0000, got ${colorProbe.value}`);
-
-    await page.click('[data-onc-edit-command="link"]');
-    const linkProbe = await page.evaluate(() => {
-      const probe = window.__oncEditProbe || { prompts: [], execCalls: [] };
-      const anchorInsert = Array.isArray(probe.execCalls)
-        ? probe.execCalls.find((item) => item.command.toLowerCase() === 'inserthtml')
-        : null;
-      return {
-        prompts: probe.prompts || [],
-        anchorInsert: anchorInsert || null
-      };
-    });
-    assert(linkProbe.prompts.length >= 2, `Expected hyperlink flow to prompt at least twice, got ${linkProbe.prompts.length}`);
-    assert(/url/i.test(linkProbe.prompts[0].message), `Expected first hyperlink prompt to request URL, got ${linkProbe.prompts[0].message}`);
-    assert(/display text/i.test(linkProbe.prompts[1].message), `Expected second hyperlink prompt to request display text, got ${linkProbe.prompts[1].message}`);
-    assert(Boolean(linkProbe.anchorInsert), 'Expected hyperlink flow to insert HTML anchor via execCommand(insertHTML)');
-    assert(/<a\s+href="https:\/\/example\.com">Example Link<\/a>/i.test(String(linkProbe.anchorInsert && linkProbe.anchorInsert.value ? linkProbe.anchorInsert.value : '')), 'Expected inserted hyperlink markup to include prompted URL and display text');
-
-    await page.evaluate(() => {
-      if (window.__oncEditProbe && typeof window.__oncEditProbe.restore === 'function') {
-        window.__oncEditProbe.restore();
+      assert(compact.toolbarPaddingTop < office.toolbarPaddingTop, `Expected compact top padding smaller than office-97 at ${viewport.name}, got compact=${compact.toolbarPaddingTop} office=${office.toolbarPaddingTop}`);
+      assert(compact.toolbarPaddingLeft < office.toolbarPaddingLeft, `Expected compact side padding smaller than office-97 at ${viewport.name}, got compact=${compact.toolbarPaddingLeft} office=${office.toolbarPaddingLeft}`);
+      assert(compact.buttonPaddingLeft < office.buttonPaddingLeft, `Expected compact button padding-left smaller than office-97 at ${viewport.name}, got compact=${compact.buttonPaddingLeft} office=${office.buttonPaddingLeft}`);
+      assert(compact.buttonPaddingRight < office.buttonPaddingRight, `Expected compact button padding-right smaller than office-97 at ${viewport.name}, got compact=${compact.buttonPaddingRight} office=${office.buttonPaddingRight}`);
+      if (viewport.width > 640) {
+        assert(ribbon.styleWidth > compact.styleWidth, `Expected ribbon style dropdown wider than compact at ${viewport.name}, got ribbon=${ribbon.styleWidth} compact=${compact.styleWidth}`);
+        assert(linux.styleWidth > compact.styleWidth, `Expected linux style dropdown wider than compact at ${viewport.name}, got linux=${linux.styleWidth} compact=${compact.styleWidth}`);
       }
-    });
-
-    await page.click('[data-onc-action="metadata-toggle"]');
-    const metadataState = await page.evaluate(() => {
-      const panel = document.querySelector('[data-onc-role="metadata-panel"]');
-      const pageTitle = panel ? panel.querySelector('[data-onc-field="page-title"]') : null;
-      const exportFormat = panel ? panel.querySelector('[data-onc-field="export-format"]') : null;
-      return {
-        visible: Boolean(panel && !panel.hidden),
-        text: panel ? String(panel.textContent || '') : '',
-        pageTitle: pageTitle ? String(pageTitle.textContent || '').trim() : '',
-        exportFormat: exportFormat ? String(exportFormat.textContent || '').trim() : ''
-      };
-    });
-    assert(metadataState.visible === true, 'Expected metadata panel to open');
-    assert(!/Profile/i.test(metadataState.text) && !/Warnings/i.test(metadataState.text), 'Did not expect Profile or Warnings entries in metadata panel');
-    assert(metadataState.pageTitle === 'Toolbar', `Expected metadata panel to show page title Toolbar, got ${metadataState.pageTitle}`);
-    assert(metadataState.exportFormat === 'html', `Expected metadata panel to show export format html, got ${metadataState.exportFormat}`);
-
-    const helperText = await page.textContent('#onenote-cleaner-toolbar');
-    assert(!/Advanced features in one toolbar/i.test(String(helperText || '')), 'Did not expect removed helper message to be present');
-
-    await page.click('[data-onc-action="hide-toolbar"]');
-
-    const hiddenState = await page.evaluate(() => {
-      const root = document.getElementById('onenote-cleaner-toolbar');
-      const showButton = document.getElementById('onc-toolbar-show');
-      const toggle = document.getElementById('onc-converted-theme-toggle');
-      const showRect = showButton ? showButton.getBoundingClientRect() : null;
-      const toggleRect = toggle ? toggle.getBoundingClientRect() : null;
-      return {
-        toolbarHidden: Boolean(root && root.hidden),
-        showVisible: Boolean(showButton && !showButton.hidden),
-        showLabel: showButton ? (showButton.textContent || '').trim() : '',
-        showTop: showRect ? Math.round(showRect.top) : -1,
-        toggleTop: toggleRect ? Math.round(toggleRect.top) : -1,
-        showRight: showRect ? Math.round(showRect.right) : -1,
-        toggleRight: toggleRect ? Math.round(toggleRect.right) : -1
-      };
-    });
-
-    assert(hiddenState.toolbarHidden === true, 'Expected toolbar to be hidden after clicking hide button');
-    assert(hiddenState.showVisible === true, 'Expected show button to be visible after hiding toolbar');
-    assert(hiddenState.showLabel === 'Toolbar', `Expected reveal button label to be Toolbar, got ${hiddenState.showLabel}`);
-    assert(Math.abs(hiddenState.showTop - hiddenState.toggleTop) <= 6, `Expected reveal button to align next to theme toggle vertically, got show=${hiddenState.showTop} toggle=${hiddenState.toggleTop}`);
-    assert(hiddenState.showRight < hiddenState.toggleRight, `Expected reveal button to sit left of theme toggle, got showRight=${hiddenState.showRight} toggleRight=${hiddenState.toggleRight}`);
-
-    await page.click('#onc-toolbar-show');
-
-    const shownState = await page.evaluate(() => {
-      const root = document.getElementById('onenote-cleaner-toolbar');
-      const showButton = document.getElementById('onc-toolbar-show');
-      return {
-        toolbarHidden: Boolean(root && root.hidden),
-        showVisible: Boolean(showButton && !showButton.hidden)
-      };
-    });
-
-    assert(shownState.toolbarHidden === false, 'Expected toolbar to reappear after clicking show button');
-    assert(shownState.showVisible === false, 'Expected show button to hide after restoring toolbar');
+      assert(macos.buttonRadius > office.buttonRadius, `Expected macos button radius larger than office-97 at ${viewport.name}, got macos=${macos.buttonRadius} office=${office.buttonRadius}`);
+      assert(/gradient|linear-gradient/i.test(String(ribbon.toolbarBackgroundImage || '')), `Expected ribbon preset to keep gradient background at ${viewport.name}, got ${ribbon.toolbarBackgroundImage}`);
+      assert(isDarkRgb(linux.toolbarBackgroundColor), `Expected linux preset toolbar background to remain dark at ${viewport.name}, got ${linux.toolbarBackgroundColor}`);
+      assert(!isDarkRgb(compact.toolbarBackgroundColor), `Did not expect compact preset toolbar background to be dark at ${viewport.name}, got ${compact.toolbarBackgroundColor}`);
+    }
 
     console.log('toolbar-hide-playwright: OK');
     await browser.close();

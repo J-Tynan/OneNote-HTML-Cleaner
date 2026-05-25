@@ -29,7 +29,7 @@
           <button
             id="helpButton"
             type="button"
-            class="btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm"
+            class="btn-ghost header-icon-button"
             aria-haspopup="dialog"
             aria-controls="helpModal"
             aria-expanded="false"
@@ -41,7 +41,7 @@
           <button
             id="themeToggle"
             type="button"
-            class="btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none"
+            class="btn-ghost header-icon-button header-icon-button--theme"
             aria-pressed="false"
             aria-label="Toggle color theme">
             <span id="themeToggleIcon" aria-hidden="true">🔆</span>
@@ -87,7 +87,7 @@
               <button
                 id="importButton"
                 type="button"
-                class="btn-primary homepage-import-button">
+                class="btn-primary homepage-import-button homepage-primary-button">
                 Browse files
               </button>
 
@@ -281,12 +281,12 @@
                     <span>
                       Add toolbar to exported pages
                       <span class="block text-xs text-muted">
-                        When enabled, the exported toolbar includes both the edit mode toggle and the metadata visibility toggle automatically.
+                        Available for HTML export only. When enabled, the exported toolbar includes both the edit mode toggle and the metadata visibility toggle automatically.
                       </span>
                     </span>
                   </label>
 
-                  <div class="option-subgroup option-subgroup--compact">
+                  <div id="toolbarStyleContainer" class="option-subgroup option-subgroup--compact hidden">
                     <label for="toolbarStyle" class="block text-xs text-muted">Toolbar style</label>
                     <select
                       id="toolbarStyle"
@@ -294,10 +294,13 @@
                       class="form-control mt-1"
                       aria-describedby="toolbarStyleHelp">
                       <option value="compact" selected>Compact (default)</option>
-                      <option value="classic">Classic</option>
+                      <option value="office-97">Office-97</option>
+                      <option value="ribbon">Ribbon</option>
+                      <option value="macos">MacOS</option>
+                      <option value="linux">Linux</option>
                     </select>
                     <p id="toolbarStyleHelp" class="text-xs text-muted">
-                      Compact keeps controls small for narrow screens. Classic uses a denser, Office-inspired toolbar look.
+                      Compact keeps controls small for narrow screens. Enable toolbar injection to choose a toolbar chrome preset before conversion.
                     </p>
                   </div>
 
@@ -328,7 +331,7 @@
             </span>
           </div>
 
-          <p id="statusSummary" class="text-sm text-secondary">
+          <p id="statusSummary" class="status-summary text-sm text-secondary">
             Added files will appear here with progress, status, and downloads.
           </p>
 
@@ -336,20 +339,20 @@
             <button
               id="clearFilesButton"
               type="button"
-              class="btn-secondary"
+              class="btn-secondary secondary-action-button"
               disabled>
               Clear files
             </button>
             <button
               id="downloadZip"
               type="button"
-              class="btn-primary"
+              class="btn-primary homepage-primary-button"
               disabled>
               Download ZIP
             </button>
           </div>
 
-          <div id="fileList" class="space-y-3"></div>
+          <div id="fileList" class="space-y-2"></div>
 
           <details
             id="diagnosticsPanel"

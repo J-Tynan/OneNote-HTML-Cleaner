@@ -21,7 +21,11 @@ function normalizeToolbarBundleMode(value) {
 
 function normalizeToolbarStyle(value) {
   const normalized = String(value || '').trim().toLowerCase();
-  return normalized === 'classic' ? 'classic' : 'compact';
+  if (normalized === 'classic' || normalized === 'office-97') return 'office-97';
+  if (normalized === 'ribbon') return 'ribbon';
+  if (normalized === 'macos') return 'macos';
+  if (normalized === 'linux') return 'linux';
+  return 'compact';
 }
 
 function normalizeOutputCleanupMode(value) {
@@ -139,14 +143,18 @@ export function buildOutputDecorationConfig(rawConfig = {}) {
   const normalizedToolbarConfig = normalizeToolbarConfig(rawConfig);
   const normalizedExportConfig = normalizeExportConfig(rawConfig);
   const normalizedConvertedPageThemeConfig = normalizeConvertedPageThemeConfig(rawConfig);
+  const htmlExport = normalizedExportConfig.ExportFormat === 'html';
 
   return {
     ...normalizedToolbarConfig,
     ...normalizedExportConfig,
-    ConvertedPageThemeToggleEnabled: normalizedExportConfig.ExportFormat === 'html'
+    ToolbarEnabled: htmlExport ? normalizedToolbarConfig.ToolbarEnabled : false,
+    ToolbarEditToggleEnabled: htmlExport ? normalizedToolbarConfig.ToolbarEditToggleEnabled : false,
+    ToolbarMetadataToggleEnabled: htmlExport ? normalizedToolbarConfig.ToolbarMetadataToggleEnabled : false,
+    ConvertedPageThemeToggleEnabled: htmlExport
       ? normalizedConvertedPageThemeConfig.ConvertedPageThemeToggleEnabled
       : false,
-    ConvertedPageThemeToggleOledBlack: normalizedExportConfig.ExportFormat === 'html'
+    ConvertedPageThemeToggleOledBlack: htmlExport
       ? normalizedConvertedPageThemeConfig.ConvertedPageThemeToggleOledBlack
       : false
   };
