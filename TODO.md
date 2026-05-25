@@ -577,6 +577,9 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] Remove Office/OneNote artifacts.
 - [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
 - [x] Normalize repetitive inline styles (migration + collapse rules).
+- [ ] [P2] Improve cleaned HTML code quality for human inspection: remove redundant blank lines between sections, trim avoidable whitespace, and review minor markup/serialization cleanup opportunities.
+- [ ] [P3] Add a reproducible token-efficiency benchmark that compares one representative note saved as cleaned HTML, MHTML, PDF, and DOCX using a fixed tokenizer, and record raw token counts plus normalized comparison metrics.
+- [ ] [P3] Document token-efficiency findings for launch and marketing use, including methodology caveats about tokenizer choice, embedded assets, and why cleaned HTML is a better LLM-facing source than raw export formats.
 - [x] Implement `normalizeTableAttributes` with unit tests.
 - [x] Restore embedded images in pipeline and add `image-embedding.unit.js`.
 
