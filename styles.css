@@ -32,6 +32,15 @@ html {
   --btn-padding-y: 0.75rem; /* more top/bottom space */
   --btn-shadow: 0 1px 2px rgba(2,6,23,0.06);
   --btn-focus-ring: rgba(14,165,179,0.12);
+  --btn-secondary-min-height: 2.25rem;
+  --btn-secondary-padding-x: 0.875rem;
+  --btn-secondary-padding-y: 0.4375rem;
+  --btn-secondary-font-size: 0.8125rem;
+  --btn-header-icon-size: 2.25rem;
+  --btn-homepage-primary-min-height: 3.5rem;
+  --btn-homepage-primary-padding-x: 1.5rem;
+  --btn-homepage-primary-padding-y: 0.875rem;
+  --btn-homepage-primary-font-size: 0.9375rem;
 }
 
 /* === BASELINE === */
@@ -151,8 +160,15 @@ summary::-webkit-details-marker {
 }
 
 .homepage-import-button {
-  min-height: 3rem;
   white-space: nowrap;
+}
+
+.homepage-primary-button {
+  min-height: var(--btn-homepage-primary-min-height);
+  padding: var(--btn-homepage-primary-padding-y) var(--btn-homepage-primary-padding-x);
+  font-size: var(--btn-homepage-primary-font-size);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .home-layout__primary,
@@ -172,6 +188,10 @@ summary::-webkit-details-marker {
 
 .home-results-card--empty #statusSummary {
   max-width: 30ch;
+}
+
+#statusSummary {
+  min-height: calc(1.6em * 2);
 }
 
 .home-results-card--empty #fileList:empty {
@@ -340,15 +360,22 @@ summary::-webkit-details-marker {
     justify-content: center;
     -webkit-appearance: none;
     appearance: none;
-    font-size: 0.75rem;
+    min-height: var(--btn-secondary-min-height);
+    font-size: var(--btn-secondary-font-size);
     font-weight: 500;
+    line-height: 1.25;
     transition: background-color 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
     outline: none;
     background-color: var(--bg-card);
     color: var(--text-help);
     border: 1px solid var(--border-muted);
-    border-radius: 0.375rem;
-    padding: 0.25rem 0.625rem;
+    border-radius: var(--btn-radius);
+    padding: var(--btn-secondary-padding-y) var(--btn-secondary-padding-x);
+    box-shadow: var(--btn-shadow);
+  }
+  .btn-secondary:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
   }
   .btn-secondary:hover { background-color: var(--bg-soft); }
   .btn-secondary:focus { box-shadow: 0 0 0 4px var(--btn-focus-ring); }
@@ -370,6 +397,8 @@ summary::-webkit-details-marker {
     border-radius: 0.25rem;
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
+    line-height: 1;
+    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, color 150ms ease;
     background: transparent;
     color: var(--text-primary);
     border: 1px solid transparent;
@@ -379,6 +408,36 @@ summary::-webkit-details-marker {
   .btn-ghost:focus-visible {
     outline: none;
     box-shadow: 0 0 0 4px var(--btn-focus-ring);
+  }
+
+  .header-icon-button {
+    width: var(--btn-header-icon-size);
+    height: var(--btn-header-icon-size);
+    padding: 0.375rem;
+    border-color: var(--border-muted);
+    background-color: var(--bg-card);
+    color: var(--text-help);
+    box-shadow: var(--btn-shadow);
+  }
+
+  .header-icon-button:hover {
+    background-color: var(--bg-soft);
+  }
+
+  .header-icon-button--theme {
+    padding: 0.25rem;
+    font-size: 1.25rem;
+  }
+
+  .secondary-action-button {
+    min-height: 2.25rem;
+    padding: 0.4375rem 0.875rem;
+  }
+
+  .file-item__remove-button {
+    flex: none;
+    align-self: flex-start;
+    white-space: nowrap;
   }
 
   .form-control {
@@ -620,6 +679,11 @@ html.dark .status-pill--error {
 
   #downloadZip {
     width: 100%;
+  }
+
+  .homepage-primary-button {
+    min-height: 3.25rem;
+    padding: 0.8125rem 1.25rem;
   }
 
   .convert-button-wrapper .tooltip {
@@ -868,6 +932,10 @@ html.dark #dropzone .text-xs {
 
 html.dark .btn-ghost:hover {
   background-color: rgba(148, 163, 184, 0.16);
+}
+
+html.dark .header-icon-button:hover {
+  background-color: var(--bg-soft);
 }
 
 /* Tooltip for Convert button when manual action is disabled */

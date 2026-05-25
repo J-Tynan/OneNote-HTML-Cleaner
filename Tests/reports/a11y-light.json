@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-05-10T16:28:35.369Z",
-  "url": "http://127.0.0.1:63087/",
+  "timestamp": "2026-05-25T17:10:51.854Z",
+  "url": "http://127.0.0.1:60045/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -863,7 +863,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -889,7 +889,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -915,7 +915,7 @@
             }
           ],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -1200,7 +1200,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -1218,7 +1218,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -1236,7 +1236,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -1542,7 +1542,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -1560,7 +1560,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -1578,7 +1578,7 @@
             }
           ],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -1924,7 +1924,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -1956,7 +1956,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -2216,7 +2216,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -2234,7 +2234,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -2252,7 +2252,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -2475,7 +2475,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -2500,7 +2500,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -2518,7 +2518,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
           "target": [
             "#importButton"
           ]
@@ -2561,7 +2561,25 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary secondary-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "target": [
+            "#clearFilesButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary homepage-primary-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -2615,7 +2633,7 @@
                 {
                   "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
                   "target": [
-                    ".justify-between.gap-3.items-center > h2"
+                    ".items-center.justify-between.gap-3 > h2"
                   ]
                 }
               ],
@@ -2724,7 +2742,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#0b6f83",
                 "contrastRatio": 5.8,
-                "fontSize": "10.5pt (14px)",
+                "fontSize": "11.3pt (15px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -2736,7 +2754,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
           "target": [
             "#importButton"
           ]
@@ -2788,7 +2806,7 @@
           "impact": null,
           "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
           "target": [
-            ".max-w-sm > .text-secondary"
+            ".max-w-sm > .text-secondary.text-sm"
           ]
         },
         {
@@ -2883,7 +2901,7 @@
           "impact": null,
           "html": "<span class=\"text-xs text-muted\">Optional</span>",
           "target": [
-            ".advanced-options-summary > .text-muted.text-xs"
+            ".advanced-options-summary > .text-muted"
           ]
         },
         {
@@ -2908,7 +2926,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".justify-between.gap-3.items-center > h2"
+            ".items-center.justify-between.gap-3 > h2"
           ]
         },
         {
@@ -3324,6 +3342,42 @@
           "any": [
             {
               "id": "duplicate-id-aria",
+              "data": "toolbarStyle",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"toolbarStyle\" disabled=\"\" class=\"form-control mt-1\" aria-describedby=\"toolbarStyleHelp\">\n                      <option value=\"compact\" selected=\"\">Compact (default)</option>\n                      <option value=\"classic\">Classic</option>\n                    </select>",
+          "target": [
+            "#toolbarStyle"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "toolbarStyleHelp",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"toolbarStyleHelp\" class=\"text-xs text-muted\">\n                      Compact keeps controls small for narrow screens. Classic uses a denser, Office-inspired toolbar look.\n                    </p>",
+          "target": [
+            "#toolbarStyleHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
               "data": "helpModal",
               "relatedNodes": [],
               "impact": "critical",
@@ -3438,7 +3492,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".justify-between.gap-3.items-center > h2"
+            ".items-center.justify-between.gap-3 > h2"
           ]
         }
       ]
@@ -3588,7 +3642,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".justify-between.gap-3.items-center > h2"
+            ".items-center.justify-between.gap-3 > h2"
           ]
         }
       ]
@@ -4083,7 +4137,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -4390,7 +4444,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -4408,7 +4462,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -4426,7 +4480,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
           "target": [
             "#importButton"
           ]
@@ -4480,7 +4534,25 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary secondary-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "target": [
+            "#clearFilesButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary homepage-primary-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -4693,7 +4765,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -4733,7 +4805,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center w-8 h-8 p-0 text-2xl leading-none\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"false\" aria-label=\"Switch to dark theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
           "target": [
             "#themeToggle"
           ]
@@ -4793,7 +4865,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"page-shell mx-auto w-full max-w-6xl px-4 py-6 md:px-8\">",
+          "html": "<div class=\"page-shell mx-auto w-full max-w-6xl px-2 py-4 md:px-8\">",
           "target": [
             ".w-full"
           ]
@@ -4853,7 +4925,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+          "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
           ]
@@ -5093,7 +5165,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
           "target": [
             "#importButton"
           ]
@@ -5255,7 +5327,7 @@
           "impact": null,
           "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
           "target": [
-            ".max-w-sm > .text-secondary"
+            ".max-w-sm > .text-secondary.text-sm"
           ]
         },
         {
@@ -5395,7 +5467,7 @@
           "impact": null,
           "html": "<span class=\"text-xs text-muted\">Optional</span>",
           "target": [
-            ".advanced-options-summary > .text-muted.text-xs"
+            ".advanced-options-summary > .text-muted"
           ]
         },
         {
@@ -5455,7 +5527,7 @@
           "impact": null,
           "html": "<div class=\"flex items-center justify-between gap-3\">\n            <h2 class=\"text-lg font-medium\">Conversion results</h2>\n            <span id=\"appStateBadge\" class=\"inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase\" data-state=\"empty\">Empty</span>\n          </div>",
           "target": [
-            ".justify-between.gap-3.items-center"
+            ".items-center.justify-between.gap-3"
           ]
         },
         {
@@ -5475,7 +5547,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".justify-between.gap-3.items-center > h2"
+            ".items-center.justify-between.gap-3 > h2"
           ]
         },
         {
@@ -5533,7 +5605,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"flex justify-start\">\n            <button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n              Download ZIP\n            </button>\n          </div>",
+          "html": "<div class=\"flex flex-wrap justify-start gap-3\">",
           "target": [
             ".justify-start"
           ]
@@ -5553,7 +5625,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary secondary-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "target": [
+            "#clearFilesButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary homepage-primary-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -5821,7 +5913,7 @@
           ],
           "none": [],
           "impact": "critical",
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost inline-flex items-center justify-center rounded w-8 h-8 text-sm\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ],
@@ -5861,7 +5953,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
                   "target": [
                     ".home-start-card"
                   ]
@@ -5893,7 +5985,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
                   "target": [
                     ".home-start-card"
                   ]
@@ -5925,7 +6017,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
                   "target": [
                     ".home-start-card"
                   ]
@@ -5957,7 +6049,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
                   "target": [
                     ".home-start-card"
                   ]
@@ -5989,7 +6081,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
                   "target": [
                     ".home-start-card"
                   ]
@@ -6021,7 +6113,7 @@
               },
               "relatedNodes": [
                 {
-                  "html": "<section class=\"home-start-card card-panel import-card m-1 space-y-5\" aria-labelledby=\"importHeading\">",
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
                   "target": [
                     ".home-start-card"
                   ]

@@ -70,7 +70,9 @@ function createStaticServer(root) {
       convertDisabled: document.getElementById('convertButton')?.disabled ?? null,
       badge: document.getElementById('appStateBadge')?.textContent?.trim() ?? '',
       summary: document.getElementById('statusSummary')?.textContent?.trim() ?? '',
-      rows: document.querySelectorAll('.file-item').length
+      rows: document.querySelectorAll('.file-item').length,
+      clearTop: document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? null,
+      zipTop: document.getElementById('downloadZip')?.getBoundingClientRect().top ?? null
     }));
 
     if (initialState.clearDisabled !== true || initialState.zipDisabled !== true || initialState.convertDisabled !== true) {
@@ -93,7 +95,9 @@ function createStaticServer(root) {
       clearDisabled: document.getElementById('clearFilesButton')?.disabled ?? null,
       convertDisabled: document.getElementById('convertButton')?.disabled ?? null,
       badge: document.getElementById('appStateBadge')?.textContent?.trim() ?? '',
-      rows: document.querySelectorAll('.file-item').length
+      rows: document.querySelectorAll('.file-item').length,
+      clearTop: document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? null,
+      zipTop: document.getElementById('downloadZip')?.getBoundingClientRect().top ?? null
     }));
 
     if (queuedState.clearDisabled !== false || queuedState.convertDisabled !== false) {
@@ -101,6 +105,9 @@ function createStaticServer(root) {
     }
     if (queuedState.badge !== 'Queued' || queuedState.rows !== 1) {
       throw new Error(`Expected one queued row before clearing, got ${JSON.stringify(queuedState)}`);
+    }
+    if (Math.abs((queuedState.clearTop ?? 0) - (initialState.clearTop ?? 0)) > 1 || Math.abs((queuedState.zipTop ?? 0) - (initialState.zipTop ?? 0)) > 1) {
+      throw new Error(`Expected results action row to stay stable when status summary changes, got initial=${JSON.stringify({ clearTop: initialState.clearTop, zipTop: initialState.zipTop })} queued=${JSON.stringify({ clearTop: queuedState.clearTop, zipTop: queuedState.zipTop })}`);
     }
 
     await page.click('#clearFilesButton');
@@ -113,7 +120,9 @@ function createStaticServer(root) {
       convertDisabled: document.getElementById('convertButton')?.disabled ?? null,
       badge: document.getElementById('appStateBadge')?.textContent?.trim() ?? '',
       summary: document.getElementById('statusSummary')?.textContent?.trim() ?? '',
-      rows: document.querySelectorAll('.file-item').length
+      rows: document.querySelectorAll('.file-item').length,
+      clearTop: document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? null,
+      zipTop: document.getElementById('downloadZip')?.getBoundingClientRect().top ?? null
     }));
 
     if (clearedState.rows !== 0 || clearedState.badge !== 'Empty') {
@@ -124,6 +133,9 @@ function createStaticServer(root) {
     }
     if (clearedState.summary !== 'Added files will appear here with progress, status, and downloads.') {
       throw new Error(`Expected default summary after clearing, got ${clearedState.summary}`);
+    }
+    if (Math.abs((clearedState.clearTop ?? 0) - (initialState.clearTop ?? 0)) > 1 || Math.abs((clearedState.zipTop ?? 0) - (initialState.zipTop ?? 0)) > 1) {
+      throw new Error(`Expected results action row to return to the same position after clearing, got initial=${JSON.stringify({ clearTop: initialState.clearTop, zipTop: initialState.zipTop })} cleared=${JSON.stringify({ clearTop: clearedState.clearTop, zipTop: clearedState.zipTop })}`);
     }
 
     console.log('clear-files-playwright: OK');
