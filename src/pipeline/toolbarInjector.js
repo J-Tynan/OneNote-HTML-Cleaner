@@ -234,6 +234,20 @@ function resolveToolbarStyle(options = {}) {
   return 'compact';
 }
 
+function minifyInlineCss(source = '') {
+  return String(source || '')
+    .trim()
+    .replace(/;}/g, '}');
+}
+
+function minifyInlineScript(source = '') {
+  return String(source || '')
+    .split(/\r?\n/g)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join('');
+}
+
 function buildBaseStyleCss() {
   return '#onenote-cleaner-toolbar{position:sticky;top:0;z-index:9999;background:var(--onc-toolbar-bg,#fff);color:var(--onc-toolbar-fg,#1f2a37);border-bottom:1px solid var(--onc-toolbar-border,#d7dce2);padding:var(--onc-toolbar-padding,.45rem .65rem);font:var(--onc-toolbar-font,13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}' +
     '#onenote-cleaner-toolbar .onc-toolbar-row{display:flex;flex-wrap:wrap;gap:var(--onc-toolbar-gap,.4rem);align-items:center;}' +
@@ -294,14 +308,16 @@ function buildToolbarSkinCss(toolbarStyle) {
 }
 
 function buildStyleTag(toolbarStyle = 'compact') {
+  const css = minifyInlineCss(buildBaseStyleCss() + buildToolbarSkinCss(toolbarStyle));
   return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}">` +
-    buildBaseStyleCss() +
-    buildToolbarSkinCss(toolbarStyle) +
+    css +
     '</style>';
 }
 
 function buildScriptTag() {
-  const serializedEditStyles = JSON.stringify(EDIT_STYLE_OPTIONS).replace(/</g, '\\u003c');
+  const serializedEditStyles = JSON.stringify(
+    EDIT_STYLE_OPTIONS.map((style) => [style.key, style.blockTag, style.blockStyles])
+  ).replace(/</g, '\\u003c');
   const script = `(function(){
   function init(){
   const root = document.getElementById('${TOOLBAR_ROOT_ID}');
@@ -477,7 +493,13 @@ function buildScriptTag() {
 
   function getEditStyleDefinition(key){
     const normalized = String(key || '').trim().toLowerCase();
-    return editStyles.find((style) => style && String(style.key || '').toLowerCase() === normalized) || null;
+    const match = editStyles.find((style) => Array.isArray(style) && String(style[0] || '').toLowerCase() === normalized);
+    if (!match) return null;
+    return {
+      key: match[0],
+      blockTag: match[1],
+      blockStyles: match[2] || {}
+    };
   }
 
   function getSelectionAnchorElement(){
@@ -800,7 +822,7 @@ function buildScriptTag() {
   }
 })();`;
 
-  return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${script}</script>`;
+  return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${minifyInlineScript(script)}</script>`;
 }
 
 function buildMetadataTag(metadata) {
@@ -915,7 +937,7 @@ export function summarizeWarningsBySeverity(items = []) {
 }
 
 function buildConvertedThemeStyleTag() {
-  return `<style id="${CONVERTED_THEME_STYLE_ID}" data-onc-converted-theme-style="${CONVERTED_THEME_VERSION}">` +
+  const css = minifyInlineCss(
     `#${CONVERTED_THEME_ROOT_ID}{position:fixed;right:1rem;top:var(--onc-floating-top,.75rem);z-index:10000;border:0;background:transparent;color:#0f172a;border-radius:0;width:auto;height:auto;display:block;cursor:pointer;padding:0;line-height:1;font:400 1.5rem/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:none;}` +
     `#${CONVERTED_THEME_ROOT_ID}:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px;}` +
     `html[data-onc-converted-theme="dark"]{--onc-converted-bg:#1f1f1f;--onc-converted-fg:#e6e6e6;}` +
@@ -923,7 +945,10 @@ function buildConvertedThemeStyleTag() {
     `html[data-onc-converted-theme="dark"] body{background:var(--onc-converted-bg);color:var(--onc-converted-fg);}` +
     `html[data-onc-converted-theme="dark"] main{background:var(--onc-converted-bg);color:var(--onc-converted-fg);}` +
     `html[data-onc-converted-theme="dark"] body [style*="color: #000"],html[data-onc-converted-theme="dark"] body [style*="color:#000"],html[data-onc-converted-theme="dark"] body [style*="color: black"],html[data-onc-converted-theme="dark"] body [style*="color:black"],html[data-onc-converted-theme="dark"] body [style*="color: rgb(0, 0, 0)"],html[data-onc-converted-theme="dark"] body [style*="color:rgb(0,0,0)"]{color:var(--onc-converted-fg) !important;}` +
-    `html[data-onc-converted-theme="dark"] body [style*="background: white"],html[data-onc-converted-theme="dark"] body [style*="background:white"],html[data-onc-converted-theme="dark"] body [style*="background-color: white"],html[data-onc-converted-theme="dark"] body [style*="background-color:white"],html[data-onc-converted-theme="dark"] body [style*="background: #fff"],html[data-onc-converted-theme="dark"] body [style*="background:#fff"],html[data-onc-converted-theme="dark"] body [style*="background-color: #fff"],html[data-onc-converted-theme="dark"] body [style*="background-color:#fff"],html[data-onc-converted-theme="dark"] body [style*="background: rgb(255, 255, 255)"],html[data-onc-converted-theme="dark"] body [style*="background:rgb(255,255,255)"]{background:transparent !important;}` +
+    `html[data-onc-converted-theme="dark"] body [style*="background: white"],html[data-onc-converted-theme="dark"] body [style*="background:white"],html[data-onc-converted-theme="dark"] body [style*="background-color: white"],html[data-onc-converted-theme="dark"] body [style*="background-color:white"],html[data-onc-converted-theme="dark"] body [style*="background: #fff"],html[data-onc-converted-theme="dark"] body [style*="background:#fff"],html[data-onc-converted-theme="dark"] body [style*="background-color: #fff"],html[data-onc-converted-theme="dark"] body [style*="background-color:#fff"],html[data-onc-converted-theme="dark"] body [style*="background: rgb(255, 255, 255)"],html[data-onc-converted-theme="dark"] body [style*="background:rgb(255,255,255)"]{background:transparent !important;}`
+  );
+  return `<style id="${CONVERTED_THEME_STYLE_ID}" data-onc-converted-theme-style="${CONVERTED_THEME_VERSION}">` +
+    css +
     '</style>';
 }
 
@@ -975,7 +1000,7 @@ function buildConvertedThemeScriptTag(options = {}) {
   }
 })();`;
 
-  return `<script id="${CONVERTED_THEME_SCRIPT_ID}" data-onc-converted-theme-script="${CONVERTED_THEME_VERSION}">${script}</script>`;
+  return `<script id="${CONVERTED_THEME_SCRIPT_ID}" data-onc-converted-theme-script="${CONVERTED_THEME_VERSION}">${minifyInlineScript(script)}</script>`;
 }
 
 function buildConvertedThemeToggleMarkup() {

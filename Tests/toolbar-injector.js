@@ -11,6 +11,14 @@ function countMatches(input, re) {
   return Array.isArray(matches) ? matches.length : 0;
 }
 
+function extractTagContentLength(html, tag, id) {
+  const match = String(html || '').match(new RegExp(`<${tag}\\b[^>]*\\bid=["']${id}["'][^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
+  if (!match) {
+    fail(`Expected ${id} ${tag} tag to be present for size measurement`);
+  }
+  return match[1].length;
+}
+
 async function main() {
   const injectorPath = path.resolve(process.cwd(), 'src', 'pipeline', 'toolbarInjector.js');
   const injectorUrl = pathToFileURL(injectorPath).href;
@@ -255,6 +263,30 @@ async function main() {
   });
   if (nonHtmlBypass !== baseHtml) {
     fail('Expected converted-page theme toggle to be skipped for non-HTML export format');
+  }
+
+  const payloadMetrics = {
+    totalInjectedOutputLength: withThemeToggle.length,
+    toolbarStyleTagContentLength: extractTagContentLength(injected, 'style', 'onc-toolbar-style'),
+    toolbarScriptTagContentLength: extractTagContentLength(injected, 'script', 'onc-toolbar-script'),
+    convertedThemeStyleTagContentLength: extractTagContentLength(withThemeToggle, 'style', 'onc-converted-theme-style'),
+    convertedThemeScriptTagContentLength: extractTagContentLength(withThemeToggle, 'script', 'onc-converted-theme-script')
+  };
+
+  if (payloadMetrics.totalInjectedOutputLength >= 30000) {
+    fail(`Expected injected toolbar + theme payload to stay below 30000 chars, got ${payloadMetrics.totalInjectedOutputLength}`);
+  }
+  if (payloadMetrics.toolbarScriptTagContentLength >= 17500) {
+    fail(`Expected toolbar script payload to stay below 17500 chars, got ${payloadMetrics.toolbarScriptTagContentLength}`);
+  }
+  if (payloadMetrics.toolbarStyleTagContentLength >= 4600) {
+    fail(`Expected toolbar style payload to stay below 4600 chars, got ${payloadMetrics.toolbarStyleTagContentLength}`);
+  }
+  if (payloadMetrics.convertedThemeScriptTagContentLength >= 1450) {
+    fail(`Expected converted-page theme script payload to stay below 1450 chars, got ${payloadMetrics.convertedThemeScriptTagContentLength}`);
+  }
+  if (payloadMetrics.convertedThemeStyleTagContentLength >= 2120) {
+    fail(`Expected converted-page theme style payload to stay below 2120 chars, got ${payloadMetrics.convertedThemeStyleTagContentLength}`);
   }
 
   const injectedViaExportState = mod.injectOutputToolbar(baseHtml, {

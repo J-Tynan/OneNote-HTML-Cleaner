@@ -254,7 +254,7 @@ First-pass tasks:
 2. Tackle deferred post-release test-harness cleanup that directly improves confidence and delivery speed, especially repeated static-server setup and shared browser-test helpers.
 3. Run a consistency pass on high-visibility controls and current features, including primary/secondary button polish, toolbar/config stability, and the clear-results workflow.
 4. Rewrite or tighten high-traffic product copy where it still feels provisional, including Help content, feature descriptions, and acceptance-gate documentation.
-5. Start reusable launch assets early: capture refreshed screenshots as the UI improves, draft short feature blurbs, and keep comparison notes that will help later release announcements.
+5. Finish reusable launch assets after the core `v0.2` stabilization work lands: capture refreshed screenshots last, then draft short feature blurbs and keep comparison notes that will help later release announcements.
 
 ## Version 1.0 — Native `.one` Release
 
@@ -321,12 +321,12 @@ First-pass tasks:
 - [x] [P1] Polish primary action buttons for screenshot readiness: increase button size, label padding, and contrast so they read clearly across matte laptop, OLED phone, and IPS desktop displays. (2026-05-25)
 - [x] [P1] Run a consistency pass on secondary/icon controls so Help, theme, remove, and similar buttons use clearer sizing, spacing, and visibility. (2026-05-25)
 - [x] [P1] Refactor the Help pop-up content into easier-to-scan native collapsible sections using built-in browser features where practical (for example, `details` / `summary`). (2026-05-10)
-- [ ] [P1] Do a cross-display UI polish review before screenshots and record any remaining readability or contrast fixes needed for the PWA.
 - [x] [P1] Add a README Before/After comparison using the same note in raw OneNote MHTML form and cleaned app output, with concise captions covering warning banner, load delay, layout fixes, and optional dark-mode-friendly viewing. (2026-05-16)
 - [x] [P2] Add first-time-user README support sections for scope/trust questions: `What This Tool Is Not`, `Troubleshooting`, `Performance Notes`, and `Security & Privacy`. (2026-05-16)
 - [x] [P2] Add a clear-files button so users can quickly empty the queued file list before starting a new conversion batch. (2026-05-15)
 - [x] [P2] Keep the Conversion results action row stable so Clear files and Download ZIP do not shift position when the status text above them changes. (2026-05-25)
 - [x] [P2] Reduce spacing and visual bulk in the homepage converted-files list so larger batches are easier to scan and navigate. (2026-05-25)
+- [ ] [P1] Do a cross-display UI polish review as the last pre-screenshot `v0.2` UI task and record any remaining readability or contrast fixes needed for the PWA.
 
 ---
 
@@ -338,7 +338,8 @@ First-pass tasks:
 - [x] Toggle Bold/Italic/Heading buttons on double-clicks and enforce heading exclusivity (2026-03-03)
 - [x] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux. (2026-05-25)
 - [x] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release. (2026-05-25)
-- [ ] [P2] Investigate minifying the injected toolbar assets after the toolbar feature set is implemented so adding a toolbar does not nearly double exported file size.
+- [x] [P2] Investigate minifying the injected toolbar assets after the toolbar feature set is implemented so adding a toolbar does not nearly double exported file size. (2026-05-26, landed a first-pass inline CSS/JS compaction pass with payload-size guardrails in `Tests/toolbar-injector.js`.)
+- [ ] [P3] Evaluate a build-time minification path for injected toolbar assets if the current inline compaction still leaves unacceptable export-size overhead on representative exports.
 
 ### OneNote Tag Support (post‑release)
 
@@ -578,7 +579,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] Remove Office/OneNote artifacts.
 - [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
 - [x] Normalize repetitive inline styles (migration + collapse rules).
-- [ ] [P2] Improve cleaned HTML code quality for human inspection: remove redundant blank lines between sections, trim avoidable whitespace, and review minor markup/serialization cleanup opportunities.
+- [x] [P2] Improve cleaned HTML code quality for human inspection: remove redundant blank lines between sections, trim avoidable whitespace, and review minor markup/serialization cleanup opportunities. (2026-05-26, landed a deterministic post-serialization cleanup pass in `src/pipeline/format.js` with focused formatter coverage plus idempotence/rerun/artifact regression validation.)
 - [ ] [P3] Add a reproducible token-efficiency benchmark that compares one representative note saved as cleaned HTML, MHTML, PDF, and DOCX using a fixed tokenizer, and record raw token counts plus normalized comparison metrics.
 - [ ] [P3] Document token-efficiency findings for launch and marketing use, including methodology caveats about tokenizer choice, embedded assets, and why cleaned HTML is a better LLM-facing source than raw export formats.
 - [x] Implement `normalizeTableAttributes` with unit tests.
