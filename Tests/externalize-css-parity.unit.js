@@ -1,17 +1,11 @@
 import assert from 'node:assert';
-import { JSDOM } from 'jsdom';
 import { FIXTURE_FILES, readFixture } from './fixtures.js';
-
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+import { setupNodeTestEnvironment } from './node-test-helper.js';
 
 const { parseMht } = await import('../src/pipeline/mht.js');
 const { runPipeline } = await import('../src/pipeline/pipeline.js');
-const { setEnabled } = await import('../src/logging.js');
-setEnabled(false);
+
+await setupNodeTestEnvironment();
 
 const REPRESENTATIVE_FIXTURES = [
   FIXTURE_FILES.COMMUNICATE_MARKDOWN,

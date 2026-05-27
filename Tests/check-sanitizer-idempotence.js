@@ -1,40 +1,20 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { JSDOM } from 'jsdom';
-
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+import {
+  firstDiffIndex,
+  normalizeHtmlForDiff,
+  setupNodeTestEnvironment
+} from './node-test-helper.js';
+import { discoverFixtureFiles, resolveFixturePath } from './fixtures.js';
 
 const { parseMht } = await import('../src/pipeline/mht.js');
 const { runPipeline } = await import('../src/pipeline/pipeline.js');
-const { setEnabled } = await import('../src/logging.js');
-setEnabled(false);
 
-function normalizeHtml(value) {
-  return String(value || '')
-    .replace(/\r\n/g, '\n')
-    .replace(/>\s+</g, '><')
-    .replace(/[ \t]+\n/g, '\n')
-    .trim();
-}
-
-function firstDiffIndex(a, b) {
-  const max = Math.max(a.length, b.length);
-  for (let i = 0; i < max; i += 1) {
-    if (a[i] !== b[i]) return i;
-  }
-  return -1;
-}
+await setupNodeTestEnvironment();
 
 console.log('running sanitizer idempotence regression test');
 
-const fixtures = fs
-  .readdirSync('Tests')
-  .filter((name) => /\.(mht|mhtml)$/i.test(name))
-  .map((name) => path.join('Tests', name));
+const fixtures = discoverFixtureFiles().map(resolveFixturePath);
 
 if (!fixtures.length) {
   console.warn('no .mht fixtures found to test');
@@ -55,8 +35,8 @@ for (const fixturePath of fixtures) {
   const firstRun = await runPipeline(parsed.html || '', config);
   const secondRun = await runPipeline(firstRun.output || '', config);
 
-  const once = normalizeHtml(firstRun.output);
-  const twice = normalizeHtml(secondRun.output);
+  const once = normalizeHtmlForDiff(firstRun.output);
+  const twice = normalizeHtmlForDiff(secondRun.output);
 
   if (once !== twice) {
     failed = true;

@@ -1,8 +1,8 @@
-import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'module';
 import { chromium } from 'playwright';
+import { startStaticServer } from './playwright-server-helper.js';
 
 // `require` helper for ESM modules (used to resolve axe-core script path)
 const require = createRequire(import.meta.url);
@@ -11,41 +11,6 @@ const require = createRequire(import.meta.url);
 // each dark theme variant. It writes individual JSON reports and
 // exits with a non-zero code if any serious/critical violations are found.
 
-function createStaticServer(root) {
-  return http.createServer((req, res) => {
-    try {
-      const safeUrl = decodeURIComponent(req.url.split('?')[0]);
-      let filePath = path.join(root, safeUrl);
-      if (safeUrl === '/' || safeUrl === '') filePath = path.join(root, 'index.html');
-      if (!filePath.startsWith(root)) {
-        res.writeHead(403);
-        res.end('Forbidden');
-        return;
-      }
-      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-        res.writeHead(404);
-        res.end('Not found');
-        return;
-      }
-      const ext = path.extname(filePath).toLowerCase();
-      const map = {
-        '.html': 'text/html; charset=utf-8',
-        '.js': 'application/javascript; charset=utf-8',
-        '.css': 'text/css; charset=utf-8',
-        '.json': 'application/json; charset=utf-8',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.svg': 'image/svg+xml'
-      };
-      const ct = map[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': ct });
-      fs.createReadStream(filePath).pipe(res);
-    } catch (err) {
-      res.writeHead(500);
-      res.end(String(err));
-    }
-  });
-}
 
 async function loadTheme(page, url, theme, axePath) {
   await page.goto(url, { waitUntil: 'networkidle' });
@@ -97,15 +62,8 @@ async function assertHelpModalKeyboardFlow(page, theme) {
 
 (async () => {
   const root = process.cwd();
-  const server = createStaticServer(root);
-
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', () => resolve());
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const url = `http://127.0.0.1:${port}/`;
+  const serverHandle = await startStaticServer(root);
+  const url = `${serverHandle.baseUrl}/`;
 
   // only audit the two canonical themes: light and default dark (Charcoal)
   const themes = [
@@ -183,7 +141,7 @@ async function assertHelpModalKeyboardFlow(page, theme) {
     fs.writeFileSync(path.join(reportDir, 'a11y-summary.txt'), summary);
 
     await browser.close();
-    server.close();
+    await serverHandle.close();
 
     if (hadSerious) {
       console.error('Accessibility audit: SERIOUS/CRITICAL violations detected. See Tests/reports.');
@@ -194,7 +152,7 @@ async function assertHelpModalKeyboardFlow(page, theme) {
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('Accessibility audit: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

@@ -5,17 +5,12 @@
 import assert from 'assert';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
+import { ensureDomParserGlobals } from './node-test-helper.js';
 const { parseMht } = await import('../src/pipeline/mht.js');
 const { ensureListStructure } = await import('../src/pipeline/sanitize.js');
 import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
 
-// ensure DOMParser (and NodeFilter) are available for pipeline tests
-// (Node/jsdom doesn't provide them by default).
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+ensureDomParserGlobals();
 
 console.log('running list duplication regression test');
 

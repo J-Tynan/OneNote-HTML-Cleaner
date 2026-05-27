@@ -68,6 +68,15 @@
 
     function pass(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:green">PASS: ${msg}</div>`; }
     function fail(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:red">FAIL: ${msg}</div>`; }
+    function getRuntime() {
+      try {
+        return window.__ONC_DEV_HOOKS && typeof window.__ONC_DEV_HOOKS.getRuntime === 'function'
+          ? window.__ONC_DEV_HOOKS.getRuntime()
+          : null;
+      } catch (_error) {
+        return null;
+      }
+    }
 
     initUI();
 
@@ -102,7 +111,8 @@
     for (const preset of supportedToolbarPresets) {
       toolbarStyle.value = preset;
       toolbarStyle.dispatchEvent(new Event('change', { bubbles: true }));
-      const selectedCfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
+      const runtime = getRuntime();
+      const selectedCfg = runtime && runtime.downloadHelpers.getConversionConfig();
       if (toolbarStyle.value !== preset || !selectedCfg || selectedCfg.ToolbarStyle !== preset) {
         presetsRoundTripOk = false;
         break;
@@ -188,7 +198,8 @@
     if (/choose html or markdown output/i.test(help.textContent || '')) pass('Homepage help text reflects HTML and Markdown experimental choices');
     else fail('Expected homepage help text to mention HTML and Markdown choices');
 
-    const cfg = window.__getRuntime && window.__getRuntime().downloadHelpers.getConversionConfig();
+    const runtime = getRuntime();
+    const cfg = runtime && runtime.downloadHelpers.getConversionConfig();
     if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');
     else fail('Export format should fallback to HTML when experimental is OFF');
 

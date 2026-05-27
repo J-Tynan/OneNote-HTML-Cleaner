@@ -1,39 +1,7 @@
-import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
-
-function createStaticServer(root) {
-  return http.createServer((req, res) => {
-    try {
-      const safeUrl = decodeURIComponent(req.url.split('?')[0]);
-      let filePath = path.join(root, safeUrl);
-      if (safeUrl === '/' || safeUrl === '') filePath = path.join(root, 'index.html');
-      if (!filePath.startsWith(root)) {
-        res.writeHead(403);
-        res.end('Forbidden');
-        return;
-      }
-      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-        res.writeHead(404);
-        res.end('Not found');
-        return;
-      }
-      const ext = path.extname(filePath).toLowerCase();
-      const map = {
-        '.html': 'text/html; charset=utf-8',
-        '.js': 'application/javascript; charset=utf-8',
-        '.css': 'text/css; charset=utf-8',
-        '.json': 'application/json; charset=utf-8'
-      };
-      res.writeHead(200, { 'Content-Type': map[ext] || 'application/octet-stream' });
-      fs.createReadStream(filePath).pipe(res);
-    } catch (err) {
-      res.writeHead(500);
-      res.end(String(err));
-    }
-  });
-}
+import { startStaticServer } from './playwright-server-helper.js';
 
 function resolveFixtureSource(testsDir, cleanedHtmlName) {
   const stem = String(cleanedHtmlName || '').replace(/\.html$/i, '');
@@ -69,14 +37,8 @@ function resolveFixtureSource(testsDir, cleanedHtmlName) {
     };
   });
 
-  const server = createStaticServer(root);
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', () => resolve());
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const url = `http://127.0.0.1:${port}/`;
+  const serverHandle = await startStaticServer(root);
+  const url = `${serverHandle.baseUrl}/`;
 
   let browser;
   try {
@@ -247,11 +209,11 @@ function resolveFixtureSource(testsDir, cleanedHtmlName) {
 
     console.log('externalize-css-visual-parity-playwright: OK');
     await browser.close();
-    server.close();
+    await serverHandle.close();
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('externalize-css-visual-parity-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

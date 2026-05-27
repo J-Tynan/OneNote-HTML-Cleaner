@@ -1,47 +1,15 @@
-import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import { startStaticServer } from './playwright-server-helper.js';
+import {
+  getConversionConfig,
+  getLastMarkdownDownload,
+  installMarkdownDownloadCapture,
+  installRuntimeHarness
+} from './playwright-runtime-harness.js';
 
 const SUPPORTED_FLAVORS = ['obsidian', 'commonmark', 'gfm', 'markdown-extra'];
-
-function createStaticServer(root) {
-  return http.createServer((req, res) => {
-    try {
-      const safeUrl = decodeURIComponent((req.url || '/').split('?')[0]);
-      let filePath = path.join(root, safeUrl);
-      if (safeUrl === '/' || safeUrl === '') filePath = path.join(root, 'index.html');
-      if (!filePath.startsWith(root)) {
-        res.writeHead(403);
-        res.end('Forbidden');
-        return;
-      }
-      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-        res.writeHead(404);
-        res.end('Not found');
-        return;
-      }
-
-      const ext = path.extname(filePath).toLowerCase();
-      const map = {
-        '.html': 'text/html; charset=utf-8',
-        '.js': 'application/javascript; charset=utf-8',
-        '.css': 'text/css; charset=utf-8',
-        '.json': 'application/json; charset=utf-8',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.svg': 'image/svg+xml',
-        '.mht': 'multipart/related'
-      };
-      const ct = map[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': ct });
-      fs.createReadStream(filePath).pipe(res);
-    } catch (err) {
-      res.writeHead(500);
-      res.end(String(err));
-    }
-  });
-}
 
 function parseFlavorArg() {
   const fromArg = process.argv.find((value) => String(value || '').startsWith('--flavor='));
@@ -99,14 +67,8 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
     throw new Error(`No .mht fixtures found under ${testsRoot}`);
   }
 
-  const server = createStaticServer(root);
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', () => resolve());
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const baseUrl = `http://127.0.0.1:${port}/`;
+  const serverHandle = await startStaticServer(root);
+  const baseUrl = `${serverHandle.baseUrl}/`;
 
   let browser;
   try {
@@ -117,6 +79,7 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
       for (const fixturePath of fixturePaths) {
         const fixtureName = path.basename(fixturePath);
         const context = await browser.newContext();
+        await installRuntimeHarness(context);
         await context.addInitScript(() => {
           try { localStorage.setItem('autoConvertEnabled', 'false'); } catch (_err) {}
         });
@@ -145,33 +108,21 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
         }, flavor);
 
         await page.waitForFunction((activeFlavor) => {
-          const runtime = window.__getRuntime ? window.__getRuntime() : null;
-          if (!runtime || !runtime.downloadHelpers) return false;
-          const cfg = runtime.downloadHelpers.getConversionConfig();
+          const harness = window.__ONC_TEST_HARNESS || null;
+          if (!harness || typeof harness.getConversionConfig !== 'function') return false;
+          const cfg = harness.getConversionConfig();
           return cfg
             && cfg.ExperimentalExportEnabled === true
             && cfg.ExportFormat === 'markdown'
             && String(cfg.MarkdownFlavor || '').toLowerCase() === String(activeFlavor || '').toLowerCase();
         }, flavor, { timeout: 5000 });
 
-        await page.evaluate(() => {
-          const runtime = window.__getRuntime ? window.__getRuntime() : null;
-          if (!runtime || !runtime.downloadHelpers) throw new Error('downloadHelpers not available');
-          if (runtime.downloadHelpers.__markdownCapturePatched) return;
+        const config = await getConversionConfig(page);
+        if (!config || config.ExperimentalExportEnabled !== true || config.ExportFormat !== 'markdown') {
+          throw new Error(`Runtime harness did not expose markdown conversion config for flavor ${flavor}`);
+        }
 
-          window.__markdownDownloads = [];
-          const originalDownloadBlob = runtime.downloadHelpers.downloadBlob.bind(runtime.downloadHelpers);
-          runtime.downloadHelpers.downloadBlob = (filename, text, mime) => {
-            window.__markdownDownloads.push({
-              filename: String(filename || ''),
-              text: String(text || ''),
-              mime: String(mime || '')
-            });
-            return undefined;
-          };
-          runtime.downloadHelpers.__markdownCapturePatched = true;
-          runtime.downloadHelpers.__markdownOriginalDownloadBlob = originalDownloadBlob;
-        });
+        await installMarkdownDownloadCapture(page);
 
         await page.setInputFiles('#fileInput', fixturePath);
 
@@ -202,10 +153,7 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
 
         await page.click('[data-download-id]');
 
-        const download = await page.evaluate(() => {
-          const all = Array.isArray(window.__markdownDownloads) ? window.__markdownDownloads : [];
-          return all.length > 0 ? all[all.length - 1] : null;
-        });
+        const download = await getLastMarkdownDownload(page);
 
         if (!download || !download.filename || !download.text) {
           throw new Error(`Did not capture markdown download payload for flavor ${flavor} and fixture ${fixtureName}`);
@@ -243,11 +191,11 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
 
     console.log(`export-markdown-playwright: OK (${flavors.join(', ')})`);
     await browser.close();
-    server.close();
+    await serverHandle.close();
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('export-markdown-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

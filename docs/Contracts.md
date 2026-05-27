@@ -152,7 +152,9 @@ The app currently exposes explicit browser-side dev hooks for local debugging an
 - `window.__ONC_DEV_HOOKS.getWorkerManagerDiagnostics()` returns the current `WorkerManager` diagnostics buffer or an empty array.
 - `window.__getRuntime()` and `window.__getWorkerManagerDiagnostics()` remain as legacy aliases for the same hooks while the test suite still references them directly.
 
-These hooks are not end-user features and should be treated as dev/test affordances only. They remain in the shipped build for the current release because several browser tests still depend on them; replacing those direct runtime accesses is tracked as later test-harness cleanup.
+Browser tests should prefer the shared harness helpers under `Tests/` instead of calling the legacy alias globals directly. The runtime harness in `Tests/playwright-runtime-harness.js` routes test-side runtime access through the documented `__ONC_DEV_HOOKS` contract, with a temporary fallback to the legacy aliases kept only for compatibility while the hooks remain shipped.
+
+These hooks are not end-user features and should be treated as dev/test affordances only. They remain in the shipped build for the current release for local debugging and compatibility, but committed browser tests now go through the shared harness or the documented `__ONC_DEV_HOOKS` surface rather than depending on the legacy aliases directly.
 
 ## Toolbar Phase 0 reference
 

@@ -1,10 +1,7 @@
 import assert from 'assert';
-import { JSDOM } from 'jsdom';
+import { ensureDomParserGlobals } from './node-test-helper.js';
 
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-}
+ensureDomParserGlobals();
 
 const { convertSanitizedHtmlToMarkdown, assertMarkdownSourceIsSanitizedHtml } = await import('../src/convert/markdownCore.js');
 

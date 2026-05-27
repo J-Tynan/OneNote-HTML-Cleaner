@@ -1,11 +1,9 @@
 import assert from 'node:assert';
 import { JSDOM } from 'jsdom';
+import { ensureDomParserGlobals } from './node-test-helper.js';
 import * as sanitize from '../src/pipeline/sanitize.js';
 
-// polyfill DOMParser and NodeFilter for Node tests
-const dom = new JSDOM('');
-if (!global.DOMParser) global.DOMParser = dom.window.DOMParser;
-if (!global.NodeFilter) global.NodeFilter = dom.window.NodeFilter;
+ensureDomParserGlobals();
 
 function sanitizeHtml(html) {
   const dom = new JSDOM(html);

@@ -27,9 +27,15 @@ function readFileHead(filePath, maxBytes = 262144) {
   }
 }
 
+function normalizeFixtureHead(head) {
+  return String(head || '')
+    .replace(/=\r?\n/g, '')
+    .replace(/=3D/gi, '=');
+}
+
 function isLikelyOneNoteExport(filePath) {
   try {
-    const head = readFileHead(filePath);
+    const head = normalizeFixtureHead(readFileHead(filePath));
     if (!head) return false;
     return /ProgId\s*content\s*=\s*['\"]?OneNote\.File/i.test(head)
       || /meta\s+name\s*=\s*['\"]Generator['\"][^>]*Microsoft\s+OneNote/i.test(head)

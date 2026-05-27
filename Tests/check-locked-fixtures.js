@@ -1,30 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { firstDiffIndex, normalizeHtmlForDiff } from './node-test-helper.js';
 
 const ROOT = process.cwd();
 const CLEANED_DIR = path.join(ROOT, 'Tests', 'Cleaned');
 const LOCKED_DIR = path.join(ROOT, 'Tests', 'expected', 'locked-cleaned');
 const MANIFEST_PATH = path.join(LOCKED_DIR, 'manifest.json');
 
-function normalizeHtml(value) {
-  return String(value || '')
-    .replace(/\r\n/g, '\n')
-    .replace(/>\s+</g, '><')
-    .replace(/[ \t]+\n/g, '\n')
-    .trim();
-}
-
 function sha256(content) {
   return crypto.createHash('sha256').update(content).digest('hex');
-}
-
-function firstDiffIndex(a, b) {
-  const max = Math.max(a.length, b.length);
-  for (let i = 0; i < max; i += 1) {
-    if (a[i] !== b[i]) return i;
-  }
-  return -1;
 }
 
 function readManifest() {
@@ -67,8 +52,8 @@ function main() {
       continue;
     }
 
-    const cleanedNormalized = normalizeHtml(fs.readFileSync(cleanedPath, 'utf8'));
-    const lockedNormalized = normalizeHtml(fs.readFileSync(lockedPath, 'utf8'));
+    const cleanedNormalized = normalizeHtmlForDiff(fs.readFileSync(cleanedPath, 'utf8'));
+    const lockedNormalized = normalizeHtmlForDiff(fs.readFileSync(lockedPath, 'utf8'));
 
     const manifestHash = manifest.hashes && manifest.hashes[fileName] ? String(manifest.hashes[fileName]) : '';
     const lockedHash = sha256(lockedNormalized);

@@ -1,11 +1,8 @@
 import assert from 'assert';
 import { JSDOM } from 'jsdom';
+import { ensureDomParserGlobals } from './node-test-helper.js';
 
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+ensureDomParserGlobals();
 
 console.log('running table attribute normalization unit tests');
 

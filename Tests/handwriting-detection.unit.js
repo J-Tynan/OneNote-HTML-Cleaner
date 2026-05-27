@@ -1,15 +1,9 @@
 import assert from 'assert';
-import { JSDOM } from 'jsdom';
-
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+import { setupNodeTestEnvironment } from './node-test-helper.js';
 
 const { runPipeline } = await import('../src/pipeline/pipeline.js');
-const { setEnabled } = await import('../src/logging.js');
-setEnabled(false);
+
+await setupNodeTestEnvironment();
 
 function parseOutput(html) {
   const parser = new DOMParser();

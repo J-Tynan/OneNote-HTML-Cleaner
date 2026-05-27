@@ -1,12 +1,5 @@
 import assert from 'assert';
-import { JSDOM } from 'jsdom';
-
-// polyfill DOMParser/NodeFilter for tests
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+import { setupNodeTestEnvironment } from './node-test-helper.js';
 
 // import migration helpers
 const {
@@ -16,9 +9,7 @@ const {
   parseStyle,
 } = await import('../src/pipeline/inlineStyleMigration.js');
 
-// silence logging in imports
-const { setEnabled } = await import('../src/logging.js');
-setEnabled(false);
+await setupNodeTestEnvironment();
 
 function makeDoc(html) {
   const parser = new DOMParser();

@@ -1,12 +1,8 @@
 import assert from 'node:assert';
-import { JSDOM } from 'jsdom';
+import { ensureDomParserGlobals } from './node-test-helper.js';
 import * as sanitize from '../src/pipeline/sanitize.js';
 
-if (typeof global.DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+ensureDomParserGlobals();
 
 function makeDoc(html) {
   const parser = new DOMParser();

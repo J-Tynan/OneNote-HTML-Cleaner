@@ -1,10 +1,9 @@
 import assert from 'node:assert';
 import { JSDOM } from 'jsdom';
+import { ensureDomParserGlobals } from './node-test-helper.js';
 import * as sanitize from '../src/pipeline/sanitize.js';
 
-const dom = new JSDOM('');
-if (!global.DOMParser) global.DOMParser = dom.window.DOMParser;
-if (!global.NodeFilter) global.NodeFilter = dom.window.NodeFilter;
+ensureDomParserGlobals();
 
 function sanitizeDoc(html) {
   const doc = new JSDOM(html).window.document;

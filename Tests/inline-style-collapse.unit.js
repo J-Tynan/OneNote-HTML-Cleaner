@@ -1,16 +1,9 @@
 import assert from 'assert';
-import { JSDOM } from 'jsdom';
-
-// polyfill DOMParser/NodeFilter
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+import { setupNodeTestEnvironment } from './node-test-helper.js';
 
 const { collapseInlineStyleDuplicates } = await import('../src/pipeline/sanitize.js');
-const { setEnabled } = await import('../src/logging.js');
-setEnabled(false);
+
+await setupNodeTestEnvironment();
 
 function makeDoc(html) {
   const parser = new DOMParser();

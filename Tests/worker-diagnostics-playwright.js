@@ -1,60 +1,18 @@
-import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
-
-function createStaticServer(root) {
-  return http.createServer((req, res) => {
-    try {
-      const safeUrl = decodeURIComponent(req.url.split('?')[0]);
-      let filePath = path.join(root, safeUrl);
-      if (safeUrl === '/' || safeUrl === '') filePath = path.join(root, 'index.html');
-      if (!filePath.startsWith(root)) {
-        res.writeHead(403);
-        res.end('Forbidden');
-        return;
-      }
-      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-        res.writeHead(404);
-        res.end('Not found');
-        return;
-      }
-      const ext = path.extname(filePath).toLowerCase();
-      const map = {
-        '.html': 'text/html; charset=utf-8',
-        '.js': 'application/javascript; charset=utf-8',
-        '.css': 'text/css; charset=utf-8',
-        '.json': 'application/json; charset=utf-8',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.svg': 'image/svg+xml'
-      };
-      const ct = map[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': ct });
-      fs.createReadStream(filePath).pipe(res);
-    } catch (err) {
-      res.writeHead(500);
-      res.end(String(err));
-    }
-  });
-}
+import { startStaticServer } from './playwright-server-helper.js';
+import { getWorkerDiagnostics, installRuntimeHarness } from './playwright-runtime-harness.js';
 
 (async () => {
-  const root = process.cwd();
-  const server = createStaticServer(root);
-
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', () => resolve());
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const url = `http://127.0.0.1:${port}/`;
+  const serverHandle = await startStaticServer(process.cwd());
+  const url = `${serverHandle.baseUrl}/`;
 
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
     const ctx = await browser.newContext();
+    await installRuntimeHarness(ctx);
     const page = await ctx.newPage();
 
     page.on('pageerror', (err) => console.error('PAGE ERROR:', err && err.stack ? err.stack : err));
@@ -83,7 +41,7 @@ function createStaticServer(root) {
     // Wait for the worker to post diagnostics (verify via the runtime helper)
     let diags = [];
     for (let i = 0; i < 10; i++) {
-      diags = await page.evaluate(() => window.__getWorkerManagerDiagnostics ? window.__getWorkerManagerDiagnostics() : []);
+      diags = await getWorkerDiagnostics(page);
       if (diags && diags.length) break;
       await new Promise(r => setTimeout(r, 200));
     }
@@ -119,11 +77,11 @@ function createStaticServer(root) {
 
     console.log('worker-diagnostics-playwright: OK');
     await browser.close();
-    server.close();
+    await serverHandle.close();
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('worker-diagnostics-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

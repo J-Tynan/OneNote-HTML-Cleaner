@@ -1,29 +1,19 @@
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
-import { JSDOM } from 'jsdom';
-
-// Ensure DOMParser/NodeFilter available (same as other node tests)
-if (typeof global.DOMParser === 'undefined' && typeof DOMParser === 'undefined') {
-  const dom = new JSDOM('');
-  global.DOMParser = dom.window.DOMParser;
-  global.NodeFilter = dom.window.NodeFilter;
-}
+import { setupNodeTestEnvironment } from './node-test-helper.js';
+import { discoverFixtureFiles, resolveFixturePath } from './fixtures.js';
 
 // load pipeline helpers
 const { parseMht } = await import('../src/pipeline/mht.js');
 const { runPipeline } = await import('../src/pipeline/pipeline.js');
-// suppress logging to keep output focused; see src/logging.js
-const { setEnabled } = await import('../src/logging.js');
-setEnabled(false);
+
+await setupNodeTestEnvironment();
 
 console.log('running C0-control-character pipeline compliance test');
 
-// scan MHT fixtures directly (any .mht in Tests root)
-const fixtures = fs
-  .readdirSync('Tests')
-  .filter(f => f.match(/\.(mht|mhtml)$/i))
-  .map(f => path.join('Tests', f));
+// scan MHT fixtures through the shared fixture-discovery policy
+const fixtures = discoverFixtureFiles().map(resolveFixturePath);
 
 if (fixtures.length === 0) {
   console.warn('no .mht fixtures found to test');
