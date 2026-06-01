@@ -327,6 +327,7 @@ First-pass tasks:
 - [x] [P2] Keep the Conversion results action row stable so Clear files and Download ZIP do not shift position when the status text above them changes. (2026-05-25)
 - [x] [P2] Reduce spacing and visual bulk in the homepage converted-files list so larger batches are easier to scan and navigate. (2026-05-25)
 - [ ] [P1] Do a cross-display UI polish review as the last pre-screenshot `v0.2` UI task and record any remaining readability or contrast fixes needed for the PWA.
+- [ ] [P2] Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
 
 ---
 
@@ -339,6 +340,7 @@ First-pass tasks:
 - [x] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux. (2026-05-25)
 - [x] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release. (2026-05-25)
 - [x] [P2] Investigate minifying the injected toolbar assets after the toolbar feature set is implemented so adding a toolbar does not nearly double exported file size. (2026-05-26, landed a first-pass inline CSS/JS compaction pass with payload-size guardrails in `Tests/toolbar-injector.js`.)
+- [ ] [P2] Revert inline minification of the injected toolbar CSS/JS so exported HTML keeps readable toolbar assets; the current roughly 10% file-size reduction does not justify the trust/readability tradeoff.
 - [ ] [P3] Evaluate a build-time minification path for injected toolbar assets if the current inline compaction still leaves unacceptable export-size overhead on representative exports.
 
 ### OneNote Tag Support (post‑release)
