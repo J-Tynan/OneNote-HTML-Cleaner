@@ -145,7 +145,11 @@
           <details id="advancedOptions" class="card-section">
             <summary class="advanced-options-summary text-sm font-medium cursor-pointer">
               <span>Advanced options</span>
-              <span class="text-xs text-muted">Optional</span>
+              <span class="advanced-options-summary__meta text-xs text-muted">
+                <span>Optional settings</span>
+                <span class="advanced-options-summary__state advanced-options-summary__state--closed">Click to expand</span>
+                <span class="advanced-options-summary__state advanced-options-summary__state--open">Click to collapse</span>
+              </span>
             </summary>
 
             <p class="mt-3 text-xs text-muted">
@@ -397,8 +401,8 @@
     aria-modal="true"
     aria-labelledby="helpModalTitle">
     <div class="absolute inset-0 bg-black/40"></div>
-    <div class="surface-card relative max-w-xl rounded p-6 shadow-lg">
-      <div class="flex items-start justify-between gap-4">
+    <div class="help-modal__panel surface-card relative max-w-xl rounded p-6 shadow-lg">
+      <div class="help-modal__header flex items-start justify-between gap-4">
         <div class="help-modal__content min-w-0 flex-1">
           <h3 id="helpModalTitle" class="text-lg font-medium">How to use OneNote HTML Cleaner</h3>
           <p class="mt-2 text-sm text-secondary">
@@ -464,8 +468,8 @@
             </details>
           </div>
         </div>
-        <div class="flex items-start">
-          <button id="helpCloseButton" type="button" class="ml-4 btn-ghost" aria-label="Close help">Close</button>
+        <div class="help-modal__actions flex items-start">
+          <button id="helpCloseButton" type="button" class="help-modal__close ml-4 btn-ghost" aria-label="Close help">Close</button>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 # Cross-Display UI Review Plan
 
 Prepared: 2026-06-01
-Status: in progress; matte LCD laptop and AMOLED phone evidence received, first polish fixes implemented
+Status: complete; matte LCD laptop and AMOLED phone evidence reviewed, findings recorded, and first polish fixes implemented on 2026-07-08
 
 ## Goal
 
@@ -13,7 +13,7 @@ This is a review-and-triage task first, not an implementation task. The aim is t
 
 Source task in `TODO.md`:
 
-- `[ ] [P1] Do a cross-display UI polish review as the last pre-screenshot v0.2 UI task and record any remaining readability or contrast fixes needed for the PWA.`
+- `[x] [P1] Do a cross-display UI polish review as the last pre-screenshot v0.2 UI task and record any remaining readability or contrast fixes needed for the PWA.`
 
 ## Scope
 
@@ -182,15 +182,12 @@ Severity: Blocker | Follow-up | Polish
 
 ## Current Next Step
 
-Run or collect one final post-fix confirmation pass for the adjusted header alignment, single-card Advanced options styling, and reduced homepage card title top gaps, then decide whether the next action is:
-
-1. record findings only
-2. prepare a focused fix plan
-3. request one more targeted screenshot pass for an unresolved display-specific issue
+Prepare the refreshed screenshot step for `v0.2`. The cross-display follow-up polish tasks are complete, so the next work should be screenshot capture or any unrelated remaining release-hardening tasks.
 
 ## Notes
 
 - User-supplied real-hardware observations should take priority when they conflict with synthetic browser checks, especially for matte-screen light-theme contrast and AMOLED dark-theme readability.
 - The AMOLED phone evidence was reviewed from chat attachments on 2026-07-08 because the JPG files were not visible in `Tests/screenshots` from the workspace tools; the matte LCD laptop screenshots were visible on disk.
+- Review outcome on 2026-07-08: no blocker-grade cross-display regressions remained after the header-alignment, Advanced-options surface, and homepage card-spacing fixes; the remaining items were converted into narrower follow-up tasks in `TODO.md`.
 - If the review finds only small polish issues, batch them into one narrow follow-up implementation slice rather than reopening broader homepage layout decisions.
 - Generated report files under `Tests/reports/` are not required deliverables for this review unless a deliberate rebaseline becomes necessary later.

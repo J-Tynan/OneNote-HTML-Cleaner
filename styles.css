@@ -14,13 +14,13 @@ html {
   color-scheme: light;
 
   /* Color tokens (light theme) */
-  --bg-page: #f3f6f9;
+  --bg-page: #eaf1f6;
   --bg-card: #ffffff;
-  --bg-soft: #eef3f7;
+  --bg-soft: #e4edf4;
   --text-primary: #0f172a;
-  --text-muted: #586c82; /* original muted text color; light/dark overrides handle contrast */
-  --text-help: #44576c;
-  --border-muted: #cfd8e3;
+  --text-muted: #4f6478; /* original muted text color; light/dark overrides handle contrast */
+  --text-help: #3d5165;
+  --border-muted: #b9cad9;
   --cta-bg: #0b6f83;
   --cta-bg-hover: #095f70;
   --cta-bg-active: #084c5a;
@@ -93,11 +93,33 @@ summary::-webkit-details-marker {
 .advanced-options-summary {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
+  min-height: 2.5rem;
 }
 
 .advanced-options-summary > span:first-child {
   flex: 1 1 auto;
+}
+
+.advanced-options-summary__meta {
+  display: grid;
+  justify-items: end;
+  gap: 0.125rem;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.advanced-options-summary__state--open {
+  display: none;
+}
+
+#advancedOptions[open] .advanced-options-summary__state--closed {
+  display: none;
+}
+
+#advancedOptions[open] .advanced-options-summary__state--open {
+  display: inline;
 }
 
 .advanced-options-summary::after {
@@ -150,7 +172,7 @@ summary::-webkit-details-marker {
 }
 
 .home-footer .page-shell {
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
 }
 
 .home-layout {
@@ -281,7 +303,9 @@ summary::-webkit-details-marker {
   .option-subgroup {
     display: grid;
     gap: 0.5rem;
-    padding-left: 2rem;
+    margin-left: 1.75rem;
+    padding-left: 0.875rem;
+    border-left: 2px solid rgba(148, 163, 184, 0.25);
   }
 
   .option-subgroup--compact {
@@ -299,8 +323,9 @@ summary::-webkit-details-marker {
 
   /* Checkbox rows */
   .checkbox-option {
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1rem minmax(0, 1fr);
+    align-items: start;
     gap: 0.75rem;
     font-size: 0.875rem;
     cursor: pointer;
@@ -309,6 +334,8 @@ summary::-webkit-details-marker {
 
   .checkbox-option > span {
     min-width: 0;
+    display: grid;
+    gap: 0.25rem;
   }
 
   .checkbox-input {
@@ -447,9 +474,13 @@ summary::-webkit-details-marker {
     width: 100%;
     border-radius: 0.375rem;
     border: 1px solid var(--border-muted);
+    min-height: 2.5rem;
     padding: 0.5rem 0.75rem;
+    font-family: inherit;
     font-size: 0.875rem;
+    line-height: 1.35;
     outline: none;
+    appearance: none;
     background-color: var(--bg-card);
     color: var(--text-primary);
   }
@@ -721,7 +752,7 @@ html.dark .status-pill--error {
   }
 
   .home-footer .page-shell {
-    padding-bottom: 1rem;
+    padding-bottom: 0.625rem;
   }
 
   p {
@@ -816,7 +847,7 @@ html.dark {
   --cta-text: #1b1206;
   --dropzone-highlight: #071217;
   --btn-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  --btn-focus-ring: rgba(255, 184, 107, 0.34);
+  --btn-focus-ring: rgba(255, 184, 107, 0.48);
 }
 
 /* === Dark theme VARIANTS (Phase 3 testing hooks) ===
@@ -1018,6 +1049,15 @@ html.dark .header-icon-button:hover {
   box-shadow: 0 0 0 4px var(--btn-focus-ring);
 }
 
+html.dark .btn-primary:focus,
+html.dark .btn-secondary:focus,
+html.dark .btn-ghost:focus-visible,
+html.dark .advanced-options-summary:focus-visible,
+html.dark #dropzone:focus-visible,
+html.dark .convert-button-wrapper:focus-within {
+  box-shadow: 0 0 0 1px rgba(255, 184, 107, 0.8), 0 0 0 5px var(--btn-focus-ring);
+}
+
 .tooltip.hidden {
   display: none;
 }
@@ -1042,6 +1082,14 @@ html.dark .header-icon-button:hover {
 
 .help-modal__content {
   min-width: 0;
+}
+
+.help-modal__actions {
+  flex: none;
+}
+
+.help-modal__close {
+  white-space: nowrap;
 }
 
 .help-sections {
@@ -1119,10 +1167,25 @@ html.dark .help-section[open] > .help-section__summary {
 
 @media (max-width: 639px) {
   #helpModal > .relative {
-    max-width: 92vw;
+    max-width: 96vw;
     max-height: calc(100vh - 1.5rem);
     border-radius: 0.5rem; /* 8px */
-    padding: 1rem; /* 16px */
+    padding: 0.875rem; /* 14px */
+  }
+
+  .help-modal__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .help-modal__actions {
+    order: -1;
+    justify-content: flex-end;
+  }
+
+  .help-modal__close {
+    margin-left: 0;
   }
 
   .help-section__summary {

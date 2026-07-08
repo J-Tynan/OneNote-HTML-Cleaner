@@ -82,11 +82,11 @@ Baseline references:
 
 ## Theme And Contrast
 
-- [ ] Light theme CTA contrast is strong and readable.
+- [x] Light theme CTA contrast is strong and readable.
 - [x] Dark theme CTA contrast is strong and readable.
 - [x] The page does not look like a mixed-theme surface after reload.
 - [x] Dark theme is reviewed by reloading with the persisted theme state, not by manually toggling classes.
-- [ ] Card borders, backgrounds, and text colors feel coherent in both themes.
+- [x] Card borders, backgrounds, and text colors feel coherent in both themes.
 
 ## Accessibility And Keyboard Flow
 
@@ -157,12 +157,12 @@ Baseline references:
 
 - Observation: The advanced section doesn't immediately tell the user this is a collapsed section that can expand when clicked on.
   Impact: This could create delays in user interaction and negatively impact the impression of our tool.
-  Suggestion: Include a visual aid for the user such as icons that represent the collapsed/expanded section state or a short text hint such as "Click to expand"/"Click to collapse".
+  Suggestion: Include a visual aid for the user such as icons that represent the collapsed/expanded section state or a short text hint such as "Click to expand"/"Click to collapse". Addressed on 2026-07-08 in `index.html` and `styles.css`.
   Severity: Follow-up.
 
 - Observation: In the advanced section there are layout inconsistencies: Checkboxes of different sizes, dropdown menus with different fonts, text labels have different indentations.
   Impact: First-time users could consider this unprofessional and not use our PWA.
-  Suggestion: We tidy up the design of the advanced section: Consistent use of fonts, consistent use of checkboxes, re-align text labels to appear consistent.
+  Suggestion: We tidy up the design of the advanced section: Consistent use of fonts, consistent use of checkboxes, re-align text labels to appear consistent. Addressed on 2026-07-08 in `styles.css`.
   Severity: Blocker
 
 - Observation: When a user unchecks the advanced option for automatic conversion, the layout shifts upwards becse the following text dissapears "Files are converted automatically when added to the queue.
@@ -183,17 +183,17 @@ You can change this behaviour in Advanced options."
 
 - Observation: When viewed on a mobile device (Samsung S23 Ultra using Samsung Browser), the footer is too large.
   Impact: The unused space makes it hard for a first-time user to discover the link to our documentation.
-  Suggestion: Reduce the height of the footer on both `Layout B · Tablet / Laptop` and `Layout C · Mobile`.
+  Suggestion: Reduce the height of the footer on both `Layout B · Tablet / Laptop` and `Layout C · Mobile`. Addressed on 2026-07-08 in `styles.css`.
   Severity: Polish
 
 - Observation: Testing this PWA on a laptop with a display that is anti-glare/matte type, the Light theme is not contrasty enough to distinguish seperate cards and sections and buttons.
   Impact: Users may have difficulty distinguishing different sections and buttons, leading to a poor user experience.
-  Suggestion: Increase the contrast between cards, sections, and buttons in the Light theme to improve visibility.
+  Suggestion: Increase the contrast between cards, sections, and buttons in the Light theme to improve visibility. Addressed on 2026-07-08 in `styles.css`.
   Severity: Follow-up
 
 - Observation: When navigating the homepage with keyboard shortcurts in Dark theme, buttons have a gentle highlight instead of a strong highlight.
   Impact: Users may have difficulty identifying the currently focused button, leading to a poor user experience.
-  Suggestion: Increase the highlight intensity for focused buttons in Dark theme to improve visibility.
+  Suggestion: Increase the highlight intensity for focused buttons in Dark theme to improve visibility. Addressed on 2026-07-08 in `styles.css`.
   Severity: Follow-up
 
 - Observation: Sometimes when the browser window is not in focus, the list of queued files/converted files refreshes and the user loses their work.
