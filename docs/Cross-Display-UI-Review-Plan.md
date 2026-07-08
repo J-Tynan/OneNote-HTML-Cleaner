@@ -1,7 +1,7 @@
 # Cross-Display UI Review Plan
 
 Prepared: 2026-06-01
-Status: planned, waiting for manual screenshot evidence
+Status: in progress; matte LCD laptop and AMOLED phone evidence received, first polish fixes implemented
 
 ## Goal
 
@@ -103,8 +103,8 @@ Minimum manual review matrix:
 - Desktop light theme
 - Desktop dark theme
 - Narrow mobile width
-- One matte or low-contrast desktop/laptop pass
-- One OLED dark-theme phone pass if available
+- One matte LCD laptop pass at 1920x1080 landscape
+- One AMOLED dark-theme phone pass at 1440x3088 portrait
 
 For each context, inspect:
 
@@ -154,14 +154,14 @@ The first manual evidence batch should focus on the highest-value display contex
 
 Confirmed device coverage:
 
-- Matte laptop or low-contrast desktop
-- OLED phone in dark theme
+- Laptop: LCD matte, 1920x1080, landscape
+- Smartphone: AMOLED, 1440x3088, portrait
 
 Requested screenshot batch:
 
-1. Empty homepage in light theme on the matte or low-contrast display
-2. One queued file in light theme on the matte or low-contrast display
-3. One queued file in dark theme after a full reload on the OLED phone
+1. Empty homepage in light theme on the matte LCD laptop
+2. One queued file in light theme on the matte LCD laptop
+3. One queued file in dark theme after a full reload on the AMOLED phone
 4. Advanced options expanded on mobile width
 
 For each screenshot, include:
@@ -182,7 +182,7 @@ Severity: Blocker | Follow-up | Polish
 
 ## Current Next Step
 
-Wait for the first screenshot batch, compare it against the homepage review checklist, then decide whether the next action is:
+Run or collect one post-fix confirmation pass for the adjusted header alignment and single-card Advanced options styling, then decide whether the next action is:
 
 1. record findings only
 2. prepare a focused fix plan
@@ -190,6 +190,7 @@ Wait for the first screenshot batch, compare it against the homepage review chec
 
 ## Notes
 
-- User-supplied real-hardware observations should take priority when they conflict with synthetic browser checks, especially for matte-screen light-theme contrast and OLED dark-theme readability.
+- User-supplied real-hardware observations should take priority when they conflict with synthetic browser checks, especially for matte-screen light-theme contrast and AMOLED dark-theme readability.
+- The AMOLED phone evidence was reviewed from chat attachments on 2026-07-08 because the JPG files were not visible in `Tests/screenshots` from the workspace tools; the matte LCD laptop screenshots were visible on disk.
 - If the review finds only small polish issues, batch them into one narrow follow-up implementation slice rather than reopening broader homepage layout decisions.
 - Generated report files under `Tests/reports/` are not required deliverables for this review unless a deliberate rebaseline becomes necessary later.

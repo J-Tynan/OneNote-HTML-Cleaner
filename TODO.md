@@ -274,6 +274,8 @@ First-pass tasks:
 3. Implement the minimal release-quality native pipeline, including import UX, warnings, failure messaging, and deterministic output expectations.
 4. Document native workflow limitations, expected fidelity, and troubleshooting paths in product docs and in-app help.
 5. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
+6. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
+7. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 
@@ -571,6 +573,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name. (2026-03-07, automated via `Tests/externalize-css-visual-parity-playwright.js`)
 - [ ] [P3] Decide whether additional inline-style properties should stay inline for fidelity and update extraction allow/deny rules.
 - [ ] [P3] Confirm CSS filename/path strategy remains optimal for downstream workflows (ZIP root vs nested assets, stable names, collision handling).
+- [ ] [P3] Implement a human-readable naming convention for externalized CSS files so generated stylesheet assets are easier to inspect and trace during review.
 - [x] [P3] Publish review findings and decisions in `Tests/reports/manual-review-findings.md` (or a dedicated CSS review report) before finalizing this feature. (2026-03-07, published in `Tests/reports/css-audit-report.md`)
 
 ---

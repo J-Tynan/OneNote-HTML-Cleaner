@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-05-25T17:10:51.854Z",
-  "url": "http://127.0.0.1:60045/",
+  "timestamp": "2026-07-08T10:26:34.511Z",
+  "url": "http://127.0.0.1:59473/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -2860,15 +2860,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#0f172a",
-                "bgColor": "#eef3f7",
-                "contrastRatio": 15.98,
+                "bgColor": "#ffffff",
+                "contrastRatio": 17.85,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.98"
+              "message": "Element has sufficient color contrast of 17.85"
             }
           ],
           "all": [],
@@ -2885,15 +2885,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#586c82",
-                "bgColor": "#eef3f7",
-                "contrastRatio": 4.84,
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.4,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.84"
+              "message": "Element has sufficient color contrast of 5.4"
             }
           ],
           "all": [],
@@ -2974,7 +2974,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"text-sm text-secondary\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -3351,7 +3351,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<select id=\"toolbarStyle\" disabled=\"\" class=\"form-control mt-1\" aria-describedby=\"toolbarStyleHelp\">\n                      <option value=\"compact\" selected=\"\">Compact (default)</option>\n                      <option value=\"classic\">Classic</option>\n                    </select>",
+          "html": "<select id=\"toolbarStyle\" disabled=\"\" class=\"form-control mt-1\" aria-describedby=\"toolbarStyleHelp\">",
           "target": [
             "#toolbarStyle"
           ]
@@ -3369,7 +3369,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"toolbarStyleHelp\" class=\"text-xs text-muted\">\n                      Compact keeps controls small for narrow screens. Classic uses a denser, Office-inspired toolbar look.\n                    </p>",
+          "html": "<p id=\"toolbarStyleHelp\" class=\"text-xs text-muted\">Enable toolbar injection to choose a toolbar chrome preset before conversion.</p>",
           "target": [
             "#toolbarStyleHelp"
           ]
@@ -5585,7 +5585,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"text-sm text-secondary\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -5665,7 +5665,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"fileList\" class=\"space-y-3\"></div>",
+          "html": "<div id=\"fileList\" class=\"space-y-2\"></div>",
           "target": [
             "#fileList"
           ]

@@ -44,14 +44,14 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 	</tr>
 	<tr>
 		<td width="50%">
-			<img src="assets/release/release-advanced-options-markdown.png" alt="Advanced options expanded with Markdown export selected and Obsidian chosen as the Markdown flavor.">
+			<img src="assets/release/release-advanced-options-markdown.png" alt="Advanced options expanded with externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection controls visible.">
 		</td>
 		<td width="50%">
 			<img src="assets/release/release-zip-export.png" alt="ZIP export result showing multiple converted files with readable filenames.">
 		</td>
 	</tr>
 	<tr>
-		<td><strong>Advanced Options</strong><br>Advanced options expose optional Markdown export controls without changing the default HTML workflow.</td>
+		<td><strong>Advanced Options</strong><br>Advanced options expose optional output controls such as externalized CSS, Markdown export, converted-page theme toggles, and toolbar injection without changing the default HTML workflow.</td>
 		<td><strong>Batch Export</strong><br>Batch exports produce readable filenames that are easier to store and share.</td>
 	</tr>
 </table>
@@ -115,10 +115,9 @@ Converted output is designed to be more readable and easier to reuse than raw ex
 
 ### Batch Conversion And ZIP Export
 
-You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share.
+You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share. If you want to discard the current queue before starting a different batch, use `Clear files`.
 
 ### Simple Default Flow, Advanced Controls When Needed
-
 Advanced options stay collapsed by default so first-time users are not forced through configuration before converting a file. When needed, advanced settings can enable optional behaviors such as:
 
 - manual convert mode
@@ -154,6 +153,7 @@ The conversion path preserves important note structures such as headings, lists,
 
 - drag and drop or file-picker import
 - automatic conversion or manual conversion
+- clear queued files before starting a new batch
 - single download or ZIP download
 - Light / Dark UI theme toggle
 - in-app Help modal with keyboard support
@@ -210,6 +210,10 @@ Use externalized CSS when you plan to keep exported HTML and CSS files together,
 
 Disable auto-convert if you want to queue files first and trigger conversion manually with the `Convert` button.
 
+### Converted-Page Edit Toolbar
+
+For HTML exports, Advanced options can inject an Edit Mode toolbar into converted pages. The current presets include Compact, Office-97, Ribbon, MacOS, and Linux chrome styles.
+
 ## Roadmap
 
 The roadmap is focused on expanding the product carefully without weakening the stable MHTML workflow.
@@ -223,7 +227,7 @@ The roadmap is focused on expanding the product carefully without weakening the 
 ### Planned Product Expansion
 
 - broader export capabilities after the stable MHTML release is established
-- optional toolbar enhancements for converted pages
+- future investigation of richer converted-page editing workflows beyond the current optional toolbar presets
 - future investigation of richer support for native OneNote formats such as `.one` and `.onepkg`
 
 ### Planned Tag Features

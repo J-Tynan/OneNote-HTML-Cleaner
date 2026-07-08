@@ -141,6 +141,7 @@ summary::-webkit-details-marker {
 
 .home-header__actions {
   flex: none;
+  margin-top: 1rem;
 }
 
 .home-main {
@@ -261,6 +262,17 @@ summary::-webkit-details-marker {
     padding: 0.875rem;
     transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
     background-color: var(--bg-soft);
+  }
+
+  .home-advanced-card.card-panel--soft {
+    background-color: var(--bg-card);
+  }
+
+  .home-advanced-card .card-section {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background-color: transparent;
   }
 
   /* Option group panels */

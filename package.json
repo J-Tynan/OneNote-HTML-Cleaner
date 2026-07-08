@@ -27,6 +27,7 @@
     "test:theme": "node ./Tests/tailwind-darkmode.js && node ./Tests/theme-playwright.js",
     "test:playwright:a11y": "node ./Tests/playwright-a11y.js",
     "test:playwright:a11y-exports": "node ./Tests/playwright-a11y-exports.js --dir Tests/Cleaned",
+    "test:layout-shift": "node ./Tests/layout-shift-playwright.js",
     "test:exports:regressions": "node ./Tests/exports-regressions.js",
     "test:image-alt": "node ./Tests/image-alt.unit.js",
     "test:handwriting-detection": "node ./Tests/handwriting-detection.unit.js",

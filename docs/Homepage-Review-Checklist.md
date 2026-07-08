@@ -120,6 +120,26 @@ Baseline references:
 
 - Pass with notes is acceptable for small spacing or copy refinements if the page still meets the approved implementation intent.
 - Treat any blocker above as a follow-up issue before merge.
+- Observation: In the matte LCD laptop screenshots, the Help and Theme buttons sat near the top edge of the window instead of aligning with the page title.
+  Impact: The header felt slightly unbalanced and less intentional on the desktop light-theme layout.
+  Suggestion: Align the header action buttons with the page-title text rather than the header top edge. Addressed on 2026-07-08 in `styles.css`.
+  Severity: Polish
+
+- Observation: In the matte LCD laptop screenshots, the collapsed Advanced options section appeared as a card nested inside another card.
+  Impact: The duplicate border and padding made the section feel heavier than intended and less consistent with the surrounding cards.
+  Suggestion: Keep Advanced options as a single card surface while preserving the existing collapsed/expanded details behavior. Addressed on 2026-07-08 in `styles.css`.
+  Severity: Polish
+
+- Observation: In the AMOLED phone screenshot with Advanced options expanded, the controls remain readable but the section becomes a long, dense mobile surface before users reach results.
+  Impact: First-time mobile users may lose workflow context or need more scrolling than expected after opening Advanced options.
+  Suggestion: Treat this as a post-review polish follow-up if it still feels heavy after the single-card Advanced options fix; possible approaches include tightening helper copy, grouping advanced controls more clearly, or reducing low-value vertical spacing on mobile.
+  Severity: Polish
+
+- Observation: In the AMOLED phone screenshot after a dark-theme reload, homepage surfaces, text, status pills, and results card separation remain readable with no obvious mixed-theme regression.
+  Impact: The dark-theme mobile baseline looks usable on AMOLED for the queued-file workflow.
+  Suggestion: No blocker-grade fix required from this evidence; keep monitoring CTA saturation under the existing button-color follow-up note.
+  Severity: Polish
+
 - Observation: The Browse and Convert buttons stack badly on desktop layout (`Layout A · Desktop`). The `Browse files` button is bigger than the `Convert queued files` button.
   Impact: First impression this looks unprofessional.
   Suggestion: Make the Browse and Convert buttons the same size on `Layout A · Desktop`.
