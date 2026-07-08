@@ -182,7 +182,7 @@ Severity: Blocker | Follow-up | Polish
 
 ## Current Next Step
 
-Run or collect one post-fix confirmation pass for the adjusted header alignment and single-card Advanced options styling, then decide whether the next action is:
+Run or collect one final post-fix confirmation pass for the adjusted header alignment, single-card Advanced options styling, and reduced homepage card title top gaps, then decide whether the next action is:
 
 1. record findings only
 2. prepare a focused fix plan

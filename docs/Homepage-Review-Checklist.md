@@ -140,6 +140,11 @@ Baseline references:
   Suggestion: No blocker-grade fix required from this evidence; keep monitoring CTA saturation under the existing button-color follow-up note.
   Severity: Polish
 
+- Observation: In the post-fix phone and laptop screenshots, homepage cards still had a large top gap above the visible card titles.
+  Impact: The cards felt vertically heavier than necessary and less polished, especially on the mobile empty-homepage view.
+  Suggestion: Reset default heading margins and reduce homepage card top padding while preserving side and bottom spacing. Addressed on 2026-07-08 in `styles.css`.
+  Severity: Polish
+
 - Observation: The Browse and Convert buttons stack badly on desktop layout (`Layout A · Desktop`). The `Browse files` button is bigger than the `Convert queued files` button.
   Impact: First impression this looks unprofessional.
   Suggestion: Make the Browse and Convert buttons the same size on `Layout A · Desktop`.
