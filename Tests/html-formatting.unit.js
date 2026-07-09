@@ -23,4 +23,13 @@ console.log('running html-formatting unit tests');
   assert(normalized.includes('</pre>\n\n<p>Done</p>'));
 }
 
+{
+  const raw = '<!DOCTYPE html>\n<html>\n<body>\n<style>\n.example {\n  color: red;  \n\n  background: white;\n}\n</style>\n\n\n<textarea>first line  \n\nsecond line</textarea>\n\n\n<p>Done</p>\n</body>\n</html>';
+  const normalized = normalizeWhitespace(raw);
+
+  assert(normalized.includes('<style>\n.example {\n  color: red;  \n\n  background: white;\n}\n</style>'));
+  assert(normalized.includes('<textarea>first line  \n\nsecond line</textarea>'));
+  assert(normalized.includes('</textarea>\n\n<p>Done</p>'));
+}
+
 console.log('html-formatting: PASS');

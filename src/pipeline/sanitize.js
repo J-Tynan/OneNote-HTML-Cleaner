@@ -1375,7 +1375,7 @@ export function ensureListStructure(doc) {
   if (unwrappedCount) logs.push({ step: 'UnwrapMalformedListCount', unwrappedCount });
 
   // remove explicit bullet glyphs from list items (e.g. • or ·) to avoid duplicates
-  const bulletRegex = /^[\s\u00A0]*[•·\u2022\u00B7\-]+[\s\u00A0]*/;
+  const bulletRegex = /^[\s\u00A0]*(?:[•·\u2022\u00B7]+|-(?=[\s\u00A0]))[\s\u00A0]*/;
   Array.from(doc.querySelectorAll('li')).forEach(li => {
     const first = li.firstChild;
     if (first && first.nodeType === TEXT_NODE) {
@@ -1411,25 +1411,27 @@ export function ensureListStructure(doc) {
   return logs;
 }
 
-// Remove adjacent or identical duplicate <li> elements from any list. This is a
-// defensive pass meant to catch cases where earlier repairs accidentally
-// cloned or left behind items. It is idempotent and cheap for typical
-// documents. The pipeline invokes this after `ensureListStructure`.
+// Remove adjacent duplicate <li> elements from any list. This is a defensive
+// pass meant to catch cases where earlier repairs accidentally cloned or left
+// behind the same item twice in a row. The pipeline invokes this after
+// `ensureListStructure`.
 export function dedupeLists(doc) {
   const logs = [];
   const lists = Array.from(doc.querySelectorAll('ul,ol'));
   lists.forEach(list => {
-    const seen = new Set();
+    let previousHtml = null;
     let removed = 0;
     Array.from(list.children).forEach(child => {
       if (child.nodeType === ELEMENT_NODE && child.tagName.toLowerCase() === 'li') {
         const html = child.outerHTML;
-        if (seen.has(html)) {
+        if (previousHtml === html) {
           child.remove();
           removed += 1;
         } else {
-          seen.add(html);
+          previousHtml = html;
         }
+      } else {
+        previousHtml = null;
       }
     });
     if (removed) logs.push({ step: 'dedupeLists', list: list.tagName.toLowerCase(), removed });

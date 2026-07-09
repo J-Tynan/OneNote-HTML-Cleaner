@@ -250,7 +250,7 @@ Success criteria:
 - The current feature set has clearer acceptance gates, sharper docs, and reusable launch material that can carry into later releases.
 
 First-pass tasks:
-1. Harden the MHTML-to-HTML pipeline against edge-case fixtures and expand targeted regression coverage for tables, lists, whitespace, and inline resources.
+1. Harden the MHTML-to-HTML pipeline against edge-case fixtures and expand targeted regression coverage for tables, lists, whitespace, and inline resources. (2026-07-09, tightened list deduplication and bullet-marker handling in `src/pipeline/sanitize.js`, narrowed `mergeStyled()` table-cell list merging in `src/pipeline/listRepair.js`, hardened queried-path and unresolved-resource image handling in `src/pipeline/images.js`, added deterministic `imageMapCollision` warnings in `src/pipeline/mht.js`, expanded focused coverage under `Tests/`, added `test:pipeline-edge-cases` to `package.json`, and validated with `npm run test:pipeline-edge-cases` plus `node ./Tests/mht-fixtures-playwright.js`.)
 2. Tackle deferred post-release test-harness cleanup that directly improves confidence and delivery speed, especially repeated static-server setup and shared browser-test helpers.
 3. Run a consistency pass on high-visibility controls and current features, including primary/secondary button polish, toolbar/config stability, and the clear-results workflow.
 4. Rewrite or tighten high-traffic product copy where it still feels provisional, including Help content, feature descriptions, and acceptance-gate documentation.
@@ -269,13 +269,15 @@ Success criteria:
 - Native import behavior is stable enough that release notes can describe known limitations clearly without apologizing for the core workflow.
 
 First-pass tasks:
-1. Define the `v1.0` native support contract: what kinds of `.one` files are in scope, what is intentionally unsupported, and what quality bar counts as release-ready.
-2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
-3. Implement the minimal release-quality native pipeline, including import UX, warnings, failure messaging, and deterministic output expectations.
-4. Document native workflow limitations, expected fidelity, and troubleshooting paths in product docs and in-app help.
-5. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
-6. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
-7. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
+1. Convert the JavaScript codebase to TypeScript incrementally, starting with shared core modules and build/test tooling, while keeping the app shippable throughout the transition.
+2. Define the `v1.0` native support contract: what kinds of `.one` files are in scope, what is intentionally unsupported, and what quality bar counts as release-ready.
+3. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
+4. Implement the minimal release-quality native pipeline, including import UX, warnings, failure messaging, and deterministic output expectations.
+5. Document native workflow limitations, expected fidelity, and troubleshooting paths in product docs and in-app help.
+6. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
+7. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
+8. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
+9. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 
@@ -331,7 +333,6 @@ First-pass tasks:
 - [x] [P1] Do a cross-display UI polish review as the last pre-screenshot `v0.2` UI task and record any remaining readability or contrast fixes needed for the PWA. (2026-07-08, completed with matte LCD laptop and AMOLED phone evidence, recorded in `docs/Homepage-Review-Checklist.md`, with header alignment, Advanced-options surface cleanup, and homepage card-spacing fixes landed.)
 - [x] [P1] Tighten Advanced options after the cross-display review: improve collapsed/expanded affordance, normalize checkbox/dropdown alignment, and reduce dense mobile presentation so the section feels screenshot-ready. (2026-07-08, added explicit expand/collapse hinting in `index.html`, normalized Advanced-options checkbox/select styling in `styles.css`, and validated with `npm run test:layout-shift`, `npm run test:theme`, and `npm run test:playwright:a11y`.)
 - [x] [P2] Improve homepage readability follow-ups found during the cross-display review: strengthen light-theme surface separation on matte displays, strengthen dark-theme keyboard focus visibility, and reduce oversized footer weight on mobile. (2026-07-08, tuned light-theme surface tokens and footer spacing in `styles.css`, strengthened dark-mode focus rings for keyboard-visible controls, and validated with `npm run test:theme` and `npm run test:playwright:a11y`.)
-- [ ] [P2] Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
 
 ---
 
@@ -344,7 +345,7 @@ First-pass tasks:
 - [x] [P2] Redesign the Edit Mode toolbar UI and tools so Advanced options can reveal a hidden toolbar-style dropdown before conversion, letting users choose the injected toolbar chrome only when needed to limit output filesize; initial styles to explore: Office-97, Ribbon, MacOS, and Linux. (2026-05-25)
 - [x] [P2] Add coverage to test the Edit Mode toolbar UI variants so Office-97, Ribbon, MacOS, and Linux styles are verified for selection behavior, rendering, and core toolbar actions before release. (2026-05-25)
 - [x] [P2] Investigate minifying the injected toolbar assets after the toolbar feature set is implemented so adding a toolbar does not nearly double exported file size. (2026-05-26, landed a first-pass inline CSS/JS compaction pass with payload-size guardrails in `Tests/toolbar-injector.js`.)
-- [ ] [P2] Revert inline minification of the injected toolbar CSS/JS so exported HTML keeps readable toolbar assets; the current roughly 10% file-size reduction does not justify the trust/readability tradeoff.
+- [x] [P2] Revert inline minification of the injected toolbar CSS/JS so exported HTML keeps readable toolbar assets; the current roughly 10% file-size reduction does not justify the trust/readability tradeoff. (2026-07-08, toolbar CSS and JS now stay readable in inline output while the converted-page theme toggle keeps its existing compact encoding.)
 - [ ] [P3] Evaluate a build-time minification path for injected toolbar assets if the current inline compaction still leaves unacceptable export-size overhead on representative exports.
 
 ### OneNote Tag Support (post‑release)

@@ -31,5 +31,12 @@ function createDoc(html) {
     assert(!logs.some(entry => entry && entry.step === 'UnwrapMalformedListCount'));
   }
 
+  {
+    const doc = createDoc('<html><body><main><ul><li>- Example bullet</li><li>-10 degrees</li></ul></main></body></html>');
+    ensureListStructure(doc);
+    const items = Array.from(doc.querySelectorAll('main > ul > li')).map((li) => li.textContent.trim());
+    assert.deepEqual(items, ['Example bullet', '-10 degrees']);
+  }
+
   console.log('list-structure-normalization: PASS');
 })();

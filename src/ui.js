@@ -1243,6 +1243,10 @@ function onAdvancedOptionsChange() {
   rebuildSuccessfulOutputs();
 }
 
+function supportsNativeHelpDialog() {
+  return Boolean(dom.helpModal && typeof dom.helpModal.showModal === 'function' && typeof dom.helpModal.close === 'function');
+}
+
 /* === EVENT BINDING === */
 
 function bindEvents() {
@@ -1278,6 +1282,13 @@ function bindEvents() {
     openHelpModal();
   });
 
+  dom.helpButton?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openHelpModal();
+    }
+  });
+
   dom.helpCloseButton?.addEventListener('click', (e) => {
     e.preventDefault();
     closeHelpModal();
@@ -1308,6 +1319,11 @@ function bindEvents() {
 
   dom.helpModal?.addEventListener('click', (e) => {
     if (e.target === dom.helpModal) closeHelpModal();
+  });
+
+  dom.helpModal?.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    closeHelpModal();
   });
 
   window.addEventListener('resize', logLayoutMode);
@@ -1427,8 +1443,15 @@ export async function initUI(workerManager, options = {}) {
 
 function openHelpModal() {
   if (!dom.helpModal || !dom.helpButton) return;
-  dom.helpModal.classList.remove('hidden');
-  dom.helpModal.classList.add('flex');
+  if (supportsNativeHelpDialog()) {
+    if (!dom.helpModal.open) {
+      dom.helpModal.classList.remove('hidden');
+      dom.helpModal.showModal();
+    }
+  } else {
+    dom.helpModal.classList.remove('hidden');
+    dom.helpModal.classList.add('flex');
+  }
   dom.helpButton.setAttribute('aria-expanded', 'true');
   // focus the close button for keyboard users
   try { dom.helpCloseButton?.focus(); } catch (e) {}
@@ -1436,6 +1459,9 @@ function openHelpModal() {
 
 function closeHelpModal() {
   if (!dom.helpModal || !dom.helpButton) return;
+  if (supportsNativeHelpDialog() && dom.helpModal.open) {
+    dom.helpModal.close();
+  }
   dom.helpModal.classList.add('hidden');
   dom.helpModal.classList.remove('flex');
   dom.helpButton.setAttribute('aria-expanded', 'false');

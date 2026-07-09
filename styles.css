@@ -1067,6 +1067,16 @@ html.dark .convert-button-wrapper:focus-within {
 /* Light theme variants removed (testing postponed) */
 
 /* === Help modal tweaks (scoped overrides) === */
+#helpModal {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+#helpModal::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 #helpModal > .relative {
   width: 100%;
   max-width: min(92vw, 720px);
@@ -1225,6 +1235,3 @@ html.dark .help-section[open] > .help-section__summary {
   border-radius: 0.375rem; /* 6px */
 }
 
-#helpModal > .absolute {
-  background-color: rgba(0,0,0,0.40);
-}

@@ -308,7 +308,7 @@ function buildToolbarSkinCss(toolbarStyle) {
 }
 
 function buildStyleTag(toolbarStyle = 'compact') {
-  const css = minifyInlineCss(buildBaseStyleCss() + buildToolbarSkinCss(toolbarStyle));
+  const css = `${buildBaseStyleCss()}${buildToolbarSkinCss(toolbarStyle)}`;
   return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}">` +
     css +
     '</style>';
@@ -822,7 +822,7 @@ function buildScriptTag() {
   }
 })();`;
 
-  return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${minifyInlineScript(script)}</script>`;
+  return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${script}</script>`;
 }
 
 function buildMetadataTag(metadata) {

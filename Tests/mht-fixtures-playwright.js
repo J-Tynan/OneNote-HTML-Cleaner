@@ -57,6 +57,16 @@ function assertNoUnresolvedResourceRefs(html, caseName) {
   }
 }
 
+function assertNoUnresolvedEmbeddingWarnings(logs, caseName) {
+  const unresolvedLog = (logs || []).find((entry) => entry && entry.step === 'embedImagesUnresolved');
+  if (unresolvedLog) {
+    const sampleText = Array.isArray(unresolvedLog.samples) && unresolvedLog.samples.length
+      ? ` samples: ${unresolvedLog.samples.join(', ')}`
+      : '';
+    throw new Error(`MHT fixture mismatch: ${caseName} (pipeline reported ${unresolvedLog.unresolved || 0} unresolved embedded resources.${sampleText})`);
+  }
+}
+
 (async () => {
   const root = process.cwd();
   const serverHandle = await startStaticServer(root);
@@ -108,7 +118,13 @@ function assertNoUnresolvedResourceRefs(html, caseName) {
           // robust comparisons across serializers.
           actualNormalized = actualNormalized.replace(/>\s+</g, '><');
           expectedNormalized = expectedNormalized.replace(/>\s+</g, '><');
-          return { name: caseName, pass: actualNormalized === expectedNormalized, actual: actualNormalized, expected: expectedNormalized };
+          return {
+            name: caseName,
+            pass: actualNormalized === expectedNormalized,
+            actual: actualNormalized,
+            expected: expectedNormalized,
+            logs: run.logs || []
+          };
         } catch (err) {
           return { name: caseName, pass: false, error: String(err && err.stack ? err.stack : err) };
         }
@@ -149,6 +165,7 @@ function assertNoUnresolvedResourceRefs(html, caseName) {
         const missing = mustContain.filter(tok => !actual.includes(tok));
         if (missing.length === 0) {
           assertNoUnresolvedResourceRefs(actual, tc.name);
+          assertNoUnresolvedEmbeddingWarnings(res.logs, tc.name);
           console.warn('MHT fixture serialization differs but structural tokens present; accepting:', tc.name);
           console.log('MHT fixture passed (structural):', tc.name);
         } else {
@@ -177,6 +194,7 @@ function assertNoUnresolvedResourceRefs(html, caseName) {
         }
       } else {
         assertNoUnresolvedResourceRefs(res.actual || '', tc.name);
+        assertNoUnresolvedEmbeddingWarnings(res.logs, tc.name);
         console.log('MHT fixture passed:', tc.name);
       }
     }

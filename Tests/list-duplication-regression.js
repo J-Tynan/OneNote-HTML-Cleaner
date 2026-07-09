@@ -7,7 +7,7 @@ import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import { ensureDomParserGlobals } from './node-test-helper.js';
 const { parseMht } = await import('../src/pipeline/mht.js');
-const { ensureListStructure } = await import('../src/pipeline/sanitize.js');
+const { dedupeLists, ensureListStructure } = await import('../src/pipeline/sanitize.js');
 import { FIXTURE_FILES, resolveFixturePath } from './fixtures.js';
 
 ensureDomParserGlobals();
@@ -43,6 +43,14 @@ function checkOutput(html) {
 
 checkOutput(output);
 checkOutput(isolated);
+
+{
+  const repeatDoc = new JSDOM('<html><body><main><ul><li>Repeat</li><li>Unique</li><li>Repeat</li><li>Repeat</li></ul></main></body></html>').window.document;
+  const dedupeLogs = dedupeLists(repeatDoc);
+  const items = Array.from(repeatDoc.querySelectorAll('main > ul > li')).map((li) => li.textContent.trim());
+  assert.deepEqual(items, ['Repeat', 'Unique', 'Repeat']);
+  assert(dedupeLogs.some((entry) => entry && entry.step === 'dedupeLists' && entry.removed === 1));
+}
 
 console.log('list-duplication-regression: PASS');
 

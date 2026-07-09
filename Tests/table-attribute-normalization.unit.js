@@ -6,12 +6,17 @@ ensureDomParserGlobals();
 
 console.log('running table attribute normalization unit tests');
 
-const { normalizeTableAttributes, normalizeLegacyAttributes } = await import('../src/pipeline/sanitize.js');
+const {
+  normalizeTableAttributes,
+  normalizeLegacyAttributes,
+  normalizeTableCellParagraphMargins
+} = await import('../src/pipeline/sanitize.js');
 
 function apply(html) {
   const doc = new JSDOM(html).window.document;
   const logs = [];
   logs.push(...normalizeTableAttributes(doc));
+  logs.push(...normalizeTableCellParagraphMargins(doc));
   logs.push(...normalizeLegacyAttributes(doc, { removeLegacyDataAttrs: true }));
   return { doc, html: doc.documentElement.outerHTML, logs };
 }
@@ -70,6 +75,25 @@ function assertNoAttr(el, attr) {
   const ffMatches = style.match(/font-family\s*:/g) || [];
   assert.equal(ffMatches.length, 1, 'duplicate font-family declarations should be deduped');
   console.log('case4 pass');
+})();
+
+(() => {
+  const input = `<html><body><table border="1" cellpadding="2" cellspacing="3"><thead><tr><th><p>Head</p></th></tr></thead><tbody><tr><td><p>Body</p></td></tr></tbody><tfoot><tr><td><p style="margin-top:1em">Footer</p></td></tr></tfoot></table></body></html>`;
+  const { doc, logs } = apply(input);
+  const table = doc.querySelector('table');
+  const headParagraph = doc.querySelector('thead th > p');
+  const bodyParagraph = doc.querySelector('tbody td > p');
+  const footParagraph = doc.querySelector('tfoot td > p');
+
+  assert(table, 'table should exist');
+  assertNoAttr(table, 'border');
+  assertNoAttr(table, 'cellpadding');
+  assertNoAttr(table, 'cellspacing');
+  assert.equal(headParagraph.getAttribute('style'), 'margin: 0');
+  assert.equal(bodyParagraph.getAttribute('style'), 'margin: 0');
+  assert(/margin-top\s*:\s*1em/i.test(footParagraph.getAttribute('style') || ''), 'existing footer paragraph margin should be preserved');
+  assert(logs.some((entry) => entry && entry.step === 'NormalizeTableCellParagraphMargins' && entry.updated === 2));
+  console.log('case5 pass');
 })();
 
 console.log('table-attribute-normalization: PASS');

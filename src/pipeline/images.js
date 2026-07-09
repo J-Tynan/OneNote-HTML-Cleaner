@@ -39,7 +39,16 @@ function candidatesFor(val) {
   c.add(raw.replace(/^\/+/, ''));
 
   // Remove query string and fragment
-  try { c.add(raw.split(/[?#]/)[0]); } catch {}
+  try {
+    const withoutQuery = raw.split(/[?#]/)[0];
+    c.add(withoutQuery);
+    const cleanedParts = withoutQuery.split(/[\/\\]/);
+    const cleanedBase = cleanedParts[cleanedParts.length - 1];
+    if (cleanedBase) {
+      c.add(cleanedBase);
+      c.add(cleanedBase.toLowerCase());
+    }
+  } catch {}
 
   // Basename (filename only)
   try {
@@ -67,6 +76,21 @@ function candidatesFor(val) {
   return Array.from(c).filter(Boolean);
 }
 
+function shouldTrackUnresolvedResource(node, attr, val) {
+  if (!val) return false;
+
+  if (attr === 'src') return true;
+
+  const raw = String(val).trim();
+  if (/^(cid:|file:\/\/\/)/i.test(raw)) return true;
+  if (/\.(?:png|jpe?g|gif|webp|svg|bmp|ico|tiff?|avif|woff2?|woff|ttf|otf|eot)(?:[?#].*)?$/i.test(raw)) {
+    return true;
+  }
+
+  const tagName = node && node.tagName ? String(node.tagName).toLowerCase() : '';
+  return tagName === 'a';
+}
+
 /**
  * embedImagesInHtml
  * Replaces src/href attributes in the provided Document using the provided map.
@@ -81,6 +105,7 @@ export function embedImagesInHtml(doc, map = {}) {
   }
 
   let replacements = 0;
+  let unresolved = 0;
   const unmatchedSamples = [];
 
   function tryReplaceAttr(node, attr) {
@@ -94,7 +119,10 @@ export function embedImagesInHtml(doc, map = {}) {
       }
     }
     // record a sample of unmatched values for diagnostics
-    if (unmatchedSamples.length < 10) unmatchedSamples.push(val);
+    if (shouldTrackUnresolvedResource(node, attr, val)) {
+      if (unmatchedSamples.length < 10) unmatchedSamples.push(val);
+      unresolved += 1;
+    }
     return false;
   }
 
@@ -115,6 +143,15 @@ export function embedImagesInHtml(doc, map = {}) {
   });
 
   if (replacements) logs.push({ step: 'embedImages', replacements });
+
+  if (unresolved > 0) {
+    logs.push({
+      step: 'embedImagesUnresolved',
+      level: 'warn',
+      unresolved,
+      samples: unmatchedSamples.slice(0, 5)
+    });
+  }
 
   // If no replacements were made, provide a small diagnostic sample to help debugging
   if (replacements === 0 && unmatchedSamples.length > 0) {

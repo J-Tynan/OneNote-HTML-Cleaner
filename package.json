@@ -8,7 +8,7 @@
     "watch:tailwind": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --watch",
     "tools:regen-cleaned": "node ./tools/regenerate-cleaned.js",
     "fixtures:rebaseline": "node ./tools/rebaseline-locked-fixtures.js",
-    "test:gate:native": "npm run tools:regen-cleaned && npm run test:charset && npm run test:charset-fallback && npm run test:utf8-encoding && npm run test:idempotence && npm run test:rerun-equivalence && npm run test:obsolete-attrs && npm run test:inline-style-collapse && npm run test:inline-style-normalization && npm run test:contrast-colors && npm run test:externalize-css && npm run test:externalize-css-parity && npm run test:style-dependency && npm run test:export-independence && npm run test:pipeline-config && npm run test:toolbar && npm run test:ui-downloads && npm run test:exported-page-naming && npm run test:markdown-contract && npm run test:exports:regressions && npm run test:locked-fixtures && npm run test:image-alt && npm run test:smoke:native && npm run test:forbidden-artifacts",
+    "test:gate:native": "npm run tools:regen-cleaned && npm run test:charset && npm run test:charset-fallback && npm run test:utf8-encoding && npm run test:idempotence && npm run test:rerun-equivalence && npm run test:pipeline-edge-cases && npm run test:obsolete-attrs && npm run test:inline-style-collapse && npm run test:inline-style-normalization && npm run test:contrast-colors && npm run test:externalize-css && npm run test:externalize-css-parity && npm run test:style-dependency && npm run test:export-independence && npm run test:pipeline-config && npm run test:toolbar && npm run test:ui-downloads && npm run test:exported-page-naming && npm run test:markdown-contract && npm run test:exports:regressions && npm run test:locked-fixtures && npm run test:image-alt && npm run test:smoke:native && npm run test:forbidden-artifacts",
     "test:smoke:native": "node ./Tests/smoke-native.js",
     "test:toolbar": "node ./Tests/toolbar-injector.js",
     "test:semantic:native": "node ./Tests/semantic-native-parser.js",
@@ -49,6 +49,7 @@
     "test:export-independence": "node ./Tests/export-independence.unit.js",
     "test:idempotence": "node ./Tests/check-sanitizer-idempotence.js",
     "test:rerun-equivalence": "node ./Tests/check-rerun-equivalence.js",
+    "test:pipeline-edge-cases": "node ./Tests/list-structure-normalization.unit.js && node ./Tests/list-duplication-regression.js && node ./Tests/list-repair-merge-styled.unit.js && node ./Tests/nested-table-mixed-lists.unit.js && node ./Tests/table-attribute-normalization.unit.js && node ./Tests/html-formatting.unit.js && node ./Tests/image-embedding.unit.js && node ./Tests/mht-inline-image-guardrail.unit.js && node ./Tests/mht-image-map-collision.unit.js && node ./Tests/mht-partial-image-embedding.unit.js",
     "test:locked-fixtures": "node ./Tests/check-locked-fixtures.js",
     "test:list-fidelity": "node ./Tests/list-fidelity.unit.js",
     "test:obsolete-attrs": "node ./Tests/obsolete-attributes.unit.js",
@@ -78,14 +79,18 @@
     "libarchive.js": "^2.0.2"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.2.0",
     "@axe-core/playwright": "^4.6.2",
     "@playwright/test": "^1.58.2",
+    "@tailwindcss/cli": "^4.2.0",
     "jsdom": "^28.1.0",
     "playwright": "^1.58.2",
-    "tailwindcss": "^4.2.0"
+    "tailwindcss": "^4.2.0",
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "undici": "^7.24.0"
+  },
+  "allowScripts": {
+    "typescript@7.0.2": true
   }
 }

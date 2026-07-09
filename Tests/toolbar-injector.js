@@ -273,14 +273,14 @@ async function main() {
     convertedThemeScriptTagContentLength: extractTagContentLength(withThemeToggle, 'script', 'onc-converted-theme-script')
   };
 
-  if (payloadMetrics.totalInjectedOutputLength >= 30000) {
-    fail(`Expected injected toolbar + theme payload to stay below 30000 chars, got ${payloadMetrics.totalInjectedOutputLength}`);
+  if (payloadMetrics.totalInjectedOutputLength >= 34000) {
+    fail(`Expected injected toolbar + theme payload to stay below 34000 chars, got ${payloadMetrics.totalInjectedOutputLength}`);
   }
-  if (payloadMetrics.toolbarScriptTagContentLength >= 17500) {
-    fail(`Expected toolbar script payload to stay below 17500 chars, got ${payloadMetrics.toolbarScriptTagContentLength}`);
+  if (payloadMetrics.toolbarScriptTagContentLength >= 21000) {
+    fail(`Expected toolbar script payload to stay below 21000 chars, got ${payloadMetrics.toolbarScriptTagContentLength}`);
   }
-  if (payloadMetrics.toolbarStyleTagContentLength >= 4600) {
-    fail(`Expected toolbar style payload to stay below 4600 chars, got ${payloadMetrics.toolbarStyleTagContentLength}`);
+  if (payloadMetrics.toolbarStyleTagContentLength >= 6200) {
+    fail(`Expected toolbar style payload to stay below 6200 chars, got ${payloadMetrics.toolbarStyleTagContentLength}`);
   }
   if (payloadMetrics.convertedThemeScriptTagContentLength >= 1450) {
     fail(`Expected converted-page theme script payload to stay below 1450 chars, got ${payloadMetrics.convertedThemeScriptTagContentLength}`);

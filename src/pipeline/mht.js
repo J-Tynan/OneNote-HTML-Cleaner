@@ -259,7 +259,7 @@ function parseHeaders(headerBlock) {
   return headers;
 }
 
-function addImageKeys(map, p, dataUri) {
+function addImageKeys(map, p, dataUri, diagnostics = []) {
   if (!dataUri) return;
   const keys = new Set();
 
@@ -309,6 +309,21 @@ function addImageKeys(map, p, dataUri) {
   // Finally add the dataUri under all keys
   for (const k of Array.from(keys)) {
     if (!k) continue;
+    if (Object.prototype.hasOwnProperty.call(map, k)) {
+      if (map[k] !== dataUri) {
+        diagnostics.push({
+          step: 'imageMapCollision',
+          level: 'warn',
+          details: 'MHT image map key collision detected; preserved the first embedded asset mapping.',
+          meta: {
+            key: k,
+            contentLocation: p.ContentLocation || '',
+            contentId: (p.headers && p.headers['content-id']) ? p.headers['content-id'] : ''
+          }
+        });
+      }
+      continue;
+    }
     map[k] = dataUri;
   }
 }
@@ -572,7 +587,7 @@ export function parseMht(rawText, options = {}) {
               continue;
             }
           }
-          addImageKeys(imageMap, p, dataUri);
+          addImageKeys(imageMap, p, dataUri, imageDiagnostics);
         }
       }
     }

@@ -12,6 +12,13 @@ function getLiNodesFromOl(ol) {
   return Array.from(ol.querySelectorAll(':scope > li'));
 }
 
+function getTopLevelOlNodesFromTd(td) {
+  return Array.from(td.querySelectorAll('ol')).filter((ol) => {
+    const ancestorList = ol.parentElement ? ol.parentElement.closest('ol,ul') : null;
+    return !ancestorList;
+  });
+}
+
 function cleanText(value) {
   return String(value || '').replace(/\u00a0/g, ' ').trim();
 }
@@ -216,7 +223,7 @@ export function mergeStyled(doc) {
   const tds = Array.from(doc.querySelectorAll('td'));
   let mergedCount = 0;
   tds.forEach(td => {
-    const ols = Array.from(td.querySelectorAll('ol'));
+    const ols = getTopLevelOlNodesFromTd(td);
     if (ols.length <= 1) return;
     // Use attributes from first ol
     const first = ols[0];
