@@ -62,7 +62,7 @@ function getExtcssClassNames(doc) {
     String(el.getAttribute('class') || '')
       .split(/\s+/)
       .filter(Boolean)
-      .filter((name) => name.startsWith('extcss-'))
+      .filter((name) => name.startsWith('extcss-') || name.startsWith('onc-'))
       .forEach((name) => names.add(name));
   });
   return Array.from(names).sort();

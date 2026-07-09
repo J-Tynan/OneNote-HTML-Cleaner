@@ -6,11 +6,18 @@ function makeDoc(html) {
   return new JSDOM(html).window.document;
 }
 
+function classNames(node) {
+  return String(node && node.className || '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .sort();
+}
+
 (function main() {
   console.log('running externalize-css unit tests');
 
   {
-    const doc = makeDoc('<html><head><style>.notes{color:blue}</style></head><body><p style="font-size:12pt; color: red">Hello</p></body></html>');
+    const doc = makeDoc('<html><head><style>.notes{color:blue}</style></head><body><p style="font-size:12pt; color: red; margin-left: 8px">Hello</p></body></html>');
     const result = externalizeCss(doc, { externalizeCssEnabled: true, externalizeCssMode: 'shared' });
     const p = doc.querySelector('p');
 
@@ -19,7 +26,10 @@ function makeDoc(html) {
     assert(p && p.hasAttribute('class'), 'inline style should be replaced with generated class');
     assert.equal(p && p.hasAttribute('style'), false, 'inline style attribute should be removed');
     assert(result.cssText.includes('.notes{color:blue}') || result.cssText.includes('.notes { color:blue'), 'existing style block should be extracted');
-    assert(result.cssText.includes('.extcss-'), 'generated css class rule should be present');
+    assert(result.cssText.includes('.onc-font-size-12pt'), 'font-size declaration should use a readable class name');
+    assert(result.cssText.includes('.onc-color-red'), 'color declaration should use a readable class name');
+    assert(result.cssText.includes('.onc-margin-left-8px'), 'spacing declaration should use a readable class name');
+    assert.deepEqual(classNames(p), ['onc-color-red', 'onc-font-size-12pt', 'onc-margin-left-8px'], 'element should receive one class per declaration');
   }
 
   {
@@ -28,8 +38,9 @@ function makeDoc(html) {
     const paragraphs = Array.from(doc.querySelectorAll('p'));
 
     assert(paragraphs.length === 2, 'expected two paragraph nodes');
-    assert.equal(paragraphs[0].className, paragraphs[1].className, 'equivalent inline declarations should map to the same extcss class');
-    assert(result.cssText.includes('color:red;font-size:12pt'), 'generated declaration should be canonicalized');
+    assert.deepEqual(classNames(paragraphs[0]), classNames(paragraphs[1]), 'equivalent inline declarations should map to the same class set');
+    assert(result.cssText.includes('.onc-color-red'), 'generated declaration should use a readable class name');
+    assert(result.cssText.includes('.onc-font-size-12pt'), 'generated declaration should use a readable class name');
     assert.equal((result.cssText.match(/\.dup\s*\{\s*color:blue\s*\}/g) || []).length, 1, 'duplicate extracted style blocks should be consolidated');
   }
 

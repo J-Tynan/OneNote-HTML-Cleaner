@@ -266,6 +266,12 @@ First-pass tasks:
   - [ ] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth.
   - [ ] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability.
   - [ ] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs.
+6. Reduce repeated code and reduce the file size of the shipped app and exported assets without changing behavior by working through these smaller follow-ups:
+  - [ ] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output.
+  - [ ] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes.
+  - [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
+  - [ ] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope.
+  - [ ] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract.
 
 ## Version 1.0 — Native `.one` Release
 

@@ -1,12 +1,6 @@
 // src/pipeline/sanitize.js
 // Lightweight sanitization and head cleanup inspired by the PowerShell script.
 
-// reuse helpers for inline-style analysis
-import {
-  getUtilityClassForDeclaration,
-  isUtilityMappableProperty,
-  parseStyle,
-} from './inlineStyleMigration.js';
 import {
   parseStyleDeclarationEntries,
   serializeStyleDeclarationEntries
@@ -51,6 +45,10 @@ function resolveDocumentLang(html, body, fallback = 'en') {
 
   const fallbackLang = normalizeLangValue(fallback) || 'en';
   return { value: fallbackLang, source: 'fallback' };
+}
+
+function normalizeCssToken(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
 function parseInlineStyle(styleText) {
@@ -126,6 +124,28 @@ function hashStyleSignature(signature) {
   return (hash >>> 0).toString(36);
 }
 
+function normalizeReadableClassToken(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/['"]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-');
+}
+
+function buildReadableExternalizedClassName(prop, value) {
+  const propToken = normalizeReadableClassToken(prop);
+  const valueToken = normalizeReadableClassToken(value);
+  if (!propToken || !valueToken) return null;
+
+  const className = `onc-${propToken}-${valueToken}`;
+  if (className.length <= 80) return className;
+
+  const suffix = hashStyleSignature(`${propToken}:${valueToken}`).slice(0, 8);
+  return `onc-${propToken}-${valueToken.slice(0, 40)}-${suffix}`.replace(/-+$/g, '');
+}
+
 export function externalizeCss(doc, options = {}) {
   const logs = [];
   if (!doc || options.externalizeCssEnabled !== true) {
@@ -147,7 +167,7 @@ export function externalizeCss(doc, options = {}) {
 
   const classBySignature = new Map();
   const declarationsByClass = new Map();
-  let externalizedInlineStyles = 0;
+  let externalizedDeclarations = 0;
 
   Array.from(doc.querySelectorAll('[style]')).forEach(el => {
     const original = String(el.getAttribute('style') || '').trim();
@@ -157,27 +177,34 @@ export function externalizeCss(doc, options = {}) {
     }
 
     const normalized = dedupeInlineStyle(original);
-    const signature = canonicalizeInlineStyle(normalized);
-    if (!signature) {
+    const declarations = parseInlineStyle(normalized);
+    if (!declarations.length) {
       el.removeAttribute('style');
       return;
     }
 
-    let className = classBySignature.get(signature);
-    if (!className) {
-      className = `extcss-${hashStyleSignature(signature)}`;
-      let suffix = 2;
-      while (declarationsByClass.has(className) && declarationsByClass.get(className) !== signature) {
-        className = `extcss-${hashStyleSignature(signature)}-${suffix}`;
-        suffix += 1;
-      }
-      classBySignature.set(signature, className);
-      declarationsByClass.set(className, signature);
-    }
+    declarations.forEach(({ prop, value }) => {
+      const normalizedProp = String(prop || '').trim().toLowerCase();
+      const normalizedValue = normalizeCssToken(value);
+      const signature = `${normalizedProp}:${normalizedValue}`;
+      let className = classBySignature.get(signature);
 
-    addClass(el, className);
+      if (!className) {
+        className = buildReadableExternalizedClassName(normalizedProp, normalizedValue) || `extcss-${hashStyleSignature(signature)}`;
+        let suffix = 2;
+        while (declarationsByClass.has(className) && declarationsByClass.get(className) !== signature) {
+          className = `${className}-${suffix}`;
+          suffix += 1;
+        }
+        classBySignature.set(signature, className);
+        declarationsByClass.set(className, signature);
+      }
+
+      addClass(el, className);
+      externalizedDeclarations += 1;
+    });
+
     el.removeAttribute('style');
-    externalizedInlineStyles += 1;
   });
 
   const classRules = Array.from(declarationsByClass.entries())
@@ -185,10 +212,10 @@ export function externalizeCss(doc, options = {}) {
     .map(([className, declaration]) => `.${className} { ${declaration}; }`);
 
   const cssText = [...classRules, ...extractedBlocks].join('\n\n').trim();
-  if (externalizedInlineStyles || extractedStyleTags) {
+  if (externalizedDeclarations || extractedStyleTags) {
     logs.push({
       step: 'ExternalizeCss',
-      externalizedInlineStyles,
+      externalizedDeclarations,
       extractedStyleTags,
       mode: String(options.externalizeCssMode || 'shared')
     });
