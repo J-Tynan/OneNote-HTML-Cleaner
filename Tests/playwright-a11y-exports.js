@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import { createRequire } from 'module';
-import { createStaticServer, closeServer } from './playwright-server-helper.js';
+import { startStaticServer } from './playwright-server-helper.js';
 const require = createRequire(import.meta.url);
 
 function isBlockingExportViolation(violation) {
@@ -116,7 +116,7 @@ async function auditPage(url, reportBase) {
   let targetDir = null;
   let mhtDir = null;
   let enableFallback = false;
-  let mainServer = null;
+  let mainServerHandle = null;
 
   try {
     for (let i = 0; i < argv.length; i++) {
@@ -147,10 +147,8 @@ async function auditPage(url, reportBase) {
     // when auditing an existing HTML directory (not MHT conversion), run the pipeline
     // start server for app resources (needed for pipeline imports)
     const root = process.cwd();
-    mainServer = createStaticServer(root);
-    await new Promise((r) => mainServer.listen(0, '127.0.0.1', r));
-    const mainPort = mainServer.address().port;
-    const mainUrl = `http://127.0.0.1:${mainPort}/`;
+    mainServerHandle = await startStaticServer(root);
+    const mainUrl = `${mainServerHandle.baseUrl}/`;
 
     let files;
     if (mhtDir) {
@@ -202,19 +200,17 @@ async function auditPage(url, reportBase) {
 
     for (const file of files) {
       const base = path.basename(file, path.extname(file));
-      const server = createStaticServer(targetDir);
+      const serverHandle = await startStaticServer(targetDir);
       let failed = false;
       try {
-        await new Promise((r) => server.listen(0, '127.0.0.1', () => r()));
-        const port = server.address().port;
-        const url = `http://127.0.0.1:${port}/${encodeURIComponent(file)}`;
+        const url = `${serverHandle.baseUrl}/${encodeURIComponent(file)}`;
 
         const reportBase = path.join(reportDir, base);
         console.log('=== auditing', file, '===');
         failed = await auditPage(url, reportBase);
         if (failed) overallFail = true;
       } finally {
-        await closeServer(server);
+        await serverHandle.close();
       }
 
       summaryLines.push(`${file}: ${failed ? 'FAIL' : 'OK'}`);
@@ -224,15 +220,15 @@ async function auditPage(url, reportBase) {
 
     if (overallFail) {
       console.error('Some exported pages had blocking serious/critical violations');
-      await closeServer(mainServer);
+      await mainServerHandle?.close();
       process.exit(1);
     }
 
     console.log('Exported HTML audit: complete');
-    await closeServer(mainServer);
+    await mainServerHandle?.close();
     process.exit(0);
   } catch (err) {
-    await closeServer(mainServer);
+    await mainServerHandle?.close();
     console.error('playwright-a11y-exports: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

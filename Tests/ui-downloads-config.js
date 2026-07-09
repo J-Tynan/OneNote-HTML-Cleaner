@@ -33,9 +33,9 @@ async function main() {
 
   const cfg = helpers.getConversionConfig();
   if (cfg.Profile !== 'onenote') fail('Expected Profile to be "onenote"');
-  if (cfg.ToolbarEnabled !== true) fail('Expected ToolbarEnabled true');
-  if (cfg.ToolbarEditToggleEnabled !== true) fail('Expected ToolbarEditToggleEnabled true');
-  if (cfg.ToolbarMetadataToggleEnabled !== true) fail('Expected ToolbarMetadataToggleEnabled true');
+  if (cfg.ToolbarEnabled !== false) fail('Expected ToolbarEnabled false for non-HTML export format');
+  if (cfg.ToolbarEditToggleEnabled !== false) fail('Expected ToolbarEditToggleEnabled false for non-HTML export format');
+  if (cfg.ToolbarMetadataToggleEnabled !== false) fail('Expected ToolbarMetadataToggleEnabled false for non-HTML export format');
   if (cfg.ExternalizeCssEnabled !== true) fail('Expected ExternalizeCssEnabled true');
   if (cfg.ExternalizeCssMode !== 'per-page') fail('Expected ExternalizeCssMode to be "per-page"');
   if (cfg.ExperimentalExportEnabled !== true) fail('Expected ExperimentalExportEnabled true');
@@ -47,6 +47,9 @@ async function main() {
   ctx.experimentalExportEnabled.checked = false;
   const cfgFallback = helpers.getConversionConfig();
   if (cfgFallback.ExportFormat !== 'html') fail('Expected ExportFormat fallback to "html" when experimental is disabled');
+  if (cfgFallback.ToolbarEnabled !== true) fail('Expected ToolbarEnabled true when effective export format is HTML');
+  if (cfgFallback.ToolbarEditToggleEnabled !== true) fail('Expected ToolbarEditToggleEnabled true when effective export format is HTML');
+  if (cfgFallback.ToolbarMetadataToggleEnabled !== true) fail('Expected ToolbarMetadataToggleEnabled true when effective export format is HTML');
   if (cfgFallback.ConvertedPageThemeToggleEnabled !== true) fail('Expected ConvertedPageThemeToggleEnabled true when effective export format is HTML');
   if (cfgFallback.ConvertedPageThemeToggleOledBlack !== true) fail('Expected ConvertedPageThemeToggleOledBlack true when toggle is enabled and effective export format is HTML');
 

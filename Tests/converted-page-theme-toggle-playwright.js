@@ -1,7 +1,7 @@
-import http from 'node:http';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
+import { startRouteServer } from './playwright-server-helper.js';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -46,34 +46,12 @@ function assert(condition, message) {
     ExportFormat: 'html'
   });
 
-  const server = http.createServer((req, res) => {
-    const url = (req.url || '/').split('?')[0];
-    if (url === '/standard') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(standardHtml);
-      return;
-    }
-    if (url === '/oled') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(oledHtml);
-      return;
-    }
-    if (url === '/toolbar') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(toolbarHtml);
-      return;
-    }
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('Not found');
+  const serverHandle = await startRouteServer({
+    '/standard': standardHtml,
+    '/oled': oledHtml,
+    '/toolbar': toolbarHtml
   });
-
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', resolve);
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const baseUrl = `http://127.0.0.1:${port}`;
+  const baseUrl = serverHandle.baseUrl;
 
   let browser;
   try {
@@ -187,7 +165,7 @@ function assert(condition, message) {
       return Number.parseFloat(top || '0');
     });
 
-    assert(topOffset >= 60, `Expected converted-page theme toggle to be offset below toolbar, got top ${topOffset}px`);
+    assert(topOffset > defaultHiddenLayout.toggleTop, `Expected converted-page theme toggle to move down when toolbar is shown, default=${defaultHiddenLayout.toggleTop} shown=${topOffset}`);
 
     await page.click('#onc-converted-theme-toggle');
     const toolbarDarkState = await page.evaluate(() => {
@@ -244,11 +222,11 @@ function assert(condition, message) {
 
     console.log('converted-page-theme-toggle-playwright: OK');
     await browser.close();
-    server.close();
+    await serverHandle.close();
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('converted-page-theme-toggle-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

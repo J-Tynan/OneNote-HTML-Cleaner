@@ -90,3 +90,50 @@ export async function startStaticServer(root, options = {}) {
     close: async () => closeServer(server)
   };
 }
+
+export async function startRouteServer(routes = {}, options = {}) {
+  const host = options.host || '127.0.0.1';
+  const port = Number.isInteger(options.port) ? options.port : 0;
+  const normalizedRoutes = { ...routes };
+  const server = http.createServer((req, res) => {
+    const url = String((req && req.url) || '/').split('?')[0] || '/';
+    const route = Object.prototype.hasOwnProperty.call(normalizedRoutes, url)
+      ? normalizedRoutes[url]
+      : null;
+
+    if (!route) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Not found');
+      return;
+    }
+
+    const body = typeof route === 'string'
+      ? route
+      : String(route && Object.prototype.hasOwnProperty.call(route, 'body') ? route.body : '');
+    const status = typeof route === 'object' && route && Number.isInteger(route.status)
+      ? route.status
+      : 200;
+    const headers = typeof route === 'object' && route && route.headers
+      ? route.headers
+      : { 'Content-Type': 'text/html; charset=utf-8' };
+
+    res.writeHead(status, headers);
+    res.end(body);
+  });
+
+  await new Promise((resolve, reject) => {
+    server.listen(port, host, resolve);
+    server.on('error', reject);
+  });
+
+  const address = server.address();
+  const resolvedPort = address && typeof address === 'object' ? address.port : port;
+
+  return {
+    server,
+    host,
+    port: resolvedPort,
+    baseUrl: `http://${host}:${resolvedPort}`,
+    close: async () => closeServer(server)
+  };
+}

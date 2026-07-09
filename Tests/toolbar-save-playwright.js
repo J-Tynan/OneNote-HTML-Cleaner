@@ -1,7 +1,7 @@
-import http from 'node:http';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
+import { startRouteServer } from './playwright-server-helper.js';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -24,24 +24,10 @@ function assert(condition, message) {
     WarningSummary: { total: 0, info: 0, warning: 0, error: 0 }
   });
 
-  const server = http.createServer((req, res) => {
-    const url = (req.url || '/').split('?')[0];
-    if (url === '/toolbar') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(withToolbar);
-      return;
-    }
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('Not found');
+  const serverHandle = await startRouteServer({
+    '/toolbar': withToolbar
   });
-
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', resolve);
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const baseUrl = `http://127.0.0.1:${port}`;
+  const baseUrl = serverHandle.baseUrl;
 
   let browser;
   try {
@@ -106,12 +92,12 @@ function assert(condition, message) {
     await saveContext.close();
     await cancelContext.close();
     await browser.close();
-    server.close();
+    await serverHandle.close();
     console.log('toolbar-save-playwright: OK');
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('toolbar-save-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

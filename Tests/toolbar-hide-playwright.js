@@ -1,7 +1,7 @@
-import http from 'node:http';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
+import { startRouteServer } from './playwright-server-helper.js';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -51,25 +51,13 @@ function isDarkRgb(color) {
   }
 
   const presetPages = Object.fromEntries(PRESETS.map((preset) => [preset, buildToolbarPage(preset)]));
-
-  const server = http.createServer((req, res) => {
-    const url = (req.url || '/').split('?')[0];
-    if (url === '/toolbar') {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      res.end(presetPages['office-97']);
-      return;
-    }
-    if (url.startsWith('/toolbar/')) {
-      const preset = decodeURIComponent(url.slice('/toolbar/'.length)).toLowerCase();
-      if (presetPages[preset]) {
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(presetPages[preset]);
-        return;
-      }
-    }
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('Not found');
-  });
+  const routes = {
+    '/toolbar': presetPages['office-97']
+  };
+  for (const [preset, pageHtml] of Object.entries(presetPages)) {
+    routes[`/toolbar/${preset}`] = pageHtml;
+  }
+  const serverHandle = await startRouteServer(routes);
 
   async function waitForToolbarReady(page) {
     await page.waitForSelector('#onenote-cleaner-toolbar', { state: 'attached' });
@@ -220,13 +208,7 @@ function isDarkRgb(color) {
     return metrics;
   }
 
-  await new Promise((resolve, reject) => {
-    server.listen(0, '127.0.0.1', resolve);
-    server.on('error', reject);
-  });
-
-  const port = server.address().port;
-  const baseUrl = `http://127.0.0.1:${port}`;
+  const baseUrl = serverHandle.baseUrl;
 
   let browser;
   try {
@@ -267,11 +249,11 @@ function isDarkRgb(color) {
 
     console.log('toolbar-hide-playwright: OK');
     await browser.close();
-    server.close();
+    await serverHandle.close();
     process.exit(0);
   } catch (err) {
     if (browser) await browser.close();
-    server.close();
+    await serverHandle.close();
     console.error('toolbar-hide-playwright: FAIL', err && err.stack ? err.stack : err);
     process.exit(1);
   }

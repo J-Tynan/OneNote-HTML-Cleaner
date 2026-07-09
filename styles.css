@@ -183,6 +183,10 @@ summary::-webkit-details-marker {
   align-items: stretch;
 }
 
+.results-action-row {
+  align-items: stretch;
+}
+
 .homepage-import-button {
   white-space: nowrap;
 }
@@ -410,11 +414,22 @@ summary::-webkit-details-marker {
   .btn-secondary:focus { box-shadow: 0 0 0 4px var(--btn-focus-ring); }
 
   .homepage-convert-button {
-    min-height: 3rem;
-    padding: var(--btn-padding-y) var(--btn-padding-x);
-    font-size: 0.875rem;
+    min-height: var(--btn-homepage-primary-min-height);
+    padding: var(--btn-homepage-primary-padding-y) var(--btn-homepage-primary-padding-x);
+    font-size: var(--btn-homepage-primary-font-size);
+    font-weight: 600;
+    letter-spacing: 0.01em;
     white-space: nowrap;
   }
+
+    .results-action-button {
+      min-height: 2.875rem;
+      padding: 0.6875rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      width: 100%;
+    }
 
   /* Ghost button (used for theme toggle) */
   .btn-ghost {
@@ -710,13 +725,13 @@ html.dark .status-pill--error {
     padding: 1.75rem 0.875rem;
   }
 
-  #downloadZip {
-    width: 100%;
-  }
-
   .homepage-primary-button {
     min-height: 3.25rem;
     padding: 0.8125rem 1.25rem;
+  }
+
+  .results-action-button {
+    width: 100%;
   }
 
   .convert-button-wrapper .tooltip {
@@ -764,6 +779,10 @@ html.dark .status-pill--error {
 
 @media (min-width: 640px) and (max-width: 1023px) {
 
+  .results-action-button {
+    width: auto;
+  }
+
   .home-layout {
     gap: 1.5rem;
   }
@@ -776,6 +795,10 @@ html.dark .status-pill--error {
 /* === DESKTOP WORKBENCH (Layout A) === */
 
 @media (min-width: 1024px) {
+
+  .results-action-button {
+    width: auto;
+  }
 
   .home-layout {
     gap: 2rem;
