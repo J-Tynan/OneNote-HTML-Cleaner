@@ -14,7 +14,7 @@ const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current rele
 const AUTO_CONVERT_NOTICE_COPY = {
   enabled: {
     lead: 'Files are converted automatically when added to the queue.',
-    detail: 'You can change this behaviour in Advanced options.'
+    detail: 'Change this in Advanced options if you prefer manual conversion.'
   },
   disabled: {
     lead: 'Files stay in the queue until you convert them manually.',
@@ -723,11 +723,11 @@ function updateExportFormatControls() {
   }
   if (dom.exportFormatHelp) {
     if (!advancedOptionsState.experimentalEnabled) {
-      dom.exportFormatHelp.textContent = 'Enable experimental export formats to choose HTML or Markdown output.';
+      dom.exportFormatHelp.textContent = 'Enable experimental export formats to choose HTML or Markdown output when you need it.';
     } else if (advancedOptionsState.selectedExportFormat === 'markdown') {
-      dom.exportFormatHelp.textContent = 'Markdown export is structure-first (layout not preserved).';
+      dom.exportFormatHelp.textContent = 'Markdown export prioritizes structure over visual layout.';
     } else {
-      dom.exportFormatHelp.textContent = 'HTML export keeps the existing parity-first conversion path.';
+      dom.exportFormatHelp.textContent = 'HTML keeps the default parity-first conversion path.';
     }
   }
 
@@ -751,7 +751,7 @@ function updateConvertedPageThemeControls(advancedOptionsState = buildAdvancedOp
     if (!htmlSelected) {
       dom.convertedPageThemeHelp.textContent = 'Converted-page theme toggle is available only for HTML export.';
     } else {
-      dom.convertedPageThemeHelp.textContent = 'Enable to inject a symbol-based Light/Dark toggle into converted HTML pages (default Light). Optional OLED-black applies only when the toggle is enabled.';
+      dom.convertedPageThemeHelp.textContent = 'Enable a symbol-based Light or Dark toggle in converted HTML pages. Optional OLED-black applies only when the theme toggle is enabled.';
     }
   }
 }

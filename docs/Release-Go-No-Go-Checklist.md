@@ -2,7 +2,7 @@
 
 Use this document as the release-facing sign-off sheet for `0.1.0`.
 
-The goal is to confirm that the shipped contract, public-facing assets, and final verification evidence all match the release scope already defined in `TODO.md`.
+The goal is to confirm that the shipped contract, public-facing assets, and recorded verification evidence all match the release scope already defined in `TODO.md`.
 
 ## Canonical Release Contract
 
@@ -15,7 +15,7 @@ The goal is to confirm that the shipped contract, public-facing assets, and fina
 
 ## Release Sign-Off Checklist
 
-- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` all describe the same shipped v0.1 scope.
+- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same shipped `v0.1` scope.
 - [x] Public docs describe Markdown export as optional/advanced rather than the default workflow.
 - [x] Public docs describe native `.one` and `.onepkg` files as unsupported in the shipped runtime.
 - [x] Public docs avoid broader browser-compatibility claims than the final RC pass actually verifies.
@@ -24,7 +24,7 @@ The goal is to confirm that the shipped contract, public-facing assets, and fina
 - [x] Screenshot assets are captured and placed in the release-facing docs.
 - [x] Screenshot captions and alt text are final.
 - [x] Final RC verification results are recorded after the release-facing docs and screenshot assets land.
-- [ ] `v0.1.0` tag is created only after `main` is green.
+- [ ] Create the `v0.1.0` tag only after `main` is green.
 
 ## Browser And Runtime Verification Notes
 
@@ -69,7 +69,7 @@ Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, save locatio
 
 ## Final RC Verification Record
 
-Complete this section only after the release-facing docs and screenshots are landed.
+Complete this section only after the release-facing docs and screenshots have landed.
 
 - [x] `npm ci`
 - [x] `npm run test:gate:native`

@@ -1,8 +1,8 @@
 # OneNote HTML Cleaner
 
-Convert OneNote MHTML exports into clean, portable HTML and optional Markdown — entirely in your browser.
+Convert OneNote MHTML exports into cleaner, portable HTML and optional Markdown entirely in your browser.
 
-OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path is focused on MHTML input and a straightforward conversion flow that works well for first-time users as well as repeat batch use.
+OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path stays focused on exported MHTML input and a straightforward conversion flow that works well for first-time use as well as repeat batch work.
 
 ## Why Not Open The OneNote Export Directly?
 
@@ -22,10 +22,10 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 
 ## v0.1 Release Highlights
 
-- Stable MHTML -> HTML conversion with deterministic output and offline PWA support.
-- Optional Markdown export (Obsidian default) and optional externalized CSS for ZIP exports.
-- Handwriting preserved as raster images; vector ink extraction remains post-release work.
-- Native `.one` and `.onepkg` files are surfaced clearly as unsupported instead of being partially processed.
+- Stable MHTML-to-HTML conversion with deterministic output and offline PWA support.
+- Optional Markdown export with Obsidian as the default flavor, plus optional externalized CSS for ZIP exports.
+- Handwriting preserved as raster images; editable vector ink remains outside the current release path.
+- Native `.one` and `.onepkg` files are detected clearly as unsupported instead of being partially processed.
 
 ## Screenshots
 
@@ -64,10 +64,10 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 
 ## Why Use It
 
-- Convert exported OneNote MHTML files into cleaner HTML with a simpler reading experience.
+- Convert exported OneNote MHTML files into cleaner HTML with a more readable default presentation.
 - Run entirely in the browser with offline capability after the first load.
 - Process one file quickly or batch multiple files into a ZIP download.
-- Keep the default experience simple while still offering advanced export controls when needed.
+- Keep the default experience simple while still exposing advanced export controls when needed.
 - Preserve important note content such as headings, lists, tables, images, and handwriting rasters.
 
 ## Quick Start
@@ -76,7 +76,7 @@ This is the fastest path for someone using the app once.
 
 1. Open the app in your browser.
 2. Drag in your exported OneNote `.mht` or `.mhtml` files, or use the file picker.
-3. Leave Advanced options collapsed unless you specifically need Markdown export or externalized CSS.
+3. Leave Advanced options collapsed unless you specifically need Markdown export, manual conversion, or externalized CSS.
 4. Let the app convert automatically, or click `Convert` if you have disabled auto-convert.
 5. Download a single converted file or use `Download ZIP` for multi-file exports.
 
@@ -96,7 +96,7 @@ The app's privacy model is intentionally simple: files are processed locally in 
 - The stable release supports OneNote MHTML exports only: `.mht` and `.mhtml`.
 - Unsupported files such as `.one` and `.onepkg` are detected and labeled clearly instead of being partially processed.
 - The app includes a Light / Dark UI theme toggle and remembers your choice in the browser.
-- In-app help is available from the Help button, and keyboard support is built in for Help, importing, and the main controls.
+- In-app help is available from the Help button, and keyboard support covers Help, import, conversion, and the main controls.
 - Exported HTML targets one page-level `h1` and a `<main>` landmark for a cleaner accessibility baseline.
 - If you only need HTML output, you can ignore most advanced settings.
 - Tested locally with automated browser coverage on Chromium 145 for Windows.
@@ -115,7 +115,7 @@ Converted output is designed to be more readable and easier to reuse than raw ex
 
 ### Batch Conversion And ZIP Export
 
-You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share. If you want to discard the current queue before starting a different batch, use `Clear files`.
+You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share. If you want to reset the current queue before starting a different batch, use `Clear files`.
 
 ### Simple Default Flow, Advanced Controls When Needed
 Advanced options stay collapsed by default so first-time users are not forced through configuration before converting a file. When needed, advanced settings can enable optional behaviors such as:
@@ -127,7 +127,7 @@ Advanced options stay collapsed by default so first-time users are not forced th
 
 ### Optional Markdown Export
 
-The app can also export Markdown through the advanced export controls. Obsidian-compatible output is the default Markdown flavor, with additional supported flavors available for users who need a different target.
+The app can also export Markdown through the advanced export controls. Obsidian-compatible output is the default Markdown flavor, with additional supported flavors available when you need a different target.
 
 ### Optional Externalized CSS For ZIP Exports
 
@@ -212,7 +212,7 @@ Disable auto-convert if you want to queue files first and trigger conversion man
 
 ### Converted-Page Edit Toolbar
 
-For HTML exports, Advanced options can inject an Edit Mode toolbar into converted pages. The current presets include Compact, Office-97, Ribbon, MacOS, and Linux chrome styles.
+For HTML exports, Advanced options can inject an Edit Mode toolbar into converted pages. Available presets include Compact, Office-97, Ribbon, MacOS, and Linux chrome styles.
 
 ## Roadmap
 
@@ -222,7 +222,7 @@ The roadmap is focused on expanding the product carefully without weakening the 
 
 - continue refining the MHTML conversion path for reliability and output quality
 - improve export workflows around HTML and Markdown packaging
-- expand the first-time-user experience with clearer visual guidance and polished UI flows
+- keep improving the first-time-user experience with clearer visual guidance and polished UI flows
 
 ### Planned Product Expansion
 

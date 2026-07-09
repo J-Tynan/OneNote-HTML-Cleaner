@@ -19,7 +19,7 @@
         <div class="home-header__identity max-w-3xl">
           <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
           <p class="mt-2 text-sm text-help">
-            Convert exported OneNote pages into clean HTML locally in your browser.
+            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.
           </p>
         </div>
 
@@ -69,17 +69,17 @@
             <div>
               <h2 id="importHeading" class="text-lg font-medium">Convert exported OneNote pages</h2>
               <p class="mt-1 max-w-2xl text-sm leading-6 text-secondary">
-                Add one or more MHT or MHTML files to clean and export them locally.
+                Add one or more exported MHT or MHTML files to clean and export locally.
               </p>
             </div>
 
             <div class="space-y-1 text-xs text-muted">
               <p>Supported input: .mht, .mhtml</p>
               <!-- Convert button: triggers processing when auto-convert is OFF -->
-              <p>Files stay on your device</p>
+              <p>Files stay on your device.</p>
               <p id="autoConvertNotice" class="auto-convert-notice">
                 <span id="autoConvertNoticeLead">Files are converted automatically when added to the queue.</span>
-                <span id="autoConvertNoticeDetail">You can change this behaviour in Advanced options.</span>
+                <span id="autoConvertNoticeDetail">Change this in Advanced options if you prefer manual conversion.</span>
               </p>
             </div>
 
@@ -233,7 +233,7 @@
                       <option value="markdown">Markdown (.md)</option>
                     </select>
                     <p id="exportFormatHelp" class="text-xs text-muted">
-                      Enable experimental export formats to choose HTML or Markdown output.
+                      Enable experimental export formats to choose HTML or Markdown output when you need it.
                     </p>
                   </div>
 
@@ -404,7 +404,7 @@
         <div class="help-modal__content min-w-0 flex-1">
           <h3 id="helpModalTitle" class="text-lg font-medium">How to use OneNote HTML Cleaner</h3>
           <p class="mt-2 text-sm text-secondary">
-            This tool converts exported OneNote MHTML files locally in your browser. Expand the sections below for the parts you need.
+            Convert exported OneNote `.mht` or `.mhtml` files locally in your browser. Expand the sections below for the workflow or option you need.
           </p>
 
           <div class="help-sections mt-4 space-y-3">
@@ -412,10 +412,10 @@
               <summary class="help-section__summary text-sm font-medium">Start a conversion</summary>
               <div class="help-section__body space-y-3">
                 <p class="text-sm text-secondary">
-                  Add an MHTML file (.mht/.mhtml) using the Browse button or by dragging it into the dropzone. The app converts the file locally in your browser and provides a download link when finished.
+                  Add one or more exported OneNote files using Browse files or by dragging them into the dropzone. The app converts them locally in your browser and adds download actions when each file finishes.
                 </p>
                 <p class="text-sm text-secondary">
-                  Handwriting exported from OneNote via MHTML is preserved as raster imagery. Appearance can vary by OneNote theme at export time, and vector ink editing is not available in this path.
+                  Handwriting from OneNote exports is preserved as raster imagery. Appearance can vary with the theme used when the page was exported, and vector ink editing is not available in this workflow.
                 </p>
               </div>
             </details>
@@ -424,10 +424,10 @@
               <summary class="help-section__summary text-sm font-medium">HTML output and ZIP export</summary>
               <div class="help-section__body space-y-3">
                 <p class="text-sm text-secondary">
-                  Converted pages are validated to avoid required CDN or app-runtime dependencies. If you enable Externalize CSS, use ZIP output so HTML and CSS sidecar assets stay together.
+                  Converted HTML is self-contained by default and does not depend on a CDN or the app runtime after export. If you enable Externalize CSS, use ZIP output so the HTML files and stylesheet sidecars stay together.
                 </p>
                 <p class="text-sm text-secondary">
-                  Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML page.
+                  Shared mode writes one stylesheet for the whole ZIP. Per-page mode writes one stylesheet for each exported HTML page.
                 </p>
               </div>
             </details>
@@ -436,10 +436,10 @@
               <summary class="help-section__summary text-sm font-medium">Export formats</summary>
               <div class="help-section__body space-y-3">
                 <p class="text-sm text-secondary">
-                  Experimental export controls are available in Advanced options. HTML remains the default stable path, and Markdown is available with selectable flavor.
+                  Advanced options can enable Markdown export. HTML remains the default stable path, and Markdown is available as an optional export with selectable flavor.
                 </p>
                 <p class="text-sm text-secondary">
-                  Planned Markdown export follows a structure-first approach, with Obsidian-compatible output as the default flavor.
+                  Markdown export follows a structure-first approach rather than layout preservation, with Obsidian-compatible output as the default flavor.
                 </p>
               </div>
             </details>
@@ -448,10 +448,10 @@
               <summary class="help-section__summary text-sm font-medium">Converted-page options</summary>
               <div class="help-section__body space-y-3">
                 <p class="text-sm text-secondary">
-                  Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light or Dark symbol toggle, and an optional OLED-black dark variant for page and main content surfaces.
+                  Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light or Dark symbol toggle, with an optional OLED-black dark variant for page and main-content surfaces.
                 </p>
                 <p class="text-sm text-secondary">
-                  If toolbar injection is enabled for converted pages, the toolbar starts hidden by default. Use the small Toolbar button beside the page theme toggle to reveal it.
+                  If toolbar injection is enabled, the converted-page toolbar starts hidden by default. Use the small Toolbar button beside the page theme toggle to reveal it.
                 </p>
               </div>
             </details>
