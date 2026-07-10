@@ -8,6 +8,9 @@ const {
   migrateInlineStylesToUtilities,
   parseStyle,
 } = await import('../src/pipeline/inlineStyleMigration.js');
+const {
+  compactRepeatedTypographyClasses
+} = await import('../src/pipeline/sanitize.js');
 
 await setupNodeTestEnvironment();
 
@@ -91,6 +94,73 @@ console.log('running inline-style-normalization unit tests');
   const second = doc.querySelectorAll('p')[1];
   assert(first.className.includes('font-sans'));
   assert(!second.className);
+}
+
+// compact repeated typography classes while keeping inline fallback styles
+{
+  const html = '<html><head></head><body class="font-sans text-base" style="font-family: Calibri; font-size: 11.0pt"><div class="mt-6" style="margin-top: 2rem; margin-left: 2rem"><p class="font-sans text-base" style="margin: 0; font-family: Calibri; font-size: 11.0pt">Body</p><p class="font-sans text-sm" style="margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #666666">Meta</p><h2 class="font-sans text-xl" style="margin: 0; font-family: Calibri; font-size: 16.0pt; color: #1E4E79"><span class="font-bold" style="font-weight: bold">Heading</span></h2><p class="font-sans text-xl" style="margin: 0; font-family: &quot;Calibri Light&quot;; font-size: 20.0pt">Page Title</p></div></body></html>';
+  const doc = makeDoc(html);
+  const logs = compactRepeatedTypographyClasses(doc);
+  const headStyle = doc.querySelector('style[data-onc-compact-typography]');
+  const body = doc.querySelector('body');
+  const wrapper = doc.querySelector('div');
+  const bodyCopy = doc.querySelector('p');
+  const meta = doc.querySelectorAll('p')[1];
+  const heading = doc.querySelector('h2');
+  const headingSpan = doc.querySelector('span');
+  const pageTitle = doc.querySelectorAll('p')[2];
+
+  assert(headStyle, 'compact typography stylesheet should be injected into the document head');
+  assert(headStyle.textContent.includes('.onc-copy{margin:0;font-family:Calibri;font-size:11.0pt;}'));
+  assert(body.className.includes('onc-body'));
+  assert(!body.className.includes('font-sans'));
+  assert(!body.className.includes('text-base'));
+  assert.equal(body.getAttribute('style'), null);
+  assert(!wrapper.className.includes('mt-6'));
+  assert(bodyCopy.className.includes('onc-copy'));
+  assert(!bodyCopy.className.includes('font-sans'));
+  assert(!bodyCopy.className.includes('text-base'));
+  assert.equal(bodyCopy.getAttribute('style'), null);
+  assert(meta.className.includes('onc-meta'));
+  assert(!meta.className.includes('text-sm'));
+  assert.equal(meta.getAttribute('style'), 'color: #666666');
+  assert(heading.className.includes('onc-h1'));
+  assert(!heading.className.includes('text-xl'));
+  assert.equal(heading.getAttribute('style'), 'color: #1E4E79');
+  assert(!headingSpan.className.includes('font-bold'));
+  assert.equal(headingSpan.getAttribute('style'), 'font-weight: bold');
+  assert(pageTitle.className.includes('onc-title'));
+  assert.equal(pageTitle.getAttribute('style'), null);
+  assert(logs.some((entry) => entry.step === 'CompactRepeatedTypographyClasses' && entry.replacements === 5 && entry.prunedUtilityClasses === 2 && entry.strippedStyleDeclarations === 5));
+}
+
+// compact repeated table and alignment declarations while keeping unmatched layout inline
+{
+  const html = '<html><head></head><body><table style="direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 1pt"><tr><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: .9388in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p style="text-align: center">Cell</p></td><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: .9798in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p style="text-align: right">Right</p></td></tr></table></body></html>';
+  const doc = makeDoc(html);
+  const logs = compactRepeatedTypographyClasses(doc);
+  const styleBlock = doc.querySelector('style[data-onc-compact-typography]');
+  const table = doc.querySelector('table');
+  const cells = doc.querySelectorAll('td');
+  const centered = doc.querySelector('p');
+  const right = doc.querySelectorAll('p')[1];
+
+  assert(styleBlock, 'compact fallback stylesheet should be injected for table compaction too');
+  assert(styleBlock.textContent.includes('.onc-table{border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:1pt;}'));
+  assert(styleBlock.textContent.includes('.onc-cell{border-style:solid;border-color:#A3A3A3;border-width:1pt;vertical-align:top;padding:2.0pt 3.0pt 2.0pt 3.0pt;}'));
+  assert(styleBlock.textContent.includes('.onc-center{text-align:center;}'));
+  assert(styleBlock.textContent.includes('.onc-right{text-align:right;}'));
+  assert(table.className.includes('onc-table'));
+  assert.equal(table.getAttribute('style'), 'direction: ltr');
+  assert(cells[0].className.includes('onc-cell'));
+  assert.equal(cells[0].getAttribute('style'), 'width: .9388in');
+  assert(cells[1].className.includes('onc-cell'));
+  assert.equal(cells[1].getAttribute('style'), 'width: .9798in');
+  assert(centered.className.includes('onc-center'));
+  assert.equal(centered.getAttribute('style'), null);
+  assert(right.className.includes('onc-right'));
+  assert.equal(right.getAttribute('style'), null);
+  assert(logs.some((entry) => entry.step === 'CompactRepeatedTypographyClasses' && entry.replacements === 5 && entry.strippedStyleDeclarations === 5));
 }
 
 console.log('inline-style-normalization: PASS');

@@ -152,6 +152,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.dedupeLists(doc)));
     logs.push(...ensureArray(sanitize.ensureCreatedWithOneNoteFooterGap(doc)));
     logs.push(...ensureArray(sanitize.injectFooterSpacerCss(doc)));
+    logs.push(...ensureArray(sanitize.compactRepeatedTypographyClasses(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {

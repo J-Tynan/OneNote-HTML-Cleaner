@@ -944,6 +944,280 @@ export function injectFooterSpacerCss(doc) {
   return [{ step: 'InjectFooterSpacerCss', details: 'Inserted compact spacer stylesheet' }];
 }
 
+const COMPACT_TYPOGRAPHY_PATTERNS = [
+  {
+    className: 'onc-body',
+    cssText: 'font-family:Calibri;font-size:11.0pt;',
+    selector: 'body',
+    requiredClasses: ['font-sans', 'text-base'],
+    removableClasses: ['font-sans', 'text-base'],
+    removableStyleProps: ['font-family', 'font-size'],
+    requiredStyles: {
+      'font-family': 'Calibri',
+      'font-size': '11.0pt'
+    }
+  },
+  {
+    className: 'onc-copy',
+    cssText: 'margin:0;font-family:Calibri;font-size:11.0pt;',
+    requiredClasses: ['font-sans', 'text-base'],
+    removableClasses: ['font-sans', 'text-base'],
+    removableStyleProps: ['margin', 'font-family', 'font-size'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': 'Calibri',
+      'font-size': '11.0pt'
+    }
+  },
+  {
+    className: 'onc-meta',
+    cssText: 'margin:0;font-family:Calibri,Arial,sans-serif;font-size:10pt;',
+    requiredClasses: ['font-sans', 'text-sm'],
+    removableClasses: ['font-sans', 'text-sm'],
+    removableStyleProps: ['margin', 'font-family', 'font-size'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': 'Calibri, Arial, sans-serif',
+      'font-size': '10pt'
+    }
+  },
+  {
+    className: 'onc-title',
+    cssText: 'margin:0;font-family:"Calibri Light";font-size:20pt;font-weight:400;',
+    requiredClasses: ['font-sans', 'text-xl'],
+    removableClasses: ['font-sans', 'text-xl', 'font-normal'],
+    removableStyleProps: ['margin', 'font-family', 'font-size', 'font-weight'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': ['"Calibri Light"', 'Calibri Light'],
+      'font-size': ['20pt', '20.0pt']
+    }
+  },
+  {
+    className: 'onc-h1',
+    cssText: 'margin:0;font-family:Calibri;font-size:16.0pt;',
+    requiredClasses: ['font-sans', 'text-xl'],
+    removableClasses: ['font-sans', 'text-xl'],
+    removableStyleProps: ['margin', 'font-family', 'font-size'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': 'Calibri',
+      'font-size': '16.0pt'
+    }
+  },
+  {
+    className: 'onc-h2',
+    cssText: 'margin:0;font-family:Calibri;font-size:14.0pt;',
+    requiredClasses: ['font-sans', 'text-lg'],
+    removableClasses: ['font-sans', 'text-lg'],
+    removableStyleProps: ['margin', 'font-family', 'font-size'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': 'Calibri',
+      'font-size': '14.0pt'
+    }
+  },
+  {
+    className: 'onc-h3',
+    cssText: 'margin:0;font-family:Calibri;font-size:12.0pt;',
+    requiredClasses: ['font-sans', 'text-base'],
+    removableClasses: ['font-sans', 'text-base'],
+    removableStyleProps: ['margin', 'font-family', 'font-size'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': 'Calibri',
+      'font-size': '12.0pt'
+    }
+  },
+  {
+    className: 'onc-cite',
+    cssText: 'margin:0;font-family:Calibri;font-size:9.0pt;',
+    requiredClasses: ['font-sans', 'text-xs'],
+    removableClasses: ['font-sans', 'text-xs'],
+    removableStyleProps: ['margin', 'font-family', 'font-size'],
+    requiredStyles: {
+      margin: '0',
+      'font-family': 'Calibri',
+      'font-size': '9.0pt'
+    }
+  }
+];
+
+const COMPACT_LAYOUT_PATTERNS = [
+  {
+    className: 'onc-table',
+    cssText: 'border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:1pt;',
+    removableStyleProps: ['border-collapse', 'border-style', 'border-color', 'border-width'],
+    requiredStyles: {
+      'border-collapse': 'collapse',
+      'border-style': 'solid',
+      'border-color': '#A3A3A3',
+      'border-width': '1pt'
+    }
+  },
+  {
+    className: 'onc-cell',
+    cssText: 'border-style:solid;border-color:#A3A3A3;border-width:1pt;vertical-align:top;padding:2.0pt 3.0pt 2.0pt 3.0pt;',
+    removableStyleProps: ['border-style', 'border-color', 'border-width', 'vertical-align', 'padding'],
+    requiredStyles: {
+      'border-style': 'solid',
+      'border-color': '#A3A3A3',
+      'border-width': '1pt',
+      'vertical-align': 'top',
+      padding: '2.0pt 3.0pt 2.0pt 3.0pt'
+    }
+  },
+  {
+    className: 'onc-center',
+    cssText: 'text-align:center;',
+    removableStyleProps: ['text-align'],
+    requiredStyles: {
+      'text-align': 'center'
+    }
+  },
+  {
+    className: 'onc-right',
+    cssText: 'text-align:right;',
+    removableStyleProps: ['text-align'],
+    requiredStyles: {
+      'text-align': 'right'
+    }
+  }
+];
+
+const REDUNDANT_UTILITY_PRUNE_RULES = [
+  {
+    className: 'mt-6',
+    requiredStyles: {
+      'margin-top': '2rem'
+    }
+  },
+  {
+    className: 'mt-0',
+    requiredStyles: {
+      'margin-top': '0'
+    }
+  },
+  {
+    className: 'font-bold',
+    requiredStyles: {
+      'font-weight': ['bold', '700']
+    }
+  }
+];
+
+function getClassNameSet(el) {
+  return new Set(String(el.getAttribute('class') || '').split(/\s+/).filter(Boolean));
+}
+
+function removeClassNames(el, classNames = []) {
+  const next = Array.from(getClassNameSet(el)).filter((name) => !classNames.includes(name));
+  if (next.length) {
+    el.setAttribute('class', next.join(' '));
+    return;
+  }
+  el.removeAttribute('class');
+}
+
+function hasRequiredClasses(el, requiredClasses = []) {
+  const classSet = getClassNameSet(el);
+  return requiredClasses.every((name) => classSet.has(name));
+}
+
+function hasRequiredStyles(el, requiredStyles = {}) {
+  const styleMap = new Map();
+  parseInlineStyle(el.getAttribute('style') || '').forEach(({ prop, value }) => {
+    styleMap.set(String(prop || '').trim().toLowerCase(), normalizeCssToken(value));
+  });
+
+  return Object.entries(requiredStyles).every(([prop, value]) => {
+    const actual = styleMap.get(String(prop).trim().toLowerCase());
+    const expectedValues = Array.isArray(value) ? value : [value];
+    return expectedValues.some((entry) => actual === normalizeCssToken(entry));
+  });
+}
+
+function ensureCompactTypographyStyle(doc) {
+  const head = doc.querySelector('head') || doc.documentElement;
+  if (!head) return false;
+  if (head.querySelector('style[data-onc-compact-typography]')) return false;
+
+  const style = doc.createElement('style');
+  style.setAttribute('data-onc-compact-typography', '1');
+  style.appendChild(doc.createTextNode([
+    ...COMPACT_TYPOGRAPHY_PATTERNS,
+    ...COMPACT_LAYOUT_PATTERNS
+  ].map((pattern) => `.${pattern.className}{${pattern.cssText}}`).join('\n')));
+  head.appendChild(style);
+  return true;
+}
+
+function removeMatchedStyleDeclarations(el, removableStyleProps = []) {
+  if (!el || !removableStyleProps.length) return false;
+  const styleText = el.getAttribute('style') || '';
+  const declarations = parseInlineStyle(styleText);
+  if (!declarations.length) return false;
+
+  const removable = new Set(removableStyleProps.map((prop) => String(prop || '').trim().toLowerCase()));
+  const kept = declarations.filter(({ prop }) => !removable.has(String(prop || '').trim().toLowerCase()));
+  if (kept.length === declarations.length) return false;
+
+  const nextStyle = serializeInlineStyle(kept);
+  if (nextStyle) {
+    el.setAttribute('style', nextStyle);
+  } else {
+    el.removeAttribute('style');
+  }
+  return true;
+}
+
+export function compactRepeatedTypographyClasses(doc) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const nodes = Array.from(doc.querySelectorAll('[style]'));
+  let replacements = 0;
+  let prunedUtilityClasses = 0;
+  let strippedStyleDeclarations = 0;
+
+  nodes.forEach((node) => {
+    const match = [...COMPACT_TYPOGRAPHY_PATTERNS, ...COMPACT_LAYOUT_PATTERNS].find((pattern) => {
+      if (pattern.selector && !node.matches(pattern.selector)) return false;
+      return hasRequiredClasses(node, pattern.requiredClasses) && hasRequiredStyles(node, pattern.requiredStyles);
+    });
+    if (!match) return;
+
+    addClass(node, match.className);
+    removeClassNames(node, match.removableClasses);
+    if (removeMatchedStyleDeclarations(node, match.removableStyleProps || [])) {
+      strippedStyleDeclarations += 1;
+    }
+    replacements += 1;
+  });
+
+  nodes.forEach((node) => {
+    REDUNDANT_UTILITY_PRUNE_RULES.forEach((rule) => {
+      if (!hasRequiredClasses(node, [rule.className])) return;
+      if (!hasRequiredStyles(node, rule.requiredStyles)) return;
+      removeClassNames(node, [rule.className]);
+      prunedUtilityClasses += 1;
+    });
+  });
+
+  if (!replacements && !prunedUtilityClasses) return logs;
+
+  const inserted = replacements ? ensureCompactTypographyStyle(doc) : false;
+  logs.push({
+    step: 'CompactRepeatedTypographyClasses',
+    replacements,
+    prunedUtilityClasses,
+    strippedStyleDeclarations,
+    stylesheetInserted: inserted,
+    patterns: COMPACT_TYPOGRAPHY_PATTERNS.length + COMPACT_LAYOUT_PATTERNS.length
+  });
+  return logs;
+}
+
 export function normalizeContentBlankLineSpacers(doc) {
   const logs = [];
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
