@@ -267,10 +267,10 @@ First-pass tasks:
   - [ ] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability.
   - [ ] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs.
 6. Reduce repeated code and reduce the file size of the shipped app and exported assets without changing behavior by working through these smaller follow-ups:
-  - [ ] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output.
-  - [ ] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes.
+  - [x] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output. (2026-07-13, reviewed the new comparison set and confirmed that the remaining repeated `direction:ltr` wrappers, widths, alignment, and sparse emphasis spans are still mostly structural rather than safe standalone CSS candidates.)
+  - [x] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes. (2026-07-13, measured the attached comparison set and recorded byte/token reductions across the updated outputs.)
   - [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
-  - [ ] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope.
+  - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
   - [ ] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract.
 
 ## Version 1.0 — Native `.one` Release
@@ -605,6 +605,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
 - [x] Normalize repetitive inline styles (migration + collapse rules).
 - [x] [P2] Improve cleaned HTML code quality for human inspection: remove redundant blank lines between sections, trim avoidable whitespace, and review minor markup/serialization cleanup opportunities. (2026-05-26, landed a deterministic post-serialization cleanup pass in `src/pipeline/format.js` with focused formatter coverage plus idempotence/rerun/artifact regression validation.)
+- [x] [P2] Measure and validate the recent inline-style fallback compaction work against real comparison sets and `.mht` processing before merging to `main`. (2026-07-13, committed the cleanup slice, merged it to `main`, pushed it to GitHub, and re-ran `node ./Tests/mht-fixtures-playwright.js` successfully on local `main`.)
 - [ ] [P3] Add a reproducible token-efficiency benchmark that compares one representative note saved as cleaned HTML, MHTML, PDF, and DOCX using a fixed tokenizer, and record raw token counts plus normalized comparison metrics.
 - [ ] [P3] Document token-efficiency findings for launch and marketing use, including methodology caveats about tokenizer choice, embedded assets, and why cleaned HTML is a better LLM-facing source than raw export formats.
 - [x] Implement `normalizeTableAttributes` with unit tests.
