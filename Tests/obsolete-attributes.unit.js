@@ -35,6 +35,22 @@ function sanitizeDoc(html) {
   }
 
   {
+    const doc = sanitizeDoc('<html><body><table title="" data-legacy-summary=""><tr><td>X</td></tr></table></body></html>');
+    const table = doc.querySelector('table');
+    assert(table, 'table should exist');
+    assert.equal(table.hasAttribute('title'), false, 'empty table title should be removed');
+    assert.equal(table.hasAttribute('data-legacy-summary'), false, 'empty legacy summary should be removed');
+  }
+
+  {
+    const doc = sanitizeDoc('<html><body><table summary="   "><tr><td>X</td></tr></table></body></html>');
+    const table = doc.querySelector('table');
+    assert(table, 'table should exist');
+    assert.equal(table.hasAttribute('summary'), false, 'empty summary should be removed');
+    assert.equal(table.hasAttribute('data-legacy-summary'), false, 'empty summary should not create legacy summary');
+  }
+
+  {
     const doc = sanitizeDoc('<html><body><div summary="legacy-hint">Text</div></body></html>');
     const div = doc.querySelector('div');
     assert(div, 'div should exist');

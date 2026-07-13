@@ -603,7 +603,7 @@ export function normalizeTableAttributes(doc, options = {}) {
     // summary handling
     if (tbl.hasAttribute('summary')) {
       const val = tbl.getAttribute('summary');
-      if (/^mso-/i.test(val) || OFFICE_NS_RE.test(val)) {
+      if (!String(val || '').trim() || /^mso-/i.test(val) || OFFICE_NS_RE.test(val)) {
         tbl.removeAttribute('summary');
         removed.push('summary');
       } else {
@@ -630,6 +630,17 @@ export function normalizeTableAttributes(doc, options = {}) {
         removed.push('xmlns');
       }
     }
+
+    if (tbl.hasAttribute('title') && !String(tbl.getAttribute('title') || '').trim()) {
+      tbl.removeAttribute('title');
+      removed.push('title');
+    }
+
+    if (tbl.hasAttribute('data-legacy-summary') && !String(tbl.getAttribute('data-legacy-summary') || '').trim()) {
+      tbl.removeAttribute('data-legacy-summary');
+      removed.push('data-legacy-summary');
+    }
+
     if (removed.length) logs.push({ step: 'NormalizeTableAttr', tag: 'TABLE', removed });
   });
   return logs;
@@ -1040,10 +1051,144 @@ const COMPACT_TYPOGRAPHY_PATTERNS = [
       'font-family': 'Calibri',
       'font-size': '9.0pt'
     }
+  },
+  {
+    className: 'onc-list',
+    cssText: 'direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;font-family:Calibri;font-size:11.0pt;font-weight:400;font-style:normal;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
+    selector: 'ol',
+    requiredClasses: ['font-sans', 'text-base', 'font-normal'],
+    removableClasses: ['mt-0', 'mb-0', 'font-sans', 'text-base', 'font-normal'],
+    removableStyleProps: ['direction', 'unicode-bidi', 'margin-top', 'margin-bottom', 'font-family', 'font-size', 'font-weight', 'font-style', 'margin-left', 'padding-left', 'padding-inline-start'],
+    requiredStyles: {
+      direction: 'ltr',
+      'unicode-bidi': 'embed',
+      'margin-top': '0',
+      'margin-bottom': '0',
+      'font-family': 'Calibri',
+      'font-size': '11.0pt',
+      'font-weight': ['normal', '400'],
+      'font-style': 'normal',
+      'margin-left': '0.35em',
+      'padding-left': '1.2em',
+      'padding-inline-start': '1.2em'
+    }
+  },
+  {
+    className: 'onc-list-strong',
+    cssText: 'direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;font-family:Calibri;font-size:11.0pt;font-weight:700;font-style:normal;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
+    selector: 'ol',
+    requiredClasses: ['font-sans', 'text-base'],
+    removableClasses: ['mt-0', 'mb-0', 'font-sans', 'text-base', 'font-bold'],
+    removableStyleProps: ['direction', 'unicode-bidi', 'margin-top', 'margin-bottom', 'font-family', 'font-size', 'font-weight', 'font-style', 'margin-left', 'padding-left', 'padding-inline-start'],
+    requiredStyles: {
+      direction: 'ltr',
+      'unicode-bidi': 'embed',
+      'margin-top': '0',
+      'margin-bottom': '0',
+      'font-family': 'Calibri',
+      'font-size': '11.0pt',
+      'font-weight': ['bold', '700'],
+      'font-style': 'normal',
+      'margin-left': '0.35em',
+      'padding-left': '1.2em',
+      'padding-inline-start': '1.2em'
+    }
+  },
+  {
+    className: 'onc-list-item-strong',
+    cssText: 'margin-top:0;margin-bottom:0;vertical-align:middle;font-weight:700;',
+    selector: 'li',
+    removableClasses: ['font-bold'],
+    removableStyleProps: ['margin-top', 'margin-bottom', 'vertical-align', 'font-weight'],
+    requiredStyles: {
+      'margin-top': '0',
+      'margin-bottom': '0',
+      'vertical-align': 'middle',
+      'font-weight': ['bold', '700']
+    }
+  },
+  {
+    className: 'onc-list-item',
+    cssText: 'margin-top:0;margin-bottom:0;vertical-align:middle;',
+    selector: 'li',
+    removableClasses: ['mt-0', 'mb-0'],
+    removableStyleProps: ['margin-top', 'margin-bottom', 'vertical-align'],
+    requiredStyles: {
+      'margin-top': '0',
+      'margin-bottom': '0',
+      'vertical-align': 'middle'
+    }
+  },
+  {
+    className: 'onc-bullet-list',
+    cssText: 'direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
+    selector: 'ul',
+    requiredClasses: ['list-disc', 'list-outside', 'mb-0'],
+    removableClasses: ['mt-0', 'mb-0'],
+    removableStyleProps: ['direction', 'unicode-bidi', 'margin-top', 'margin-bottom', 'margin-left', 'padding-left', 'padding-inline-start'],
+    requiredStyles: {
+      direction: 'ltr',
+      'unicode-bidi': 'embed',
+      'margin-top': '0',
+      'margin-bottom': '0',
+      'margin-left': '0.35em',
+      'padding-left': '1.2em',
+      'padding-inline-start': '1.2em'
+    }
+  },
+  {
+    className: 'onc-inline-copy',
+    cssText: 'font-family:Calibri;font-size:11.0pt;font-weight:400;font-style:normal;',
+    selector: 'span',
+    requiredClasses: ['font-sans', 'text-base', 'font-normal'],
+    removableClasses: ['font-sans', 'text-base', 'font-normal'],
+    removableStyleProps: ['font-family', 'font-size', 'font-weight', 'font-style'],
+    requiredStyles: {
+      'font-family': 'Calibri',
+      'font-size': '11.0pt',
+      'font-weight': ['normal', '400'],
+      'font-style': 'normal'
+    }
+  },
+  {
+    className: 'onc-inline-copy-reset',
+    cssText: 'font-family:Calibri;font-size:11.0pt;font-weight:400;',
+    selector: 'span',
+    requiredClasses: ['font-sans', 'text-base', 'font-normal'],
+    removableClasses: ['font-sans', 'text-base', 'font-normal'],
+    removableStyleProps: ['font-family', 'font-size', 'font-weight'],
+    requiredStyles: {
+      'font-family': 'Calibri',
+      'font-size': '11.0pt',
+      'font-weight': ['normal', '400']
+    }
+  },
+  {
+    className: 'onc-inline-copy-lite',
+    cssText: 'font-family:Calibri;font-size:11.0pt;',
+    selector: 'span',
+    requiredClasses: ['font-sans', 'text-base'],
+    removableClasses: ['font-sans', 'text-base'],
+    removableStyleProps: ['font-family', 'font-size'],
+    requiredStyles: {
+      'font-family': 'Calibri',
+      'font-size': '11.0pt'
+    }
   }
 ];
 
 const COMPACT_LAYOUT_PATTERNS = [
+  {
+    className: 'onc-table-borderless',
+    cssText: 'border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:0;',
+    removableStyleProps: ['border-collapse', 'border-style', 'border-color', 'border-width'],
+    requiredStyles: {
+      'border-collapse': 'collapse',
+      'border-style': 'solid',
+      'border-color': '#A3A3A3',
+      'border-width': '0'
+    }
+  },
   {
     className: 'onc-table',
     cssText: 'border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:1pt;',
@@ -1053,6 +1198,28 @@ const COMPACT_LAYOUT_PATTERNS = [
       'border-style': 'solid',
       'border-color': '#A3A3A3',
       'border-width': '1pt'
+    }
+  },
+  {
+    className: 'onc-cell-borderless',
+    cssText: 'border-style:solid;border-color:#A3A3A3;border-width:0;vertical-align:top;padding:2.0pt 3.0pt 2.0pt 3.0pt;',
+    removableStyleProps: ['border-style', 'border-color', 'border-width', 'vertical-align', 'padding'],
+    requiredStyles: {
+      'border-style': 'solid',
+      'border-color': '#A3A3A3',
+      'border-width': '0',
+      'vertical-align': 'top',
+      padding: '2.0pt 3.0pt 2.0pt 3.0pt'
+    }
+  },
+  {
+    className: 'onc-cell-borderless-lite',
+    cssText: 'border-width:0;vertical-align:top;padding:2.0pt 3.0pt 2.0pt 3.0pt;',
+    removableStyleProps: ['border-width', 'vertical-align', 'padding'],
+    requiredStyles: {
+      'border-width': '0',
+      'vertical-align': 'top',
+      padding: '2.0pt 3.0pt 2.0pt 3.0pt'
     }
   },
   {
@@ -1081,6 +1248,43 @@ const COMPACT_LAYOUT_PATTERNS = [
     removableStyleProps: ['text-align'],
     requiredStyles: {
       'text-align': 'right'
+    }
+  }
+];
+
+const RESIDUAL_COMPACT_PATTERNS = [
+  {
+    className: 'onc-page-title',
+    selector: 'h1',
+    cssText: 'display:inline-block;padding-right:1in;padding-bottom:0.08em;border-bottom:1px solid #b7b7b7;',
+    requiredClasses: ['converted-page-title', 'onc-title'],
+    removableStyleProps: ['display', 'padding-right', 'padding-bottom', 'border-bottom'],
+    requiredStyles: {
+      display: 'inline-block',
+      'padding-right': '1in',
+      'padding-bottom': '0.08em',
+      'border-bottom': '1px solid #b7b7b7'
+    }
+  },
+  {
+    className: 'onc-page-date-tone',
+    selector: 'p',
+    cssText: 'color:#666666;',
+    requiredClasses: ['converted-page-date', 'onc-meta'],
+    removableStyleProps: ['color'],
+    requiredStyles: {
+      color: '#666666'
+    }
+  },
+  {
+    className: 'onc-page-time',
+    selector: 'span',
+    cssText: 'color:#666666;margin-left:0.75em;',
+    requiredClasses: ['created-time', 'converted-page-time', 'onc-meta'],
+    removableStyleProps: ['color', 'margin-left'],
+    requiredStyles: {
+      color: '#666666',
+      'margin-left': '0.75em'
     }
   }
 ];
@@ -1137,17 +1341,21 @@ function hasRequiredStyles(el, requiredStyles = {}) {
   });
 }
 
-function ensureCompactTypographyStyle(doc) {
+function ensureCompactTypographyStyle(doc, usedPatternClassNames = []) {
   const head = doc.querySelector('head') || doc.documentElement;
   if (!head) return false;
   if (head.querySelector('style[data-onc-compact-typography]')) return false;
 
+  const allPatterns = [...COMPACT_TYPOGRAPHY_PATTERNS, ...COMPACT_LAYOUT_PATTERNS, ...RESIDUAL_COMPACT_PATTERNS];
+  const requested = new Set((usedPatternClassNames || []).map((name) => String(name || '').trim()).filter(Boolean));
+  const patterns = requested.size
+    ? allPatterns.filter((pattern) => requested.has(pattern.className))
+    : allPatterns;
+  if (!patterns.length) return false;
+
   const style = doc.createElement('style');
   style.setAttribute('data-onc-compact-typography', '1');
-  style.appendChild(doc.createTextNode([
-    ...COMPACT_TYPOGRAPHY_PATTERNS,
-    ...COMPACT_LAYOUT_PATTERNS
-  ].map((pattern) => `.${pattern.className}{${pattern.cssText}}`).join('\n')));
+  style.appendChild(doc.createTextNode(patterns.map((pattern) => `.${pattern.className}{${pattern.cssText}}`).join('\n')));
   head.appendChild(style);
   return true;
 }
@@ -1171,29 +1379,99 @@ function removeMatchedStyleDeclarations(el, removableStyleProps = []) {
   return true;
 }
 
-export function compactRepeatedTypographyClasses(doc) {
-  const logs = [];
-  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
-
-  const nodes = Array.from(doc.querySelectorAll('[style]'));
+function applyCompactPatterns(nodes, patterns, usedPatternClassNames) {
   let replacements = 0;
-  let prunedUtilityClasses = 0;
   let strippedStyleDeclarations = 0;
 
   nodes.forEach((node) => {
-    const match = [...COMPACT_TYPOGRAPHY_PATTERNS, ...COMPACT_LAYOUT_PATTERNS].find((pattern) => {
+    const match = patterns.find((pattern) => {
       if (pattern.selector && !node.matches(pattern.selector)) return false;
       return hasRequiredClasses(node, pattern.requiredClasses) && hasRequiredStyles(node, pattern.requiredStyles);
     });
     if (!match) return;
 
     addClass(node, match.className);
+    usedPatternClassNames.add(match.className);
     removeClassNames(node, match.removableClasses);
     if (removeMatchedStyleDeclarations(node, match.removableStyleProps || [])) {
       strippedStyleDeclarations += 1;
     }
     replacements += 1;
   });
+
+  return { replacements, strippedStyleDeclarations };
+}
+
+function cleanupRedundantAttributes(doc) {
+  if (!doc || typeof doc.querySelectorAll !== 'function') {
+    return {
+      emptyStyleRemoved: 0,
+      emptyClassRemoved: 0,
+      classAttributesDeduped: 0
+    };
+  }
+
+  let emptyStyleRemoved = 0;
+  let emptyClassRemoved = 0;
+  let classAttributesDeduped = 0;
+
+  Array.from(doc.querySelectorAll('[style],[class]')).forEach((node) => {
+    if (node.hasAttribute('style')) {
+      const declarations = parseInlineStyle(node.getAttribute('style') || '');
+      if (!declarations.length) {
+        node.removeAttribute('style');
+        emptyStyleRemoved += 1;
+      }
+    }
+
+    if (!node.hasAttribute('class')) return;
+
+    const tokens = String(node.getAttribute('class') || '').split(/\s+/).filter(Boolean);
+    if (!tokens.length) {
+      node.removeAttribute('class');
+      emptyClassRemoved += 1;
+      return;
+    }
+
+    const uniqueTokens = [];
+    const seen = new Set();
+    tokens.forEach((token) => {
+      if (seen.has(token)) return;
+      seen.add(token);
+      uniqueTokens.push(token);
+    });
+
+    if (uniqueTokens.length !== tokens.length || uniqueTokens.join(' ') !== node.getAttribute('class')) {
+      node.setAttribute('class', uniqueTokens.join(' '));
+      classAttributesDeduped += 1;
+    }
+  });
+
+  return {
+    emptyStyleRemoved,
+    emptyClassRemoved,
+    classAttributesDeduped
+  };
+}
+
+export function compactRepeatedTypographyClasses(doc) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const nodes = Array.from(doc.querySelectorAll('[style]'));
+  const usedPatternClassNames = new Set();
+  let replacements = 0;
+  let prunedUtilityClasses = 0;
+  let strippedStyleDeclarations = 0;
+
+  const firstPass = applyCompactPatterns(nodes, [...COMPACT_TYPOGRAPHY_PATTERNS, ...COMPACT_LAYOUT_PATTERNS], usedPatternClassNames);
+  replacements += firstPass.replacements;
+  strippedStyleDeclarations += firstPass.strippedStyleDeclarations;
+
+  const residualNodes = nodes.filter((node) => node && node.hasAttribute && node.hasAttribute('style'));
+  const secondPass = applyCompactPatterns(residualNodes, RESIDUAL_COMPACT_PATTERNS, usedPatternClassNames);
+  replacements += secondPass.replacements;
+  strippedStyleDeclarations += secondPass.strippedStyleDeclarations;
 
   nodes.forEach((node) => {
     REDUNDANT_UTILITY_PRUNE_RULES.forEach((rule) => {
@@ -1204,14 +1482,21 @@ export function compactRepeatedTypographyClasses(doc) {
     });
   });
 
-  if (!replacements && !prunedUtilityClasses) return logs;
+  const attributeCleanup = cleanupRedundantAttributes(doc);
 
-  const inserted = replacements ? ensureCompactTypographyStyle(doc) : false;
+  if (!replacements && !prunedUtilityClasses && !attributeCleanup.emptyStyleRemoved && !attributeCleanup.emptyClassRemoved && !attributeCleanup.classAttributesDeduped) {
+    return logs;
+  }
+
+  const inserted = replacements ? ensureCompactTypographyStyle(doc, Array.from(usedPatternClassNames)) : false;
   logs.push({
     step: 'CompactRepeatedTypographyClasses',
     replacements,
     prunedUtilityClasses,
     strippedStyleDeclarations,
+    emptyStyleRemoved: attributeCleanup.emptyStyleRemoved,
+    emptyClassRemoved: attributeCleanup.emptyClassRemoved,
+    classAttributesDeduped: attributeCleanup.classAttributesDeduped,
     stylesheetInserted: inserted,
     patterns: COMPACT_TYPOGRAPHY_PATTERNS.length + COMPACT_LAYOUT_PATTERNS.length
   });
