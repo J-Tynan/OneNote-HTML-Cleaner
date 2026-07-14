@@ -8,6 +8,8 @@ OneNote HTML Cleaner is a progressive web app for people who need a practical wa
 
 For many first-time users, the most convincing comparison is not feature depth but the difference between opening a default OneNote `.mhtml` export directly in the browser and opening a cleaned page produced by this app.
 
+Raw OneNote exports are often dense with authoring markup, redundant inline styles, and layout scaffolding. The cleaned HTML produced by this app removes that noise and restores clearer semantic structure, so headings, lists, tables, and images are easier to read, inspect, and reuse.
+
 The section below is prepared for a side-by-side example using the same note in two states:
 
 - Before: the default OneNote MHTML export opened directly in the browser
@@ -64,11 +66,13 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 
 ## Why Use It
 
-- Convert exported OneNote MHTML files into cleaner HTML with a more readable default presentation.
-- Run entirely in the browser with offline capability after the first load.
-- Process one file quickly or batch multiple files into a ZIP download.
-- Keep the default experience simple while still exposing advanced export controls when needed.
-- Preserve important note content such as headings, lists, tables, images, and handwriting rasters.
+- **Reliable browser-first conversion:** Convert exported OneNote MHTML files locally in the browser with a workflow designed for steady results, offline use after the first load, and clear status from import through download.
+
+- **Readable output by default:** The cleaned HTML strips away OneNote authoring noise and restores clearer structure, so headings, lists, tables, and images are easier to inspect, reuse, and share.
+
+- **Modern, predictable HTML:** The export path targets semantic HTML5 structure, UTF-8 encoding, and stable document organization, which makes repeated runs easier to trust and compare.
+
+- **Simple UX with room to grow:** The default flow stays straightforward for first-time use, while advanced controls remain available when you need Markdown, ZIP-friendly CSS, or other optional export behavior.
 
 ## Quick Start
 

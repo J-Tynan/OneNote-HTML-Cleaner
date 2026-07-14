@@ -19,6 +19,7 @@ With `v0.1.0` tagged, new work should center on `v0.2` stabilization while defin
 
 ## Recent Success
 
+- [x] README comparison copy: added a concise raw OneNote/MHTML vs cleaned modern HTML summary to the before/after section. (2026-07-14)
 - [x] Homepage polish pass: aligned the Start/Results cards, normalized Advanced options helper text, and improved Help popup readability and scanability. (2026-05-10)
 - [x] Preserve same-tab queue state across unexpected reload/discard and add focused regression coverage in `Tests/queue-reload-restore-playwright.js`. (2026-05-10)
 - [x] Fix MHT spacer regression: preserve image-only paragraphs before footer so `DevToys.mht` keeps embedded `data:image/*;base64` icons in cleaned HTML (2026-03-07)
@@ -263,7 +264,7 @@ First-pass tasks:
   - [ ] Recapture the ZIP export screenshot so the filenames, export controls, and surrounding UI match the stabilized `v0.2` build.
   - [ ] Recapture the accessibility/structure screenshot or equivalent proof asset showing `<main>` plus a single page-level `h1` in the exported HTML.
   - [ ] Verify the refreshed screenshot files use the expected names in `assets/release/` and replace any stale thumbnails or derived copies that no longer match.
-  - [ ] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth.
+  - [x] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth. (2026-07-14)
   - [ ] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability.
   - [ ] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs.
 6. Reduce repeated code and reduce the file size of the shipped app and exported assets without changing behavior by working through these smaller follow-ups:
