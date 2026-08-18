@@ -24,6 +24,7 @@ pnpm-debug.log*
 assets/wasm/
 .tmp-*
 # local editor / debug artifacts
+.venv/
 .vscode/
 
 # IDE/editor project files
