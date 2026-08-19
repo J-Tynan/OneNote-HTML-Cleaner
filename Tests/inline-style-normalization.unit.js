@@ -9,7 +9,8 @@ const {
   parseStyle,
 } = await import('../src/pipeline/inlineStyleMigration.js');
 const {
-  compactRepeatedTypographyClasses
+  compactRepeatedTypographyClasses,
+  promoteCompactContentTableCellWidthsToMinWidth
 } = await import('../src/pipeline/sanitize.js');
 
 await setupNodeTestEnvironment();
@@ -114,6 +115,7 @@ console.log('running inline-style-normalization unit tests');
   const createdTime = dateParagraph.querySelector('span.created-time');
 
   assert(headStyle, 'compact typography stylesheet should be injected into the document head');
+  assert(headStyle.textContent.includes('.onc-body{font-family:Calibri;font-size:11.0pt;background-color:transparent;color:initial;}'));
   assert(headStyle.textContent.includes('.onc-copy{margin:0;font-family:Calibri;font-size:11.0pt;}'));
   assert(headStyle.textContent.includes('.onc-page-title{display:inline-block;padding-right:1in;padding-bottom:0.08em;border-bottom:1px solid #b7b7b7;}'));
   assert(headStyle.textContent.includes('.onc-page-date-tone{color:#666666;}'));
@@ -219,6 +221,24 @@ console.log('running inline-style-normalization unit tests');
   assert(cells[1].className.includes('onc-cell-borderless-lite'));
   assert.equal(cells[1].getAttribute('style'), 'width: .9798in');
   assert(logs.some((entry) => entry.step === 'CompactRepeatedTypographyClasses' && entry.replacements === 3 && entry.strippedStyleDeclarations === 3));
+}
+
+// promote compact content-table cell widths to min-width when short text would otherwise wrap
+{
+  const html = '<html><head></head><body><table style="direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 1pt"><tr><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: .9388in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p><code><span style="font-weight: bold">Header 1</span></code></p></td><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: 1.4361in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p><code><span style="font-weight: bold">Header 2</span></code></p></td><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: .9583in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p><code><span style="font-weight: bold">Header 3</span></code></p></td></tr><tr><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: .9583in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p class="onc-copy">Left-aligned</p></td><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: 1.4361in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p style="text-align: center" class="onc-copy">Middle-aligned text</p></td><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: .9583in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p style="text-align: right" class="onc-copy">Right-aligned</p></td></tr></table><table style="direction: ltr; border-collapse: collapse; border-style: solid; border-color: #A3A3A3; border-width: 1pt"><tr><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: 4in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p class="onc-copy">A much wider cell that should keep its original width declaration.</p></td><td style="border-style: solid; border-color: #A3A3A3; border-width: 1pt; vertical-align: top; width: 4in; padding: 2.0pt 3.0pt 2.0pt 3.0pt"><p class="onc-copy">Another wide cell</p></td></tr></table></body></html>';
+  const doc = makeDoc(html);
+  compactRepeatedTypographyClasses(doc);
+  const logs = promoteCompactContentTableCellWidthsToMinWidth(doc);
+  const tables = doc.querySelectorAll('table');
+  const promotedCells = tables[0].querySelectorAll('td');
+  const untouchedCells = tables[1].querySelectorAll('td');
+
+  assert.equal(promotedCells[0].getAttribute('style'), 'min-width: .9388in');
+  assert.equal(promotedCells[1].getAttribute('style'), 'min-width: 1.4361in');
+  assert.equal(promotedCells[2].getAttribute('style'), 'min-width: .9583in');
+  assert.equal(untouchedCells[0].getAttribute('style'), 'width: 4in');
+  assert.equal(untouchedCells[1].getAttribute('style'), 'width: 4in');
+  assert(logs.some((entry) => entry.step === 'PromoteCompactContentTableCellWidthsToMinWidth' && entry.tablesAdjusted === 1 && entry.cellsAdjusted === 6));
 }
 
 // remove empty style attributes and dedupe class tokens left behind by compaction-adjacent transforms

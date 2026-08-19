@@ -89,6 +89,7 @@ export async function runPipeline(htmlString, config = {}) {
       fallbackAlt: resolvedConfig.ImageAltFallback || 'Image'
     })));
     logs.push(...ensureArray(sanitize.removeNbsp(doc)));
+    logs.push(...ensureArray(sanitize.normalizeLeadingTagParagraphIndent(doc)));
     // ensure main and heading after basic sanitization
     logs.push(...ensureArray(sanitize.ensureMainHeading(doc, {
       defaultTitle: resolvedConfig.defaultTitle || resolvedConfig.fileName || 'Document'
@@ -133,6 +134,8 @@ export async function runPipeline(htmlString, config = {}) {
       })));
     }
 
+    logs.push(...ensureArray(sanitize.normalizeCreatedWithOneNoteFooterInset(doc)));
+
     logs.push(...ensureArray(sanitize.warnExcessiveInlineStyles(doc, {
       enabled: resolvedConfig.InlineStyleWarningEnabled !== false,
       maxNodes: resolvedConfig.InlineStyleWarningMaxNodes,
@@ -153,6 +156,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.ensureCreatedWithOneNoteFooterGap(doc)));
     logs.push(...ensureArray(sanitize.injectFooterSpacerCss(doc)));
     logs.push(...ensureArray(sanitize.compactRepeatedTypographyClasses(doc)));
+    logs.push(...ensureArray(sanitize.promoteCompactContentTableCellWidthsToMinWidth(doc)));
 
     const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
     if (injectTailwindCss) {

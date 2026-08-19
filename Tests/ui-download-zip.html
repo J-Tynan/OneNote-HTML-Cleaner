@@ -52,16 +52,35 @@
       // Stub JSZip so we can detect ZIP generation without performing a download
       window.__test_generateAsync_called = false;
       window.__test_zip_files = [];
+      window.__test_zip_contents = {};
       window.__test_zip_readme = '';
+      window.__lastDownloadHtml = '';
       window.JSZip = function () {
         this._files = {};
         this.file = (name, content) => { this._files[name] = content; return this; };
         this.generateAsync = () => {
           window.__test_generateAsync_called = true;
           window.__test_zip_files = Object.keys(this._files);
+          window.__test_zip_contents = { ...this._files };
           window.__test_zip_readme = String(this._files['README.txt'] || '');
           return Promise.resolve(new Blob([]));
         };
+      };
+
+      const realFetch = window.fetch ? window.fetch.bind(window) : null;
+      window.fetch = async (input, init) => {
+        const url = String(typeof input === 'string' ? input : (input && input.url) || '');
+        if (/assets\/tailwind-output\.css$/i.test(url)) {
+          return {
+            ok: true,
+            status: 200,
+            async text() {
+              return 'body { background: #fff; } .onc-copy { color: #111; }';
+            }
+          };
+        }
+        if (realFetch) return realFetch(input, init);
+        throw new Error(`Unexpected fetch in test: ${url}`);
       };
 
       initUI();
@@ -72,8 +91,8 @@
         name: '123e4567-e89b-12d3-a456-426614174000.mht',
         size: 1024,
         status: 'success',
-        outputHtml: '<!doctype html><html><head><title>Readable Export Name</title></head><body><main><h1>Readable Export Name</h1><p>ok</p></main></body></html>',
-        conversionConfig: { ExternalizeCssEnabled: true },
+        outputHtml: '<!doctype html><html><head><title>Readable Export Name</title><link rel="stylesheet" href="assets/tailwind-output.css"></head><body><main><h1>Readable Export Name</h1><p>ok</p></main></body></html>',
+        conversionConfig: { ExternalizeCssEnabled: false },
         outputAssets: []
       };
       const entryWithSidecar = {
@@ -81,11 +100,20 @@
         name: '36f1cb41-5f18-4fd7-8f52-6dca6af3a9b1.mht',
         size: 1024,
         status: 'success',
-        outputHtml: '<!doctype html><html><head><title>Styled Export Name</title></head><body><main><h1>Styled Export Name</h1><p>styled</p></main></body></html>',
+        outputHtml: '<!doctype html><html><head><title>Styled Export Name</title><link rel="stylesheet" href="assets/tailwind-output.css"></head><body><main><h1>Styled Export Name</h1><p>styled</p></main></body></html>',
         conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
         outputAssets: [{ type: 'text/css', content: '.demo{color:red}', filename: 'converted-shared.css' }]
       };
-      state.queue.push(entry, entryWithSidecar);
+      const entryMissingSidecar = {
+        id: 't-3',
+        name: '4b52b50a-b2a4-4cab-9602-5c4c7cf6b9ee.mht',
+        size: 1024,
+        status: 'success',
+        outputHtml: '<!doctype html><html><head><title>Fallback Export Name</title><link rel="stylesheet" href="assets/tailwind-output.css"></head><body><main><h1>Fallback Export Name</h1><p>fallback</p></main></body></html>',
+        conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
+        outputAssets: []
+      };
+      state.queue.push(entry, entryWithSidecar, entryMissingSidecar);
       renderFileList();
 
       const perFileBtn = document.querySelector('[data-download-id="t-1"]');
@@ -96,10 +124,24 @@
       else fail('Per-file download should be blocked when CSS sidecar exists');
 
       const realCreate = Document.prototype.createElement;
+      const realCreateObjectURL = URL.createObjectURL.bind(URL);
+      const realRevokeObjectURL = URL.revokeObjectURL.bind(URL);
       Document.prototype.createElement = function(tag) {
         const el = realCreate.call(this, tag);
         if (tag.toLowerCase() === 'a') window.__lastAnchor = el;
         return el;
+      };
+      URL.createObjectURL = function(blob) {
+        const type = String((blob && blob.type) || '');
+        if (/text\/html/i.test(type) && blob && typeof blob.text === 'function') {
+          blob.text().then((text) => {
+            window.__lastDownloadHtml = text;
+          });
+        }
+        return realCreateObjectURL(blob);
+      };
+      URL.revokeObjectURL = function(url) {
+        return realRevokeObjectURL(url);
       };
 
       perFileBtn.click();
@@ -108,6 +150,12 @@
           pass('Per-file download attempted with title-derived filename');
         } else {
           fail('Per-file download did not create expected anchor');
+        }
+
+        if (/data-onc-inline-stylesheet="assets\/tailwind-output\.css"/i.test(window.__lastDownloadHtml) && !/<link[^>]+href="assets\/tailwind-output\.css"/i.test(window.__lastDownloadHtml)) {
+          pass('Per-file download inlines bundled stylesheet for standalone HTML');
+        } else {
+          fail('Per-file download did not inline bundled stylesheet for standalone HTML');
         }
 
         const zipBtn = document.getElementById('downloadZip');
@@ -135,6 +183,19 @@
             fail('ZIP missing expected CSS sidecar asset');
           }
 
+          if (!window.__test_zip_files.some((name) => name === 'assets/tailwind-output.css')) {
+            pass('ZIP avoids bundled stylesheet sidecar when external CSS is off');
+          } else {
+            fail('ZIP should not include bundled stylesheet sidecar when external CSS is off');
+          }
+
+          const readableZipHtml = String(window.__test_zip_contents['Readable Export Name.html'] || '');
+          if (/data-onc-inline-stylesheet="assets\/tailwind-output\.css"/i.test(readableZipHtml) && !/<link[^>]+href="assets\/tailwind-output\.css"/i.test(readableZipHtml)) {
+            pass('ZIP inlines bundled stylesheet for standalone HTML pages');
+          } else {
+            fail('ZIP did not inline bundled stylesheet for standalone HTML pages');
+          }
+
           if (window.__test_zip_files.includes('README.txt') && /Falling back to HTML output as-is/i.test(window.__test_zip_readme)) {
             pass('ZIP includes fallback README warning for missing sidecar');
           } else {
@@ -142,6 +203,8 @@
           }
 
           Document.prototype.createElement = realCreate;
+          URL.createObjectURL = realCreateObjectURL;
+          URL.revokeObjectURL = realRevokeObjectURL;
         }, 200);
       }, 50);
     }

@@ -67,6 +67,14 @@ p {
   line-height: 1.6;
 }
 
+/* Converted OneNote table copy should keep compact Office-like leading
+   instead of inheriting the app's looser prose rhythm. */
+.onc-cell .onc-copy,
+.onc-cell-borderless .onc-copy,
+.onc-cell-borderless-lite .onc-copy {
+  line-height: 1.2;
+}
+
 .text-secondary {
   color: var(--text-help);
 }

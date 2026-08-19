@@ -889,6 +889,87 @@ function isWhitespaceOnlyParagraphLike(el) {
   return text.replace(/[\u00a0\s]/g, '') === '';
 }
 
+function getTableRows(table) {
+  if (!table || !table.querySelectorAll) return [];
+  const bodyRows = Array.from(table.querySelectorAll(':scope > tbody > tr'));
+  if (bodyRows.length) return bodyRows;
+  return Array.from(table.querySelectorAll(':scope > tr'));
+}
+
+function getRowCells(row) {
+  if (!row || !row.querySelectorAll) return [];
+  return Array.from(row.querySelectorAll(':scope > th, :scope > td'));
+}
+
+function normalizeInlineText(text) {
+  return String(text || '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function detectSemanticTableColumnIndexes(table) {
+  const rows = getTableRows(table);
+  if (!rows.length) return null;
+
+  const firstCells = getRowCells(rows[0]);
+  if (firstCells.length < 2) return null;
+
+  let cueIndex = -1;
+  let notesIndex = -1;
+  firstCells.forEach((cell, index) => {
+    const text = normalizeInlineText(cell.textContent || '');
+    if (cueIndex === -1 && /\bcue(s)?\b/.test(text)) cueIndex = index;
+    if (notesIndex === -1 && /\bnote(s)?\b/.test(text)) notesIndex = index;
+  });
+
+  if (cueIndex === -1) cueIndex = 0;
+  if (notesIndex === -1) notesIndex = 1;
+  if (cueIndex === notesIndex) return null;
+
+  return { cueIndex, notesIndex };
+}
+
+function getInlineStyleValue(el, propName) {
+  if (!el || !propName) return '';
+  const targetProp = String(propName || '').trim().toLowerCase();
+  const entry = parseInlineStyle(el.getAttribute('style') || '').find(({ prop }) => String(prop || '').trim().toLowerCase() === targetProp);
+  return entry ? String(entry.value || '') : '';
+}
+
+function hasContentSizedBlankLineTypography(el) {
+  if (!el) return false;
+
+  const classNames = String(el.getAttribute('class') || '');
+  if (/\b(?:font-sans|text-base|onc-copy|onc-title|onc-h1|onc-h2|onc-h3|onc-cite)\b/i.test(classNames)) {
+    return true;
+  }
+
+  const fontSize = normalizeCssToken(getInlineStyleValue(el, 'font-size')).toLowerCase();
+  const match = fontSize.match(/^([0-9]+(?:\.[0-9]+)?)(pt|px)$/i);
+  if (!match) return false;
+
+  const size = Number(match[1]);
+  const unit = String(match[2] || '').toLowerCase();
+  if (!Number.isFinite(size)) return false;
+  return unit === 'pt' ? size >= 8 : size >= 10;
+}
+
+function shouldNormalizeTableBlankLineSpacer(el) {
+  if (!el || typeof el.closest !== 'function') return false;
+  const detailCell = el.closest('td[data-onc-col-role="detail"],th[data-onc-col-role="detail"],td,th');
+  if (!detailCell) return false;
+
+  const row = detailCell.parentElement;
+  const table = detailCell.closest('table');
+  if (!row || !table) return false;
+
+  const classifiedColumns = detectSemanticTableColumnIndexes(table);
+  if (!classifiedColumns) return false;
+
+  const cellIndex = getRowCells(row).indexOf(detailCell);
+  if (cellIndex !== classifiedColumns.notesIndex) return false;
+
+  return hasContentSizedBlankLineTypography(el);
+}
+
 function ensureVisibleSpacerBlock(el, doc) {
   if (!el || !el.tagName) return false;
   const tag = String(el.tagName || '').toLowerCase();
@@ -958,7 +1039,7 @@ export function injectFooterSpacerCss(doc) {
 const COMPACT_TYPOGRAPHY_PATTERNS = [
   {
     className: 'onc-body',
-    cssText: 'font-family:Calibri;font-size:11.0pt;',
+      cssText: 'font-family:Calibri;font-size:11.0pt;background-color:transparent;color:initial;',
     selector: 'body',
     requiredClasses: ['font-sans', 'text-base'],
     removableClasses: ['font-sans', 'text-base'],
@@ -1454,6 +1535,128 @@ function cleanupRedundantAttributes(doc) {
   };
 }
 
+function parseCssLengthToInches(value) {
+  const text = String(value || '').trim().toLowerCase();
+  if (!text) return null;
+  const match = text.match(/^([+-]?[0-9]*\.?[0-9]+)\s*(in|pt|px|pc|cm|mm)$/i);
+  if (!match) return null;
+  const magnitude = Number.parseFloat(match[1]);
+  if (!Number.isFinite(magnitude)) return null;
+  const unit = String(match[2] || '').toLowerCase();
+  switch (unit) {
+    case 'in':
+      return magnitude;
+    case 'pt':
+      return magnitude / 72;
+    case 'px':
+      return magnitude / 96;
+    case 'pc':
+      return magnitude / 6;
+    case 'cm':
+      return magnitude / 2.54;
+    case 'mm':
+      return magnitude / 25.4;
+    default:
+      return null;
+  }
+}
+
+function cellUsesCompactTableLayoutClass(cell) {
+  if (!cell || !cell.classList) return false;
+  return cell.classList.contains('onc-cell')
+    || cell.classList.contains('onc-cell-borderless')
+    || cell.classList.contains('onc-cell-borderless-lite');
+}
+
+function getCompactTableCellWidthEntry(cell) {
+  if (!cell || !cell.getAttribute) return null;
+  return parseInlineStyle(cell.getAttribute('style') || '').find(({ prop }) => String(prop || '').trim().toLowerCase() === 'width') || null;
+}
+
+function getCompactTableCellTextMetrics(cell) {
+  if (!cellUsesCompactTableLayoutClass(cell)) return null;
+
+  const widthEntry = getCompactTableCellWidthEntry(cell);
+  if (!widthEntry || !widthEntry.value) return null;
+
+  const widthInches = parseCssLengthToInches(widthEntry.value);
+  if (!Number.isFinite(widthInches) || widthInches <= 0) return null;
+
+  const paragraphs = Array.from(cell.querySelectorAll(':scope > p'));
+  if (paragraphs.length !== 1) return null;
+
+  const paragraph = paragraphs[0];
+  if (paragraph.querySelector('img,svg,canvas,table,ul,ol,blockquote,pre,br')) return null;
+
+  const directChildren = Array.from(paragraph.children || []);
+  if (!directChildren.every((child) => /^(code|span|a)$/i.test(String(child.tagName || '')))) return null;
+
+  const text = cleanInlineText(paragraph.textContent || '');
+  if (!text || text.length > 24) return null;
+
+  return {
+    text,
+    widthInches,
+    density: text.length / widthInches
+  };
+}
+
+function shouldPromoteCompactTableCellWidths(table) {
+  if (!table || !table.querySelectorAll) return false;
+  if (!(table.classList && (table.classList.contains('onc-table') || table.classList.contains('onc-table-borderless')))) return false;
+
+  const rows = getTableRows(table);
+  if (rows.length < 2 || rows.length > 8) return false;
+
+  const firstRowCells = getRowCells(rows[0]);
+  if (firstRowCells.length < 2 || firstRowCells.length > 4) return false;
+
+  let measuredCells = 0;
+  let denseCells = 0;
+
+  for (const row of rows) {
+    const cells = getRowCells(row);
+    if (cells.length !== firstRowCells.length) return false;
+    for (const cell of cells) {
+      const metrics = getCompactTableCellTextMetrics(cell);
+      if (!metrics) return false;
+      measuredCells += 1;
+      if (metrics.density >= 10.5) {
+        denseCells += 1;
+      }
+    }
+  }
+
+  return measuredCells > 0 && denseCells > 0;
+}
+
+function rewriteWidthStyleToMinWidth(cell) {
+  if (!cell || !cell.getAttribute) return false;
+  const entries = parseInlineStyle(cell.getAttribute('style') || '');
+  if (!entries.length) return false;
+
+  let changed = false;
+  const nextEntries = entries.map((entry) => {
+    const prop = String(entry.prop || '').trim().toLowerCase();
+    if (prop !== 'width') return entry;
+    changed = true;
+    return {
+      prop: 'min-width',
+      value: entry.value
+    };
+  });
+
+  if (!changed) return false;
+
+  const nextStyle = serializeInlineStyle(nextEntries);
+  if (nextStyle) {
+    cell.setAttribute('style', nextStyle);
+  } else {
+    cell.removeAttribute('style');
+  }
+  return true;
+}
+
 export function compactRepeatedTypographyClasses(doc) {
   const logs = [];
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
@@ -1503,6 +1706,100 @@ export function compactRepeatedTypographyClasses(doc) {
   return logs;
 }
 
+export function promoteCompactContentTableCellWidthsToMinWidth(doc) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  let tablesAdjusted = 0;
+  let cellsAdjusted = 0;
+
+  Array.from(doc.querySelectorAll('table')).forEach((table) => {
+    if (!shouldPromoteCompactTableCellWidths(table)) return;
+
+    let tableCellsAdjusted = 0;
+    Array.from(table.querySelectorAll('td,th')).forEach((cell) => {
+      if (rewriteWidthStyleToMinWidth(cell)) {
+        tableCellsAdjusted += 1;
+      }
+    });
+
+    if (!tableCellsAdjusted) return;
+    tablesAdjusted += 1;
+    cellsAdjusted += tableCellsAdjusted;
+  });
+
+  if (tablesAdjusted) {
+    logs.push({
+      step: 'PromoteCompactContentTableCellWidthsToMinWidth',
+      tablesAdjusted,
+      cellsAdjusted
+    });
+  }
+
+  return logs;
+}
+
+function isLeadingTagParagraph(el) {
+  if (!el || !el.tagName || String(el.tagName).toLowerCase() !== 'p') return false;
+  const styleText = String(el.getAttribute('style') || '').trim();
+  if (!styleText || /text-indent\s*:\s*calc\(/i.test(styleText)) return false;
+
+  const textIndent = getInlineStyleValue(el, 'text-indent');
+  const indentInches = parseCssLengthToInches(textIndent);
+  if (!Number.isFinite(indentInches) || indentInches > -0.08 || indentInches < -0.35) return false;
+
+  const firstElement = el.firstElementChild;
+  if (!firstElement || String(firstElement.tagName || '').toLowerCase() !== 'img') return false;
+  if (!isSmallInlineIconImage(firstElement)) return false;
+
+  const trailingText = Array.from(el.childNodes || [])
+    .filter((node) => node.nodeType === TEXT_NODE)
+    .map((node) => String(node.textContent || ''))
+    .join('');
+  if (!cleanInlineText(trailingText)) return false;
+
+  return true;
+}
+
+function isSmallInlineIconImage(img) {
+  if (!img || !img.getAttribute) return false;
+  const width = Number.parseFloat(String(img.getAttribute('width') || '').trim());
+  const height = Number.parseFloat(String(img.getAttribute('height') || '').trim());
+  if (Number.isFinite(width) && width > 20) return false;
+  if (Number.isFinite(height) && height > 20) return false;
+  return true;
+}
+
+export function normalizeLeadingTagParagraphIndent(doc) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  let updated = 0;
+  Array.from(doc.querySelectorAll('p[style]')).forEach((el) => {
+    if (!isLeadingTagParagraph(el)) return;
+
+    const entries = parseInlineStyle(el.getAttribute('style') || '');
+    const nextEntries = entries.map((entry) => {
+      const prop = String(entry.prop || '').trim().toLowerCase();
+      if (prop !== 'text-indent') return entry;
+      return {
+        prop: entry.prop,
+        value: `calc(${String(entry.value || '').trim()} - 0.23em)`
+      };
+    });
+
+    const nextStyle = serializeInlineStyle(nextEntries);
+    if (!nextStyle || nextStyle === el.getAttribute('style')) return;
+    el.setAttribute('style', nextStyle);
+    updated += 1;
+  });
+
+  if (updated) {
+    logs.push({ step: 'NormalizeLeadingTagParagraphIndent', updated });
+  }
+  return logs;
+}
+
 export function normalizeContentBlankLineSpacers(doc) {
   const logs = [];
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
@@ -1514,7 +1811,8 @@ export function normalizeContentBlankLineSpacers(doc) {
 
   candidates.forEach((el) => {
     if (!isWhitespaceOnlyParagraphLike(el)) return;
-    if (el.closest && el.closest('table,thead,tbody,tfoot,tr,td,th')) return;
+    const inTable = Boolean(el.closest && el.closest('table,thead,tbody,tfoot,tr,td,th'));
+    if (inTable && !shouldNormalizeTableBlankLineSpacer(el)) return;
     if (el.querySelector && el.querySelector('img,svg,canvas,code,pre,ul,ol')) return;
     if (Array.from(el.classList || []).includes('converted-page-spacer')) return;
 
@@ -1537,6 +1835,7 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const spacerText = typeof options.spacerText === 'string' ? options.spacerText : '\u00a0';
+  const footerMarginLeft = typeof options.footerMarginLeft === 'string' ? options.footerMarginLeft : '8px';
   const footers = Array.from(doc.querySelectorAll('p')).filter(el => {
     if (!el || !el.textContent) return false;
     return isCreatedWithOneNoteFooterText(el.textContent);
@@ -1547,8 +1846,49 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
   let alreadyPresent = 0;
   let collapsed = 0;
   let trimmedBeforeFooter = 0;
+  let footerInsetNormalized = 0;
+
+  function ensureFooterInset(footer) {
+    if (!footer || !footer.getAttribute || !footerMarginLeft) return false;
+    const entries = parseInlineStyle(footer.getAttribute('style') || '');
+    let found = false;
+    let changed = false;
+
+    const nextEntries = entries.map((entry) => {
+      const prop = String(entry.prop || '').trim().toLowerCase();
+      if (prop !== 'margin-left') return entry;
+      found = true;
+      const current = normalizeCssToken(entry.value);
+      if (current && current !== '0' && current !== '0px') {
+        return entry;
+      }
+      changed = true;
+      return {
+        prop: entry.prop,
+        value: footerMarginLeft
+      };
+    });
+
+    if (!found) {
+      nextEntries.push({ prop: 'margin-left', value: footerMarginLeft });
+      changed = true;
+    }
+
+    if (!changed) return false;
+    const nextStyle = serializeInlineStyle(nextEntries);
+    if (nextStyle) {
+      footer.setAttribute('style', nextStyle);
+    } else {
+      footer.removeAttribute('style');
+    }
+    return true;
+  }
 
   footers.forEach((footer) => {
+    if (ensureFooterInset(footer)) {
+      footerInsetNormalized += 1;
+    }
+
     const container = footer.parentElement;
     const beforeContainer = container && container.previousElementSibling;
     if (beforeContainer) {
@@ -1583,15 +1923,67 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
     inserted += 1;
   });
 
-  if (inserted || normalized || alreadyPresent) {
+  if (inserted || normalized || alreadyPresent || footerInsetNormalized) {
     logs.push({
       step: 'EnsureCreatedWithOneNoteFooterGap',
       inserted,
       normalized,
       alreadyPresent,
       collapsed,
-      trimmedBeforeFooter
+      trimmedBeforeFooter,
+      footerInsetNormalized
     });
+  }
+
+  return logs;
+}
+
+export function normalizeCreatedWithOneNoteFooterInset(doc, options = {}) {
+  const logs = [];
+  if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
+
+  const footerMarginLeft = typeof options.footerMarginLeft === 'string' ? options.footerMarginLeft : '8px';
+  let updated = 0;
+
+  Array.from(doc.querySelectorAll('p')).forEach((footer) => {
+    if (!footer || !footer.textContent || !isCreatedWithOneNoteFooterText(footer.textContent)) return;
+
+    const entries = parseInlineStyle(footer.getAttribute('style') || '');
+    let found = false;
+    let changed = false;
+
+    const nextEntries = entries.map((entry) => {
+      const prop = String(entry.prop || '').trim().toLowerCase();
+      if (prop !== 'margin-left') return entry;
+      found = true;
+      const current = normalizeCssToken(entry.value);
+      if (current && current !== '0' && current !== '0px') {
+        return entry;
+      }
+      changed = true;
+      return {
+        prop: entry.prop,
+        value: footerMarginLeft
+      };
+    });
+
+    if (!found) {
+      nextEntries.push({ prop: 'margin-left', value: footerMarginLeft });
+      changed = true;
+    }
+
+    if (!changed) return;
+    const nextStyle = serializeInlineStyle(nextEntries);
+    if (nextStyle) {
+      footer.setAttribute('style', nextStyle);
+    } else {
+      footer.removeAttribute('style');
+    }
+    updated += 1;
+  });
+
+  if (updated) {
+    logs.push({ step: 'NormalizeCreatedWithOneNoteFooterInset', updated, footerMarginLeft });
   }
 
   return logs;
