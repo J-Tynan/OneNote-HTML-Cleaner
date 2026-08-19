@@ -1145,6 +1145,7 @@ html.dark .convert-button-wrapper:focus-within {
   border: 0;
   padding: 0;
   background: transparent;
+  overflow: hidden;
 }
 
 #helpModal::backdrop {
@@ -1160,7 +1161,7 @@ html.dark .convert-button-wrapper:focus-within {
   padding: 1.25rem; /* 20px */
   box-sizing: border-box;
   background-clip: padding-box;
-  overflow-y: auto;
+  overflow-y: scroll;
   overscroll-behavior: contain;
 }
 
