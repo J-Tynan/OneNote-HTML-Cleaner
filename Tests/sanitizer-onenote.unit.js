@@ -24,6 +24,20 @@ function normalizeFooterGap(html) {
   return doc.documentElement.outerHTML;
 }
 
+function normalizeContentBlankLineSpacersHtml(html) {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
+  sanitize.normalizeContentBlankLineSpacers(doc);
+  return doc.documentElement.outerHTML;
+}
+
+function normalizeLeadingTagParagraphIndentHtml(html) {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
+  sanitize.normalizeLeadingTagParagraphIndent(doc);
+  return doc.documentElement.outerHTML;
+}
+
 (function main() {
   console.log('running OneNote sanitizer unit tests');
   const cases = [
@@ -96,8 +110,55 @@ function normalizeFooterGap(html) {
   if (!footerGapOutput.includes('data:image/png;base64,AAAA')) {
     console.error('footer gap normalization should not remove image-only paragraphs before footer');
     failed = true;
+  } else if (!/Created with OneNote\.<\/p>/.test(footerGapOutput) || !/margin-left:\s*8px/i.test(footerGapOutput)) {
+    console.error('footer gap normalization should add a small left inset to the Created with OneNote footer');
+    failed = true;
   } else if (!failed) {
     console.log('footer gap icon preservation: OK');
+  }
+
+  const detailCellSpacerInput = `
+    <html><body><main>
+      <table><tr>
+        <td>Cues</td>
+        <td>Notes</td>
+        <td>Extras</td>
+      </tr><tr>
+        <td style="font-size:11.0pt">Label</td>
+        <td>
+          <p style="margin:0;font-family:Calibri;font-size:11.0pt">First line</p>
+          <p style="margin:0;font-family:Calibri;font-size:11.0pt"> </p>
+          <p style="margin:0;font-family:Calibri;font-size:11.0pt">Second line</p>
+        </td>
+        <td>
+          <p style="margin:0;font-size:1pt"> </p>
+        </td>
+      </tr></table>
+    </main></body></html>
+  `;
+  const detailCellSpacerOutput = normalizeContentBlankLineSpacersHtml(detailCellSpacerInput);
+  if (!detailCellSpacerOutput.includes('class="converted-content-spacer"') || !detailCellSpacerOutput.includes('<br>')) {
+    console.error('content blank lines inside semantic detail columns should normalize to explicit spacer blocks before table annotation');
+    failed = true;
+  } else if (detailCellSpacerOutput.includes('<td>\n          <p style="margin:0;font-size:1pt" class="converted-content-spacer"><br></p>')) {
+    console.error('tiny filler paragraphs in non-semantic table cells should not normalize to content spacers');
+    failed = true;
+  } else if (!failed) {
+    console.log('detail cell blank-line spacer normalization: OK');
+  }
+
+  const leadingTagIndentInput = `
+    <html><body><main>
+      <p style="margin:0;font-family:Calibri;font-size:11.0pt">Regular text</p>
+      <p style="color:#000000;margin:0;text-indent:-.1666in;font-family:Calibri;font-size:11.0pt"><img src="data:image/png;base64,AAAA" width="16" height="16" alt="Idea"> Some normal text with a tag.</p>
+    </main></body></html>
+  `;
+  const leadingTagIndentOutput = normalizeLeadingTagParagraphIndentHtml(leadingTagIndentInput);
+  if (!leadingTagIndentOutput.includes('text-indent: calc(-.1666in - 0.23em)')) {
+    console.error('leading tag paragraphs should get the normalized hanging indent override');
+    failed = true;
+  } else if (!failed) {
+    console.log('leading tag paragraph indent normalization: OK');
   }
 
   if (failed) {

@@ -23,10 +23,13 @@ import { startStaticServer } from './playwright-server-helper.js';
       'PASS: Per-file Download button rendered',
       'PASS: Per-file download blocked when CSS sidecar exists',
       'PASS: Per-file download attempted with title-derived filename',
+      'PASS: Per-file download inlines bundled stylesheet for standalone HTML',
       'PASS: Download ZIP button enabled',
       'PASS: ZIP generation invoked (JSZip.generateAsync called)',
       'PASS: ZIP uses title-derived page filenames',
       'PASS: ZIP includes externalized CSS sidecar asset',
+      'PASS: ZIP avoids bundled stylesheet sidecar when external CSS is off',
+      'PASS: ZIP inlines bundled stylesheet for standalone HTML pages',
       'PASS: ZIP includes fallback README warning for missing sidecar'
     ];
 

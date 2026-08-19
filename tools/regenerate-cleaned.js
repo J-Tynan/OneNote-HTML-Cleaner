@@ -11,6 +11,8 @@ import { runPipeline } from '../src/pipeline/pipeline.js';
 
 async function main() {
   fs.mkdirSync(path.join('Tests', 'Cleaned'), { recursive: true });
+  fs.mkdirSync(path.join('Tests', 'Cleaned', 'assets'), { recursive: true });
+  fs.copyFileSync(path.join('assets', 'tailwind-output.css'), path.join('Tests', 'Cleaned', 'assets', 'tailwind-output.css'));
   const files = fs.readdirSync('Tests').filter(f => /\.(mht|mhtml)$/i.test(f));
   for (const f of files) {
     const raw = fs.readFileSync(path.join('Tests', f), 'latin1');
