@@ -267,6 +267,7 @@ First-pass tasks:
   - [x] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth. (2026-07-14)
   - [ ] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability.
   - [ ] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs.
+  - [ ] Reduce the CSS bundled within each converted note to cut export size without changing the screenshot-ready `v0.2` output.
 6. Reduce repeated code and reduce the file size of the shipped app and exported assets without changing behavior by working through these smaller follow-ups:
   - [x] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output. (2026-07-13, reviewed the new comparison set and confirmed that the remaining repeated `direction:ltr` wrappers, widths, alignment, and sparse emphasis spans are still mostly structural rather than safe standalone CSS candidates.)
   - [x] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes. (2026-07-13, measured the attached comparison set and recorded byte/token reductions across the updated outputs.)
