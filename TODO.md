@@ -293,10 +293,11 @@ First-pass tasks:
 3. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
 4. Implement the minimal release-quality native pipeline, including import UX, warnings, failure messaging, and deterministic output expectations.
 5. Document native workflow limitations, expected fidelity, and troubleshooting paths in product docs and in-app help.
-6. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
-7. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
-8. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
-9. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
+6. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
+7. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
+8. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
+9. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
+10. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 
