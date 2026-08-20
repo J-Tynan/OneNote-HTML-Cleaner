@@ -167,12 +167,12 @@ summary::-webkit-details-marker {
 }
 
 .home-header__inner {
-  min-height: 4.5rem;
+  min-height: 0.5rem;
 }
 
 .home-header__actions {
   flex: none;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .home-main {
@@ -236,7 +236,7 @@ summary::-webkit-details-marker {
 }
 
 #statusSummary {
-  min-height: calc(1.6em * 2);
+  min-height: calc(0.5em);
 }
 
 .home-results-card--empty #fileList:empty {
