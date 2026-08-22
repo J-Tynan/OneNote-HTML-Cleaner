@@ -21,10 +21,8 @@ function normalizeToolbarBundleMode(value) {
 
 function normalizeToolbarStyle(value) {
   const normalized = String(value || '').trim().toLowerCase();
-  if (normalized === 'classic' || normalized === 'office-97') return 'office-97';
+  if (normalized === 'classic' || normalized === 'office-97' || normalized === 'office') return 'office';
   if (normalized === 'ribbon') return 'ribbon';
-  if (normalized === 'macos') return 'macos';
-  if (normalized === 'linux') return 'linux';
   return 'compact';
 }
 
@@ -43,6 +41,11 @@ function normalizeUnitStrategy(value) {
 function normalizeExternalizeCssMode(value) {
   const normalized = String(value || '').trim().toLowerCase();
   return normalized === 'per-page' ? 'per-page' : 'shared';
+}
+
+function normalizeExportStylesMode(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === 'deferred' ? 'deferred' : 'tailwind';
 }
 
 const DEFAULT_PIPELINE_CONFIG = {
@@ -65,6 +68,7 @@ const DEFAULT_PIPELINE_CONFIG = {
   HandwritingRasterAltText: 'Handwritten notes (raster image)',
   InjectTailwindCss: true,
   TailwindCssHref: 'assets/tailwind-output.css',
+  ExportStylesMode: 'tailwind',
   CollapseInlineStyles: false,
   OutputCleanupMode: 'off',
   UnitStrategy: 'normalize-safe',
@@ -195,6 +199,7 @@ export function normalizePipelineConfig(rawConfig = {}) {
     Profile: DEFAULT_PIPELINE_CONFIG.Profile,
     UseTableSemantics: useTableSemantics,
     TableHeaderFallback: tableHeaderFallback,
+    ExportStylesMode: normalizeExportStylesMode(rawConfig.ExportStylesMode || DEFAULT_PIPELINE_CONFIG.ExportStylesMode),
     OutputCleanupMode: outputCleanupMode,
     UnitStrategy: unitStrategy,
     NormalizeDirectionLayout: normalizeDirectionLayout,

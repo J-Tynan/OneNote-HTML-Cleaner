@@ -7,7 +7,7 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-const PRESETS = ['compact', 'office-97', 'ribbon', 'macos', 'linux'];
+const PRESETS = ['compact', 'office', 'ribbon'];
 const VIEWPORTS = [
   { name: 'narrow-phone', width: 320, height: 740 },
   { name: 'mobile', width: 390, height: 844 },
@@ -52,7 +52,7 @@ function isDarkRgb(color) {
 
   const presetPages = Object.fromEntries(PRESETS.map((preset) => [preset, buildToolbarPage(preset)]));
   const routes = {
-    '/toolbar': presetPages['office-97']
+    '/toolbar': presetPages.office
   };
   for (const [preset, pageHtml] of Object.entries(presetPages)) {
     routes[`/toolbar/${preset}`] = pageHtml;
@@ -160,7 +160,6 @@ function isDarkRgb(color) {
     assert(initialState.showVisible === true, `Expected reveal button visible for ${preset} at ${viewport.name}`);
 
     await page.click('#onc-toolbar-show');
-    await page.click('[data-onc-action="edit-toggle"]');
 
     const metrics = await getVisibleMetrics(page);
     assert(metrics.preset === preset, `Expected ${preset} preset marker after showing toolbar at ${viewport.name}, got ${metrics.preset}`);
@@ -228,22 +227,17 @@ function isDarkRgb(color) {
     for (const viewport of VIEWPORTS) {
       const viewportMetrics = metricsByViewport.get(viewport.name);
       const compact = viewportMetrics.compact;
-      const office = viewportMetrics['office-97'];
+      const office = viewportMetrics.office;
       const ribbon = viewportMetrics.ribbon;
-      const macos = viewportMetrics.macos;
-      const linux = viewportMetrics.linux;
 
-      assert(compact.toolbarPaddingTop < office.toolbarPaddingTop, `Expected compact top padding smaller than office-97 at ${viewport.name}, got compact=${compact.toolbarPaddingTop} office=${office.toolbarPaddingTop}`);
-      assert(compact.toolbarPaddingLeft < office.toolbarPaddingLeft, `Expected compact side padding smaller than office-97 at ${viewport.name}, got compact=${compact.toolbarPaddingLeft} office=${office.toolbarPaddingLeft}`);
-      assert(compact.buttonPaddingLeft < office.buttonPaddingLeft, `Expected compact button padding-left smaller than office-97 at ${viewport.name}, got compact=${compact.buttonPaddingLeft} office=${office.buttonPaddingLeft}`);
-      assert(compact.buttonPaddingRight < office.buttonPaddingRight, `Expected compact button padding-right smaller than office-97 at ${viewport.name}, got compact=${compact.buttonPaddingRight} office=${office.buttonPaddingRight}`);
+      assert(compact.toolbarPaddingTop < office.toolbarPaddingTop, `Expected compact top padding smaller than office at ${viewport.name}, got compact=${compact.toolbarPaddingTop} office=${office.toolbarPaddingTop}`);
+      assert(compact.toolbarPaddingLeft < office.toolbarPaddingLeft, `Expected compact side padding smaller than office at ${viewport.name}, got compact=${compact.toolbarPaddingLeft} office=${office.toolbarPaddingLeft}`);
+      assert(compact.buttonPaddingLeft < office.buttonPaddingLeft, `Expected compact button padding-left smaller than office at ${viewport.name}, got compact=${compact.buttonPaddingLeft} office=${office.buttonPaddingLeft}`);
+      assert(compact.buttonPaddingRight < office.buttonPaddingRight, `Expected compact button padding-right smaller than office at ${viewport.name}, got compact=${compact.buttonPaddingRight} office=${office.buttonPaddingRight}`);
       if (viewport.width > 640) {
         assert(ribbon.styleWidth > compact.styleWidth, `Expected ribbon style dropdown wider than compact at ${viewport.name}, got ribbon=${ribbon.styleWidth} compact=${compact.styleWidth}`);
-        assert(linux.styleWidth > compact.styleWidth, `Expected linux style dropdown wider than compact at ${viewport.name}, got linux=${linux.styleWidth} compact=${compact.styleWidth}`);
       }
-      assert(macos.buttonRadius > office.buttonRadius, `Expected macos button radius larger than office-97 at ${viewport.name}, got macos=${macos.buttonRadius} office=${office.buttonRadius}`);
       assert(/gradient|linear-gradient/i.test(String(ribbon.toolbarBackgroundImage || '')), `Expected ribbon preset to keep gradient background at ${viewport.name}, got ${ribbon.toolbarBackgroundImage}`);
-      assert(isDarkRgb(linux.toolbarBackgroundColor), `Expected linux preset toolbar background to remain dark at ${viewport.name}, got ${linux.toolbarBackgroundColor}`);
       assert(!isDarkRgb(compact.toolbarBackgroundColor), `Did not expect compact preset toolbar background to be dark at ${viewport.name}, got ${compact.toolbarBackgroundColor}`);
     }
 

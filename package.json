@@ -20,6 +20,7 @@
     "test:exported-page-naming": "node ./Tests/exported-page-naming.unit.js",
     "test:pipeline-config": "node ./Tests/pipeline-config.unit.js",
     "test:ui-download-smoke": "node ./Tests/ui-download-zip-playwright.js",
+    "test:export-size": "node ./Tests/export-size-budget.unit.js",
     "test:export-format-controls": "node ./Tests/export-format-controls-playwright.js",
     "test:converted-page-theme-toggle": "node ./Tests/converted-page-theme-toggle-playwright.js",
     "test:header-edge": "node ./Tests/header-edge-to-edge-playwright.js",

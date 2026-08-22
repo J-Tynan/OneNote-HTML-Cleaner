@@ -38,6 +38,7 @@ async function main() {
   if (cfg.ToolbarMetadataToggleEnabled !== false) fail('Expected ToolbarMetadataToggleEnabled false for non-HTML export format');
   if (cfg.ExternalizeCssEnabled !== true) fail('Expected ExternalizeCssEnabled true');
   if (cfg.ExternalizeCssMode !== 'per-page') fail('Expected ExternalizeCssMode to be "per-page"');
+  if (cfg.ExportStylesMode !== 'deferred') fail('Expected ExportStylesMode to default to "deferred" for UI conversions');
   if (cfg.ExperimentalExportEnabled !== true) fail('Expected ExperimentalExportEnabled true');
   if (cfg.ExportFormat !== 'markdown') fail('Expected ExportFormat to be "markdown" when experimental is enabled');
   if (cfg.MarkdownFlavor !== 'gfm') fail('Expected MarkdownFlavor to be "gfm"');
@@ -47,6 +48,7 @@ async function main() {
   ctx.experimentalExportEnabled.checked = false;
   const cfgFallback = helpers.getConversionConfig();
   if (cfgFallback.ExportFormat !== 'html') fail('Expected ExportFormat fallback to "html" when experimental is disabled');
+  if (cfgFallback.ExportStylesMode !== 'deferred') fail('Expected ExportStylesMode to stay "deferred" for HTML fallback conversions');
   if (cfgFallback.ToolbarEnabled !== true) fail('Expected ToolbarEnabled true when effective export format is HTML');
   if (cfgFallback.ToolbarEditToggleEnabled !== true) fail('Expected ToolbarEditToggleEnabled true when effective export format is HTML');
   if (cfgFallback.ToolbarMetadataToggleEnabled !== true) fail('Expected ToolbarMetadataToggleEnabled true when effective export format is HTML');

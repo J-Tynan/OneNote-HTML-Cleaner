@@ -4,6 +4,7 @@ const BASE_CONVERSION_CONFIG = {
   Profile: 'onenote',
   OutputCleanupMode: 'safe',
   UnitStrategy: 'normalize-safe',
+  ExportStylesMode: 'deferred',
   TailwindCssHref: 'assets/tailwind-output.css'
 };
 

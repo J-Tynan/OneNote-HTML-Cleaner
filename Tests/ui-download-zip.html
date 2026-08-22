@@ -14,7 +14,7 @@
   <!-- Minimal DOM hooks used by src/ui.js -->
   <div id="dropzone"></div>
   <button id="importButton" type="button">Browse</button>
-  <input id="fileInput" type="file" />
+  <input id="fileInput" type="file" title="Import files" />
   <button id="downloadZip" type="button" disabled>Download ZIP</button>
   <div class="convert-button-wrapper" tabindex="0">
     <button id="convertButton" type="button">Convert</button>
@@ -29,18 +29,18 @@
   <div id="helpModal" class="hidden"><button id="helpCloseButton" type="button">Close</button></div>
 
   <!-- Advanced options (minimal hooks) -->
-  <input id="autoConvertEnabled" type="checkbox" checked />
-  <select id="conversionProfile"><option value="onenote">OneNote</option></select>
-  <input id="externalizeCssEnabled" type="checkbox" />
-  <select id="externalizeCssMode"><option value="shared">Shared stylesheet for all converted pages</option><option value="per-page">One stylesheet per converted page</option></select>
-  <input id="experimentalExportEnabled" type="checkbox" />
-  <select id="exportFormat"><option value="html">HTML (.html)</option><option value="markdown">Markdown (.md)</option></select>
+  <input id="autoConvertEnabled" type="checkbox" title="Auto convert" checked />
+  <select id="conversionProfile" title="Conversion profile"><option value="onenote">OneNote</option></select>
+  <input id="externalizeCssEnabled" type="checkbox" title="Externalize CSS" />
+  <select id="externalizeCssMode" title="Externalize CSS mode"><option value="shared">Shared stylesheet for all converted pages</option><option value="per-page">One stylesheet per converted page</option></select>
+  <input id="experimentalExportEnabled" type="checkbox" title="Experimental export" />
+  <select id="exportFormat" title="Export format"><option value="html">HTML (.html)</option><option value="markdown">Markdown (.md)</option></select>
   <p id="exportFormatHelp"></p>
-  <div id="markdownFlavorContainer" class="hidden"><select id="markdownFlavor"><option value="obsidian">Obsidian-compatible</option></select></div>
-  <input id="convertedPageThemeToggleEnabled" type="checkbox" />
-  <input id="convertedPageThemeToggleOledBlack" type="checkbox" />
+  <div id="markdownFlavorContainer" class="hidden"><select id="markdownFlavor" title="Markdown flavor"><option value="obsidian">Obsidian-compatible</option></select></div>
+  <input id="convertedPageThemeToggleEnabled" type="checkbox" title="Converted page theme toggle" />
+  <input id="convertedPageThemeToggleOledBlack" type="checkbox" title="OLED black mode" />
   <p id="convertedPageThemeHelp"></p>
-  <input id="toolbarEnabled" type="checkbox" />
+  <input id="toolbarEnabled" type="checkbox" title="Toolbar enabled" />
 
   <script type="module">
     function pass(msg) { const o = document.getElementById('out'); o.innerHTML += `<div style="color:green">PASS: ${msg}</div>`; }
@@ -113,7 +113,16 @@
         conversionConfig: { ExternalizeCssEnabled: true, ExternalizeCssMode: 'shared' },
         outputAssets: []
       };
-      state.queue.push(entry, entryWithSidecar, entryMissingSidecar);
+      const deferredEntry = {
+        id: 't-4',
+        name: 'deferred-export-demo.mht',
+        size: 1024,
+        status: 'success',
+        outputHtml: '<!doctype html><html><head><title>Deferred Export Demo</title><style id="onc-toolbar-style"></style><script id="onc-toolbar-script"><\/script><style id="onc-converted-theme-style"></style><script id="onc-converted-theme-script"><\/script><script data-onc-export-styles-loader="v1">!function(d,h,l){l=d.createElement(\'link\');l.rel=\'stylesheet\';l.href=\'styles.css\';l.onload=function(){h.className+=\' enhanced\'};(d.head||h).appendChild(l)}(document,document.documentElement)<\/script></head><body><main><h1>Deferred Export Demo</h1><p>deferred</p></main><button type="button" id="onc-converted-theme-toggle">🔆</button><button type="button" id="onc-toolbar-show">Toolbar</button></body></html>',
+        conversionConfig: { ExternalizeCssEnabled: false, ExportStylesMode: 'deferred' },
+        outputAssets: []
+      };
+      state.queue.push(entry, entryWithSidecar, entryMissingSidecar, deferredEntry);
       renderFileList();
 
       const perFileBtn = document.querySelector('[data-download-id="t-1"]');
@@ -183,6 +192,12 @@
             fail('ZIP missing expected CSS sidecar asset');
           }
 
+          if (!window.__test_zip_files.some((name) => name === 'styles.css')) {
+            pass('ZIP omits deferred export enhancement stylesheet');
+          } else {
+            fail('ZIP should not include deferred export enhancement stylesheet');
+          }
+
           if (!window.__test_zip_files.some((name) => name === 'assets/tailwind-output.css')) {
             pass('ZIP avoids extra bundled stylesheet file in shared mode');
           } else {
@@ -191,6 +206,7 @@
 
           const readableZipHtml = String(window.__test_zip_contents['Readable Export Name.html'] || '');
           const styledZipHtml = String(window.__test_zip_contents['Styled Export Name.html'] || '');
+          const deferredZipHtml = String(window.__test_zip_contents['deferred-export-demo.html'] || '');
           if (!/<link[^>]+href="assets\/tailwind-output\.css"/i.test(styledZipHtml) && /<link[^>]+href="converted-shared\.css"/i.test(styledZipHtml) && !/data-onc-inline-stylesheet="assets\/tailwind-output\.css"/i.test(styledZipHtml)) {
             pass('ZIP uses only converted-shared.css for shared externalized HTML pages');
           } else {
@@ -201,6 +217,12 @@
             pass('ZIP still inlines bundled stylesheet for non-externalized HTML pages');
           } else {
             fail('ZIP did not inline bundled stylesheet for non-externalized HTML pages');
+          }
+
+          if (/data-onc-export-styles-loader="v1"/i.test(deferredZipHtml) && /id="onc-toolbar-script"/i.test(deferredZipHtml) && /id="onc-converted-theme-script"/i.test(deferredZipHtml) && !/enhancements\.js/i.test(deferredZipHtml) && !/data-onc-inline-stylesheet="styles\.css"/i.test(deferredZipHtml) && !/<link[^>]+href="styles\.css"/i.test(deferredZipHtml)) {
+            pass('ZIP keeps deferred export HTML self-contained without packaging styles.css');
+          } else {
+            fail('ZIP did not preserve deferred export HTML contract');
           }
 
           if (window.__test_zip_files.includes('README.txt') && /Falling back to HTML output as-is/i.test(window.__test_zip_readme)) {

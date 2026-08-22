@@ -227,11 +227,13 @@ function hasConvertedThemeToggleRoot(html = '') {
 
 function resolveToolbarStyle(options = {}) {
   const normalized = String(options.ToolbarStyle || '').trim().toLowerCase();
-  if (normalized === 'classic' || normalized === 'office-97') return 'office-97';
+  if (normalized === 'classic' || normalized === 'office-97' || normalized === 'office') return 'office';
   if (normalized === 'ribbon') return 'ribbon';
-  if (normalized === 'macos') return 'macos';
-  if (normalized === 'linux') return 'linux';
   return 'compact';
+}
+
+function usesDeferredExportStyles(options = {}) {
+  return String(options.ExportStylesMode || '').trim().toLowerCase() === 'deferred';
 }
 
 function minifyInlineCss(source = '') {
@@ -276,11 +278,11 @@ function buildBaseStyleCss() {
 }
 
 function buildToolbarSkinCss(toolbarStyle) {
-  if (toolbarStyle === 'office-97') {
-    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office-97"]{--onc-toolbar-bg:#d4d0c8;--onc-toolbar-fg:#1f1f1f;--onc-toolbar-border:#808080;--onc-toolbar-padding:.35rem .5rem;--onc-toolbar-mobile-padding:.35rem .5rem;--onc-toolbar-gap:.3rem;--onc-toolbar-mobile-gap:.3rem;--onc-toolbar-btn-bg:#ece9d8;--onc-toolbar-btn-border:#7a7a70;--onc-toolbar-radius:.15rem;--onc-toolbar-btn-padding:.18rem .4rem;--onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);--onc-toolbar-panel-bg:#ece9d8;--onc-toolbar-panel-border:#808080;--onc-toolbar-show-padding:.14rem .32rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office-97"] .onc-title{font-size:11px;letter-spacing:.02em;text-transform:uppercase;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office-97"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="office-97"] .onc-btn[data-onc-active="true"]{background:#d6def4;border-color:#51607a;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office-97"] .onc-btn:hover,#onenote-cleaner-toolbar[data-onc-toolbar-preset="office-97"] #onc-toolbar-show:hover{filter:brightness(.98);}';
+  if (toolbarStyle === 'office') {
+    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"]{--onc-toolbar-bg:#d4d0c8;--onc-toolbar-fg:#1f1f1f;--onc-toolbar-border:#808080;--onc-toolbar-padding:.35rem .5rem;--onc-toolbar-mobile-padding:.35rem .5rem;--onc-toolbar-gap:.3rem;--onc-toolbar-mobile-gap:.3rem;--onc-toolbar-btn-bg:#ece9d8;--onc-toolbar-btn-border:#7a7a70;--onc-toolbar-radius:.15rem;--onc-toolbar-btn-padding:.18rem .4rem;--onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);--onc-toolbar-panel-bg:#ece9d8;--onc-toolbar-panel-border:#808080;--onc-toolbar-show-padding:.14rem .32rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;}' +
+      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-title{font-size:11px;letter-spacing:.02em;text-transform:uppercase;}' +
+      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn[data-onc-active="true"]{background:#d6def4;border-color:#51607a;}' +
+      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn:hover,#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] #onc-toolbar-show:hover{filter:brightness(.98);}';
   }
 
   if (toolbarStyle === 'ribbon') {
@@ -288,20 +290,6 @@ function buildToolbarSkinCss(toolbarStyle) {
       '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-title{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#36526b;}' +
       '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-btn[data-onc-active="true"]{background:#dcecff;border-color:#7aa6d1;}' +
       '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-panel{box-shadow:0 1px 2px rgba(15,23,42,.06);}';
-  }
-
-  if (toolbarStyle === 'macos') {
-    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="macos"]{--onc-toolbar-bg:#f5f5f7;--onc-toolbar-fg:#1d1d1f;--onc-toolbar-border:#d2d2d7;--onc-toolbar-padding:.4rem .65rem;--onc-toolbar-mobile-padding:.34rem .5rem;--onc-toolbar-gap:.38rem;--onc-toolbar-mobile-gap:.28rem;--onc-toolbar-font:13px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;--onc-toolbar-mobile-font:12px/1.25 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;--onc-toolbar-btn-bg:rgba(255,255,255,.96);--onc-toolbar-btn-border:#c7c7cc;--onc-toolbar-radius:999px;--onc-toolbar-btn-padding:.2rem .52rem;--onc-toolbar-btn-shadow:0 1px 1px rgba(0,0,0,.04);--onc-toolbar-panel-bg:#ffffff;--onc-toolbar-panel-border:#d2d2d7;--onc-toolbar-show-padding:.16rem .38rem;--onc-toolbar-mobile-btn-padding:.16rem .3rem;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="macos"] .onc-title{font-weight:700;letter-spacing:.01em;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="macos"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="macos"] .onc-btn[data-onc-active="true"]{background:#dbeafe;border-color:#93c5fd;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="macos"] .onc-panel{border-radius:.75rem;}';
-  }
-
-  if (toolbarStyle === 'linux') {
-    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="linux"]{--onc-toolbar-bg:#2f343f;--onc-toolbar-fg:#f5f6f7;--onc-toolbar-border:#444b57;--onc-toolbar-padding:.34rem .55rem;--onc-toolbar-mobile-padding:.3rem .45rem;--onc-toolbar-gap:.32rem;--onc-toolbar-mobile-gap:.24rem;--onc-toolbar-btn-bg:#3b4250;--onc-toolbar-btn-border:#596273;--onc-toolbar-radius:.22rem;--onc-toolbar-btn-padding:.18rem .42rem;--onc-toolbar-btn-shadow:none;--onc-toolbar-panel-bg:#262b35;--onc-toolbar-panel-border:#4b5565;--onc-toolbar-show-padding:.14rem .34rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;--onc-toolbar-select-width:8.75rem;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="linux"] .onc-title{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:#d7dde5;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="linux"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="linux"] .onc-btn[data-onc-active="true"]{background:#4f6d8f;border-color:#80a7d8;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="linux"] .onc-muted{color:#d7dde5;}';
   }
 
   return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="compact"]{--onc-toolbar-bg:#fff;--onc-toolbar-fg:#1f2a37;--onc-toolbar-border:#d7dce2;--onc-toolbar-padding:.3rem .45rem;--onc-toolbar-mobile-padding:.24rem .36rem;--onc-toolbar-gap:.25rem;--onc-toolbar-mobile-gap:.2rem;--onc-toolbar-font:12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-mobile-font:11px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-btn-bg:#fff;--onc-toolbar-btn-border:#b7c0cc;--onc-toolbar-radius:.3rem;--onc-toolbar-btn-padding:.16rem .34rem;--onc-toolbar-panel-bg:#f8fafc;--onc-toolbar-panel-border:#d7dce2;--onc-toolbar-show-padding:.12rem .28rem;--onc-toolbar-mobile-btn-padding:.12rem .24rem;--onc-toolbar-select-width:8rem;}';
@@ -765,11 +753,13 @@ function buildScriptTag() {
 
   if (hideButton && showButton) {
     hideButton.addEventListener('click', () => {
+      if (canEdit) setEditMode(false);
       setToolbarVisible(false);
       showButton.focus();
     });
     showButton.addEventListener('click', () => {
       setToolbarVisible(true);
+      if (canEdit) setEditMode(true);
       root.focus();
     });
   }
@@ -822,7 +812,7 @@ function buildScriptTag() {
   }
 })();`;
 
-  return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${script}</script>`;
+  return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${minifyInlineScript(script)}</script>`;
 }
 
 function buildMetadataTag(metadata) {
@@ -1003,8 +993,9 @@ function buildConvertedThemeScriptTag(options = {}) {
   return `<script id="${CONVERTED_THEME_SCRIPT_ID}" data-onc-converted-theme-script="${CONVERTED_THEME_VERSION}">${minifyInlineScript(script)}</script>`;
 }
 
-function buildConvertedThemeToggleMarkup() {
-  return `<button type="button" id="${CONVERTED_THEME_ROOT_ID}" data-onc-converted-theme-toggle="${CONVERTED_THEME_VERSION}" aria-pressed="false" aria-label="Switch converted page to dark theme" title="Toggle converted page theme">🔆</button>`;
+function buildConvertedThemeToggleMarkup(options = {}) {
+  const oledBlack = options.ConvertedPageThemeToggleOledBlack === true;
+  return `<button type="button" id="${CONVERTED_THEME_ROOT_ID}" data-onc-converted-theme-toggle="${CONVERTED_THEME_VERSION}" data-onc-oled-black="${oledBlack ? 'true' : 'false'}" aria-pressed="false" aria-label="Switch converted page to dark theme" title="Toggle converted page theme">🔆</button>`;
 }
 
 export function injectConvertedPageThemeToggle(html, options = {}) {
@@ -1024,6 +1015,7 @@ export function injectConvertedPageThemeToggle(html, options = {}) {
     return input;
   }
 
-  const withHead = injectIntoHead(input, `${buildConvertedThemeStyleTag()}${buildConvertedThemeScriptTag(options)}`);
-  return injectIntoBody(withHead, buildConvertedThemeToggleMarkup());
+  const headInsert = `${buildConvertedThemeStyleTag()}${buildConvertedThemeScriptTag(options)}`;
+  const withHead = injectIntoHead(input, headInsert);
+  return injectIntoBody(withHead, buildConvertedThemeToggleMarkup(options));
 }

@@ -1,0 +1,236 @@
+html.enhanced #onc-converted-theme-toggle{
+  position:fixed;
+  right:1rem;
+  top:var(--onc-floating-top,.75rem);
+  z-index:10000;
+  display:block;
+  border:0;
+  background:transparent;
+  color:#0f172a;
+  border-radius:0;
+  width:auto;
+  height:auto;
+  cursor:pointer;
+  padding:0;
+  line-height:1;
+  font:400 1.5rem/1 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  box-shadow:none;
+}
+
+html.enhanced #onc-converted-theme-toggle:focus-visible,
+html.enhanced #onc-toolbar-show:focus-visible,
+html.enhanced #onenote-cleaner-toolbar .onc-btn:focus-visible{
+  outline:2px solid #7ea5e0;
+  outline-offset:2px;
+}
+
+html.enhanced #onc-toolbar-show{
+  position:fixed;
+  right:3.35rem;
+  top:var(--onc-floating-top,.75rem);
+  z-index:10000;
+}
+
+html.enhanced #onenote-cleaner-toolbar{
+  position:sticky;
+  top:0;
+  z-index:9999;
+  background:var(--onc-toolbar-bg,#fff);
+  color:var(--onc-toolbar-fg,#1f2a37);
+  border-bottom:1px solid var(--onc-toolbar-border,#d7dce2);
+  padding:var(--onc-toolbar-padding,.3rem .45rem);
+  font:var(--onc-toolbar-font,12px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif);
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-toolbar-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--onc-toolbar-gap,.25rem);
+  align-items:center;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-edit-tools{
+  margin-top:.35rem;
+}
+
+html.enhanced #onenote-cleaner-toolbar [data-onc-role="edit-tools"][hidden],
+html.enhanced #onenote-cleaner-toolbar [data-onc-role="metadata-panel"][hidden]{
+  display:none !important;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-title{
+  font-weight:600;
+  margin-right:.25rem;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-btn,
+html.enhanced #onc-toolbar-show{
+  border:1px solid var(--onc-toolbar-btn-border,#b7c0cc);
+  background:var(--onc-toolbar-btn-bg,#fff);
+  color:inherit;
+  border-radius:var(--onc-toolbar-radius,.3rem);
+  padding:var(--onc-toolbar-btn-padding,.16rem .34rem);
+  cursor:pointer;
+  font:inherit;
+  box-shadow:var(--onc-toolbar-btn-shadow,none);
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"],
+html.enhanced #onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{
+  background:var(--onc-toolbar-active-bg,#eef5ff);
+  border-color:var(--onc-toolbar-active-border,#7ea5e0);
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-select{
+  min-width:var(--onc-toolbar-select-width,8rem);
+  max-width:100%;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-color-input{
+  position:absolute;
+  inline-size:1px;
+  block-size:1px;
+  opacity:0;
+  pointer-events:none;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-panel{
+  margin-top:.5rem;
+  border:1px solid var(--onc-toolbar-panel-border,#d7dce2);
+  border-radius:var(--onc-toolbar-radius,.3rem);
+  padding:.5rem;
+  background:var(--onc-toolbar-panel-bg,#f8fafc);
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-panel dl{
+  display:grid;
+  grid-template-columns:max-content 1fr;
+  gap:.25rem .5rem;
+  margin:0;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-panel dt{
+  font-weight:600;
+}
+
+html.enhanced #onenote-cleaner-toolbar .onc-panel dd{
+  margin:0;
+  word-break:break-word;
+}
+
+html.enhanced #onenote-cleaner-toolbar[data-onc-toolbar-preset="compact"]{
+  --onc-toolbar-bg:#fff;
+  --onc-toolbar-fg:#1f2a37;
+  --onc-toolbar-border:#d7dce2;
+  --onc-toolbar-padding:.3rem .45rem;
+  --onc-toolbar-gap:.25rem;
+  --onc-toolbar-font:12px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --onc-toolbar-btn-bg:#fff;
+  --onc-toolbar-btn-border:#b7c0cc;
+  --onc-toolbar-radius:.3rem;
+  --onc-toolbar-btn-padding:.16rem .34rem;
+  --onc-toolbar-panel-bg:#f8fafc;
+  --onc-toolbar-panel-border:#d7dce2;
+  --onc-toolbar-show-padding:.12rem .28rem;
+  --onc-toolbar-select-width:8rem;
+}
+
+html.enhanced #onenote-cleaner-toolbar[data-onc-toolbar-preset="office"]{
+  --onc-toolbar-bg:#d4d0c8;
+  --onc-toolbar-fg:#1f1f1f;
+  --onc-toolbar-border:#808080;
+  --onc-toolbar-padding:.35rem .5rem;
+  --onc-toolbar-gap:.3rem;
+  --onc-toolbar-btn-bg:#ece9d8;
+  --onc-toolbar-btn-border:#7a7a70;
+  --onc-toolbar-radius:.15rem;
+  --onc-toolbar-btn-padding:.18rem .4rem;
+  --onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);
+  --onc-toolbar-panel-bg:#ece9d8;
+  --onc-toolbar-panel-border:#808080;
+  --onc-toolbar-select-width:9rem;
+}
+
+html.enhanced #onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"]{
+  --onc-toolbar-bg:linear-gradient(180deg,#f7fbff,#e6eef8);
+  --onc-toolbar-fg:#12324a;
+  --onc-toolbar-border:#b8cce0;
+  --onc-toolbar-padding:.5rem .75rem;
+  --onc-toolbar-gap:.45rem;
+  --onc-toolbar-btn-bg:#fff;
+  --onc-toolbar-btn-border:#aac0d6;
+  --onc-toolbar-radius:.5rem;
+  --onc-toolbar-btn-padding:.24rem .55rem;
+  --onc-toolbar-btn-shadow:0 1px 0 rgba(255,255,255,.9),inset 0 1px 0 rgba(255,255,255,.7);
+  --onc-toolbar-panel-bg:#fff;
+  --onc-toolbar-panel-border:#c8d7e6;
+  --onc-toolbar-select-width:9.5rem;
+}
+
+html[data-onc-converted-theme="dark"]{
+  --onc-converted-bg:#1f1f1f;
+  --onc-converted-fg:#e6e6e6;
+}
+
+html[data-onc-converted-theme="dark"][data-onc-converted-oled="true"]{
+  --onc-converted-bg:#000;
+  --onc-converted-fg:#d6d6cf;
+}
+
+html[data-onc-converted-theme="dark"] body,
+html[data-onc-converted-theme="dark"] main{
+  background:var(--onc-converted-bg);
+  color:var(--onc-converted-fg);
+}
+
+html[data-onc-converted-theme="dark"] body [style*="color: #000"],
+html[data-onc-converted-theme="dark"] body [style*="color:#000"],
+html[data-onc-converted-theme="dark"] body [style*="color: black"],
+html[data-onc-converted-theme="dark"] body [style*="color:black"],
+html[data-onc-converted-theme="dark"] body [style*="color: rgb(0, 0, 0)"],
+html[data-onc-converted-theme="dark"] body [style*="color:rgb(0,0,0)"]{
+  color:var(--onc-converted-fg) !important;
+}
+
+html[data-onc-converted-theme="dark"] body [style*="background: white"],
+html[data-onc-converted-theme="dark"] body [style*="background:white"],
+html[data-onc-converted-theme="dark"] body [style*="background-color: white"],
+html[data-onc-converted-theme="dark"] body [style*="background-color:white"],
+html[data-onc-converted-theme="dark"] body [style*="background: #fff"],
+html[data-onc-converted-theme="dark"] body [style*="background:#fff"],
+html[data-onc-converted-theme="dark"] body [style*="background-color: #fff"],
+html[data-onc-converted-theme="dark"] body [style*="background-color:#fff"],
+html[data-onc-converted-theme="dark"] body [style*="background: rgb(255, 255, 255)"],
+html[data-onc-converted-theme="dark"] body [style*="background:rgb(255,255,255)"]{
+  background:transparent !important;
+}
+
+html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar{
+  background:var(--onc-converted-bg,#1f1f1f);
+  color:var(--onc-converted-fg,#e6e6e6);
+  border-bottom-color:rgba(148,163,184,.35);
+}
+
+html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn,
+html[data-onc-converted-theme="dark"] #onc-toolbar-show{
+  background:rgba(15,23,42,.38);
+  color:var(--onc-converted-fg,#e6e6e6);
+  border-color:rgba(148,163,184,.45);
+  box-shadow:none;
+}
+
+html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"],
+html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{
+  background:rgba(59,130,246,.22);
+  border-color:rgba(125,177,255,.7);
+}
+
+html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-panel{
+  background:rgba(15,23,42,.32);
+  border-color:rgba(148,163,184,.35);
+}
+
+[data-onc-editing="true"] [data-onc-editable="1"]{
+  outline:1px dashed #7ea5e0;
+  outline-offset:2px;
+}
