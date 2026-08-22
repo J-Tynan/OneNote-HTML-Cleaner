@@ -184,16 +184,23 @@
           }
 
           if (!window.__test_zip_files.some((name) => name === 'assets/tailwind-output.css')) {
-            pass('ZIP avoids bundled stylesheet sidecar when external CSS is off');
+            pass('ZIP avoids extra bundled stylesheet file in shared mode');
           } else {
-            fail('ZIP should not include bundled stylesheet sidecar when external CSS is off');
+            fail('ZIP should not emit a separate bundled stylesheet file in shared mode');
           }
 
           const readableZipHtml = String(window.__test_zip_contents['Readable Export Name.html'] || '');
-          if (/data-onc-inline-stylesheet="assets\/tailwind-output\.css"/i.test(readableZipHtml) && !/<link[^>]+href="assets\/tailwind-output\.css"/i.test(readableZipHtml)) {
-            pass('ZIP inlines bundled stylesheet for standalone HTML pages');
+          const styledZipHtml = String(window.__test_zip_contents['Styled Export Name.html'] || '');
+          if (!/<link[^>]+href="assets\/tailwind-output\.css"/i.test(styledZipHtml) && /<link[^>]+href="converted-shared\.css"/i.test(styledZipHtml) && !/data-onc-inline-stylesheet="assets\/tailwind-output\.css"/i.test(styledZipHtml)) {
+            pass('ZIP uses only converted-shared.css for shared externalized HTML pages');
           } else {
-            fail('ZIP did not inline bundled stylesheet for standalone HTML pages');
+            fail('ZIP did not collapse shared externalized HTML pages to one stylesheet link');
+          }
+
+          if (/data-onc-inline-stylesheet="assets\/tailwind-output\.css"/i.test(readableZipHtml) && !/<link[^>]+href="assets\/tailwind-output\.css"/i.test(readableZipHtml)) {
+            pass('ZIP still inlines bundled stylesheet for non-externalized HTML pages');
+          } else {
+            fail('ZIP did not inline bundled stylesheet for non-externalized HTML pages');
           }
 
           if (window.__test_zip_files.includes('README.txt') && /Falling back to HTML output as-is/i.test(window.__test_zip_readme)) {

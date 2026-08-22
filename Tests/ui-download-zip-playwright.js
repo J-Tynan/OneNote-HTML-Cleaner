@@ -28,8 +28,9 @@ import { startStaticServer } from './playwright-server-helper.js';
       'PASS: ZIP generation invoked (JSZip.generateAsync called)',
       'PASS: ZIP uses title-derived page filenames',
       'PASS: ZIP includes externalized CSS sidecar asset',
-      'PASS: ZIP avoids bundled stylesheet sidecar when external CSS is off',
-      'PASS: ZIP inlines bundled stylesheet for standalone HTML pages',
+      'PASS: ZIP avoids extra bundled stylesheet file in shared mode',
+      'PASS: ZIP uses only converted-shared.css for shared externalized HTML pages',
+      'PASS: ZIP still inlines bundled stylesheet for non-externalized HTML pages',
       'PASS: ZIP includes fallback README warning for missing sidecar'
     ];
 

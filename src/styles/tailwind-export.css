@@ -1,0 +1,11 @@
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+/* Export bundle: only scan pipeline and cleaned-output contract sources. */
+@source "../../src/pipeline";
+@source "../../Tests/expected";
+@source "../../Tests/Cleaned";
+
+@import "./export-base.css";

@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:tailwind": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --minify",
-    "watch:tailwind": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/tailwind-output.css --watch",
+    "build:tailwind": "npm run build:tailwind:app && npm run build:tailwind:export",
+    "build:tailwind:app": "tailwindcss -i ./src/styles/tailwind-app.css -o ./assets/tailwind-app.css",
+    "build:tailwind:export": "tailwindcss -i ./src/styles/tailwind-export.css -o ./assets/tailwind-output.css",
+    "watch:tailwind": "tailwindcss -i ./src/styles/tailwind-app.css -o ./assets/tailwind-app.css --watch",
     "tools:regen-cleaned": "node ./tools/regenerate-cleaned.js",
     "fixtures:rebaseline": "node ./tools/rebaseline-locked-fixtures.js",
     "test:gate:native": "npm run tools:regen-cleaned && npm run test:charset && npm run test:charset-fallback && npm run test:utf8-encoding && npm run test:idempotence && npm run test:rerun-equivalence && npm run test:pipeline-edge-cases && npm run test:obsolete-attrs && npm run test:inline-style-collapse && npm run test:inline-style-normalization && npm run test:contrast-colors && npm run test:externalize-css && npm run test:externalize-css-parity && npm run test:style-dependency && npm run test:export-independence && npm run test:pipeline-config && npm run test:toolbar && npm run test:ui-downloads && npm run test:exported-page-naming && npm run test:markdown-contract && npm run test:exports:regressions && npm run test:locked-fixtures && npm run test:image-alt && npm run test:smoke:native && npm run test:forbidden-artifacts",

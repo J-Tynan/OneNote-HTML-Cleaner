@@ -1,0 +1,10 @@
+@layer theme, base, components, utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+/* App bundle: only scan app-facing sources for utility classes. */
+@source "../../index.html";
+@source "../../src";

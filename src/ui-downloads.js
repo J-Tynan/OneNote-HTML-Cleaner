@@ -104,6 +104,17 @@ export function inlineStylesheetLinks(html, stylesByHref = {}) {
   return output;
 }
 
+export function removeStylesheetLinks(html, hrefs = []) {
+  const hrefSet = new Set((hrefs || []).map((href) => String(href || '').trim()).filter(Boolean));
+  if (!hrefSet.size) return String(html || '');
+
+  return String(html || '').replace(/<link\b[^>]*>/ig, (tagText) => {
+    if (!isStylesheetLinkTag(tagText)) return tagText;
+    const tagHref = getTagAttributeValue(tagText, 'href');
+    return hrefSet.has(tagHref) ? '' : tagText;
+  });
+}
+
 // Consolidates duplicated selector+declaration rule blocks while preserving first-seen order.
 export function consolidateCssRules(cssText) {
   const css = String(cssText || '');
@@ -225,6 +236,22 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     return inlineStylesheetLinks(html, stylesByHref);
   }
 
+  async function collectBundledStylesheetDependencies(html) {
+    const hrefs = collectStylesheetHrefs(html).filter(isBundledStylesheetHref);
+    if (!hrefs.length) {
+      return { hrefs: [], stylesByHref: {} };
+    }
+
+    const stylesByHref = {};
+    for (const href of hrefs) {
+      const cssText = await fetchBundledStylesheetText(href);
+      if (!cssText.trim()) continue;
+      stylesByHref[href] = cssText;
+    }
+
+    return { hrefs, stylesByHref };
+  }
+
   async function downloadBlob(filename, text, mime = 'text/html') {
     const bom = '\uFEFF';
     const isHtml = /^text\/html(?:;|$)/i.test(String(mime || ''));
@@ -285,6 +312,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const sharedCssParts = [];
     const sharedCssFilename = 'converted-shared.css';
     const perPageCssTaken = new Set();
+    const packagedBundledStylesheets = new Set();
     const warnings = [];
 
     for (const [name, value] of ctx.successfulOutputs.entries()) {
@@ -317,7 +345,31 @@ export function createDownloadHelpers(ctx, updateZipButton) {
         warnings.push(`${name}: Externalize CSS is enabled, but no CSS sidecar was produced. Falling back to HTML output as-is.`);
       }
 
-      content = await inlineBundledStylesheetDependencies(content);
+      if (externalizeEnabled) {
+        const { hrefs, stylesByHref } = await collectBundledStylesheetDependencies(content);
+        const missingHrefs = hrefs.filter((href) => !stylesByHref[href]);
+
+        if (missingHrefs.length) {
+          warnings.push(`${name}: Failed to package bundled stylesheet dependency (${missingHrefs.join(', ')}). Falling back to inline bundled stylesheet.`);
+          content = await inlineBundledStylesheetDependencies(content);
+        } else {
+          Object.entries(stylesByHref).forEach(([href, cssText]) => {
+            if (cssMode === 'shared') {
+              sharedCssParts.push(cssText);
+              return;
+            }
+            if (packagedBundledStylesheets.has(href)) return;
+            zip.file(href, `${cssText}\n`);
+            packagedBundledStylesheets.add(href);
+          });
+
+          if (cssMode === 'shared' && Object.keys(stylesByHref).length) {
+            content = removeStylesheetLinks(content, Object.keys(stylesByHref));
+          }
+        }
+      } else {
+        content = await inlineBundledStylesheetDependencies(content);
+      }
 
       zip.file(name, `\uFEFF${content}`);
     }
