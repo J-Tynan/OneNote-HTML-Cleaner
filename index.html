@@ -285,7 +285,7 @@
                     <span>
                       Add toolbar to exported pages
                       <span class="block text-xs text-muted">
-                        Available for HTML export only. When enabled, the exported toolbar includes both the edit mode toggle and the metadata visibility toggle automatically.
+                        Available for HTML export only. When enabled, the exported toolbar opens with editing enabled and includes metadata, save, and hide controls.
                       </span>
                     </span>
                   </label>
@@ -298,10 +298,8 @@
                       class="form-control mt-1"
                       aria-describedby="toolbarStyleHelp">
                       <option value="compact" selected>Compact (default)</option>
-                      <option value="office-97">Office-97</option>
+                      <option value="office">Office</option>
                       <option value="ribbon">Ribbon</option>
-                      <option value="macos">MacOS</option>
-                      <option value="linux">Linux</option>
                     </select>
                     <p id="toolbarStyleHelp" class="text-xs text-muted">
                       Compact keeps controls small for narrow screens. Enable toolbar injection to choose a toolbar chrome preset before conversion.

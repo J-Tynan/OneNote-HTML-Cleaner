@@ -24,10 +24,8 @@
   <div id="toolbarStyleContainer" class="hidden">
     <select id="toolbarStyle" disabled title="Toolbar style">
       <option value="compact" selected>Compact</option>
-      <option value="office-97">Office-97</option>
+      <option value="office">Office</option>
       <option value="ribbon">Ribbon</option>
-      <option value="macos">MacOS</option>
-      <option value="linux">Linux</option>
     </select>
   </div>
   <p id="toolbarStyleHelp"></p>
@@ -92,7 +90,7 @@
     const convertedThemeToggle = document.getElementById('convertedPageThemeToggleEnabled');
     const convertedThemeOled = document.getElementById('convertedPageThemeToggleOledBlack');
     const convertedThemeHelp = document.getElementById('convertedPageThemeHelp');
-    const supportedToolbarPresets = ['compact', 'office-97', 'ribbon', 'macos', 'linux'];
+    const supportedToolbarPresets = ['compact', 'office', 'ribbon'];
 
     const toolbarOptionValues = Array.from(toolbarStyle.options).map((option) => option.value);
     if (JSON.stringify(toolbarOptionValues) === JSON.stringify(supportedToolbarPresets)) pass('Toolbar style dropdown exposes all supported presets in order');
@@ -121,7 +119,7 @@
     if (presetsRoundTripOk) pass('Toolbar style presets round-trip through the UI config while HTML export is active');
     else fail('Toolbar style presets should round-trip through the UI config while HTML export is active');
 
-    toolbarStyle.value = 'linux';
+    toolbarStyle.value = 'ribbon';
     toolbarStyle.dispatchEvent(new Event('change', { bubbles: true }));
 
     if (exportFormat.disabled && exportFormat.classList.contains('hidden')) pass('Export format hidden/disabled by default');
@@ -157,8 +155,8 @@
     if (toolbarStyle.disabled && toolbarStyleContainer.classList.contains('hidden')) pass('Toolbar style hidden/disabled for non-HTML export format');
     else fail('Toolbar style should be hidden/disabled for non-HTML export format');
 
-    if (toolbarStyle.value === 'linux') pass('Toolbar style selection is preserved while toolbar controls are gated for non-HTML export');
-    else fail(`Toolbar style selection should remain linux while toolbar controls are gated, got ${toolbarStyle.value}`);
+    if (toolbarStyle.value === 'ribbon') pass('Toolbar style selection is preserved while toolbar controls are gated for non-HTML export');
+    else fail(`Toolbar style selection should remain ribbon while toolbar controls are gated, got ${toolbarStyle.value}`);
 
     if (/available only for html/i.test(toolbarStyleHelp.textContent || '')) pass('Toolbar style HTML-only help text shown for non-HTML formats');
     else fail('Expected toolbar style HTML-only help text for non-HTML formats');
@@ -178,7 +176,7 @@
     if (!toolbarEnabled.disabled) pass('Toolbar toggle re-enabled when export falls back to HTML');
     else fail('Toolbar toggle should be re-enabled when export falls back to HTML');
 
-    if (toolbarStyle.value === 'linux' && !toolbarStyle.disabled && !toolbarStyleContainer.classList.contains('hidden')) pass('Toolbar style selection is restored when export falls back to HTML');
+    if (toolbarStyle.value === 'ribbon' && !toolbarStyle.disabled && !toolbarStyleContainer.classList.contains('hidden')) pass('Toolbar style selection is restored when export falls back to HTML');
     else fail('Toolbar style should be restored and enabled again when export falls back to HTML');
 
     const helpBeforeToggle = convertedThemeHelp.textContent || '';
@@ -203,7 +201,7 @@
     if (cfg && cfg.ExportFormat === 'html') pass('Export format falls back to HTML when experimental is OFF');
     else fail('Export format should fallback to HTML when experimental is OFF');
 
-    if (cfg && cfg.ToolbarStyle === 'linux') pass('Toolbar style is passed in conversion config when toolbar is enabled');
+    if (cfg && cfg.ToolbarStyle === 'ribbon') pass('Toolbar style is passed in conversion config when toolbar is enabled');
     else fail(`Toolbar style should be present in conversion config when toolbar is enabled, got ${cfg ? cfg.ToolbarStyle : 'missing config'}`);
 
     if (cfg && cfg.ConvertedPageThemeToggleEnabled === true) pass('Converted-page theme toggle is passed in conversion config for HTML output');

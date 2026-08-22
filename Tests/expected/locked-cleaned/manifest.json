@@ -1,6 +1,6 @@
 {
   "name": "locked-cleaned-fixtures",
-  "updatedAt": "2026-07-10T11:36:52.526Z",
+  "updatedAt": "2026-08-22T14:51:27.489Z",
   "source": "Tests/Cleaned",
   "requiredFiles": [
     "Communicate using Markdown.html",
@@ -17,12 +17,12 @@
     "trimTrailingWhitespaceLines": true
   },
   "hashes": {
-    "Communicate using Markdown.html": "8c963bddaab29d112fab1c5bac19990b39ef5b1d38de38c44df000373ae35136",
-    "DevToys.html": "398833ff8fc179da95253d520b5d7bc2cf2d4569c972aee284192d401390fec4",
-    "Problematic mht-full-snippet.html": "37df5dac24c52d483f569373a30bd4b290cdfda5d644c0bedf12df9134537676",
-    "Problematic mht-sample.html": "a520c089cf98b3429301189f176a77d089eff594546d9db4075276c9fdb49d26",
-    "Resolve merge conflicts.html": "5efcd4f146356071a31c2b6794ef0436a78ec57b0210896438ba672ce2065ef5",
-    "Test Handwriting.html": "76a76c5039a393aa1b26491554bbf6c104495479752eafa041414e80e96826f6",
-    "Test File.html": "070f4908b3770522d43e0c5e16b5de9d073c7193a84b885bdbcaec00fe8764f4"
+    "Communicate using Markdown.html": "69e03c55d8fd5dcdb6d0aaa24fd9fcc4f29615f833e7db3dc59fd02b8bd755ec",
+    "DevToys.html": "c4285ec6ec5e56183c0d20924e0e46a1db9a6fe274289115ff191d631e4f9dc4",
+    "Problematic mht-full-snippet.html": "59f7b703fffa4a53a9934dc77f4b884b55f7ce2c3fd01708c9f14ad8c1d62b02",
+    "Problematic mht-sample.html": "04bd066f97d4af07eada894f471b059882d99807aece56f06dbf1e3fc86dc26d",
+    "Resolve merge conflicts.html": "3e164e6d9eed53f1666b87582cc09e7f8c3f8f9b1001e71ccc315f4528fb7364",
+    "Test Handwriting.html": "7c6f00e6feb8c484f776076032b1307c71810d268d1abe7b2701b1d8826684c4",
+    "Test File.html": "5e4466decfab06fa81880fd39096b4f7bbd23f4f3c5ba3208ec0e783b5e1f8d5"
   }
 }

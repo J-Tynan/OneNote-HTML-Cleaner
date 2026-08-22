@@ -16,6 +16,20 @@ import { injectConvertedPageThemeToggle, injectOutputToolbar, summarizeWarningsB
 import { createLogger } from '../logging.js';
 const logger = createLogger('pipeline');
 
+function injectConfiguredExportStyles(doc, resolvedConfig) {
+  const exportStylesMode = String(resolvedConfig.ExportStylesMode || 'tailwind').trim().toLowerCase();
+  if (exportStylesMode === 'deferred') {
+    return sanitize.injectDeferredStylesActivation(doc, 'styles.css');
+  }
+
+  const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
+  if (!injectTailwindCss) {
+    return [];
+  }
+
+  return sanitize.injectCssLink(doc, resolvedConfig.TailwindCssHref || 'assets/tailwind-output.css');
+}
+
 /**
  * runPipeline(htmlString, config)
  * - returns { output: string, logs: Array }
@@ -158,10 +172,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(sanitize.compactRepeatedTypographyClasses(doc)));
     logs.push(...ensureArray(sanitize.promoteCompactContentTableCellWidthsToMinWidth(doc)));
 
-    const injectTailwindCss = resolvedConfig.InjectTailwindCss !== false;
-    if (injectTailwindCss) {
-      logs.push(...ensureArray(sanitize.injectCssLink(doc, resolvedConfig.TailwindCssHref || 'assets/tailwind-output.css')));
-    }
+    logs.push(...ensureArray(injectConfiguredExportStyles(doc, resolvedConfig)));
 
     // Image embedding (map may be provided in config.imageMap)
     const map = resolvedConfig.imageMap || {};
@@ -207,6 +218,7 @@ export async function runPipeline(htmlString, config = {}) {
 
     const withToolbar = injectOutputToolbar(normalized, {
       ...outputDecorationConfig,
+      ExportStylesMode: resolvedConfig.ExportStylesMode,
       exportState,
       SourceName: resolvedConfig.SourceName || resolvedConfig.fileName || 'Converted file',
       SourceKind: resolvedConfig.SourceKind || resolvedConfig.sourceKind || 'html',
@@ -215,6 +227,7 @@ export async function runPipeline(htmlString, config = {}) {
 
     const withThemeToggle = injectConvertedPageThemeToggle(withToolbar, {
       ...outputDecorationConfig,
+      ExportStylesMode: resolvedConfig.ExportStylesMode,
       exportState
     });
 

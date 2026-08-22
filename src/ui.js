@@ -703,7 +703,7 @@ function updateToolbarStyleControls(advancedOptionsState = buildAdvancedOptionsS
     } else if (!toolbarChecked) {
       dom.toolbarStyleHelp.textContent = 'Enable toolbar injection to choose a toolbar chrome preset before conversion.';
     } else {
-      dom.toolbarStyleHelp.textContent = 'Compact keeps controls small for narrow screens. Office-97, Ribbon, MacOS, and Linux adjust only the injected toolbar chrome.';
+      dom.toolbarStyleHelp.textContent = 'Compact keeps controls small for narrow screens. Office uses an Office 97-inspired chrome, and Ribbon uses a larger modern Office-style chrome.';
     }
   }
 }
@@ -1065,25 +1065,24 @@ export function renderFileList() {
             </p>
             ${safeMessage ? `<p class="mt-1 text-xs text-muted">${safeMessage}</p>` : ''}
           </div>
-          <button
-            type="button"
-            class="remove-item btn-secondary secondary-action-button file-item__remove-button"
-            data-remove-id="${entry.id}"
-            aria-label="Remove ${safeName}">
-            Remove
-          </button>
-        </div>
-
-        ${canDownload ? `
-          <div class="mt-2">
+          <div class="file-item__actions">
             <button
               type="button"
-              class="btn-primary"
-              data-download-id="${entry.id}">
-              ${downloadLabel}
+              class="remove-item btn-secondary secondary-action-button file-item__remove-button"
+              data-remove-id="${entry.id}"
+              aria-label="Remove ${safeName}">
+              Remove
             </button>
+            ${canDownload ? `
+              <button
+                type="button"
+                class="btn-primary file-item__download-button"
+                data-download-id="${entry.id}">
+                ${downloadLabel}
+              </button>
+            ` : ''}
           </div>
-        ` : ''}
+        </div>
         ${hasOutput && singleDownloadBlocked ? `
           <p class="mt-2 text-xs text-muted">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
         ` : ''}

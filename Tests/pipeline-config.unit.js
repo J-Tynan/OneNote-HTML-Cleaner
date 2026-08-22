@@ -45,6 +45,7 @@ async function main() {
     ExperimentalExportEnabled: 'true',
     ExportFormat: 'MARKDOWN',
     MarkdownFlavor: 'GFM',
+    ExportStylesMode: 'DEFERRED',
     ConvertedPageThemeToggleEnabled: 'true',
     ConvertedPageThemeToggleOledBlack: 'true'
   });
@@ -63,6 +64,7 @@ async function main() {
   assert(normalizedProfile.ExperimentalExportEnabled === true, 'Expected ExperimentalExportEnabled true');
   assert(normalizedProfile.ExportFormat === 'markdown', 'Expected ExportFormat to normalize to markdown');
   assert(normalizedProfile.MarkdownFlavor === 'gfm', 'Expected MarkdownFlavor to normalize to gfm');
+  assert(normalizedProfile.ExportStylesMode === 'deferred', 'Expected ExportStylesMode to normalize to deferred');
   assert(normalizedProfile.ConvertedPageThemeToggleEnabled === true, 'Expected ConvertedPageThemeToggleEnabled true');
   assert(normalizedProfile.ConvertedPageThemeToggleOledBlack === true, 'Expected ConvertedPageThemeToggleOledBlack true');
 
@@ -90,6 +92,7 @@ async function main() {
   assert(normalizedFallback.ExperimentalExportEnabled === false, 'Expected ExperimentalExportEnabled false');
   assert(normalizedFallback.ExportFormat === 'html', 'Expected ExportFormat to fallback to html when experiment disabled');
   assert(normalizedFallback.MarkdownFlavor === 'obsidian', 'Expected invalid MarkdownFlavor to fallback to obsidian');
+  assert(normalizedFallback.ExportStylesMode === 'tailwind', 'Expected invalid ExportStylesMode to fallback to tailwind');
   assert(normalizedFallback.ConvertedPageThemeToggleEnabled === false, 'Expected ConvertedPageThemeToggleEnabled false');
   assert(normalizedFallback.ConvertedPageThemeToggleOledBlack === false, 'Expected ConvertedPageThemeToggleOledBlack false when toggle disabled');
 
@@ -105,10 +108,10 @@ async function main() {
   assert(normalizedExport.MarkdownFlavor === 'commonmark', 'Expected normalizeExportConfig MarkdownFlavor to normalize to commonmark');
 
   const toolbarStyleAliases = mod.normalizePipelineConfig({ ToolbarStyle: 'classic' });
-  assert(toolbarStyleAliases.ToolbarStyle === 'office-97', 'Expected legacy classic toolbar style to normalize to office-97');
+  assert(toolbarStyleAliases.ToolbarStyle === 'office', 'Expected legacy classic toolbar style to normalize to office');
 
-  const toolbarStyleVariants = mod.normalizePipelineConfig({ ToolbarStyle: 'MACOS' });
-  assert(toolbarStyleVariants.ToolbarStyle === 'macos', 'Expected ToolbarStyle to normalize to macos');
+  const toolbarStyleVariants = mod.normalizePipelineConfig({ ToolbarStyle: 'OFFICE-97' });
+  assert(toolbarStyleVariants.ToolbarStyle === 'office', 'Expected ToolbarStyle to normalize office aliases to office');
 
   const outputDecorationConfig = mod.buildOutputDecorationConfig({
     ToolbarEnabled: 'true',

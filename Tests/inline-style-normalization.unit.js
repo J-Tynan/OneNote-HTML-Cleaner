@@ -275,6 +275,9 @@ console.log('running inline-style-normalization unit tests');
   assert(!list.className.includes('font-sans'));
   assert(!list.className.includes('text-base'));
   assert(!list.className.includes('font-normal'));
+  assert(!list.className.includes('list-decimal'));
+  assert(!list.className.includes('list-outside'));
+  assert(!list.className.includes('pl-5'));
   assert.equal(list.getAttribute('style'), null);
   assert(item.className.includes('onc-list-item'));
   assert(!item.className.includes('mt-0'));
@@ -286,7 +289,7 @@ console.log('running inline-style-normalization unit tests');
 
 // compact repeated bold ordered-list typography while preserving semantics and item color
 {
-  const html = '<html><head></head><body><ol type="1" style="direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: bold; font-style: normal; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em" class="mb-0 font-sans text-base list-decimal list-outside"><li value="2" style="margin-top: 0; margin-bottom: 0; vertical-align: middle; font-weight: bold; color: #2E75B5" class="onc-list-item"><span style="font-weight: normal; font-family: Calibri; font-size: 11.0pt" class="font-normal font-sans text-base">B</span></li></ol></body></html>';
+  const html = '<html><head></head><body><ol type="1" style="direction: ltr; unicode-bidi: embed; margin-top: 0; margin-bottom: 0; font-family: Calibri; font-size: 11.0pt; font-weight: bold; font-style: normal; margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em" class="mb-0 font-sans text-base list-decimal list-outside"><li value="2" style="margin-top: 0; margin-bottom: 0; vertical-align: middle; font-weight: bold; color: #2E75B5" class="mt-0 mb-0 onc-list-item"><span style="font-weight: normal; font-family: Calibri; font-size: 11.0pt" class="font-normal font-sans text-base">B</span></li></ol></body></html>';
   const doc = makeDoc(html);
   const logs = compactRepeatedTypographyClasses(doc);
   const styleBlock = doc.querySelector('style[data-onc-compact-typography]');
@@ -299,8 +302,12 @@ console.log('running inline-style-normalization unit tests');
   assert(styleBlock.textContent.includes('.onc-list-item-strong{margin-top:0;margin-bottom:0;vertical-align:middle;font-weight:700;}'));
   assert(styleBlock.textContent.includes('.onc-inline-copy-reset{font-family:Calibri;font-size:11.0pt;font-weight:400;}'));
   assert(list.className.includes('onc-list-strong'));
+  assert(!list.className.includes('list-decimal'));
+  assert(!list.className.includes('list-outside'));
   assert.equal(list.getAttribute('style'), null);
   assert(item.className.includes('onc-list-item-strong'));
+  assert(!item.className.includes('mt-0'));
+  assert(!item.className.includes('mb-0'));
   assert.equal(item.getAttribute('style'), 'color: #2E75B5');
   assert(span.className.includes('onc-inline-copy-reset'));
   assert.equal(span.getAttribute('style'), null);
@@ -322,12 +329,50 @@ console.log('running inline-style-normalization unit tests');
   assert(styleBlock.textContent.includes('.onc-inline-copy-lite{font-family:Calibri;font-size:11.0pt;}'));
   assert(list.className.includes('onc-bullet-list'));
   assert(!list.className.includes('mb-0'));
+  assert(!list.className.includes('list-disc'));
+  assert(!list.className.includes('list-outside'));
   assert.equal(list.getAttribute('style'), null);
   assert(item.className.includes('onc-list-item'));
   assert.equal(item.getAttribute('style'), 'color: #000000');
   assert(span.className.includes('onc-inline-copy-lite'));
   assert.equal(span.getAttribute('style'), null);
   assert(logs.some((entry) => entry.step === 'CompactRepeatedTypographyClasses' && entry.replacements === 3 && entry.strippedStyleDeclarations === 3));
+}
+
+// prune residual utility classes when surviving inline styles already define the same export presentation
+{
+  const html = '<html><head></head><body><div style="direction: ltr; margin-top: .4805in; margin-left: 0; width: 7.2597in" class="mt-6"><h2 style="margin-top: 0; margin-bottom: 9pt; font-family: Calibri; font-size: 14.0pt; color: #2E75B5" class="mb-3 font-sans text-lg">Heading</h2><p style="margin: 0; font-family: Verdana; font-size: 12.0pt" class="font-sans text-base">Body</p><p style="text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr" class="font-sans text-xs">Footer</p></div></body></html>';
+  const doc = makeDoc(html);
+  const logs = compactRepeatedTypographyClasses(doc);
+  const wrapper = doc.querySelector('div');
+  const heading = doc.querySelector('h2');
+  const body = doc.querySelectorAll('p')[0];
+  const footer = doc.querySelectorAll('p')[1];
+
+  assert.equal(wrapper.getAttribute('class'), null);
+  assert.equal(heading.getAttribute('class'), null);
+  assert.equal(body.getAttribute('class'), null);
+  assert.equal(footer.getAttribute('class'), null);
+  assert.equal(wrapper.getAttribute('style'), 'direction: ltr; margin-top: .4805in; margin-left: 0; width: 7.2597in');
+  assert.equal(heading.getAttribute('style'), 'margin-top: 0; margin-bottom: 9pt; font-family: Calibri; font-size: 14.0pt; color: #2E75B5');
+  assert.equal(body.getAttribute('style'), 'margin: 0; font-family: Verdana; font-size: 12.0pt');
+  assert.equal(footer.getAttribute('style'), 'text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr');
+  assert(logs.some((entry) => entry.step === 'CompactRepeatedTypographyClasses' && entry.prunedUtilityClasses === 8));
+}
+
+// compact structural ordered-list wrappers that only need indent preservation, leaving browser numbering defaults intact
+{
+  const html = '<html><head></head><body><ol type="1" style="margin-left: 0.35em; padding-left: 1.2em; padding-inline-start: 1.2em" class="list-decimal list-outside"><li value="5"> </li></ol></body></html>';
+  const doc = makeDoc(html);
+  const logs = compactRepeatedTypographyClasses(doc);
+  const styleBlock = doc.querySelector('style[data-onc-compact-typography]');
+  const list = doc.querySelector('ol');
+
+  assert(styleBlock, 'compact fallback stylesheet should be injected for structural ordered-list compaction');
+  assert(styleBlock.textContent.includes('.onc-list-layout{margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;}'));
+  assert.equal(list.getAttribute('class'), 'onc-list-layout');
+  assert.equal(list.getAttribute('style'), null);
+  assert(logs.some((entry) => entry.step === 'CompactRepeatedTypographyClasses' && entry.replacements === 1 && entry.strippedStyleDeclarations === 1));
 }
 
 console.log('inline-style-normalization: PASS');

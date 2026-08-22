@@ -2,6 +2,11 @@
 // Lightweight sanitization and head cleanup inspired by the PowerShell script.
 
 import {
+  getUtilityClassForDeclaration,
+  isUtilityMappableProperty,
+  parseStyle
+} from './inlineStyleMigration.js';
+import {
   parseStyleDeclarationEntries,
   serializeStyleDeclarationEntries
 } from './styleUtils.js';
@@ -1138,7 +1143,7 @@ const COMPACT_TYPOGRAPHY_PATTERNS = [
     cssText: 'direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;font-family:Calibri;font-size:11.0pt;font-weight:400;font-style:normal;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
     selector: 'ol',
     requiredClasses: ['font-sans', 'text-base', 'font-normal'],
-    removableClasses: ['mt-0', 'mb-0', 'font-sans', 'text-base', 'font-normal'],
+    removableClasses: ['mt-0', 'mb-0', 'font-sans', 'text-base', 'font-normal', 'list-decimal', 'list-outside', 'pl-5'],
     removableStyleProps: ['direction', 'unicode-bidi', 'margin-top', 'margin-bottom', 'font-family', 'font-size', 'font-weight', 'font-style', 'margin-left', 'padding-left', 'padding-inline-start'],
     requiredStyles: {
       direction: 'ltr',
@@ -1159,7 +1164,7 @@ const COMPACT_TYPOGRAPHY_PATTERNS = [
     cssText: 'direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;font-family:Calibri;font-size:11.0pt;font-weight:700;font-style:normal;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
     selector: 'ol',
     requiredClasses: ['font-sans', 'text-base'],
-    removableClasses: ['mt-0', 'mb-0', 'font-sans', 'text-base', 'font-bold'],
+    removableClasses: ['mt-0', 'mb-0', 'font-sans', 'text-base', 'font-bold', 'list-decimal', 'list-outside', 'pl-5'],
     removableStyleProps: ['direction', 'unicode-bidi', 'margin-top', 'margin-bottom', 'font-family', 'font-size', 'font-weight', 'font-style', 'margin-left', 'padding-left', 'padding-inline-start'],
     requiredStyles: {
       direction: 'ltr',
@@ -1179,7 +1184,7 @@ const COMPACT_TYPOGRAPHY_PATTERNS = [
     className: 'onc-list-item-strong',
     cssText: 'margin-top:0;margin-bottom:0;vertical-align:middle;font-weight:700;',
     selector: 'li',
-    removableClasses: ['font-bold'],
+    removableClasses: ['mt-0', 'mb-0', 'font-bold'],
     removableStyleProps: ['margin-top', 'margin-bottom', 'vertical-align', 'font-weight'],
     requiredStyles: {
       'margin-top': '0',
@@ -1205,13 +1210,26 @@ const COMPACT_TYPOGRAPHY_PATTERNS = [
     cssText: 'direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
     selector: 'ul',
     requiredClasses: ['list-disc', 'list-outside', 'mb-0'],
-    removableClasses: ['mt-0', 'mb-0'],
+    removableClasses: ['mt-0', 'mb-0', 'list-disc', 'list-outside', 'pl-5'],
     removableStyleProps: ['direction', 'unicode-bidi', 'margin-top', 'margin-bottom', 'margin-left', 'padding-left', 'padding-inline-start'],
     requiredStyles: {
       direction: 'ltr',
       'unicode-bidi': 'embed',
       'margin-top': '0',
       'margin-bottom': '0',
+      'margin-left': '0.35em',
+      'padding-left': '1.2em',
+      'padding-inline-start': '1.2em'
+    }
+  },
+  {
+    className: 'onc-list-layout',
+    cssText: 'margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;',
+    selector: 'ol',
+    requiredClasses: ['list-decimal', 'list-outside'],
+    removableClasses: ['list-decimal', 'list-outside', 'pl-5'],
+    removableStyleProps: ['margin-left', 'padding-left', 'padding-inline-start'],
+    requiredStyles: {
       'margin-left': '0.35em',
       'padding-left': '1.2em',
       'padding-inline-start': '1.2em'
@@ -1535,6 +1553,29 @@ function cleanupRedundantAttributes(doc) {
   };
 }
 
+function pruneInlineBackedUtilityClasses(nodes = []) {
+  let pruned = 0;
+
+  nodes.forEach((node) => {
+    if (!node || !node.getAttribute || !node.hasAttribute('class') || !node.hasAttribute('style')) return;
+
+    const removableClasses = new Set();
+    parseInlineStyle(node.getAttribute('style') || '').forEach(({ prop, value }) => {
+      const className = getUtilityClassForDeclaration(prop, value);
+      if (!className) return;
+      if (!hasRequiredClasses(node, [className])) return;
+      removableClasses.add(className);
+    });
+
+    if (!removableClasses.size) return;
+
+    pruned += removableClasses.size;
+    removeClassNames(node, Array.from(removableClasses));
+  });
+
+  return pruned;
+}
+
 function parseCssLengthToInches(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return null;
@@ -1684,6 +1725,8 @@ export function compactRepeatedTypographyClasses(doc) {
       prunedUtilityClasses += 1;
     });
   });
+
+  prunedUtilityClasses += pruneInlineBackedUtilityClasses(nodes);
 
   const attributeCleanup = cleanupRedundantAttributes(doc);
 
@@ -2003,6 +2046,20 @@ export function injectCssLink(doc, cssHref) {
   link.setAttribute('href', cssHref);
   head.appendChild(link);
   return [{ step: 'InjectCss', details: cssHref }];
+}
+
+export function injectDeferredStylesActivation(doc, cssHref = 'styles.css') {
+  const head = doc.querySelector('head') || doc.documentElement;
+  const existing = head.querySelector('script[data-onc-export-styles-loader="v1"]');
+  if (existing) {
+    return [];
+  }
+
+  const script = doc.createElement('script');
+  script.setAttribute('data-onc-export-styles-loader', 'v1');
+  script.textContent = `!function(d,h,l){l=d.createElement('link');l.rel='stylesheet';l.href=${JSON.stringify(String(cssHref || 'styles.css'))};l.onload=function(){h.className+=' enhanced'};(d.head||h).appendChild(l)}(document,document.documentElement)`;
+  head.appendChild(script);
+  return [{ step: 'InjectDeferredStylesActivation', details: cssHref }];
 }
 
 // collapse repeated inline styles among siblings by promoting common

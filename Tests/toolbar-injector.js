@@ -176,9 +176,9 @@ async function main() {
     ToolbarEditToggleEnabled: true,
     ToolbarMetadataToggleEnabled: true,
     ToolbarBundleMode: 'inline',
-    ToolbarStyle: 'office-97'
+    ToolbarStyle: 'office'
   });
-  assertSharedToolbarMarkup(officeInjected, 'office-97');
+  assertSharedToolbarMarkup(officeInjected, 'office');
 
   const classicAliasInjected = mod.injectOutputToolbar(baseHtml, {
     ToolbarEnabled: true,
@@ -187,9 +187,9 @@ async function main() {
     ToolbarBundleMode: 'inline',
     ToolbarStyle: 'classic'
   });
-  assertSharedToolbarMarkup(classicAliasInjected, 'office-97');
+  assertSharedToolbarMarkup(classicAliasInjected, 'office');
 
-  for (const preset of ['ribbon', 'macos', 'linux']) {
+  for (const preset of ['ribbon']) {
     const injectedPreset = mod.injectOutputToolbar(baseHtml, {
       ToolbarEnabled: true,
       ToolbarEditToggleEnabled: true,
@@ -254,6 +254,45 @@ async function main() {
   const themeScriptCount = countMatches(withThemeToggleAgain, /id="onc-converted-theme-script"/gi);
   if (themeRootCount !== 1 || themeStyleCount !== 1 || themeScriptCount !== 1) {
     fail(`Expected idempotent converted-page theme injection, got root=${themeRootCount}, style=${themeStyleCount}, script=${themeScriptCount}`);
+  }
+
+  const deferredToolbar = mod.injectOutputToolbar(baseHtml, {
+    ToolbarEnabled: true,
+    ToolbarEditToggleEnabled: true,
+    ToolbarMetadataToggleEnabled: true,
+    ToolbarBundleMode: 'inline',
+    ToolbarStyle: 'compact',
+    ExportStylesMode: 'deferred',
+    SourceName: 'Sample.mht',
+    SourceKind: 'mht'
+  });
+
+  if (!/id="onc-toolbar-style"/i.test(deferredToolbar) || !/id="onc-toolbar-script"/i.test(deferredToolbar)) {
+    fail('Expected deferred toolbar injection to inline toolbar style and script bundles for standalone exports');
+  }
+  if (!/id="onc-toolbar-metadata"/i.test(deferredToolbar)) {
+    fail('Expected deferred toolbar injection to keep toolbar metadata');
+  }
+  if (/id="onc-toolbar-show"[^>]*\shidden/i.test(deferredToolbar)) {
+    fail('Expected deferred toolbar reveal button to stay visible in standalone exports');
+  }
+
+  const deferredThemeToggle = mod.injectConvertedPageThemeToggle(deferredToolbar, {
+    ConvertedPageThemeToggleEnabled: true,
+    ConvertedPageThemeToggleOledBlack: true,
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html',
+    ExportStylesMode: 'deferred'
+  });
+
+  if (!/id="onc-converted-theme-style"/i.test(deferredThemeToggle) || !/id="onc-converted-theme-script"/i.test(deferredThemeToggle)) {
+    fail('Expected deferred theme injection to inline theme style and script bundles for standalone exports');
+  }
+  if (!/id="onc-converted-theme-toggle"[^>]*\sdata-onc-oled-black="true"/i.test(deferredThemeToggle)) {
+    fail('Expected deferred theme toggle markup to retain OLED preference');
+  }
+  if (/id="onc-converted-theme-toggle"[^>]*\shidden/i.test(deferredThemeToggle)) {
+    fail('Expected deferred theme toggle to stay visible in standalone exports');
   }
 
   const nonHtmlBypass = mod.injectConvertedPageThemeToggle(baseHtml, {
