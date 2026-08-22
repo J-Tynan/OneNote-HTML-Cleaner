@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Communicate
+using Markdown</title><style data-converted-spacer="1">.converted-page-spacer{margin:0;line-height:0.95;font-size:1em;}.converted-content-spacer{margin:0;line-height:1;font-size:1em;}</style><style data-onc-compact-typography="1">.onc-body{font-family:Calibri;font-size:11.0pt;background-color:transparent;color:initial;}
+.onc-copy{margin:0;font-family:Calibri;font-size:11.0pt;}
+.onc-meta{margin:0;font-family:Calibri,Arial,sans-serif;font-size:10pt;}
+.onc-title{margin:0;font-family:"Calibri Light";font-size:20pt;font-weight:400;}
+.onc-h1{margin:0;font-family:Calibri;font-size:16.0pt;}
+.onc-list{direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;font-family:Calibri;font-size:11.0pt;font-weight:400;font-style:normal;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;}
+.onc-list-item{margin-top:0;margin-bottom:0;vertical-align:middle;}
+.onc-bullet-list{direction:ltr;unicode-bidi:embed;margin-top:0;margin-bottom:0;margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;}
+.onc-inline-copy{font-family:Calibri;font-size:11.0pt;font-weight:400;font-style:normal;}
+.onc-inline-copy-lite{font-family:Calibri;font-size:11.0pt;}
+.onc-table-borderless{border-collapse:collapse;border-style:solid;border-color:#A3A3A3;border-width:0;}
+.onc-cell-borderless-lite{border-width:0;vertical-align:top;padding:2.0pt 3.0pt 2.0pt 3.0pt;}
+.onc-page-title{display:inline-block;padding-right:1in;padding-bottom:0.08em;border-bottom:1px solid #b7b7b7;}
+.onc-page-date-tone{color:#666666;}
+.onc-page-time{color:#666666;margin-left:0.75em;}</style><script data-onc-export-styles-loader="v1">!function(d,h,l){l=d.createElement('link');l.rel='stylesheet';l.href="styles.css";l.onload=function(){h.className+=' enhanced'};(d.head||h).appendChild(l)}(document,document.documentElement)</script><style id="onc-toolbar-style" data-onc-toolbar-style="v1" data-onc-toolbar-preset="office">#onenote-cleaner-toolbar{position:sticky;top:0;z-index:9999;background:var(--onc-toolbar-bg,#fff);color:var(--onc-toolbar-fg,#1f2a37);border-bottom:1px solid var(--onc-toolbar-border,#d7dce2);padding:var(--onc-toolbar-padding,.45rem .65rem);font:var(--onc-toolbar-font,13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}#onenote-cleaner-toolbar .onc-toolbar-row{display:flex;flex-wrap:wrap;gap:var(--onc-toolbar-gap,.4rem);align-items:center;}#onenote-cleaner-toolbar .onc-edit-tools{margin-top:.35rem;}#onenote-cleaner-toolbar [data-onc-role="edit-tools"][hidden]{display:none !important;}#onenote-cleaner-toolbar .onc-title{font-weight:600;margin-right:.25rem;}#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{border:1px solid var(--onc-toolbar-btn-border,#b7c0cc);background:var(--onc-toolbar-btn-bg,#fff);color:inherit;border-radius:var(--onc-toolbar-radius,.35rem);padding:var(--onc-toolbar-btn-padding,.24rem .48rem);cursor:pointer;font:inherit;box-shadow:var(--onc-toolbar-btn-shadow,none);}#onenote-cleaner-toolbar .onc-select{min-width:var(--onc-toolbar-select-width,9rem);max-width:100%;}#onenote-cleaner-toolbar .onc-color-input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none;}#onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:var(--onc-toolbar-active-bg,#eef5ff);border-color:var(--onc-toolbar-active-border,#7ea5e0);}#onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{background:var(--onc-toolbar-active-bg,#eef5ff);border-color:var(--onc-toolbar-active-border,#7ea5e0);}#onenote-cleaner-toolbar .onc-btn:focus-visible,#onc-toolbar-show:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px;}#onenote-cleaner-toolbar .onc-muted{font-size:12px;color:#4b5563;}#onenote-cleaner-toolbar .onc-panel{margin-top:.5rem;border:1px solid var(--onc-toolbar-panel-border,#d7dce2);border-radius:var(--onc-toolbar-radius,.35rem);padding:.5rem;background:var(--onc-toolbar-panel-bg,#f8fafc);}#onenote-cleaner-toolbar .onc-panel dl{display:grid;grid-template-columns:max-content 1fr;gap:.25rem .5rem;margin:0;}#onenote-cleaner-toolbar .onc-panel dt{font-weight:600;}#onenote-cleaner-toolbar .onc-panel dd{margin:0;word-break:break-word;}#onc-toolbar-show{position:fixed;right:3.35rem;top:var(--onc-floating-top,.75rem);bottom:auto;z-index:10000;font-size:11px;padding:var(--onc-toolbar-show-padding,.18rem .42rem);}@media (max-width: 640px){#onenote-cleaner-toolbar{padding:var(--onc-toolbar-mobile-padding,.375rem .5rem);font:var(--onc-toolbar-mobile-font,12px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}#onenote-cleaner-toolbar .onc-toolbar-row{gap:var(--onc-toolbar-mobile-gap,.3rem);}#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{padding:var(--onc-toolbar-mobile-btn-padding,.18rem .34rem);}#onenote-cleaner-toolbar .onc-select{min-width:7.25rem;}}html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar{background:var(--onc-converted-bg,#1f1f1f);color:var(--onc-converted-fg,#e6e6e6);border-bottom-color:rgba(148,163,184,.35);}html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn,html[data-onc-converted-theme="dark"] #onc-toolbar-show{background:rgba(15,23,42,.38);color:var(--onc-converted-fg,#e6e6e6);border-color:rgba(148,163,184,.45);box-shadow:none;}html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:rgba(59,130,246,.22);border-color:rgba(125,177,255,.7);}html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-panel{background:rgba(15,23,42,.32);border-color:rgba(148,163,184,.35);}html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-muted{color:#cbd5e1;}[data-onc-editing="true"] [data-onc-editable="1"]{outline:1px dashed #7ea5e0;outline-offset:2px;}#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"]{--onc-toolbar-bg:#d4d0c8;--onc-toolbar-fg:#1f1f1f;--onc-toolbar-border:#808080;--onc-toolbar-padding:.35rem .5rem;--onc-toolbar-mobile-padding:.35rem .5rem;--onc-toolbar-gap:.3rem;--onc-toolbar-mobile-gap:.3rem;--onc-toolbar-btn-bg:#ece9d8;--onc-toolbar-btn-border:#7a7a70;--onc-toolbar-radius:.15rem;--onc-toolbar-btn-padding:.18rem .4rem;--onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);--onc-toolbar-panel-bg:#ece9d8;--onc-toolbar-panel-border:#808080;--onc-toolbar-show-padding:.14rem .32rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;}#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-title{font-size:11px;letter-spacing:.02em;text-transform:uppercase;}#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn[data-onc-active="true"]{background:#d6def4;border-color:#51607a;}#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn:hover,#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] #onc-toolbar-show:hover{filter:brightness(.98);}</style><script type="application/json" id="onc-toolbar-metadata">{"sourceName":"Communicate using Markdown.mht","sourceKind":"mht","pageTitle":"","exportFormat":"html","timestamp":"2026-08-22T16:07:15.800Z"}</script><script id="onc-toolbar-script" data-onc-toolbar-script="v1">(function(){function init(){const root = document.getElementById('onenote-cleaner-toolbar');if (!root) return false;if (root.dataset.oncInitialized === '1') return true;root.dataset.oncInitialized = '1';const html = document.documentElement;const showButton = document.getElementById('onc-toolbar-show');const metadataPanel = root.querySelector('[data-onc-role="metadata-panel"]');const editTools = root.querySelector('[data-onc-role="edit-tools"]');const editToggle = root.querySelector('[data-onc-action="edit-toggle"]');const metadataToggle = root.querySelector('[data-onc-action="metadata-toggle"]');const hideButton = root.querySelector('[data-onc-action="hide-toolbar"]');const saveButton = root.querySelector('[data-onc-action="save"]');const styleSelect = root.querySelector('[data-onc-role="style-select"]');const colorInput = root.querySelector('[data-onc-role="color-input"]');const metadataScript = document.getElementById('onc-toolbar-metadata');const canEdit = root.dataset.oncEditEnabled === 'true';const canMetadata = root.dataset.oncMetadataEnabled === 'true';const editCommandButtons = Array.from(root.querySelectorAll('button[data-onc-edit-command]'));const editStyles = [["page-title","p",{"margin":"0","fontFamily":"\"Calibri Light\", Calibri, sans-serif","fontSize":"20.0pt","color":"#000000","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}],["heading-1","h1",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"16.0pt","color":"#1E4E79","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}],["heading-2","h2",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"14.0pt","color":"#2E75B5","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}],["heading-3","h3",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"12.0pt","color":"#5B9BD5","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}],["heading-4","h4",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"12.0pt","color":"#5B9BD5","fontStyle":"italic","fontWeight":"normal","textIndent":"0"}],["heading-5","h5",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"11.0pt","color":"#2E75B5","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}],["heading-6","h6",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"11.0pt","color":"#2E75B5","fontStyle":"italic","fontWeight":"normal","textIndent":"0"}],["citation","p",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"9.0pt","color":"#595959","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}],["quote","blockquote",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"11.0pt","color":"#595959","fontStyle":"italic","fontWeight":"normal","textIndent":"0"}],["code","pre",{"margin":"0","fontFamily":"Consolas, \"Courier New\", monospace","fontSize":"11.0pt","color":"#111827","fontStyle":"normal","fontWeight":"normal","textIndent":"0","whiteSpace":"pre-wrap","backgroundColor":"#f3f4f6","padding":".35rem .5rem","borderRadius":".25rem"}],["normal","p",{"margin":"0","fontFamily":"Calibri, sans-serif","fontSize":"11.0pt","color":"#000000","fontStyle":"normal","fontWeight":"normal","textIndent":"0"}]];let lastCommandHint = '';if (!canEdit && editToggle) editToggle.hidden = true;if (!canMetadata && metadataToggle) metadataToggle.hidden = true;if (!canMetadata && metadataPanel) metadataPanel.hidden = true;let metadata = null;try {metadata = metadataScript ? JSON.parse(metadataScript.textContent || '{}') : null;} catch (_err) {metadata = null;}function hasSemanticsMarker(node){if (!node || !node.closest) return false;const semanticHit = node.closest('[data-onc-table-layout],[data-onc-col-role]');if (semanticHit) return true;return false;}function editableTargets(){const targets = Array.from(document.querySelectorAll('p, li, td'));return targets.filter((node) => {if (!node || !node.tagName) return false;if (node.closest('#onenote-cleaner-toolbar')) return false;if (hasSemanticsMarker(node)) return false;return true;});}function syncFloatingControls(){if (!root.hidden) {const rect = root.getBoundingClientRect();const nextTop = Math.max(12, Math.ceil(rect.bottom + 8));html.classList.add('onc-toolbar-present');html.style.setProperty('--onc-floating-top', nextTop + 'px');} else {html.classList.remove('onc-toolbar-present');html.style.setProperty('--onc-floating-top', '.75rem');}try {window.dispatchEvent(new CustomEvent('onc:toolbar-layout-changed', { detail: { visible: !root.hidden } }));} catch (_err) {}}function setToolbarVisible(visible){root.hidden = !visible;if (showButton) showButton.hidden = visible;syncFloatingControls();}function formatTimestamp(value){const input = String(value || '').trim();if (!input) return '';const parsed = new Date(input);if (Number.isNaN(parsed.getTime())) return input;try {return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(parsed);} catch (_err) {return parsed.toLocaleString();}}function getSuggestedFileName(){const sourceName = metadata && metadata.sourceName ? String(metadata.sourceName) : '';const title = String(document.title || 'converted-page');const raw = sourceName || title;const withoutExtension = raw.replace(/\.[^.\s]{1,8}$/i, '');const normalized = withoutExtension.normalize('NFKC').replace(/[\u0000-\u001F\u007F]+/g, ' ').replace(/[\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();return (normalized || 'converted-page') + '.html';}function serializeCurrentHtml(){return '<!doctype html>\n' + document.documentElement.outerHTML;}function downloadHtml(content, fileName){const blob = new Blob([content], { type: 'text/html;charset=utf-8' });const url = URL.createObjectURL(blob);const anchor = document.createElement('a');anchor.href = url;anchor.download = fileName;anchor.rel = 'noopener';document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(() => URL.revokeObjectURL(url), 1000);}async function saveDocument(){const content = serializeCurrentHtml();const fileName = getSuggestedFileName();const pickerAvailable = typeof window.showSaveFilePicker === 'function';if (pickerAvailable) {try {const handle = await window.showSaveFilePicker({suggestedName: fileName,types: [{description: 'HTML file',accept: { 'text/html': ['.html', '.htm'] }}]});const writable = await handle.createWritable();await writable.write(content);await writable.close();} catch (_err) {return;}return;}downloadHtml(content, fileName);}function setEditMode(enabled){const targets = editableTargets();targets.forEach((node) => {if (enabled) {node.setAttribute('contenteditable', 'true');node.setAttribute('spellcheck', 'true');node.setAttribute('data-onc-editable', '1');} else if (node.getAttribute('data-onc-editable') === '1') {node.removeAttribute('contenteditable');node.removeAttribute('spellcheck');node.removeAttribute('data-onc-editable');}});root.dataset.oncEditing = enabled ? 'true' : 'false';if (editTools) editTools.hidden = !enabled;if (styleSelect) styleSelect.disabled = !enabled;if (editToggle) {editToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');editToggle.textContent = enabled ? 'Disable edit' : 'Enable edit';editToggle.title = enabled ? 'Disable edit' : 'Enable edit';}document.body.setAttribute('data-onc-editing', enabled ? 'true' : 'false');}function setEditButtonActive(command, active){const target = editCommandButtons.find((btn) => String(btn.getAttribute('data-onc-edit-command') || '') === String(command || ''));if (!target) return;target.setAttribute('data-onc-active', active ? 'true' : 'false');target.setAttribute('aria-pressed', active ? 'true' : 'false');}function getEditStyleDefinition(key){const normalized = String(key || '').trim().toLowerCase();const match = editStyles.find((style) => Array.isArray(style) && String(style[0] || '').toLowerCase() === normalized);if (!match) return null;return {key: match[0],blockTag: match[1],blockStyles: match[2] || {}};}function getSelectionAnchorElement(){const selection = window.getSelection ? window.getSelection() : null;const anchorNode = selection && selection.anchorNode ? selection.anchorNode : null;if (anchorNode && anchorNode.nodeType === Node.ELEMENT_NODE) return anchorNode;if (anchorNode && anchorNode.parentElement) return anchorNode.parentElement;const active = document.activeElement;if (active && active.closest && !active.closest('#onenote-cleaner-toolbar')) return active;return null;}function getCurrentBlockElement(){const anchor = getSelectionAnchorElement();if (!anchor || !anchor.closest) return null;return anchor.closest('p, li, td, h1, h2, h3, h4, h5, h6, blockquote, pre');}function clearBlockStyleState(block){if (!block || !block.style) return;block.removeAttribute('data-onc-style-key');['margin','fontFamily','fontSize','color','fontStyle','fontWeight','textIndent','whiteSpace','backgroundColor','padding','borderRadius'].forEach((property) => {block.style[property] = '';});}function applyBlockStyleDefinition(block, style){if (!block || !style) return;clearBlockStyleState(block);block.setAttribute('data-onc-style-key', String(style.key || 'normal'));const blockStyles = style.blockStyles || {};Object.keys(blockStyles).forEach((property) => {if (blockStyles[property] == null) return;block.style[property] = String(blockStyles[property]);});}function getCurrentStyleKey(){const block = getCurrentBlockElement();const explicitKey = block ? String(block.getAttribute('data-onc-style-key') || '').trim().toLowerCase() : '';if (explicitKey) return explicitKey;try {const value = String(document.queryCommandValue('formatBlock') || '').toLowerCase();if (value === 'h1' || value === '<h1>') return 'heading-1';if (value === 'h2' || value === '<h2>') return 'heading-2';if (value === 'h3' || value === '<h3>') return 'heading-3';if (value === 'h4' || value === '<h4>') return 'heading-4';if (value === 'h5' || value === '<h5>') return 'heading-5';if (value === 'h6' || value === '<h6>') return 'heading-6';if (value === 'blockquote' || value === '<blockquote>') return 'quote';if (value === 'pre' || value === '<pre>') return 'code';} catch (_err) {}return 'normal';}function syncStyleSelect(){if (!styleSelect) return;const current = getCurrentStyleKey();styleSelect.value = current || 'normal';}function syncEditCommandState(){if (root.dataset.oncEditing !== 'true') {editCommandButtons.forEach((btn) => {btn.setAttribute('data-onc-active', 'false');btn.setAttribute('aria-pressed', 'false');});syncStyleSelect();return;}const statefulMap = {bold: 'bold',italic: 'italic',bullet: 'insertUnorderedList',number: 'insertOrderedList',sub: 'subscript',super: 'superscript',link: 'createLink'};editCommandButtons.forEach((btn) => {const command = String(btn.getAttribute('data-onc-edit-command') || '');let active = false;if (statefulMap[command]) {try {active = document.queryCommandState(statefulMap[command]) === true;} catch (_err) {active = false;}} else if (command === 'color' || command === 'size' || command === 'undo') {active = lastCommandHint === command;}btn.setAttribute('data-onc-active', active ? 'true' : 'false');btn.setAttribute('aria-pressed', active ? 'true' : 'false');});syncStyleSelect();}function escapeHtmlFragment(value){return String(value || '').replace(/[&<>"']/g, (ch) => ({'&': '&amp;','<': '&lt;','>': '&gt;','"': '&quot;',"'": '&#39;'}[ch]));}function runEditCommand(command, value){try {return document.execCommand(command, false, value);} catch (_err) {return false;}}function applyEditCommand(action){if (root.dataset.oncEditing !== 'true') return;if (!document || typeof document.execCommand !== 'function') return;const cmd = String(action || '').toLowerCase();const selectedStyle = getEditStyleDefinition(cmd);if (selectedStyle) {runEditCommand('formatBlock', String(selectedStyle.blockTag || 'p'));const block = getCurrentBlockElement();if (block) {applyBlockStyleDefinition(block, selectedStyle);}lastCommandHint = selectedStyle.key === 'normal' ? '' : selectedStyle.key;syncEditCommandState();return;}if (cmd === 'bold') {runEditCommand('bold', null);syncEditCommandState();return;}if (cmd === 'italic') {runEditCommand('italic', null);syncEditCommandState();return;}if (cmd === 'bullet') {runEditCommand('insertUnorderedList', null);syncEditCommandState();return;}if (cmd === 'number') {runEditCommand('insertOrderedList', null);syncEditCommandState();return;}if (cmd === 'color') {if (colorInput) {colorInput.click();}return;}if (cmd === 'size') {const size = window.prompt('Enter font size (1-7)', '3');if (!size) return;const numeric = Number.parseInt(size, 10);if (!Number.isFinite(numeric) || numeric < 1 || numeric > 7) return;runEditCommand('fontSize', String(numeric));lastCommandHint = 'size';setEditButtonActive('size', true);syncEditCommandState();return;}if (cmd === 'sub') {runEditCommand('subscript', null);syncEditCommandState();return;}if (cmd === 'super') {runEditCommand('superscript', null);syncEditCommandState();return;}if (cmd === 'link') {const href = window.prompt('Enter URL', 'https://');if (!href) return;const selectedText = String(window.getSelection ? (window.getSelection().toString() || '') : '').trim();const displayText = window.prompt('Enter display text', selectedText || href);if (!displayText) return;const safeHref = escapeHtmlFragment(href.trim());const safeText = escapeHtmlFragment(displayText.trim());runEditCommand('insertHTML', '<a href="' + safeHref + '">' + safeText + '</a>');syncEditCommandState();return;}if (cmd === 'undo') {runEditCommand('undo', null);lastCommandHint = 'undo';setEditButtonActive('undo', true);syncEditCommandState();return;}lastCommandHint = cmd;setEditButtonActive(cmd, true);syncEditCommandState();}if (styleSelect) {styleSelect.addEventListener('change', () => {if (root.dataset.oncEditing !== 'true') return;applyEditCommand(styleSelect.value || 'normal');});}if (colorInput) {const applyPickedColor = () => {if (root.dataset.oncEditing !== 'true') return;const color = String(colorInput.value || '').trim();if (!color) return;runEditCommand('foreColor', color);lastCommandHint = 'color';setEditButtonActive('color', true);syncEditCommandState();};colorInput.addEventListener('input', applyPickedColor);colorInput.addEventListener('change', applyPickedColor);}if (editToggle) {editToggle.addEventListener('click', () => {if (!canEdit) return;const enabled = editToggle.getAttribute('aria-pressed') !== 'true';setEditMode(enabled);});}if (metadataToggle && metadataPanel) {metadataToggle.addEventListener('click', () => {if (!canMetadata) return;const nextHidden = !metadataPanel.hidden;metadataPanel.hidden = nextHidden;metadataToggle.setAttribute('aria-pressed', nextHidden ? 'false' : 'true');requestAnimationFrame(syncFloatingControls);if (!nextHidden) {const firstValue = metadataPanel.querySelector('dd');if (firstValue && firstValue.focus) {firstValue.setAttribute('tabindex', '-1');firstValue.focus();}}});}if (hideButton && showButton) {hideButton.addEventListener('click', () => {if (canEdit) setEditMode(false);setToolbarVisible(false);showButton.focus();});showButton.addEventListener('click', () => {setToolbarVisible(true);if (canEdit) setEditMode(true);root.focus();});}if (saveButton) {saveButton.addEventListener('click', () => {void saveDocument();});}root.addEventListener('click', (event) => {const target = event.target;if (!target || !target.closest) return;const button = target.closest('[data-onc-edit-command]');if (!button) return;applyEditCommand(button.getAttribute('data-onc-edit-command'));});document.addEventListener('selectionchange', () => {if (root.dataset.oncEditing === 'true') {syncEditCommandState();}});if (typeof ResizeObserver !== 'undefined') {const observer = new ResizeObserver(() => syncFloatingControls());observer.observe(root);}window.addEventListener('resize', syncFloatingControls, { passive: true });if (!metadata || !metadataPanel) return true;const sourceName = metadataPanel.querySelector('[data-onc-field="source-name"]');const sourceKind = metadataPanel.querySelector('[data-onc-field="source-kind"]');const pageTitle = metadataPanel.querySelector('[data-onc-field="page-title"]');const exportFormat = metadataPanel.querySelector('[data-onc-field="export-format"]');const timestamp = metadataPanel.querySelector('[data-onc-field="timestamp"]');if (sourceName) sourceName.textContent = metadata.sourceName || 'Unknown source';if (sourceKind) sourceKind.textContent = metadata.sourceKind || 'html';if (pageTitle) pageTitle.textContent = metadata.pageTitle || document.title || 'Untitled page';if (exportFormat) exportFormat.textContent = metadata.exportFormat || 'html';if (timestamp) timestamp.textContent = formatTimestamp(metadata.timestamp || '');setToolbarVisible(false);syncEditCommandState();syncFloatingControls();return true;}if (!init()) {document.addEventListener('DOMContentLoaded', init, { once: true });}})();</script><style id="onc-converted-theme-style" data-onc-converted-theme-style="v1">#onc-converted-theme-toggle{position:fixed;right:1rem;top:var(--onc-floating-top,.75rem);z-index:10000;border:0;background:transparent;color:#0f172a;border-radius:0;width:auto;height:auto;display:block;cursor:pointer;padding:0;line-height:1;font:400 1.5rem/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:none}#onc-converted-theme-toggle:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px}html[data-onc-converted-theme="dark"]{--onc-converted-bg:#1f1f1f;--onc-converted-fg:#e6e6e6}html[data-onc-converted-theme="dark"][data-onc-converted-oled="true"]{--onc-converted-bg:#000000;--onc-converted-fg:#d6d6cf}html[data-onc-converted-theme="dark"] body{background:var(--onc-converted-bg);color:var(--onc-converted-fg)}html[data-onc-converted-theme="dark"] main{background:var(--onc-converted-bg);color:var(--onc-converted-fg)}html[data-onc-converted-theme="dark"] body [style*="color: #000"],html[data-onc-converted-theme="dark"] body [style*="color:#000"],html[data-onc-converted-theme="dark"] body [style*="color: black"],html[data-onc-converted-theme="dark"] body [style*="color:black"],html[data-onc-converted-theme="dark"] body [style*="color: rgb(0, 0, 0)"],html[data-onc-converted-theme="dark"] body [style*="color:rgb(0,0,0)"]{color:var(--onc-converted-fg) !important}html[data-onc-converted-theme="dark"] body [style*="background: white"],html[data-onc-converted-theme="dark"] body [style*="background:white"],html[data-onc-converted-theme="dark"] body [style*="background-color: white"],html[data-onc-converted-theme="dark"] body [style*="background-color:white"],html[data-onc-converted-theme="dark"] body [style*="background: #fff"],html[data-onc-converted-theme="dark"] body [style*="background:#fff"],html[data-onc-converted-theme="dark"] body [style*="background-color: #fff"],html[data-onc-converted-theme="dark"] body [style*="background-color:#fff"],html[data-onc-converted-theme="dark"] body [style*="background: rgb(255, 255, 255)"],html[data-onc-converted-theme="dark"] body [style*="background:rgb(255,255,255)"]{background:transparent !important}</style><script id="onc-converted-theme-script" data-onc-converted-theme-script="v1">(function(){function init(){const root = document.getElementById('onc-converted-theme-toggle');if (!root) return false;if (root.dataset.oncInitialized === '1') return true;root.dataset.oncInitialized = '1';const html = document.documentElement;if (document.getElementById('onenote-cleaner-toolbar')) {html.classList.add('onc-toolbar-present');}const oledBlack = false;const storageKey = 'onc:converted-theme:' + location.pathname;function applyTheme(nextTheme){const theme = nextTheme === 'dark' ? 'dark' : 'light';html.setAttribute('data-onc-converted-theme', theme);html.setAttribute('data-onc-converted-oled', oledBlack ? 'true' : 'false');root.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');root.setAttribute('aria-label', theme === 'dark' ? 'Switch converted page to light theme' : 'Switch converted page to dark theme');root.textContent = theme === 'dark' ? '🌙' : '🔆';}let saved = 'light';try {saved = localStorage.getItem(storageKey) || 'light';} catch (_err) {}applyTheme(saved);root.addEventListener('click', function(){const current = html.getAttribute('data-onc-converted-theme') === 'dark' ? 'dark' : 'light';const next = current === 'dark' ? 'light' : 'dark';applyTheme(next);try { localStorage.setItem(storageKey, next); } catch (_err) {}});return true;}if (!init()) {document.addEventListener('DOMContentLoaded', init, { once: true });}})();</script></head>
+
+<body lang="en-GB" class="onc-body"><button type="button" id="onc-converted-theme-toggle" data-onc-converted-theme-toggle="v1" data-onc-oled-black="false" aria-pressed="false" aria-label="Switch converted page to dark theme" title="Toggle converted page theme">🔆</button><div id="onenote-cleaner-toolbar" data-onc-toolbar="v1" data-onc-toolbar-preset="office" data-onc-edit-enabled="true" data-onc-metadata-enabled="true" tabindex="-1" aria-label="OneNote Cleaner toolbar" hidden><div class="onc-toolbar-row"><span class="onc-title">Tools</span><button type="button" class="onc-btn" data-onc-action="edit-toggle" aria-pressed="false" title="Enable edit">Enable edit</button><button type="button" class="onc-btn" data-onc-action="metadata-toggle" aria-pressed="false" title="Show metadata">Show metadata</button><button type="button" class="onc-btn" data-onc-action="save" title="Save current page">Save</button><button type="button" class="onc-btn" data-onc-action="hide-toolbar" title="Hide toolbar">Hide</button></div><div class="onc-toolbar-row onc-edit-tools" data-onc-role="edit-tools" hidden><button type="button" class="onc-btn" data-onc-edit-command="undo" data-onc-active="false" aria-pressed="false" title="Undo">Undo</button><select class="onc-btn onc-select" data-onc-role="style-select" title="Styles" aria-label="Styles" disabled><option value="page-title">Page Title</option><option value="heading-1">Heading 1</option><option value="heading-2">Heading 2</option><option value="heading-3">Heading 3</option><option value="heading-4">Heading 4</option><option value="heading-5">Heading 5</option><option value="heading-6">Heading 6</option><option value="citation">Citation</option><option value="quote">Quote</option><option value="code">Code</option><option value="normal">Normal</option></select><button type="button" class="onc-btn" data-onc-edit-command="bold" data-onc-active="false" aria-pressed="false" title="Bold">B</button><button type="button" class="onc-btn" data-onc-edit-command="italic" data-onc-active="false" aria-pressed="false" title="Italic">I</button><button type="button" class="onc-btn" data-onc-edit-command="color" data-onc-active="false" aria-pressed="false" title="Text color">Color</button><input type="color" class="onc-color-input" data-onc-role="color-input" value="#2563eb" aria-label="Pick text color"><button type="button" class="onc-btn" data-onc-edit-command="size" data-onc-active="false" aria-pressed="false" title="Text size">Size</button><button type="button" class="onc-btn" data-onc-edit-command="sub" data-onc-active="false" aria-pressed="false" title="Subscript">Sub</button><button type="button" class="onc-btn" data-onc-edit-command="super" data-onc-active="false" aria-pressed="false" title="Superscript">Super</button><button type="button" class="onc-btn" data-onc-edit-command="bullet" data-onc-active="false" aria-pressed="false" title="Bullet list">Bullet List</button><button type="button" class="onc-btn" data-onc-edit-command="number" data-onc-active="false" aria-pressed="false" title="Numbered list">Numbered List</button><button type="button" class="onc-btn" data-onc-edit-command="link" data-onc-active="false" aria-pressed="false" title="Insert link">Link</button></div><aside class="onc-panel" data-onc-role="metadata-panel" hidden><dl><dt>Source</dt><dd data-onc-field="source-name">Communicate using Markdown.mht</dd><dt>Kind</dt><dd data-onc-field="source-kind">mht</dd><dt>Page title</dt><dd data-onc-field="page-title"></dd><dt>Format</dt><dd data-onc-field="export-format">html</dd><dt>Timestamp</dt><dd data-onc-field="timestamp">2026-08-22T16:07:15.800Z</dd></dl></aside></div><button type="button" id="onc-toolbar-show" aria-label="Show toolbar" title="Show toolbar">Toolbar</button><main>
+
+<div style="direction: ltr; margin-top: 2rem; margin-left: 2rem">
+
+<div style="direction: ltr; margin-top: 0; margin-left: 0">
+
+<h1 lang="yo" class="converted-page-title onc-title onc-page-title">Communicate
+using Markdown</h1>
+
+</div>
+
+<div style="direction: ltr; margin-left: 0">
+
+<p class="converted-page-date onc-meta onc-page-date-tone">22 September 2025<span class="created-time converted-page-time onc-meta onc-page-time">15:30</span></p>
+
+</div>
+
+<div style="direction: ltr; margin-top: .1805in; margin-left: 0; width: 7.602in">
+
+<div style="direction: ltr">
+
+<table style="direction: ltr" class="onc-table-borderless">
+ <tbody><tr>
+  <td style="width: 7.7048in" class="onc-cell-borderless-lite">
+  <div style="direction: ltr">
+  <table style="direction: ltr" data-onc-table-layout="two-column" class="onc-table-borderless">
+   <tbody><tr>
+    <td style="width: .9298in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+    <p style="text-align: right" lang="yo" class="onc-copy"><span style="font-weight: bold">Class:</span></p>
+    </td>
+    <td style="width: 2.9305in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+    <p lang="yo" class="onc-copy">Skills
+    for GitHub</p>
+    </td>
+    <td style="width: .9173in" class="onc-cell-borderless-lite">
+    <p style="text-align: right" lang="yo" class="onc-copy"><span style="font-weight: bold">Files:</span></p>
+    </td>
+    <td style="width: .5215in" class="onc-cell-borderless-lite">
+    <p style="margin: 0"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACG0lEQVQ4jYWTXUiTURjHf89xpOi2MMPmKhddDAJ1i8i6sYwsBn1Ad3XVVUEUdBUUYUUoFUIg5kXiXQRKIF1kBEWQGU4MCvq2MNLFFLHWB453H+/TRW3t1aEPHDiH8/x/z+H/5wgF1bupUSvW1lCsRCBlK7vbL+DftkVEBABXYVPtoX3UnTqGbdsFQkFEMMYQj8fxh8NMRsdUVUVEkNFgo1aYkqJTc2Wpje/xAOPj4zQ3NwPwJTpGYPtWcc1m0sySXhIAsDqTIZvN5s81oXoednSq63t2eTGAbdu43W7a2tqIxWIEg0E8n6dwfU1ZJJaBlJsSdhiD3+8nEokwPz+P2+1mYuYuriPRRySTSQCGunoIHz3sEOuLl3DiJNnOLipbz+P1evPGTpeV4woEApJr7jvTqj6fzwFIVa4ioWCqqvLCXCoqC2IsKy3F4/E4ALK3hRk1VBw8gDHGAVEE4zDqH7lw/XoW5SeGucEHi+5sEecLlL+A/HQR3pxtZf21dt533yQ+HMUbqkcFqnc2oYsA4gR86O5h6tU7ft/upzzUgAnU8vpWPz8mp1gzFGVFyy5nXHcuXtVkMqmJ+LT2NUX0xsp1Ght9rpZlqWVZmkqlNJ1O69ynCc1kMjpwuUOLvmDw+Gk+Ph1hf28X1ZsbyH2cnHmVGzfk+4t6sOf6FZouncMfqnMIc/u86bogxrGhYb6R/t907z5L1dsnI/wB68rJLCHbBKMAAAAASUVORK5CYIJ=" width="16" height="16" alt="GemIcon"></p>
+    </td>
+    <td style="width: 1.9423in" class="onc-cell-borderless-lite">
+    <p class="onc-copy"><a href="https://1drv.ms/f/c/6C8DED377E6CF4C2/Ai4WkYPuiz5Iu9vwvbL-D5w?e=OXY2iA"><span lang="yo">OneDrive folder</span></a></p>
+    </td>
+   </tr>
+   <tr>
+    <td style="width: .9298in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+    <p style="text-align: right" lang="yo" class="onc-copy"><span style="font-weight: bold">Topic:</span></p>
+    </td>
+    <td style="width: 3.034in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+    <p lang="yo" class="onc-copy">Organize
+    ideas and collaborate using Markdown, a lightweight language for text
+    formatting.</p>
+    </td>
+    <td style="width: .8131in" class="onc-cell-borderless-lite">
+    <p lang="yo" class="onc-copy"> </p>
+    </td>
+    <td style="width: .5215in" class="onc-cell-borderless-lite">
+    <p style="margin: 0"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABZUlEQVQ4y6WTvS9DURjGf/c6RYyM4iMRQ9MuGolYMAl7Q0hEDAwG4n8wkRgNogYWBiaDUCZT08VH9YPWvU0EcW/FZ9CbewytRNOL4sk5yTnDefJ73/M+ipSSD52cGzKSMkikTRK6SVwzuHt8AQnR9XEFBykTc7vyLJ0hfX2PlDZIiczv3NkGCaoQBQ+FUBjo9iD2wjog+UmRtbGCe9ayaR0OIPijXELFsmTpBp7+BUcaAaCqCgcrI3gHFjleHWVqbgf96o6NGT9u/7xjCQUGtp3rQVWlC4A2by0V5WWlEwBshzQ6WuoIRy9xN9bw8PTGdGD/yyYWGcS0DD3tTQRDOkO9HpobqgmGUqUTxHWTiT4fy5uHnF3c0uWrZ3J2q3SCk3MjR6KbRJIGnS31ZC37RwLFO7gkIb++mcTo+rjj1/55kIpK+K2ylo0Qyv/DpHyO81HyRsY0k5hmENcNTjWT++fXb+P8DnAZ1MBOYl/7AAAAAElFTkSuQmCC" width="16" height="16" alt="GemIcon"></p>
+    </td>
+    <td style="width: 1.9423in" class="onc-cell-borderless-lite">
+    <p lang="yo" class="onc-copy"> </p>
+    </td>
+   </tr>
+  </tbody></table>
+  </div>
+  <div style="direction: ltr">
+  <table style="direction: ltr" data-onc-table-layout="two-column" class="onc-table-borderless">
+   <tbody><tr>
+    <td style="width: .9319in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+    <p style="text-align: right" lang="yo" class="onc-copy"><span style="font-weight: bold">Website:</span></p>
+    </td>
+    <td style="width: 6.309in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+    <p lang="yo" class="onc-copy"><a href="https://github.com/skills/communicate-using-markdown">https://github.com/skills/communicate-using-markdown</a></p>
+    </td>
+   </tr>
+  </tbody></table>
+  </div>
+  </td>
+ </tr>
+ <tr>
+  <td style="width: 7.5916in" class="onc-cell-borderless-lite">
+  <blockquote style="color: #595959" lang="yo" class="onc-copy"><span style="font-style: italic">This course will walk
+  you through creating and using headings more effectively, organizing thoughts
+  in bulleted lists, and showing how much work you’ve completed with
+  checklists. You can even use Markdown to add some depth to your work with the
+  help of emoji, images, and links.</span></blockquote>
+  <blockquote style="color: #595959" lang="yo" class="onc-copy"><span style="font-style: italic">What you'll build:
+  We'll update a plain text file and add Markdown formatting, and you can use
+  this file to start your own GitHub Pages site.</span></blockquote>
+  </td>
+ </tr>
+ <tr>
+  <td style="width: 7.5166in" class="onc-cell-borderless-lite">
+  <div style="direction: ltr">
+  <table style="direction: ltr" class="onc-table-borderless">
+   <tbody><tr>
+    <td style="width: 7.4666in" class="onc-cell-borderless-lite">
+    <div style="direction: ltr">
+    <table style="direction: ltr" data-onc-table-layout="two-column" class="onc-table-borderless">
+     <tbody><tr>
+      <td style="width: 2.225in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+      <h2 style="color: #1E4E79" lang="yo" class="onc-h1">Cues</h2>
+      </td>
+      <td style="width: 5.0291in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <h2 style="color: #1E4E79" lang="yo" class="onc-h1">Notes</h2>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="1" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Course outline</span></li></ol>
+
+      </td>
+      <td style="width: 4.9736in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="onc-copy">In
+      this course, using Markdown I will: Add headers, add an image, add a code
+      example, make a task list and merge a pull request.</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="2" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">What is Markdown?</span></li></ol>
+
+      </td>
+      <td style="width: 5.0777in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="converted-content-spacer onc-copy"><br></p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="3" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">File extensions?</span></li></ol>
+
+      </td>
+      <td style="width: 4.9736in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="onc-copy">Markdown
+      files end with an extension of either <span style="font-style: italic">.md</span>
+      or <span style="font-style: italic">.markdown</span> however I would aim
+      to always use the <span style="font-style: italic">.md</span> extension.</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="4" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">What is a header?</span></li></ol>
+
+      </td>
+      <td style="width: 5.0215in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="onc-copy">A
+      header is a larger bit of text at the beginning of a section. There are
+      six sizes.</p>
+      <p lang="yo" class="onc-copy"># This
+      is an `&lt;h1&gt;` header, which is the largest.</p>
+      <p lang="yo" class="onc-copy">##
+      This is an `&lt;h2&gt;` header.</p>
+      <p lang="yo" class="onc-copy">######
+      This is an `&lt;h6&gt;` header, which is the smallest.</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="5" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Adding images</span></li></ol>
+
+      </td>
+      <td style="width: 5.0777in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="converted-content-spacer onc-copy"><br></p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="6" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Adding code blocks</span></li></ol>
+
+      </td>
+      <td style="width: 4.9736in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="converted-content-spacer onc-copy"><br></p>
+      <p lang="yo" class="onc-copy"><span style="color: #c00000; background: white">var</span><span style="color: #330066; background: white"> myVar </span><span style="color: #555555; background: white">=</span><span style="color: #330066; background: white"> </span><span style="color: #1861A7; background: white">"Hello, world!"</span><span style="color: #555555; background: white">;</span></p>
+      <p lang="yo" class="onc-copy">```</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="7" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Adding a task list</span></li></ol>
+
+      </td>
+      <td style="width: 4.9736in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p class="onc-copy"><span lang="yo">A
+      Markdown task list creates checkboxes to check/tick off. You can only
+      check/tick these boxes by editing the file. Example:<br>
+            </span><span lang="en-GB">- [x] List syntax is required</span></p>
+      <p class="onc-copy">- [x] This
+      item is complete</p>
+      <p class="onc-copy">- [ ] This
+      item is not complete</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="8" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Merge the pull request(s)</span></li></ol>
+
+      </td>
+      <td style="width: 4.9666in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p lang="yo" class="onc-copy">Click
+      on 'Merge pull requests' and delete the old branch.</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="9" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Recap of tasks</span></li></ol>
+
+      </td>
+      <td style="width: 4.9736in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p class="onc-copy"><span lang="yo">I
+      have </span><span lang="en-GB">learned about Markdown, headings, images,
+      code examples, and task lists. Also I have created a merged a GitHub
+      Markdown file.</span></p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="10" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Follow-up</span></li></ol>
+
+      </td>
+      <td style="width: 4.9736in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p class="onc-copy">You can enable
+      GitHub Pages and see your Markdown file as a website!</p>
+      </td>
+     </tr>
+     <tr>
+      <td style="width: 2.3034in" data-onc-col-role="leading" class="onc-cell-borderless-lite">
+
+       <ol type="1" class="onc-list"><li value="11" style="color: #2E75B5" lang="yo" class="onc-list-item"><span class="onc-inline-copy">Publish README as website</span></li></ol>
+
+      </td>
+      <td style="width: 5.0777in" data-onc-col-role="detail" class="onc-cell-borderless-lite">
+      <p class="onc-copy">Under your
+      repository name at the upper right, click "Settings".</p>
+      <p class="onc-copy">Then on the
+      lower left, click 'Pages' in the 'Code and automation' section.</p>
+      <p class="onc-copy">In the GitHub
+      Pages section, ensure "Deploy from a branch" is selected from
+      the Source drop-down menu, and then select main from the Branch drop-down
+      menu as your GitHub Pages publishing source.</p>
+      <p class="onc-copy">Click the
+      'Save' button.</p>
+      <p class="onc-copy">Wait about 30
+      seconds then refresh the page. When you see "Your site is published
+      at ..." you can click on the link to see your published site.</p>
+      </td>
+     </tr>
+    </tbody></table>
+    </div>
+    </td>
+   </tr>
+   <tr>
+    <td style="width: 7.3881in" class="onc-cell-borderless-lite">
+    <h2 style="color: #1E4E79" lang="yo" class="onc-h1">Summary</h2>
+    </td>
+   </tr>
+   <tr>
+    <td style="width: 7.3347in" class="onc-cell-borderless-lite">
+
+     <ul class="onc-bullet-list"><li style="color: #000000" lang="yo" class="onc-list-item"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE7SURBVDhPnZNPTsJQEIe/aUlkJwRcCycAIe65gdzAegO2TUwIibHXoDfAG+jaVO0N2AMp7CRpO64oZURC/FZvfvPnzcvMgxMsg563DHqe1cs4VjB4qIysWEassCN5uu3mbv4J4GTOTf3x/cvGcKqD3M2Lm8tniyyC/sCKAKLMRLgEUGWjwtDGAMgq6E+Be+s4k1AA/lkkbPiR5wA0/MgDQhvxF6rEznc6wk7hnE5Uid1tOqhP4jW2AMDquTdD5M7qHEnm6BhFCucvRNflZGwHybhTyy4q8934juGQtut+PN/bJbKqO7TJqmzKdq6Vg6U6KCC6XxZF3xzStitpF9WXvc7B5yqekIw7tbxaSVTZIDpq+h/TcuAi6A8EpgLXij7s/EUHWdUdAqG7TVs2GeDKj16bftQCJoIU6/8DFcd3WNfEEFkAAAAASUVORK5CYIJ=" width="16" height="16" alt="Important"> <span class="onc-inline-copy-lite">Creating Markdown files and merging pull requests
+          are essential basic skills when using GitHub.</span></li></ul>
+
+    </td>
+   </tr>
+  </tbody></table>
+  </div>
+  </td>
+ </tr>
+ <tr>
+  <td style="width: 7.468in" class="onc-cell-borderless-lite">
+  <div style="direction: ltr">
+  <table style="direction: ltr" class="onc-table-borderless">
+   <tbody><tr>
+    <td style="width: 7.2423in" class="onc-cell-borderless-lite">
+    <h2 style="color: #1E4E79" lang="yo" class="onc-h1">Study Questions</h2>
+    </td>
+   </tr>
+   <tr>
+    <td style="width: 7.2583in" class="onc-cell-borderless-lite">
+
+     <ul class="onc-bullet-list"><li style="color: #000000" lang="yo" class="onc-list-item"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD9SURBVDhPvZGxSsNQFIa/c1Kfwb1DHkJwMSVGBB0ls3vBtQ/gA3QSSldvu8VAUApu4uysuPgEgqPmXheF5JjagtJv+/9z/59zuILBJVVMVI8EMmAbAM99UMb54mhu30tTuKSKJXq/BgjoRIVXAO/9QIQsoKe2pNcURPUIINRbB/nt4WNjcuHSqxvxDIFWgTaF4HcDOjdhAFSkQNn54RvZV+Gl7f0TLi3PZ2nxbH2zQTcuLU8EPwzoxM5av9DFV3gakLt8cZzZ+a8F398akKeuMCtPiD7G3vO2LMyqAkH2VTmz/lq4pIpnaRmsb1m6gfbqPettlstB8fCnE9blEzQ2UW3YjIcQAAAAAElFTkSuQmCC" width="16" height="16" alt="Question"> <span class="onc-inline-copy-lite"> Should you avoid emojis in your README Markdown
+          files? It might look more professional if you avoid them.</span></li></ul>
+
+    </td>
+   </tr>
+  </tbody></table>
+  </div>
+  </td>
+ </tr>
+</tbody></table>
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<p style="margin: 0" class="converted-content-spacer converted-page-spacer"><br></p>
+
+<p style="text-align: left; margin: 0; font-family: Arial; font-size: 9pt; color: #666666; direction: ltr; margin-left: 8px">Created with OneNote.</p>
+
+</div>
+
+</main></body></html>
