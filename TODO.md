@@ -274,6 +274,8 @@ First-pass tasks:
   - [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
   - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
   - [ ] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract.
+7. Remove any plan or default behavior that bundles the toolbar and converted-page theme selector automatically; inclusion of either feature must remain an explicit user choice at conversion time, with docs/tests aligned to that contract.
+8. Convert core modules to TypeScript incrementally during `v0.2`, keeping the app shippable and tests green after each step.
 
 ## Version 1.0 — Native `.one` Release
 
@@ -288,16 +290,21 @@ Success criteria:
 - Native import behavior is stable enough that release notes can describe known limitations clearly without apologizing for the core workflow.
 
 First-pass tasks:
-1. Convert the JavaScript codebase to TypeScript incrementally, starting with shared core modules and build/test tooling, while keeping the app shippable throughout the transition.
-2. Define the `v1.0` native support contract: what kinds of `.one` files are in scope, what is intentionally unsupported, and what quality bar counts as release-ready.
-3. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
-4. Implement the minimal release-quality native pipeline, including import UX, warnings, failure messaging, and deterministic output expectations.
-5. Document native workflow limitations, expected fidelity, and troubleshooting paths in product docs and in-app help.
-6. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
-7. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
-8. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
-9. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
-10. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
+1. Define the `v1.0` native support contract as a written release document listing supported `.one` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness.
+2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
+3. Implement the minimal release-quality native pipeline so representative `.one` fixtures convert reliably and clear failure modes are surfaced to the UI.
+4. Ship acceptance UX for native import with clear warnings when `.one` features are unsupported and actionable next steps for the user.
+5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-selector support without bundling those assets by default.
+6. Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
+7. Measure and document the file-size impact of toolbar and theme-selector support, including per-file cost guidance for release docs and UI copy.
+8. In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme selector.
+9. Create documentation and in-app instructions for how to activate the toolbar and theme selector later by adding `onc-styles.css` after conversion.
+10. Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
+11. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
+12. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
+13. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
+14. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
+15. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 
