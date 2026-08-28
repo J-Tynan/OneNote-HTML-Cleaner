@@ -1,18 +1,16 @@
-# v0.1 Release Screenshot Shot List
+# v0.2 Release Screenshot Inventory
 
-Use this document to capture the final release screenshots for `0.1.0`.
+Use this document as the filename, scene, caption, and alt-text source of truth for `0.2.0`.
 
-Save all captured files under `assets/release/` using the filenames below so the later README update can reference them directly without renaming.
+The current `v0.2` screenshot set is already captured under `assets/release/`. This document keeps the public wording aligned across `README.md`, `RELEASE_NOTES.md`, and the release checklist.
 
-## Capture Setup
+## Asset Status
 
-- Use a clean browser profile on the current `main` build.
-- Use one browser consistently for the full set.
-- Keep the viewport consistent across the four primary product screenshots.
-- Avoid visible devtools, unrelated tabs, noisy desktop chrome, or stale queue state.
-- If the app looks stale after deployment, reload first. Only unregister the service worker if stale assets still persist.
+- Keep all current release assets under `assets/release/` with the filenames below.
+- Do not recapture or rename assets unless the product UI changes enough that the current image becomes misleading.
+- If wording drifts from what an image actually shows, update the docs to match the captured asset rather than inventing a cleaner description.
 
-## Required Files
+## Current Files
 
 ### 1. Main import workflow
 
@@ -33,10 +31,10 @@ Save all captured files under `assets/release/` using the filenames below so the
 ### 3. Advanced options
 
 - Filename: `assets/release/release-advanced-options-markdown.png`
-- Scene: Advanced options expanded with Export format set to Markdown and Markdown flavor set to Obsidian
-- Caption: Advanced options expose optional Markdown export controls without changing the default HTML workflow.
-- Alt text: Advanced options expanded with Markdown export selected and Obsidian chosen as the Markdown flavor.
-- Notes: keep the view focused on the controls; avoid crowding the frame with unrelated results.
+- Scene: Advanced options expanded with optional output controls visible, including externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection
+- Caption: Advanced options expose optional output controls such as externalized CSS, Markdown export, converted-page theme toggles, and toolbar injection without changing the default HTML workflow.
+- Alt text: Advanced options expanded with externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection controls visible.
+- Notes: this asset is not Markdown-only anymore; keep the wording aligned to the current captured image while preserving that these features are optional.
 
 ### 4. ZIP export
 
@@ -54,16 +52,8 @@ Save all captured files under `assets/release/` using the filenames below so the
 - Alt text: Exported HTML structure highlighting a single page-level h1 and a main landmark.
 - Notes: this can be a supporting figure rather than a hero image. Prioritize clarity of the structure evidence over visual polish.
 
-## Recommended Capture Order
+## Alignment Check
 
-1. `release-import-workflow.png`
-2. `release-advanced-options-markdown.png`
-3. `release-converted-output.png`
-4. `release-zip-export.png`
-5. `release-accessibility-structure.png`
-
-This order minimizes repeated setup changes in the app state.
-
-## Completion Check
-
-Before handing the screenshots back for integration, confirm all five files exist in `assets/release/` and that none of them still need cropping, renaming, or caption changes.
+- The caption and alt-text strings for these five assets should match exactly in `README.md` and `docs/Release-Go-No-Go-Checklist.md`.
+- `RELEASE_NOTES.md` should describe the same feature set and release scope without needing to repeat every caption verbatim.
+- Keep the release copy narrow: browser-first MHTML cleaning, optional advanced features, unsupported native `.one` and `.onepkg`, and no broader browser-support claims than the recorded verification supports.

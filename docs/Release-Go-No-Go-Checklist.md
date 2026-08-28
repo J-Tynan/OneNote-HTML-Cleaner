@@ -1,30 +1,30 @@
-# v0.1 Release Go / No-Go Checklist
+# v0.2 Release Go / No-Go Checklist
 
-Use this document as the release-facing sign-off sheet for `0.1.0`.
+Use this document as the release-facing sign-off sheet for `0.2.0`.
 
-The goal is to confirm that the shipped contract, public-facing assets, and recorded verification evidence all match the release scope already defined in `TODO.md`.
+The goal is to confirm that the shipped contract, current screenshot assets, and public-facing copy all describe the same `v0.2` stabilization release.
 
 ## Canonical Release Contract
 
-- Version: `0.1.0`
+- Version: `0.2.0`
 - Stable input scope: exported OneNote `.mht` and `.mhtml` only
 - Stable output scope: cleaned HTML by default, optional Markdown through advanced export controls
+- Optional HTML-only extras: converted-page theme toggle, toolbar injection, and externalized CSS when the workflow keeps related assets together
 - Unsupported native formats: `.one` and `.onepkg` are detected for messaging but are not converted in the shipped runtime
 - Out of scope for this release: `.docx` export and native OneNote conversion
 - Accessibility baseline: exported HTML should include one page-level `h1` and a `<main>` landmark
 
 ## Release Sign-Off Checklist
 
-- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same shipped `v0.1` scope.
-- [x] Public docs describe Markdown export as optional/advanced rather than the default workflow.
+- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same current shipped scope.
+- [x] Public docs describe Markdown export, toolbar injection, converted-page theme toggles, and externalized CSS as optional advanced features rather than the default workflow.
 - [x] Public docs describe native `.one` and `.onepkg` files as unsupported in the shipped runtime.
-- [x] Public docs avoid broader browser-compatibility claims than the final RC pass actually verifies.
+- [x] Public docs avoid broader browser-compatibility claims than the recorded verification supports.
 - [x] Service-worker update guidance is present: reload first, then unregister and reload only if stale assets persist.
-- [x] Known limitations are stated clearly and consistently.
-- [x] Screenshot assets are captured and placed in the release-facing docs.
-- [x] Screenshot captions and alt text are final.
-- [x] Final RC verification results are recorded after the release-facing docs and screenshot assets land.
-- [ ] Create the `v0.1.0` tag only after `main` is green.
+- [x] Screenshot asset filenames in `assets/release/` match the active release docs.
+- [x] Screenshot captions and alt text are aligned across the README, screenshot inventory, and this checklist.
+- [ ] Final `v0.2` RC verification results are recorded after the release-facing docs are locked.
+- [ ] Create the `v0.2.0` tag only after `main` is green.
 
 ## Browser And Runtime Verification Notes
 
@@ -32,10 +32,11 @@ The goal is to confirm that the shipped contract, public-facing assets, and reco
 - Do not broaden support wording beyond the browsers actually exercised during final validation.
 - Confirm the offline-capable PWA flow still works after the first load.
 - Confirm that a fresh reload picks up the current service-worker-managed assets.
+- Re-check that opt-in converted-page features remain off by default in the shipped HTML path.
 
 ## Screenshot Inventory
 
-Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, save location, and capture order.
+Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, scene descriptions, caption text, and alt-text wording.
 
 ### 1. Main import workflow
 
@@ -51,9 +52,9 @@ Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, save locatio
 
 ### 3. Advanced options
 
-- Scene: Advanced options expanded with Export format set to Markdown and Markdown flavor set to Obsidian
-- Caption: Advanced options expose optional Markdown export controls without changing the default HTML workflow.
-- Alt text: Advanced options expanded with Markdown export selected and Obsidian chosen as the Markdown flavor.
+- Scene: Advanced options expanded with optional output controls visible, including externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection
+- Caption: Advanced options expose optional output controls such as externalized CSS, Markdown export, converted-page theme toggles, and toolbar injection without changing the default HTML workflow.
+- Alt text: Advanced options expanded with externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection controls visible.
 
 ### 4. ZIP export
 
@@ -69,17 +70,17 @@ Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, save locatio
 
 ## Final RC Verification Record
 
-Complete this section only after the release-facing docs and screenshots have landed.
+Complete this section only after the release-facing docs are locked and the final `v0.2` validation pass has run.
 
-- [x] `npm ci`
-- [x] `npm run test:gate:native`
-- [x] Playwright smoke coverage
-- [x] Accessibility audits
-- [x] Manual acceptance already recorded for the locked core fixtures
+- [ ] `npm ci`
+- [ ] `npm run test:gate:native`
+- [ ] Focused Playwright smoke coverage for the shipped flow and any changed release-facing UI
+- [ ] Accessibility audits
+- [ ] Manual acceptance recorded for the locked core `.mht` fixtures
 
-Recorded on `2026-05-13` against `main` after the release docs and screenshot assets landed.
+Recorded on `TBD`.
 
 ## Release Decision
 
 - Go if every checklist item above is complete and `main` is green.
-- No-go if scope wording drifts, screenshot assets are still placeholders, or the final RC pass finds a release-path regression.
+- No-go if scope wording drifts, the screenshot assets become stale or misleading, or the final RC pass finds a release-path regression.

@@ -22,14 +22,16 @@ The section below is prepared for a side-by-side example using the same note in 
 
 This comparison is intended to show a real exported note with a clean, reasonable before-and-after example rather than a dramatized marketing comparison.
 
-## v0.1 Release Highlights
+## v0.2 Release Highlights
 
-- Stable MHTML-to-HTML conversion with deterministic output and offline PWA support.
-- Optional Markdown export with Obsidian as the default flavor, plus optional externalized CSS for ZIP exports.
-- Handwriting preserved as raster images; editable vector ink remains outside the current release path.
-- Native `.one` and `.onepkg` files are detected clearly as unsupported instead of being partially processed.
+- Hardened MHTML-to-HTML conversion against edge-case layout, list, table, whitespace, and inline-resource regressions while keeping deterministic browser-first output.
+- Optional advanced features stay opt-in: Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection.
+- Homepage, Help, queue recovery, and batch export flows are polished for steadier desktop and mobile use.
+- Native `.one` and `.onepkg` files remain clearly detected as unsupported instead of being partially processed.
 
 ## Screenshots
+
+<!-- markdownlint-disable MD033 MD010 -->
 
 <table>
 	<tr>
@@ -63,6 +65,8 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 </p>
 
 <p><strong>Accessibility Note</strong><br>Exported HTML keeps a single page-level heading and a main landmark for a cleaner accessibility baseline.</p>
+
+<!-- markdownlint-enable MD033 MD010 -->
 
 ## Why Use It
 
@@ -122,6 +126,7 @@ Converted output is designed to be more readable and easier to reuse than raw ex
 You can process one file or multiple files in the same session. Batch exports are packaged into a ZIP with deterministic, readable filenames so the result is easier to store and share. If you want to reset the current queue before starting a different batch, use `Clear files`.
 
 ### Simple Default Flow, Advanced Controls When Needed
+
 Advanced options stay collapsed by default so first-time users are not forced through configuration before converting a file. When needed, advanced settings can enable optional behaviors such as:
 
 - manual convert mode
@@ -194,7 +199,7 @@ The app supports a small set of explicit keyboard shortcuts and a broader set of
 
 ## Release Scope
 
-The first stable release is intentionally narrow.
+The current shipped release remains intentionally narrow.
 
 - Supported production conversion path: OneNote MHTML exports only
 - Native OneNote files such as `.one` and `.onepkg` are not supported in this release
