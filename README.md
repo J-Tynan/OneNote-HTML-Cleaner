@@ -127,7 +127,8 @@ Advanced options stay collapsed by default so first-time users are not forced th
 - manual convert mode
 - Markdown export
 - externalized CSS for ZIP exports
-- converted-page theme toggle options for HTML output
+- opt-in converted-page theme toggle options for HTML output
+- opt-in converted-page edit toolbar for HTML output
 
 ### Optional Markdown Export
 
@@ -136,6 +137,10 @@ The app can also export Markdown through the advanced export controls. Obsidian-
 ### Optional Externalized CSS For ZIP Exports
 
 For HTML batch exports, styles can be written to separate CSS files instead of staying embedded in each HTML file. This is useful when exported files will remain together as a ZIP package.
+
+### Converted-Page Theme Toggle
+
+For HTML exports, Advanced options can add an optional Light or Dark toggle to converted pages. The toggle stays off by default, and the OLED-black variant is available only after you explicitly enable the converted-page theme toggle.
 
 ### Preserved Rich Content
 
@@ -216,7 +221,7 @@ Disable auto-convert if you want to queue files first and trigger conversion man
 
 ### Converted-Page Edit Toolbar
 
-For HTML exports, Advanced options can inject an Edit Mode toolbar into converted pages. Available presets include Compact, Office-97, Ribbon, MacOS, and Linux chrome styles.
+For HTML exports, Advanced options can inject an Edit Mode toolbar into converted pages when you explicitly enable it. The current shipped presets are Compact, Office, and Ribbon.
 
 ## Roadmap
 

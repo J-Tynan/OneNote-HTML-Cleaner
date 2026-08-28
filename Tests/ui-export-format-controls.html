@@ -91,13 +91,24 @@
     const convertedThemeOled = document.getElementById('convertedPageThemeToggleOledBlack');
     const convertedThemeHelp = document.getElementById('convertedPageThemeHelp');
     const supportedToolbarPresets = ['compact', 'office', 'ribbon'];
+    const initialRuntime = getRuntime();
+    const initialCfg = initialRuntime && initialRuntime.downloadHelpers.getConversionConfig();
 
     const toolbarOptionValues = Array.from(toolbarStyle.options).map((option) => option.value);
     if (JSON.stringify(toolbarOptionValues) === JSON.stringify(supportedToolbarPresets)) pass('Toolbar style dropdown exposes all supported presets in order');
     else fail(`Toolbar style dropdown presets should match supported list, got ${JSON.stringify(toolbarOptionValues)}`);
 
+    if (!toolbarEnabled.checked) pass('Toolbar toggle starts unchecked for explicit opt-in HTML enhancement');
+    else fail('Toolbar toggle should start unchecked for explicit opt-in HTML enhancement');
+
     if (toolbarStyle.disabled && toolbarStyleContainer.classList.contains('hidden')) pass('Toolbar style hidden/disabled by default when toolbar is OFF');
     else fail('Toolbar style should be hidden/disabled by default when toolbar is OFF');
+
+    if (!convertedThemeToggle.checked) pass('Converted-page theme toggle starts unchecked for explicit opt-in HTML enhancement');
+    else fail('Converted-page theme toggle should start unchecked for explicit opt-in HTML enhancement');
+
+    if (initialCfg && initialCfg.ToolbarEnabled === false && initialCfg.ConvertedPageThemeToggleEnabled === false && initialCfg.ConvertedPageThemeToggleOledBlack === false) pass('Default HTML conversion config keeps toolbar and converted-page theme toggle OFF');
+    else fail('Default HTML conversion config should keep toolbar and converted-page theme toggle OFF');
 
     toolbarEnabled.checked = true;
     toolbarEnabled.dispatchEvent(new Event('change', { bubbles: true }));
@@ -128,8 +139,8 @@
     if (flavorContainer.classList.contains('hidden') && flavor.disabled) pass('Markdown flavor hidden/disabled by default');
     else fail('Markdown flavor should be hidden/disabled by default');
 
-    if (!convertedThemeToggle.disabled) pass('Converted-page theme toggle enabled by default for HTML output');
-    else fail('Converted-page theme toggle should be enabled by default for HTML output');
+    if (!convertedThemeToggle.disabled) pass('Converted-page theme toggle stays available for HTML output while remaining opt-in');
+    else fail('Converted-page theme toggle should stay available for HTML output while remaining opt-in');
 
     if (convertedThemeOled.disabled) pass('OLED option disabled until converted-page theme toggle is enabled');
     else fail('OLED option should be disabled until converted-page theme toggle is enabled');

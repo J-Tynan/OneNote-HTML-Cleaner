@@ -223,6 +223,17 @@ async function main() {
     fail('Expected disabled toolbar config to keep output unchanged');
   }
 
+  const themeDisabled = mod.injectConvertedPageThemeToggle(baseHtml, {
+    ConvertedPageThemeToggleEnabled: false,
+    ConvertedPageThemeToggleOledBlack: true,
+    ExperimentalExportEnabled: false,
+    ExportFormat: 'html'
+  });
+
+  if (themeDisabled !== baseHtml) {
+    fail('Expected disabled converted-page theme toggle config to keep output unchanged');
+  }
+
   const withThemeToggle = mod.injectConvertedPageThemeToggle(baseHtml, {
     ConvertedPageThemeToggleEnabled: true,
     ConvertedPageThemeToggleOledBlack: true,

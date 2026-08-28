@@ -28,8 +28,8 @@ With `v0.1.0` tagged, new work should center on `v0.2` stabilization while defin
 - [x] PWA conversion test with `Test File.mht` passed — ready to commit (2026-02-20)
 - [x] In-app Help popup and keyboard shortcut added (2026-02-20)
 - [x] Convert-button end-to-end smoke test added: `Tests/convert-button-smoke-playwright.js` (2026-02-24)
- - [x] Run local MHT conversion tests and regenerate `Tests/Cleaned` (2026-02-25)
- - [x] Populate missing converted fixtures used by native smoke suite (local-only) (2026-02-25)
+- [x] Run local MHT conversion tests and regenerate `Tests/Cleaned` (2026-02-25)
+- [x] Populate missing converted fixtures used by native smoke suite (local-only) (2026-02-25)
 
 - [x] Centralize fixture discovery and add `Tests/fixtures.js` (2026-03-02)
 - [x] Sanitizer: unwrap malformed list wrappers to prevent synthetic top-level bullets (2026-03-02)
@@ -126,10 +126,10 @@ This audit pass is complete. Keep this section as historical context for what wa
 
 ### Bucket 5 findings: Experimental export paths
 
- [x] [P1] Unify export-format and Markdown-flavor normalization so `src/ui-downloads.js`, `src/pipeline/config.js`, and `src/pipeline/toolbarInjector.js` do not each maintain their own accepted-format logic.
- [x] [P1] Remove duplicate Markdown conversion routing between `src/worker.js` and `src/worker-wrapper.js` so experimental export behavior has one canonical execution path.
- - [x] [P1] Quarantine dormant `.docx` runtime branches at the config boundary and update docs (2026-03-12).
- - [x] [P1] Refactor toolbar injector to consume an explicit normalized `exportState` and rewire callers (2026-03-12).
+- [x] [P1] Unify export-format and Markdown-flavor normalization so `src/ui-downloads.js`, `src/pipeline/config.js`, and `src/pipeline/toolbarInjector.js` do not each maintain their own accepted-format logic.
+- [x] [P1] Remove duplicate Markdown conversion routing between `src/worker.js` and `src/worker-wrapper.js` so experimental export behavior has one canonical execution path.
+- [x] [P1] Quarantine dormant `.docx` runtime branches at the config boundary and update docs (2026-03-12).
+- [x] [P1] Refactor toolbar injector to consume an explicit normalized `exportState` and rewire callers (2026-03-12).
 
 - [x] [P1] Simplify diagnostic buffering and dispatch in `src/worker-wrapper.js` so handshake timeout, unmatched-message, duplicate-response, and worker-origin diagnostics all flow through one implementation path instead of partially duplicating push/trim/event logic. (2026-03-12)
 - [x] [P1] Decide whether `window.__getWorkerManagerDiagnostics`, `window.__getRuntime`, and other test-facing globals in `src/ui.js` should remain in production builds; if they stay, document them as explicit dev hooks rather than leaving them as ad hoc test affordances. (2026-03-12)
@@ -193,6 +193,7 @@ Derived from `docs/HTML-Output-Standard.md`.
 All items in this section must be satisfied before tagging the first stable release.
 
 ### Document structure
+
 - [x] Assert exactly one `<main>` element per exported document.
 - [x] Assert exactly one page-level `<h1>` per document.
 - [x] Add regression test enforcing valid heading order (`h1 → h2 → h3`).
@@ -204,21 +205,25 @@ All items in this section must be satisfied before tagging the first stable rele
 - [x] Assert no deprecated attributes (`bgcolor`, `align`, `border`, `summary`) remain. (2026-02-25)
 
 ### Attributes & styling
+
 - [x] Normalize or remove repetitive inline styles introduced by conversion. (2026-02-26)
 - [x] Add regression test asserting sanitizer idempotence. (2026-02-25)
 - [x] Ensure visual fidelity does not rely on authoring‑tool‑specific styles. (2026-02-26)
 
 ### Encoding & character safety
+
 - [x] Assert exported HTML is UTF‑8 encoded. (2026-02-26)
 - [x] Add CI test asserting no C0 control characters appear in output.
 - [x] Lock charset fallback behavior behind tests and documentation. (2026-02-26)
 
 ### Accessibility baseline
+
 - [x] Assert presence of `<main>` landmark.
 - [x] Assert exactly one page-level `<h1>`.
 - [x] Add test asserting non-decorative images include `alt` text.
 
 ### Stability guarantees
+
 - [x] Assert sanitization is idempotent. (2026-02-25)
 - [x] Assert re‑running conversion on the same input produces equivalent output. (2026-02-25)
 - [x] Lock cleaned fixtures for regression comparison. (2026-02-25)
@@ -243,38 +248,34 @@ All items in this section must be satisfied before tagging the first stable rele
 Use this track to make the shipped browser-first MHTML workflow calmer, more reliable, and easier to present before native-file support expands the scope.
 
 Release goal:
+
 - Reduce avoidable bugs and release friction in the current `.mht` / `.mhtml` path.
 
 Success criteria:
+
 - Real-world MHTML regressions are addressed faster because the test harness is easier to trust and maintain.
 - High-visibility UI controls feel consistent and screenshot-ready across desktop and mobile displays.
 - The current feature set has clearer acceptance gates, sharper docs, and reusable launch material that can carry into later releases.
 
 First-pass tasks:
+
 1. Harden the MHTML-to-HTML pipeline against edge-case fixtures and expand targeted regression coverage for tables, lists, whitespace, and inline resources. Completed 2026-07-09: tightened list deduplication and bullet-marker handling in `src/pipeline/sanitize.js`, narrowed `mergeStyled()` table-cell list merging in `src/pipeline/listRepair.js`, hardened queried-path and unresolved-resource image handling in `src/pipeline/images.js`, added deterministic `imageMapCollision` warnings in `src/pipeline/mht.js`, expanded focused coverage under `Tests/`, added `test:pipeline-edge-cases` to `package.json`, and validated with `npm run test:pipeline-edge-cases`, `node ./Tests/mht-fixtures-playwright.js`, and `npm run test:gate:native` after updating the stale HTML-only toolbar expectation in `Tests/ui-downloads-config.js`.
 2. Tackle deferred post-release test-harness cleanup that directly improves confidence and delivery speed, especially repeated static-server setup and shared browser-test helpers. Completed 2026-07-09: finished consolidating browser-test HTTP setup into `Tests/playwright-server-helper.js`, migrated the remaining route-backed toolbar Playwright coverage (`Tests/toolbar-save-playwright.js`, `Tests/converted-page-theme-toggle-playwright.js`, `Tests/toolbar-hide-playwright.js`) plus the exported-page a11y audit onto the shared helpers, confirmed runtime-diagnostics access remains centralized in `Tests/playwright-runtime-harness.js`, and validated with `node ./Tests/toolbar-save-playwright.js`, `node ./Tests/converted-page-theme-toggle-playwright.js`, `node ./Tests/toolbar-hide-playwright.js`, and `node ./Tests/playwright-a11y-exports.js --dir Tests/Cleaned`.
 3. Run a consistency pass on high-visibility controls and current features, including primary/secondary button polish, toolbar/config stability, and the clear-results workflow. Completed 2026-07-09: aligned the homepage Browse/Convert CTA sizing in `styles.css`, unified the results-area Clear files / Download ZIP action row in `index.html` and `styles.css`, expanded `Tests/clear-files-playwright.js` to lock desktop height parity plus stacked full-width mobile actions, and revalidated homepage layout plus advanced export/toolbar control stability with `node ./Tests/convert-button-smoke-playwright.js`, `node ./Tests/clear-files-playwright.js`, `node ./Tests/layout-shift-playwright.js`, and `node ./Tests/export-format-controls-playwright.js`.
 4. Rewrite or tighten high-traffic product copy where it still feels provisional, including Help content, feature descriptions, and acceptance-gate documentation. Completed 2026-07-09: tightened homepage and Help-modal workflow wording in `index.html`, aligned advanced export/theme helper text in `src/ui.js`, refreshed public-facing feature and workflow descriptions in `README.md`, clarified acceptance-gate wording in `docs/Release-Go-No-Go-Checklist.md`, and validated the in-app copy changes with `node ./Tests/export-format-controls-playwright.js` and `node ./Tests/playwright-a11y.js`.
-5. Finish reusable launch assets after the core `v0.2` stabilization work lands by completing this small-step checklist:
-  - [ ] Audit `assets/release/` against `docs/Release-Screenshot-Shot-List.md` and note which existing release images can be reused as-is versus which need a fresh `v0.2` capture.
-  - [ ] Update `docs/Release-Screenshot-Shot-List.md` only where the required scene, caption, alt text, or capture notes no longer match the current `v0.2` UI and copy.
-  - [ ] Recapture the homepage/import workflow screenshot on a clean profile after the final `v0.2` UI and copy changes are in place.
-  - [ ] Recapture the converted-output screenshot on a clean profile using a fixture that still shows headings, lists, tables, and handwriting clearly.
-  - [ ] Recapture the Advanced options screenshot so the current export-format and Markdown-flavor wording is reflected exactly.
-  - [ ] Recapture the ZIP export screenshot so the filenames, export controls, and surrounding UI match the stabilized `v0.2` build.
-  - [ ] Recapture the accessibility/structure screenshot or equivalent proof asset showing `<main>` plus a single page-level `h1` in the exported HTML.
-  - [ ] Verify the refreshed screenshot files use the expected names in `assets/release/` and replace any stale thumbnails or derived copies that no longer match.
-  - [x] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth. (2026-07-14)
-  - [ ] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability.
-  - [ ] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs.
-  - [ ] Reduce the CSS bundled within each converted note to cut export size without changing the screenshot-ready `v0.2` output.
+5. Finish reusable launch assets after the core `v0.2` stabilization work lands.
+   - [x] Screenshot assets for the release are already captured in `assets/release/` and no longer need additional `v0.2` capture work.
+   - [x] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth. (2026-07-14)
+   - [x] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability. (2026-08-28, added `docs/Release-Before-After-Notes.md`.)
+   - [ ] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs.
+   - [ ] Reduce the CSS bundled within each converted note to cut export size without changing the screenshot-ready `v0.2` output.
 6. Reduce repeated code and reduce the file size of the shipped app and exported assets without changing behavior by working through these smaller follow-ups:
-  - [x] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output. (2026-07-13, reviewed the new comparison set and confirmed that the remaining repeated `direction:ltr` wrappers, widths, alignment, and sparse emphasis spans are still mostly structural rather than safe standalone CSS candidates.)
-  - [x] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes. (2026-07-13, measured the attached comparison set and recorded byte/token reductions across the updated outputs.)
-  - [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
-  - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
-  - [ ] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract.
-7. Remove any plan or default behavior that bundles the toolbar and converted-page theme selector automatically; inclusion of either feature must remain an explicit user choice at conversion time, with docs/tests aligned to that contract.
+   - [x] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output. (2026-07-13, reviewed the new comparison set and confirmed that the remaining repeated `direction:ltr` wrappers, widths, alignment, and sparse emphasis spans are still mostly structural rather than safe standalone CSS candidates.)
+   - [x] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes. (2026-07-13, measured the attached comparison set and recorded byte/token reductions across the updated outputs.)
+   - [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
+   - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
+   - [ ] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract.
+7. Completed 2026-08-28: confirmed the shipped HTML path keeps both toolbar injection and the converted-page theme toggle explicitly opt-in, tightened release-facing/docs contract wording, and added focused default-off regression coverage for the UI and injector paths.
 8. Convert core modules to TypeScript incrementally during `v0.2`, keeping the app shippable and tests green after each step.
 
 ## Version 1.0 — Native `.one` Release
@@ -282,23 +283,26 @@ First-pass tasks:
 Use this track for the first stable native OneNote-file release, with scope defined by a narrow support contract rather than by every deferred feature that could attach itself to native import.
 
 Release goal:
+
 - Ship `.one` processing as a credible product capability, not just a parser milestone.
 
 Success criteria:
+
 - Supported `.one` scenarios are explicitly documented and backed by representative fixtures.
 - Failure modes are understandable in the UI and do not leave users guessing whether a file, feature, or workflow is unsupported.
 - Native import behavior is stable enough that release notes can describe known limitations clearly without apologizing for the core workflow.
 
 First-pass tasks:
+
 1. Define the `v1.0` native support contract as a written release document listing supported `.one` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness.
 2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
 3. Implement the minimal release-quality native pipeline so representative `.one` fixtures convert reliably and clear failure modes are surfaced to the UI.
 4. Ship acceptance UX for native import with clear warnings when `.one` features are unsupported and actionable next steps for the user.
-5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-selector support without bundling those assets by default.
+5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
 6. Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
-7. Measure and document the file-size impact of toolbar and theme-selector support, including per-file cost guidance for release docs and UI copy.
-8. In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme selector.
-9. Create documentation and in-app instructions for how to activate the toolbar and theme selector later by adding `onc-styles.css` after conversion.
+7. Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance for release docs and UI copy.
+8. In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle.
+9. Create documentation and in-app instructions for how to activate the toolbar and theme toggle later by adding `onc-styles.css` after conversion.
 10. Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
 11. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
 12. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
@@ -311,14 +315,17 @@ First-pass tasks:
 Use this track for the first post-`v1.0` hardening release: absorb real-world feedback from native `.one` usage, improve compatibility, and package the product more clearly for wider adoption.
 
 Release goal:
+
 - Make the native-file story dependable in practice and easier to communicate externally.
 
 Success criteria:
+
 - Early `.one` bugs and compatibility gaps are reduced based on real post-release evidence.
 - Release assets are strong enough to explain the product quickly to new users without improvising from scratch.
 - Marketing and release-prep work becomes a maintained asset library rather than a one-off scramble.
 
 First-pass tasks:
+
 1. Prioritize and fix the first wave of `.one` regressions, unsupported-content surprises, and fidelity gaps found after `v1.0` ships.
 2. Expand compatibility fixtures and troubleshooting documentation using real sample diversity rather than only synthetic happy paths.
 3. Produce a maintained screenshot set for homepage, import flow, converted output, native `.one` scenarios, and key options.
@@ -378,18 +385,21 @@ First-pass tasks:
 ### OneNote Tag Support (post‑release)
 
 #### Phase 1 — Tag Parsing Improvements
+
 - [ ] [P2] Expand MHTML → HTML sanitizer to detect OneNote tag glyphs and map them to semantic tag types.
 - [ ] [P2] Define canonical HTML representation for tags (for example, `<span class="onenote-tag" data-tag="todo">`).
 - [ ] [P2] Add regression fixtures containing all built‑in OneNote tag types.
 - [ ] [P2] Add Markdown export rules for tags (Obsidian-compatible checkboxes, emoji, or text markers).
 
 #### Phase 2 — Edit Mode Tag Insertion
+
 - [ ] [P2] Add tag insertion controls to Edit Mode toolbar (To‑Do, Important, Question, Idea, etc.).
 - [ ] [P2] Ensure inserted tags use the same canonical HTML representation as parsed tags.
 - [ ] [P2] Add Playwright coverage for tag insertion, toggling, and deletion.
 - [ ] [P2] Add visual variants for tag icons depending on toolbar UI style (Office‑97, Ribbon, MacOS, Linux).
 
 #### Phase 3 — Tag Summary Tool
+
 - [ ] [P3] Create standalone `summarize-tags.html` tool for drag‑and‑drop analysis of converted HTML/Markdown.
 - [ ] [P3] Parse tags across multiple files and group by:
   - tag type
@@ -402,48 +412,57 @@ First-pass tasks:
 ### OneNote Tag System — Design & Research (post‑release)
 
 #### Phase 0 — Research Capture (now)
+
 - [ ] Record Option A (emoji) and Option B (Heroicons) findings in docs.
 - [ ] Decide on a single canonical tag data model independent of rendering.
 - [ ] Define required tag metadata: type, label, priority, completion state.
 
 #### Phase 1 — Canonical Tag Model
+
 - [ ] Define canonical HTML structure for tags (`data-tag`, `data-label`, etc.).
 - [ ] Add minimal CSS for tag containers (spacing, alignment, accessibility).
 - [ ] Add regression fixtures containing parsed OneNote tags.
 
 #### Phase 2 — Emoji Renderer (Option A)
+
 - [ ] Define emoji mapping for all default OneNote tags.
 - [ ] Add CSS to normalize emoji size and baseline alignment.
 - [ ] Use emoji renderer for:
-      - Markdown export
-      - Summarize Tags tool
-      - Plain‑text fallback
+  - Markdown export
+  - Summarize Tags tool
+  - Plain‑text fallback
 
 #### Phase 3 — SVG Renderer (Option B)
+
 - [ ] Define Heroicons mapping for all default OneNote tags.
 - [ ] Add SVG renderer for:
-      - Edit Mode toolbar
-      - Converted HTML output
+  - Edit Mode toolbar
+  - Converted HTML output
 - [ ] Ensure SVG renderer can be swapped for emoji renderer without markup changes.
 
 #### Phase 4 — Summarize Tags Tool
+
 - [ ] Build standalone HTML tool for drag‑and‑drop tag summaries.
 - [ ] Default to emoji renderer for portability.
 - [ ] Add filters by tag type, page, and completion state.
 
-**Current Release Focus**
+#### Current Release Focus
+
 - **Stabilize the shipped MHTML path for `v0.2` while defining the narrow `v1.0` `.one` support contract and collecting reusable launch assets along the way.**
 
 Completed follow-up work from this milestone:
+
 - [x] Draft `README.md` section describing Externalize CSS behavior, supported modes, and recommended usage (shared vs per-page), including examples and known caveats. (2026-03-10)
 - [x] Add in-app help text and tooltip copy explaining when externalized CSS is suitable and warnings for single-file downloads without assets. (2026-03-10)
 - [x] Add a small smoke/test example (or test instruction) demonstrating per-page vs shared CSS outputs and link integrity. (2026-03-10)
 - [x] Land the documentation and test updates on `main`. (2026-03-10)
 
-**Notes / Deferred items**
+#### Notes / Deferred items
+
 - `Test Handwriting.html` follow-on content baseline margin normalization shipped with regression coverage in `Tests/direction-layout-normalization.unit.js`. Keep monitoring future handwriting fixtures for edge cases. (updated 2026-03-07)
 
 ### Manual Convert Button
+
 - [x] Convert button implemented and tested.
 - [x] Disabled when auto‑convert is ON.
 - [x] Tooltip shown when disabled.
@@ -451,6 +470,7 @@ Completed follow-up work from this milestone:
 - [x] README updated.
 
 ### Experimental handwriting conversion
+
 - [x] [P2] Add handwriting fixtures (OneNote pages with ink) to regression suite. (2026-03-03)
 - [x] [P2] Implement ink detection in pipeline: detect `<svg>`, VML, `<canvas>`, and raster `<img>` cases. (2026-03-03)
 - [x] [P2] If only raster found, preserve image, replace alt-text with appropriate wording and add data-handwriting="raster" metadata. (2026-03-03)
@@ -469,12 +489,14 @@ Goal: Provide high‑quality, structure‑first Markdown exports suitable for lo
 knowledge bases and note‑taking tools. Visual parity with OneNote is not a goal.
 
 Design principles:
+
 - Semantic fidelity over visual layout.
 - Deterministic, renderer‑agnostic output.
 - One shared semantic conversion core with thin flavor adapters.
 - No inline HTML unless strictly necessary.
 
 Initial scope:
+
 - Headings, paragraphs, lists, tables, code blocks, images.
 - Flatten free‑form layout and absolute positioning.
 - Preserve document hierarchy and reading order.
@@ -511,7 +533,6 @@ Initial scope:
 - [x] [P2] Add a regression test asserting HTML → Markdown determinism. (2026-03-03)  
   Given a fixed sanitized HTML fixture, Markdown output must be byte‑stable across runs and independent of UI options unrelated to export format.
 
-
 ### Markdown Export — Conversion Boundaries
 
 - [x] [P2] Explicitly flatten free‑form layout during Markdown conversion. (2026-03-03)  
@@ -519,7 +540,6 @@ Initial scope:
 
 - [x] [P2] Prohibit inline HTML emission in Markdown by default. (2026-03-03)  
   Add a guardrail test that fails if Markdown output contains raw `<div>`, `<span>`, or `<table>` tags unless a future opt‑in flag is enabled.
-
 
 ### Markdown Flavor Handling — Obsidian‑First
 
@@ -532,7 +552,6 @@ Initial scope:
 - [x] [P2] Add a smoke test validating Obsidian‑flavored Markdown output. (2026-03-03)  
   Assert that default Markdown output contains no constructs known to break Obsidian rendering.
 
-
 ### Documentation & User Expectations
 
 - [x] [P2] Document Markdown export philosophy in `README.md`. (2026-03-03)  
@@ -544,6 +563,7 @@ Initial scope:
 ---
 
 ### Experimental Export Formats
+
 - [x] [P2] Add experimental “Export format” toggle in Advanced options (OFF by default). (2026-03-03)
 - [x] [P2] Show export-format dropdown when experimental toggle is enabled: HTML (`.html`) and Markdown (`.md`) in the shipped app, while keeping `Document (.docx)` deferred post-release. (2026-03-03; clarified 2026-03-12)
 - [x] [P2] When Markdown (`.md`) export is selected, show a dependent “Markdown flavor” dropdown; hide it for non-Markdown formats. (2026-03-03)
@@ -577,8 +597,8 @@ Note: the shipped UI now exposes HTML and Markdown only. Full Word-compatible `D
 - [x] [P2] Disable Markdown flavor selection unless export format is Markdown. (2026-03-03)
 - [x] [P2] Add help text explaining semantic vs visual tradeoffs. (2026-03-03)
 
-
 ### Converted-Page Theme Toggle (HTML only)
+
 - [x] [P2] Add Advanced options checkbox: “Add theme toggle (Light/Dark) to converted pages” (default OFF). (2026-03-03)
 - [x] [P2] Add dependent sub-checkbox: “Use OLED black for Dark theme” (enabled only when theme toggle option is ON). (2026-03-03)
 - [x] [P2] Inject a simple symbol-based Light/Dark toggle into converted HTML pages (top-right corner, default Light, one click/tap toggles Dark). (2026-03-03)
@@ -587,6 +607,7 @@ Note: the shipped UI now exposes HTML and Markdown only. Full Word-compatible `D
 - [x] [P3] Document exported-page theme toggle behavior and limitations in `README.md` and in-app help. (2026-03-03)
 
 ### Externalized CSS for Converted Pages (HTML only)
+
 - [x] [P2] Add Advanced options checkbox: “Externalize CSS to separate file” (default OFF). (2026-02-27)
 - [x] [P2] Add dependent sub-option (enabled only when externalize is ON): “CSS mode: Shared stylesheet for all converted pages / One stylesheet per page”. (2026-02-27)
 - [x] [P2] Keep current embedded-style output as default/fallback when externalize is OFF. (2026-02-27)
@@ -597,7 +618,9 @@ Note: the shipped UI now exposes HTML and Markdown only. Full Word-compatible `D
 - [x] [P3] Document External CSS behavior, constraints, and recommended usage in `README.md` and in-app help. (2026-03-10)
 
 #### Externalized CSS review follow-up (deferred to post-release)
+
 Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
+
 - [x] [P3] Run fixture-by-fixture review of generated CSS files (`shared` and `per-page`) to verify rule quality, duplication, and readability. (2026-03-07, automated audit report in `Tests/reports/css-audit-report.md`)
 - [x] [P3] Audit extracted selectors/classes for over-generation (for example too many one-off classes) and define consolidation rules. (2026-03-07, consolidation added in `src/ui-downloads.js` with unit coverage in `Tests/ui-downloads-css-consolidation.unit.js`)
 - [x] [P3] Compare visual parity against embedded-style baseline on all locked fixtures and record any regressions by fixture name. (2026-03-07, automated via `Tests/externalize-css-visual-parity-playwright.js`)
@@ -611,6 +634,7 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 ## Sanitization, Quality & Encoding (recommended)
 
 ### Sanitization
+
 - [x] Remove Office/OneNote artifacts.
 - [x] Remove obsolete attributes (`summary`, legacy `xmlns`). (2026-02-25)
 - [x] Normalize repetitive inline styles (migration + collapse rules).
@@ -622,20 +646,24 @@ Note: Deferred by decision on 2026-02-27. Re-open after first stable release.
 - [x] Restore embedded images in pipeline and add `image-embedding.unit.js`.
 
 ### Encoding & control characters
+
 - [x] Detect C0 control characters at decode time.
 - [x] Add CI test asserting no control characters in output.
 - [x] [P1] Apply minimal sanitization fallback only when decode recovery fails, with regression tests.
 
 ### Accessibility & semantics
+
 - [x] Add heading hierarchy smoke test. (2026-02-25)
 - [x] Assert single page‑level `lang` attribute.
 - [x] Add test for missing `alt` text on images. (2026-02-25)
 
 ### Performance / output size
+
 - [x] [P2] Add guardrail for oversized inlined images (threshold + warning/fail behavior + test coverage). (2026-03-02)
 - [x] [P2] Add threshold-based warning for excessive inline styles and verify via regression test. (2026-03-02)
 
 ### Export output independence
+
 - [x] [P1] Ensure exported HTML pages are dependency-free by default (no required external JS/CSS libraries when opening output files). (2026-03-02)
 - [x] [P1] Add regression checks asserting converted HTML outputs do not require CDN or app-runtime library imports. (2026-03-02)
 - [x] [P1] Keep optional export features self-contained in produced artifacts (for example inline assets or bundled sidecars) with safe fallback when disabled. (2026-03-02)

@@ -20,12 +20,15 @@ import { startStaticServer } from './playwright-server-helper.js';
     const text = await page.evaluate(() => document.body.innerText || '');
     const checks = [
       'PASS: Toolbar style dropdown exposes all supported presets in order',
+      'PASS: Toolbar toggle starts unchecked for explicit opt-in HTML enhancement',
       'PASS: Toolbar style hidden/disabled by default when toolbar is OFF',
+      'PASS: Converted-page theme toggle starts unchecked for explicit opt-in HTML enhancement',
+      'PASS: Default HTML conversion config keeps toolbar and converted-page theme toggle OFF',
       'PASS: Toolbar style shown/enabled when toolbar injection is ON',
       'PASS: Toolbar style presets round-trip through the UI config while HTML export is active',
       'PASS: Export format hidden/disabled by default',
       'PASS: Markdown flavor hidden/disabled by default',
-      'PASS: Converted-page theme toggle enabled by default for HTML output',
+      'PASS: Converted-page theme toggle stays available for HTML output while remaining opt-in',
       'PASS: OLED option disabled until converted-page theme toggle is enabled',
       'PASS: Export format enabled when experimental is ON',
       'PASS: Markdown flavor shown/enabled when Markdown format selected',
