@@ -267,16 +267,15 @@ First-pass tasks:
 
    - [x] Screenshot assets for the release are already captured in `assets/release/` and no longer need additional `v0.2` capture work.
    - [x] Draft 3-5 short feature blurbs for the current browser-first workflow using `README.md` and `RELEASE_NOTES.md` as the source of truth. (2026-07-14)
-    - [x] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability. (2026-08-28, added `docs/Release-Before-After-Notes.md`.)
-    - [x] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs. (2026-08-28, retitled the active release checklist/inventory docs to `v0.2`, aligned the five shared screenshot caption/alt-text strings across the README and release docs, and refreshed the top release-facing README/notes copy to match the current shipped scope.)
+   - [x] Write one concise before/after comparison note set for later release posts, covering raw OneNote export friction versus cleaned HTML readability. (2026-08-28, added `docs/Release-Before-After-Notes.md`.)
+   - [x] Do one final docs pass to align screenshot captions, alt text, and short launch copy across `README.md`, `RELEASE_NOTES.md`, and release-checklist docs. (2026-08-28, retitled the active release checklist/inventory docs to `v0.2`, aligned the five shared screenshot caption/alt-text strings across the README and release docs, and refreshed the top release-facing README/notes copy to match the current shipped scope.)
 
 6. Reduce repeated code and reduce the file size of the shipped app and exported assets without changing behavior by working through these smaller follow-ups:
    - [x] Audit the current standalone cleaned-HTML contract and list which repeated inline declarations must remain unless a companion stylesheet is shipped beside every output. (2026-07-13, reviewed the new comparison set and confirmed that the remaining repeated `direction:ltr` wrappers, widths, alignment, and sparse emphasis spans are still mostly structural rather than safe standalone CSS candidates.)
    - [x] Measure one representative cleaned HTML file before any further changes and record which remaining inline patterns contribute the most repeated bytes. (2026-07-13, measured the attached comparison set and recorded byte/token reductions across the updated outputs.)
-    - [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
-    - [ ] Defer reducing the CSS bundled within each converted note to this post-release size-reduction track unless measured evidence shows it must ship in `v0.2`.
-    - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
-    - [ ] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract.
+   - [x] Defer reducing the CSS bundled within each converted note to this post-release size-reduction track unless measured evidence shows it must ship in `v0.2`. (2026-08-28, decided to keep standalone cleaned HTML dependency-free and continue any size-reduction work in the ZIP/export-sidecar path.)
+   - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
+   - [x] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract. (2026-08-28, decided ZIP/export-sidecar only; standalone cleaned HTML should remain dependency-free.)
 7. Completed 2026-08-28: confirmed the shipped HTML path keeps both toolbar injection and the converted-page theme toggle explicitly opt-in, tightened release-facing/docs contract wording, and added focused default-off regression coverage for the UI and injector paths.
 8. Convert core modules to TypeScript incrementally during `v0.2`, keeping the app shippable and tests green after each step.
 
@@ -311,6 +310,8 @@ First-pass tasks:
 13. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
 14. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
 15. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
+16. Convert core modules to TypeScript incrementally during `v1.0`, keeping the app shippable and tests green after each step.
+17. Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 
