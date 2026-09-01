@@ -154,7 +154,7 @@ This audit pass is complete. Keep this section as historical context for what wa
 
 ### Post-triage next task
 
-- Current next release task is to define the narrow `v1.0` native `.one` support contract, then build representative fixtures and acceptance checks around that scope.
+- Current next release task is to build representative native fixtures and acceptance checks around the locked `v1.0` support contract, using `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` as the planning baseline.
 
 ### Version 0.1 Close-Out Order (historical)
 
@@ -293,8 +293,8 @@ Success criteria:
 
 First-pass tasks:
 
-1. Define the `v1.0` native support contract as a written release document listing supported `.one` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness.
-2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth.
+1. [x] Define the `v1.0` native support contract as a written release document listing supported `.one` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness. (2026-09-01, locked in `docs/Native-OneNote-v1.0-Support-Contract.md`; supporting facts captured in `docs/OneNote-Native-Format-Facts-For-GPT-5.5.md`.)
+2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth, using `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` as the contract-to-test baseline.
 3. Implement the minimal release-quality native pipeline so representative `.one` fixtures convert reliably and clear failure modes are surfaced to the UI.
 4. Ship acceptance UX for native import with clear warnings when `.one` features are unsupported and actionable next steps for the user.
 5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
