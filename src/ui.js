@@ -1,8 +1,17 @@
 // src/ui.js
 
-import { buildExportFileName } from './export-filenames.js';
 import { createDownloadHelpers } from './ui-downloads.js';
 import { buildAdvancedOptionsState } from './ui-options.js';
+import { buildWorkerPayloadForEntry } from './ui-worker-payload.js';
+import {
+  buildSuccessfulOutputRecord,
+  getEntryDownloadFileName,
+  getEntryDownloadMime,
+  getEntryOutputContent,
+  getEntryOutputFormat,
+  getStatusTone,
+  hasExternalizedCssAsset
+} from './ui-output-records.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
 
@@ -581,16 +590,6 @@ function updateStatusVisibility() {
   updateClearFilesButton();
 }
 
-function getStatusTone(status) {
-  const normalized = String(status || '').toLowerCase();
-  if (normalized === 'queued') return 'queued';
-  if (normalized === 'working' || normalized === 'processing' || normalized === 'in-progress') return 'working';
-  if (normalized === 'success' || normalized === 'completed' || normalized === 'done') return 'success';
-  if (normalized === 'error' || normalized === 'failed') return 'error';
-  if (normalized === 'unsupported') return 'unsupported';
-  return 'neutral';
-}
-
 /* === DIAGNOSTICS UI === */
 
 function formatDiagnosticForList(d) {
@@ -614,53 +613,6 @@ function renderDiagnostics() {
   dom.diagnosticsList.innerHTML = diags.map(formatDiagnosticForList).join('\n') || '';
   if (dom.diagnosticsCount) dom.diagnosticsCount.textContent = `(${diags.length})`;
   if (dom.diagnosticsPanel) dom.diagnosticsPanel.classList.toggle('hidden', diags.length === 0);
-}
-
-function isSuccessStatus(status) {
-  const normalized = String(status || '').toLowerCase();
-  return normalized === 'success' || normalized === 'completed';
-}
-
-function hasExternalizedCssAsset(entry) {
-  if (!entry || !Array.isArray(entry.outputAssets)) return false;
-  return entry.outputAssets.some((asset) => asset
-    && asset.type === 'text/css'
-    && typeof asset.content === 'string'
-    && asset.content.trim().length > 0);
-}
-
-function getEntryOutputFormat(entry) {
-  if (entry && typeof entry.outputFormat === 'string') {
-    return entry.outputFormat === 'markdown' ? 'markdown' : 'html';
-  }
-  if (typeof entry?.outputText === 'string' && entry.outputText.length > 0) {
-    return 'markdown';
-  }
-  return 'html';
-}
-
-function getEntryOutputContent(entry) {
-  const format = getEntryOutputFormat(entry);
-  if (format === 'markdown') {
-    return typeof entry.outputText === 'string' ? entry.outputText : '';
-  }
-  return typeof entry.outputHtml === 'string' ? entry.outputHtml : '';
-}
-
-function getEntryDownloadFileName(entry) {
-  if (typeof entry?.downloadFileName === 'string' && entry.downloadFileName) {
-    return entry.downloadFileName;
-  }
-
-  return buildExportFileName({
-    entryName: entry?.name || 'output',
-    outputFormat: getEntryOutputFormat(entry),
-    outputContent: getEntryOutputContent(entry)
-  });
-}
-
-function getEntryDownloadMime(entry) {
-  return getEntryOutputFormat(entry) === 'markdown' ? 'text/markdown' : 'text/html';
 }
 
 function updateZipButton() {
@@ -768,25 +720,12 @@ function rebuildSuccessfulOutputs() {
   runtime.successfulOutputs.clear();
 
   for (const entry of state.queue) {
-    if (!isSuccessStatus(entry.status)) continue;
-    const content = getEntryOutputContent(entry);
-    if (!content) continue;
+    const built = buildSuccessfulOutputRecord(entry, runtime.successfulOutputs);
+    if (!built) continue;
 
-    const filename = buildExportFileName({
-      entryName: entry.name || 'output',
-      outputFormat: getEntryOutputFormat(entry),
-      outputContent: content,
-      takenNames: runtime.successfulOutputs
-    });
+    entry.downloadFileName = built.filename;
 
-    entry.downloadFileName = filename;
-
-    runtime.successfulOutputs.set(filename, {
-      content,
-      format: getEntryOutputFormat(entry),
-      assets: Array.isArray(entry.outputAssets) ? entry.outputAssets : [],
-      config: entry.conversionConfig || null
-    });
+    runtime.successfulOutputs.set(built.filename, built.record);
   }
 
   updateZipButton();
@@ -933,15 +872,7 @@ async function processEntryWithWorker(entry) {
   try {
     const conversionConfig = getActiveConversionConfig();
     entry.conversionConfig = conversionConfig;
-    const sourceKind = detectSourceKind(entry.name, entry.file.type);
-    const payload = {
-      id: entry.id,
-      fileName: entry.name,
-      relativePath: entry.name,
-      mimetype: entry.file.type || '',
-      sourceKind,
-      config: conversionConfig
-    };
+    const { sourceKind, payload } = buildWorkerPayloadForEntry(entry, conversionConfig);
 
     let transferList = [];
     if (sourceKind === 'one' || sourceKind === 'onepkg') {

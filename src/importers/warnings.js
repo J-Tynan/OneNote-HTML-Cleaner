@@ -3,6 +3,14 @@
 // They remain defined so post-release native work can keep a stable warning
 // surface, but they are not part of the shipped stable conversion flow.
 
+// @ts-check
+
+/**
+ * @typedef {import('../contracts.js').WarningDetail} WarningDetail
+ * @typedef {import('../contracts.js').WarningSeverity} WarningSeverity
+ */
+
+/** @type {{ one: Record<string, string>, onepkg: Record<string, string> }} */
 export const WARNING_CODES = {
   one: {
     signatureValidated: 'ONE_SIGNATURE_VALIDATED',
@@ -27,10 +35,18 @@ export const WARNING_CODES = {
   }
 };
 
+/**
+ * @param {unknown} code
+ * @param {unknown} message
+ * @param {WarningSeverity} [severity]
+ * @param {Record<string, unknown>} [context]
+ * @returns {WarningDetail}
+ */
 export function makeWarning(code, message, severity = 'info', context = undefined) {
+  /** @type {WarningDetail} */
   const warning = {
     code: String(code || '').trim(),
-    severity: String(severity || 'info').trim(),
+    severity,
     message: String(message || '').trim()
   };
 
@@ -41,6 +57,10 @@ export function makeWarning(code, message, severity = 'info', context = undefine
   return warning;
 }
 
+/**
+ * @param {unknown} warningDetails
+ * @returns {string[]}
+ */
 export function toWarningMessages(warningDetails) {
   if (!Array.isArray(warningDetails)) return [];
   return warningDetails

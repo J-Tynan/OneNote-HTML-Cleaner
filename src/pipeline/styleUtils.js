@@ -1,3 +1,22 @@
+// @ts-check
+
+/**
+ * @typedef {{ prop: string, value: string }} StyleDeclarationEntry
+ * @typedef {{ value: number, unit: string }} ParsedCssLength
+ */
+
+/**
+ * @param {StyleDeclarationEntry | null} entry
+ * @returns {entry is StyleDeclarationEntry}
+ */
+function isStyleDeclarationEntry(entry) {
+  return entry !== null;
+}
+
+/**
+ * @param {unknown} styleText
+ * @returns {StyleDeclarationEntry[]}
+ */
 export function parseStyleDeclarationEntries(styleText) {
   return String(styleText || '')
     .split(';')
@@ -11,17 +30,25 @@ export function parseStyleDeclarationEntries(styleText) {
       if (!prop) return null;
       return { prop, value };
     })
-    .filter(Boolean);
+    .filter(isStyleDeclarationEntry);
 }
 
+/**
+ * @param {StyleDeclarationEntry[] | unknown} entries
+ * @returns {string}
+ */
 export function serializeStyleDeclarationEntries(entries) {
   return Array.isArray(entries)
-    ? entries.map(({ prop, value }) => `${prop}: ${value}`).join('; ')
+    ? /** @type {StyleDeclarationEntry[]} */ (entries).map(({ prop, value }) => `${prop}: ${value}`).join('; ')
     : '';
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {Record<string, string>}
+ */
 export function parseStyleDeclarations(styleText) {
-  const declarations = {};
+  const declarations = /** @type {Record<string, string>} */ ({});
   const entries = parseStyleDeclarationEntries(styleText);
   entries.forEach(({ prop, value }) => {
     declarations[String(prop || '').trim().toLowerCase()] = value;
@@ -29,6 +56,10 @@ export function parseStyleDeclarations(styleText) {
   return declarations;
 }
 
+/**
+ * @param {unknown} value
+ * @returns {ParsedCssLength | null}
+ */
 export function parseCssLength(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (!normalized) return null;
@@ -44,6 +75,10 @@ export function parseCssLength(value) {
   };
 }
 
+/**
+ * @param {unknown} value
+ * @returns {number | null}
+ */
 export function parseCssNumericValue(value) {
   const source = String(value || '').trim();
   if (!source) return null;
@@ -53,6 +88,10 @@ export function parseCssNumericValue(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+/**
+ * @param {unknown} value
+ * @returns {number | null}
+ */
 export function cssLengthToPx(value) {
   const parsed = parseCssLength(value);
   if (!parsed) return null;

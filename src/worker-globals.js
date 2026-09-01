@@ -1,13 +1,20 @@
+// @ts-check
 // src/worker-globals.js
-const _workerGlobal = (typeof globalThis !== 'undefined' && globalThis)
-  || (typeof self !== 'undefined' && self)
-  || (typeof window !== 'undefined' && window)
-  || null;
+const _workerGlobal = (typeof globalThis !== 'undefined' && globalThis) || null;
 
 import { createLogger } from './logging.js';
 const logger = createLogger('worker-globals');
 
+/**
+ * @typedef {import('./contracts.js').WorkerDiagnosticMessage} WorkerDiagnosticMessage
+ * @typedef {Partial<WorkerDiagnosticMessage> & Record<string, unknown>} WorkerDiagnosticInput
+ */
+
 // Short stable fingerprint for the worker module (used in diagnostics).
+/**
+ * @param {unknown} s
+ * @returns {string}
+ */
 function _shortHexHash(s) {
   let h = 2166136261 >>> 0;
   for (let i = 0; i < String(s || '').length; i++) {
@@ -17,6 +24,7 @@ function _shortHexHash(s) {
   return (h >>> 0).toString(16).padStart(8, '0').slice(0, 8);
 }
 
+/** @type {string | null} */
 const _workerUrl = (typeof import.meta !== 'undefined' && import.meta.url) || (typeof self !== 'undefined' && self && self.location && self.location.href) || null;
 const _workerUrlHash = _workerUrl ? _shortHexHash(_workerUrl) : null;
 
@@ -57,14 +65,19 @@ try {
 // A safe, structured diagnostic helper available at import-time via a named
 // export. It will safely fall back to logger output when `postMessage` is
 // unavailable.
+/**
+ * @param {WorkerDiagnosticInput} [detail]
+ * @returns {void}
+ */
 export function postDiagnostic(detail = {}) {
   try {
-    const status = detail.status || 'info';
+    const status = typeof detail.status === 'string' && detail.status ? detail.status : 'info';
     const level = (status === 'error') ? 'error' : (status === 'warn' || status === 'warning') ? 'warn' : 'info';
-    const msg = detail.msg || detail.message || detail.error || detail.phase || '';
+    const msg = String(detail.msg || detail.message || detail.error || detail.phase || '');
 
+    /** @type {WorkerDiagnosticMessage} */
     const payload = Object.assign({
-      id: detail.id || 'diag',
+      id: typeof detail.id === 'string' && detail.id ? detail.id : 'diag',
       type: '__diag__',
       status,
       level,

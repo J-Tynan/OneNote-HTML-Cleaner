@@ -1,22 +1,62 @@
+// @ts-check
 import {
   parseCssNumericValue,
   parseStyleDeclarations
 } from '../pipeline/styleUtils.js';
 
+/**
+ * @typedef {{ nodeType?: number, textContent?: string | null, childNodes?: ArrayLike<DomNode>, parentElement?: DomElement | null }} DomNode
+ * @typedef {DomNode & { tagName: string, children: ArrayLike<DomElement>, getAttribute: (name: string) => string | null, querySelector: (selector: string) => DomElement | null, querySelectorAll: (selector: string) => ArrayLike<DomElement>, closest: (selector: string) => DomElement | null }} DomElement
+ * @typedef {{ body?: DomElement | null }} DomDocument
+ * @typedef {'left' | 'center' | 'right'} TableAlign
+ * @typedef {{ codeAsPlainText?: boolean }} InlineMarkdownOptions
+ * @typedef {{ marker: ' ' | 'x', text: string }} TodoState
+ * @typedef {{ index: number, positioned: boolean, top: number, left: number }} ReadingOrderHint
+ * @typedef {{ cells: string[], aligns: (TableAlign | null)[], hasHeaderCell: boolean }} TableRowModel
+ * @typedef {{ type: 'text', text: string }} MarkdownIrTextBlock
+ * @typedef {{ type: 'heading', level: number, text: string }} MarkdownIrHeadingBlock
+ * @typedef {{ type: 'paragraph', text: string, isMarkdownInline?: boolean }} MarkdownIrParagraphBlock
+ * @typedef {{ type: 'blockquote', text: string, isMarkdownInline?: boolean }} MarkdownIrBlockquoteBlock
+ * @typedef {{ type: 'codeBlock', code: string }} MarkdownIrCodeBlock
+ * @typedef {{ type: 'inlineCode', code: string }} MarkdownIrInlineCodeBlock
+ * @typedef {{ type: 'image', alt: string, src: string }} MarkdownIrImageBlock
+ * @typedef {{ type: 'table', header: string[], rows: string[][], syntheticHeader?: boolean, sourceColumnCount?: number, aligns?: (TableAlign | null)[] }} MarkdownIrTableBlock
+ * @typedef {{ type: 'listItem', children: MarkdownIrBlock[] }} MarkdownIrListItem
+ * @typedef {{ type: 'list', ordered: boolean, items: MarkdownIrListItem[] }} MarkdownIrListBlock
+ * @typedef {MarkdownIrTextBlock | MarkdownIrHeadingBlock | MarkdownIrParagraphBlock | MarkdownIrBlockquoteBlock | MarkdownIrCodeBlock | MarkdownIrInlineCodeBlock | MarkdownIrImageBlock | MarkdownIrTableBlock | MarkdownIrListBlock} MarkdownIrBlock
+ * @typedef {{ type: 'document', blocks: MarkdownIrBlock[] }} MarkdownIrDocument
+ */
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeLineBreaks(value) {
   return String(value || '').replace(/\r\n?/g, '\n');
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeWhitespace(value) {
   return normalizeLineBreaks(value).replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * @param {unknown} text
+ * @returns {string}
+ */
 function escapeInlineMarkdown(text) {
   return String(text || '')
     .replace(/\\/g, '\\\\')
     .replace(/([*_`[\]])/g, '\\$1');
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeMarkdownOutput(value) {
   return normalizeLineBreaks(value)
     .replace(/[ \t]+\n/g, '\n')
@@ -24,11 +64,20 @@ function normalizeMarkdownOutput(value) {
     .trim();
 }
 
+/**
+ * @param {DomNode | null | undefined} node
+ * @returns {string}
+ */
 function collectNodeText(node) {
   if (!node) return '';
   return normalizeWhitespace(node.textContent || '');
 }
 
+/**
+ * @param {DomNode | null | undefined} node
+ * @param {InlineMarkdownOptions} [options]
+ * @returns {string}
+ */
 function collectInlineMarkdown(node, options = {}) {
   if (!node) return '';
 
@@ -39,12 +88,13 @@ function collectInlineMarkdown(node, options = {}) {
 
   if (node.nodeType !== 1) return '';
 
-  const tag = String(node.tagName || '').toLowerCase();
+  const element = /** @type {DomElement} */ (node);
+  const tag = String(element.tagName || '').toLowerCase();
   if (tag === 'br') return '\n';
 
   if (tag === 'a') {
-    const label = normalizeWhitespace(node.textContent || '');
-    const href = normalizeWhitespace(node.getAttribute('href') || '');
+    const label = normalizeWhitespace(element.textContent || '');
+    const href = normalizeWhitespace(element.getAttribute('href') || '');
     if (label && href) {
       return `[${escapeInlineMarkdown(label)}](${href})`;
     }
@@ -52,11 +102,11 @@ function collectInlineMarkdown(node, options = {}) {
   }
 
   if (tag === 'code') {
-    const linkedChild = node.querySelector && node.querySelector(':scope > a[href]');
+    const linkedChild = element.querySelector(':scope > a[href]');
     if (linkedChild) {
       return collectInlineMarkdown(linkedChild, options);
     }
-    const code = normalizeWhitespace(node.textContent || '');
+    const code = normalizeWhitespace(element.textContent || '');
     if (!code) return '';
     if (options.codeAsPlainText === true) {
       return escapeInlineMarkdown(code);
@@ -64,7 +114,7 @@ function collectInlineMarkdown(node, options = {}) {
     return `\`${code.replace(/`/g, '\\`')}\``;
   }
 
-  const childParts = Array.from(node.childNodes || [])
+  const childParts = Array.from(element.childNodes || [])
     .map((child) => collectInlineMarkdown(child, options))
     .filter(Boolean);
   const content = childParts.join(' ').replace(/[ \t]{2,}/g, ' ').trim();
@@ -79,6 +129,11 @@ function collectInlineMarkdown(node, options = {}) {
   return content;
 }
 
+/**
+ * @param {DomNode | null | undefined} node
+ * @param {InlineMarkdownOptions} [options]
+ * @returns {string}
+ */
 function collectParagraphMarkdown(node, options = {}) {
   if (!node) return '';
 
@@ -93,6 +148,11 @@ function collectParagraphMarkdown(node, options = {}) {
     .trim();
 }
 
+/**
+ * @param {DomElement | null | undefined} listNode
+ * @param {boolean} [ordered]
+ * @returns {string}
+ */
 function collectListItemsAsInlineMarkdown(listNode, ordered = false) {
   if (!listNode || !listNode.children) return '';
   const items = Array.from(listNode.children)
@@ -107,6 +167,10 @@ function collectListItemsAsInlineMarkdown(listNode, ordered = false) {
   return items.join(' <br> ');
 }
 
+/**
+ * @param {DomElement | null | undefined} cell
+ * @returns {string}
+ */
 function collectTableCellMarkdown(cell) {
   if (!cell) return '';
 
@@ -115,7 +179,7 @@ function collectTableCellMarkdown(cell) {
     return collectParagraphMarkdown(cell, { codeAsPlainText: true });
   }
 
-  const parts = [];
+  const parts = /** @type {string[]} */ ([]);
   elementChildren.forEach((child) => {
     const tag = String(child.tagName || '').toLowerCase();
     if (tag === 'ul') {
@@ -136,6 +200,10 @@ function collectTableCellMarkdown(cell) {
   return parts.join(' <br> ').replace(/[ \t]{2,}/g, ' ').trim();
 }
 
+/**
+ * @param {DomElement | null | undefined} cell
+ * @returns {TableAlign | null}
+ */
 function getCellTextAlign(cell) {
   const style = parseStyleDeclarations(cell && cell.getAttribute ? cell.getAttribute('style') : '');
   let align = String(style['text-align'] || '').trim().toLowerCase();
@@ -150,6 +218,10 @@ function getCellTextAlign(cell) {
   return null;
 }
 
+/**
+ * @param {DomElement | null | undefined} node
+ * @returns {boolean}
+ */
 function looksLikePageTitleParagraph(node) {
   if (!node || !node.tagName) return false;
   const tag = String(node.tagName || '').toLowerCase();
@@ -164,6 +236,10 @@ function looksLikePageTitleParagraph(node) {
   return fontSize !== null && fontSize >= 18;
 }
 
+/**
+ * @param {DomElement | null | undefined} node
+ * @returns {TodoState | null}
+ */
 function getTodoStateFromParagraph(node) {
   if (!node || !node.querySelector) return null;
   const todoIcon = node.querySelector('img[alt="To Do"]');
@@ -177,16 +253,29 @@ function getTodoStateFromParagraph(node) {
   return { marker: ' ', text };
 }
 
+/**
+ * @param {DomElement | null | undefined} node
+ * @returns {boolean}
+ */
 function looksLikeCitationParagraph(node) {
   if (!node || !node.querySelector) return false;
   if (node.querySelector(':scope > cite')) return true;
   return false;
 }
 
+/**
+ * @param {unknown} value
+ * @returns {number | null}
+ */
 function parseCssLength(value) {
   return parseCssNumericValue(value);
 }
 
+/**
+ * @param {DomElement | null | undefined} node
+ * @param {number} index
+ * @returns {ReadingOrderHint}
+ */
 function getReadingOrderHint(node, index) {
   const style = parseStyleDeclarations(node && node.getAttribute ? node.getAttribute('style') : '');
   const position = String(style.position || '').toLowerCase();
@@ -202,12 +291,21 @@ function getReadingOrderHint(node, index) {
   };
 }
 
+/**
+ * @param {ReadingOrderHint} a
+ * @param {ReadingOrderHint} b
+ * @returns {number}
+ */
 function compareReadingOrderHints(a, b) {
   if (a.top !== b.top) return a.top - b.top;
   if (a.left !== b.left) return a.left - b.left;
   return a.index - b.index;
 }
 
+/**
+ * @param {DomElement} row
+ * @returns {TableRowModel}
+ */
 function tableRowToModel(row) {
   const cells = Array.from(row.children)
     .filter((node) => /^(th|td)$/i.test(node.tagName));
@@ -219,6 +317,10 @@ function tableRowToModel(row) {
   };
 }
 
+/**
+ * @param {DomElement} tableNode
+ * @returns {DomElement[]}
+ */
 function getDirectTableRows(tableNode) {
   return [
     ...Array.from(tableNode.querySelectorAll(':scope > tr')),
@@ -226,12 +328,20 @@ function getDirectTableRows(tableNode) {
   ];
 }
 
+/**
+ * @param {DomElement} tableNode
+ * @returns {TableRowModel[]}
+ */
 function getTableRowModels(tableNode) {
   return getDirectTableRows(tableNode)
     .map(tableRowToModel)
     .filter((row) => row.cells.length > 0);
 }
 
+/**
+ * @param {DomElement} tableNode
+ * @returns {DomElement[]}
+ */
 function getImmediateNestedTables(tableNode) {
   const candidates = [
     ...Array.from(tableNode.querySelectorAll(':scope > tr > td > table')),
@@ -243,6 +353,10 @@ function getImmediateNestedTables(tableNode) {
   return Array.from(new Set(candidates));
 }
 
+/**
+ * @param {DomElement} node
+ * @returns {MarkdownIrTableBlock | MarkdownIrParagraphBlock}
+ */
 function tableToIr(node) {
   let rowModels = getTableRowModels(node);
   let unwrappedFromWrapperTable = false;
@@ -298,7 +412,7 @@ function tableToIr(node) {
     : Array.from({ length: trimmedColumnCount }, (_, index) => `Column ${index + 1}`);
   const bodyRows = useFirstRowAsHeader ? compactRows.slice(1) : compactRows;
   const sourceAligns = rowModels.find((row) => Array.isArray(row.aligns) && row.aligns.some(Boolean));
-  const aligns = Array.isArray(sourceAligns && sourceAligns.aligns)
+  const aligns = sourceAligns && Array.isArray(sourceAligns.aligns)
     ? sourceAligns.aligns.slice(0, trimmedColumnCount)
     : [];
   if (aligns.some((value) => value === 'center' || value === 'right')) {
@@ -318,10 +432,14 @@ function tableToIr(node) {
   };
 }
 
+/**
+ * @param {DomElement} item
+ * @returns {MarkdownIrBlock[]}
+ */
 function listItemChildrenToIr(item) {
-  const children = [];
+  const children = /** @type {MarkdownIrBlock[]} */ ([]);
 
-  Array.from(item.childNodes).forEach((child) => {
+  Array.from(item.childNodes || []).forEach((child) => {
     if (child.nodeType === 3) {
       const text = normalizeWhitespace(child.textContent || '');
       if (text) {
@@ -331,13 +449,15 @@ function listItemChildrenToIr(item) {
     }
 
     if (child.nodeType !== 1) return;
-    const tag = child.tagName.toLowerCase();
+    const childElement = /** @type {DomElement} */ (child);
+    const tag = childElement.tagName.toLowerCase();
     if (tag === 'ul' || tag === 'ol') {
-      children.push(domNodeToIr(child));
+      const nestedList = domNodeToIr(childElement);
+      if (nestedList) children.push(nestedList);
       return;
     }
 
-    const text = collectNodeText(child);
+    const text = collectNodeText(childElement);
     if (text) {
       children.push({ type: 'text', text });
     }
@@ -346,11 +466,15 @@ function listItemChildrenToIr(item) {
   return children;
 }
 
+/**
+ * @param {DomElement} node
+ * @returns {MarkdownIrListBlock}
+ */
 function listToIr(node) {
   const ordered = node.tagName.toLowerCase() === 'ol';
   const items = Array.from(node.children)
     .filter((child) => child.tagName && child.tagName.toLowerCase() === 'li')
-    .map((item) => ({
+    .map((item) => /** @type {MarkdownIrListItem} */ ({
       type: 'listItem',
       children: listItemChildrenToIr(item)
     }));
@@ -362,6 +486,10 @@ function listToIr(node) {
   };
 }
 
+/**
+ * @param {DomElement} node
+ * @returns {MarkdownIrHeadingBlock}
+ */
 function headingToIr(node) {
   const baseLevel = Number(node.tagName.toLowerCase().slice(1));
   let level = baseLevel;
@@ -381,6 +509,10 @@ function headingToIr(node) {
   };
 }
 
+/**
+ * @param {DomElement} node
+ * @returns {MarkdownIrCodeBlock}
+ */
 function preToIr(node) {
   const codeNode = node.querySelector('code');
   const code = codeNode ? normalizeLineBreaks(codeNode.textContent || '') : normalizeLineBreaks(node.textContent || '');
@@ -390,6 +522,10 @@ function preToIr(node) {
   };
 }
 
+/**
+ * @param {DomElement} node
+ * @returns {MarkdownIrImageBlock}
+ */
 function imageToIr(node) {
   return {
     type: 'image',
@@ -398,14 +534,19 @@ function imageToIr(node) {
   };
 }
 
+/**
+ * @param {DomElement | DomNode | null | undefined} node
+ * @returns {MarkdownIrBlock | null}
+ */
 function domNodeToIr(node) {
   if (!node || node.nodeType !== 1) return null;
-  const tag = node.tagName.toLowerCase();
+  const element = /** @type {DomElement} */ (node);
+  const tag = element.tagName.toLowerCase();
 
-  if (/^h[1-6]$/.test(tag)) return headingToIr(node);
-  if (tag === 'blockquote') return { type: 'blockquote', text: collectParagraphMarkdown(node), isMarkdownInline: true };
+  if (/^h[1-6]$/.test(tag)) return headingToIr(element);
+  if (tag === 'blockquote') return { type: 'blockquote', text: collectParagraphMarkdown(element), isMarkdownInline: true };
   if (tag === 'p') {
-    const todo = getTodoStateFromParagraph(node);
+    const todo = getTodoStateFromParagraph(element);
     if (todo) {
       return {
         type: 'paragraph',
@@ -414,27 +555,31 @@ function domNodeToIr(node) {
       };
     }
 
-    if (looksLikeCitationParagraph(node)) {
-      return { type: 'blockquote', text: collectParagraphMarkdown(node), isMarkdownInline: true };
+    if (looksLikeCitationParagraph(element)) {
+      return { type: 'blockquote', text: collectParagraphMarkdown(element), isMarkdownInline: true };
     }
 
-    if (looksLikePageTitleParagraph(node)) {
-      return { type: 'heading', level: 1, text: collectNodeText(node) };
+    if (looksLikePageTitleParagraph(element)) {
+      return { type: 'heading', level: 1, text: collectNodeText(element) };
     }
 
-    return { type: 'paragraph', text: collectParagraphMarkdown(node), isMarkdownInline: true };
+    return { type: 'paragraph', text: collectParagraphMarkdown(element), isMarkdownInline: true };
   }
-  if (tag === 'ul' || tag === 'ol') return listToIr(node);
-  if (tag === 'pre') return preToIr(node);
-  if (tag === 'code') return { type: 'inlineCode', code: collectNodeText(node) };
-  if (tag === 'img') return imageToIr(node);
-  if (tag === 'table') return tableToIr(node);
+  if (tag === 'ul' || tag === 'ol') return listToIr(element);
+  if (tag === 'pre') return preToIr(element);
+  if (tag === 'code') return { type: 'inlineCode', code: collectNodeText(element) };
+  if (tag === 'img') return imageToIr(element);
+  if (tag === 'table') return tableToIr(element);
 
-  const text = collectNodeText(node);
+  const text = collectNodeText(element);
   if (!text) return null;
   return { type: 'paragraph', text };
 }
 
+/**
+ * @param {DomDocument | null | undefined} doc
+ * @returns {MarkdownIrDocument}
+ */
 export function createMarkdownIrFromDocument(doc) {
   const body = doc && doc.body ? doc.body : null;
   if (!body) {
@@ -480,9 +625,9 @@ export function createMarkdownIrFromDocument(doc) {
     });
   }
 
-  const blocks = entries
+  const blocks = /** @type {MarkdownIrBlock[]} */ (entries
     .map((entry) => domNodeToIr(entry.node))
-    .filter((block) => block && !(block.type === 'paragraph' && !block.text));
+    .filter((block) => block && !(block.type === 'paragraph' && !block.text)));
 
   return {
     type: 'document',
@@ -490,6 +635,12 @@ export function createMarkdownIrFromDocument(doc) {
   };
 }
 
+/**
+ * @param {MarkdownIrListItem[]} items
+ * @param {boolean} ordered
+ * @param {number} [depth]
+ * @returns {string}
+ */
 function renderListItems(items, ordered, depth = 0) {
   return items.map((item, index) => {
     const indent = '  '.repeat(depth);
@@ -521,6 +672,12 @@ function renderListItems(items, ordered, depth = 0) {
   }).filter(Boolean).join('\n');
 }
 
+/**
+ * @param {string[]} header
+ * @param {string[][]} rows
+ * @param {(TableAlign | null | string)[]} [aligns]
+ * @returns {string}
+ */
 function renderTable(header, rows, aligns = []) {
   if (!Array.isArray(header) || header.length === 0) return '';
   const escapedHeader = header.map((cell) => String(cell || '').replace(/\|/g, '\\|').trim());
@@ -545,6 +702,10 @@ function renderTable(header, rows, aligns = []) {
   ].join('\n');
 }
 
+/**
+ * @param {MarkdownIrBlock | null | undefined} block
+ * @returns {string}
+ */
 function renderBlock(block) {
   if (!block || !block.type) return '';
 
@@ -594,6 +755,10 @@ function renderBlock(block) {
   return '';
 }
 
+/**
+ * @param {MarkdownIrDocument | null | undefined} irDocument
+ * @returns {string}
+ */
 export function renderMarkdownFromIr(irDocument) {
   const blocks = irDocument && Array.isArray(irDocument.blocks) ? irDocument.blocks : [];
   const rendered = blocks.map((block) => renderBlock(block)).filter(Boolean).join('\n\n');

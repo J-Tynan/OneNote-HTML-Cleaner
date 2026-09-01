@@ -1,3 +1,14 @@
+// @ts-check
+
+/**
+ * @typedef {import('../contracts.js').SourceKind} SourceKind
+ */
+
+/**
+ * @param {string} [fileName]
+ * @param {string} [mimeType]
+ * @returns {SourceKind}
+ */
 export function detectSourceKind(fileName = '', mimeType = '') {
   const name = String(fileName || '').toLowerCase();
   const type = String(mimeType || '').toLowerCase();
@@ -9,11 +20,19 @@ export function detectSourceKind(fileName = '', mimeType = '') {
   return 'unknown';
 }
 
+/**
+ * @param {string} [fileName]
+ * @returns {string}
+ */
 export function baseNameFromFile(fileName = '') {
   const name = String(fileName || 'input').trim();
   return name.replace(/\.[^./\\]+$/, '') || 'input';
 }
 
+/**
+ * @param {string} [name]
+ * @returns {string}
+ */
 export function toFolderSafeName(name = '') {
   return String(name || 'item')
     .replace(/[<>:"/\\|?*\x00-\x1F]/g, '_')

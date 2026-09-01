@@ -154,7 +154,7 @@ This audit pass is complete. Keep this section as historical context for what wa
 
 ### Post-triage next task
 
-- Current next release task is to execute the `v0.2` stabilization plan, then define the narrow support contract that will gate `v1.0` native `.one` work.
+- Current next release task is to define the narrow `v1.0` native `.one` support contract, then build representative fixtures and acceptance checks around that scope.
 
 ### Version 0.1 Close-Out Order (historical)
 
@@ -277,8 +277,6 @@ First-pass tasks:
    - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
    - [x] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract. (2026-08-28, decided ZIP/export-sidecar only; standalone cleaned HTML should remain dependency-free.)
 7. Completed 2026-08-28: confirmed the shipped HTML path keeps both toolbar injection and the converted-page theme toggle explicitly opt-in, tightened release-facing/docs contract wording, and added focused default-off regression coverage for the UI and injector paths.
-8. Convert core modules to TypeScript incrementally during `v0.2`, keeping the app shippable and tests green after each step.
-
 ## Version 1.0 — Native `.one` Release
 
 Use this track for the first stable native OneNote-file release, with scope defined by a narrow support contract rather than by every deferred feature that could attach itself to native import.

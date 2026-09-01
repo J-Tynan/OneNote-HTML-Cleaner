@@ -1,5 +1,18 @@
+// @ts-check
 import { buildOutputDecorationConfig } from './pipeline/config.js';
 
+/**
+ * @typedef {import('./contracts.js').ExportFormat} ExportFormat
+ * @typedef {import('./contracts.js').OutputDecorationConfig} OutputDecorationConfig
+ * @typedef {import('./contracts.js').PipelineConfigInput} PipelineConfigInput
+ * @typedef {Pick<HTMLInputElement, 'checked'>} CheckableControl
+ * @typedef {Pick<HTMLInputElement | HTMLSelectElement, 'value'>} ValueControl
+ * @typedef {{ toolbarEnabled?: CheckableControl | null, toolbarStyle?: ValueControl | null, externalizeCssEnabled?: CheckableControl | null, externalizeCssMode?: ValueControl | null, experimentalExportEnabled?: CheckableControl | null, exportFormat?: ValueControl | null, markdownFlavor?: ValueControl | null, convertedPageThemeToggleEnabled?: CheckableControl | null, convertedPageThemeToggleOledBlack?: CheckableControl | null }} AdvancedOptionsControls
+ * @typedef {PipelineConfigInput & { ToolbarEnabled: boolean, ToolbarEditToggleEnabled: boolean, ToolbarMetadataToggleEnabled: boolean, ToolbarStyle: string, ExternalizeCssEnabled: boolean, ExternalizeCssMode: string, ExperimentalExportEnabled: boolean, ExportFormat: string, MarkdownFlavor: string, ConvertedPageThemeToggleEnabled: boolean, ConvertedPageThemeToggleOledBlack: boolean }} AdvancedOptionsRawConfig
+ * @typedef {{ rawConfig: AdvancedOptionsRawConfig, outputDecorationConfig: OutputDecorationConfig, experimentalEnabled: boolean, selectedExportFormat: string, effectiveExportFormat: ExportFormat, toolbarEnabledChecked: boolean, markdownSelected: boolean, htmlSelected: boolean, convertedPageThemeToggleChecked: boolean }} AdvancedOptionsState
+ */
+
+/** @satisfies {PipelineConfigInput} */
 const BASE_CONVERSION_CONFIG = {
   Profile: 'onenote',
   OutputCleanupMode: 'safe',
@@ -8,14 +21,27 @@ const BASE_CONVERSION_CONFIG = {
   TailwindCssHref: 'assets/tailwind-output.css'
 };
 
+/**
+ * @param {CheckableControl | null | undefined} control
+ * @returns {boolean}
+ */
 function isChecked(control) {
   return Boolean(control && control.checked);
 }
 
+/**
+ * @param {ValueControl | null | undefined} control
+ * @param {string} fallback
+ * @returns {string}
+ */
 function getValue(control, fallback) {
   return control ? String(control.value || fallback) : fallback;
 }
 
+/**
+ * @param {AdvancedOptionsControls} [dom]
+ * @returns {AdvancedOptionsRawConfig}
+ */
 export function readAdvancedOptions(dom = {}) {
   return {
     ToolbarEnabled: isChecked(dom.toolbarEnabled),
@@ -32,6 +58,10 @@ export function readAdvancedOptions(dom = {}) {
   };
 }
 
+/**
+ * @param {AdvancedOptionsControls} [dom]
+ * @returns {AdvancedOptionsState}
+ */
 export function buildAdvancedOptionsState(dom = {}) {
   const rawConfig = readAdvancedOptions(dom);
   const outputDecorationConfig = buildOutputDecorationConfig(rawConfig);
@@ -52,6 +82,10 @@ export function buildAdvancedOptionsState(dom = {}) {
   };
 }
 
+/**
+ * @param {AdvancedOptionsControls} [dom]
+ * @returns {PipelineConfigInput}
+ */
 export function buildUiConversionConfig(dom = {}) {
   const { rawConfig, outputDecorationConfig } = buildAdvancedOptionsState(dom);
 

@@ -1,9 +1,16 @@
+// @ts-check
 // src/theme.js
 const STORAGE_KEY = 'theme';
 const STORAGE_KEY_VARIANT = 'themeVariant';
 const TOGGLE_ID = 'themeToggle';
 const ICON_ID = 'themeToggleIcon';
 
+/** @typedef {'light' | 'dark'} ThemeName */
+
+/**
+ * @param {ThemeName} theme
+ * @returns {void}
+ */
 function applyTheme(theme) {
   const root = document.documentElement;
   if (theme === 'dark') root.classList.add('dark');
@@ -16,6 +23,9 @@ function applyTheme(theme) {
   }
 }
 
+/**
+ * @returns {ThemeName}
+ */
 function effectiveThemeFromSystem() {
   try {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -24,6 +34,10 @@ function effectiveThemeFromSystem() {
   }
 }
 
+/**
+ * @param {ThemeName} theme
+ * @returns {void}
+ */
 function updateToggleUI(theme) {
   const btn = document.getElementById(TOGGLE_ID);
   const icon = document.getElementById(ICON_ID);
@@ -34,6 +48,10 @@ function updateToggleUI(theme) {
 
 // apply a named dark‑variant by setting a data attribute and persisting
 // (used by tests and as a developer helper; no visible UI control shipped)
+/**
+ * @param {string | null | undefined} variant
+ * @returns {void}
+ */
 export function applyThemeVariant(variant) {
   try {
     if (variant) {
@@ -50,6 +68,9 @@ export function applyThemeVariant(variant) {
 
 
 
+/**
+ * @returns {ThemeName}
+ */
 export function toggleTheme() {
   const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   const next = current === 'dark' ? 'light' : 'dark';
@@ -58,11 +79,16 @@ export function toggleTheme() {
   return next;
 }
 
+/**
+ * @returns {void}
+ */
 export function initTheme() {
   // Determine persisted preference. If none exists, default to LIGHT and persist it.
+  /** @type {string | null} */
   let stored;
   try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) { stored = null; }
 
+  /** @type {ThemeName} */
   let theme;
   if (stored === 'dark' || stored === 'light') {
     theme = stored;

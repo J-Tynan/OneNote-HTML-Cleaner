@@ -1,9 +1,14 @@
+// @ts-check
 // src/app.js
 import { initUI } from './ui.js';
 import WorkerManager from './worker-wrapper.js';
 import { initTheme } from './theme.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('app');
+
+/**
+ * @typedef {{ autoConvertEnabled: boolean }} InitUiOptions
+ */
 
 const AUTO_CONVERT_STORAGE_KEY = 'autoConvertEnabled';
 const DEFAULT_AUTO_CONVERT = true;
@@ -29,7 +34,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   logger.info({ msg: 'WorkerManager created' });
 
   // Initialise UI with resolved preferences
-  await initUI(wm, {
+  /** @type {InitUiOptions} */
+  const initOptions = {
     autoConvertEnabled
-  });
+  };
+  await initUI(wm, initOptions);
 });

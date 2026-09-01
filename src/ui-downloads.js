@@ -1,3 +1,4 @@
+// @ts-check
 // src/ui-downloads.js
 import { baseNameFromFile, toFolderSafeName } from './importers/sourceKind.js';
 import { normalizeExportStem, buildUniqueFilename } from './export-filenames.js';
@@ -5,10 +6,45 @@ import { buildUiConversionConfig } from './ui-options.js';
 import { createLogger } from './logging.js';
 const logger = createLogger('ui');
 
+/**
+ * @typedef {import('./contracts.js').NativeImportResult} NativeImportResult
+ * @typedef {import('./contracts.js').OutputAsset} OutputAsset
+ * @typedef {import('./contracts.js').PipelineConfigInput} PipelineConfigInput
+ * @typedef {import('./ui-options.js').AdvancedOptionsControls} AdvancedOptionsControls
+ * @typedef {'html' | 'markdown'} DownloadOutputFormat
+ * @typedef {{ prop: string, val: string }} CssDeclarationEntry
+ * @typedef {{ content: string, format: DownloadOutputFormat, assets: OutputAsset[], config: PipelineConfigInput | null }} SuccessfulOutputRecord
+ * @typedef {string | { content?: string, html?: string, format?: string, assets?: OutputAsset[], config?: PipelineConfigInput | null }} SuccessfulOutputValue
+ * @typedef {{ hrefs: string[], stylesByHref: Record<string, string> }} StylesheetDependencyResult
+ * @typedef {{ binary?: boolean }} JSZipFileOptions
+ * @typedef {{ file: (name: string, data: string | Uint8Array, options?: JSZipFileOptions) => void, generateAsync: (options: { type: 'blob', compression?: string, mimeType?: string }) => Promise<Blob> }} JSZipLike
+ * @typedef {new () => JSZipLike} JSZipConstructor
+ * @typedef {{ disabled: boolean, textContent: string | null }} DownloadZipButton
+ * @typedef {AdvancedOptionsControls & { downloadZipButton?: DownloadZipButton | null, successfulOutputs: Map<string, SuccessfulOutputValue>, [key: string]: unknown }} DownloadContext
+ * @typedef {{ downloadBlob: (filename: string, text: string, mime?: string) => Promise<void>, downloadDebug: (name: string, text: string) => void, downloadBinary: (filename: string, blob: Blob) => void, downloadZip: () => Promise<void>, downloadNativeZip: (file: File, nativeResult: NativeImportResult) => Promise<void>, getConversionConfig: () => PipelineConfigInput }} DownloadHelpers
+ */
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
+
 function normalizeCssToken(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * @param {CssDeclarationEntry | null} entry
+ * @returns {entry is CssDeclarationEntry}
+ */
+function isCssDeclarationEntry(entry) {
+  return entry !== null;
+}
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function canonicalizeCssDeclaration(value) {
   const entries = String(value || '')
     .split(';')
@@ -22,20 +58,29 @@ function canonicalizeCssDeclaration(value) {
       if (!prop) return null;
       return { prop, val };
     })
-    .filter(Boolean)
+    .filter(isCssDeclarationEntry)
     .sort((a, b) => a.prop.localeCompare(b.prop));
 
   return entries.map(({ prop, val }) => `${prop}:${val}`).join(';');
 }
 
+/** @type {Set<string>} */
 const BUNDLED_STYLESHEET_HREFS = new Set([
   'assets/tailwind-output.css'
 ]);
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function escapeRegExp(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function escapeHtmlAttribute(value) {
   return String(value || '')
     .replace(/&/g, '&amp;')
@@ -44,6 +89,11 @@ function escapeHtmlAttribute(value) {
     .replace(/>/g, '&gt;');
 }
 
+/**
+ * @param {unknown} tagText
+ * @param {unknown} attributeName
+ * @returns {string}
+ */
 function getTagAttributeValue(tagText, attributeName) {
   const normalizedName = String(attributeName || '').trim();
   if (!normalizedName) return '';
@@ -53,18 +103,30 @@ function getTagAttributeValue(tagText, attributeName) {
   return bare ? String(bare[1] || '').trim() : '';
 }
 
+/**
+ * @param {unknown} tagText
+ * @returns {boolean}
+ */
 function isStylesheetLinkTag(tagText) {
   const rel = getTagAttributeValue(tagText, 'rel');
   return /(^|\s)stylesheet(\s|$)/i.test(rel);
 }
 
+/**
+ * @param {unknown} href
+ * @returns {boolean}
+ */
 function isBundledStylesheetHref(href) {
   return BUNDLED_STYLESHEET_HREFS.has(String(href || '').trim());
 }
 
+/**
+ * @param {unknown} html
+ * @returns {string[]}
+ */
 export function collectStylesheetHrefs(html) {
-  const hrefs = [];
-  const seen = new Set();
+  const hrefs = /** @type {string[]} */ ([]);
+  const seen = /** @type {Set<string>} */ (new Set());
   const tagMatches = String(html || '').match(/<link\b[^>]*>/ig) || [];
 
   tagMatches.forEach((tagText) => {
@@ -78,6 +140,11 @@ export function collectStylesheetHrefs(html) {
   return hrefs;
 }
 
+/**
+ * @param {unknown} html
+ * @param {Record<string, string>} [stylesByHref]
+ * @returns {string}
+ */
 export function inlineStylesheetLinks(html, stylesByHref = {}) {
   let output = String(html || '');
 
@@ -104,6 +171,11 @@ export function inlineStylesheetLinks(html, stylesByHref = {}) {
   return output;
 }
 
+/**
+ * @param {unknown} html
+ * @param {string[]} [hrefs]
+ * @returns {string}
+ */
 export function removeStylesheetLinks(html, hrefs = []) {
   const hrefSet = new Set((hrefs || []).map((href) => String(href || '').trim()).filter(Boolean));
   if (!hrefSet.size) return String(html || '');
@@ -116,12 +188,16 @@ export function removeStylesheetLinks(html, hrefs = []) {
 }
 
 // Consolidates duplicated selector+declaration rule blocks while preserving first-seen order.
+/**
+ * @param {unknown} cssText
+ * @returns {string}
+ */
 export function consolidateCssRules(cssText) {
   const css = String(cssText || '');
   if (!css.trim()) return '';
 
-  const rules = [];
-  const seen = new Set();
+  const rules = /** @type {string[]} */ ([]);
+  const seen = /** @type {Set<string>} */ (new Set());
   const re = /([^{}]+)\{([^{}]*)\}/g;
   let match;
 
@@ -141,9 +217,19 @@ export function consolidateCssRules(cssText) {
   return rules.join('\n\n');
 }
 
+/**
+ * @param {DownloadContext} ctx
+ * @param {() => void} updateZipButton
+ * @returns {DownloadHelpers}
+ */
 export function createDownloadHelpers(ctx, updateZipButton) {
+  /** @type {Map<string, Promise<string>>} */
   const bundledStylesheetCache = new Map();
 
+  /**
+   * @param {SuccessfulOutputValue} value
+   * @returns {SuccessfulOutputRecord}
+   */
   function getSuccessfulOutputRecord(value) {
     if (value && typeof value === 'object' && typeof value.content === 'string') {
       return {
@@ -171,6 +257,11 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     };
   }
 
+  /**
+   * @param {string} html
+   * @param {string} href
+   * @returns {string}
+   */
   function ensureStylesheetLink(html, href) {
     const linkTag = `<link rel="stylesheet" href="${href}">`;
     if (new RegExp(`<link\\s+[^>]*href=["']${escapeRegExp(href)}["'][^>]*>`, 'i').test(html)) {
@@ -185,16 +276,24 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     return `${linkTag}${html}`;
   }
 
+  /**
+   * @param {SuccessfulOutputRecord} record
+   * @returns {string}
+   */
   function getCssAssetContent(record) {
     const cssAsset = (record.assets || []).find(asset => asset && asset.type === 'text/css' && typeof asset.content === 'string');
-    return cssAsset ? cssAsset.content : '';
+    return cssAsset && typeof cssAsset.content === 'string' ? cssAsset.content : '';
   }
 
+  /**
+   * @param {string} href
+   * @returns {Promise<string>}
+   */
   async function fetchBundledStylesheetText(href) {
     const normalizedHref = String(href || '').trim();
     if (!isBundledStylesheetHref(normalizedHref)) return '';
     if (bundledStylesheetCache.has(normalizedHref)) {
-      return bundledStylesheetCache.get(normalizedHref);
+      return bundledStylesheetCache.get(normalizedHref) || '';
     }
 
     const pending = (async () => {
@@ -218,11 +317,15 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     return pending;
   }
 
+  /**
+   * @param {unknown} html
+   * @returns {Promise<string>}
+   */
   async function inlineBundledStylesheetDependencies(html) {
     const hrefs = collectStylesheetHrefs(html).filter(isBundledStylesheetHref);
     if (!hrefs.length) return String(html || '');
 
-    const stylesByHref = {};
+    const stylesByHref = /** @type {Record<string, string>} */ ({});
     for (const href of hrefs) {
       const cssText = await fetchBundledStylesheetText(href);
       if (!cssText.trim()) continue;
@@ -236,13 +339,17 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     return inlineStylesheetLinks(html, stylesByHref);
   }
 
+  /**
+   * @param {unknown} html
+   * @returns {Promise<StylesheetDependencyResult>}
+   */
   async function collectBundledStylesheetDependencies(html) {
     const hrefs = collectStylesheetHrefs(html).filter(isBundledStylesheetHref);
     if (!hrefs.length) {
       return { hrefs: [], stylesByHref: {} };
     }
 
-    const stylesByHref = {};
+  const stylesByHref = /** @type {Record<string, string>} */ ({});
     for (const href of hrefs) {
       const cssText = await fetchBundledStylesheetText(href);
       if (!cssText.trim()) continue;
@@ -252,6 +359,12 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     return { hrefs, stylesByHref };
   }
 
+  /**
+   * @param {string} filename
+   * @param {string} text
+   * @param {string} [mime]
+   * @returns {Promise<void>}
+   */
   async function downloadBlob(filename, text, mime = 'text/html') {
     const bom = '\uFEFF';
     const isHtml = /^text\/html(?:;|$)/i.test(String(mime || ''));
@@ -275,10 +388,20 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     URL.revokeObjectURL(a.href);
   }
 
+  /**
+   * @param {string} name
+   * @param {string} text
+   * @returns {void}
+   */
   function downloadDebug(name, text) {
     downloadBlob(name, text, 'text/plain');
   }
 
+  /**
+   * @param {string} filename
+   * @param {Blob} blob
+   * @returns {void}
+   */
   function downloadBinary(filename, blob) {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -289,20 +412,34 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     URL.revokeObjectURL(a.href);
   }
 
+  /**
+   * @returns {string}
+   */
   function getZipFilename() {
     const now = new Date();
+    /**
+     * @param {number} n
+     * @returns {string}
+     */
     const pad = (n) => String(n).padStart(2, '0');
     const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
     return `cleaned_${stamp}.zip`;
   }
 
+  /**
+   * @returns {PipelineConfigInput}
+   */
   function getConversionConfig() {
     return buildUiConversionConfig(ctx);
   }
 
+  /**
+   * @returns {Promise<void>}
+   */
   async function downloadZip() {
     if (!ctx.downloadZipButton || ctx.downloadZipButton.disabled) return;
-    const JSZip = window.JSZip;
+    const appWindow = /** @type {Window & typeof globalThis & { JSZip?: JSZipConstructor }} */ (window);
+    const JSZip = appWindow.JSZip;
     if (!JSZip) {
       logger.error({ msg: 'JSZip not available; ensure dependency is installed and loaded' });
       return;
@@ -399,8 +536,14 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     }
   }
 
+  /**
+   * @param {File} file
+   * @param {NativeImportResult} nativeResult
+   * @returns {Promise<void>}
+   */
   async function downloadNativeZip(file, nativeResult) {
-    const JSZip = window.JSZip;
+    const appWindow = /** @type {Window & typeof globalThis & { JSZip?: JSZipConstructor }} */ (window);
+    const JSZip = appWindow.JSZip;
     if (!JSZip) {
       logger.error({ msg: 'JSZip not available; ensure dependency is installed and loaded' });
       return;
