@@ -1,3 +1,5 @@
+// @ts-check
+
 // src/pipeline/sanitize.js
 // Lightweight sanitization and head cleanup inspired by the PowerShell script.
 
@@ -12,8 +14,36 @@ import {
 } from './styleUtils.js';
 
 const OFFICE_NS_RE = /^https?:\/\/schemas\.microsoft\.com\/(office|onenote|word)/i;
+const DOM_GLOBALS = /** @type {{ Node?: { ELEMENT_NODE: number, TEXT_NODE: number, DOCUMENT_POSITION_PRECEDING: number }, NodeFilter?: { SHOW_TEXT: number } }} */ (globalThis);
+
+/**
+ * @typedef {{ prop: string, value: string }} StyleDeclarationEntry
+ * @typedef {'debug' | 'info' | 'warn' | 'error'} LogLevel
+ * @typedef {{ step: string, level?: LogLevel, details?: string, meta?: Record<string, unknown>, [key: string]: unknown }} SanitizeLogEntry
+ * @typedef {{ add: (className: string) => void }} ClassListLike
+ * @typedef {any} DomNodeLike
+ * @typedef {any} DomElementLike
+ * @typedef {any} PipelineDocument
+ * @typedef {{ value: string, source: 'html' | 'body' | 'fallback' }} LangResolution
+ * @typedef {{ externalizeCssEnabled?: unknown, externalizeCssMode?: unknown }} ExternalizeCssOptions
+ * @typedef {{ logs: SanitizeLogEntry[], cssText: string }} ExternalizeCssResult
+ * @typedef {{ unitStrategy?: unknown }} NormalizeUnitsOptions
+ * @typedef {{ enabled?: unknown, maxNodes?: unknown, maxChars?: unknown }} InlineStyleWarningOptions
+ * @typedef {{ defaultLang?: unknown, defaultTitle?: unknown }} EnsureHeadOptions
+ * @typedef {{ removeLegacyDataAttrs?: unknown }} NormalizeLegacyAttributesOptions
+ * @typedef {{ enabled?: unknown, rasterAltText?: unknown }} HandwritingAnnotationOptions
+ * @typedef {{ fallbackAlt?: unknown }} EnsureImageAltOptions
+ * @typedef {{ spacerText?: unknown, footerMarginLeft?: unknown }} FooterGapOptions
+ * @typedef {{ minCount?: unknown, removeMigratedDeclarations?: unknown }} CollapseInlineStyleDuplicatesOptions
+ * @typedef {{ emptyStyleRemoved: number, emptyClassRemoved: number, classAttributesDeduped: number }} AttributeCleanupResult
+ */
 
 // small helper to add a class to an element (works even without classList)
+/**
+ * @param {DomElementLike | null | undefined} el
+ * @param {string} className
+ * @returns {void}
+ */
 function addClass(el, className) {
   if (!el || !className) return;
   if (typeof el.classList !== 'undefined') {
@@ -25,6 +55,10 @@ function addClass(el, className) {
   el.setAttribute('class', Array.from(classes).join(' '));
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string | null}
+ */
 function normalizeLangValue(value) {
   const trimmed = String(value || '').trim();
   if (!trimmed) return null;
@@ -41,6 +75,12 @@ function normalizeLangValue(value) {
   return trimmed;
 }
 
+/**
+ * @param {DomElementLike | null | undefined} html
+ * @param {DomElementLike | null | undefined} body
+ * @param {unknown} [fallback='en']
+ * @returns {LangResolution}
+ */
 function resolveDocumentLang(html, body, fallback = 'en') {
   const htmlLang = normalizeLangValue(html && html.getAttribute ? html.getAttribute('lang') : null);
   if (htmlLang) return { value: htmlLang, source: 'html' };
@@ -52,18 +92,34 @@ function resolveDocumentLang(html, body, fallback = 'en') {
   return { value: fallbackLang, source: 'fallback' };
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeCssToken(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {StyleDeclarationEntry[]}
+ */
 function parseInlineStyle(styleText) {
   return parseStyleDeclarationEntries(styleText);
 }
 
+/**
+ * @param {StyleDeclarationEntry[]} entries
+ * @returns {string}
+ */
 function serializeInlineStyle(entries) {
   return serializeStyleDeclarationEntries(entries);
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {string}
+ */
 function dedupeInlineStyle(styleText) {
   const byProp = new Map();
   parseInlineStyle(styleText).forEach(({ prop, value }) => {
@@ -72,16 +128,24 @@ function dedupeInlineStyle(styleText) {
   return serializeInlineStyle(Array.from(byProp.entries()).map(([prop, value]) => ({ prop, value })));
 }
 
+/**
+ * @param {unknown} cssText
+ * @returns {string}
+ */
 function normalizeCssBlockText(cssText) {
   return String(cssText || '').replace(/\r\n?/g, '\n').trim();
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeZeroCssLength(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (/^0+(?:\.0+)?(?:px|pt|pc|cm|mm|in|em|rem|%)$/.test(normalized)) {
     return '0';
   }
-  return value;
+  return String(value || '');
 }
 
 const LOW_CONTRAST_COLOR_MAP = new Map([
@@ -92,10 +156,18 @@ const LOW_CONTRAST_COLOR_MAP = new Map([
   ['#ff3030', '#c00000']
 ]);
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeColorToken(value) {
   return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function remapLowContrastColor(value) {
   const original = String(value || '').trim();
   if (!original) return original;
@@ -108,6 +180,10 @@ function remapLowContrastColor(value) {
   return `${mapped}${importantSuffix}`;
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {string | null}
+ */
 function canonicalizeInlineStyle(styleText) {
   const byProp = new Map();
   parseInlineStyle(styleText).forEach(({ prop, value }) => {
@@ -120,6 +196,10 @@ function canonicalizeInlineStyle(styleText) {
     .join(';');
 }
 
+/**
+ * @param {unknown} signature
+ * @returns {string}
+ */
 function hashStyleSignature(signature) {
   let hash = 5381;
   const text = String(signature || '');
@@ -129,6 +209,10 @@ function hashStyleSignature(signature) {
   return (hash >>> 0).toString(36);
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeReadableClassToken(value) {
   return String(value || '')
     .trim()
@@ -139,6 +223,11 @@ function normalizeReadableClassToken(value) {
     .replace(/-{2,}/g, '-');
 }
 
+/**
+ * @param {unknown} prop
+ * @param {unknown} value
+ * @returns {string | null}
+ */
 function buildReadableExternalizedClassName(prop, value) {
   const propToken = normalizeReadableClassToken(prop);
   const valueToken = normalizeReadableClassToken(value);
@@ -151,13 +240,18 @@ function buildReadableExternalizedClassName(prop, value) {
   return `onc-${propToken}-${valueToken.slice(0, 40)}-${suffix}`.replace(/-+$/g, '');
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @param {ExternalizeCssOptions} [options={}]
+ * @returns {ExternalizeCssResult}
+ */
 export function externalizeCss(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || options.externalizeCssEnabled !== true) {
     return { logs, cssText: '' };
   }
 
-  const extractedBlocks = [];
+  const extractedBlocks = /** @type {string[]} */ ([]);
   const seenExtractedBlocks = new Set();
   let extractedStyleTags = 0;
   Array.from(doc.querySelectorAll('style')).forEach(styleEl => {
@@ -229,8 +323,13 @@ export function externalizeCss(doc, options = {}) {
   return { logs, cssText };
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {NormalizeUnitsOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeUnits(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const strategy = String(options.unitStrategy || 'preserve').toLowerCase();
   if (strategy !== 'normalize-safe') return logs;
 
@@ -260,14 +359,24 @@ export function normalizeUnits(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {unknown} value
+ * @param {number} fallbackValue
+ * @returns {number}
+ */
 function normalizePositiveInteger(value, fallbackValue) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || parsed <= 0) return fallbackValue;
   return Math.floor(parsed);
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @param {InlineStyleWarningOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function warnExcessiveInlineStyles(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const enabled = options.enabled !== false;
@@ -305,8 +414,12 @@ export function warnExcessiveInlineStyles(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function stripObsoleteHeadArtifacts(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
 
   const html = doc.querySelector('html') || doc.documentElement;
   if (html && String(html.getAttribute('xmlns') || '').trim().toLowerCase() === 'http://www.w3.org/tr/rec-html40') {
@@ -333,8 +446,13 @@ export function stripObsoleteHeadArtifacts(doc) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {NormalizeLegacyAttributesOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeLegacyAttributes(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const removeLegacyDataAttrs = options.removeLegacyDataAttrs !== false;
   let updatedStyles = 0;
   let removedListType = 0;
@@ -402,8 +520,12 @@ export function normalizeLegacyAttributes(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeAccessibleTextContrast(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   let updatedColors = 0;
 
   Array.from(doc.querySelectorAll('[style]')).forEach(el => {
@@ -439,6 +561,10 @@ export function normalizeAccessibleTextContrast(doc) {
 }
 
 
+/**
+ * @param {DomElementLike | null | undefined} head
+ * @returns {number}
+ */
 function compactHeadWhitespaceNodes(head) {
   if (!head || !head.childNodes) return 0;
   let removed = 0;
@@ -452,8 +578,13 @@ function compactHeadWhitespaceNodes(head) {
   return removed;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {EnsureHeadOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function ensureHead(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   let head = doc.querySelector('head');
   const html = doc.querySelector('html') || doc.documentElement;
   const body = doc.querySelector('body');
@@ -512,8 +643,12 @@ export function ensureHead(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function removeOneNoteMeta(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   // Remove meta tags or comments that look like OneNote/Word cruft
   const metas = Array.from(doc.querySelectorAll('meta')).filter(m =>
     /one|mso|generator/i.test(m.getAttribute('name') || '') ||
@@ -528,8 +663,12 @@ export function removeOneNoteMeta(doc) {
 // declarations, and `mso-spacerun` spans. The output should retain all
 // meaningful text/content while stripping structural cruft that bloats the
 // document and may confuse downstream sanitizers.
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function removeOfficeArtifacts(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const all = Array.from(doc.querySelectorAll('*'));
   all.forEach(el => {
     // remove unwanted attributes
@@ -558,7 +697,7 @@ export function removeOfficeArtifacts(doc) {
     // scrub style attribute value for mso- declarations
     if (el.hasAttribute('style')) {
       const style = el.getAttribute('style');
-      const cleaned = style.split(';').filter(s => !/mso-/i.test(s)).join(';');
+      const cleaned = String(style || '').split(';').filter((s) => !/mso-/i.test(s)).join(';');
       if (cleaned !== style) {
         el.setAttribute('style', cleaned);
         logs.push({ step: 'CleanStyle', tag: el.tagName });
@@ -600,8 +739,13 @@ export function removeOfficeArtifacts(doc) {
 }
 
 // normalize/remove obsolete or presentational table attributes
+/**
+ * @param {PipelineDocument} doc
+ * @param {Record<string, unknown>} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeTableAttributes(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
 
   Array.from(doc.querySelectorAll('table')).forEach(tbl => {
     const removed = [];
@@ -613,7 +757,7 @@ export function normalizeTableAttributes(doc, options = {}) {
         removed.push('summary');
       } else {
         // keep value for review/accessibility
-        tbl.setAttribute('data-legacy-summary', val);
+        tbl.setAttribute('data-legacy-summary', String(val || ''));
         tbl.removeAttribute('summary');
         logs.push({ step: 'NormalizeTableAttr', tag: 'TABLE', action: 'movedSummary', value: val });
       }
@@ -624,7 +768,7 @@ export function normalizeTableAttributes(doc, options = {}) {
         const v = tbl.getAttribute(a);
         tbl.removeAttribute(a);
         removed.push(a);
-        tbl.setAttribute(`data-legacy-${a}`, v);
+        tbl.setAttribute(`data-legacy-${a}`, String(v || ''));
       }
     });
     // bare xmlns removal when Office-related
@@ -655,8 +799,12 @@ export function normalizeTableAttributes(doc, options = {}) {
 // while equivalent cells use margin:0. Browser default <p> margins then make
 // some rows taller. Normalize missing margins inside table cells to preserve
 // author-chosen row heights.
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeTableCellParagraphMargins(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const paragraphs = Array.from(doc.querySelectorAll('table td > p, table th > p'));
   let updated = 0;
 
@@ -681,8 +829,12 @@ export function normalizeTableCellParagraphMargins(doc) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function sanitizeImageAttributes(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const imgs = Array.from(doc.querySelectorAll('img'));
   let cleaned = 0;
   imgs.forEach(img => {
@@ -694,7 +846,7 @@ export function sanitizeImageAttributes(doc) {
     // Remove MSO inline styles that break responsiveness
     const style = img.getAttribute('style') || '';
     if (/mso-/i.test(style)) {
-      const newStyle = style.split(';').filter(s => !/mso-/i.test(s)).join(';');
+      const newStyle = String(style || '').split(';').filter((s) => !/mso-/i.test(s)).join(';');
       img.setAttribute('style', newStyle);
       cleaned++;
     }
@@ -703,12 +855,14 @@ export function sanitizeImageAttributes(doc) {
   return logs;
 }
 
+/** @param {DomElementLike} img */
 function isDecorativeImage(img) {
   const role = String(img.getAttribute('role') || '').trim().toLowerCase();
   const ariaHidden = String(img.getAttribute('aria-hidden') || '').trim().toLowerCase();
   return role === 'presentation' || role === 'none' || ariaHidden === 'true';
 }
 
+/** @param {DomElementLike} img */
 function isLikelyHandwritingRasterImage(img) {
   const alt = String(img.getAttribute('alt') || '').trim().toLowerCase();
   const ariaLabel = String(img.getAttribute('aria-label') || '').trim().toLowerCase();
@@ -718,6 +872,7 @@ function isLikelyHandwritingRasterImage(img) {
   return /\b(ink|handwrit|ink\s+drawings?)\b/.test(signalText);
 }
 
+/** @param {PipelineDocument} doc */
 function countVmlElements(doc) {
   const all = Array.from(doc.querySelectorAll('*'));
   let count = 0;
@@ -735,8 +890,13 @@ function countVmlElements(doc) {
   return count;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @param {HandwritingAnnotationOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function annotateHandwritingAssets(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const enabled = options.enabled !== false;
@@ -795,8 +955,13 @@ export function annotateHandwritingAssets(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {EnsureImageAltOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function ensureImageAlt(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const imgs = Array.from(doc.querySelectorAll('img'));
   const fallbackAlt = typeof options.fallbackAlt === 'string' && options.fallbackAlt.trim()
     ? options.fallbackAlt.trim()
@@ -825,13 +990,17 @@ export function ensureImageAlt(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function removeNbsp(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.createTreeWalker !== 'function') {
     return logs;
   }
 
-  const walker = doc.createTreeWalker(doc, NodeFilter.SHOW_TEXT);
+  const walker = doc.createTreeWalker(doc, DOM_GLOBALS.NodeFilter ? DOM_GLOBALS.NodeFilter.SHOW_TEXT : 4);
   let node = walker.nextNode();
   let updated = 0;
 
@@ -852,7 +1021,7 @@ export function removeNbsp(doc) {
         // Keep one NBSP so intentionally blank block lines retain visible height.
         node.nodeValue = '\u00a0';
       } else {
-        node.nodeValue = value.replace(/\u00a0/g, ' ');
+        node.nodeValue = String(value).replace(/\u00a0/g, ' ');
       }
       updated++;
     }
@@ -863,14 +1032,17 @@ export function removeNbsp(doc) {
   return logs;
 }
 
+/** @param {unknown} text */
 function cleanInlineText(text) {
   return String(text || '').replace(/\s+/g, ' ').trim();
 }
 
+/** @param {unknown} text */
 function isCreatedWithOneNoteFooterText(text) {
   return /^created with onenote\.?$/i.test(cleanInlineText(text));
 }
 
+/** @param {DomElementLike | null | undefined} el */
 function isVisualSpacerElement(el) {
   if (!el || !el.tagName) return false;
   const tag = String(el.tagName || '').toLowerCase();
@@ -884,6 +1056,7 @@ function isVisualSpacerElement(el) {
   return cleanInlineText(el.textContent || '') === '';
 }
 
+/** @param {DomElementLike | null | undefined} el */
 function isWhitespaceOnlyParagraphLike(el) {
   if (!el || !el.tagName) return false;
   const tag = String(el.tagName || '').toLowerCase();
@@ -894,6 +1067,7 @@ function isWhitespaceOnlyParagraphLike(el) {
   return text.replace(/[\u00a0\s]/g, '') === '';
 }
 
+/** @param {DomElementLike | null | undefined} table */
 function getTableRows(table) {
   if (!table || !table.querySelectorAll) return [];
   const bodyRows = Array.from(table.querySelectorAll(':scope > tbody > tr'));
@@ -901,15 +1075,18 @@ function getTableRows(table) {
   return Array.from(table.querySelectorAll(':scope > tr'));
 }
 
+/** @param {DomElementLike | null | undefined} row */
 function getRowCells(row) {
   if (!row || !row.querySelectorAll) return [];
   return Array.from(row.querySelectorAll(':scope > th, :scope > td'));
 }
 
+/** @param {unknown} text */
 function normalizeInlineText(text) {
   return String(text || '').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
+/** @param {DomElementLike | null | undefined} table */
 function detectSemanticTableColumnIndexes(table) {
   const rows = getTableRows(table);
   if (!rows.length) return null;
@@ -932,6 +1109,10 @@ function detectSemanticTableColumnIndexes(table) {
   return { cueIndex, notesIndex };
 }
 
+/**
+ * @param {DomElementLike | null | undefined} el
+ * @param {unknown} propName
+ */
 function getInlineStyleValue(el, propName) {
   if (!el || !propName) return '';
   const targetProp = String(propName || '').trim().toLowerCase();
@@ -939,6 +1120,7 @@ function getInlineStyleValue(el, propName) {
   return entry ? String(entry.value || '') : '';
 }
 
+/** @param {DomElementLike | null | undefined} el */
 function hasContentSizedBlankLineTypography(el) {
   if (!el) return false;
 
@@ -957,6 +1139,7 @@ function hasContentSizedBlankLineTypography(el) {
   return unit === 'pt' ? size >= 8 : size >= 10;
 }
 
+/** @param {DomElementLike | null | undefined} el */
 function shouldNormalizeTableBlankLineSpacer(el) {
   if (!el || typeof el.closest !== 'function') return false;
   const detailCell = el.closest('td[data-onc-col-role="detail"],th[data-onc-col-role="detail"],td,th');
@@ -975,6 +1158,10 @@ function shouldNormalizeTableBlankLineSpacer(el) {
   return hasContentSizedBlankLineTypography(el);
 }
 
+/**
+ * @param {DomElementLike | null | undefined} el
+ * @param {PipelineDocument} doc
+ */
 function ensureVisibleSpacerBlock(el, doc) {
   if (!el || !el.tagName) return false;
   const tag = String(el.tagName || '').toLowerCase();
@@ -998,11 +1185,13 @@ function ensureVisibleSpacerBlock(el, doc) {
   return changed;
 }
 
+/** @param {DomElementLike | null | undefined} el */
 function isContainerElement(el) {
   if (!el || !el.tagName) return false;
   return /^(div|section|article|main|aside|blockquote|li|td|th)$/i.test(String(el.tagName || ''));
 }
 
+/** @param {DomElementLike | null | undefined} root */
 function trimTrailingVisualSpacersDeep(root) {
   if (!root || !root.lastElementChild) return 0;
   let removed = 0;
@@ -1029,6 +1218,10 @@ function trimTrailingVisualSpacersDeep(root) {
   return removed;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function injectFooterSpacerCss(doc) {
   if (!doc) return [];
   const head = doc.querySelector('head') || doc.documentElement;
@@ -1409,10 +1602,15 @@ const REDUNDANT_UTILITY_PRUNE_RULES = [
   }
 ];
 
+/** @param {DomElementLike} el */
 function getClassNameSet(el) {
   return new Set(String(el.getAttribute('class') || '').split(/\s+/).filter(Boolean));
 }
 
+/**
+ * @param {DomElementLike} el
+ * @param {string[]} [classNames=[]]
+ */
 function removeClassNames(el, classNames = []) {
   const next = Array.from(getClassNameSet(el)).filter((name) => !classNames.includes(name));
   if (next.length) {
@@ -1422,11 +1620,19 @@ function removeClassNames(el, classNames = []) {
   el.removeAttribute('class');
 }
 
+/**
+ * @param {DomElementLike} el
+ * @param {string[]} [requiredClasses=[]]
+ */
 function hasRequiredClasses(el, requiredClasses = []) {
   const classSet = getClassNameSet(el);
   return requiredClasses.every((name) => classSet.has(name));
 }
 
+/**
+ * @param {DomElementLike} el
+ * @param {Record<string, unknown>} [requiredStyles={}]
+ */
 function hasRequiredStyles(el, requiredStyles = {}) {
   const styleMap = new Map();
   parseInlineStyle(el.getAttribute('style') || '').forEach(({ prop, value }) => {
@@ -1440,6 +1646,10 @@ function hasRequiredStyles(el, requiredStyles = {}) {
   });
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {string[]} [usedPatternClassNames=[]]
+ */
 function ensureCompactTypographyStyle(doc, usedPatternClassNames = []) {
   const head = doc.querySelector('head') || doc.documentElement;
   if (!head) return false;
@@ -1459,6 +1669,10 @@ function ensureCompactTypographyStyle(doc, usedPatternClassNames = []) {
   return true;
 }
 
+/**
+ * @param {DomElementLike | null | undefined} el
+ * @param {string[]} [removableStyleProps=[]]
+ */
 function removeMatchedStyleDeclarations(el, removableStyleProps = []) {
   if (!el || !removableStyleProps.length) return false;
   const styleText = el.getAttribute('style') || '';
@@ -1478,6 +1692,11 @@ function removeMatchedStyleDeclarations(el, removableStyleProps = []) {
   return true;
 }
 
+/**
+ * @param {DomElementLike[]} nodes
+ * @param {Array<{ className: string, selector?: string, requiredClasses?: string[], requiredStyles?: Record<string, unknown>, removableClasses?: string[], removableStyleProps?: string[] }>} patterns
+ * @param {Set<string>} usedPatternClassNames
+ */
 function applyCompactPatterns(nodes, patterns, usedPatternClassNames) {
   let replacements = 0;
   let strippedStyleDeclarations = 0;
@@ -1501,6 +1720,10 @@ function applyCompactPatterns(nodes, patterns, usedPatternClassNames) {
   return { replacements, strippedStyleDeclarations };
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {AttributeCleanupResult}
+ */
 function cleanupRedundantAttributes(doc) {
   if (!doc || typeof doc.querySelectorAll !== 'function') {
     return {
@@ -1532,7 +1755,7 @@ function cleanupRedundantAttributes(doc) {
       return;
     }
 
-    const uniqueTokens = [];
+    const uniqueTokens = /** @type {string[]} */ ([]);
     const seen = new Set();
     tokens.forEach((token) => {
       if (seen.has(token)) return;
@@ -1553,6 +1776,7 @@ function cleanupRedundantAttributes(doc) {
   };
 }
 
+/** @param {DomElementLike[]} [nodes=[]] */
 function pruneInlineBackedUtilityClasses(nodes = []) {
   let pruned = 0;
 
@@ -1576,6 +1800,7 @@ function pruneInlineBackedUtilityClasses(nodes = []) {
   return pruned;
 }
 
+/** @param {unknown} value */
 function parseCssLengthToInches(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return null;
@@ -1602,6 +1827,7 @@ function parseCssLengthToInches(value) {
   }
 }
 
+/** @param {DomElementLike | null | undefined} cell */
 function cellUsesCompactTableLayoutClass(cell) {
   if (!cell || !cell.classList) return false;
   return cell.classList.contains('onc-cell')
@@ -1609,11 +1835,13 @@ function cellUsesCompactTableLayoutClass(cell) {
     || cell.classList.contains('onc-cell-borderless-lite');
 }
 
+/** @param {DomElementLike | null | undefined} cell */
 function getCompactTableCellWidthEntry(cell) {
   if (!cell || !cell.getAttribute) return null;
   return parseInlineStyle(cell.getAttribute('style') || '').find(({ prop }) => String(prop || '').trim().toLowerCase() === 'width') || null;
 }
 
+/** @param {DomElementLike | null | undefined} cell */
 function getCompactTableCellTextMetrics(cell) {
   if (!cellUsesCompactTableLayoutClass(cell)) return null;
 
@@ -1621,7 +1849,7 @@ function getCompactTableCellTextMetrics(cell) {
   if (!widthEntry || !widthEntry.value) return null;
 
   const widthInches = parseCssLengthToInches(widthEntry.value);
-  if (!Number.isFinite(widthInches) || widthInches <= 0) return null;
+  if (widthInches === null || !Number.isFinite(widthInches) || widthInches <= 0) return null;
 
   const paragraphs = Array.from(cell.querySelectorAll(':scope > p'));
   if (paragraphs.length !== 1) return null;
@@ -1642,6 +1870,7 @@ function getCompactTableCellTextMetrics(cell) {
   };
 }
 
+/** @param {DomElementLike | null | undefined} table */
 function shouldPromoteCompactTableCellWidths(table) {
   if (!table || !table.querySelectorAll) return false;
   if (!(table.classList && (table.classList.contains('onc-table') || table.classList.contains('onc-table-borderless')))) return false;
@@ -1671,6 +1900,7 @@ function shouldPromoteCompactTableCellWidths(table) {
   return measuredCells > 0 && denseCells > 0;
 }
 
+/** @param {DomElementLike | null | undefined} cell */
 function rewriteWidthStyleToMinWidth(cell) {
   if (!cell || !cell.getAttribute) return false;
   const entries = parseInlineStyle(cell.getAttribute('style') || '');
@@ -1698,8 +1928,12 @@ function rewriteWidthStyleToMinWidth(cell) {
   return true;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function compactRepeatedTypographyClasses(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const nodes = Array.from(doc.querySelectorAll('[style]'));
@@ -1749,8 +1983,12 @@ export function compactRepeatedTypographyClasses(doc) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function promoteCompactContentTableCellWidthsToMinWidth(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   let tablesAdjusted = 0;
@@ -1782,6 +2020,7 @@ export function promoteCompactContentTableCellWidthsToMinWidth(doc) {
   return logs;
 }
 
+/** @param {DomElementLike | null | undefined} el */
 function isLeadingTagParagraph(el) {
   if (!el || !el.tagName || String(el.tagName).toLowerCase() !== 'p') return false;
   const styleText = String(el.getAttribute('style') || '').trim();
@@ -1789,7 +2028,7 @@ function isLeadingTagParagraph(el) {
 
   const textIndent = getInlineStyleValue(el, 'text-indent');
   const indentInches = parseCssLengthToInches(textIndent);
-  if (!Number.isFinite(indentInches) || indentInches > -0.08 || indentInches < -0.35) return false;
+  if (indentInches === null || !Number.isFinite(indentInches) || indentInches > -0.08 || indentInches < -0.35) return false;
 
   const firstElement = el.firstElementChild;
   if (!firstElement || String(firstElement.tagName || '').toLowerCase() !== 'img') return false;
@@ -1804,6 +2043,7 @@ function isLeadingTagParagraph(el) {
   return true;
 }
 
+/** @param {DomElementLike | null | undefined} img */
 function isSmallInlineIconImage(img) {
   if (!img || !img.getAttribute) return false;
   const width = Number.parseFloat(String(img.getAttribute('width') || '').trim());
@@ -1813,8 +2053,12 @@ function isSmallInlineIconImage(img) {
   return true;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeLeadingTagParagraphIndent(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   let updated = 0;
@@ -1843,8 +2087,12 @@ export function normalizeLeadingTagParagraphIndent(doc) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeContentBlankLineSpacers(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
   const main = doc.querySelector('main');
   if (!main) return logs;
@@ -1873,8 +2121,13 @@ export function normalizeContentBlankLineSpacers(doc) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @param {FooterGapOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const spacerText = typeof options.spacerText === 'string' ? options.spacerText : '\u00a0';
@@ -1891,6 +2144,7 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
   let trimmedBeforeFooter = 0;
   let footerInsetNormalized = 0;
 
+  /** @param {DomElementLike | null | undefined} footer */
   function ensureFooterInset(footer) {
     if (!footer || !footer.getAttribute || !footerMarginLeft) return false;
     const entries = parseInlineStyle(footer.getAttribute('style') || '');
@@ -1981,8 +2235,13 @@ export function ensureCreatedWithOneNoteFooterGap(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @param {FooterGapOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function normalizeCreatedWithOneNoteFooterInset(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
   const footerMarginLeft = typeof options.footerMarginLeft === 'string' ? options.footerMarginLeft : '8px';
@@ -2032,6 +2291,11 @@ export function normalizeCreatedWithOneNoteFooterInset(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {string} cssHref
+ * @returns {SanitizeLogEntry[]}
+ */
 export function injectCssLink(doc, cssHref) {
   const head = doc.querySelector('head') || doc.documentElement;
   const existing = Array.from(head.querySelectorAll('link[rel="stylesheet"]')).find((link) => {
@@ -2048,6 +2312,11 @@ export function injectCssLink(doc, cssHref) {
   return [{ step: 'InjectCss', details: cssHref }];
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {string} [cssHref='styles.css']
+ * @returns {SanitizeLogEntry[]}
+ */
 export function injectDeferredStylesActivation(doc, cssHref = 'styles.css') {
   const head = doc.querySelector('head') || doc.documentElement;
   const existing = head.querySelector('script[data-onc-export-styles-loader="v1"]');
@@ -2068,13 +2337,19 @@ export function injectDeferredStylesActivation(doc, cssHref = 'styles.css') {
 // `minCount` times are considered.  When `removeMigratedDeclarations`
 // is true, the original `style` attribute is removed from the
 // affected children.
+/**
+ * @param {PipelineDocument | null | undefined} doc
+ * @param {CollapseInlineStyleDuplicatesOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function collapseInlineStyleDuplicates(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const minCount = typeof options.minCount === 'number' ? options.minCount : 3;
   const remove = options.removeMigratedDeclarations === true;
 
   if (!doc || typeof doc.querySelectorAll !== 'function') return logs;
 
+  /** @param {string} styleText */
   function computeClasses(styleText) {
     const classes = new Set();
     parseStyle(styleText).forEach(({ prop, value }) => {
@@ -2086,6 +2361,7 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
     return Array.from(classes);
   }
 
+  /** @param {string} styleText */
   function canonicalizeStyleSignature(styleText) {
     const entries = parseStyle(styleText);
     if (!entries.length) return null;
@@ -2120,8 +2396,8 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
     const children = Array.from(parent.children).filter(c => c.getAttribute && c.getAttribute('style'));
     if (children.length < minCount) return;
 
-    const styleGroups = new Map();
-    const styleSamples = new Map();
+    const styleGroups = /** @type {Map<string, DomElementLike[]>} */ (new Map());
+    const styleSamples = /** @type {Map<string, string>} */ (new Map());
     children.forEach(child => {
       const originalText = (child.getAttribute('style') || '').trim();
       if (!originalText) return;
@@ -2140,10 +2416,10 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
         const sampleStyle = styleSamples.get(styleSignature) || styleSignature;
         const classes = computeClasses(sampleStyle);
         if (classes.length) {
-          classes.forEach(cl => addClass(parent, cl));
+          classes.forEach((cl) => addClass(parent, cl));
           promotions++;
           if (remove) {
-            arr.forEach(ch => {
+            arr.forEach((ch) => {
               ch.removeAttribute('style');
               childrenFixed++;
             });
@@ -2170,10 +2446,11 @@ export function collapseInlineStyleDuplicates(doc, options = {}) {
 
 // Ensure the document contains a <main> landmark and a level-1 heading
 // cell constants for environments without global Node (e.g. Node.js/jsdom)
-const ELEMENT_NODE = typeof Node !== 'undefined' ? Node.ELEMENT_NODE : 1;
-const TEXT_NODE = typeof Node !== 'undefined' ? Node.TEXT_NODE : 3;
-const DOCUMENT_POSITION_PRECEDING = typeof Node !== 'undefined' ? Node.DOCUMENT_POSITION_PRECEDING : 2;
+const ELEMENT_NODE = DOM_GLOBALS.Node ? DOM_GLOBALS.Node.ELEMENT_NODE : 1;
+const TEXT_NODE = DOM_GLOBALS.Node ? DOM_GLOBALS.Node.TEXT_NODE : 3;
+const DOCUMENT_POSITION_PRECEDING = DOM_GLOBALS.Node ? DOM_GLOBALS.Node.DOCUMENT_POSITION_PRECEDING : 2;
 
+/** @param {string} [styleText=''] */
 function parseNumericFontSize(styleText = '') {
   const m = String(styleText || '').match(/font-size\s*:\s*([0-9]*\.?[0-9]+)\s*(pt|px|em|rem)/i);
   if (!m) return null;
@@ -2186,6 +2463,7 @@ function parseNumericFontSize(styleText = '') {
   return null;
 }
 
+/** @param {DomElementLike | null | undefined} el */
 export function looksLikeOneNoteTitleCandidate(el) {
   if (!el || !el.tagName) return false;
   const tag = el.tagName.toLowerCase();
@@ -2204,6 +2482,7 @@ export function looksLikeOneNoteTitleCandidate(el) {
   return false;
 }
 
+/** @param {DomElementLike | null | undefined} main */
 function findOneNoteTitleElement(main) {
   if (!main || !main.querySelectorAll) return null;
   const candidates = Array.from(main.querySelectorAll('p,div,span'));
@@ -2216,6 +2495,10 @@ function findOneNoteTitleElement(main) {
   return null;
 }
 
+/**
+ * @param {DomElementLike} fromEl
+ * @param {DomElementLike} toEl
+ */
 function copyAttributes(fromEl, toEl) {
   for (const attr of Array.from(fromEl.attributes || [])) {
     toEl.setAttribute(attr.name, attr.value);
@@ -2227,8 +2510,13 @@ function isPlaceholderDocumentTitle(value = '') {
   return normalized === '' || normalized === 'document';
 }
 
+/**
+ * @param {PipelineDocument} doc
+ * @param {EnsureHeadOptions} [options={}]
+ * @returns {SanitizeLogEntry[]}
+ */
 export function ensureMainHeading(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const body = doc.body || doc.querySelector('body') || doc.documentElement;
   if (!body) return logs;
 
@@ -2352,8 +2640,12 @@ export function ensureMainHeading(doc, options = {}) {
 }
 
 // repair malformed lists by ensuring only <li> children and wrapping other nodes
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function ensureListStructure(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const lists = Array.from(doc.querySelectorAll('ul,ol'));
   let fixedCount = 0;
   let unwrappedCount = 0;
@@ -2450,11 +2742,15 @@ export function ensureListStructure(doc) {
 // pass meant to catch cases where earlier repairs accidentally cloned or left
 // behind the same item twice in a row. The pipeline invokes this after
 // `ensureListStructure`.
+/**
+ * @param {PipelineDocument} doc
+ * @returns {SanitizeLogEntry[]}
+ */
 export function dedupeLists(doc) {
-  const logs = [];
+  const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const lists = Array.from(doc.querySelectorAll('ul,ol'));
   lists.forEach(list => {
-    let previousHtml = null;
+    let previousHtml = /** @type {string | null} */ (null);
     let removed = 0;
     Array.from(list.children).forEach(child => {
       if (child.nodeType === ELEMENT_NODE && child.tagName.toLowerCase() === 'li') {

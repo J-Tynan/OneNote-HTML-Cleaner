@@ -1,9 +1,63 @@
+// @ts-check
+
 import {
   parseStyleDeclarationEntries,
   serializeStyleDeclarationEntries
 } from './styleUtils.js';
 import { looksLikeOneNoteTitleCandidate } from './sanitize.js';
 
+/**
+ * @typedef {{ prop: string, value: string }} StyleDeclarationEntry
+ * @typedef {Map<string, string>} StyleMap
+ * @typedef {{ name?: string | null, value?: string | null }} DomAttribute
+ * @typedef {{ nodeType?: number, textContent?: string | null }} DomChildNode
+ * @typedef {{
+ *   tagName?: string | null,
+ *   textContent?: string | null,
+ *   attributes?: ArrayLike<DomAttribute>,
+ *   children?: ArrayLike<DomElement>,
+ *   childNodes?: ArrayLike<DomChildNode>,
+ *   classList?: { add: (className: string) => void },
+ *   getAttribute: (name: string) => string | null,
+ *   setAttribute: (name: string, value: string) => void,
+ *   removeAttribute: (name: string) => void,
+ *   querySelector: (selector: string) => DomElement | null,
+ *   querySelectorAll: (selector: string) => ArrayLike<DomElement>,
+ *   closest: (selector: string) => DomElement | null,
+ *   cloneNode: (deep?: boolean) => DomElement,
+ *   remove: () => void,
+ *   replaceWith: (...nodes: DomElement[]) => void
+ * }} DomElement
+ * @typedef {{ querySelector: (selector: string) => DomElement | null }} DomDocument
+ * @typedef {{ unwrapRedundantWrappers?: boolean, normalizeTopLevelPageWidths?: boolean, standardizeHeaderDatePositions?: boolean }} DirectionLayoutNormalizationOptions
+ * @typedef {{ changed: boolean, style: string }} NormalizedStyleResult
+ * @typedef {{ changed: number, inset: string }} InsetAlignmentResult
+ * @typedef {{ removed: number, style: string }} WidthStripResult
+ * @typedef {{ [prop: string]: string }} StyleDefaultsMap
+ * @typedef {{
+ *   step: 'NormalizeDirectionLayoutContainers',
+ *   wrappersUnwrapped: number,
+ *   widthsNormalized: number,
+ *   rootMarginsStandardized: number,
+ *   firstContentBlockMarginsStandardized: number,
+ *   handwritingContentMarginsStandardized: number,
+ *   positionsStandardized: number,
+ *   iconParagraphsAligned: number,
+ *   placeholderReferencesRemoved: number
+ * }} DirectionLayoutNormalizationLogEntry
+ * @typedef {{
+ *   step: 'EnforceHeaderDateTimeStyles',
+ *   titleStyled: number,
+ *   dateStyled: number,
+ *   timeStyled: number
+ * }} HeaderDateTimeStyleLogEntry
+ */
+
+/**
+ * @param {DomElement | null | undefined} el
+ * @param {string | null | undefined} className
+ * @returns {void}
+ */
 function addClass(el, className) {
   if (!el || !className) return;
   if (typeof el.classList !== 'undefined') {
@@ -16,24 +70,44 @@ function addClass(el, className) {
   el.setAttribute('class', Array.from(classes).join(' '));
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {StyleDeclarationEntry[]}
+ */
 function parseInlineStyle(styleText) {
   return parseStyleDeclarationEntries(styleText);
 }
 
+/**
+ * @param {StyleDeclarationEntry[]} entries
+ * @returns {string}
+ */
 function serializeInlineStyle(entries) {
   return serializeStyleDeclarationEntries(entries);
 }
 
+/**
+ * @param {DomElement} el
+ * @returns {boolean}
+ */
 function hasSignificantTextNodeChildren(el) {
   return Array.from(el.childNodes || []).some((node) => node.nodeType === 3 && String(node.textContent || '').trim().length > 0);
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {boolean}
+ */
 function isDirectionLtrOnlyStyle(styleText) {
   const entries = parseInlineStyle(styleText);
   if (!entries.length) return false;
   return entries.every(({ prop, value }) => prop === 'direction' && /^ltr$/i.test(String(value || '').trim()));
 }
 
+/**
+ * @param {DomElement} el
+ * @returns {boolean}
+ */
 function hasUnsafeWrapperAttributes(el) {
   return Array.from(el.attributes || []).some((attr) => {
     const name = String(attr.name || '').toLowerCase();
@@ -43,10 +117,18 @@ function hasUnsafeWrapperAttributes(el) {
   });
 }
 
+/**
+ * @param {unknown} value
+ * @returns {boolean}
+ */
 function isAbsoluteWidthValue(value) {
   return /^([0-9]*\.?[0-9]+)\s*(in|pt|px|pc|cm|mm)$/i.test(String(value || '').trim());
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {WidthStripResult}
+ */
 function stripAbsoluteWidthDeclaration(styleText) {
   const entries = parseInlineStyle(styleText);
   let removed = 0;
@@ -62,24 +144,40 @@ function stripAbsoluteWidthDeclaration(styleText) {
   };
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {StyleMap}
+ */
 function styleEntriesToMap(styleText) {
-  const map = new Map();
+  const map = /** @type {StyleMap} */ (new Map());
   parseInlineStyle(styleText).forEach(({ prop, value }) => {
     map.set(prop, value);
   });
   return map;
 }
 
+/**
+ * @param {StyleMap} styleMap
+ * @returns {string}
+ */
 function styleMapToString(styleMap) {
   return serializeInlineStyle(Array.from(styleMap.entries()).map(([prop, value]) => ({ prop, value })));
 }
 
+/**
+ * @param {unknown} value
+ * @returns {boolean}
+ */
 function isZeroLengthValue(value) {
   const normalized = String(value || '').trim().toLowerCase();
   if (!normalized) return true;
   return /^0(?:[a-z%]+)?$/.test(normalized);
 }
 
+/**
+ * @param {StyleMap} styleMap
+ * @returns {string}
+ */
 function extractPaddingLeftValue(styleMap) {
   const explicit = String(styleMap.get('padding-left') || '').trim();
   if (explicit) return explicit;
@@ -94,10 +192,18 @@ function extractPaddingLeftValue(styleMap) {
   return values[3];
 }
 
+/**
+ * @param {unknown} text
+ * @returns {string}
+ */
 function cleanInlineText(text) {
   return String(text || '').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * @param {DomElement | null | undefined} block
+ * @returns {string}
+ */
 function getDominantTableContentInset(block) {
   if (!block || !block.querySelectorAll) return '';
   const cells = Array.from(block.querySelectorAll('table td, table th'));
@@ -112,6 +218,10 @@ function getDominantTableContentInset(block) {
   return '';
 }
 
+/**
+ * @param {unknown} value
+ * @returns {number | null}
+ */
 function getNumericDimension(value) {
   const parsed = parseFloat(String(value || '').trim());
   return Number.isFinite(parsed) ? parsed : null;
@@ -120,6 +230,10 @@ function getNumericDimension(value) {
 const MIN_CONTENT_MARGIN_LEFT_IN = 0.125;
 const HANDWRITING_CONTENT_MARGIN_LEFT_IN = 0.075;
 
+/**
+ * @param {unknown} value
+ * @returns {number | null}
+ */
 function parseCssLengthToInches(value) {
   const text = String(value || '').trim().toLowerCase();
   if (!text) return null;
@@ -146,11 +260,19 @@ function parseCssLengthToInches(value) {
   }
 }
 
+/**
+ * @param {number} value
+ * @returns {string}
+ */
 function toInchesCssValue(value) {
   const rounded = Number(value.toFixed(4));
   return `${rounded}in`;
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function loosenContentBaselineLeftMargin(value) {
   const original = String(value || '').trim();
   if (!original) return original;
@@ -160,6 +282,10 @@ function loosenContentBaselineLeftMargin(value) {
   return toInchesCssValue(MIN_CONTENT_MARGIN_LEFT_IN);
 }
 
+/**
+ * @param {DomElement | null | undefined} img
+ * @returns {boolean}
+ */
 function isLikelyInlineIconImage(img) {
   if (!img || !img.getAttribute) return false;
   const width = getNumericDimension(img.getAttribute('width'));
@@ -169,6 +295,10 @@ function isLikelyInlineIconImage(img) {
   return true;
 }
 
+/**
+ * @param {DomElement | null | undefined} img
+ * @returns {boolean}
+ */
 function isLargeContentImage(img) {
   if (!img || !img.getAttribute) return false;
   const width = getNumericDimension(img.getAttribute('width'));
@@ -178,6 +308,10 @@ function isLargeContentImage(img) {
   return false;
 }
 
+/**
+ * @param {DomElement | null | undefined} block
+ * @returns {boolean}
+ */
 function isImageDominantContentBlock(block) {
   if (!block || !block.querySelectorAll) return false;
   const images = Array.from(block.querySelectorAll('img'));
@@ -191,11 +325,19 @@ function isImageDominantContentBlock(block) {
   return text.length === 0;
 }
 
+/**
+ * @param {DomElement | null | undefined} block
+ * @returns {boolean}
+ */
 function hasRasterHandwritingImage(block) {
   if (!block || !block.querySelector) return false;
   return !!block.querySelector('img[data-handwriting="raster"]');
 }
 
+/**
+ * @param {DomElement | null | undefined} paragraph
+ * @returns {boolean}
+ */
 function isStandaloneIconParagraph(paragraph) {
   if (!paragraph || !paragraph.tagName || paragraph.tagName.toLowerCase() !== 'p') return false;
   const directChildren = Array.from(paragraph.children || []);
@@ -210,6 +352,10 @@ function isStandaloneIconParagraph(paragraph) {
   return text.length === 0;
 }
 
+/**
+ * @param {DomElement} block
+ * @returns {InsetAlignmentResult}
+ */
 function alignStandaloneIconParagraphsToContentInset(block) {
   const inset = getDominantTableContentInset(block);
   if (!inset) {
@@ -242,6 +388,11 @@ function alignStandaloneIconParagraphsToContentInset(block) {
   };
 }
 
+/**
+ * @param {unknown} styleText
+ * @param {string} [baselineMarginLeft='']
+ * @returns {NormalizedStyleResult}
+ */
 function normalizeTitleBlockPositionStyle(styleText, baselineMarginLeft = '') {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
@@ -260,6 +411,11 @@ function normalizeTitleBlockPositionStyle(styleText, baselineMarginLeft = '') {
   };
 }
 
+/**
+ * @param {unknown} styleText
+ * @param {string} [baselineMarginLeft='']
+ * @returns {NormalizedStyleResult}
+ */
 function normalizeDateBlockPositionStyle(styleText, baselineMarginLeft = '') {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
@@ -279,6 +435,11 @@ function normalizeDateBlockPositionStyle(styleText, baselineMarginLeft = '') {
   };
 }
 
+/**
+ * @param {unknown} styleText
+ * @param {string} [baselineMarginLeft='']
+ * @returns {NormalizedStyleResult}
+ */
 function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = '') {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
@@ -290,6 +451,11 @@ function normalizeContentBlockLeftBaselineStyle(styleText, baselineMarginLeft = 
   };
 }
 
+/**
+ * @param {unknown} styleText
+ * @param {string} [baselineMarginLeft='']
+ * @returns {NormalizedStyleResult}
+ */
 function normalizeContentBlockToExactBaselineStyle(styleText, baselineMarginLeft = '') {
   if (!baselineMarginLeft) {
     return {
@@ -307,6 +473,10 @@ function normalizeContentBlockToExactBaselineStyle(styleText, baselineMarginLeft
   };
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {NormalizedStyleResult}
+ */
 function normalizeRootDocumentMarginStyle(styleText) {
   const styleMap = styleEntriesToMap(styleText);
   const before = styleMapToString(styleMap);
@@ -320,6 +490,11 @@ function normalizeRootDocumentMarginStyle(styleText) {
   };
 }
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @param {StyleDefaultsMap} [declarations={}]
+ * @returns {boolean}
+ */
 function setStyleDefaults(el, declarations = {}) {
   if (!el || !el.getAttribute) return false;
   const styleMap = styleEntriesToMap(el.getAttribute('style') || '');
@@ -339,6 +514,10 @@ function setStyleDefaults(el, declarations = {}) {
   return true;
 }
 
+/**
+ * @param {unknown} text
+ * @returns {boolean}
+ */
 function isLikelyDateText(text) {
   const value = cleanInlineText(text);
   if (!value) return false;
@@ -349,12 +528,20 @@ function isLikelyDateText(text) {
   return monthDate.test(value) || monthDateWithWeekday.test(value) || isoDate.test(value) || slashDate.test(value);
 }
 
+/**
+ * @param {unknown} text
+ * @returns {boolean}
+ */
 function isLikelyTimeText(text) {
   const value = cleanInlineText(text);
   if (!value) return false;
   return /^\d{1,2}:\d{2}(?::\d{2})?(\s?[AP]M)?$/i.test(value);
 }
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @returns {boolean}
+ */
 function looksLikeDateTimeContainer(el) {
   if (!el || !el.querySelectorAll) return false;
   if (el.querySelector(':scope > p > span.created-time')) return true;
@@ -365,6 +552,10 @@ function looksLikeDateTimeContainer(el) {
   return isLikelyDateText(dateText) && isLikelyTimeText(timeText);
 }
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @returns {boolean}
+ */
 function looksLikeTitleContainer(el) {
   if (!el || !el.querySelectorAll) return false;
   if (el.querySelector(':scope > h1')) return true;
@@ -372,6 +563,10 @@ function looksLikeTitleContainer(el) {
   return directChildren.some((child) => looksLikeOneNoteTitleCandidate(child));
 }
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @returns {boolean}
+ */
 function isOneNoteFloatingFileReferencePlaceholder(el) {
   if (!el || !el.tagName || String(el.tagName).toLowerCase() !== 'div') return false;
   if (el.querySelector && el.querySelector('img,svg,canvas,picture,video,audio,iframe,object,embed,table,ul,ol,pre,code')) {
@@ -391,8 +586,13 @@ function isOneNoteFloatingFileReferencePlaceholder(el) {
   return true;
 }
 
+/**
+ * @param {DomDocument} doc
+ * @param {DirectionLayoutNormalizationOptions} [options={}]
+ * @returns {DirectionLayoutNormalizationLogEntry[]}
+ */
 export function normalizeDirectionLayoutContainers(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {DirectionLayoutNormalizationLogEntry[]} */ ([]);
   const main = doc.querySelector('main');
   if (!main) return logs;
 
@@ -517,6 +717,7 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
       }
     }
 
+    /** @param {DomElement | null | undefined} block */
     const readMarginLeft = (block) => {
       if (!block) return '';
       const styleMap = styleEntriesToMap(block.getAttribute('style') || '');
@@ -613,8 +814,12 @@ export function normalizeDirectionLayoutContainers(doc, options = {}) {
   return logs;
 }
 
+/**
+ * @param {DomDocument} doc
+ * @returns {HeaderDateTimeStyleLogEntry[]}
+ */
 export function enforceHeaderDateTimeStyles(doc) {
-  const logs = [];
+  const logs = /** @type {HeaderDateTimeStyleLogEntry[]} */ ([]);
   const main = doc.querySelector('main');
   if (!main) return logs;
 

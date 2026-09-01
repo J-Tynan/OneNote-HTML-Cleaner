@@ -308,7 +308,7 @@ First-pass tasks:
 13. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
 14. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
 15. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
-16. Convert core modules to TypeScript incrementally during `v1.0`, keeping the app shippable and tests green after each step.
+16. [x] TypeScript migration is currently complete for the production JS runtime surface; revisit incremental `.ts` conversion only if later `v1.0` development benefits from it. (2026-09-01)
 17. Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
 
 ## Version 1.1 — Native Support Hardening And Launch Assets

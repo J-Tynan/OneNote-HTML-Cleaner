@@ -1,3 +1,5 @@
+// @ts-check
+
 // DEFERRED: Phase 2 native importer work.
 // The first stable release is MHT/MHTML-only. The worker rejects `.onepkg`
 // inputs before native importers are loaded, so this package importer remains
@@ -7,14 +9,36 @@
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { importOneSection } from './one.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
-import { normalizeExportConfig } from '../pipeline/config.js';
 import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';
 import { inflateSync } from '../../node_modules/fflate/esm/browser.js';
 
+/**
+ * @typedef {import('../contracts.js').NativeHierarchyNode} NativeHierarchyNode
+ * @typedef {import('../contracts.js').NativeImportResult} NativeImportResult
+ * @typedef {import('../contracts.js').NativePage} NativePage
+ * @typedef {import('../contracts.js').NativePageMetadata} NativePageMetadata
+ * @typedef {import('../contracts.js').NativeResource} NativeResource
+ * @typedef {import('../contracts.js').PipelineConfigInput} ImportOnePkgOptions
+ * @typedef {import('../contracts.js').WarningDetail} WarningDetail
+ * @typedef {{ index: number, coffCabStart: number, cCFData: number, typeCompress: number }} CabFolder
+ * @typedef {{ index: number, name: string, size: number, uncompressedOffset: number, attributes: number, folderIndex: number, folderIndexRaw: number }} CabEntry
+ * @typedef {{ cbCabinet: number, folderCount: number, flags: number, cbCFHeader: number, cbCFFolder: number, cbCFData: number, folders: CabFolder[], entryCount: number, entries: CabEntry[] }} ParsedCabBase
+ * @typedef {ParsedCabBase & { arrayBuffer: ArrayBuffer, fileName: string, lzxDecoder?: ((chunk: Uint8Array, context: Record<string, unknown>) => Uint8Array | null) | unknown }} ParsedCab
+ * @typedef {{ decodedFolderCount: number, failedFolderCount: number, decodedCompressionKinds: string[], failedCompressionKinds: string[] }} FolderDecodeSummary
+ * @typedef {{ map: Map<number, Uint8Array>, summary: FolderDecodeSummary }} FolderDataMapResult
+ * @typedef {{ sectionName: string, groupParts: string[], safeGroupParts: string[], safeSectionName: string, sectionFolderPath: string, pagePath?: string, pagePaths?: Array<{ name: string, path: string }> }} SectionDescriptor
+ * @typedef {{ sectionMap: Map<string, Uint8Array>, extractedPaths: string[], warningDetails: WarningDetail[], warnings: string[] }} LibarchiveExtractionResult
+ * @typedef {{ pages: NativePage[], descriptor: SectionDescriptor, extractedFromSection: boolean }} SectionEntryResult
+ * @typedef {{ pages: NativePage[], sectionDescriptors: SectionDescriptor[], extractedSectionCount: number, decodedFolderCount: number, folderDecodeSummary: FolderDecodeSummary, libarchiveExtractedSectionCount: number, libarchiveWarningDetails: WarningDetail[], libarchiveWarnings: string[] }} DerivedSectionsResult
+ */
+
+/** @type {Promise<any> | null} */
 let libarchiveModulePromise = null;
 
+/** @returns {Promise<any>} */
 async function getLibarchiveArchive() {
   if (!libarchiveModulePromise) {
+    // @ts-ignore libarchive.js does not ship declarations for this browser bundle path.
     libarchiveModulePromise = import('../../node_modules/libarchive.js/dist/libarchive.js');
   }
 
@@ -26,14 +50,25 @@ async function getLibarchiveArchive() {
   return module.Archive;
 }
 
+/** @param {DataView} view
+ * @param {number} offset
+ */
 function readUInt16(view, offset) {
   return view.getUint16(offset, true);
 }
 
+/** @param {DataView} view
+ * @param {number} offset
+ */
 function readUInt32(view, offset) {
   return view.getUint32(offset, true);
 }
 
+/**
+ * @param {Uint8Array} bytes
+ * @param {number} startOffset
+ * @returns {{ text: string, nextOffset: number }}
+ */
 function readNullTerminatedString(bytes, startOffset) {
   let end = startOffset;
   while (end < bytes.length && bytes[end] !== 0) {
@@ -44,6 +79,10 @@ function readNullTerminatedString(bytes, startOffset) {
   return { text, nextOffset: Math.min(end + 1, bytes.length) };
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @returns {ParsedCabBase}
+ */
 function parseCabEntries(arrayBuffer) {
   const view = new DataView(arrayBuffer);
   const bytes = new Uint8Array(arrayBuffer);
@@ -85,7 +124,7 @@ function parseCabEntries(arrayBuffer) {
     }
   }
 
-  const folders = [];
+  const folders = /** @type {CabFolder[]} */ ([]);
 
   for (let index = 0; index < cFolders; index += 1) {
     if (folderOffset + 8 > bytes.length) {
@@ -100,7 +139,7 @@ function parseCabEntries(arrayBuffer) {
     folderOffset += 8 + cbCFFolder;
   }
 
-  const entries = [];
+  const entries = /** @type {CabEntry[]} */ ([]);
   let offset = coffFiles;
 
   for (let i = 0; i < cFiles; i += 1) {
@@ -144,6 +183,9 @@ function parseCabEntries(arrayBuffer) {
   };
 }
 
+/** @param {number} typeCompress
+ * @returns {'none' | 'mszip' | 'quantum' | 'lzx' | 'unknown'}
+ */
 function decodeCompressionType(typeCompress) {
   const kind = typeCompress & 0x000f;
   if (kind === 0x0000) return 'none';
@@ -153,6 +195,11 @@ function decodeCompressionType(typeCompress) {
   return 'unknown';
 }
 
+/**
+ * @param {Uint8Array | null | undefined} blockBytes
+ * @param {number | undefined} expectedSize
+ * @returns {Uint8Array}
+ */
 function decodeMszipBlock(blockBytes, expectedSize) {
   if (!blockBytes || blockBytes.length < 2) {
     throw new Error('Invalid MSZIP CFDATA block: missing signature bytes');
@@ -175,6 +222,12 @@ function decodeMszipBlock(blockBytes, expectedSize) {
   return inflated;
 }
 
+/**
+ * @param {Uint8Array} bytes
+ * @param {CabFolder | null | undefined} folder
+ * @param {{ cbCFData?: unknown, lzxDecoder?: unknown }} [options={}]
+ * @returns {Uint8Array | null}
+ */
 function extractFolderData(bytes, folder, options = {}) {
   if (!folder || folder.coffCabStart <= 0 || folder.coffCabStart >= bytes.length) {
     return null;
@@ -183,7 +236,9 @@ function extractFolderData(bytes, folder, options = {}) {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const compression = decodeCompressionType(folder.typeCompress);
   const cbCFData = typeof options.cbCFData === 'number' ? options.cbCFData : 0;
-  const lzxDecoder = typeof options.lzxDecoder === 'function' ? options.lzxDecoder : null;
+  const lzxDecoder = typeof options.lzxDecoder === 'function'
+    ? /** @type {(chunk: Uint8Array, context: Record<string, unknown>) => Uint8Array | null} */ (options.lzxDecoder)
+    : null;
 
   if (compression !== 'none' && compression !== 'mszip' && compression !== 'lzx') {
     return null;
@@ -194,7 +249,7 @@ function extractFolderData(bytes, folder, options = {}) {
   }
 
   let cursor = folder.coffCabStart;
-  const chunks = [];
+  const chunks = /** @type {Uint8Array[]} */ ([]);
   let totalLength = 0;
 
   for (let index = 0; index < folder.cCFData; index += 1) {
@@ -221,7 +276,7 @@ function extractFolderData(bytes, folder, options = {}) {
       }
     } else {
       try {
-        outputChunk = lzxDecoder(chunk, {
+        outputChunk = /** @type {(chunk: Uint8Array, context: Record<string, unknown>) => Uint8Array | null} */ (lzxDecoder)(chunk, {
           expectedSize: cbUncomp,
           folder,
           blockIndex: index
@@ -253,6 +308,12 @@ function extractFolderData(bytes, folder, options = {}) {
   return output;
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @param {CabFolder[]} folders
+ * @param {{ cbCFData?: unknown, lzxDecoder?: unknown }} [options={}]
+ * @returns {FolderDataMapResult}
+ */
 function buildFolderDataMap(arrayBuffer, folders, options = {}) {
   const bytes = new Uint8Array(arrayBuffer);
   const map = new Map();
@@ -286,25 +347,35 @@ function buildFolderDataMap(arrayBuffer, folders, options = {}) {
   };
 }
 
+/** @param {unknown} [value=''] */
 function normalizeEntryPath(value = '') {
   return String(value || '')
     .replace(/\\/g, '/')
     .replace(/^\/+|\/+$/g, '');
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @param {unknown} fileName
+ * @returns {Blob | File}
+ */
 function toArchiveInputFile(arrayBuffer, fileName) {
   const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
   if (typeof File === 'function') {
-    return new File([blob], fileName || 'Notebook.onepkg', { type: 'application/octet-stream' });
+    return new File([blob], String(fileName || 'Notebook.onepkg'), { type: 'application/octet-stream' });
   }
-  blob.name = fileName || 'Notebook.onepkg';
-  return blob;
+  return Object.assign(blob, { name: String(fileName || 'Notebook.onepkg') });
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @param {unknown} fileName
+ * @returns {Promise<LibarchiveExtractionResult>}
+ */
 async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
   const sectionMap = new Map();
-  const extractedPaths = [];
-  const warningDetails = [];
+  const extractedPaths = /** @type {string[]} */ ([]);
+  const warningDetails = /** @type {WarningDetail[]} */ ([]);
   let archive = null;
 
   try {
@@ -325,7 +396,7 @@ async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
   } catch (error) {
     warningDetails.push(makeWarning(
       WARNING_CODES.onepkg.libarchiveExtractFailed,
-      `libarchive.js extraction failed: ${String(error && error.message ? error.message : error)}`,
+      `libarchive.js extraction failed: ${String(error instanceof Error ? error.message : error)}`,
       'warning'
     ));
   } finally {
@@ -346,29 +417,42 @@ async function extractSectionBytesViaLibarchive(arrayBuffer, fileName) {
   };
 }
 
+/** @param {unknown} [value='']
+ * @returns {string[]}
+ */
 function splitPath(value = '') {
   const normalized = normalizeEntryPath(value);
   return normalized ? normalized.split('/').filter(Boolean) : [];
 }
 
+/** @param {string[]} parts */
 function joinPath(parts) {
   return parts.filter(Boolean).join('/');
 }
 
+/** @param {unknown} [name=''] */
 function stripExtension(name = '') {
   return String(name || '').replace(/\.[^.]+$/i, '');
 }
 
+/** @param {unknown} [value=''] */
 function escapeHtml(value = '') {
-  return String(value).replace(/[&<>"']/g, (ch) => ({
+  const replacements = /** @type {Record<string, string>} */ ({
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;'
-  }[ch]));
+  });
+  return String(value).replace(/[&<>"']/g, (ch) => replacements[ch] || ch);
 }
 
+/**
+ * @param {unknown} notebookName
+ * @param {unknown} sectionPath
+ * @param {unknown} sectionName
+ * @returns {string}
+ */
 function buildOnePkgSectionPageHtml(notebookName, sectionPath, sectionName) {
   const notebookEscaped = escapeHtml(notebookName);
   const sectionEscaped = escapeHtml(sectionName);
@@ -377,6 +461,13 @@ function buildOnePkgSectionPageHtml(notebookName, sectionPath, sectionName) {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${sectionEscaped}</title></head><body><main><h1>${sectionEscaped}</h1><p>Converted from OneNote notebook package <strong>${notebookEscaped}</strong>.</p><p>Section path: <code>${sectionPathEscaped}</code></p><p>Detailed page extraction from .onepkg section binaries is in progress. This placeholder keeps the notebook hierarchy and enables per-section download today.</p></main></body></html>`;
 }
 
+/**
+ * @param {NativeHierarchyNode} parent
+ * @param {import('../contracts.js').NativeHierarchyKind} kind
+ * @param {string} name
+ * @param {string} path
+ * @returns {NativeHierarchyNode}
+ */
 function ensureChildNode(parent, kind, name, path) {
   const children = Array.isArray(parent.children) ? parent.children : [];
   parent.children = children;
@@ -388,9 +479,15 @@ function ensureChildNode(parent, kind, name, path) {
   return child;
 }
 
+/**
+ * @param {string} notebookName
+ * @param {string} notebookFolder
+ * @param {CabEntry[]} entries
+ * @returns {{ pages: NativePage[], sectionDescriptors: SectionDescriptor[] }}
+ */
 function deriveSectionPages(notebookName, notebookFolder, entries) {
-  const pages = [];
-  const sectionDescriptors = [];
+  const pages = /** @type {NativePage[]} */ ([]);
+  const sectionDescriptors = /** @type {SectionDescriptor[]} */ ([]);
 
   for (const entry of entries) {
     const entryPath = normalizeEntryPath(entry.name);
@@ -427,6 +524,15 @@ function deriveSectionPages(notebookName, notebookFolder, entries) {
   return { pages, sectionDescriptors };
 }
 
+/**
+ * @param {string} notebookName
+ * @param {string} notebookFolder
+ * @param {string} entryPath
+ * @param {string} sectionName
+ * @param {Uint8Array | null} sectionBytes
+ * @param {ImportOnePkgOptions} [options={}]
+ * @returns {SectionEntryResult}
+ */
 function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sectionName, sectionBytes, options = {}) {
   const parts = splitPath(entryPath);
   const groupParts = parts.slice(0, -1).map((item) => stripExtension(item));
@@ -436,7 +542,7 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
   const sectionFolderPath = joinPath(sectionFolderParts);
   const sectionLogicalPath = [notebookName, ...groupParts, sectionName].join('/');
 
-  const baseMetadata = {
+  const baseMetadata = /** @type {NativePageMetadata} */ ({
     title: sectionName,
     author: undefined,
     createdAt: undefined,
@@ -444,12 +550,12 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
     notebook: notebookName,
     sectionPath: sectionLogicalPath,
     source: 'onepkg'
-  };
+  });
 
   if (sectionBytes) {
     try {
       const sectionOffset = sectionBytes.byteOffset;
-      const sectionArrayBuffer = sectionBytes.buffer.slice(sectionOffset, sectionOffset + sectionBytes.byteLength);
+      const sectionArrayBuffer = /** @type {ArrayBuffer} */ (sectionBytes.slice().buffer);
       const sectionResult = importOneSection(sectionArrayBuffer, {
         fileName: `${sectionName}.one`,
         ToolbarEnabled: options.ToolbarEnabled === true,
@@ -461,9 +567,9 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
         Profile: options.Profile || 'onenote'
       });
       if (sectionResult && Array.isArray(sectionResult.pages) && sectionResult.pages.length > 0) {
-        const mappedPages = sectionResult.pages.map((page) => {
+        const mappedPages = /** @type {NativePage[]} */ (sectionResult.pages.map((page) => {
           const safePageName = toFolderSafeName(page.name || 'Page');
-          const mappedResources = Array.isArray(page.resources)
+          const mappedResources = /** @type {NativeResource[]} */ (Array.isArray(page.resources)
             ? page.resources.map((resource) => {
               const originalPath = String(resource && resource.path ? resource.path : resource && resource.fileName ? resource.fileName : 'resource.bin');
               const fileName = originalPath.split('/').pop();
@@ -473,7 +579,7 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
                 relativePath: `_resources/${fileName}`
               };
             })
-            : [];
+            : []);
 
           return {
             name: page.name || 'Page',
@@ -488,7 +594,7 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
             },
             resources: mappedResources
           };
-        });
+        }));
 
         return {
           pages: mappedPages,
@@ -530,14 +636,21 @@ function buildSectionPagesFromEntry(notebookName, notebookFolder, entryPath, sec
   };
 }
 
+/**
+ * @param {string} notebookName
+ * @param {string} notebookFolder
+ * @param {ParsedCab} parsed
+ * @param {ImportOnePkgOptions} [options={}]
+ * @returns {Promise<DerivedSectionsResult>}
+ */
 async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, parsed, options = {}) {
   const { map: folderData, summary: folderDecodeSummary } = buildFolderDataMap(parsed.arrayBuffer, parsed.folders, {
     cbCFData: parsed.cbCFData,
     lzxDecoder: parsed.lzxDecoder
   });
 
-  let libarchiveSectionMap = new Map();
-  const libarchiveWarningDetails = [];
+  let libarchiveSectionMap = /** @type {Map<string, Uint8Array>} */ (new Map());
+  const libarchiveWarningDetails = /** @type {WarningDetail[]} */ ([]);
   const compressionKinds = parsed.folders.map((folder) => decodeCompressionType(folder.typeCompress));
   const hasLzx = compressionKinds.includes('lzx');
   if (hasLzx) {
@@ -546,8 +659,8 @@ async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, pa
     libarchiveWarningDetails.push(...(Array.isArray(archiveExtract.warningDetails) ? archiveExtract.warningDetails : []));
   }
 
-  const pages = [];
-  const sectionDescriptors = [];
+  const pages = /** @type {NativePage[]} */ ([]);
+  const sectionDescriptors = /** @type {SectionDescriptor[]} */ ([]);
   let extractedSectionCount = 0;
 
   for (const entry of parsed.entries) {
@@ -593,13 +706,19 @@ async function deriveSectionPagesWithExtraction(notebookName, notebookFolder, pa
   };
 }
 
+/**
+ * @param {string} notebookName
+ * @param {string} notebookFolder
+ * @param {SectionDescriptor[]} sectionDescriptors
+ * @returns {NativeHierarchyNode}
+ */
 function buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors) {
-  const hierarchy = {
+  const hierarchy = /** @type {NativeHierarchyNode} */ ({
     kind: 'notebook',
     name: notebookName,
     path: `${notebookFolder}/`,
     children: []
-  };
+  });
 
   for (const descriptor of sectionDescriptors) {
     let cursor = hierarchy;
@@ -623,18 +742,23 @@ function buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors)
   return hierarchy;
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @param {ImportOnePkgOptions} [options={}]
+ * @returns {Promise<NativeImportResult & { archiveEntries: CabEntry[] }>}
+ */
 export async function importOnePackage(arrayBuffer, options = {}) {
   if (!(arrayBuffer instanceof ArrayBuffer)) {
     throw new Error('Expected binary .onepkg payload as ArrayBuffer');
   }
 
   const parsedBase = parseCabEntries(arrayBuffer);
-  const parsed = {
+  const parsed = /** @type {ParsedCab} */ ({
     ...parsedBase,
     arrayBuffer,
-    fileName: options.fileName || 'Notebook.onepkg',
+    fileName: String(options.fileName || 'Notebook.onepkg'),
     lzxDecoder: options.lzxDecoder
-  };
+  });
   const notebookName = baseNameFromFile(options.fileName || 'Notebook.onepkg');
   const notebookFolder = toFolderSafeName(notebookName);
   const compressionKinds = parsed.folders.map((folder) => decodeCompressionType(folder.typeCompress));
@@ -652,12 +776,12 @@ export async function importOnePackage(arrayBuffer, options = {}) {
 
   const hierarchy = buildSectionHierarchy(notebookName, notebookFolder, sectionDescriptors);
 
-  const warningDetails = [
+  const warningDetails = /** @type {WarningDetail[]} */ ([
     makeWarning(WARNING_CODES.onepkg.cabParsedSummary, `Parsed CAB container with ${parsed.entryCount} entries across ${parsed.folderCount} folder(s).`),
     makeWarning(WARNING_CODES.onepkg.sectionsGeneratedSummary, `Detected ${sectionDescriptors.length} section file(s) and generated ${pages.length} downloadable page(s).`),
     makeWarning(WARNING_CODES.onepkg.deepExtractionSummary, `Deep extraction succeeded for ${extractedSectionCount} section(s).`),
     makeWarning(WARNING_CODES.onepkg.folderDecodeSummary, `Decoded ${decodedFolderCount}/${parsed.folderCount} CAB folder payload(s) in-browser.`)
-  ];
+  ]);
 
   if (libarchiveExtractedSectionCount > 0) {
     warningDetails.push(makeWarning(WARNING_CODES.onepkg.libarchiveExtractSummary, `libarchive.js extracted ${libarchiveExtractedSectionCount} section payload(s) from compressed archive entries.`));
@@ -682,22 +806,20 @@ export async function importOnePackage(arrayBuffer, options = {}) {
 
   const warnings = toWarningMessages(warningDetails);
   const warningSummary = summarizeWarningsBySeverity(warningDetails);
-  const exportState = normalizeExportConfig(options);
-
-  const pagesWithToolbar = pages.map((page) => ({
+  const pagesWithToolbar = /** @type {NativePage[]} */ (pages.map((page) => ({
     ...page,
     html: injectOutputToolbar(page.html, {
       ToolbarEnabled: options.ToolbarEnabled === true,
       ToolbarEditToggleEnabled: options.ToolbarEditToggleEnabled === true,
       ToolbarMetadataToggleEnabled: options.ToolbarMetadataToggleEnabled === true,
       ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
-      exportState,
+      exportState: options,
       SourceName: page.path || options.fileName || notebookName,
       SourceKind: 'onepkg',
       Profile: options.Profile || 'onenote',
       WarningSummary: warningSummary
     })
-  }));
+  })));
 
   return {
     sourceKind: 'onepkg',

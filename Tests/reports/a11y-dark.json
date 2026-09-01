@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-07-08T10:26:37.068Z",
-  "url": "http://127.0.0.1:59473/",
+  "timestamp": "2026-09-01T11:06:24.530Z",
+  "url": "http://127.0.0.1:59677/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -629,6 +629,27 @@
       "nodes": []
     },
     {
+      "id": "scrollable-region-focusable",
+      "impact": null,
+      "tags": [
+        "cat.keyboard",
+        "wcag2a",
+        "wcag211",
+        "wcag213",
+        "TTv5",
+        "TT4.a",
+        "EN-301-549",
+        "EN-9.2.1.1",
+        "EN-9.2.1.3",
+        "RGAAv4",
+        "RGAA-7.3.2"
+      ],
+      "description": "Ensure elements that have scrollable content are accessible by keyboard",
+      "help": "Scrollable region must have keyboard access",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/scrollable-region-focusable?application=axeAPI",
+      "nodes": []
+    },
+    {
       "id": "select-name",
       "impact": null,
       "tags": [
@@ -1097,7 +1118,7 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -1149,24 +1170,6 @@
           "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-allowed-role",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "minor",
-              "message": "ARIA role is allowed for given element"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"helpModal\" class=\"fixed inset-0 z-50 items-center justify-center px-4 hidden\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
-          "target": [
-            "#helpModal"
           ]
         }
       ]
@@ -1362,7 +1365,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -1704,7 +1707,7 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -2180,7 +2183,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -2378,7 +2381,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -2430,6 +2433,38 @@
           "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44.78125\" style=\"min-height: 44.7812px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "target": [
+            "#statusSummary"
           ]
         }
       ]
@@ -2561,7 +2596,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary secondary-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
           "target": [
             "#clearFilesButton"
           ]
@@ -2579,7 +2614,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary homepage-primary-button\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -2729,7 +2764,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into clean HTML locally in your browser.\n          </p>",
+          "html": "<p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
           "target": [
             ".text-help"
           ]
@@ -2899,9 +2934,34 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"text-xs text-muted\">Optional</span>",
+          "html": "<span>Optional settings</span>",
           "target": [
-            ".advanced-options-summary > .text-muted"
+            ".advanced-options-summary__meta > span:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#c8d3d9",
+                "bgColor": "#0b0f13",
+                "contrastRatio": 12.61,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 12.61"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--closed\">Click to expand</span>",
+          "target": [
+            ".advanced-options-summary__state--closed"
           ]
         },
         {
@@ -2974,7 +3034,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44.78125\" style=\"min-height: 44.7812px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -3387,7 +3447,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"helpModal\" class=\"fixed inset-0 z-50 items-center justify-center px-4 hidden\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
+          "html": "<dialog id=\"helpModal\" class=\"fixed inset-0 z-50 items-center justify-center px-4 hidden\" aria-modal=\"true\" aria-labelledby=\"helpModalTitle\">",
           "target": [
             "#helpModal"
           ]
@@ -4221,7 +4281,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -4516,7 +4576,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">\n              <span>Advanced options</span>\n              <span class=\"text-xs text-muted\">Optional</span>\n            </summary>",
+          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
             ".advanced-options-summary"
           ]
@@ -4534,7 +4594,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary secondary-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
           "target": [
             "#clearFilesButton"
           ]
@@ -4552,7 +4612,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary homepage-primary-button\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -4685,7 +4745,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-header__identity max-w-3xl\">\n          <h1 class=\"text-2xl font-semibold\">OneNote HTML Cleaner</h1>\n          <p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into clean HTML locally in your browser.\n          </p>\n        </div>",
+          "html": "<div class=\"home-header__identity max-w-3xl\">",
           "target": [
             ".home-header__identity"
           ]
@@ -4725,7 +4785,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into clean HTML locally in your browser.\n          </p>",
+          "html": "<p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
           "target": [
             ".text-help"
           ]
@@ -4865,7 +4925,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"page-shell mx-auto w-full max-w-6xl px-2 py-4 md:px-8\">",
+          "html": "<div class=\"page-shell mx-auto w-full max-w-6xl px-4 py-4 md:px-8\">",
           "target": [
             ".w-full"
           ]
@@ -5005,7 +5065,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more MHT or MHTML files to clean and export them locally.\n              </p>",
+          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
           "target": [
             ".max-w-2xl"
           ]
@@ -5065,7 +5125,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>Files stay on your device</p>",
+          "html": "<p>Files stay on your device.</p>",
           "target": [
             ".space-y-1 > p:nth-child(2)"
           ]
@@ -5125,7 +5185,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span id=\"autoConvertNoticeDetail\">You can change this behaviour in Advanced options.</span>",
+          "html": "<span id=\"autoConvertNoticeDetail\">Change this in Advanced options if you prefer manual conversion.</span>",
           "target": [
             "#autoConvertNoticeDetail"
           ]
@@ -5385,7 +5445,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-advanced-card card-panel card-panel--soft m-1 space-y-4\">",
+          "html": "<section class=\"home-advanced-card card-panel card-panel--soft space-y-4\">",
           "target": [
             ".home-advanced-card"
           ]
@@ -5425,7 +5485,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">\n              <span>Advanced options</span>\n              <span class=\"text-xs text-muted\">Optional</span>\n            </summary>",
+          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
             ".advanced-options-summary"
           ]
@@ -5465,9 +5525,49 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"text-xs text-muted\">Optional</span>",
+          "html": "<span class=\"advanced-options-summary__meta text-xs text-muted\">",
           "target": [
-            ".advanced-options-summary > .text-muted"
+            ".advanced-options-summary__meta"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Optional settings</span>",
+          "target": [
+            ".advanced-options-summary__meta > span:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--closed\">Click to expand</span>",
+          "target": [
+            ".advanced-options-summary__state--closed"
           ]
         },
         {
@@ -5505,7 +5605,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft space-y-4 home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
           "target": [
             "#statusPanel"
           ]
@@ -5585,7 +5685,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44.78125\" style=\"min-height: 44.7812px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -5605,9 +5705,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"flex flex-wrap justify-start gap-3\">",
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\">",
           "target": [
-            ".justify-start"
+            ".results-action-row"
           ]
         },
         {
@@ -5625,7 +5725,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary secondary-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
           "target": [
             "#clearFilesButton"
           ]
@@ -5645,7 +5745,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary homepage-primary-button\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -5753,46 +5853,6 @@
       ]
     },
     {
-      "id": "scrollable-region-focusable",
-      "impact": null,
-      "tags": [
-        "cat.keyboard",
-        "wcag2a",
-        "wcag211",
-        "wcag213",
-        "TTv5",
-        "TT4.a",
-        "EN-301-549",
-        "EN-9.2.1.1",
-        "EN-9.2.1.3",
-        "RGAAv4",
-        "RGAA-7.3.2"
-      ],
-      "description": "Ensure elements that have scrollable content are accessible by keyboard",
-      "help": "Scrollable region must have keyboard access",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/scrollable-region-focusable?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "focusable-content",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element contains focusable elements"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<html lang=\"en\" class=\"dark\">",
-          "target": [
-            "html"
-          ]
-        }
-      ]
-    },
-    {
       "id": "summary-name",
       "impact": null,
       "tags": [
@@ -5823,7 +5883,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">\n              <span>Advanced options</span>\n              <span class=\"text-xs text-muted\">Optional</span>\n            </summary>",
+          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
             ".advanced-options-summary"
           ]
@@ -5998,7 +6058,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more MHT or MHTML files to clean and export them locally.\n              </p>",
+          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
           "target": [
             ".max-w-2xl"
           ],
@@ -6062,7 +6122,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<p>Files stay on your device</p>",
+          "html": "<p>Files stay on your device.</p>",
           "target": [
             ".space-y-1 > p:nth-child(2)"
           ],
@@ -6126,7 +6186,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<span id=\"autoConvertNoticeDetail\">You can change this behaviour in Advanced options.</span>",
+          "html": "<span id=\"autoConvertNoticeDetail\">Change this in Advanced options if you prefer manual conversion.</span>",
           "target": [
             "#autoConvertNoticeDetail"
           ],

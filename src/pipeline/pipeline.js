@@ -1,3 +1,5 @@
+// @ts-check
+
 // src/pipeline/pipeline.js
 import { parseHtmlToDocument, documentToHtml } from './parser.js';
 import { buildOutputDecorationConfig, normalizePipelineConfig } from './config.js';
@@ -16,6 +18,52 @@ import { injectConvertedPageThemeToggle, injectOutputToolbar, summarizeWarningsB
 import { createLogger } from '../logging.js';
 const logger = createLogger('pipeline');
 
+/**
+ * @typedef {import('../contracts.js').ImageMap} ImageMap
+ * @typedef {import('../contracts.js').ListRepairMode} ListRepairMode
+ * @typedef {import('../contracts.js').NormalizedPipelineConfig} NormalizedPipelineConfig
+ * @typedef {import('../contracts.js').OutputAsset} OutputAsset
+ * @typedef {import('../contracts.js').OutputDecorationConfig} OutputDecorationConfig
+ * @typedef {import('../contracts.js').PipelineConfigInput} PipelineConfigInput
+ * @typedef {import('../contracts.js').PipelineLogEntry} PipelineLogEntry
+ * @typedef {import('../contracts.js').PipelineResult} PipelineResult
+ * @typedef {import('../contracts.js').SourceKind} SourceKind
+ * @typedef {import('../contracts.js').WarningSeverity} WarningSeverity
+ * @typedef {{ add: (className: string) => void, contains: (className: string) => boolean, remove: (className: string) => void, length: number }} PipelineClassList
+ * @typedef {{ name: string, value: string }} PipelineAttribute
+ * @typedef {{ nodeType?: number, textContent?: string | null, parentElement?: PipelineDomElement | null }} PipelineChildNode
+ * @typedef {{
+ *   tagName: string,
+ *   className?: string,
+ *   textContent?: string | null,
+ *   outerHTML: string,
+ *   style?: Record<string, string>,
+ *   attributes?: ArrayLike<PipelineAttribute>,
+ *   children?: ArrayLike<PipelineDomElement>,
+ *   childNodes?: ArrayLike<PipelineChildNode>,
+ *   parentElement?: PipelineDomElement | null,
+ *   classList?: PipelineClassList,
+ *   getAttribute: (name: string) => string | null,
+ *   setAttribute: (name: string, value: string) => void,
+ *   removeAttribute: (name: string) => void,
+ *   hasAttribute: (name: string) => boolean,
+ *   querySelector: (selector: string) => PipelineDomElement | null,
+ *   querySelectorAll: (selector: string) => ArrayLike<PipelineDomElement>,
+ *   closest: (selector: string) => PipelineDomElement | null,
+ *   cloneNode: (deep?: boolean) => PipelineDomElement,
+ *   appendChild: (child: unknown) => void,
+ *   replaceWith: (...nodes: unknown[]) => void,
+ *   remove: () => void
+ * }} PipelineDomElement
+ * @typedef {{ documentElement?: PipelineDomElement | null, doctype?: { name: string, publicId?: string | null, systemId?: string | null } | null, querySelector: (selector: string) => PipelineDomElement | null, querySelectorAll: (selector: string) => ArrayLike<PipelineDomElement>, createElement: (tagName: string) => PipelineDomElement }} PipelineDocument
+ * @typedef {{ ExperimentalExportEnabled: boolean, ExportFormat: OutputDecorationConfig['ExportFormat'], MarkdownFlavor: OutputDecorationConfig['MarkdownFlavor'] }} ExportState
+ */
+
+/**
+ * @param {PipelineDocument} doc
+ * @param {NormalizedPipelineConfig} resolvedConfig
+ * @returns {PipelineLogEntry[]}
+ */
 function injectConfiguredExportStyles(doc, resolvedConfig) {
   const exportStylesMode = String(resolvedConfig.ExportStylesMode || 'tailwind').trim().toLowerCase();
   if (exportStylesMode === 'deferred') {
@@ -36,11 +84,16 @@ function injectConfiguredExportStyles(doc, resolvedConfig) {
  *
  * Adds runtime diagnostics to help trace MHT -> HTML conversion issues.
  */
+/**
+ * @param {unknown} htmlString
+ * @param {PipelineConfigInput} [config={}]
+ * @returns {Promise<PipelineResult>}
+ */
 export async function runPipeline(htmlString, config = {}) {
-  const logs = [];
-  const outputAssets = [];
+  const logs = /** @type {PipelineLogEntry[]} */ ([]);
+  const outputAssets = /** @type {OutputAsset[]} */ ([]);
   const resolvedConfig = normalizePipelineConfig(config);
-  const parseWarnings = ensureArray(resolvedConfig.ParseWarnings || resolvedConfig.parseWarnings);
+  const parseWarnings = /** @type {PipelineLogEntry[]} */ (ensureArray(resolvedConfig.ParseWarnings || resolvedConfig.parseWarnings));
   if (parseWarnings.length) {
     logs.push(...parseWarnings.map((entry) => ({
       step: entry && entry.step ? entry.step : 'parseMht',
@@ -56,7 +109,7 @@ export async function runPipeline(htmlString, config = {}) {
       logger.warn({ msg: 'htmlString is not a string', meta: { type: typeof htmlString } });
       logs.push({ step: 'validateInput', level: 'warn', details: 'htmlString not a string' });
     }
-    const preview = (htmlString || '').slice(0, 2000);
+    const preview = String(htmlString || '').slice(0, 2000);
     logger.info({ msg: 'input preview', meta: { preview: preview.replace(/\r?\n/g, '\\n').slice(0, 1000) } });
     if (!/<!doctype|<html|<body/i.test(preview)) {
       logger.warn({ msg: 'input does not look like decoded HTML; may be raw MHT or encoded content' });
@@ -70,7 +123,7 @@ export async function runPipeline(htmlString, config = {}) {
     }
 
     // Parse into a Document (DOMParser must be available in caller)
-    const doc = parseHtmlToDocument(htmlString || '<!doctype html><html><head></head><body></body></html>');
+    const doc = /** @type {PipelineDocument} */ (parseHtmlToDocument(htmlString || '<!doctype html><html><head></head><body></body></html>'));
     // core sanitization/structure helpers
     logs.push(...ensureArray(sanitize.ensureHead(doc, {
       defaultTitle: resolvedConfig.defaultTitle,
@@ -157,7 +210,10 @@ export async function runPipeline(htmlString, config = {}) {
     })));
 
     // List repair
-    const listMode = resolvedConfig.RepairListItemValues || 'smart';
+    const rawListMode = String(resolvedConfig.RepairListItemValues || 'smart').trim();
+    const listMode = /** @type {ListRepairMode} */ (
+      rawListMode === 'mergeStyled' || rawListMode === 'renumber' ? rawListMode : 'smart'
+    );
     logs.push(...ensureArray(fixLists(doc, listMode, {
       listMarginLeft: resolvedConfig.ListMarginLeft || '0.35em',
       listPaddingLeft: resolvedConfig.ListPaddingLeft || '1.2em',
@@ -175,7 +231,7 @@ export async function runPipeline(htmlString, config = {}) {
     logs.push(...ensureArray(injectConfiguredExportStyles(doc, resolvedConfig)));
 
     // Image embedding (map may be provided in config.imageMap)
-    const map = resolvedConfig.imageMap || {};
+    const map = /** @type {ImageMap} */ (resolvedConfig.imageMap || {});
     logs.push(...ensureArray(images.embedImagesInHtml(doc, map)));
 
     // Formatting
@@ -205,23 +261,24 @@ export async function runPipeline(htmlString, config = {}) {
     const normalized = format.normalizeWhitespace(serialized);
 
     const warningSummary = summarizeWarningsBySeverity(
-      logs.filter((item) => item && (item.level === 'warn' || item.level === 'warning' || item.level === 'error'))
-        .map((item) => ({ severity: item.level === 'warn' ? 'warning' : item.level }))
+      logs
+        .filter((item) => item && (item.level === 'warn' || item.level === 'warning' || item.level === 'error'))
+        .map((item) => ({ severity: /** @type {WarningSeverity} */ (item.level === 'error' ? 'error' : 'warning') }))
     );
 
     const outputDecorationConfig = buildOutputDecorationConfig(resolvedConfig);
-    const exportState = {
+      const exportState = /** @type {ExportState} */ ({
       ExperimentalExportEnabled: outputDecorationConfig.ExperimentalExportEnabled,
       ExportFormat: outputDecorationConfig.ExportFormat,
       MarkdownFlavor: outputDecorationConfig.MarkdownFlavor
-    };
+      });
 
     const withToolbar = injectOutputToolbar(normalized, {
       ...outputDecorationConfig,
       ExportStylesMode: resolvedConfig.ExportStylesMode,
       exportState,
-      SourceName: resolvedConfig.SourceName || resolvedConfig.fileName || 'Converted file',
-      SourceKind: resolvedConfig.SourceKind || resolvedConfig.sourceKind || 'html',
+      SourceName: String(resolvedConfig.SourceName || resolvedConfig.fileName || 'Converted file'),
+      SourceKind: /** @type {SourceKind} */ (resolvedConfig.SourceKind || resolvedConfig.sourceKind || 'html'),
       WarningSummary: warningSummary
     });
 
@@ -254,6 +311,11 @@ export async function runPipeline(htmlString, config = {}) {
   }
 }
 
+/**
+ * @template T
+ * @param {T | T[] | null | undefined} v
+ * @returns {T[]}
+ */
 function ensureArray(v) {
   if (!v) return [];
   return Array.isArray(v) ? v : [v];

@@ -1,3 +1,5 @@
+// @ts-check
+
 // src/pipeline/images.js
 // Image map helpers and tolerant embedding for MHT -> HTML pipeline.
 // Exports:
@@ -5,14 +7,30 @@
 //  - embedImagesInHtml(doc, map) -> Array of logs
 
 /**
+ * @typedef {{ tagName?: string | null, getAttribute: (name: string) => string | null, setAttribute: (name: string, value: string) => void }} DomElement
+ * @typedef {{ querySelectorAll: (selector: string) => ArrayLike<DomElement> }} DomDocument
+ * @typedef {Record<string, string>} ImageResourceMap
+ * @typedef {{ step: 'embedImages', replacements: number }} EmbedImagesLogEntry
+ * @typedef {{ step: 'embedImagesUnresolved', level: 'warn', unresolved: number, samples: string[] }} EmbedImagesUnresolvedLogEntry
+ * @typedef {EmbedImagesLogEntry | EmbedImagesUnresolvedLogEntry} EmbedImagesPipelineLogEntry
+ */
+
+/**
  * buildImageMapFromHtml
  * Minimal stub kept for compatibility with pipeline; real mapping comes from parseMht.
  * Returns an empty map by default.
+ */
+/**
+ * @param {unknown} html
+ * @param {string} [basePath='']
+ * @returns {ImageResourceMap}
  */
 export function buildImageMapFromHtml(html, basePath = '') {
   // In some flows you may want to scan the HTML for relative image references
   // and attempt to resolve them against basePath using the File System Access API.
   // For now return an empty map; parseMht builds a richer map for MHT inputs.
+  void html;
+  void basePath;
   return {};
 }
 
@@ -23,6 +41,10 @@ export function buildImageMapFromHtml(html, basePath = '') {
 import { createLogger } from '../logging.js';
 const logger = createLogger('images');
 
+/**
+ * @param {unknown} val
+ * @returns {string[]}
+ */
 function candidatesFor(val) {
   if (!val) return [];
   const c = new Set();
@@ -76,6 +98,12 @@ function candidatesFor(val) {
   return Array.from(c).filter(Boolean);
 }
 
+/**
+ * @param {DomElement | null | undefined} node
+ * @param {string} attr
+ * @param {unknown} val
+ * @returns {boolean}
+ */
 function shouldTrackUnresolvedResource(node, attr, val) {
   if (!val) return false;
 
@@ -98,16 +126,26 @@ function shouldTrackUnresolvedResource(node, attr, val) {
  *
  * Returns an array of log entries (empty if nothing changed).
  */
+/**
+ * @param {DomDocument | null | undefined} doc
+ * @param {ImageResourceMap} [map={}]
+ * @returns {EmbedImagesPipelineLogEntry[]}
+ */
 export function embedImagesInHtml(doc, map = {}) {
-  const logs = [];
+  const logs = /** @type {EmbedImagesPipelineLogEntry[]} */ ([]);
   if (!doc || typeof doc.querySelectorAll !== 'function') {
     return logs;
   }
 
   let replacements = 0;
   let unresolved = 0;
-  const unmatchedSamples = [];
+  const unmatchedSamples = /** @type {string[]} */ ([]);
 
+  /**
+   * @param {DomElement} node
+   * @param {string} attr
+   * @returns {boolean}
+   */
   function tryReplaceAttr(node, attr) {
     const val = node.getAttribute(attr);
     if (!val) return false;

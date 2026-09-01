@@ -1,3 +1,5 @@
+// @ts-check
+
 // DEFERRED: Phase 2 native importer work.
 // The first stable release is MHT/MHTML-only. The worker rejects `.one`
 // inputs before native importers are loaded, so this module is kept in-repo
@@ -6,11 +8,39 @@
 
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
-import { normalizeExportConfig } from '../pipeline/config.js';
 import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';
+
+/**
+ * @typedef {import('../contracts.js').NativeImportResult} NativeImportResult
+ * @typedef {import('../contracts.js').NativeHierarchyNode} NativeHierarchyNode
+ * @typedef {import('../contracts.js').NativePage} NativePage
+ * @typedef {import('../contracts.js').NativePageMetadata} NativePageMetadata
+ * @typedef {import('../contracts.js').NativeResource} NativeResource
+ * @typedef {import('../contracts.js').PipelineConfigInput} ImportOneOptions
+ * @typedef {import('../contracts.js').WarningDetail} WarningDetail
+ * @typedef {{ from: (value: Uint8Array | ArrayLike<number>) => { toString: (encoding?: string) => string } }} BufferLike
+ * @typedef {{ value: string, startOffset: number, endOffset: number }} ExtractedRecord
+ * @typedef {{ title: string, markerIndex: number, titleIndex: number }} PageDescriptor
+ * @typedef {{ title: string, startOffset: number, endOffset: number, source: 'fallback' | 'descriptor' }} PageSegment
+ * @typedef {{ cells: string[], delimiter: 'tab' | 'pipe' | 'space', separator: boolean }} TableInfo
+ * @typedef {{ kind: 'heading', level: number, text: string } | { kind: 'paragraph', text: string } | { kind: 'ul' | 'ol', items: string[] } | { kind: 'table', rows: string[][], hasExplicitHeader: boolean, delimiter: string }} StructuredBlock
+ * @typedef {'title' | 'author' | 'createdAt' | 'modifiedAt'} MetadataKey
+ * @typedef {'hint' | 'line-heuristic' | 'line-key-value' | 'unknown'} MetadataSource
+ * @typedef {{ label: string, value: string }} MetadataItem
+ * @typedef {{ key: MetadataKey, existing: string, incoming: string, existingSource?: MetadataSource, incomingSource: MetadataSource, resolution: 'replaced-by-priority' | 'kept-existing' }} MetadataConflict
+ * @typedef {{ title?: string, author?: string, createdAt?: string, modifiedAt?: string }} CanonicalMetadata
+ * @typedef {{ title?: MetadataSource, author?: MetadataSource, createdAt?: MetadataSource, modifiedAt?: MetadataSource }} MetadataSourceMap
+ * @typedef {NativeResource & { kind: string, extension: string, fileName: string, mimeType: string, size: number, bytes: Uint8Array, dataUri: string | null }} EmbeddedResource
+ * @typedef {{ models: SemanticPageModel[], fallbackPageCount: number, fallbackPoolSize: number, filteredOutCount: number }} SemanticPageSummary
+ * @typedef {{ title: string, source: string, lines: string[], blocks: StructuredBlock[], metadata: CanonicalMetadata, metadataSources: MetadataSourceMap, metadataItems: MetadataItem[], metadataConflicts: MetadataConflict[], fallbackUsed: boolean }} SemanticPageModel
+ * @typedef {{ maxResources?: unknown, maxBytesPerResource?: unknown }} EmbeddedResourceOptions
+ */
+
+const BUFFER_API = /** @type {{ Buffer?: BufferLike }} */ (globalThis).Buffer;
 
 const ONE_SIGNATURE = [0xE4, 0x52, 0x5C, 0x7B, 0x8C, 0xD8, 0xA7, 0x4D, 0xAE, 0xB1, 0x53, 0x78, 0xD0, 0x29, 0x96, 0xD3];
 
+/** @param {Uint8Array | null | undefined} bytes */
 function hasOneSignature(bytes) {
   if (!bytes || bytes.length < ONE_SIGNATURE.length) return false;
   for (let i = 0; i < ONE_SIGNATURE.length; i += 1) {
@@ -19,19 +49,24 @@ function hasOneSignature(bytes) {
   return true;
 }
 
+/** @param {unknown} [value=''] */
 function escapeHtml(value = '') {
-  return String(value).replace(/[&<>"']/g, (ch) => ({
+  const replacements = /** @type {Record<string, string>} */ ({
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;'
-  }[ch]));
+  });
+  return String(value).replace(/[&<>"']/g, (ch) => replacements[ch] || ch);
 }
 
+/** @param {Uint8Array} bytes
+ * @returns {ExtractedRecord[]}
+ */
 function extractWideStringRecords(bytes) {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  const records = [];
+  const records = /** @type {ExtractedRecord[]} */ ([]);
   let current = '';
   let startOffset = -1;
 
@@ -66,8 +101,11 @@ function extractWideStringRecords(bytes) {
   return records;
 }
 
+/** @param {Uint8Array} bytes
+ * @returns {ExtractedRecord[]}
+ */
 function extractUtf8StringRecords(bytes) {
-  const records = [];
+  const records = /** @type {ExtractedRecord[]} */ ([]);
   let start = -1;
   let current = '';
 
@@ -102,18 +140,21 @@ function extractUtf8StringRecords(bytes) {
   return records;
 }
 
+/** @param {unknown} value */
 function isLikelyPageTitle(value) {
-  if (!value) return false;
-  if (value.length < 4 || value.length > 80) return false;
-  if (!/[A-Za-z]/.test(value)) return false;
-  if (/[^\x20-\x7E]/.test(value)) return false;
-  if (/resolutionId|provider=|hash=|localId|Calibri|PageTitle|PageDateTime/i.test(value)) return false;
-  if (/^[A-Za-z]+\s[A-Za-z]+$/.test(value) && !/page/i.test(value)) {
+  const text = String(value || '').trim();
+  if (!text) return false;
+  if (text.length < 4 || text.length > 80) return false;
+  if (!/[A-Za-z]/.test(text)) return false;
+  if (/[^\x20-\x7E]/.test(text)) return false;
+  if (/resolutionId|provider=|hash=|localId|Calibri|PageTitle|PageDateTime/i.test(text)) return false;
+  if (/^[A-Za-z]+\s[A-Za-z]+$/.test(text) && !/page/i.test(text)) {
     return false;
   }
   return true;
 }
 
+/** @param {string} value */
 function titleScore(value) {
   let score = 0;
   if (/page/i.test(value)) score += 5;
@@ -123,8 +164,11 @@ function titleScore(value) {
   return score;
 }
 
+/** @param {ExtractedRecord[]} records
+ * @returns {PageDescriptor[]}
+ */
 function extractPageDescriptors(records) {
-  const descriptors = [];
+  const descriptors = /** @type {PageDescriptor[]} */ ([]);
   const seenTitles = new Set();
 
   for (let index = 0; index < records.length; index += 1) {
@@ -178,42 +222,53 @@ function extractPageDescriptors(records) {
   return descriptors;
 }
 
+/**
+ * @param {unknown} value
+ * @param {Set<string>} [blockedValues=new Set()]
+ */
 function isLikelyPreviewLine(value, blockedValues = new Set()) {
-  if (!value) return false;
-  if (value.length < 4 || value.length > 180) return false;
-  if (!/[A-Za-z0-9]/.test(value)) return false;
-  if (blockedValues.has(value)) return false;
-  if (/^<.*>$/.test(value)) return false;
-  if (/resolutionId|provider=|hash=|localId|PageTitle|PageDateTime/i.test(value)) return false;
-  if (/^Calibri(\s|$)/i.test(value)) return false;
-  if (/^[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}$/.test(value) && !/page/i.test(value)) return false;
+  const text = String(value || '').trim();
+  if (!text) return false;
+  if (text.length < 4 || text.length > 180) return false;
+  if (!/[A-Za-z0-9]/.test(text)) return false;
+  if (blockedValues.has(text)) return false;
+  if (/^<.*>$/.test(text)) return false;
+  if (/resolutionId|provider=|hash=|localId|PageTitle|PageDateTime/i.test(text)) return false;
+  if (/^Calibri(\s|$)/i.test(text)) return false;
+  if (/^[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}$/.test(text) && !/page/i.test(text)) return false;
 
-  const allowedChars = value.match(/[A-Za-z0-9\s,.;:'"!?()\-_/]/g) || [];
-  const printableRatio = allowedChars.length / value.length;
+  const allowedChars = text.match(/[A-Za-z0-9\s,.;:'"!?()\-_/]/g) || [];
+  const printableRatio = allowedChars.length / text.length;
   if (printableRatio < 0.85) return false;
 
-  const letterRatio = (value.match(/[A-Za-z]/g) || []).length / value.length;
-  if (letterRatio < 0.25 && !/\d{2,}/.test(value)) return false;
+  const letterRatio = (text.match(/[A-Za-z]/g) || []).length / text.length;
+  if (letterRatio < 0.25 && !/\d{2,}/.test(text)) return false;
 
-  const longWordCount = (value.match(/[A-Za-z]{3,}/g) || []).length;
-  if (longWordCount === 0 && !/\d{2,}/.test(value)) return false;
+  const longWordCount = (text.match(/[A-Za-z]{3,}/g) || []).length;
+  if (longWordCount === 0 && !/\d{2,}/.test(text)) return false;
 
-  if (/[^A-Za-z0-9\s]{3,}/.test(value)) return false;
+  if (/[^A-Za-z0-9\s]{3,}/.test(text)) return false;
 
-  if (/^[A-Z0-9]{3,}[!?]?$/.test(value)) return false;
+  if (/^[A-Z0-9]{3,}[!?]?$/.test(text)) return false;
 
-  const isDateOrTime = /\b\d{1,2}:\d{2}(?::\d{2})?\b/.test(value) || /\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b/.test(value);
+  const isDateOrTime = /\b\d{1,2}:\d{2}(?::\d{2})?\b/.test(text) || /\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b/.test(text);
   if (!isDateOrTime) {
-    const vowelCount = (value.match(/[AEIOUaeiou]/g) || []).length;
+    const vowelCount = (text.match(/[AEIOUaeiou]/g) || []).length;
     if (vowelCount < 2) return false;
-    if (!/\s/.test(value) && value.length > 16) return false;
+    if (!/\s/.test(text) && text.length > 16) return false;
   }
 
   return true;
 }
 
+/**
+ * @param {ExtractedRecord[]} records
+ * @param {Set<string> | undefined} blockedValues
+ * @param {number} [maxLines=8]
+ * @returns {string[]}
+ */
 function extractPreviewLines(records, blockedValues, maxLines = 8) {
-  const lines = [];
+  const lines = /** @type {string[]} */ ([]);
   const blocked = blockedValues || new Set();
   for (const record of records) {
     const value = record.value;
@@ -224,8 +279,17 @@ function extractPreviewLines(records, blockedValues, maxLines = 8) {
   return lines;
 }
 
+/**
+ * @param {ExtractedRecord[]} records
+ * @param {PageDescriptor} descriptor
+ * @param {PageDescriptor | null | undefined} nextDescriptor
+ * @param {string[]} fallbackLines
+ * @param {Set<string>} blockedValues
+ * @param {number} [maxLines=8]
+ * @returns {string[]}
+ */
 function extractPreviewLinesForPage(records, descriptor, nextDescriptor, fallbackLines, blockedValues, maxLines = 8) {
-  const lines = [];
+  const lines = /** @type {string[]} */ ([]);
   const start = Math.max(0, descriptor.titleIndex >= 0 ? descriptor.titleIndex : descriptor.markerIndex);
   const end = nextDescriptor
     ? Math.max(start, nextDescriptor.titleIndex >= 0 ? nextDescriptor.titleIndex : nextDescriptor.markerIndex)
@@ -246,8 +310,16 @@ function extractPreviewLinesForPage(records, descriptor, nextDescriptor, fallbac
   return fallbackLines.slice(0, maxLines);
 }
 
+/**
+ * @param {ExtractedRecord[]} records
+ * @param {number} startOffset
+ * @param {number} endOffset
+ * @param {Set<string>} blockedValues
+ * @param {number} [maxLines=8]
+ * @returns {string[]}
+ */
 function extractPreviewLinesFromRange(records, startOffset, endOffset, blockedValues, maxLines = 8) {
-  const lines = [];
+  const lines = /** @type {string[]} */ ([]);
   const min = Math.max(0, startOffset);
   const max = Math.max(min, endOffset);
 
@@ -262,6 +334,7 @@ function extractPreviewLinesFromRange(records, startOffset, endOffset, blockedVa
   return lines;
 }
 
+/** @param {unknown} [value=''] */
 function looksBinaryLikeToken(value = '') {
   const text = String(value || '').trim();
   if (!text) return false;
@@ -271,6 +344,7 @@ function looksBinaryLikeToken(value = '') {
   return false;
 }
 
+/** @param {unknown} [value=''] */
 function semanticLineScore(value = '') {
   const line = String(value || '').trim();
   if (!line) return Number.NEGATIVE_INFINITY;
@@ -289,8 +363,13 @@ function semanticLineScore(value = '') {
   return score;
 }
 
+/**
+ * @param {string[]} [lines=[]]
+ * @param {number} [maxLines=24]
+ * @returns {string[]}
+ */
 function filterSemanticLines(lines = [], maxLines = 24) {
-  const filtered = [];
+  const filtered = /** @type {string[]} */ ([]);
   for (const candidate of lines) {
     const line = String(candidate || '').trim();
     if (!line || filtered.includes(line)) continue;
@@ -304,8 +383,14 @@ function filterSemanticLines(lines = [], maxLines = 24) {
   return filtered;
 }
 
+/**
+ * @param {string[] | null | undefined} primary
+ * @param {string[] | null | undefined} secondary
+ * @param {number} [maxLines=8]
+ * @returns {string[]}
+ */
 function mergeUniqueLines(primary, secondary, maxLines = 8) {
-  const merged = [];
+  const merged = /** @type {string[]} */ ([]);
   for (const source of [primary || [], secondary || []]) {
     for (const line of source) {
       if (!line || merged.includes(line)) continue;
@@ -316,6 +401,12 @@ function mergeUniqueLines(primary, secondary, maxLines = 8) {
   return merged;
 }
 
+/**
+ * @param {PageDescriptor[]} pageDescriptors
+ * @param {ExtractedRecord[]} wideRecords
+ * @param {number} byteLength
+ * @returns {PageSegment[]}
+ */
 function buildPageSegments(pageDescriptors, wideRecords, byteLength) {
   if (!Array.isArray(pageDescriptors) || pageDescriptors.length === 0) {
     return [{
@@ -355,6 +446,14 @@ function buildPageSegments(pageDescriptors, wideRecords, byteLength) {
   });
 }
 
+/**
+ * @param {ExtractedRecord[]} wideRecords
+ * @param {ExtractedRecord[]} utf8Records
+ * @param {PageSegment} segment
+ * @param {Set<string>} blockedValues
+ * @param {number} [maxLines=24]
+ * @returns {string[]}
+ */
 function collectSegmentSemanticLines(wideRecords, utf8Records, segment, blockedValues, maxLines = 24) {
   const wideLines = extractPreviewLinesFromRange(
     wideRecords,
@@ -376,6 +475,14 @@ function collectSegmentSemanticLines(wideRecords, utf8Records, segment, blockedV
   return filterSemanticLines(merged, maxLines);
 }
 
+/**
+ * @param {ExtractedRecord[]} wideRecords
+ * @param {ExtractedRecord[]} utf8Records
+ * @param {PageDescriptor[]} pageDescriptors
+ * @param {Set<string>} blockedValues
+ * @param {number} byteLength
+ * @returns {SemanticPageSummary}
+ */
 function buildSemanticPageModels(wideRecords, utf8Records, pageDescriptors, blockedValues, byteLength) {
   const fallbackPoolRaw = mergeUniqueLines(
     extractPreviewLines(wideRecords, blockedValues, 32),
@@ -414,11 +521,15 @@ function buildSemanticPageModels(wideRecords, utf8Records, pageDescriptors, bloc
   };
 }
 
+/** @param {string[] | null | undefined} cells */
 function isMarkdownSeparatorRow(cells) {
   if (!Array.isArray(cells) || cells.length < 2) return false;
   return cells.every((cell) => /^:?-{3,}:?$/.test(String(cell || '').trim()));
 }
 
+/** @param {string} value
+ * @returns {string[] | null}
+ */
 function splitByMultiSpace(value) {
   if (!/\s{2,}/.test(value)) return null;
 
@@ -433,6 +544,9 @@ function splitByMultiSpace(value) {
   return cells;
 }
 
+/** @param {unknown} line
+ * @returns {TableInfo | null}
+ */
 function splitTableCells(line) {
   const value = String(line || '').trim();
   if (!value) return null;
@@ -476,6 +590,9 @@ function splitTableCells(line) {
   return null;
 }
 
+/** @param {unknown} line
+ * @returns {{ level: number, text: string } | null}
+ */
 function toHeadingLevel(line) {
   const hashHeading = String(line || '').match(/^(#{1,3})\s+(.+)$/);
   if (hashHeading) {
@@ -496,6 +613,10 @@ function toHeadingLevel(line) {
   return null;
 }
 
+/**
+ * @param {unknown} previousLine
+ * @param {unknown} nextLine
+ */
 function isParagraphJoinCandidate(previousLine, nextLine) {
   const prev = String(previousLine || '').trim();
   const next = String(nextLine || '').trim();
@@ -512,10 +633,16 @@ function isParagraphJoinCandidate(previousLine, nextLine) {
   return false;
 }
 
+/** @param {string[]} lines
+ * @returns {StructuredBlock[]}
+ */
 function buildStructuredBlocks(lines) {
-  const blocks = [];
+  const blocks = /** @type {StructuredBlock[]} */ ([]);
+  /** @type {{ kind: 'ul' | 'ol', items: string[] } | null} */
   let listState = null;
+  /** @type {{ rows: string[][], delimiter: string, hasExplicitHeader: boolean } | null} */
   let tableState = null;
+  /** @type {{ text: string } | null} */
   let paragraphState = null;
 
   const flushList = () => {
@@ -649,8 +776,11 @@ function buildStructuredBlocks(lines) {
   return blocks;
 }
 
+/** @param {StructuredBlock[]} blocks
+ * @returns {string}
+ */
 function renderStructuredBlocks(blocks) {
-  const rendered = [];
+  const rendered = /** @type {string[]} */ ([]);
   for (const block of blocks) {
     if (!block) continue;
 
@@ -696,10 +826,14 @@ function renderStructuredBlocks(blocks) {
   return rendered.join('');
 }
 
+/** @param {string[]} lines
+ * @returns {MetadataItem[]}
+ */
 function extractDetectedMetadata(lines) {
-  return extractPageMetadata(lines).items;
+  return extractPageMetadata(lines, '').items;
 }
 
+/** @param {unknown} label */
 function normalizeMetadataLabel(label) {
   return String(label || '')
     .trim()
@@ -708,11 +842,14 @@ function normalizeMetadataLabel(label) {
     .replace(/\s+/g, ' ');
 }
 
+/** @param {unknown} label
+ * @returns {MetadataKey | null}
+ */
 function toCanonicalMetadataKey(label) {
   const value = normalizeMetadataLabel(label);
   if (!value) return null;
 
-  const aliasMap = {
+  const aliasMap = /** @type {Record<string, MetadataKey>} */ ({
     title: 'title',
     'page title': 'title',
     'section title': 'title',
@@ -735,7 +872,7 @@ function toCanonicalMetadataKey(label) {
     'modified on': 'modifiedAt',
     'last saved': 'modifiedAt',
     'date modified': 'modifiedAt'
-  };
+  });
 
   if (aliasMap[value]) {
     return aliasMap[value];
@@ -746,6 +883,7 @@ function toCanonicalMetadataKey(label) {
   return null;
 }
 
+/** @param {unknown} rawValue */
 function normalizeMetadataDate(rawValue) {
   const value = String(rawValue || '').trim();
   if (!value) return '';
@@ -763,6 +901,10 @@ function normalizeMetadataDate(rawValue) {
   return value;
 }
 
+/**
+ * @param {MetadataKey} key
+ * @param {MetadataSource | undefined} source
+ */
 function metadataPriorityFor(key, source) {
   if (key === 'title') {
     if (source === 'line-key-value') return 3;
@@ -784,6 +926,14 @@ function metadataPriorityFor(key, source) {
   return 0;
 }
 
+/**
+ * @param {CanonicalMetadata} canonical
+ * @param {MetadataSourceMap} metadataSources
+ * @param {MetadataConflict[]} conflicts
+ * @param {MetadataKey} key
+ * @param {unknown} value
+ * @param {MetadataSource} [source='line-heuristic']
+ */
 function setCanonicalMetadataValue(canonical, metadataSources, conflicts, key, value, source = 'line-heuristic') {
   const normalizedValue = String(value || '').trim();
   if (!key || !normalizedValue) return;
@@ -813,8 +963,13 @@ function setCanonicalMetadataValue(canonical, metadataSources, conflicts, key, v
   }
 }
 
+/**
+ * @param {string[]} lines
+ * @param {unknown} titleHint
+ * @returns {{ canonical: CanonicalMetadata, sources: MetadataSourceMap, items: MetadataItem[], conflicts: MetadataConflict[] }}
+ */
 function extractPageMetadata(lines, titleHint) {
-  const items = [];
+  const items = /** @type {MetadataItem[]} */ ([]);
   const seen = new Set();
   const dateRegex = /\b\d{1,2}\s+[A-Za-z]+\s+\d{4}\b/;
   const timeRegex = /\b\d{1,2}:\d{2}(?::\d{2})?\b/;
@@ -824,13 +979,13 @@ function extractPageMetadata(lines, titleHint) {
     createdAt: undefined,
     modifiedAt: undefined
   };
-  const metadataSources = {
+  const metadataSources = /** @type {MetadataSourceMap} */ ({
     title: canonical.title ? 'hint' : undefined,
     author: undefined,
     createdAt: undefined,
     modifiedAt: undefined
-  };
-  const conflicts = [];
+  });
+  const conflicts = /** @type {MetadataConflict[]} */ ([]);
 
   for (const line of lines) {
     const lineText = String(line || '').trim();
@@ -892,6 +1047,7 @@ function extractPageMetadata(lines, titleHint) {
   };
 }
 
+/** @param {Uint8Array} bytes */
 function uint8ArrayToBase64(bytes) {
   let binary = '';
   const chunkSize = 0x8000;
@@ -904,13 +1060,16 @@ function uint8ArrayToBase64(bytes) {
     return btoa(binary);
   }
 
-  if (typeof Buffer !== 'undefined') {
-    return Buffer.from(bytes).toString('base64');
+  if (BUFFER_API) {
+    return BUFFER_API.from(bytes).toString('base64');
   }
 
   throw new Error('No base64 encoder available in current runtime');
 }
 
+/** @param {Uint8Array} bytes
+ * @param {number} start
+ */
 function findPngEnd(bytes, start) {
   const trailer = [0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82];
   for (let i = start + 8; i <= bytes.length - trailer.length; i += 1) {
@@ -928,6 +1087,9 @@ function findPngEnd(bytes, start) {
   return -1;
 }
 
+/** @param {Uint8Array} bytes
+ * @param {number} start
+ */
 function findJpegEnd(bytes, start) {
   for (let i = start + 2; i < bytes.length - 1; i += 1) {
     if (bytes[i] === 0xFF && bytes[i + 1] === 0xD9) {
@@ -937,6 +1099,9 @@ function findJpegEnd(bytes, start) {
   return -1;
 }
 
+/** @param {Uint8Array} bytes
+ * @param {number} start
+ */
 function findGifEnd(bytes, start) {
   for (let i = start + 6; i < bytes.length; i += 1) {
     if (bytes[i] === 0x3B) {
@@ -946,6 +1111,9 @@ function findGifEnd(bytes, start) {
   return -1;
 }
 
+/** @param {Uint8Array} bytes
+ * @param {number} start
+ */
 function findPdfEnd(bytes, start) {
   const marker = [0x25, 0x25, 0x45, 0x4F, 0x46]; // %%EOF
   for (let i = start + 8; i <= bytes.length - marker.length; i += 1) {
@@ -963,6 +1131,9 @@ function findPdfEnd(bytes, start) {
   return -1;
 }
 
+/** @param {Uint8Array} bytes
+ * @param {number} start
+ */
 function findZipEnd(bytes, start) {
   for (let i = start + 4; i <= bytes.length - 22; i += 1) {
     const isEocd =
@@ -981,8 +1152,12 @@ function findZipEnd(bytes, start) {
   return -1;
 }
 
+/**
+ * @param {ExtractedRecord[]} [records=[]]
+ * @returns {string[]}
+ */
 function extractObjectPlaceholderHints(records = []) {
-  const hints = [];
+  const hints = /** @type {string[]} */ ([]);
   const seen = new Set();
   const fileNameRegex = /\b[^<>:"/\\|?*\s]+\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|txt|csv|rtf)\b/i;
 
@@ -1005,12 +1180,24 @@ function extractObjectPlaceholderHints(records = []) {
   return hints;
 }
 
+/**
+ * @param {Uint8Array} bytes
+ * @param {EmbeddedResourceOptions} [options={}]
+ * @returns {EmbeddedResource[]}
+ */
 function extractEmbeddedResources(bytes, options = {}) {
   const maxResources = typeof options.maxResources === 'number' ? options.maxResources : 12;
   const maxBytesPerResource = typeof options.maxBytesPerResource === 'number' ? options.maxBytesPerResource : 600000;
-  const resources = [];
+  const resources = /** @type {EmbeddedResource[]} */ ([]);
   const seenRanges = new Set();
 
+  /**
+   * @param {string} kind
+   * @param {string} extension
+   * @param {string} mimeType
+   * @param {number} start
+   * @param {number} end
+   */
   const addResource = (kind, extension, mimeType, start, end) => {
     if (resources.length >= maxResources) return;
     if (start < 0 || end <= start || end > bytes.length) return;
@@ -1115,13 +1302,21 @@ function extractEmbeddedResources(bytes, options = {}) {
   return resources;
 }
 
+/**
+ * @param {SemanticPageModel | string} pageModelOrTitle
+ * @param {string[] | null | undefined} previewLines
+ * @param {EmbeddedResource[]} [mediaResources=[]]
+ * @param {EmbeddedResource[]} [attachmentResources=[]]
+ * @param {string[]} [placeholderHints=[]]
+ * @returns {string}
+ */
 function buildPageHtml(pageModelOrTitle, previewLines, mediaResources = [], attachmentResources = [], placeholderHints = []) {
-  const pageModel = (pageModelOrTitle && typeof pageModelOrTitle === 'object' && !Array.isArray(pageModelOrTitle))
+  const pageModel = /** @type {{ title?: string, lines?: string[], blocks?: StructuredBlock[], metadataItems?: MetadataItem[] }} */ ((pageModelOrTitle && typeof pageModelOrTitle === 'object' && !Array.isArray(pageModelOrTitle))
     ? pageModelOrTitle
     : {
-      title: pageModelOrTitle,
+      title: String(pageModelOrTitle || ''),
       lines: Array.isArray(previewLines) ? previewLines : []
-    };
+    });
 
   const titleEscaped = escapeHtml(pageModel.title || 'Untitled Page');
   const lines = Array.isArray(pageModel.lines) && pageModel.lines.length > 0
@@ -1153,6 +1348,11 @@ function buildPageHtml(pageModelOrTitle, previewLines, mediaResources = [], atta
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${titleEscaped}</title></head><body><main><h1>${titleEscaped}</h1><p>Converted from native OneNote section with heuristic extraction.</p><h2>Extracted content</h2>${bodyContent}${metadataHtml}${mediaHtml}${attachmentsHtml}${placeholdersHtml}</main></body></html>`;
 }
 
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ * @param {ImportOneOptions} [options={}]
+ * @returns {NativeImportResult}
+ */
 export function importOneSection(arrayBuffer, options = {}) {
   if (!(arrayBuffer instanceof ArrayBuffer)) {
     throw new Error('Expected binary .one payload as ArrayBuffer');
@@ -1171,11 +1371,11 @@ export function importOneSection(arrayBuffer, options = {}) {
   const mediaResources = embeddedResources.filter((item) => item.kind === 'image');
   const attachmentResources = embeddedResources.filter((item) => item.kind === 'attachment');
   const placeholderHints = extractObjectPlaceholderHints([...extractedRecords, ...extractedUtf8Records]);
-  const mappedResources = embeddedResources.map((resource) => ({
+  const mappedResources = /** @type {NativeResource[]} */ (embeddedResources.map((resource) => ({
     ...resource,
     path: `${sectionFolder}/_resources/${resource.fileName}`,
     relativePath: `_resources/${resource.fileName}`
-  }));
+  })));
   const pageDescriptors = extractPageDescriptors(extractedRecords);
   const blockedValues = new Set(pageDescriptors.map((item) => item.title));
   const semanticPages = buildSemanticPageModels(
@@ -1186,18 +1386,18 @@ export function importOneSection(arrayBuffer, options = {}) {
     bytes.length
   );
 
-  const pages = semanticPages.models.map((pageModel) => {
+  const pages = /** @type {NativePage[]} */ (semanticPages.models.map((pageModel) => {
     const title = pageModel.title || 'Page';
     const safeTitle = toFolderSafeName(title);
 
-    const pageMediaResources = mediaResources.map((resource) => ({
+    const pageMediaResources = /** @type {EmbeddedResource[]} */ (mediaResources.map((resource) => ({
       ...resource,
       relativePath: `_resources/${resource.fileName}`
-    }));
-    const pageAttachmentResources = attachmentResources.map((resource) => ({
+    })));
+    const pageAttachmentResources = /** @type {EmbeddedResource[]} */ (attachmentResources.map((resource) => ({
       ...resource,
       relativePath: `_resources/${resource.fileName}`
-    }));
+    })));
 
     return {
       name: title,
@@ -1211,7 +1411,7 @@ export function importOneSection(arrayBuffer, options = {}) {
       },
       resources: mappedResources
     };
-  });
+  }));
 
   const metadataConflictCount = semanticPages.models.reduce(
     (total, pageModel) => total + (Array.isArray(pageModel.metadataConflicts) ? pageModel.metadataConflicts.length : 0),
@@ -1224,21 +1424,21 @@ export function importOneSection(arrayBuffer, options = {}) {
     0
   );
 
-  const hierarchyChildren = pages.map((page) => ({
+  const hierarchyChildren = /** @type {NativeHierarchyNode[]} */ (pages.map((page) => ({
     kind: 'page',
     name: page.name,
     path: page.path,
     children: []
-  }));
+  })));
 
-  const warningDetails = [
+  const warningDetails = /** @type {WarningDetail[]} */ ([
     makeWarning(WARNING_CODES.one.signatureValidated, 'Section file signature validated.'),
     makeWarning(WARNING_CODES.one.structuredModelsSummary, `Structured parser generated ${pages.length} page model(s) from ${pageDescriptors.length} title descriptor(s).`),
     makeWarning(WARNING_CODES.one.fallbackSemanticSummary, `Fallback semantic line pool size: ${semanticPages.fallbackPoolSize}; filtered out ${semanticPages.filteredOutCount} low-confidence line(s); fallback used on ${semanticPages.fallbackPageCount} page(s).`),
     makeWarning(WARNING_CODES.one.metadataCanonicalizationSummary, `Metadata canonicalization produced ${pages.length} page metadata object(s) with ${metadataConflictCount} conflict(s); ${metadataPriorityReplacementCount} replaced via source-priority rules.`),
     makeWarning(WARNING_CODES.one.embeddedResourceScanSummary, `Detected ${mediaResources.length} embedded image candidate(s) and ${attachmentResources.length} attachment candidate(s) via binary signature scan.`),
     makeWarning(WARNING_CODES.one.placeholderHintsSummary, `Detected ${placeholderHints.length} object-placeholder hint(s) from native text records.`)
-  ];
+  ]);
 
   const warningSummary = summarizeWarningsBySeverity(warningDetails);
   const toolbarContext = {
@@ -1246,7 +1446,7 @@ export function importOneSection(arrayBuffer, options = {}) {
     ToolbarEditToggleEnabled: options.ToolbarEditToggleEnabled === true,
     ToolbarMetadataToggleEnabled: options.ToolbarMetadataToggleEnabled === true,
     ToolbarBundleMode: options.ToolbarBundleMode || 'inline',
-    exportState: normalizeExportConfig(options),
+    exportState: options,
     SourceName: options.SourceName || options.fileName || sectionName,
     SourceKind: options.SourceKind || 'one',
     Profile: options.Profile || 'onenote',

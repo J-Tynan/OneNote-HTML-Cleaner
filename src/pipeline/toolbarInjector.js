@@ -1,4 +1,32 @@
+// @ts-check
+
 import { normalizeExportConfig } from './config.js';
+
+/**
+ * @typedef {import('../contracts.js').ExportConfig} ExportConfig
+ * @typedef {import('../contracts.js').ExportFormat} ExportFormat
+ * @typedef {import('../contracts.js').PipelineConfigInput} PipelineConfigInput
+ * @typedef {import('../contracts.js').ToolbarStyle} ToolbarStyle
+ * @typedef {import('../contracts.js').WarningDetail} WarningDetail
+ * @typedef {'html' | 'mht' | 'one' | 'onepkg'} NormalizedSourceKind
+ * @typedef {{ total?: number, info?: number, warning?: number, error?: number }} WarningSummaryInput
+ * @typedef {{ total: number, info: number, warning: number, error: number }} WarningSummary
+ * @typedef {{ sourceName: string, sourceKind: NormalizedSourceKind, pageTitle: string, exportFormat: ExportFormat, timestamp: string }} ToolbarMetadata
+ * @typedef {{ key: string, label: string, blockTag: string, blockStyles: Record<string, string> }} EditStyleOption
+ * @typedef {PipelineConfigInput & {
+ *   SourceName?: unknown,
+ *   sourceName?: unknown,
+ *   fileName?: unknown,
+ *   SourceKind?: unknown,
+ *   sourceKind?: unknown,
+ *   PageTitle?: unknown,
+ *   pageTitle?: unknown,
+ *   ConversionTimestamp?: unknown,
+ *   conversionTimestamp?: unknown,
+ *   WarningSummary?: WarningSummaryInput,
+ *   exportState?: PipelineConfigInput | null | undefined
+ * }} ToolbarInjectorOptions
+ */
 
 const TOOLBAR_ROOT_ID = 'onenote-cleaner-toolbar';
 const TOOLBAR_VERSION = 'v1';
@@ -10,6 +38,7 @@ const CONVERTED_THEME_ROOT_ID = 'onc-converted-theme-toggle';
 const CONVERTED_THEME_STYLE_ID = 'onc-converted-theme-style';
 const CONVERTED_THEME_SCRIPT_ID = 'onc-converted-theme-script';
 const CONVERTED_THEME_VERSION = 'v1';
+/** @type {readonly EditStyleOption[]} */
 const EDIT_STYLE_OPTIONS = [
   {
     key: 'page-title',
@@ -171,6 +200,10 @@ const EDIT_STYLE_OPTIONS = [
   }
 ];
 
+/**
+ * @param {unknown} [value='']
+ * @returns {string}
+ */
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (ch) => ({
     '&': '&amp;',
@@ -178,9 +211,13 @@ function escapeHtml(value = '') {
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;'
-  }[ch]));
+  }[ch] || ch));
 }
 
+/**
+ * @param {unknown} [value='']
+ * @returns {NormalizedSourceKind}
+ */
 function normalizeSourceKind(value = '') {
   const normalized = String(value || '').trim().toLowerCase();
   if (normalized === 'mht' || normalized === 'mhtml') return 'mht';
@@ -188,6 +225,10 @@ function normalizeSourceKind(value = '') {
   return 'html';
 }
 
+/**
+ * @param {WarningSummaryInput} [summary={}]
+ * @returns {WarningSummary}
+ */
 function normalizeWarningSummary(summary = {}) {
   const info = Number(summary.info || 0);
   const warning = Number(summary.warning || 0);
@@ -196,13 +237,22 @@ function normalizeWarningSummary(summary = {}) {
   return { total, info, warning, error };
 }
 
+/**
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {ExportConfig}
+ */
 function resolveExportState(options = {}) {
-  const candidate = options && typeof options.exportState === 'object'
+  const candidate = options && options.exportState && typeof options.exportState === 'object'
     ? options.exportState
     : options;
   return normalizeExportConfig(candidate);
 }
 
+/**
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @param {ExportConfig} [exportState=resolveExportState(options)]
+ * @returns {ToolbarMetadata}
+ */
 function buildMetadata(options = {}, exportState = resolveExportState(options)) {
   return {
     sourceName: String(options.SourceName || options.sourceName || options.fileName || 'Unknown source'),
@@ -213,18 +263,32 @@ function buildMetadata(options = {}, exportState = resolveExportState(options)) 
   };
 }
 
+/**
+ * @param {unknown} [html='']
+ * @returns {boolean}
+ */
 function hasToolbarRoot(html = '') {
-  const hasId = new RegExp(`id=["']${TOOLBAR_ROOT_ID}["']`, 'i').test(html);
-  const hasMarker = /data-onc-toolbar=["']v1["']/i.test(html);
+  const source = String(html || '');
+  const hasId = new RegExp(`id=["']${TOOLBAR_ROOT_ID}["']`, 'i').test(source);
+  const hasMarker = /data-onc-toolbar=["']v1["']/i.test(source);
   return hasId && hasMarker;
 }
 
+/**
+ * @param {unknown} [html='']
+ * @returns {boolean}
+ */
 function hasConvertedThemeToggleRoot(html = '') {
-  const hasId = new RegExp(`id=["']${CONVERTED_THEME_ROOT_ID}["']`, 'i').test(html);
-  const hasMarker = /data-onc-converted-theme-toggle=["']v1["']/i.test(html);
+  const source = String(html || '');
+  const hasId = new RegExp(`id=["']${CONVERTED_THEME_ROOT_ID}["']`, 'i').test(source);
+  const hasMarker = /data-onc-converted-theme-toggle=["']v1["']/i.test(source);
   return hasId && hasMarker;
 }
 
+/**
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {ToolbarStyle}
+ */
 function resolveToolbarStyle(options = {}) {
   const normalized = String(options.ToolbarStyle || '').trim().toLowerCase();
   if (normalized === 'classic' || normalized === 'office-97' || normalized === 'office') return 'office';
@@ -232,16 +296,28 @@ function resolveToolbarStyle(options = {}) {
   return 'compact';
 }
 
+/**
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {boolean}
+ */
 function usesDeferredExportStyles(options = {}) {
   return String(options.ExportStylesMode || '').trim().toLowerCase() === 'deferred';
 }
 
+/**
+ * @param {unknown} [source='']
+ * @returns {string}
+ */
 function minifyInlineCss(source = '') {
   return String(source || '')
     .trim()
     .replace(/;}/g, '}');
 }
 
+/**
+ * @param {unknown} [source='']
+ * @returns {string}
+ */
 function minifyInlineScript(source = '') {
   return String(source || '')
     .split(/\r?\n/g)
@@ -277,6 +353,10 @@ function buildBaseStyleCss() {
     '[data-onc-editing="true"] [data-onc-editable="1"]{outline:1px dashed #7ea5e0;outline-offset:2px;}';
 }
 
+/**
+ * @param {ToolbarStyle} toolbarStyle
+ * @returns {string}
+ */
 function buildToolbarSkinCss(toolbarStyle) {
   if (toolbarStyle === 'office') {
     return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"]{--onc-toolbar-bg:#d4d0c8;--onc-toolbar-fg:#1f1f1f;--onc-toolbar-border:#808080;--onc-toolbar-padding:.35rem .5rem;--onc-toolbar-mobile-padding:.35rem .5rem;--onc-toolbar-gap:.3rem;--onc-toolbar-mobile-gap:.3rem;--onc-toolbar-btn-bg:#ece9d8;--onc-toolbar-btn-border:#7a7a70;--onc-toolbar-radius:.15rem;--onc-toolbar-btn-padding:.18rem .4rem;--onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);--onc-toolbar-panel-bg:#ece9d8;--onc-toolbar-panel-border:#808080;--onc-toolbar-show-padding:.14rem .32rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;}' +
@@ -295,6 +375,10 @@ function buildToolbarSkinCss(toolbarStyle) {
   return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="compact"]{--onc-toolbar-bg:#fff;--onc-toolbar-fg:#1f2a37;--onc-toolbar-border:#d7dce2;--onc-toolbar-padding:.3rem .45rem;--onc-toolbar-mobile-padding:.24rem .36rem;--onc-toolbar-gap:.25rem;--onc-toolbar-mobile-gap:.2rem;--onc-toolbar-font:12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-mobile-font:11px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-btn-bg:#fff;--onc-toolbar-btn-border:#b7c0cc;--onc-toolbar-radius:.3rem;--onc-toolbar-btn-padding:.16rem .34rem;--onc-toolbar-panel-bg:#f8fafc;--onc-toolbar-panel-border:#d7dce2;--onc-toolbar-show-padding:.12rem .28rem;--onc-toolbar-mobile-btn-padding:.12rem .24rem;--onc-toolbar-select-width:8rem;}';
 }
 
+/**
+ * @param {ToolbarStyle} [toolbarStyle='compact']
+ * @returns {string}
+ */
 function buildStyleTag(toolbarStyle = 'compact') {
   const css = `${buildBaseStyleCss()}${buildToolbarSkinCss(toolbarStyle)}`;
   return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}">` +
@@ -815,11 +899,20 @@ function buildScriptTag() {
   return `<script id="${TOOLBAR_SCRIPT_ID}" data-onc-toolbar-script="${TOOLBAR_VERSION}">${minifyInlineScript(script)}</script>`;
 }
 
+/**
+ * @param {ToolbarMetadata} metadata
+ * @returns {string}
+ */
 function buildMetadataTag(metadata) {
   const json = JSON.stringify(metadata).replace(/</g, '\\u003c');
   return `<script type="application/json" id="${TOOLBAR_METADATA_ID}">${json}</script>`;
 }
 
+/**
+ * @param {ToolbarMetadata} metadata
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {string}
+ */
 function buildToolbarMarkup(metadata, options = {}) {
   const toolbarEnabled = options.ToolbarEnabled === true;
   const editEnabled = toolbarEnabled || options.ToolbarEditToggleEnabled === true;
@@ -866,6 +959,11 @@ function buildToolbarMarkup(metadata, options = {}) {
   ].join('');
 }
 
+/**
+ * @param {string} html
+ * @param {string} insert
+ * @returns {string}
+ */
 function injectIntoHead(html, insert) {
   if (/<\/head>/i.test(html)) {
     return html.replace(/<\/head>/i, `${insert}</head>`);
@@ -878,6 +976,11 @@ function injectIntoHead(html, insert) {
   return `<!doctype html><html lang="en"><head>${insert}</head><body>${html}</body></html>`;
 }
 
+/**
+ * @param {string} html
+ * @param {string} insert
+ * @returns {string}
+ */
 function injectIntoBody(html, insert) {
   if (/<body[^>]*>/i.test(html)) {
     return html.replace(/<body[^>]*>/i, (match) => `${match}${insert}`);
@@ -890,6 +993,11 @@ function injectIntoBody(html, insert) {
   return `<!doctype html><html lang="en"><head></head><body>${insert}${html}</body></html>`;
 }
 
+/**
+ * @param {unknown} html
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {string}
+ */
 export function injectOutputToolbar(html, options = {}) {
   const input = String(html || '');
   if (!input) return input;
@@ -914,6 +1022,10 @@ export function injectOutputToolbar(html, options = {}) {
   return injectIntoBody(withHead, bodyInsert);
 }
 
+/**
+ * @param {Array<Pick<WarningDetail, 'severity'> | null | undefined>} [items=[]]
+ * @returns {WarningSummary}
+ */
 export function summarizeWarningsBySeverity(items = []) {
   const summary = { total: 0, info: 0, warning: 0, error: 0 };
   for (const item of items || []) {
@@ -942,6 +1054,10 @@ function buildConvertedThemeStyleTag() {
     '</style>';
 }
 
+/**
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {string}
+ */
 function buildConvertedThemeScriptTag(options = {}) {
   const oledBlack = options.ConvertedPageThemeToggleOledBlack === true;
   const script = `(function(){
@@ -993,11 +1109,20 @@ function buildConvertedThemeScriptTag(options = {}) {
   return `<script id="${CONVERTED_THEME_SCRIPT_ID}" data-onc-converted-theme-script="${CONVERTED_THEME_VERSION}">${minifyInlineScript(script)}</script>`;
 }
 
+/**
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {string}
+ */
 function buildConvertedThemeToggleMarkup(options = {}) {
   const oledBlack = options.ConvertedPageThemeToggleOledBlack === true;
   return `<button type="button" id="${CONVERTED_THEME_ROOT_ID}" data-onc-converted-theme-toggle="${CONVERTED_THEME_VERSION}" data-onc-oled-black="${oledBlack ? 'true' : 'false'}" aria-pressed="false" aria-label="Switch converted page to dark theme" title="Toggle converted page theme">🔆</button>`;
 }
 
+/**
+ * @param {unknown} html
+ * @param {ToolbarInjectorOptions} [options={}]
+ * @returns {string}
+ */
 export function injectConvertedPageThemeToggle(html, options = {}) {
   const input = String(html || '');
   if (!input) return input;

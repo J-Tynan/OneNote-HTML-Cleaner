@@ -1,3 +1,5 @@
+// @ts-check
+
 export const FONT_FAMILY_RE = /^font-family$/i;
 export const FONT_SIZE_RE = /^font-size$/i;
 export const FONT_WEIGHT_RE = /^font-weight$/i;
@@ -10,6 +12,17 @@ import {
   serializeStyleDeclarationEntries
 } from './styleUtils.js';
 
+/**
+ * @typedef {{ getAttribute: (name: string) => string | null, setAttribute: (name: string, value: string) => void, removeAttribute: (name: string) => void, classList?: { add: (className: string) => void } }} DomElement
+ * @typedef {{ querySelectorAll: (selector: string) => ArrayLike<DomElement> }} DomDocument
+ * @typedef {{ prop: string, value: string }} StyleDeclarationEntry
+ * @typedef {{ maxPx: number, className: string }} FontSizeMapEntry
+ * @typedef {{ max: number, className: string }} FontWeightMapEntry
+ * @typedef {{ selector?: string, removeMigratedDeclarations?: boolean }} InlineStyleMigrationOptions
+ * @typedef {{ step: 'migrateInlineStylesToUtilities', nodesTouched: number, declarationsMigrated: number, removeMigratedDeclarations: boolean }} InlineStyleMigrationLogEntry
+ */
+
+/** @type {readonly FontSizeMapEntry[]} */
 const FONT_SIZE_MAP = [
   { maxPx: 12, className: 'text-xs' },
   { maxPx: 14, className: 'text-sm' },
@@ -18,6 +31,7 @@ const FONT_SIZE_MAP = [
   { maxPx: Infinity, className: 'text-xl' }
 ];
 
+/** @type {readonly FontWeightMapEntry[]} */
 const FONT_WEIGHT_MAP = [
   { max: 450, className: 'font-normal' },
   { max: 550, className: 'font-medium' },
@@ -25,6 +39,7 @@ const FONT_WEIGHT_MAP = [
   { max: Infinity, className: 'font-bold' }
 ];
 
+/** @type {readonly FontSizeMapEntry[]} */
 const SPACING_MAP = [
   { maxPx: 0, className: '0' },
   { maxPx: 4, className: '1' },
@@ -34,6 +49,11 @@ const SPACING_MAP = [
   { maxPx: Infinity, className: '6' }
 ];
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @param {string | null | undefined} className
+ * @returns {void}
+ */
 function addClass(el, className) {
   if (!el || !className) return;
   if (typeof el.classList !== 'undefined') {
@@ -46,18 +66,34 @@ function addClass(el, className) {
   el.setAttribute('class', Array.from(classes).join(' '));
 }
 
+/**
+ * @param {unknown} styleText
+ * @returns {StyleDeclarationEntry[]}
+ */
 function parseStyle(styleText) {
   return parseStyleDeclarationEntries(styleText);
 }
 
+/**
+ * @param {StyleDeclarationEntry[]} entries
+ * @returns {string}
+ */
 function toStyleText(entries) {
   return serializeStyleDeclarationEntries(entries);
 }
 
+/**
+ * @param {unknown} value
+ * @returns {number | null}
+ */
 function cssToPx(value) {
   return cssLengthToPx(value);
 }
 
+/**
+ * @param {unknown} prop
+ * @returns {boolean}
+ */
 function isUtilityMappableProperty(prop) {
   const normalizedProp = String(prop || '').trim().toLowerCase();
   return (
@@ -69,12 +105,20 @@ function isUtilityMappableProperty(prop) {
   );
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string | null}
+ */
 function mapFontSize(value) {
   const px = cssToPx(value);
   if (px === null) return null;
   return FONT_SIZE_MAP.find(entry => px <= entry.maxPx)?.className || null;
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string | null}
+ */
 function mapFontWeight(value) {
   const weight = String(value || '').trim().toLowerCase();
   if (weight === 'normal') return 'font-normal';
@@ -86,6 +130,11 @@ function mapFontWeight(value) {
   return null;
 }
 
+/**
+ * @param {string} prefix
+ * @param {unknown} value
+ * @returns {string | null}
+ */
 function mapMarginClass(prefix, value) {
   const px = cssToPx(value);
   if (px === null) return null;
@@ -94,6 +143,11 @@ function mapMarginClass(prefix, value) {
   return `${prefix}-${token}`;
 }
 
+/**
+ * @param {unknown} prop
+ * @param {unknown} value
+ * @returns {string | null}
+ */
 export function getUtilityClassForDeclaration(prop, value) {
   const normalizedProp = String(prop || '').trim().toLowerCase();
 
@@ -120,8 +174,13 @@ export function getUtilityClassForDeclaration(prop, value) {
   return null;
 }
 
+/**
+ * @param {DomDocument} doc
+ * @param {InlineStyleMigrationOptions} [options]
+ * @returns {InlineStyleMigrationLogEntry[]}
+ */
 export function migrateInlineStylesToUtilities(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {InlineStyleMigrationLogEntry[]} */ ([]);
   const selector = options.selector || '[style]';
   const removeMigratedDeclarations = options.removeMigratedDeclarations === true;
   const nodes = Array.from(doc.querySelectorAll(selector));
@@ -133,7 +192,7 @@ export function migrateInlineStylesToUtilities(doc, options = {}) {
     const declarations = parseStyle(style);
     if (!declarations.length) return;
 
-    const kept = [];
+    const kept = /** @type {StyleDeclarationEntry[]} */ ([]);
     let changed = false;
 
     declarations.forEach(({ prop, value }) => {

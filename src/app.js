@@ -13,11 +13,8 @@ const logger = createLogger('app');
 const AUTO_CONVERT_STORAGE_KEY = 'autoConvertEnabled';
 const DEFAULT_AUTO_CONVERT = true;
 
-document.addEventListener('DOMContentLoaded', async () => {
-  // Apply persisted or system theme preference before rendering UI
-  initTheme();
-
-  // Resolve auto-convert preference
+/** @returns {boolean} */
+function readAutoConvertEnabledPreference() {
   let autoConvertEnabled = DEFAULT_AUTO_CONVERT;
 
   try {
@@ -25,10 +22,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (storedValue !== null) {
       autoConvertEnabled = storedValue === 'true';
     }
-  } catch (err) {
-    // If localStorage is unavailable, fall back to default
+  } catch (_err) {
+    // If localStorage is unavailable, fall back to default.
     autoConvertEnabled = DEFAULT_AUTO_CONVERT;
   }
+
+  return autoConvertEnabled;
+}
+
+/** @returns {Promise<void>} */
+async function initializeApplication() {
+  // Apply persisted or system theme preference before rendering UI
+  initTheme();
+
+  // Resolve auto-convert preference
+  const autoConvertEnabled = readAutoConvertEnabledPreference();
 
   const wm = new WorkerManager('./worker.js');
   logger.info({ msg: 'WorkerManager created' });
@@ -39,4 +47,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     autoConvertEnabled
   };
   await initUI(wm, initOptions);
-});
+}
+
+/** @returns {void} */
+function registerApplicationStartup() {
+  document.addEventListener('DOMContentLoaded', () => {
+    void initializeApplication();
+  });
+}
+
+registerApplicationStartup();

@@ -1,39 +1,89 @@
+// @ts-check
+
+/**
+ * @typedef {{ contains: (name: string) => boolean, remove: (name: string) => void, length: number }} DomClassList
+ * @typedef {{
+ *   tagName?: string,
+ *   textContent?: string | null,
+ *   classList?: DomClassList,
+ *   parentElement?: DomElement | null,
+ *   getAttribute?: (name: string) => string | null,
+ *   setAttribute: (name: string, value: string) => void,
+ *   removeAttribute: (name: string) => void,
+ *   querySelectorAll: (selector: string) => ArrayLike<DomElement>,
+ *   closest: (selector: string) => DomElement | null
+ * }} DomElement
+ * @typedef {{ querySelectorAll: (selector: string) => ArrayLike<DomElement> }} DomDocument
+ * @typedef {{ cueIndex: number, notesIndex: number }} ColumnIndexes
+ * @typedef {{ cueIndex: number, notesIndex: number, hasDetectedHeaders: boolean, rows: DomElement[] }} TableClassification
+ * @typedef {{ allowFallback?: boolean }} AnnotateTableSemanticsOptions
+ * @typedef {{ step: 'annotateTableSemantics', tablesAnnotated: number, leadingCellsAnnotated: number, detailCellsAnnotated: number, legacyClassesRemoved: number, allowFallback: boolean }} AnnotateTableSemanticsLogEntry
+ */
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function normalizeText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @param {string | null | undefined} name
+ * @param {unknown} value
+ * @returns {void}
+ */
 function setDataAttr(el, name, value) {
   if (!el || !name) return;
   if (value === null || value === undefined || value === '') return;
   el.setAttribute(name, String(value));
 }
 
+/**
+ * @param {DomElement | null | undefined} el
+ * @param {readonly string[] | null | undefined} names
+ * @returns {number}
+ */
 function removeClassNames(el, names) {
   if (!el || !Array.isArray(names) || !names.length) return 0;
-  if (!el.classList) return 0;
+  const classList = el.classList;
+  if (!classList) return 0;
   let removed = 0;
   names.forEach(name => {
-    if (el.classList.contains(name)) {
-      el.classList.remove(name);
+    if (classList.contains(name)) {
+      classList.remove(name);
       removed += 1;
     }
   });
-  if (!el.classList.length) {
+  if (!classList.length) {
     el.removeAttribute('class');
   }
   return removed;
 }
 
+/**
+ * @param {DomElement} row
+ * @returns {DomElement[]}
+ */
 function getRowCells(row) {
   return Array.from(row.querySelectorAll(':scope > th, :scope > td'));
 }
 
+/**
+ * @param {DomElement} table
+ * @returns {DomElement[]}
+ */
 function getTableRows(table) {
   const bodyRows = Array.from(table.querySelectorAll(':scope > tbody > tr'));
   if (bodyRows.length) return bodyRows;
   return Array.from(table.querySelectorAll(':scope > tr'));
 }
 
+/**
+ * @param {DomElement[]} cells
+ * @returns {ColumnIndexes}
+ */
 function detectHeaderIndexes(cells) {
   let cueIndex = -1;
   let notesIndex = -1;
@@ -47,6 +97,10 @@ function detectHeaderIndexes(cells) {
   return { cueIndex, notesIndex };
 }
 
+/**
+ * @param {DomElement[]} rows
+ * @returns {ColumnIndexes}
+ */
 function detectLegacyColumnIndexes(rows) {
   let cueIndex = -1;
   let notesIndex = -1;
@@ -63,6 +117,10 @@ function detectLegacyColumnIndexes(rows) {
   return { cueIndex, notesIndex };
 }
 
+/**
+ * @param {DomElement} table
+ * @returns {TableClassification | null}
+ */
 function classifyTable(table) {
   const rows = getTableRows(table);
   if (!rows.length) return null;
@@ -97,8 +155,13 @@ function classifyTable(table) {
   };
 }
 
+/**
+ * @param {DomDocument} doc
+ * @param {AnnotateTableSemanticsOptions} [options={}]
+ * @returns {AnnotateTableSemanticsLogEntry[]}
+ */
 export function annotateTableSemantics(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {AnnotateTableSemanticsLogEntry[]} */ ([]);
   const tables = Array.from(doc.querySelectorAll('table'));
   let tablesAnnotated = 0;
   let leadingCellsAnnotated = 0;

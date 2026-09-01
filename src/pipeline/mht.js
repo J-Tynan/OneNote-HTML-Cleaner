@@ -1,9 +1,27 @@
+// @ts-check
+
 // src/pipeline/mht.js
 // Minimal MHT/MHTML parser and image map builder for the PWA pipeline.
 // Exports:
 
 import { createLogger } from '../logging.js';
 const logger = createLogger('mht');
+
+/**
+ * @typedef {import('../contracts.js').ImageMap} ImageMap
+ * @typedef {import('../contracts.js').PipelineLogEntry} PipelineLogEntry
+ * @typedef {{ byteLength: (value: string, encoding?: string) => number, from: (value: string | ArrayLike<number>, encoding?: string) => Uint8Array & { toString: (encoding?: string) => string } }} BufferLike
+ * @typedef {{ charset?: string, withMapping?: boolean }} DecodeQuotedPrintableOptions
+ * @typedef {{ text: string, mapping: number[] }} DecodeQuotedPrintableMappedResult
+ * @typedef {{ count: number, samples: ControlCharSample[] }} ControlCharDiagnostics
+ * @typedef {{ index: number, codepoint: string, rawTextOffset?: number }} ControlCharSample
+ * @typedef {'off' | 'warn-only' | 'warn-skip'} InlineImageGuardrailBehavior
+ * @typedef {{ enabled: boolean, maxInlineImageBytes: number, behavior: InlineImageGuardrailBehavior }} InlineImageGuardrailState
+ * @typedef {{ [key: string]: unknown, EnableMapping?: boolean, EnableCharsetFallback?: boolean, EnableControlSanitization?: boolean, InlineImageMaxBytes?: unknown, inlineImageMaxBytes?: unknown, MaxInlineImageBytes?: unknown, maxInlineImageBytes?: unknown, EnableInlineImageSizeGuardrail?: unknown, enableInlineImageSizeGuardrail?: unknown, OversizedInlineImageBehavior?: unknown, oversizedInlineImageBehavior?: unknown }} ParseMhtOptions
+ * @typedef {Record<string, string>} MhtHeaders
+ * @typedef {{ index: number, headers: MhtHeaders, ContentType: string, ContentLocation: string, ContentTransferEncoding: string, BodyRaw: string, BodyRawStart: number, DeclaredCharset?: string, BodyDecodedMapping?: number[], CharsetFallbackApplied?: boolean, CharsetUsed?: string, CharsetFallbackAttempted?: boolean, DecodeRecoveryFailed?: boolean }} MhtPart
+ * @typedef {{ html: string | null, parts: MhtPart[], boundary: string | null, imageMap: ImageMap, imageDiagnostics: PipelineLogEntry[], controlCharDiagnostics?: ControlCharDiagnostics | null, controlCharSanitized?: boolean, controlSanitizationReason?: string | null, charsetFallback?: boolean, charsetFallbackAttempted?: boolean, charsetUsed?: string | null, decodeRecoveryFailed?: boolean }} ParseMhtResult
+ */
 //   parseMht(rawText, options={}) -> { html: string|null, parts: Array, boundary: string|null, imageMap: Object,
 //       controlCharDiagnostics?, controlCharSanitized?,
 //       parts[].BodyRawStart?, parts[].BodyDecodedMapping? }
@@ -13,21 +31,32 @@ const logger = createLogger('mht');
 //
 //   decodeQuotedPrintable(text[, {withMapping:true}]) -> string | {text,mapping}
 
+/**
+ * @param {unknown} s
+ * @param {number} [n=200]
+ * @returns {string}
+ */
 function safeSlice(s, n = 200) {
   if (!s) return '';
-  return s.length > n ? s.slice(0, n) + '…' : s;
+  const text = String(s);
+  return text.length > n ? text.slice(0, n) + '…' : text;
 }
 
 // decodeQuotedPrintable(text, opts={})
 //   opts.charset - "utf-8" (default) or "windows-1252"/"cp1252"
 //   opts.withMapping - when true returns {text,mapping} instead of string
+/**
+ * @param {unknown} text
+ * @param {DecodeQuotedPrintableOptions} [opts={}]
+ * @returns {string | DecodeQuotedPrintableMappedResult | unknown}
+ */
 export function decodeQuotedPrintable(text, opts = {}) {
   if (typeof text !== 'string') return text;
   const charset = (opts.charset || 'utf-8').toLowerCase();
   const wantMap = opts.withMapping || false;
 
-  const byteList = [];
-  const inputIndexForByte = wantMap ? [] : null;
+  const byteList = /** @type {number[]} */ ([]);
+  const inputIndexForByte = wantMap ? /** @type {number[]} */ ([]) : null;
 
   // iterate original text so we can correlate bytes with source indices
   for (let i = 0; i < text.length; i++) {
@@ -47,20 +76,25 @@ export function decodeQuotedPrintable(text, opts = {}) {
       const hex = text.slice(i + 1, i + 3);
       if (/^[0-9A-Fa-f]{2}$/.test(hex)) {
         byteList.push(parseInt(hex, 16));
-        if (wantMap) inputIndexForByte.push(i);
+        if (inputIndexForByte) inputIndexForByte.push(i);
         i += 2;
         continue;
       }
     }
     byteList.push(text.charCodeAt(i) & 0xff);
-    if (wantMap) inputIndexForByte.push(i);
+    if (inputIndexForByte) inputIndexForByte.push(i);
   }
 
   const u8 = new Uint8Array(byteList);
   let decoded;
 
   // helper for CP1252 single-byte decode
+  /**
+   * @param {ArrayLike<number> | Iterable<number>} bytes
+   * @returns {string}
+   */
   function cp1252Decode(bytes) {
+    /** @type {Record<number, number>} */
     const cpMap = {
       0x80: 0x20AC, 0x82: 0x201A, 0x83: 0x0192, 0x84: 0x201E,
       0x85: 0x2026, 0x86: 0x2020, 0x87: 0x2021, 0x88: 0x02C6,
@@ -71,7 +105,7 @@ export function decodeQuotedPrintable(text, opts = {}) {
       0x9C: 0x0153, 0x9E: 0x017E, 0x9F: 0x0178
     };
     let out = '';
-    for (let b of bytes) {
+    for (const b of Array.from(bytes)) {
       let code = b;
       if (b >= 0x80 && b <= 0x9f) {
         code = cpMap[b] || b;
@@ -83,7 +117,7 @@ export function decodeQuotedPrintable(text, opts = {}) {
 
   // decoding with or without mapping
   if (wantMap) {
-    const mapping = [];
+    const mapping = /** @type {number[]} */ ([]);
     let out = '';
     if (charset === 'utf-8' && typeof TextDecoder !== 'undefined') {
       const decoder = new TextDecoder('utf-8', { fatal: false });
@@ -91,15 +125,15 @@ export function decodeQuotedPrintable(text, opts = {}) {
         const ch = decoder.decode(u8.subarray(bi, bi + 1), { stream: true });
         if (ch) {
           for (let j = 0; j < ch.length; j++) {
-            mapping[out.length + j] = inputIndexForByte[bi];
+            mapping[out.length + j] = /** @type {number[]} */ (inputIndexForByte)[bi];
           }
           out += ch;
         }
       }
       const tail = decoder.decode();
       if (tail) {
-        for (let j = 0; j < tail.length; j++) {
-          mapping[out.length + j] = inputIndexForByte[u8.length - 1];
+          for (let j = 0; j < tail.length; j++) {
+          mapping[out.length + j] = /** @type {number[]} */ (inputIndexForByte)[u8.length - 1];
         }
         out += tail;
       }
@@ -107,7 +141,7 @@ export function decodeQuotedPrintable(text, opts = {}) {
       // single-byte decode
       for (let bi = 0; bi < u8.length; bi++) {
         out += cp1252Decode([u8[bi]]);
-        mapping[out.length - 1] = inputIndexForByte[bi];
+        mapping[out.length - 1] = /** @type {number[]} */ (inputIndexForByte)[bi];
       }
     } else {
       // unknown charset: fall back to utf-8 streaming
@@ -117,7 +151,7 @@ export function decodeQuotedPrintable(text, opts = {}) {
           const ch = decoder.decode(u8.subarray(bi, bi + 1), { stream: true });
           if (ch) {
             for (let j = 0; j < ch.length; j++) {
-              mapping[out.length + j] = inputIndexForByte[bi];
+              mapping[out.length + j] = /** @type {number[]} */ (inputIndexForByte)[bi];
             }
             out += ch;
           }
@@ -125,14 +159,14 @@ export function decodeQuotedPrintable(text, opts = {}) {
         const tail = decoder.decode();
         if (tail) {
           for (let j = 0; j < tail.length; j++) {
-            mapping[out.length + j] = inputIndexForByte[u8.length - 1];
+            mapping[out.length + j] = /** @type {number[]} */ (inputIndexForByte)[u8.length - 1];
           }
           out += tail;
         }
       } else {
         for (let bi = 0; bi < u8.length; bi++) {
           out += String.fromCharCode(u8[bi]);
-          mapping[out.length - 1] = inputIndexForByte[bi];
+          mapping[out.length - 1] = /** @type {number[]} */ (inputIndexForByte)[bi];
         }
       }
     }
@@ -166,19 +200,32 @@ export function decodeQuotedPrintable(text, opts = {}) {
   return decoded;
 }
 
+/**
+ * @param {unknown} b64
+ * @returns {string | null}
+ */
 function normalizeBase64(b64) {
   if (!b64) return null;
-  let s = b64.replace(/\s+/g, '');
+  let s = String(b64).replace(/\s+/g, '');
   const pad = s.length % 4;
   if (pad !== 0) s += '='.repeat(4 - pad);
   return s;
 }
 
+/**
+ * @param {unknown} contentType
+ * @param {string | null} b64
+ * @returns {string | null}
+ */
 function buildDataUriFromBase64(contentType, b64) {
   if (!b64) return null;
-  return `data:${contentType};base64,${b64}`;
+  return `data:${String(contentType || 'application/octet-stream')};base64,${b64}`;
 }
 
+/**
+ * @param {ParseMhtOptions} [options={}]
+ * @returns {InlineImageGuardrailState}
+ */
 function normalizeInlineImageGuardrailOptions(options = {}) {
   const maxInlineImageBytesRaw =
     options.InlineImageMaxBytes ??
@@ -219,6 +266,10 @@ function normalizeInlineImageGuardrailOptions(options = {}) {
   };
 }
 
+/**
+ * @param {unknown} b64
+ * @returns {number}
+ */
 function estimateDecodedBase64Bytes(b64) {
   if (!b64 || typeof b64 !== 'string') return 0;
   const normalized = b64.replace(/\s+/g, '');
@@ -227,10 +278,15 @@ function estimateDecodedBase64Bytes(b64) {
   return Math.max(0, Math.floor((normalized.length * 3) / 4) - padding);
 }
 
+/**
+ * @param {unknown} value
+ * @returns {number}
+ */
 function byteLengthFromString(value) {
   if (typeof value !== 'string' || value.length === 0) return 0;
-  if (typeof Buffer !== 'undefined') {
-    return Buffer.byteLength(value, 'utf8');
+  const bufferApi = /** @type {{ Buffer?: BufferLike }} */ (globalThis).Buffer;
+  if (bufferApi) {
+    return bufferApi.byteLength(value, 'utf8');
   }
   if (typeof TextEncoder !== 'undefined') {
     return new TextEncoder().encode(value).length;
@@ -238,9 +294,13 @@ function byteLengthFromString(value) {
   return value.length;
 }
 
+/**
+ * @param {unknown} headerBlock
+ * @returns {MhtHeaders}
+ */
 function parseHeaders(headerBlock) {
-  const headers = {};
-  const lines = headerBlock.split(/\r?\n/);
+  const headers = /** @type {MhtHeaders} */ ({});
+  const lines = String(headerBlock || '').split(/\r?\n/);
   let current = null;
   for (let line of lines) {
     if (/^\s/.test(line) && current) {
@@ -259,6 +319,13 @@ function parseHeaders(headerBlock) {
   return headers;
 }
 
+/**
+ * @param {ImageMap} map
+ * @param {MhtPart} p
+ * @param {string | null} dataUri
+ * @param {PipelineLogEntry[]} [diagnostics=[]]
+ * @returns {void}
+ */
 function addImageKeys(map, p, dataUri, diagnostics = []) {
   if (!dataUri) return;
   const keys = new Set();
@@ -328,6 +395,11 @@ function addImageKeys(map, p, dataUri, diagnostics = []) {
   }
 }
 
+/**
+ * @param {unknown} rawText
+ * @param {ParseMhtOptions} [options={}]
+ * @returns {ParseMhtResult}
+ */
 export function parseMht(rawText, options = {}) {
   try {
     // Ensure we operate on a byte-wise string.  Many callers read files
@@ -336,6 +408,10 @@ export function parseMht(rawText, options = {}) {
     // `charCodeAt & 0xff`, producing control codes when non‑ASCII was
     // present.  Convert any UTF‑8 text back into a Latin1-style byte string
     // so that every character code corresponds to the original byte value.
+    /**
+     * @param {unknown} s
+     * @returns {string | unknown}
+     */
     function toLatin1(s) {
       if (typeof s !== 'string') return s;
       // fast path: if every codepoint is <256 we can keep it as-is
@@ -359,10 +435,10 @@ export function parseMht(rawText, options = {}) {
 
     rawText = toLatin1(rawText);
 
-    logger.info({ msg: 'parseMht: raw length', meta: { length: rawText ? rawText.length : 0, opts: options && options.EnableControlSanitization ? 'sanitize' : options && options.EnableMapping ? 'map' : '' } });
+    logger.info({ msg: 'parseMht: raw length', meta: { length: typeof rawText === 'string' ? rawText.length : 0, opts: options && options.EnableControlSanitization ? 'sanitize' : options && options.EnableMapping ? 'map' : '' } });
     if (!rawText || typeof rawText !== 'string') {
       logger.warn({ msg: 'parseMht: empty or non-string input' });
-      return { html: null, parts: [], boundary: null, imageMap: {} };
+      return { html: null, parts: [], boundary: null, imageMap: {}, imageDiagnostics: [] };
     }
 
     // Find boundary (look in headers near top)
@@ -375,7 +451,7 @@ export function parseMht(rawText, options = {}) {
     const rawParts = sep ? rawText.split(sep) : rawText.split(/\r?\n--[^\r\n]+\r?\n/);
     logger.info({ msg: 'raw parts count (including preamble/epilogue)', meta: { count: rawParts.length } });
 
-    const parts = [];
+    const parts = /** @type {MhtPart[]} */ ([]);
     // keep cursor so we can compute absolute offsets within rawText
     let cursor = 0;
     for (let i = 0; i < rawParts.length; i++) {
@@ -442,18 +518,28 @@ export function parseMht(rawText, options = {}) {
       htmlPart.DeclaredCharset = declaredCharset;
 
       // helper to run decode with charset and optionally mapping
+      /**
+       * @param {string} text
+       * @param {string} charset
+       * @returns {string | DecodeQuotedPrintableMappedResult}
+       */
       function runDecode(text, charset) {
         if (/quoted-printable/i.test(cte)) {
-          return decodeQuotedPrintable(text, { withMapping: wantsMap, charset });
+          return wantsMap
+            ? /** @type {DecodeQuotedPrintableMappedResult} */ (decodeQuotedPrintable(text, { withMapping: true, charset }))
+            : /** @type {string} */ (decodeQuotedPrintable(text, { withMapping: false, charset }));
         } else if (/base64/i.test(cte)) {
           try {
             const b64 = normalizeBase64(text);
-            let bytes;
+            let bytes = /** @type {Uint8Array | undefined} */ (undefined);
             if (typeof atob !== 'undefined') {
-              const bin = atob(b64);
+              const bin = atob(String(b64 || ''));
               bytes = new Uint8Array(bin.split('').map(ch => ch.charCodeAt(0)));
-            } else if (typeof Buffer !== 'undefined') {
-              bytes = Buffer.from(b64, 'base64');
+            } else {
+              const bufferApi = /** @type {{ Buffer?: BufferLike }} */ (globalThis).Buffer;
+              if (bufferApi) {
+                bytes = bufferApi.from(String(b64 || ''), 'base64');
+              }
             }
             if (bytes) {
               if (wantsMap) {
@@ -464,8 +550,9 @@ export function parseMht(rawText, options = {}) {
                   try { return new TextDecoder(charset, { fatal:false }).decode(bytes); } catch {}
                 }
                 // fallback to binary->string
-                if (typeof Buffer !== 'undefined') return Buffer.from(bytes).toString('binary');
-                return String.fromCharCode.apply(null, bytes);
+                const bufferApi = /** @type {{ Buffer?: BufferLike }} */ (globalThis).Buffer;
+                if (bufferApi) return bufferApi.from(bytes).toString('binary');
+                return String.fromCharCode.apply(null, Array.from(bytes));
               }
             }
           } catch {
@@ -480,12 +567,12 @@ export function parseMht(rawText, options = {}) {
       }
 
       // initial decode
-      let decodedResult = runDecode(html, declaredCharset);
+      const decodedResult = runDecode(String(html || ''), declaredCharset);
       if (wantsMap) {
-        html = decodedResult.text;
-        htmlPart.BodyDecodedMapping = decodedResult.mapping;
+        html = /** @type {DecodeQuotedPrintableMappedResult} */ (decodedResult).text;
+        htmlPart.BodyDecodedMapping = /** @type {DecodeQuotedPrintableMappedResult} */ (decodedResult).mapping;
       } else {
-        html = decodedResult;
+        html = /** @type {string} */ (decodedResult);
       }
 
       // detection & maybe fallback
@@ -504,13 +591,13 @@ export function parseMht(rawText, options = {}) {
           htmlPart.CharsetFallbackAttempted = true;
           // try cp1252
           const fallbackResult = runDecode(htmlPart.BodyRaw, 'windows-1252');
-          const fbHtml = wantsMap ? fallbackResult.text : fallbackResult;
+          const fbHtml = wantsMap ? /** @type {DecodeQuotedPrintableMappedResult} */ (fallbackResult).text : /** @type {string} */ (fallbackResult);
           const fbDiag = detectControlChars(fbHtml);
           const fbHasReplacement = fbHtml.indexOf('\uFFFD') !== -1;
           // choose fallback if it removes replacement or reduces control count
           if ((!fbHasReplacement && sawReplacement) || fbDiag.count < origDiag.count) {
             html = fbHtml;
-            if (wantsMap) htmlPart.BodyDecodedMapping = fallbackResult.mapping;
+            if (wantsMap) htmlPart.BodyDecodedMapping = /** @type {DecodeQuotedPrintableMappedResult} */ (fallbackResult).mapping;
             htmlPart.CharsetUsed = 'windows-1252';
             htmlPart.CharsetFallbackApplied = true;
             origDiag = fbDiag;
@@ -525,8 +612,8 @@ export function parseMht(rawText, options = {}) {
 
     // Build image map from parts (images, fonts, octet-stream)
     const inlineImageGuardrail = normalizeInlineImageGuardrailOptions(options);
-    const imageDiagnostics = [];
-    const imageMap = {};
+    const imageDiagnostics = /** @type {PipelineLogEntry[]} */ ([]);
+    const imageMap = /** @type {ImageMap} */ ({});
     for (const p of parts) {
       if (/^(image|font|application\/octet-stream)/i.test(p.ContentType || '')) {
         let dataUri = null;
@@ -538,10 +625,10 @@ export function parseMht(rawText, options = {}) {
           dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), b64);
         } else if (/quoted-printable/i.test(cte)) {
           // decode quoted printable then base64-encode the result for data URI
-          const decoded = decodeQuotedPrintable(p.BodyRaw);
+            const decoded = decodeQuotedPrintable(p.BodyRaw);
           decodedBytes = byteLengthFromString(decoded);
           try {
-            const b64 = btoa(unescape(encodeURIComponent(decoded)));
+            const b64 = btoa(unescape(encodeURIComponent(String(decoded))));
             dataUri = buildDataUriFromBase64((p.ContentType || 'application/octet-stream').split(';')[0].trim(), b64);
           } catch (err) {
             logger.warn({ msg: 'failed to base64-encode decoded quoted-printable image', meta: { error: String(err) } });
@@ -567,7 +654,7 @@ export function parseMht(rawText, options = {}) {
 
         if (dataUri) {
           if (inlineImageGuardrail.enabled && decodedBytes > inlineImageGuardrail.maxInlineImageBytes) {
-            const diagnostic = {
+            const diagnostic = /** @type {PipelineLogEntry} */ ({
               step: 'inlineImageGuardrail',
               level: 'warn',
               details: inlineImageGuardrail.behavior === 'warn-skip'
@@ -580,7 +667,7 @@ export function parseMht(rawText, options = {}) {
                 contentType: (p.ContentType || 'application/octet-stream').split(';')[0].trim(),
                 contentLocation: p.ContentLocation || ''
               }
-            };
+            });
             imageDiagnostics.push(diagnostic);
             logger.warn({ msg: diagnostic.details, meta: diagnostic.meta });
             if (inlineImageGuardrail.behavior === 'warn-skip') {
@@ -594,8 +681,12 @@ export function parseMht(rawText, options = {}) {
 
     logger.info({ msg: 'built imageMap entries', meta: { count: Object.keys(imageMap).length } });
     // detect C0 control characters in decoded HTML (except tab/lf/cr)
+    /**
+     * @param {string} s
+     * @returns {ControlCharDiagnostics}
+     */
     function detectControlChars(s) {
-      const res = { count: 0, samples: [] };
+      const res = /** @type {ControlCharDiagnostics} */ ({ count: 0, samples: [] });
       if (typeof s !== 'string' || s.length === 0) return res;
       const re = /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g;
       let m;
@@ -613,6 +704,10 @@ export function parseMht(rawText, options = {}) {
     }
 
     // remove control characters by default replacement (space)
+    /**
+     * @param {string} s
+     * @returns {string}
+     */
     function sanitizeControlChars(s) {
       if (typeof s !== 'string' || s.length === 0) return s;
       return s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
@@ -627,9 +722,10 @@ export function parseMht(rawText, options = {}) {
       decodeRecoveryFailed = parts.some(p => p.DecodeRecoveryFailed === true);
       if (controlCharDiagnostics.count > 0) {
         // attach raw offsets if mapping is available
-        if (options && options.EnableMapping && htmlPart && htmlPart.BodyDecodedMapping && typeof htmlPart.BodyRawStart === 'number') {
+        if (options && options.EnableMapping && htmlPart && Array.isArray(htmlPart.BodyDecodedMapping) && typeof htmlPart.BodyRawStart === 'number') {
+          const decodedMapping = htmlPart.BodyDecodedMapping;
           controlCharDiagnostics.samples = controlCharDiagnostics.samples.map(s => {
-            const rawOff = htmlPart.BodyRawStart + (htmlPart.BodyDecodedMapping[s.index] || s.index);
+            const rawOff = htmlPart.BodyRawStart + (decodedMapping[s.index] || s.index);
             return { ...s, rawTextOffset: rawOff };
           });
         }

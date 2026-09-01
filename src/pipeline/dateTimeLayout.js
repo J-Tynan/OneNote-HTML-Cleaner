@@ -1,7 +1,36 @@
+// @ts-check
+
+/**
+ * @typedef {{
+ *   className?: string,
+ *   textContent?: string | null,
+ *   getAttribute: (name: string) => string | null,
+ *   setAttribute: (name: string, value: string) => void,
+ *   querySelector: (selector: string) => DomElement | null,
+ *   querySelectorAll: (selector: string) => ArrayLike<DomElement>,
+ *   appendChild: (child: DomElement) => void,
+ *   remove: () => void
+ * }} DomElement
+ * @typedef {{
+ *   querySelectorAll: (selector: string) => ArrayLike<DomElement>,
+ *   createElement: (tagName: string) => DomElement
+ * }} DomDocument
+ * @typedef {{ gap?: string }} MergeCreatedDateTimeRowOptions
+ * @typedef {{ step: 'mergeCreatedDateTimeRow', merged: number, gap: string }} MergeCreatedDateTimeRowLogEntry
+ */
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
 function cleanText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * @param {unknown} text
+ * @returns {boolean}
+ */
 function isDateText(text) {
   const value = cleanText(text);
   if (!value) return false;
@@ -12,14 +41,23 @@ function isDateText(text) {
   return monthDate.test(value) || monthDateWithWeekday.test(value) || isoDate.test(value) || slashDate.test(value);
 }
 
+/**
+ * @param {unknown} text
+ * @returns {boolean}
+ */
 function isTimeText(text) {
   const value = cleanText(text);
   if (!value) return false;
   return /^\d{1,2}:\d{2}(?::\d{2})?(\s?[AP]M)?$/i.test(value);
 }
 
+/**
+ * @param {DomDocument} doc
+ * @param {MergeCreatedDateTimeRowOptions} [options={}]
+ * @returns {MergeCreatedDateTimeRowLogEntry[]}
+ */
 export function mergeCreatedDateTimeRow(doc, options = {}) {
-  const logs = [];
+  const logs = /** @type {MergeCreatedDateTimeRowLogEntry[]} */ ([]);
   const gap = options.gap || '0.75em';
   const containers = Array.from(doc.querySelectorAll('div'));
   let merged = 0;
