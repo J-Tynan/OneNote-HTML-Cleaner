@@ -14,7 +14,7 @@ import { normalizeMarkdownFlavor } from '../convert/markdownFlavors.js';
  * @typedef {import('../contracts.js').ToolbarBundleMode} ToolbarBundleMode
  * @typedef {import('../contracts.js').ToolbarStyle} ToolbarStyle
  * @typedef {import('../contracts.js').UnitStrategy} UnitStrategy
- * @typedef {Pick<OutputDecorationConfig, 'ConvertedPageThemeToggleEnabled' | 'ConvertedPageThemeToggleOledBlack'>} ConvertedPageThemeConfig
+ * @typedef {Pick<OutputDecorationConfig, 'ConvertedPageThemeToggleEnabled'>} ConvertedPageThemeConfig
  * @typedef {Pick<NormalizedPipelineConfig, 'ExternalizeCssEnabled' | 'ExternalizeCssMode'>} ExternalCssConfig
  * @typedef {Pick<OutputDecorationConfig, 'ToolbarEnabled' | 'ToolbarEditToggleEnabled' | 'ToolbarMetadataToggleEnabled' | 'ToolbarBundleMode' | 'ToolbarStyle'>} ToolbarConfig
  */
@@ -132,7 +132,6 @@ const DEFAULT_PIPELINE_CONFIG = {
   ExportFormat: 'html',
   MarkdownFlavor: 'obsidian',
   ConvertedPageThemeToggleEnabled: false,
-  ConvertedPageThemeToggleOledBlack: false,
   ToolbarStyle: 'compact'
 };
 
@@ -193,14 +192,8 @@ export function isHtmlExportEnabled(rawConfig = {}) {
  * @returns {ConvertedPageThemeConfig}
  */
 function normalizeConvertedPageThemeConfig(rawConfig = {}) {
-  const convertedPageThemeToggleEnabled = toBoolean(rawConfig.ConvertedPageThemeToggleEnabled, false);
-  const convertedPageThemeToggleOledBlack = convertedPageThemeToggleEnabled
-    ? toBoolean(rawConfig.ConvertedPageThemeToggleOledBlack, false)
-    : false;
-
   return {
-    ConvertedPageThemeToggleEnabled: convertedPageThemeToggleEnabled,
-    ConvertedPageThemeToggleOledBlack: convertedPageThemeToggleOledBlack
+    ConvertedPageThemeToggleEnabled: toBoolean(rawConfig.ConvertedPageThemeToggleEnabled, false)
   };
 }
 
@@ -237,9 +230,6 @@ export function buildOutputDecorationConfig(rawConfig = {}) {
     ToolbarMetadataToggleEnabled: htmlExport ? normalizedToolbarConfig.ToolbarMetadataToggleEnabled : false,
     ConvertedPageThemeToggleEnabled: htmlExport
       ? normalizedConvertedPageThemeConfig.ConvertedPageThemeToggleEnabled
-      : false,
-    ConvertedPageThemeToggleOledBlack: htmlExport
-      ? normalizedConvertedPageThemeConfig.ConvertedPageThemeToggleOledBlack
       : false
   };
 }

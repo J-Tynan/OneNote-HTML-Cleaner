@@ -16,14 +16,6 @@ function assert(condition, message) {
 
   const standardHtml = injector.injectConvertedPageThemeToggle(base, {
     ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: false,
-    ExperimentalExportEnabled: false,
-    ExportFormat: 'html'
-  });
-
-  const oledHtml = injector.injectConvertedPageThemeToggle(base, {
-    ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: true,
     ExperimentalExportEnabled: false,
     ExportFormat: 'html'
   });
@@ -41,14 +33,12 @@ function assert(condition, message) {
 
   const toolbarHtml = injector.injectConvertedPageThemeToggle(toolbarInjected, {
     ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: false,
     ExperimentalExportEnabled: false,
     ExportFormat: 'html'
   });
 
   const serverHandle = await startRouteServer({
     '/standard': standardHtml,
-    '/oled': oledHtml,
     '/toolbar': toolbarHtml
   });
   const baseUrl = serverHandle.baseUrl;
@@ -81,12 +71,12 @@ function assert(condition, message) {
     assert(initialToggleChrome.borderTopWidth === '0px', `Expected icon-only toggle with no border, got ${initialToggleChrome.borderTopWidth}`);
 
     await page.click('#onc-converted-theme-toggle');
-    const darkTheme = await page.evaluate(() => document.documentElement.getAttribute('data-onc-converted-theme'));
-    assert(darkTheme === 'dark', 'Expected converted-page theme to switch to dark on click');
-    const darkIcon = await page.textContent('#onc-converted-theme-toggle');
-    assert((darkIcon || '').trim() === '🌙', `Expected dark-theme toggle icon to be 🌙, got ${(darkIcon || '').trim()}`);
+    const blackTheme = await page.evaluate(() => document.documentElement.getAttribute('data-onc-converted-theme'));
+    assert(blackTheme === 'black', 'Expected converted-page theme to switch to black on click');
+    const blackIcon = await page.textContent('#onc-converted-theme-toggle');
+    assert((blackIcon || '').trim() === '🌑', `Expected black-theme toggle icon to be 🌑, got ${(blackIcon || '').trim()}`);
 
-    const standardDarkState = await page.evaluate(() => {
+    const blackState = await page.evaluate(() => {
       const bodyBg = getComputedStyle(document.body).backgroundColor;
       const heading = document.getElementById('summary-heading');
       const question = document.getElementById('study-question');
@@ -103,35 +93,17 @@ function assert(condition, message) {
       };
     });
 
-    assert(standardDarkState.bodyBg === 'rgb(31, 31, 31)', `Expected standard dark body background to be dark grey, got ${standardDarkState.bodyBg}`);
-    assert(standardDarkState.questionColor === 'rgb(230, 230, 230)', `Expected Study Questions text to recolor in dark theme, got ${standardDarkState.questionColor}`);
-    assert(standardDarkState.redTokenColor === 'rgb(192, 0, 0)', `Expected red syntax token color to be preserved, got ${standardDarkState.redTokenColor}`);
-    assert(standardDarkState.blueTokenColor === 'rgb(24, 97, 167)', `Expected blue syntax token color to be preserved, got ${standardDarkState.blueTokenColor}`);
-    assert(standardDarkState.redTokenBg === 'rgba(0, 0, 0, 0)', `Expected red syntax token white background to be cleared, got ${standardDarkState.redTokenBg}`);
-    assert(standardDarkState.blueTokenBg === 'rgba(0, 0, 0, 0)', `Expected blue syntax token white background to be cleared, got ${standardDarkState.blueTokenBg}`);
+    assert(blackState.bodyBg === 'rgb(0, 0, 0)', `Expected black-theme body background to be black, got ${blackState.bodyBg}`);
+    assert(blackState.questionColor === 'rgb(214, 214, 207)', `Expected Study Questions text to recolor in black theme, got ${blackState.questionColor}`);
+    assert(blackState.redTokenColor === 'rgb(192, 0, 0)', `Expected red syntax token color to be preserved, got ${blackState.redTokenColor}`);
+    assert(blackState.blueTokenColor === 'rgb(24, 97, 167)', `Expected blue syntax token color to be preserved, got ${blackState.blueTokenColor}`);
+    assert(blackState.redTokenBg === 'rgba(0, 0, 0, 0)', `Expected red syntax token white background to be cleared, got ${blackState.redTokenBg}`);
+    assert(blackState.blueTokenBg === 'rgba(0, 0, 0, 0)', `Expected blue syntax token white background to be cleared, got ${blackState.blueTokenBg}`);
 
     await page.reload({ waitUntil: 'networkidle' });
     await page.waitForSelector('#onc-converted-theme-toggle');
     const persistedTheme = await page.evaluate(() => document.documentElement.getAttribute('data-onc-converted-theme'));
-    assert(persistedTheme === 'dark', 'Expected converted-page theme to persist per file via localStorage');
-
-    await page.goto(`${baseUrl}/oled`, { waitUntil: 'networkidle' });
-    await page.waitForSelector('#onc-converted-theme-toggle');
-    await page.click('#onc-converted-theme-toggle');
-
-    const oledState = await page.evaluate(() => {
-      const bodyBg = getComputedStyle(document.body).backgroundColor;
-      const bodyColor = getComputedStyle(document.body).color;
-      const main = document.querySelector('main');
-      const mainBg = main ? getComputedStyle(main).backgroundColor : '';
-      const oled = document.documentElement.getAttribute('data-onc-converted-oled');
-      return { bodyBg, bodyColor, mainBg, oled };
-    });
-
-    assert(oledState.oled === 'true', 'Expected OLED flag on document element when OLED option is enabled');
-    assert(oledState.bodyBg === 'rgb(0, 0, 0)', `Expected OLED body background to be black, got ${oledState.bodyBg}`);
-    assert(oledState.bodyColor === 'rgb(214, 214, 207)', `Expected OLED body text color to be off-white, got ${oledState.bodyColor}`);
-    assert(oledState.mainBg === 'rgb(0, 0, 0)', `Expected OLED main background to be black, got ${oledState.mainBg}`);
+    assert(persistedTheme === 'black', 'Expected converted-page theme to persist per file via localStorage');
 
     await page.goto(`${baseUrl}/toolbar`, { waitUntil: 'networkidle' });
     await page.waitForSelector('#onc-converted-theme-toggle');
@@ -168,7 +140,7 @@ function assert(condition, message) {
     assert(topOffset > defaultHiddenLayout.toggleTop, `Expected converted-page theme toggle to move down when toolbar is shown, default=${defaultHiddenLayout.toggleTop} shown=${topOffset}`);
 
     await page.click('#onc-converted-theme-toggle');
-    const toolbarDarkState = await page.evaluate(() => {
+    const toolbarBlackState = await page.evaluate(() => {
       const toolbar = document.getElementById('onenote-cleaner-toolbar');
       const style = toolbar ? getComputedStyle(toolbar) : null;
       return {
@@ -176,7 +148,7 @@ function assert(condition, message) {
         color: style ? style.color : ''
       };
     });
-    assert(toolbarDarkState.bg === 'rgb(31, 31, 31)', `Expected toolbar background to follow dark theme, got ${toolbarDarkState.bg}`);
+    assert(toolbarBlackState.bg === 'rgb(0, 0, 0)', `Expected toolbar background to follow black theme, got ${toolbarBlackState.bg}`);
 
     const beforeExpandTop = await page.evaluate(() => {
       const toggle = document.getElementById('onc-converted-theme-toggle');

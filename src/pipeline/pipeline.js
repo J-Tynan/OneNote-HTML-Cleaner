@@ -292,7 +292,7 @@ export async function runPipeline(htmlString, config = {}) {
       logs.push({ step: 'injectToolbar', level: 'info', details: 'Injected single advanced toolbar (inline bundle).' });
     }
     if (withThemeToggle !== withToolbar) {
-      logs.push({ step: 'injectConvertedPageThemeToggle', level: 'info', details: 'Injected converted-page Light/Dark toggle (inline bundle).' });
+      logs.push({ step: 'injectConvertedPageThemeToggle', level: 'info', details: 'Injected converted-page Light/Black toggle (inline bundle).' });
     }
 
     // Final sanity check: does output look like HTML?

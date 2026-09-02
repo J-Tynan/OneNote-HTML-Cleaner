@@ -58,7 +58,6 @@ No tag-specific worker config keys are part of the stable shipped contract yet.
     "ToolbarMetadataToggleEnabled": false,
     "ToolbarBundleMode": "inline",
     "ConvertedPageThemeToggleEnabled": false,
-    "ConvertedPageThemeToggleOledBlack": false,
     "imageMap": { "path": "data:...base64" }
   }
 }
@@ -99,8 +98,7 @@ Toolbar flags are additive and optional:
 
 Converted-page theme flags are additive and optional:
 - default OFF in all flows
-- HTML-only; non-HTML exports normalize both flags to `false`
-- `ConvertedPageThemeToggleOledBlack` remains inactive unless `ConvertedPageThemeToggleEnabled` is `true`
+- HTML-only; non-HTML exports normalize the toggle flag to `false`
 ---
 ## Worker response (done)
 ```json

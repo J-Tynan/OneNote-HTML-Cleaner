@@ -58,7 +58,6 @@ import { createLogger, setEnabled as setLogEnabled } from './logging.js';
  *   exportFormatHelp: HTMLElement | null,
  *   toolbarStyleHelp: HTMLElement | null,
  *   convertedPageThemeToggleEnabled: HTMLInputElement | null,
- *   convertedPageThemeToggleOledBlack: HTMLInputElement | null,
  *   convertedPageThemeHelp: HTMLElement | null,
  *   autoConvertNotice: HTMLElement | null,
  *   autoConvertNoticeLead: HTMLElement | null,
@@ -134,7 +133,6 @@ const dom = {
   exportFormatHelp: null,
   toolbarStyleHelp: null,
   convertedPageThemeToggleEnabled: null,
-  convertedPageThemeToggleOledBlack: null,
   convertedPageThemeHelp: null,
   autoConvertNotice: null,
   autoConvertNoticeLead: null,
@@ -900,21 +898,16 @@ function updateExportFormatControls() {
  */
 function updateConvertedPageThemeControls(advancedOptionsState = buildAdvancedOptionsState(dom)) {
   const htmlSelected = advancedOptionsState.htmlSelected;
-  const toggleEnabled = advancedOptionsState.convertedPageThemeToggleChecked;
 
   if (dom.convertedPageThemeToggleEnabled) {
     dom.convertedPageThemeToggleEnabled.disabled = !htmlSelected;
-  }
-
-  if (dom.convertedPageThemeToggleOledBlack) {
-    dom.convertedPageThemeToggleOledBlack.disabled = !htmlSelected || !toggleEnabled;
   }
 
   if (dom.convertedPageThemeHelp) {
     if (!htmlSelected) {
       dom.convertedPageThemeHelp.textContent = 'Converted-page theme toggle is available only for HTML export.';
     } else {
-      dom.convertedPageThemeHelp.textContent = 'Enable a symbol-based Light or Dark toggle in converted HTML pages. Optional OLED-black applies only when the theme toggle is enabled.';
+      dom.convertedPageThemeHelp.textContent = 'Enable a symbol-based Light or Black toggle in converted HTML pages.';
     }
   }
 }
@@ -1507,7 +1500,6 @@ function bindEvents() {
   dom.exportFormat?.addEventListener('change', onAdvancedOptionsChange);
   dom.markdownFlavor?.addEventListener('change', onAdvancedOptionsChange);
   dom.convertedPageThemeToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
-  dom.convertedPageThemeToggleOledBlack?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
   dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
@@ -1604,7 +1596,6 @@ export async function initUI(workerManager, options = {}) {
   dom.exportFormatHelp = /** @type {HTMLElement | null} */ (document.getElementById('exportFormatHelp'));
   dom.toolbarStyleHelp = /** @type {HTMLElement | null} */ (document.getElementById('toolbarStyleHelp'));
   dom.convertedPageThemeToggleEnabled = /** @type {HTMLInputElement | null} */ (document.getElementById('convertedPageThemeToggleEnabled'));
-  dom.convertedPageThemeToggleOledBlack = /** @type {HTMLInputElement | null} */ (document.getElementById('convertedPageThemeToggleOledBlack'));
   dom.convertedPageThemeHelp = /** @type {HTMLElement | null} */ (document.getElementById('convertedPageThemeHelp'));
   dom.autoConvertNotice = /** @type {HTMLElement | null} */ (document.getElementById('autoConvertNotice'));
   dom.autoConvertNoticeLead = /** @type {HTMLElement | null} */ (document.getElementById('autoConvertNoticeLead'));
@@ -1655,8 +1646,7 @@ export async function initUI(workerManager, options = {}) {
     experimentalExportEnabled: dom.experimentalExportEnabled,
     exportFormat: dom.exportFormat,
     markdownFlavor: dom.markdownFlavor,
-    convertedPageThemeToggleEnabled: dom.convertedPageThemeToggleEnabled,
-    convertedPageThemeToggleOledBlack: dom.convertedPageThemeToggleOledBlack
+    convertedPageThemeToggleEnabled: dom.convertedPageThemeToggleEnabled
   }, updateZipButton));
 
   if (appWindow.JSZip) {

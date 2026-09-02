@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-09-01T11:06:22.589Z",
-  "url": "http://127.0.0.1:59677/",
+  "timestamp": "2026-09-02T14:43:15.861Z",
+  "url": "http://127.0.0.1:51728/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -3360,24 +3360,6 @@
           "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
           "target": [
             "#convertedPageThemeToggleEnabled"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "convertedPageThemeToggleOledBlack",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<input id=\"convertedPageThemeToggleOledBlack\" type=\"checkbox\" disabled=\"\" class=\"checkbox-input\">",
-          "target": [
-            "#convertedPageThemeToggleOledBlack"
           ]
         },
         {

@@ -167,65 +167,60 @@ html.enhanced #onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"]{
   --onc-toolbar-select-width:9.5rem;
 }
 
-html[data-onc-converted-theme="dark"]{
-  --onc-converted-bg:#1f1f1f;
-  --onc-converted-fg:#e6e6e6;
-}
-
-html[data-onc-converted-theme="dark"][data-onc-converted-oled="true"]{
+html[data-onc-converted-theme="black"]{
   --onc-converted-bg:#000;
   --onc-converted-fg:#d6d6cf;
 }
 
-html[data-onc-converted-theme="dark"] body,
-html[data-onc-converted-theme="dark"] main{
+html[data-onc-converted-theme="black"] body,
+html[data-onc-converted-theme="black"] main{
   background:var(--onc-converted-bg);
   color:var(--onc-converted-fg);
 }
 
-html[data-onc-converted-theme="dark"] body [style*="color: #000"],
-html[data-onc-converted-theme="dark"] body [style*="color:#000"],
-html[data-onc-converted-theme="dark"] body [style*="color: black"],
-html[data-onc-converted-theme="dark"] body [style*="color:black"],
-html[data-onc-converted-theme="dark"] body [style*="color: rgb(0, 0, 0)"],
-html[data-onc-converted-theme="dark"] body [style*="color:rgb(0,0,0)"]{
+html[data-onc-converted-theme="black"] body [style*="color: #000"],
+html[data-onc-converted-theme="black"] body [style*="color:#000"],
+html[data-onc-converted-theme="black"] body [style*="color: black"],
+html[data-onc-converted-theme="black"] body [style*="color:black"],
+html[data-onc-converted-theme="black"] body [style*="color: rgb(0, 0, 0)"],
+html[data-onc-converted-theme="black"] body [style*="color:rgb(0,0,0)"]{
   color:var(--onc-converted-fg) !important;
 }
 
-html[data-onc-converted-theme="dark"] body [style*="background: white"],
-html[data-onc-converted-theme="dark"] body [style*="background:white"],
-html[data-onc-converted-theme="dark"] body [style*="background-color: white"],
-html[data-onc-converted-theme="dark"] body [style*="background-color:white"],
-html[data-onc-converted-theme="dark"] body [style*="background: #fff"],
-html[data-onc-converted-theme="dark"] body [style*="background:#fff"],
-html[data-onc-converted-theme="dark"] body [style*="background-color: #fff"],
-html[data-onc-converted-theme="dark"] body [style*="background-color:#fff"],
-html[data-onc-converted-theme="dark"] body [style*="background: rgb(255, 255, 255)"],
-html[data-onc-converted-theme="dark"] body [style*="background:rgb(255,255,255)"]{
+html[data-onc-converted-theme="black"] body [style*="background: white"],
+html[data-onc-converted-theme="black"] body [style*="background:white"],
+html[data-onc-converted-theme="black"] body [style*="background-color: white"],
+html[data-onc-converted-theme="black"] body [style*="background-color:white"],
+html[data-onc-converted-theme="black"] body [style*="background: #fff"],
+html[data-onc-converted-theme="black"] body [style*="background:#fff"],
+html[data-onc-converted-theme="black"] body [style*="background-color: #fff"],
+html[data-onc-converted-theme="black"] body [style*="background-color:#fff"],
+html[data-onc-converted-theme="black"] body [style*="background: rgb(255, 255, 255)"],
+html[data-onc-converted-theme="black"] body [style*="background:rgb(255,255,255)"]{
   background:transparent !important;
 }
 
-html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar{
-  background:var(--onc-converted-bg,#1f1f1f);
-  color:var(--onc-converted-fg,#e6e6e6);
+html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar{
+  background:var(--onc-converted-bg,#000);
+  color:var(--onc-converted-fg,#d6d6cf);
   border-bottom-color:rgba(148,163,184,.35);
 }
 
-html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn,
-html[data-onc-converted-theme="dark"] #onc-toolbar-show{
+html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn,
+html[data-onc-converted-theme="black"] #onc-toolbar-show{
   background:rgba(15,23,42,.38);
-  color:var(--onc-converted-fg,#e6e6e6);
+  color:var(--onc-converted-fg,#d6d6cf);
   border-color:rgba(148,163,184,.45);
   box-shadow:none;
 }
 
-html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"],
-html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{
+html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"],
+html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn[data-onc-active="true"]{
   background:rgba(59,130,246,.22);
   border-color:rgba(125,177,255,.7);
 }
 
-html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-panel{
+html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-panel{
   background:rgba(15,23,42,.32);
   border-color:rgba(148,163,184,.35);
 }

@@ -44,7 +44,6 @@ function isDarkRgb(color) {
 
     return injector.injectConvertedPageThemeToggle(withToolbar, {
       ConvertedPageThemeToggleEnabled: true,
-      ConvertedPageThemeToggleOledBlack: false,
       ExperimentalExportEnabled: false,
       ExportFormat: 'html'
     });

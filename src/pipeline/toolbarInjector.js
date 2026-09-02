@@ -345,11 +345,11 @@ function buildBaseStyleCss() {
     '#onenote-cleaner-toolbar .onc-panel dd{margin:0;word-break:break-word;}' +
     '#onc-toolbar-show{position:fixed;right:3.35rem;top:var(--onc-floating-top,.75rem);bottom:auto;z-index:10000;font-size:11px;padding:var(--onc-toolbar-show-padding,.18rem .42rem);}' +
     '@media (max-width: 640px){#onenote-cleaner-toolbar{padding:var(--onc-toolbar-mobile-padding,.375rem .5rem);font:var(--onc-toolbar-mobile-font,12px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}#onenote-cleaner-toolbar .onc-toolbar-row{gap:var(--onc-toolbar-mobile-gap,.3rem);}#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{padding:var(--onc-toolbar-mobile-btn-padding,.18rem .34rem);}#onenote-cleaner-toolbar .onc-select{min-width:7.25rem;}}' +
-    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar{background:var(--onc-converted-bg,#1f1f1f);color:var(--onc-converted-fg,#e6e6e6);border-bottom-color:rgba(148,163,184,.35);}' +
-    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn,html[data-onc-converted-theme="dark"] #onc-toolbar-show{background:rgba(15,23,42,.38);color:var(--onc-converted-fg,#e6e6e6);border-color:rgba(148,163,184,.45);box-shadow:none;}' +
-    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:rgba(59,130,246,.22);border-color:rgba(125,177,255,.7);}' +
-    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-panel{background:rgba(15,23,42,.32);border-color:rgba(148,163,184,.35);}' +
-    'html[data-onc-converted-theme="dark"] #onenote-cleaner-toolbar .onc-muted{color:#cbd5e1;}' +
+    'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar{background:var(--onc-converted-bg,#000);color:var(--onc-converted-fg,#d6d6cf);border-bottom-color:rgba(148,163,184,.35);}' +
+    'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn,html[data-onc-converted-theme="black"] #onc-toolbar-show{background:rgba(15,23,42,.38);color:var(--onc-converted-fg,#d6d6cf);border-color:rgba(148,163,184,.45);box-shadow:none;}' +
+    'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:rgba(59,130,246,.22);border-color:rgba(125,177,255,.7);}' +
+    'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-panel{background:rgba(15,23,42,.32);border-color:rgba(148,163,184,.35);}' +
+    'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-muted{color:#cbd5e1;}' +
     '[data-onc-editing="true"] [data-onc-editable="1"]{outline:1px dashed #7ea5e0;outline-offset:2px;}';
 }
 
@@ -1042,12 +1042,11 @@ function buildConvertedThemeStyleTag() {
   const css = minifyInlineCss(
     `#${CONVERTED_THEME_ROOT_ID}{position:fixed;right:1rem;top:var(--onc-floating-top,.75rem);z-index:10000;border:0;background:transparent;color:#0f172a;border-radius:0;width:auto;height:auto;display:block;cursor:pointer;padding:0;line-height:1;font:400 1.5rem/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:none;}` +
     `#${CONVERTED_THEME_ROOT_ID}:focus-visible{outline:2px solid #7ea5e0;outline-offset:2px;}` +
-    `html[data-onc-converted-theme="dark"]{--onc-converted-bg:#1f1f1f;--onc-converted-fg:#e6e6e6;}` +
-    `html[data-onc-converted-theme="dark"][data-onc-converted-oled="true"]{--onc-converted-bg:#000000;--onc-converted-fg:#d6d6cf;}` +
-    `html[data-onc-converted-theme="dark"] body{background:var(--onc-converted-bg);color:var(--onc-converted-fg);}` +
-    `html[data-onc-converted-theme="dark"] main{background:var(--onc-converted-bg);color:var(--onc-converted-fg);}` +
-    `html[data-onc-converted-theme="dark"] body [style*="color: #000"],html[data-onc-converted-theme="dark"] body [style*="color:#000"],html[data-onc-converted-theme="dark"] body [style*="color: black"],html[data-onc-converted-theme="dark"] body [style*="color:black"],html[data-onc-converted-theme="dark"] body [style*="color: rgb(0, 0, 0)"],html[data-onc-converted-theme="dark"] body [style*="color:rgb(0,0,0)"]{color:var(--onc-converted-fg) !important;}` +
-    `html[data-onc-converted-theme="dark"] body [style*="background: white"],html[data-onc-converted-theme="dark"] body [style*="background:white"],html[data-onc-converted-theme="dark"] body [style*="background-color: white"],html[data-onc-converted-theme="dark"] body [style*="background-color:white"],html[data-onc-converted-theme="dark"] body [style*="background: #fff"],html[data-onc-converted-theme="dark"] body [style*="background:#fff"],html[data-onc-converted-theme="dark"] body [style*="background-color: #fff"],html[data-onc-converted-theme="dark"] body [style*="background-color:#fff"],html[data-onc-converted-theme="dark"] body [style*="background: rgb(255, 255, 255)"],html[data-onc-converted-theme="dark"] body [style*="background:rgb(255,255,255)"]{background:transparent !important;}`
+    `html[data-onc-converted-theme="black"]{--onc-converted-bg:#000000;--onc-converted-fg:#d6d6cf;}` +
+    `html[data-onc-converted-theme="black"] body{background:var(--onc-converted-bg);color:var(--onc-converted-fg);}` +
+    `html[data-onc-converted-theme="black"] main{background:var(--onc-converted-bg);color:var(--onc-converted-fg);}` +
+    `html[data-onc-converted-theme="black"] body [style*="color: #000"],html[data-onc-converted-theme="black"] body [style*="color:#000"],html[data-onc-converted-theme="black"] body [style*="color: black"],html[data-onc-converted-theme="black"] body [style*="color:black"],html[data-onc-converted-theme="black"] body [style*="color: rgb(0, 0, 0)"],html[data-onc-converted-theme="black"] body [style*="color:rgb(0,0,0)"]{color:var(--onc-converted-fg) !important;}` +
+    `html[data-onc-converted-theme="black"] body [style*="background: white"],html[data-onc-converted-theme="black"] body [style*="background:white"],html[data-onc-converted-theme="black"] body [style*="background-color: white"],html[data-onc-converted-theme="black"] body [style*="background-color:white"],html[data-onc-converted-theme="black"] body [style*="background: #fff"],html[data-onc-converted-theme="black"] body [style*="background:#fff"],html[data-onc-converted-theme="black"] body [style*="background-color: #fff"],html[data-onc-converted-theme="black"] body [style*="background-color:#fff"],html[data-onc-converted-theme="black"] body [style*="background: rgb(255, 255, 255)"],html[data-onc-converted-theme="black"] body [style*="background:rgb(255,255,255)"]{background:transparent !important;}`
   );
   return `<style id="${CONVERTED_THEME_STYLE_ID}" data-onc-converted-theme-style="${CONVERTED_THEME_VERSION}">` +
     css +
@@ -1059,7 +1058,6 @@ function buildConvertedThemeStyleTag() {
  * @returns {string}
  */
 function buildConvertedThemeScriptTag(options = {}) {
-  const oledBlack = options.ConvertedPageThemeToggleOledBlack === true;
   const script = `(function(){
   function init(){
     const root = document.getElementById('${CONVERTED_THEME_ROOT_ID}');
@@ -1072,16 +1070,14 @@ function buildConvertedThemeScriptTag(options = {}) {
       html.classList.add('onc-toolbar-present');
     }
 
-    const oledBlack = ${oledBlack ? 'true' : 'false'};
     const storageKey = 'onc:converted-theme:' + location.pathname;
 
     function applyTheme(nextTheme){
-      const theme = nextTheme === 'dark' ? 'dark' : 'light';
+      const theme = nextTheme === 'black' ? 'black' : 'light';
       html.setAttribute('data-onc-converted-theme', theme);
-      html.setAttribute('data-onc-converted-oled', oledBlack ? 'true' : 'false');
-      root.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-      root.setAttribute('aria-label', theme === 'dark' ? 'Switch converted page to light theme' : 'Switch converted page to dark theme');
-      root.textContent = theme === 'dark' ? '🌙' : '🔆';
+      root.setAttribute('aria-pressed', theme === 'black' ? 'true' : 'false');
+      root.setAttribute('aria-label', theme === 'black' ? 'Switch converted page to light theme' : 'Switch converted page to black theme');
+      root.textContent = theme === 'black' ? '🌑' : '🔆';
     }
 
     let saved = 'light';
@@ -1092,8 +1088,8 @@ function buildConvertedThemeScriptTag(options = {}) {
     applyTheme(saved);
 
     root.addEventListener('click', function(){
-      const current = html.getAttribute('data-onc-converted-theme') === 'dark' ? 'dark' : 'light';
-      const next = current === 'dark' ? 'light' : 'dark';
+      const current = html.getAttribute('data-onc-converted-theme') === 'black' ? 'black' : 'light';
+      const next = current === 'black' ? 'light' : 'black';
       applyTheme(next);
       try { localStorage.setItem(storageKey, next); } catch (_err) {}
     });
@@ -1114,8 +1110,7 @@ function buildConvertedThemeScriptTag(options = {}) {
  * @returns {string}
  */
 function buildConvertedThemeToggleMarkup(options = {}) {
-  const oledBlack = options.ConvertedPageThemeToggleOledBlack === true;
-  return `<button type="button" id="${CONVERTED_THEME_ROOT_ID}" data-onc-converted-theme-toggle="${CONVERTED_THEME_VERSION}" data-onc-oled-black="${oledBlack ? 'true' : 'false'}" aria-pressed="false" aria-label="Switch converted page to dark theme" title="Toggle converted page theme">🔆</button>`;
+  return `<button type="button" id="${CONVERTED_THEME_ROOT_ID}" data-onc-converted-theme-toggle="${CONVERTED_THEME_VERSION}" aria-pressed="false" aria-label="Switch converted page to black theme" title="Toggle converted page theme">🔆</button>`;
 }
 
 /**

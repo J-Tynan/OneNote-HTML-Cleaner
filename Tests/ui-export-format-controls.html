@@ -50,7 +50,6 @@
   <p id="exportFormatHelp"></p>
 
   <input id="convertedPageThemeToggleEnabled" type="checkbox" title="Converted page theme toggle enabled" />
-  <input id="convertedPageThemeToggleOledBlack" type="checkbox" disabled title="Converted page OLED black enabled" />
   <p id="convertedPageThemeHelp"></p>
 
   <details id="diagnosticsPanel" class="hidden"></details>
@@ -88,7 +87,6 @@
     const toolbarStyle = document.getElementById('toolbarStyle');
     const toolbarStyleHelp = document.getElementById('toolbarStyleHelp');
     const convertedThemeToggle = document.getElementById('convertedPageThemeToggleEnabled');
-    const convertedThemeOled = document.getElementById('convertedPageThemeToggleOledBlack');
     const convertedThemeHelp = document.getElementById('convertedPageThemeHelp');
     const supportedToolbarPresets = ['compact', 'office', 'ribbon'];
     const initialRuntime = getRuntime();
@@ -107,7 +105,7 @@
     if (!convertedThemeToggle.checked) pass('Converted-page theme toggle starts unchecked for explicit opt-in HTML enhancement');
     else fail('Converted-page theme toggle should start unchecked for explicit opt-in HTML enhancement');
 
-    if (initialCfg && initialCfg.ToolbarEnabled === false && initialCfg.ConvertedPageThemeToggleEnabled === false && initialCfg.ConvertedPageThemeToggleOledBlack === false) pass('Default HTML conversion config keeps toolbar and converted-page theme toggle OFF');
+    if (initialCfg && initialCfg.ToolbarEnabled === false && initialCfg.ConvertedPageThemeToggleEnabled === false) pass('Default HTML conversion config keeps toolbar and converted-page theme toggle OFF');
     else fail('Default HTML conversion config should keep toolbar and converted-page theme toggle OFF');
 
     toolbarEnabled.checked = true;
@@ -141,9 +139,6 @@
 
     if (!convertedThemeToggle.disabled) pass('Converted-page theme toggle stays available for HTML output while remaining opt-in');
     else fail('Converted-page theme toggle should stay available for HTML output while remaining opt-in');
-
-    if (convertedThemeOled.disabled) pass('OLED option disabled until converted-page theme toggle is enabled');
-    else fail('OLED option should be disabled until converted-page theme toggle is enabled');
 
     experimental.checked = true;
     experimental.dispatchEvent(new Event('change', { bubbles: true }));
@@ -194,12 +189,6 @@
 
     convertedThemeToggle.checked = true;
     convertedThemeToggle.dispatchEvent(new Event('change', { bubbles: true }));
-
-    if (!convertedThemeOled.disabled) pass('OLED option enabled when converted-page theme toggle is checked');
-    else fail('OLED option should be enabled when converted-page theme toggle is checked');
-
-    convertedThemeOled.checked = true;
-    convertedThemeOled.dispatchEvent(new Event('change', { bubbles: true }));
     const helpAfterToggle = convertedThemeHelp.textContent || '';
     if (helpBeforeToggle === helpAfterToggle) pass('Converted-page theme helper text remains stable when toggles are changed');
     else fail('Converted-page theme helper text should remain stable when toggles are changed');

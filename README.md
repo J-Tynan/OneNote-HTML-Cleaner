@@ -18,7 +18,7 @@ The section below is prepared for a side-by-side example using the same note in 
 | Before | After |
 | --- | --- |
 | [![Before screenshot showing the raw OneNote MHTML export with browser warnings and broken layout](<assets/release/thumbnails/before (thumbnail).png>)](<assets/release/before.png>) | [![After screenshot showing the cleaned OneNote HTML Cleaner output with corrected layout](<assets/release/thumbnails/after (thumbnail).png>)](<assets/release/after.png>) |
-| Default OneNote MHTML export opened directly in the browser. In testing, the raw export took more than 1 second to load, showed compatibility warnings, broke parts of the note layout, and could inhibit browser extensions from working as expected, including cases where page-level dark mode was unavailable. | Cleaned output from OneNote HTML Cleaner. The cleaned page restores a more readable layout, removes the browser warning path, behaves more like normal HTML in the browser, and can optionally expose dark-mode-friendly viewing through the converted-page theme toggle. |
+| Default OneNote MHTML export opened directly in the browser. In testing, the raw export took more than 1 second to load, showed compatibility warnings, broke parts of the note layout, and could inhibit browser extensions from working as expected, including cases where page-level dark mode was unavailable. | Cleaned output from OneNote HTML Cleaner. The cleaned page restores a more readable layout, removes the browser warning path, behaves more like normal HTML in the browser, and can optionally expose a Light/Black theme toggle in converted pages. |
 
 This comparison is intended to show a real exported note with a clean, reasonable before-and-after example rather than a dramatized marketing comparison.
 
@@ -145,7 +145,7 @@ For HTML batch exports, styles can be written to separate CSS files instead of s
 
 ### Converted-Page Theme Toggle
 
-For HTML exports, Advanced options can add an optional Light or Dark toggle to converted pages. The toggle stays off by default, and the OLED-black variant is available only after you explicitly enable the converted-page theme toggle.
+For HTML exports, Advanced options can add an optional Light or Black toggle to converted pages. The toggle stays off by default and only affects converted HTML output.
 
 ### Preserved Rich Content
 

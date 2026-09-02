@@ -68,7 +68,6 @@ export interface PipelineConfigInput {
   ExportFormat?: ExportFormat | string;
   MarkdownFlavor?: MarkdownFlavor | string;
   ConvertedPageThemeToggleEnabled?: BooleanConfigValue;
-  ConvertedPageThemeToggleOledBlack?: BooleanConfigValue;
   ToolbarEnabled?: BooleanConfigValue;
   ToolbarEditToggleEnabled?: BooleanConfigValue;
   ToolbarMetadataToggleEnabled?: BooleanConfigValue;
@@ -97,7 +96,6 @@ export interface OutputDecorationConfig extends ExportConfig {
   ToolbarBundleMode: ToolbarBundleMode;
   ToolbarStyle: ToolbarStyle;
   ConvertedPageThemeToggleEnabled: boolean;
-  ConvertedPageThemeToggleOledBlack: boolean;
 }
 
 type NormalizedPipelineConfigBase = Omit<PipelineConfigInput, keyof OutputDecorationConfig>;

@@ -46,8 +46,7 @@ async function main() {
     ExportFormat: 'MARKDOWN',
     MarkdownFlavor: 'GFM',
     ExportStylesMode: 'DEFERRED',
-    ConvertedPageThemeToggleEnabled: 'true',
-    ConvertedPageThemeToggleOledBlack: 'true'
+    ConvertedPageThemeToggleEnabled: 'true'
   });
 
   assert(normalizedProfile.Profile === 'onenote', 'Expected Profile to normalize to onenote');
@@ -66,7 +65,6 @@ async function main() {
   assert(normalizedProfile.MarkdownFlavor === 'gfm', 'Expected MarkdownFlavor to normalize to gfm');
   assert(normalizedProfile.ExportStylesMode === 'deferred', 'Expected ExportStylesMode to normalize to deferred');
   assert(normalizedProfile.ConvertedPageThemeToggleEnabled === true, 'Expected ConvertedPageThemeToggleEnabled true');
-  assert(normalizedProfile.ConvertedPageThemeToggleOledBlack === true, 'Expected ConvertedPageThemeToggleOledBlack true');
 
   const normalizedFallback = mod.normalizePipelineConfig({
     Profile: 'unknown-profile',
@@ -78,8 +76,7 @@ async function main() {
     // Unsupported or deferred formats should never escape the config boundary.
     ExportFormat: 'docx',
     MarkdownFlavor: 'not-a-flavor',
-    ConvertedPageThemeToggleEnabled: 'false',
-    ConvertedPageThemeToggleOledBlack: 'true'
+    ConvertedPageThemeToggleEnabled: 'false'
   });
 
   assert(normalizedFallback.Profile === 'onenote', 'Expected Profile to remain fixed to onenote');
@@ -94,7 +91,6 @@ async function main() {
   assert(normalizedFallback.MarkdownFlavor === 'obsidian', 'Expected invalid MarkdownFlavor to fallback to obsidian');
   assert(normalizedFallback.ExportStylesMode === 'tailwind', 'Expected invalid ExportStylesMode to fallback to tailwind');
   assert(normalizedFallback.ConvertedPageThemeToggleEnabled === false, 'Expected ConvertedPageThemeToggleEnabled false');
-  assert(normalizedFallback.ConvertedPageThemeToggleOledBlack === false, 'Expected ConvertedPageThemeToggleOledBlack false when toggle disabled');
 
   const normalizedExport = mod.normalizeExportConfig({
     ExperimentalExportEnabled: 'true',
@@ -120,8 +116,7 @@ async function main() {
     ExperimentalExportEnabled: 'true',
     ExportFormat: 'markdown',
     MarkdownFlavor: 'GFM',
-    ConvertedPageThemeToggleEnabled: 'true',
-    ConvertedPageThemeToggleOledBlack: 'true'
+    ConvertedPageThemeToggleEnabled: 'true'
   });
 
   assert(outputDecorationConfig.ToolbarEnabled === false, 'Expected buildOutputDecorationConfig to disable toolbar for non-HTML exports');
@@ -130,7 +125,6 @@ async function main() {
   assert(outputDecorationConfig.ExportFormat === 'markdown', 'Expected buildOutputDecorationConfig ExportFormat markdown');
   assert(outputDecorationConfig.MarkdownFlavor === 'gfm', 'Expected buildOutputDecorationConfig MarkdownFlavor gfm');
   assert(outputDecorationConfig.ConvertedPageThemeToggleEnabled === false, 'Expected buildOutputDecorationConfig to disable theme toggle for non-HTML exports');
-  assert(outputDecorationConfig.ConvertedPageThemeToggleOledBlack === false, 'Expected buildOutputDecorationConfig to disable OLED black for non-HTML exports');
 
   console.log('pipeline-config: PASS');
 }

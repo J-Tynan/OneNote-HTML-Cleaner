@@ -225,7 +225,6 @@ async function main() {
 
   const themeDisabled = mod.injectConvertedPageThemeToggle(baseHtml, {
     ConvertedPageThemeToggleEnabled: false,
-    ConvertedPageThemeToggleOledBlack: true,
     ExperimentalExportEnabled: false,
     ExportFormat: 'html'
   });
@@ -236,7 +235,6 @@ async function main() {
 
   const withThemeToggle = mod.injectConvertedPageThemeToggle(baseHtml, {
     ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: true,
     ExperimentalExportEnabled: false,
     ExportFormat: 'html'
   });
@@ -250,13 +248,12 @@ async function main() {
   if (!/id="onc-converted-theme-script"/i.test(withThemeToggle)) {
     fail('Expected converted-page theme toggle script to be injected');
   }
-  if (!/const oledBlack = true;/i.test(withThemeToggle)) {
-    fail('Expected OLED black flag to be embedded in injected script');
+  if (!/data-onc-converted-theme="black"/i.test(withThemeToggle) && !/nextTheme === 'black'/i.test(withThemeToggle)) {
+    fail('Expected injected converted-page theme script to target the black theme state');
   }
 
   const withThemeToggleAgain = mod.injectConvertedPageThemeToggle(withThemeToggle, {
     ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: true,
     ExperimentalExportEnabled: false,
     ExportFormat: 'html'
   });
@@ -290,7 +287,6 @@ async function main() {
 
   const deferredThemeToggle = mod.injectConvertedPageThemeToggle(deferredToolbar, {
     ConvertedPageThemeToggleEnabled: true,
-    ConvertedPageThemeToggleOledBlack: true,
     ExperimentalExportEnabled: false,
     ExportFormat: 'html',
     ExportStylesMode: 'deferred'
@@ -299,8 +295,8 @@ async function main() {
   if (!/id="onc-converted-theme-style"/i.test(deferredThemeToggle) || !/id="onc-converted-theme-script"/i.test(deferredThemeToggle)) {
     fail('Expected deferred theme injection to inline theme style and script bundles for standalone exports');
   }
-  if (!/id="onc-converted-theme-toggle"[^>]*\sdata-onc-oled-black="true"/i.test(deferredThemeToggle)) {
-    fail('Expected deferred theme toggle markup to retain OLED preference');
+  if (!/id="onc-converted-theme-toggle"[^>]*aria-label="Switch converted page to black theme"/i.test(deferredThemeToggle)) {
+    fail('Expected deferred theme toggle markup to advertise the black theme');
   }
   if (/id="onc-converted-theme-toggle"[^>]*\shidden/i.test(deferredThemeToggle)) {
     fail('Expected deferred theme toggle to stay visible in standalone exports');

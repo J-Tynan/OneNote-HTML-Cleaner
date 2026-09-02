@@ -21,7 +21,6 @@ async function main() {
     exportFormat: { value: 'markdown' },
     markdownFlavor: { value: 'gfm' },
     convertedPageThemeToggleEnabled: { checked: true },
-    convertedPageThemeToggleOledBlack: { checked: true },
     downloadZipButton: { disabled: false },
     successfulOutputs: new Map()
   };
@@ -43,7 +42,6 @@ async function main() {
   if (cfg.ExportFormat !== 'markdown') fail('Expected ExportFormat to be "markdown" when experimental is enabled');
   if (cfg.MarkdownFlavor !== 'gfm') fail('Expected MarkdownFlavor to be "gfm"');
   if (cfg.ConvertedPageThemeToggleEnabled !== false) fail('Expected ConvertedPageThemeToggleEnabled false for non-HTML export format');
-  if (cfg.ConvertedPageThemeToggleOledBlack !== false) fail('Expected ConvertedPageThemeToggleOledBlack false for non-HTML export format');
 
   ctx.experimentalExportEnabled.checked = false;
   const cfgFallback = helpers.getConversionConfig();
@@ -53,7 +51,6 @@ async function main() {
   if (cfgFallback.ToolbarEditToggleEnabled !== true) fail('Expected ToolbarEditToggleEnabled true when effective export format is HTML');
   if (cfgFallback.ToolbarMetadataToggleEnabled !== true) fail('Expected ToolbarMetadataToggleEnabled true when effective export format is HTML');
   if (cfgFallback.ConvertedPageThemeToggleEnabled !== true) fail('Expected ConvertedPageThemeToggleEnabled true when effective export format is HTML');
-  if (cfgFallback.ConvertedPageThemeToggleOledBlack !== true) fail('Expected ConvertedPageThemeToggleOledBlack true when toggle is enabled and effective export format is HTML');
 
   console.log('ui-downloads-config: OK');
 }
