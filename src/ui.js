@@ -857,9 +857,9 @@ function updateToolbarStyleControls(advancedOptionsState = buildAdvancedOptionsS
     if (!htmlSelected) {
       dom.toolbarStyleHelp.textContent = 'Toolbar presets are available only for HTML export.';
     } else if (!toolbarChecked) {
-      dom.toolbarStyleHelp.textContent = 'Enable toolbar injection to choose a toolbar chrome preset before conversion.';
+      dom.toolbarStyleHelp.textContent = 'Enable toolbar injection to choose a toolbar chrome preset before conversion. Inline toolbar assets increase each HTML file\'s size.';
     } else {
-      dom.toolbarStyleHelp.textContent = 'Compact keeps controls small for narrow screens. Office uses an Office 97-inspired chrome, and Ribbon uses a larger modern Office-style chrome.';
+      dom.toolbarStyleHelp.textContent = 'Compact keeps controls small for narrow screens. Office uses an Office 97-inspired chrome, and Ribbon uses a larger modern Office-style chrome. Inline toolbar assets increase each HTML file\'s size.';
     }
   }
 }
@@ -907,7 +907,7 @@ function updateConvertedPageThemeControls(advancedOptionsState = buildAdvancedOp
     if (!htmlSelected) {
       dom.convertedPageThemeHelp.textContent = 'Converted-page theme toggle is available only for HTML export.';
     } else {
-      dom.convertedPageThemeHelp.textContent = 'Enable a symbol-based Light or Black toggle in converted HTML pages.';
+      dom.convertedPageThemeHelp.textContent = 'Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file\'s size.';
     }
   }
 }
