@@ -300,7 +300,7 @@ First-pass tasks:
 5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
 6. Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
 7. Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance for release docs and UI copy.
-8. In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle.
+8. [x] In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle. (2026-10-03, completed in PR #12.)
 9. Create documentation and in-app instructions for how to activate the toolbar and theme toggle later by adding `onc-styles.css` after conversion.
 10. Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
 11. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
