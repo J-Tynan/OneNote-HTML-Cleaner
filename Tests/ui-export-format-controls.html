@@ -105,6 +105,9 @@
     if (!convertedThemeToggle.checked) pass('Converted-page theme toggle starts unchecked for explicit opt-in HTML enhancement');
     else fail('Converted-page theme toggle should start unchecked for explicit opt-in HTML enhancement');
 
+    if (/increases each html file's size/i.test(convertedThemeHelp.textContent || '')) pass('Converted-page theme helper text warns about the HTML file-size increase');
+    else fail('Expected converted-page theme helper text to warn about the HTML file-size increase');
+
     if (initialCfg && initialCfg.ToolbarEnabled === false && initialCfg.ConvertedPageThemeToggleEnabled === false) pass('Default HTML conversion config keeps toolbar and converted-page theme toggle OFF');
     else fail('Default HTML conversion config should keep toolbar and converted-page theme toggle OFF');
 
@@ -113,6 +116,9 @@
 
     if (!toolbarStyle.disabled && !toolbarStyleContainer.classList.contains('hidden')) pass('Toolbar style shown/enabled when toolbar injection is ON');
     else fail('Toolbar style should be shown/enabled when toolbar injection is ON');
+
+    if (/increases each html file's size/i.test(toolbarStyleHelp.textContent || '')) pass('Toolbar helper text warns about the HTML file-size increase');
+    else fail('Expected toolbar helper text to warn about the HTML file-size increase');
 
     let presetsRoundTripOk = true;
     for (const preset of supportedToolbarPresets) {
