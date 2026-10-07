@@ -147,13 +147,13 @@
 
             <div id="statusControls" class="mt-4 space-y-4">
 
-              <!-- Conversion tweaks -->
-              <section class="option-panel" aria-labelledby="conversionTweaksLabel">
-                <h3 id="conversionTweaksLabel" class="text-sm font-medium">
-                  Conversion tweaks
-                </h3>
+              <div class="advanced-options-groups">
+                <section class="advanced-options-group" aria-labelledby="conversionTweaksLabel">
+                  <h3 id="conversionTweaksLabel" class="advanced-options-group__heading text-sm font-medium">
+                    Conversion
+                  </h3>
 
-                <div class="space-y-3">
+                  <div class="advanced-options-group__controls space-y-3">
 
                   <label class="checkbox-option" for="autoConvertEnabled">
                     <input
@@ -169,6 +169,15 @@
                     </span>
                   </label>
 
+                  </div>
+                </section>
+
+                <section class="advanced-options-group" aria-labelledby="exportOptionsLabel">
+                  <h3 id="exportOptionsLabel" class="advanced-options-group__heading text-sm font-medium">
+                    Export
+                  </h3>
+
+                  <div class="advanced-options-group__controls space-y-3">
                   <label class="checkbox-option" for="externalizeCssEnabled">
                     <input
                       id="externalizeCssEnabled"
@@ -239,6 +248,15 @@
                     </select>
                   </div>
 
+                  </div>
+                </section>
+
+                <section class="advanced-options-group" aria-labelledby="pageEnhancementsLabel">
+                  <h3 id="pageEnhancementsLabel" class="advanced-options-group__heading text-sm font-medium">
+                    Converted-page enhancements
+                  </h3>
+
+                  <div class="advanced-options-group__controls space-y-3">
                   <label class="checkbox-option" for="convertedPageThemeToggleEnabled">
                     <input
                       id="convertedPageThemeToggleEnabled"
@@ -287,8 +305,9 @@
                     </p>
                   </div>
 
-                </div>
-              </section>
+                  </div>
+                </section>
+              </div>
 
             </div>
           </details>

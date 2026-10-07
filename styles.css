@@ -377,17 +377,29 @@ summary:focus-visible {
     background-color: var(--bg-soft);
   }
 
-  /* Option group panels */
-  .option-panel {
-    border: 1px solid var(--border-muted);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
-    background-color: var(--bg-card);
+  .advanced-options-groups {
+    display: grid;
+    gap: 1rem;
   }
 
-  .option-panel > * + * {
-    margin-top: 0.75rem;
+  .advanced-options-group {
+    display: grid;
+    gap: 0.625rem;
+  }
+
+  .advanced-options-group + .advanced-options-group {
+    border-top: 1px solid var(--border-muted);
+    padding-top: 1rem;
+  }
+
+  .advanced-options-group__heading {
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    letter-spacing: 0.01em;
+  }
+
+  .advanced-options-group__controls {
+    min-width: 0;
   }
 
   .option-subgroup {
