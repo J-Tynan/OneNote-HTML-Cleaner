@@ -15,16 +15,17 @@
   <!-- Header -->
   <header class="home-header border-b">
     <div class="page-shell mx-auto max-w-6xl px-4 py-3 md:px-8">
-      <div class="home-header__inner flex flex-wrap items-start justify-between gap-4 md:flex-nowrap md:items-center">
+      <div class="home-header__inner flex flex-wrap items-start justify-between gap-4 md:items-center">
         <div class="home-header__identity max-w-3xl">
           <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
-          <p class="mt-2 text-sm text-help">
+          <p class="mt-1 text-sm text-help">
             Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.
           </p>
         </div>
 
-        <!-- Theme toggle -->
         <div class="home-header__actions flex items-center gap-3">
+          <a class="btn-ghost header-link" href="README.md">Documentation</a>
+
           <!-- Help button: opens small usage popup -->
           <button
             id="helpButton"
@@ -34,8 +35,8 @@
             aria-controls="helpModal"
             aria-expanded="false"
             title="Help">
-            ?
-            <span class="sr-only">Help: show usage and GitHub link</span>
+            Help
+            <span class="sr-only">: show usage and GitHub link</span>
           </button>
 
           <button
@@ -45,6 +46,7 @@
             aria-pressed="false"
             aria-label="Toggle color theme">
             <span id="themeToggleIcon" aria-hidden="true">🔆</span>
+            <span class="header-theme-label">Theme</span>
             <span class="sr-only">Toggle theme</span>
           </button>
 
@@ -58,16 +60,16 @@
   <main class="home-main">
     <div class="page-shell mx-auto w-full max-w-6xl px-4 py-4 md:px-8">
 
-      <div class="home-layout grid gap-6 md:gap-8 lg:grid-cols-12">
+      <div class="home-layout grid gap-6 md:gap-8">
 
         <!-- LEFT COLUMN -->
-        <div class="home-layout__primary space-y-6 lg:col-span-7">
+        <div class="home-layout__primary space-y-6">
 
-          <!-- Start card -->
+          <!-- Import -->
           <section class="home-start-card card-panel import-card space-y-5" aria-labelledby="importHeading">
           <div class="space-y-3">
             <div>
-              <h2 id="importHeading" class="text-lg font-medium">Convert exported OneNote pages</h2>
+              <h2 id="importHeading" class="text-lg font-medium">Add OneNote files</h2>
               <p class="mt-1 max-w-2xl text-sm leading-6 text-secondary">
                 Add one or more exported MHT or MHTML files to clean and export locally.
               </p>
@@ -83,66 +85,53 @@
               </p>
             </div>
 
-            <div class="homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch">
+            <div class="homepage-action-row">
               <button
                 id="importButton"
                 type="button"
                 class="btn-primary homepage-import-button homepage-primary-button">
                 Browse files
               </button>
-
-              <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
-              <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
-                <button
-                  id="convertButton"
-                  type="button"
-                  class="btn-secondary homepage-convert-button"
-                  aria-label="Convert queued files"
-                  disabled>
-                  Convert queued files
-                </button>
-                <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
-                  Auto-convert is enabled — manual Convert is disabled
-                </div>
-              </div>
             </div>
           </div>
-          </section>
 
-          <!-- Dropzone -->
-          <section id="controls" class="home-dropzone-card card-panel" aria-labelledby="dropzoneHeading">
           <div
-            id="dropzone"
-            class="surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
-            role="region"
-            aria-label="Add files to conversion queue"
-            tabindex="0">
+            id="controls"
+            class="home-dropzone-card"
+            aria-labelledby="dropzoneHeading">
+            <div
+              id="dropzone"
+              class="surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
+              role="region"
+              aria-label="Add files to conversion queue"
+              tabindex="0">
 
-            <div class="mx-auto max-w-sm text-center space-y-3">
-              <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
+              <div class="mx-auto max-w-sm text-center space-y-3">
+                <h3 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h3>
 
-              <p class="text-sm text-secondary">
-                Drop exported OneNote pages here to start conversion.
-              </p>
+                <p class="text-sm text-secondary">
+                  Drop exported OneNote pages here to start conversion.
+                </p>
 
-              <p class="text-xs text-muted">
-                Local browser processing only.
-              </p>
+                <p class="text-xs text-muted">
+                  Local browser processing only.
+                </p>
+              </div>
+
+              <input
+                id="fileInput"
+                class="sr-only"
+                type="file"
+                multiple
+                aria-label="Select files to import"
+                accept=".mht,.mhtml" />
             </div>
-
-            <input
-              id="fileInput"
-              class="sr-only"
-              type="file"
-              multiple
-              aria-label="Select files to import"
-              accept=".mht,.mhtml" />
           </div>
           </section>
 
           <!-- Advanced Options -->
           <section class="home-advanced-card card-panel card-panel--soft space-y-4">
-          <details id="advancedOptions" class="card-section">
+          <details id="advancedOptions">
             <summary class="advanced-options-summary text-sm font-medium cursor-pointer">
               <span>Advanced options</span>
               <span class="advanced-options-summary__meta text-xs text-muted">
@@ -158,13 +147,7 @@
 
             <div id="statusControls" class="mt-4 space-y-4">
 
-              <!-- Conversion tweaks -->
-              <section class="option-panel" aria-labelledby="conversionTweaksLabel">
-                <h3 id="conversionTweaksLabel" class="text-sm font-medium">
-                  Conversion tweaks
-                </h3>
-
-                <div class="space-y-3">
+              <div class="space-y-3">
 
                   <label class="checkbox-option" for="autoConvertEnabled">
                     <input
@@ -298,17 +281,34 @@
                     </p>
                   </div>
 
-                </div>
-              </section>
+              </div>
 
             </div>
           </details>
           </section>
 
+          <section class="queue-action-strip" aria-label="Queue actions">
+            <p class="queue-action-strip__status text-xs text-muted">Convert queued files when automatic conversion is disabled.</p>
+            <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
+            <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
+              <button
+                id="convertButton"
+                type="button"
+                class="btn-primary homepage-convert-button"
+                aria-label="Convert queued files"
+                disabled>
+                Convert queued files
+              </button>
+              <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
+                Auto-convert is enabled — manual Convert is disabled
+              </div>
+            </div>
+          </section>
+
         </div>
 
         <!-- RIGHT COLUMN -->
-        <aside class="home-results-column space-y-6 lg:col-span-5">
+        <aside class="home-results-column">
 
           <section
           id="statusPanel"
@@ -329,6 +329,20 @@
             Added files will appear here with progress, status, and downloads.
           </p>
 
+          <div id="fileList" class="space-y-2"></div>
+
+          <details
+            id="diagnosticsPanel"
+            class="surface-soft border-default hidden rounded-lg border p-3">
+            <summary class="cursor-pointer text-sm font-medium">
+              Diagnostics and conversion details
+              <span id="diagnosticsCount" class="text-xs text-muted">(0)</span>
+            </summary>
+            <ul
+              id="diagnosticsList"
+              class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
+          </details>
+
           <div class="results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start">
             <button
               id="clearFilesButton"
@@ -346,20 +360,6 @@
             </button>
           </div>
 
-          <div id="fileList" class="space-y-2"></div>
-
-          <details
-            id="diagnosticsPanel"
-            class="surface-soft border-default hidden rounded-lg border p-3">
-            <summary class="cursor-pointer text-sm font-medium">
-              Diagnostics and conversion details
-              <span id="diagnosticsCount" class="text-xs text-muted">(0)</span>
-            </summary>
-            <ul
-              id="diagnosticsList"
-              class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
-          </details>
-
           </section>
 
         </aside>
@@ -370,10 +370,13 @@
 
   <footer class="home-footer">
     <div class="page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
-      <p>
-        Offline‑capable local processing. Files stay on your device.
-        <a href="README.md" class="underline">Documentation</a>
-      </p>
+      <div class="home-footer__content">
+        <p>Processing happens locally in your browser. Files stay on your device.</p>
+        <div class="home-footer__links">
+          <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner/issues" target="_blank" rel="noopener noreferrer">Report an issue</a>
+        </div>
+      </div>
     </div>
   </footer>
 

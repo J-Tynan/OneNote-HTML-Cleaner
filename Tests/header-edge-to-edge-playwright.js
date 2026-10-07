@@ -39,19 +39,25 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
   }
 }
 
-async function assertPrimaryColumnOrder(page, viewportLabel) {
+async function assertApprovedShell(page, viewportLabel, expectsColumns) {
   const result = await page.evaluate(() => {
+    const importCard = document.querySelector('.home-start-card');
     const dropzone = document.getElementById('controls');
     const advanced = document.getElementById('advancedOptions');
     const importButton = document.getElementById('importButton');
-    if (!dropzone || !advanced || !importButton) {
+    const convertButton = document.getElementById('convertButton');
+    const results = document.getElementById('statusPanel');
+    const fileList = document.getElementById('fileList');
+    const resultsActions = document.querySelector('.results-action-row');
+    if (!importCard || !dropzone || !advanced || !importButton || !convertButton || !results || !fileList || !resultsActions) {
       return { ok: false, reason: 'required homepage elements missing' };
     }
 
     const snapshot = () => ({
       importTop: importButton.getBoundingClientRect().top,
-      dropzoneTop: dropzone.getBoundingClientRect().top,
-      advancedTop: advanced.getBoundingClientRect().top
+      advancedTop: advanced.getBoundingClientRect().top,
+      convertTop: convertButton.getBoundingClientRect().top,
+      resultsTop: results.getBoundingClientRect().top
     });
 
     const before = snapshot();
@@ -61,15 +67,34 @@ async function assertPrimaryColumnOrder(page, viewportLabel) {
     return {
       before,
       after,
-      ok: before.importTop < before.dropzoneTop
-        && before.dropzoneTop < before.advancedTop
-        && after.importTop < after.dropzoneTop
-        && after.dropzoneTop < after.advancedTop
+      dropzoneInsideImport: importCard.contains(dropzone),
+      actionsAfterList: Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING),
+      ok: importCard.contains(dropzone)
+        && Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING)
+        && before.importTop < before.advancedTop
+        && before.advancedTop < before.convertTop
+        && after.importTop < after.advancedTop
+        && after.advancedTop < after.convertTop
     };
   });
 
+  if (expectsColumns) {
+    const alignment = await page.evaluate(() => {
+      const importCard = document.querySelector('.home-start-card');
+      const results = document.getElementById('statusPanel');
+      if (!importCard || !results) return { ok: false, reason: 'column panels missing' };
+      return {
+        importTop: importCard.getBoundingClientRect().top,
+        resultsTop: results.getBoundingClientRect().top,
+        ok: Math.abs(importCard.getBoundingClientRect().top - results.getBoundingClientRect().top) <= 1
+      };
+    });
+    result.columnAlignment = alignment;
+    result.ok = result.ok && alignment.ok;
+  }
+
   if (!result.ok) {
-    throw new Error(`${viewportLabel}: unexpected homepage order. details=${JSON.stringify(result)}`);
+    throw new Error(`${viewportLabel}: unexpected approved shell. details=${JSON.stringify(result)}`);
   }
 }
 
@@ -85,21 +110,21 @@ async function assertPrimaryColumnOrder(page, viewportLabel) {
     const desktopPage = await desktopContext.newPage();
     await desktopPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(desktopPage, 'desktop');
-    await assertPrimaryColumnOrder(desktopPage, 'desktop');
+    await assertApprovedShell(desktopPage, 'desktop', true);
     await desktopContext.close();
 
     const tabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
     const tabletPage = await tabletContext.newPage();
     await tabletPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(tabletPage, 'tablet-layout-b');
-    await assertPrimaryColumnOrder(tabletPage, 'tablet-layout-b');
+    await assertApprovedShell(tabletPage, 'tablet-layout-b', false);
     await tabletContext.close();
 
     const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const mobilePage = await mobileContext.newPage();
     await mobilePage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(mobilePage, 'mobile');
-    await assertPrimaryColumnOrder(mobilePage, 'mobile');
+    await assertApprovedShell(mobilePage, 'mobile', false);
     await mobileContext.close();
 
     console.log('header-edge-to-edge-playwright: OK');
