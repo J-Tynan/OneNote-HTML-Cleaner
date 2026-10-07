@@ -81,21 +81,6 @@
                   class="btn-primary homepage-import-button homepage-primary-button">
                   Browse files
                 </button>
-
-                <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
-                <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
-                  <button
-                    id="convertButton"
-                    type="button"
-                    class="btn-secondary homepage-convert-button"
-                    aria-label="Convert queued files"
-                    disabled>
-                    Convert queued files
-                  </button>
-                  <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
-                    Auto-convert is enabled — manual Convert is disabled
-                  </div>
-                </div>
               </div>
 
               <div class="import-card__privacy space-y-1 text-xs text-muted">
@@ -107,25 +92,27 @@
               </div>
             </div>
 
-            <div
-              id="dropzone"
-              class="import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
-              role="region"
-              aria-labelledby="dropzoneHeading"
-              tabindex="0">
-              <div class="mx-auto max-w-sm text-center space-y-2">
-                <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
-                <p class="text-sm text-secondary">Drop exported OneNote pages here to start conversion.</p>
-                <p class="text-xs text-muted">Local browser processing only.</p>
-              </div>
+            <div id="controls" class="import-card__dropzone-shell">
+              <div
+                id="dropzone"
+                class="import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
+                role="region"
+                aria-labelledby="dropzoneHeading"
+                tabindex="0">
+                <div class="mx-auto max-w-sm text-center space-y-2">
+                  <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
+                  <p class="text-sm text-secondary">Drop exported OneNote pages here to start conversion.</p>
+                  <p class="text-xs text-muted">Local browser processing only.</p>
+                </div>
 
-              <input
-                id="fileInput"
-                class="sr-only"
-                type="file"
-                multiple
-                aria-label="Select files to import"
-                accept=".mht,.mhtml" />
+                <input
+                  id="fileInput"
+                  class="sr-only"
+                  type="file"
+                  multiple
+                  aria-label="Select files to import"
+                  accept=".mht,.mhtml" />
+              </div>
             </div>
           </section>
 
@@ -312,6 +299,22 @@
             </div>
           </details>
           </section>
+
+          <div class="convert-action-row">
+            <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
+              <button
+                id="convertButton"
+                type="button"
+                class="btn-secondary homepage-convert-button"
+                aria-label="Convert queued files"
+                disabled>
+                Convert queued files
+              </button>
+              <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
+                Auto-convert is enabled — manual Convert is disabled
+              </div>
+            </div>
+          </div>
 
         </div>
 
