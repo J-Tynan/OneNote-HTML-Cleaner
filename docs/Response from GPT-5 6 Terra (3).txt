@@ -1,0 +1,247 @@
+## 1. Diagnosis of redesign attempt 1
+
+**Planning problems**
+
+- The plan treated markup preservation as a higher priority than the approved screenshot’s information architecture.
+- It split visual work into eight narrow phases before first proving the approved shell. That allowed each phase to improve styling while retaining the old page model.
+- Existing behavioral tests were used as a proxy for visual acceptance. They verify IDs, state, download behavior, and layout stability, but do not detect a card-heavy or vertically inefficient desktop layout.
+
+**Implementation/decomposition problems**
+
+- The current main branch still uses separate import, dropzone, and Advanced Options surfaces in a $7/5$ desktop grid. The approved reference needs one compact import card, a compact disclosure beneath it, and approximately equal desktop columns.
+- The prior branch chain is linear (`New-UI-Phase-1` through `New-UI-Phase-8`) and provides rollback points, but its output should not be merged as a redesign base.
+- `renderFileList()` retained a large rounded card for every entry. CSS refinement cannot make that convincingly resemble the approved table/tree-like result surface.
+
+**Existing-code constraints**
+
+- The constraints were real, but mostly presentation-safe: `ui.js` binds to IDs and delegates row actions through `data-remove-id` and `data-download-id`. That permits substantial HTML restructuring.
+- One existing test actively preserves the failed structure: `header-edge-to-edge-playwright.js` requires import, separate dropzone, then Advanced Options. It must be deliberately updated in Milestone 1.
+
+**CSS/layout problems**
+
+- `lg:grid-cols-12` with `lg:col-span-7` / `lg:col-span-5` constrains the Results surface to the narrower column, causing filename pressure.
+- `.file-item` is a padded, rounded, bordered card; `.file-item__actions` stacks actions vertically.
+- `.option-panel`, `.option-subgroup`, `space-y-*`, descriptions under every option, and nested borders turn one disclosure into several visual subcards.
+- The detached `#controls` dropzone consumes another full card-height block.
+- Large primary button sizing and broad vertical gaps amplify the left-column height.
+
+## 2. Structural gap analysis
+
+**Current main / failed implementation**
+
+- Header has title, description, Help icon, and theme control, but lacks the compact Documentation/Help action composition of the approved design.
+- Left column is import card, separate dropzone card, then a tall Advanced Options card.
+- Convert is colocated with Browse instead of operating as a compact queue action.
+- Results actions precede the list, while the approved reference places bottom actions after the working surface.
+- Results use individual cards rather than shared column headers and compact rows.
+- Footer has a local-processing note and Documentation only.
+
+**Approved screenshot**
+
+- Uses a compact, balanced workbench: approximately equal columns, dense cards, import/drop integrated, one compact options disclosure, thin queue action area, and a row-based Results surface.
+- Its hierarchy is visual only. Native notebook trees, counts, filters, selection, and bulk selection actions must not be copied.
+
+**Required structural changes**
+
+- Move `#dropzone` and `#fileInput` inside the import card while retaining `#controls` as a stable wrapper if useful.
+- Move the existing `#convertButton` wrapper to a compact queue-action strip below Advanced Options.
+- Replace the 7/5 grid with equal desktop tracks.
+- Move Results actions below `#fileList`.
+- Add static Results column headers in `index.html`; retain dynamic rows inside `#fileList`.
+- Flatten Advanced Options into one disclosure with compact option rows and only conditionally visible dependent controls.
+
+## 3. Behavioural contracts that must survive
+
+Preserve these live hooks from `index.html` and `ui.js`:
+
+- Import and drag/drop: `#importButton`, `#fileInput`, `#dropzone`, keyboard focusability, paste intake, drag-state styling.
+- Conversion: `#convertButton`, `.convert-button-wrapper`, `#convertTooltip`, `#autoConvertEnabled`, auto/manual conversion semantics, queue status lifecycle.
+- Results: `#statusPanel`, `#appStateBadge[data-state]`, `#statusSummary`, `#fileList`, `.file-item[data-id][data-status]`, `.status-pill--*`.
+- Per-entry actions: `[data-remove-id]`, `[data-download-id]`, `.file-item__actions`; preserve delegated click handling.
+- Downloads: `#downloadZip`, external-CSS single-download restriction, ZIP behavior.
+- Persistence: queue draft restore, current settings persistence, status restoration.
+- Advanced settings: `#externalizeCssEnabled`, `#externalizeCssMode`, `#experimentalExportEnabled`, `#exportFormat`, `#markdownFlavor`, `#markdownFlavorContainer`, `#convertedPageThemeToggleEnabled`, `#toolbarEnabled`, `#toolbarStyle`, `#toolbarStyleContainer`.
+- Diagnostics/help/theme: `#diagnosticsPanel`, `#diagnosticsList`, `#diagnosticsCount`, `#helpButton`, `#helpModal`, `#helpCloseButton`, `#themeToggle`.
+- Status-summary minimum-height preservation, which protects against action-row movement.
+
+## 4. Markup changes that are now explicitly permitted
+
+- Recompose the header into identity, compact version treatment only if sourced from existing metadata, Documentation, Help, and theme controls.
+- Reparent the dropzone into the import card.
+- Reparent the manual-convert wrapper into a compact queue strip.
+- Replace nested Advanced Option panels/subgroups with compact rows. Keep each actual input and its required help/container IDs.
+- Reorder Results internals to heading/summary, column header plus list, diagnostics, then bottom actions.
+- Replace `renderFileList()` card markup with grid-row markup while retaining its behavioral classes, attributes, and data-action hooks.
+- Update tests coupled to obsolete markup: especially `header-edge-to-edge-playwright.js` and `unsupported-file-playwright.js`.
+
+## 5. Milestone 1 plan — Structural shell
+
+**Goal:** Make the running page recognizably share the approved screenshot’s skeleton before polish.
+
+**Files:** `index.html`, `styles.css`, `header-edge-to-edge-playwright.js`, narrowly relevant layout tests.
+
+**Exact structural changes**
+
+- Build a compact header with actual Documentation, Help, and theme actions.
+- Use equal desktop columns.
+- Put Browse and drag/drop in a single import card.
+- Keep one collapsed `#advancedOptions` disclosure, flatten option presentation, and place its dependent select/help content directly beneath relevant controls without nested cards.
+- Relocate the existing manual Convert control to a thin queue action/status strip.
+- Reorder Results actions to the bottom.
+- Expand footer with real GitHub and issue links plus local-processing reassurance.
+
+**Behaviour preserved:** all contracts in section 3; no `ui.js` architecture changes.
+
+**Non-goals:** no row redesign, native hierarchy, filters, selection, fake counts, or visual pixel matching.
+
+**Tests:** `npm run typecheck`, `npm run test:header-edge`, `npm run test:layout-shift`, `npm run test:theme`, plus `clear-files-playwright.js` and `auto-convert-manual-playwright.js`.
+
+**Manual tests:** Browse, drag/drop, expanded/collapsed options, auto/manual conversion, Help, theme persistence, empty Results state.
+
+**Visual acceptance:** at desktop width, import/drop is one compact card; Advanced Options is one compact card; Results begins beside it with bottom actions; the screen no longer reads as three tall left-column cards.
+
+**STOP/GO:** stop after screenshot, functional smoke test, and diff review. Proceed only on explicit GO.
+
+**Risk:** obsolete source-order assertion and action-row stability. Update the assertion to the approved shell, retain `#statusSummary` height behavior.
+
+**Recommended model:** GPT-5.6 Terra, default/adaptive, standard context.
+
+**Commit boundary:** `ui-attempt-2/m1-shell`; commit only after GO.
+
+## 6. Milestone 2 plan — Results architecture
+
+**Goal:** Replace card-per-file output with dense, real-state rows.
+
+**Files:** `ui.js`, `index.html`, `styles.css`, `unsupported-file-playwright.js`, focused queue/download tests.
+
+**Exact structural changes**
+
+- Add a static desktop column header for Name, Type, Status, Size, and Actions.
+- Make `#fileList` render compact `.file-item` CSS-grid rows.
+- Give Name the flexible track; use stable compact tracks for type, status, size, and actions.
+- Derive Type from real source kind/extension, show real formatted size, and use current status/tone state.
+- Preserve full filename access through an accessible name/title while visually truncating long names.
+- Render error/unsupported/download-restriction messages as a compact row detail spanning the data region only when present.
+- Retain `.file-item`, `data-id`, `data-status`, `.status-pill--${tone}`, `.file-item__actions`, `[data-remove-id]`, and `[data-download-id]`.
+
+**Behaviour preserved:** removal, downloads, ZIP export, status/error/unsupported state, persistence, keyboard access, conversion semantics.
+
+**Non-goals:** native indentation, notebook/page hierarchy, selection controls, fake rows, fake metadata.
+
+**Tests:** Milestone 1 suite plus `convert-button-smoke-playwright.js`, `unsupported-file-playwright.js`, `queue-reload-restore-playwright.js`, `queue-focus-preservation-playwright.js`, and `npm run test:ui-download-smoke`.
+
+**Manual tests:** long MHT/MHTML names, queued/success/error/unsupported rows, Remove, per-file Download, ZIP, restored queue.
+
+**Visual acceptance:** no large rounded file cards; filenames remain mostly one line; results visibly read as rows with shared columns.
+
+**STOP/GO:** stop for screenshot, behavioral check, and diff review before styling work.
+
+**Risk:** tests that query old nested row paragraphs. Change them to assert semantic row text/status rather than specific incidental tags.
+
+**Recommended model:** GPT-5.6 Terra, default/adaptive, standard context.
+
+**Commit boundary:** `ui-attempt-2/m2-results`, branched from approved Milestone 1.
+
+## 7. Milestone 3 plan — Visual convergence
+
+1. **Shell density and proportions**  
+   Files: `styles.css`.  
+   Acceptance: desktop columns, card heights, and whitespace visually approach the approved reference.
+
+2. **Header, import card, and footer**  
+   Files: `styles.css`, possibly `index.html`.  
+   Acceptance: compact header/action composition and import-card height match the reference without changing behavior.
+
+3. **Advanced Options density**  
+   Files: `styles.css`, possibly `index.html`.  
+   Acceptance: all settings remain usable when expanded, but no nested-card or excessive indentation appearance remains.
+
+4. **Results row geometry**  
+   Files: `styles.css`.  
+   Acceptance: column alignment, row height, truncation, borders, and action placement resemble the approved surface.
+
+5. **Surface finishing**  
+   Files: `styles.css`.  
+   Acceptance: typography, borders, radii, shadows, colors, and button heights converge without broad restyling.
+
+Each is one Luna chat, one screenshot comparison, one observable difference, and one focused regression check.
+
+## 8. Milestone 4 plan — Responsive/accessibility/regression
+
+Validate desktop, laptop, tablet, mobile, browser zoom, long filenames, light/dark theme, focus order, disclosure operation, contrast, drag/drop, picker import, auto/manual conversion, removal, single download, ZIP download, persistence, diagnostics, and MHT/MHTML behavior.
+
+Run `npm run typecheck`, `npm run test:theme`, `npm run test:playwright:a11y`, `npm run test:header-edge`, `npm run test:layout-shift`, relevant queue/download tests, and the established MHT/MHTML regression suite. Restrict fixes to observed QA defects.
+
+## 9. Branch and rollback strategy
+
+- Create `ui-attempt-2/m1-shell` from current `main`.
+- After explicit approval, commit Milestone 1 and retain that commit as the rollback point.
+- Create `ui-attempt-2/m2-results` from the approved Milestone 1 commit.
+- Use a short-lived branch per approved Luna adjustment, always based on the latest approved milestone.
+- Do not merge rejected work. Keep it intact for screenshot/diff comparison.
+- Merge to `main` only after Milestone 4 approval.
+
+## 10. Model-routing summary
+
+| Milestone | Model | Reason |
+|---|---|---|
+| 1 | GPT-5.6 Terra | Coordinated structural HTML/CSS/test update |
+| 2 | GPT-5.6 Terra | Renderer markup plus behavioral regression constraints |
+| 3 | GPT-5.6 Luna | One small screenshot-led visual correction per chat |
+| 4 | GPT-5.6 Terra | Cross-cutting responsive, accessibility, and regression QA |
+
+Use default/adaptive thinking and standard context throughout. Do not use Sol or subagents unless a concrete repository problem requires it.
+
+## 11. Explicit deferred functionality
+
+This redesign does **not** implement native hierarchy, native conversion, Add from folder, selection checkboxes, Download selected, search/filter, fake screenshot data, or architectural decomposition of `ui.js`.
+
+## 12. Exact Milestone 1 implementation brief
+
+Implement Milestone 1 only on a new branch from current `main`. Do not redesign conversion logic or refactor `ui.js`.
+
+Restructure `index.html` and `styles.css` so the desktop page matches the approved screenshot’s information architecture: compact header with real Documentation, Help, and theme controls; equal left/right workbench columns; one compact import card containing Browse and the existing drag/drop surface; one compact `#advancedOptions` disclosure; the existing manual Convert wrapper in a thin queue action strip below options; Results with heading/summary/list/diagnostics and actions at the bottom; concise footer with local-processing, GitHub, and issue links.
+
+Preserve every existing functional ID, the convert tooltip wrapper, all option inputs and conditional containers, drag/drop behavior, theme behavior, diagnostics, downloads, queue persistence, and accessibility. Flatten Advanced Options presentation: no nested option cards, section headings, or decorative indentation unless required for a dependent control. Update the obsolete order assertion in `header-edge-to-edge-playwright.js` to assert the new approved shell rather than separate-dropzone ordering.
+
+Run the focused Milestone 1 checks, then stop. Do not begin Results-row work or visual polishing until the human screenshot and functional review explicitly approve the structural shell.
+
+## Milestone 1 acceptance and verification
+
+Non-goals:
+- no Results-row redesign;
+- no native hierarchy;
+- no filters;
+- no selection;
+- no fake counts/data;
+- no pixel-perfect visual polishing.
+
+Run:
+- `npm run typecheck`
+- `npm run test:header-edge`
+- `npm run test:layout-shift`
+- `npm run test:theme`
+- `clear-files-playwright.js`
+- `auto-convert-manual-playwright.js`
+
+Manually verify:
+- Browse
+- drag/drop
+- Advanced Options expanded/collapsed
+- automatic/manual conversion
+- Help
+- theme persistence
+- empty Results state
+
+Visual acceptance criterion:
+
+At desktop width:
+- import and drag/drop form one compact card;
+- Advanced Options forms one compact card;
+- Results begins alongside the left column;
+- Results actions are at the bottom;
+- the application no longer reads visually as three tall left-column cards.
+
+STOP after implementation, tests and screenshot review.
+
+Do not proceed to Milestone 2 until I explicitly give GO.
