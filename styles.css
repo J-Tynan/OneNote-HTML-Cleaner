@@ -222,8 +222,6 @@ summary::-webkit-details-marker {
   margin-top: 0.5rem;
 }
 
-.home-main {
-  padding-bottom: 0.1rem;
 button:focus-visible,
 a:focus-visible,
 select:focus-visible,
@@ -233,9 +231,8 @@ summary:focus-visible {
   outline: 2px solid var(--focus-color);
   outline-offset: 2px;
 }
-}
 
-  box-shadow: 0 0 0 1px var(--focus-color), 0 0 0 5px var(--btn-focus-ring);
+.home-main {
   padding-bottom: 0.1rem;
 }
 
