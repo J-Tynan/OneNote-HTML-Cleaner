@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-07T11:19:06.664Z",
-  "url": "http://127.0.0.1:62365/",
+  "timestamp": "2026-10-07T11:26:45.596Z",
+  "url": "http://127.0.0.1:65009/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1012,7 +1012,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -1038,7 +1038,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1064,33 +1064,7 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1199,7 +1173,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1217,7 +1191,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1343,7 +1317,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -1361,7 +1335,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1379,25 +1353,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1487,7 +1443,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1505,7 +1461,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1753,7 +1709,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -1771,7 +1727,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1789,25 +1745,7 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1897,7 +1835,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1915,7 +1853,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -1965,7 +1903,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1997,7 +1935,7 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2031,7 +1969,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -2209,7 +2147,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -2241,7 +2179,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -2273,39 +2211,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2527,7 +2433,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -2545,7 +2451,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -2563,25 +2469,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2684,7 +2572,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -2807,7 +2695,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                  Browse files\n                </button>",
           "target": [
             "#importButton"
           ]
@@ -2832,7 +2720,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -2908,7 +2796,7 @@
                   ]
                 },
                 {
-                  "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+                  "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
                   "target": [
                     "#importHeading"
                   ]
@@ -3068,7 +2956,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                  Browse files\n                </button>",
           "target": [
             "#importButton"
           ]
@@ -3118,7 +3006,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
+          "html": "<p class=\"text-sm text-secondary\">Drop exported OneNote pages here to start conversion.</p>",
           "target": [
             ".max-w-sm > .text-secondary.text-sm"
           ]
@@ -3143,7 +3031,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                Local browser processing only.\n              </p>",
+          "html": "<p class=\"text-xs text-muted\">Local browser processing only.</p>",
           "target": [
             ".max-w-sm > .text-muted.text-xs"
           ]
@@ -3388,7 +3276,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -3406,7 +3294,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -3725,7 +3613,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -3831,13 +3719,13 @@
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > h2:nth-child(1)"
                     ],
                     "level": 2
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(2) > div > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div:nth-child(1) > h2:nth-child(1)"
                     ],
                     "level": 2
                   },
@@ -3875,7 +3763,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -4419,7 +4307,7 @@
               "id": "landmark-is-unique",
               "data": {
                 "role": "region",
-                "accessibleText": "convert exported onenote pages"
+                "accessibleText": "add onenote files"
               },
               "relatedNodes": [],
               "impact": "moderate",
@@ -4450,28 +4338,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "landmark-is-unique",
-              "data": {
-                "role": "region",
-                "accessibleText": "add files to conversion queue"
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -4800,7 +4667,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                  Browse files\n                </button>",
           "target": [
             "#importButton"
           ]
@@ -4818,7 +4685,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
           "target": [
             "#convertButton"
           ]
@@ -5285,9 +5152,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"space-y-3\">",
+          "html": "<div class=\"import-card__intro space-y-3\">",
           "target": [
-            ".home-start-card > .space-y-3"
+            ".import-card__intro"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"import-card__heading-row\">",
+          "target": [
+            ".import-card__heading-row"
           ]
         },
         {
@@ -5307,7 +5194,7 @@
           "impact": null,
           "html": "<div>",
           "target": [
-            ".space-y-3 > div:nth-child(1)"
+            ".import-card__heading-row > div"
           ]
         },
         {
@@ -5325,7 +5212,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -5345,7 +5232,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
+          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                    Add one or more exported MHT or MHTML files to clean and export locally.\n                  </p>",
           "target": [
             ".max-w-2xl"
           ]
@@ -5365,9 +5252,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"space-y-1 text-xs text-muted\">",
+          "html": "<p class=\"import-card__supported text-xs text-muted\">Supported: .mht, .mhtml</p>",
           "target": [
-            ".space-y-1"
+            ".import-card__supported"
           ]
         },
         {
@@ -5385,9 +5272,109 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>Supported input: .mht, .mhtml</p>",
+          "html": "<div class=\"homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch\">",
           "target": [
-            ".space-y-1 > p:nth-child(1)"
+            ".homepage-action-row"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                  Browse files\n                </button>",
+          "target": [
+            "#importButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"import-card__privacy space-y-1 text-xs text-muted\">",
+          "target": [
+            ".import-card__privacy"
           ]
         },
         {
@@ -5407,7 +5394,7 @@
           "impact": null,
           "html": "<p>Files stay on your device.</p>",
           "target": [
-            ".space-y-1 > p:nth-child(2)"
+            ".import-card__privacy > p:nth-child(1)"
           ]
         },
         {
@@ -5485,127 +5472,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch\">",
-          "target": [
-            ".homepage-action-row"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
-          "target": [
-            "#importButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -5625,7 +5492,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"mx-auto max-w-sm text-center space-y-3\">",
+          "html": "<div class=\"mx-auto max-w-sm text-center space-y-2\">",
           "target": [
             ".max-w-sm"
           ]
@@ -5665,7 +5532,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
+          "html": "<p class=\"text-sm text-secondary\">Drop exported OneNote pages here to start conversion.</p>",
           "target": [
             ".max-w-sm > .text-secondary.text-sm"
           ]
@@ -5685,7 +5552,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                Local browser processing only.\n              </p>",
+          "html": "<p class=\"text-xs text-muted\">Local browser processing only.</p>",
           "target": [
             ".max-w-sm > .text-muted.text-xs"
           ]
@@ -6292,7 +6159,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
           ]
@@ -6386,7 +6253,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ],
@@ -6418,7 +6285,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
+          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                    Add one or more exported MHT or MHTML files to clean and export locally.\n                  </p>",
           "target": [
             ".max-w-2xl"
           ],
@@ -6450,9 +6317,9 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<p>Supported input: .mht, .mhtml</p>",
+          "html": "<p class=\"import-card__supported text-xs text-muted\">Supported: .mht, .mhtml</p>",
           "target": [
-            ".space-y-1 > p:nth-child(1)"
+            ".import-card__supported"
           ],
           "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
         },
@@ -6484,7 +6351,7 @@
           "impact": "serious",
           "html": "<p>Files stay on your device.</p>",
           "target": [
-            ".space-y-1 > p:nth-child(2)"
+            ".import-card__privacy > p:nth-child(1)"
           ],
           "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
         },

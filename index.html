@@ -63,79 +63,70 @@
 
           <!-- Start card -->
           <section class="home-start-card card-panel import-card space-y-5" aria-labelledby="importHeading">
-          <div class="space-y-3">
-            <div>
-              <h2 id="importHeading" class="text-lg font-medium">Convert exported OneNote pages</h2>
-              <p class="mt-1 max-w-2xl text-sm leading-6 text-secondary">
-                Add one or more exported MHT or MHTML files to clean and export locally.
-              </p>
-            </div>
+            <div class="import-card__intro space-y-3">
+              <div class="import-card__heading-row">
+                <div>
+                  <h2 id="importHeading" class="text-lg font-medium">Add OneNote files</h2>
+                  <p class="mt-1 max-w-2xl text-sm leading-6 text-secondary">
+                    Add one or more exported MHT or MHTML files to clean and export locally.
+                  </p>
+                </div>
+                <p class="import-card__supported text-xs text-muted">Supported: .mht, .mhtml</p>
+              </div>
 
-            <div class="space-y-1 text-xs text-muted">
-              <p>Supported input: .mht, .mhtml</p>
-              <!-- Convert button: triggers processing when auto-convert is OFF -->
-              <p>Files stay on your device.</p>
-              <p id="autoConvertNotice" class="auto-convert-notice">
-                <span id="autoConvertNoticeLead">Files are converted automatically when added to the queue.</span>
-                <span id="autoConvertNoticeDetail">Change this in Advanced options if you prefer manual conversion.</span>
-              </p>
-            </div>
-
-            <div class="homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch">
-              <button
-                id="importButton"
-                type="button"
-                class="btn-primary homepage-import-button homepage-primary-button">
-                Browse files
-              </button>
-
-              <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
-              <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
+              <div class="homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch">
                 <button
-                  id="convertButton"
+                  id="importButton"
                   type="button"
-                  class="btn-secondary homepage-convert-button"
-                  aria-label="Convert queued files"
-                  disabled>
-                  Convert queued files
+                  class="btn-primary homepage-import-button homepage-primary-button">
+                  Browse files
                 </button>
-                <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
-                  Auto-convert is enabled — manual Convert is disabled
+
+                <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
+                <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
+                  <button
+                    id="convertButton"
+                    type="button"
+                    class="btn-secondary homepage-convert-button"
+                    aria-label="Convert queued files"
+                    disabled>
+                    Convert queued files
+                  </button>
+                  <div id="convertTooltip" role="tooltip" class="tooltip hidden" aria-hidden="true">
+                    Auto-convert is enabled — manual Convert is disabled
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          </section>
 
-          <!-- Dropzone -->
-          <section id="controls" class="home-dropzone-card card-panel" aria-labelledby="dropzoneHeading">
-          <div
-            id="dropzone"
-            class="surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
-            role="region"
-            aria-label="Add files to conversion queue"
-            tabindex="0">
-
-            <div class="mx-auto max-w-sm text-center space-y-3">
-              <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
-
-              <p class="text-sm text-secondary">
-                Drop exported OneNote pages here to start conversion.
-              </p>
-
-              <p class="text-xs text-muted">
-                Local browser processing only.
-              </p>
+              <div class="import-card__privacy space-y-1 text-xs text-muted">
+                <p>Files stay on your device.</p>
+                <p id="autoConvertNotice" class="auto-convert-notice">
+                  <span id="autoConvertNoticeLead">Files are converted automatically when added to the queue.</span>
+                  <span id="autoConvertNoticeDetail">Change this in Advanced options if you prefer manual conversion.</span>
+                </p>
+              </div>
             </div>
 
-            <input
-              id="fileInput"
-              class="sr-only"
-              type="file"
-              multiple
-              aria-label="Select files to import"
-              accept=".mht,.mhtml" />
-          </div>
+            <div
+              id="dropzone"
+              class="import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors"
+              role="region"
+              aria-labelledby="dropzoneHeading"
+              tabindex="0">
+              <div class="mx-auto max-w-sm text-center space-y-2">
+                <h2 id="dropzoneHeading" class="text-base font-medium">Drag and drop files</h2>
+                <p class="text-sm text-secondary">Drop exported OneNote pages here to start conversion.</p>
+                <p class="text-xs text-muted">Local browser processing only.</p>
+              </div>
+
+              <input
+                id="fileInput"
+                class="sr-only"
+                type="file"
+                multiple
+                aria-label="Select files to import"
+                accept=".mht,.mhtml" />
+            </div>
           </section>
 
           <!-- Advanced Options -->

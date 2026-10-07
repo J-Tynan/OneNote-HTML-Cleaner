@@ -333,6 +333,29 @@ summary:focus-visible {
       var(--bg-card);
   }
 
+  .import-card__heading-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .import-card__supported {
+    flex: none;
+    margin: 0.25rem 0 0;
+    text-align: right;
+  }
+
+  .import-card__privacy {
+    border-top: 1px solid var(--border-muted);
+    padding-top: 0.75rem;
+  }
+
+  .import-card__dropzone {
+    min-height: 8.5rem;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  }
+
   /* Softer contextual surface (status, diagnostics, advanced zones) */
   .card-panel--soft {
     background-color: var(--bg-soft);
@@ -669,6 +692,10 @@ html.dark #appStateBadge[data-state="error"] {
   justify-content: center;
 }
 
+.import-card__dropzone {
+  width: 100%;
+}
+
 #statusPanel {
   min-height: 100%;
 }
@@ -782,6 +809,19 @@ html.dark .status-pill--error {
   #dropzone {
     min-height: 2rem;
     padding: 1.25rem;
+  }
+
+  .import-card__heading-row {
+    display: block;
+  }
+
+  .import-card__supported {
+    margin-top: 0.75rem;
+    text-align: left;
+  }
+
+  .import-card__dropzone {
+    min-height: 7.5rem;
   }
 
   .home-results-card--empty #fileList:empty::before {
