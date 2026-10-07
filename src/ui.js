@@ -643,6 +643,18 @@ function formatBytes(size) {
   return `${value.toFixed(power === 0 ? 0 : 1)} ${units[power]}`;
 }
 
+/**
+ * @param {QueueEntry} entry
+ * @returns {string}
+ */
+function getEntryTypeLabel(entry) {
+  const sourceKind = String(entry.sourceKind || '').toLowerCase();
+  if (sourceKind && sourceKind !== 'unknown') return sourceKind.toUpperCase();
+
+  const extension = String(entry.name || '').match(/\.([^.\\/]+)$/);
+  return extension ? extension[1].toUpperCase() : 'File';
+}
+
 /* === STATUS VISIBILITY === */
 
 /**
@@ -1238,6 +1250,7 @@ export function renderFileList() {
 
   const markup = state.queue.map((entry) => {
     const safeName = escapeHtml(entry.name);
+    const safeType = escapeHtml(getEntryTypeLabel(entry));
     const displayStatus = entry.status === 'unsupported' ? STATUS_UNSUPPORTED : (entry.status || 'queued');
     const safeStatus = escapeHtml(displayStatus);
     const statusTone = getStatusTone(displayStatus);
@@ -1254,40 +1267,34 @@ export function renderFileList() {
     );
     const canDownload = hasOutput && !singleDownloadBlocked;
     const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
+    const detailMessage = safeMessage || (hasOutput && singleDownloadBlocked
+      ? 'Single-file download disabled while external CSS is enabled. Use Download ZIP.'
+      : '');
 
     return `
-      <div class="file-item rounded-xl border p-3" data-id="${entry.id}" data-status="${statusTone}">
-        <div class="flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <p class="truncate text-sm font-semibold">${safeName}</p>
-            <p class="mt-1 flex items-center gap-2 text-xs text-muted">
-              <span>${safeSize}</span>
-              <span aria-hidden="true">&middot;</span>
-              <span class="status-pill status-pill--${statusTone}">${safeStatus}</span>
-            </p>
-            ${safeMessage ? `<p class="mt-1 text-xs text-muted">${safeMessage}</p>` : ''}
-          </div>
-          <div class="file-item__actions">
+      <div class="file-item" data-id="${entry.id}" data-status="${statusTone}">
+        <span class="file-item__name" title="${safeName}">${safeName}</span>
+        <span class="file-item__type" aria-label="Type: ${safeType}">${safeType}</span>
+        <span class="file-item__status"><span class="status-pill status-pill--${statusTone}">${safeStatus}</span></span>
+        <span class="file-item__size" aria-label="Size: ${safeSize}">${safeSize}</span>
+        <div class="file-item__actions">
+          ${canDownload ? `
             <button
               type="button"
-              class="remove-item btn-secondary secondary-action-button file-item__remove-button"
-              data-remove-id="${entry.id}"
-              aria-label="Remove ${safeName}">
-              Remove
+              class="btn-primary file-item__download-button"
+              data-download-id="${entry.id}">
+              ${downloadLabel}
             </button>
-            ${canDownload ? `
-              <button
-                type="button"
-                class="btn-primary file-item__download-button"
-                data-download-id="${entry.id}">
-                ${downloadLabel}
-              </button>
-            ` : ''}
-          </div>
+          ` : ''}
+          <button
+            type="button"
+            class="remove-item btn-secondary secondary-action-button file-item__remove-button"
+            data-remove-id="${entry.id}"
+            aria-label="Remove ${safeName}">
+            Remove
+          </button>
         </div>
-        ${hasOutput && singleDownloadBlocked ? `
-          <p class="mt-2 text-xs text-muted">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
-        ` : ''}
+        ${detailMessage ? `<p class="file-item__detail">${detailMessage}</p>` : ''}
       </div>
     `;
   }).join('');

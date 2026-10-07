@@ -536,9 +536,10 @@ summary::-webkit-details-marker {
 
   .file-item__actions {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: flex-end;
-    gap: 0.5rem;
+    justify-content: flex-end;
+    gap: 0.375rem;
     flex: none;
   }
 
@@ -580,13 +581,81 @@ summary::-webkit-details-marker {
 /* === STATUS / QUEUE ITEMS === */
 
 .file-item {
-  border-color: var(--border-muted);
-  background-color: var(--bg-card);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.25rem 5.75rem 4rem minmax(6.5rem, auto);
+  grid-template-areas: "name type status size actions" "detail detail detail detail actions";
+  align-items: center;
+  column-gap: 0.625rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-muted);
   transition: background-color 120ms ease, border-color 120ms ease;
 }
 
 .file-item:hover {
   background-color: var(--bg-soft);
+}
+
+.file-list-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.25rem 5.75rem 4rem minmax(6.5rem, auto);
+  gap: 0.625rem;
+  padding: 0 0 0.375rem;
+  border-bottom: 1px solid var(--border-muted);
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.file-list-header > :last-child {
+  text-align: right;
+}
+
+.file-item__name {
+  grid-area: name;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-item__type,
+.file-item__size {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.file-item__type {
+  grid-area: type;
+}
+
+.file-item__status {
+  grid-area: status;
+  min-width: 0;
+}
+
+.file-item__size {
+  grid-area: size;
+  text-align: right;
+}
+
+.file-item__actions {
+  grid-area: actions;
+}
+
+.file-item__detail {
+  grid-area: detail;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
 }
 
 #appStateBadge {
@@ -763,6 +832,34 @@ html.dark .status-pill--error {
 /* === MOBILE POLISH (Layout C) === */
 
 @media (max-width: 639px) {
+
+  .file-list-header {
+    display: none;
+  }
+
+  .file-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name actions"
+      "type status"
+      "size ."
+      "detail detail";
+    row-gap: 0.375rem;
+    min-height: 0;
+    padding: 0.625rem 0;
+  }
+
+  .file-item__actions {
+    align-self: start;
+  }
+
+  .file-item__size {
+    text-align: left;
+  }
+
+  .file-item__detail {
+    align-self: center;
+  }
 
   .home-layout {
     gap: 1rem;

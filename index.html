@@ -329,7 +329,15 @@
             Added files will appear here with progress, status, and downloads.
           </p>
 
-          <div id="fileList" class="space-y-2"></div>
+          <div class="file-list-header" aria-hidden="true">
+            <span>Name</span>
+            <span>Type</span>
+            <span>Status</span>
+            <span>Size</span>
+            <span>Actions</span>
+          </div>
+
+          <div id="fileList"></div>
 
           <details
             id="diagnosticsPanel"

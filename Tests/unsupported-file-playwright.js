@@ -26,7 +26,7 @@ import { startStaticServer } from './playwright-server-helper.js';
 
     // Wait for the file list entry to render and assert it contains 'Unsupported'
     await page.waitForSelector('.file-item');
-    const statusText = await page.$eval('.file-item p.mt-1', (el) => el.textContent);
+    const statusText = await page.$eval('.file-item__status', (el) => el.textContent);
     if (!/Unsupported/i.test(statusText || '')) {
       throw new Error('Expected UI to mark .one file as Unsupported — got: ' + String(statusText));
     }

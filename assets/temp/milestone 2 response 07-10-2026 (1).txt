@@ -1,0 +1,33 @@
+**Milestone 2 Complete - Awaiting Review**
+
+Changed `ui.js`, `index.html`, `styles.css`, and `unsupported-file-playwright.js`.
+
+Structural changes:
+- Added the desktop Name / Type / Status / Size / Actions header.
+- Replaced per-file cards with compact CSS-grid rows, including responsive mobile rows.
+- Type, size, status tone, error/unsupported detail, and download restriction detail derive from real queue state.
+- Preserved all required selectors/hooks, filename `title`, removal, and download controls.
+
+Behavior deliberately preserved: conversion, queue persistence/restore, statuses, per-file download, ZIP download, removal, keyboard labels, and unsupported handling.
+
+Tests:
+- Passed: `npm run typecheck`
+- Passed: `npm run test:header-edge`
+- Passed: `npm run test:layout-shift`
+- Passed: `clear-files-playwright.js`
+- Passed: `auto-convert-manual-playwright.js`
+- Passed: `convert-button-smoke-playwright.js`
+- Passed: `unsupported-file-playwright.js` (twice)
+- Passed: `queue-reload-restore-playwright.js` when run alone
+- Passed: `queue-focus-preservation-playwright.js`
+- Passed: `npm run test:ui-download-smoke`
+- `npm run test:theme` fails before app execution because its guard expects missing `tailwind.css`; unrelated to this milestone.
+- The restore test initially failed under parallel execution, then passed in isolation.
+
+Updated `unsupported-file-playwright.js` because it asserted the obsolete nested status paragraph; it now checks `.file-item__status`.
+
+Desktop screenshot review completed: rows display shared columns with no large rounded file cards. Manual review remains for long filenames, successful per-file download, ZIP, and restored queues in the target browser.
+
+No approved-scope deviation. Deliberately not implemented: native hierarchy, selections, search/filter, folder import, or fake metadata.
+
+Stopped for human visual review.

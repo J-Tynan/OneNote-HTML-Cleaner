@@ -1,0 +1,16 @@
+Implemented Milestone 1 on new branch `ui-redesign-milestone-1`.
+
+Changed `index.html`, `styles.css`, and `header-edge-to-edge-playwright.js`. The page now has the approved structural shell: compact real header actions, equal desktop columns, unified import/drop card, flat Advanced Options disclosure, a queue action strip for manual Convert, bottom Results actions, and expanded footer links.
+
+All functional IDs, inputs, conditional containers, tooltip wrapper, worker/UI behavior, diagnostics, downloads, persistence, Help, and theme behavior remain intact. The header test was updated because its old separate-dropzone order assertion enforced obsolete presentation.
+
+Validation:
+- Passed: `npm run typecheck`
+- Passed: `npm run test:header-edge`
+- Passed: `npm run test:layout-shift`
+- Passed: `clear-files-playwright.js`
+- Passed: `auto-convert-manual-playwright.js`
+- Passed: direct `theme-playwright.js`
+- `npm run test:theme` failed its pre-browser `tailwind-darkmode.js` prerequisite, which reports a missing class-based dark variant in `tailwind.css`; browser theme persistence itself passes.
+
+Desktop screenshot reviewed: the requested structural acceptance criteria are met. Human review still needed for native Browse dialog, actual drag/drop, expanded-options appearance, and overall screenshot judgment. No Milestone 2 work, fake data, hierarchy, filtering, selection, or Results-row redesign was added.
