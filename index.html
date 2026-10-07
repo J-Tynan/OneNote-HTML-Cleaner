@@ -23,8 +23,9 @@
           </p>
         </div>
 
-        <!-- Theme toggle -->
-        <div class="home-header__actions flex items-center gap-3">
+        <nav class="home-header__nav" aria-label="Application links">
+          <a href="README.md" class="home-header__link">Documentation</a>
+
           <!-- Help button: opens small usage popup -->
           <button
             id="helpButton"
@@ -47,10 +48,7 @@
             <span id="themeToggleIcon" aria-hidden="true">🔆</span>
             <span class="sr-only">Toggle theme</span>
           </button>
-
-
-
-        </div>
+        </nav>
       </div>
     </div>
   </header>
@@ -369,11 +367,15 @@
   </main>
 
   <footer class="home-footer">
-    <div class="page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
-      <p>
-        Offline‑capable local processing. Files stay on your device.
-        <a href="README.md" class="underline">Documentation</a>
+    <div class="page-shell home-footer__inner mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8">
+      <p class="home-footer__privacy">
+        <span aria-hidden="true">◈</span>
+        Offline-capable local processing. Files stay on your device.
       </p>
+      <nav class="home-footer__links" aria-label="Project links">
+        <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/J-Tynan/OneNote-HTML-Cleaner/issues/new" target="_blank" rel="noopener noreferrer">Report an issue</a>
+      </nav>
     </div>
   </footer>
 

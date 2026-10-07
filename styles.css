@@ -184,7 +184,28 @@ summary::-webkit-details-marker {
 
 .home-header__inner {
   min-height: 0.5rem;
-    border-radius: var(--radius-lg);
+  border-radius: var(--radius-lg);
+}
+
+.home-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.home-header__link,
+.home-footer__links a {
+  color: var(--text-help);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.home-header__link:hover,
+.home-footer__links a:hover {
+  color: var(--focus-color);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
 
 .home-header__actions {
   flex: none;
