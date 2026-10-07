@@ -327,7 +327,7 @@
           aria-live="polite"
           aria-label="Processing status">
 
-          <div class="flex items-center justify-between gap-3">
+          <div class="results-panel__header flex items-center justify-between gap-3">
             <h2 class="text-lg font-medium">Conversion results</h2>
             <span
               id="appStateBadge"
@@ -339,6 +339,16 @@
           <p id="statusSummary" class="status-summary text-sm text-secondary">
             Added files will appear here with progress, status, and downloads.
           </p>
+
+          <div class="results-list-heading" aria-hidden="true">
+            <span>Name</span>
+            <span>Type</span>
+            <span>Status</span>
+            <span>Size</span>
+            <span>Actions</span>
+          </div>
+
+          <div id="fileList" class="results-file-list"></div>
 
           <div class="results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start">
             <button
@@ -356,8 +366,6 @@
               Download ZIP
             </button>
           </div>
-
-          <div id="fileList" class="space-y-2"></div>
 
           <details
             id="diagnosticsPanel"

@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-07T11:26:45.596Z",
-  "url": "http://127.0.0.1:65009/",
+  "timestamp": "2026-10-07T11:47:37.964Z",
+  "url": "http://127.0.0.1:57790/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -986,84 +986,6 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
           "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -1093,6 +1015,84 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -1173,9 +1173,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1191,9 +1191,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1299,60 +1299,6 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
           "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -1374,6 +1320,60 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -1443,9 +1443,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1461,9 +1461,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1554,6 +1554,38 @@
           "html": "<span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>",
           "target": [
             "#themeToggleIcon"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-list-heading\" aria-hidden=\"true\">\n            <span>Name</span>\n            <span>Type</span>\n            <span>Status</span>\n            <span>Size</span>\n            <span>Actions</span>\n          </div>",
+          "target": [
+            ".results-list-heading"
           ]
         },
         {
@@ -1691,60 +1723,6 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
           "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -1766,6 +1744,60 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -1835,9 +1867,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1853,9 +1885,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1903,9 +1935,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1935,9 +1967,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1969,7 +2001,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -2115,102 +2147,6 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
           "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -2246,6 +2182,102 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -2415,60 +2447,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -2490,6 +2468,60 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -2720,7 +2752,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
           "target": [
             "#convertButton"
           ]
@@ -2810,7 +2842,7 @@
                 {
                   "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
                   "target": [
-                    ".items-center.justify-between.gap-3 > h2"
+                    ".results-panel__header > h2"
                   ]
                 }
               ],
@@ -3008,7 +3040,7 @@
           "impact": null,
           "html": "<p class=\"text-sm text-secondary\">Drop exported OneNote pages here to start conversion.</p>",
           "target": [
-            ".max-w-sm > .text-secondary.text-sm"
+            ".max-w-sm > .text-secondary"
           ]
         },
         {
@@ -3153,7 +3185,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-panel__header > h2"
           ]
         },
         {
@@ -3204,6 +3236,131 @@
           "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"42\" style=\"min-height: 42px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a7b5bd",
+                "bgColor": "#0f151a",
+                "contrastRatio": 8.74,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 8.74"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Name</span>",
+          "target": [
+            ".results-list-heading > span:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a7b5bd",
+                "bgColor": "#0f151a",
+                "contrastRatio": 8.74,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 8.74"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Type</span>",
+          "target": [
+            ".results-list-heading > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a7b5bd",
+                "bgColor": "#0f151a",
+                "contrastRatio": 8.74,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 8.74"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Status</span>",
+          "target": [
+            ".results-list-heading > span:nth-child(3)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a7b5bd",
+                "bgColor": "#0f151a",
+                "contrastRatio": 8.74,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 8.74"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Size</span>",
+          "target": [
+            "span:nth-child(4)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#a7b5bd",
+                "bgColor": "#0f151a",
+                "contrastRatio": 8.74,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 8.74"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Actions</span>",
+          "target": [
+            "span:nth-child(5)"
           ]
         }
       ]
@@ -3285,24 +3442,6 @@
           "any": [
             {
               "id": "duplicate-id-aria",
-              "data": "convertTooltip",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
               "data": "dropzoneHeading",
               "relatedNodes": [],
               "impact": "critical",
@@ -3330,7 +3469,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 id=\"conversionTweaksLabel\" class=\"text-sm font-medium\">\n                  Conversion tweaks\n                </h3>",
+          "html": "<h3 id=\"conversionTweaksLabel\" class=\"advanced-options-group__heading text-sm font-medium\">\n                    Conversion\n                  </h3>",
           "target": [
             "#conversionTweaksLabel"
           ]
@@ -3351,6 +3490,24 @@
           "html": "<input id=\"autoConvertEnabled\" type=\"checkbox\" checked=\"\" class=\"checkbox-input\">",
           "target": [
             "#autoConvertEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "exportOptionsLabel",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h3 id=\"exportOptionsLabel\" class=\"advanced-options-group__heading text-sm font-medium\">\n                    Export\n                  </h3>",
+          "target": [
+            "#exportOptionsLabel"
           ]
         },
         {
@@ -3465,6 +3622,24 @@
           "any": [
             {
               "id": "duplicate-id-aria",
+              "data": "pageEnhancementsLabel",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h3 id=\"pageEnhancementsLabel\" class=\"advanced-options-group__heading text-sm font-medium\">\n                    Converted-page enhancements\n                  </h3>",
+          "target": [
+            "#pageEnhancementsLabel"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
               "data": "convertedPageThemeToggleEnabled",
               "relatedNodes": [],
               "impact": "critical",
@@ -3531,6 +3706,24 @@
           "html": "<p id=\"toolbarStyleHelp\" class=\"text-xs text-muted\">Enable toolbar injection to choose a toolbar chrome preset before conversion. Inline toolbar assets increase each HTML file's size.</p>",
           "target": [
             "#toolbarStyleHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "convertTooltip",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -3651,7 +3844,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-panel__header > h2"
           ]
         }
       ]
@@ -3725,7 +3918,7 @@
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div > div:nth-child(1) > h2:nth-child(1)"
                     ],
                     "level": 2
                   },
@@ -3801,7 +3994,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-panel__header > h2"
           ]
         }
       ]
@@ -4685,9 +4878,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
+          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
-            "#convertButton"
+            ".advanced-options-summary"
           ]
         },
         {
@@ -4703,9 +4896,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
           "target": [
-            ".advanced-options-summary"
+            "#convertButton"
           ]
         },
         {
@@ -5272,7 +5465,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch\">",
+          "html": "<div class=\"homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch\">\n                <button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                  Browse files\n                </button>\n              </div>",
           "target": [
             ".homepage-action-row"
           ]
@@ -5295,66 +5488,6 @@
           "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                  Browse files\n                </button>",
           "target": [
             "#importButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                    Convert queued files\n                  </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                    Auto-convert is enabled — manual Convert is disabled\n                  </div>",
-          "target": [
-            "#convertTooltip"
           ]
         },
         {
@@ -5472,6 +5605,26 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<div id=\"controls\" class=\"import-card__dropzone-shell\">",
+          "target": [
+            "#controls"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -5534,7 +5687,7 @@
           "impact": null,
           "html": "<p class=\"text-sm text-secondary\">Drop exported OneNote pages here to start conversion.</p>",
           "target": [
-            ".max-w-sm > .text-secondary.text-sm"
+            ".max-w-sm > .text-secondary"
           ]
         },
         {
@@ -5732,6 +5885,86 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<div class=\"convert-action-row\">",
+          "target": [
+            ".convert-action-row"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<aside class=\"home-results-column space-y-6 lg:col-span-5\">",
           "target": [
             "aside"
@@ -5772,9 +6005,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"flex items-center justify-between gap-3\">\n            <h2 class=\"text-lg font-medium\">Conversion results</h2>\n            <span id=\"appStateBadge\" class=\"inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase\" data-state=\"empty\">Empty</span>\n          </div>",
+          "html": "<div class=\"results-panel__header flex items-center justify-between gap-3\">",
           "target": [
-            ".items-center.justify-between.gap-3"
+            ".results-panel__header"
           ]
         },
         {
@@ -5794,7 +6027,7 @@
           "impact": null,
           "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-panel__header > h2"
           ]
         },
         {
@@ -5835,6 +6068,26 @@
           "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"42\" style=\"min-height: 42px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" class=\"results-file-list\"></div>",
+          "target": [
+            "#fileList"
           ]
         },
         {
@@ -5895,26 +6148,6 @@
           "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
           "target": [
             "#downloadZip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"fileList\" class=\"space-y-2\"></div>",
-          "target": [
-            "#fileList"
           ]
         },
         {
@@ -6141,9 +6374,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            ".convert-button-wrapper"
+            "#dropzone"
           ]
         },
         {
@@ -6159,9 +6392,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"import-card__dropzone surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-labelledby=\"dropzoneHeading\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
           "target": [
-            "#dropzone"
+            ".convert-button-wrapper"
           ]
         }
       ]

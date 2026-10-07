@@ -1241,6 +1241,10 @@ export function renderFileList() {
     const displayStatus = entry.status === 'unsupported' ? STATUS_UNSUPPORTED : (entry.status || 'queued');
     const safeStatus = escapeHtml(displayStatus);
     const statusTone = getStatusTone(displayStatus);
+    const sourceType = entry.sourceKind === 'mht'
+      ? (entry.name.toLowerCase().endsWith('.mhtml') ? 'MHTML' : 'MHT')
+      : String(entry.sourceKind || 'File').toUpperCase();
+    const safeSourceType = escapeHtml(sourceType);
     const safeSize = escapeHtml(formatBytes(entry.size));
     const safeMessage = entry.message ? escapeHtml(entry.message) : '';
     const outputFormat = getEntryOutputFormat(entry);
@@ -1256,18 +1260,17 @@ export function renderFileList() {
     const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
 
     return `
-      <div class="file-item rounded-xl border p-3" data-id="${entry.id}" data-status="${statusTone}">
-        <div class="flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <p class="truncate text-sm font-semibold">${safeName}</p>
-            <p class="mt-1 flex items-center gap-2 text-xs text-muted">
-              <span>${safeSize}</span>
-              <span aria-hidden="true">&middot;</span>
-              <span class="status-pill status-pill--${statusTone}">${safeStatus}</span>
-            </p>
-            ${safeMessage ? `<p class="mt-1 text-xs text-muted">${safeMessage}</p>` : ''}
-          </div>
-          <div class="file-item__actions">
+      <div class="file-item" data-id="${entry.id}" data-status="${statusTone}">
+        <div class="file-item__name min-w-0">
+          <p class="file-item__filename" title="${safeName}">${safeName}</p>
+          ${safeMessage ? `<p class="file-item__message">${safeMessage}</p>` : ''}
+        </div>
+        <p class="file-item__type" aria-label="File type">${safeSourceType}</p>
+        <p class="file-item__status mt-1">
+          <span class="status-pill status-pill--${statusTone}">${safeStatus}</span>
+        </p>
+        <p class="file-item__size">${safeSize}</p>
+        <div class="file-item__actions">
             <button
               type="button"
               class="remove-item btn-secondary secondary-action-button file-item__remove-button"
@@ -1283,10 +1286,9 @@ export function renderFileList() {
                 ${downloadLabel}
               </button>
             ` : ''}
-          </div>
         </div>
         ${hasOutput && singleDownloadBlocked ? `
-          <p class="mt-2 text-xs text-muted">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
+          <p class="file-item__download-notice">Single-file download disabled while external CSS is enabled. Use Download ZIP.</p>
         ` : ''}
       </div>
     `;
