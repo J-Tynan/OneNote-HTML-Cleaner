@@ -175,6 +175,28 @@ summary::-webkit-details-marker {
   margin-top: 0;
 }
 
+.home-header .page-shell {
+  padding-block: 0.625rem;
+}
+
+.home-header__inner {
+  gap: 1rem;
+}
+
+.home-header__identity h1 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.home-header__identity p {
+  margin-top: 0.25rem;
+  line-height: 1.35;
+}
+
+.home-header__actions {
+  gap: 0.5rem;
+}
+
 .home-main {
   padding-bottom: 0.1rem;
 }
@@ -250,6 +272,41 @@ summary::-webkit-details-marker {
 
 .home-start-card {
   box-shadow: 0 10px 24px rgba(11, 114, 133, 0.08);
+}
+
+.import-card > .space-y-3 {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.import-card > .space-y-3 > * + * {
+  margin-top: 0;
+}
+
+.import-card > .space-y-3 > div:first-child > p {
+  line-height: 1.4;
+}
+
+.import-card > .space-y-3 > div:nth-child(2) {
+  line-height: 1.35;
+}
+
+.import-card .homepage-primary-button {
+  min-height: 2.75rem;
+  padding-block: 0.625rem;
+}
+
+#dropzone {
+  padding: 0.875rem 1rem;
+}
+
+#dropzone > .space-y-3 {
+  display: grid;
+  gap: 0.375rem;
+}
+
+#dropzone > .space-y-3 > * + * {
+  margin-top: 0;
 }
 
 .homepage-convert-button {
@@ -924,7 +981,7 @@ html.dark .status-pill--error {
   }
 
   .home-footer .page-shell {
-    padding-bottom: 0.1rem;
+    padding-block: 0.5rem 0.625rem;
   }
 
   p {
@@ -969,7 +1026,7 @@ html.dark .status-pill--error {
   }
 
   .home-footer .page-shell {
-    padding: 0.75rem 1.5rem 1rem;
+    padding: 0.5rem 1.5rem 0.625rem;
   }
 
   .results-action-row {
@@ -1039,7 +1096,7 @@ html.dark .status-pill--error {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem 1.5rem;
-  padding-top: 0.875rem;
+  padding-top: 0.625rem;
   border-top: 1px solid var(--border-muted);
 }
 
