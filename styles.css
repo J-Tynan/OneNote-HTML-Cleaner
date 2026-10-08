@@ -964,6 +964,14 @@ html.dark .status-pill--error {
 
 @media (min-width: 1024px) {
 
+  .home-main > .page-shell {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .home-footer .page-shell {
+    padding: 0.75rem 1.5rem 1rem;
+  }
+
   .results-action-row {
     flex-direction: row;
     flex-wrap: wrap;
@@ -980,12 +988,22 @@ html.dark .status-pill--error {
   }
 
   .home-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+    gap: 1rem;
+  }
+
+  .home-layout__primary > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem;
+  }
+
+  .home-results-column {
+    display: flex;
+    align-self: stretch;
   }
 
   .home-results-card {
-    min-height: 24rem;
+    min-height: 0;
+    flex: 1 1 auto;
   }
 
   .card-panel {
