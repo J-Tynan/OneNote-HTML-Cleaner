@@ -1,0 +1,41 @@
+# Visual convergence task
+
+Make ONLY the visual adjustment described below.
+
+Attached:
+1. The approved UI redesign.
+2. The current implementation after approved structural work.
+
+Compare the relevant area carefully.
+
+The approved image is the visual target for layout, density, proportions and styling.
+
+Do NOT redesign functionality.
+
+Do NOT:
+- change application behaviour;
+- add screenshot-only features;
+- add mock data;
+- refactor `ui.js`;
+- change conversion logic;
+- begin another visual task;
+- perform unrelated cleanup.
+
+Prefer CSS changes.
+
+Modify HTML only if necessary for THIS specific visual adjustment.
+
+Preserve existing functional IDs, selectors and hooks.
+
+After the change:
+1. run the directly relevant checks;
+2. summarise files changed;
+3. explain the visual difference addressed;
+4. identify what I should inspect manually;
+5. STOP.
+
+Do not attempt to solve other visible differences.
+
+# TARGET VISUAL DIFFERENCE
+
+[PASTE ONE LUNA TASK HERE]

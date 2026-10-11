@@ -1,0 +1,215 @@
+# UI Redesign Attempt 2 — Implementation Guardrails
+
+Implement ONLY the milestone/task pasted below.
+
+The attached APPROVED UI redesign image is authoritative for:
+
+- information architecture
+- layout structure
+- visual density
+- relative proportions
+- component ordering
+- card organisation
+- Results row architecture
+- action placement
+- approximate spacing
+
+The approved image is NOT authoritative for application functionality or example data.
+
+The existing working application remains the behavioural source of truth.
+
+---
+
+## Important lesson from redesign attempt 1
+
+The first redesign attempt preserved the old presentation structure too aggressively.
+
+That attempt passed its tests but visually remained too similar to the old UI.
+
+For this attempt:
+
+STRUCTURAL PRESENTATION CHANGES ARE ALLOWED.
+
+You may:
+
+- restructure `index.html`;
+- reparent existing controls;
+- change presentation containers;
+- change grid/layout structure;
+- flatten unnecessarily nested presentation;
+- change result-row markup where this milestone requires it;
+- update tests that explicitly preserve obsolete presentation structure.
+
+Do NOT retain poor presentation architecture merely because it already exists.
+
+However:
+
+APPLICATION BEHAVIOUR MUST REMAIN COMPATIBLE.
+
+---
+
+## Behavioural guardrails
+
+Preserve existing behaviour including, where applicable:
+
+- MHT/MHTML import and conversion;
+- file picker;
+- drag/drop;
+- paste intake;
+- automatic/manual conversion;
+- Advanced Options values and dependencies;
+- worker contracts;
+- sanitisation;
+- conversion output;
+- downloads;
+- ZIP generation;
+- persistence/restoration;
+- diagnostics;
+- Help;
+- theme persistence;
+- keyboard accessibility;
+- local-only processing.
+
+Preserve existing functional IDs, data attributes and event hooks wherever reasonably possible.
+
+If preserving an obsolete presentation selector prevents the approved structure:
+
+1. identify the dependency;
+2. change the minimum necessary dependent code/test;
+3. preserve the underlying behaviour.
+
+---
+
+## `ui.js` rule
+
+Structural UI-rendering changes are allowed when explicitly required by this milestone.
+
+Architectural refactoring is NOT allowed.
+
+Do not:
+
+- decompose `ui.js`;
+- reorganise unrelated functions;
+- rename unrelated state;
+- refactor worker coordination;
+- refactor persistence;
+- perform general cleanup.
+
+Make only milestone-specific changes.
+
+---
+
+## Screenshot rules
+
+Do NOT implement features merely because they appear in the approved image.
+
+Do NOT implement or hard-code:
+
+- example notebook names;
+- fake sections/pages;
+- fake counts;
+- fake file sizes;
+- fake statuses;
+- fake native hierarchy;
+- native `.one` / `.onepkg` conversion;
+- Add from folder;
+- selection checkboxes;
+- Download selected;
+- search/filter;
+
+unless the milestone explicitly states otherwise AND the existing application genuinely supports the behaviour.
+
+Use REAL application state only.
+
+---
+
+## Before editing
+
+1. Read the milestone completely.
+2. Inspect its listed/relevant files.
+3. Inspect directly relevant tests.
+4. Identify which presentation structures need to change.
+5. Briefly state your intended implementation approach.
+
+Then implement.
+
+Do not spend time re-planning the entire redesign.
+
+Do not investigate unrelated areas of the repository.
+
+---
+
+## Scope control
+
+Implement ONLY this milestone.
+
+Do not begin:
+- the next milestone;
+- visual polish reserved for a later milestone;
+- native OneNote UI work;
+- unrelated refactoring;
+- opportunistic cleanup.
+
+If implementation reveals that success requires changes substantially outside the approved milestone:
+
+STOP.
+
+Explain:
+- the blocker;
+- why broader changes are necessary;
+- which files would be affected;
+- the smallest proposed scope change.
+
+Wait for human approval rather than expanding autonomously.
+
+---
+
+## Testing
+
+Run the tests specified by this milestone.
+
+You may run an additional directly related test if necessary to validate a change.
+
+Do NOT:
+
+- redesign unrelated code to make tests pass;
+- fix unrelated existing failures;
+- broaden the task because another test exposes an unrelated issue.
+
+Report unrelated failures separately.
+
+---
+
+## Visual acceptance is a release criterion
+
+Passing automated tests is NOT sufficient.
+
+This milestone must also achieve its stated VISUAL ACCEPTANCE CRITERIA.
+
+After implementation:
+
+1. Stop.
+2. Summarise files changed.
+3. Summarise structural changes made.
+4. Summarise behaviour deliberately preserved.
+5. Report all tests run and results.
+6. Report any test changed because it enforced obsolete presentation.
+7. Identify anything requiring manual inspection.
+8. Identify any deviation from the approved milestone.
+9. Identify any functionality deliberately NOT implemented.
+10. STOP FOR HUMAN VISUAL REVIEW.
+
+Do NOT begin the next milestone.
+
+The human reviewer will decide:
+
+GO
+REVISE
+or
+REVERT.
+
+---
+
+# APPROVED MILESTONE / TASK
+
+[PASTE ONLY THE RELEVANT MILESTONE OR LUNA TASK HERE]
