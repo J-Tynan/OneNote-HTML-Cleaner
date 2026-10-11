@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-09-02T14:43:17.882Z",
-  "url": "http://127.0.0.1:51728/",
+  "timestamp": "2026-10-11T16:09:39.225Z",
+  "url": "http://127.0.0.1:50629/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -491,6 +491,25 @@
       "nodes": []
     },
     {
+      "id": "link-in-text-block",
+      "impact": null,
+      "tags": [
+        "cat.color",
+        "wcag2a",
+        "wcag141",
+        "TTv5",
+        "TT13.a",
+        "EN-301-549",
+        "EN-9.1.4.1",
+        "RGAAv4",
+        "RGAA-10.6.1"
+      ],
+      "description": "Ensure links are distinguished from surrounding text in a way that does not rely on color",
+      "help": "Links must be distinguishable without relying on color",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/link-in-text-block?application=axeAPI",
+      "nodes": []
+    },
+    {
       "id": "list",
       "impact": null,
       "tags": [
@@ -626,27 +645,6 @@
       "description": "Ensure the scope attribute is used correctly on tables",
       "help": "scope attribute should be used correctly",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/scope-attr-valid?application=axeAPI",
-      "nodes": []
-    },
-    {
-      "id": "scrollable-region-focusable",
-      "impact": null,
-      "tags": [
-        "cat.keyboard",
-        "wcag2a",
-        "wcag211",
-        "wcag213",
-        "TTv5",
-        "TT4.a",
-        "EN-301-549",
-        "EN-9.2.1.1",
-        "EN-9.2.1.3",
-        "RGAAv4",
-        "RGAA-7.3.2"
-      ],
-      "description": "Ensure elements that have scrollable content are accessible by keyboard",
-      "help": "Scrollable region must have keyboard access",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/scrollable-region-focusable?application=axeAPI",
       "nodes": []
     },
     {
@@ -884,7 +882,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -910,7 +908,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -962,85 +960,7 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-allowed-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attributes are used correctly for the defined role"
-            }
-          ],
-          "none": [
-            {
-              "id": "aria-unsupported-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute is supported"
-            }
-          ],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
+          "html": "<div id=\"controls\" class=\"home-dropzone-card\" aria-labelledby=\"dropzoneHeading\">",
           "target": [
             "#controls"
           ]
@@ -1118,7 +1038,111 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -1149,9 +1173,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1167,9 +1191,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1203,7 +1227,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -1221,7 +1245,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -1257,61 +1281,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-conditional-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
+          "html": "<div id=\"controls\" class=\"home-dropzone-card\" aria-labelledby=\"dropzoneHeading\">",
           "target": [
             "#controls"
           ]
@@ -1365,7 +1335,79 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -1401,9 +1443,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1419,9 +1461,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1513,12 +1555,44 @@
           "target": [
             "#themeToggleIcon"
           ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"file-list-header\" aria-hidden=\"true\">\n            <span>Name</span>\n            <span>Type</span>\n            <span>Status</span>\n            <span>Size</span>\n            <span>Actions</span>\n          </div>",
+          "target": [
+            ".file-list-header"
+          ]
         }
       ]
     },
     {
       "id": "aria-prohibited-attr",
-      "impact": null,
+      "impact": "serious",
       "tags": [
         "cat.aria",
         "wcag2a",
@@ -1545,7 +1619,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -1563,7 +1637,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -1584,78 +1658,6 @@
           "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [],
-          "none": [
-            {
-              "id": "aria-prohibited-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "ARIA attribute is allowed"
-            }
-          ],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
           ]
         },
         {
@@ -1707,7 +1709,79 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -1743,9 +1817,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1761,9 +1835,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1811,9 +1885,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
-            "#convertTooltip"
+            "#dropzone"
           ]
         },
         {
@@ -1843,9 +1917,9 @@
             }
           ],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
-            "#dropzone"
+            "#convertTooltip"
           ]
         }
       ]
@@ -1877,7 +1951,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
             "#convertTooltip"
           ]
@@ -1927,7 +2001,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -1991,103 +2065,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [],
-          "all": [
-            {
-              "id": "aria-valid-attr-value",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute values are valid"
-            },
-            {
-              "id": "aria-errormessage",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
-            },
-            {
-              "id": "aria-level",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "aria-level values are valid"
-            }
-          ],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
+          "html": "<div id=\"controls\" class=\"home-dropzone-card\" aria-labelledby=\"dropzoneHeading\">",
           "target": [
             "#controls"
           ]
@@ -2183,7 +2161,135 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -2219,7 +2325,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -2237,7 +2343,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -2273,61 +2379,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "aria-valid-attr",
-              "data": null,
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "ARIA attribute name is valid"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
+          "html": "<div id=\"controls\" class=\"home-dropzone-card\" aria-labelledby=\"dropzoneHeading\">",
           "target": [
             "#controls"
           ]
@@ -2381,7 +2433,79 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -2510,7 +2634,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -2535,7 +2659,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -2578,7 +2702,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
           "target": [
             "#convertButton"
           ]
@@ -2654,13 +2778,13 @@
                   ]
                 },
                 {
-                  "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+                  "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
                   "target": [
                     "#importHeading"
                   ]
                 },
                 {
-                  "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+                  "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
                   "target": [
                     "#dropzoneHeading"
                   ]
@@ -2727,9 +2851,9 @@
                 "fgColor": "#e1e4e6",
                 "bgColor": "#0b0f13",
                 "contrastRatio": 15.05,
-                "fontSize": "18.0pt (24px)",
+                "fontSize": "15.0pt (20px)",
                 "fontWeight": "normal",
-                "expectedContrastRatio": "3:1"
+                "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
@@ -2764,9 +2888,84 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
+          "html": "<p class=\"mt-1 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
           "target": [
             ".text-help"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#e1e4e6",
+                "bgColor": "#0b0f13",
+                "contrastRatio": 15.05,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 15.05"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a class=\"btn-ghost header-link\" href=\"README.md\">Documentation</a>",
+          "target": [
+            ".header-link"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#c8d3d9",
+                "bgColor": "#0b0f13",
+                "contrastRatio": 12.61,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 12.61"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
+          "target": [
+            "#helpButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#c8d3d9",
+                "bgColor": "#0b0f13",
+                "contrastRatio": 12.61,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 12.61"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"header-theme-label\">Theme</span>",
+          "target": [
+            ".header-theme-label"
           ]
         },
         {
@@ -2814,7 +3013,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -2839,7 +3038,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
+          "html": "<p class=\"text-sm text-secondary\">\n                  Drop exported OneNote pages here to start conversion.\n                </p>",
           "target": [
             ".max-w-sm > .text-secondary.text-sm"
           ]
@@ -2864,7 +3063,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                Local browser processing only.\n              </p>",
+          "html": "<p class=\"text-xs text-muted\">\n                  Local browser processing only.\n                </p>",
           "target": [
             ".max-w-sm > .text-muted.text-xs"
           ]
@@ -2969,6 +3168,31 @@
             {
               "id": "color-contrast",
               "data": {
+                "fgColor": "#c8d3d9",
+                "bgColor": "#0b0f13",
+                "contrastRatio": 12.61,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 12.61"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"queue-action-strip__status text-xs text-muted\">Convert queued files when automatic conversion is disabled.</p>",
+          "target": [
+            ".queue-action-strip__status"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
                 "fgColor": "#e1e4e6",
                 "bgColor": "#0a0d11",
                 "contrastRatio": 15.24,
@@ -3044,6 +3268,131 @@
             {
               "id": "color-contrast",
               "data": {
+                "fgColor": "#9aa6af",
+                "bgColor": "#0a0d11",
+                "contrastRatio": 7.83,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Name</span>",
+          "target": [
+            ".file-list-header > span:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#9aa6af",
+                "bgColor": "#0a0d11",
+                "contrastRatio": 7.83,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Type</span>",
+          "target": [
+            ".file-list-header > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#9aa6af",
+                "bgColor": "#0a0d11",
+                "contrastRatio": 7.83,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Status</span>",
+          "target": [
+            ".file-list-header > span:nth-child(3)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#9aa6af",
+                "bgColor": "#0a0d11",
+                "contrastRatio": 7.83,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Size</span>",
+          "target": [
+            "span:nth-child(4)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#9aa6af",
+                "bgColor": "#0a0d11",
+                "contrastRatio": 7.83,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.83"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Actions</span>",
+          "target": [
+            "span:nth-child(5)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
                 "fgColor": "#c8d3d9",
                 "bgColor": "#050607",
                 "contrastRatio": 13.3,
@@ -3059,9 +3408,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>",
+          "html": "<p>Processing happens locally in your browser. Files stay on your device.</p>",
           "target": [
-            ".pb-8 > p"
+            ".home-footer__content > p"
           ]
         },
         {
@@ -3069,24 +3418,49 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#9e9eff",
+                "fgColor": "#c8d3d9",
                 "bgColor": "#050607",
-                "contrastRatio": 8.48,
+                "contrastRatio": 13.3,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.48"
+              "message": "Element has sufficient color contrast of 13.3"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<a href=\"README.md\" class=\"underline\">Documentation</a>",
+          "html": "<a href=\"https://github.com/J-Tynan/OneNote-HTML-Cleaner\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>",
           "target": [
-            "a[href$=\"README.md\"]"
+            ".home-footer__links > a[target=\"_blank\"][rel=\"noopener noreferrer\"]:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#c8d3d9",
+                "bgColor": "#050607",
+                "contrastRatio": 13.3,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 13.3"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a href=\"https://github.com/J-Tynan/OneNote-HTML-Cleaner/issues\" target=\"_blank\" rel=\"noopener noreferrer\">Report an issue</a>",
+          "target": [
+            "a[target=\"_blank\"][rel=\"noopener noreferrer\"]:nth-child(2)"
           ]
         }
       ]
@@ -3159,27 +3533,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "convertTooltip",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
           ]
         },
         {
@@ -3195,27 +3551,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
           "target": [
             "#dropzoneHeading"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "duplicate-id-aria",
-              "data": "conversionTweaksLabel",
-              "relatedNodes": [],
-              "impact": "critical",
-              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<h3 id=\"conversionTweaksLabel\" class=\"text-sm font-medium\">\n                  Conversion tweaks\n                </h3>",
-          "target": [
-            "#conversionTweaksLabel"
           ]
         },
         {
@@ -3411,9 +3749,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"toolbarStyleHelp\" class=\"text-xs text-muted\">Enable toolbar injection to choose a toolbar chrome preset before conversion.</p>",
+          "html": "<p id=\"toolbarStyleHelp\" class=\"text-xs text-muted\">Enable toolbar injection to choose a toolbar chrome preset before conversion. Inline toolbar assets increase each HTML file's size.</p>",
           "target": [
             "#toolbarStyleHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "convertTooltip",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
           ]
         },
         {
@@ -3496,7 +3852,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -3514,7 +3870,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -3602,15 +3958,15 @@
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(1) > div:nth-child(1) > h2:nth-child(1)"
                     ],
                     "level": 2
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(2) > div > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(1)"
                     ],
-                    "level": 2
+                    "level": 3
                   },
                   {
                     "ancestry": [
@@ -3646,7 +4002,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -3664,7 +4020,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -3906,7 +4262,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<aside class=\"home-results-column space-y-6 lg:col-span-5\">",
+          "html": "<aside class=\"home-results-column\">",
           "target": [
             "aside"
           ]
@@ -3939,7 +4295,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<footer class=\"home-footer\">\n    <div class=\"page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8\">\n      <p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>\n    </div>\n  </footer>",
+          "html": "<footer class=\"home-footer\">",
           "target": [
             "footer"
           ]
@@ -4034,7 +4390,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<footer class=\"home-footer\">\n    <div class=\"page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8\">\n      <p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>\n    </div>\n  </footer>",
+          "html": "<footer class=\"home-footer\">",
           "target": [
             "footer"
           ]
@@ -4169,7 +4525,7 @@
               "id": "landmark-is-unique",
               "data": {
                 "role": "region",
-                "accessibleText": "convert exported onenote pages"
+                "accessibleText": "add onenote files"
               },
               "relatedNodes": [],
               "impact": "moderate",
@@ -4182,27 +4538,6 @@
           "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
           "target": [
             ".home-start-card"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "landmark-is-unique",
-              "data": {
-                "role": "region",
-                "accessibleText": "drag and drop files"
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
-          "target": [
-            "#controls"
           ]
         },
         {
@@ -4231,6 +4566,27 @@
             {
               "id": "landmark-is-unique",
               "data": {
+                "role": "region",
+                "accessibleText": "queue actions"
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
                 "role": "complementary",
                 "accessibleText": null
               },
@@ -4242,7 +4598,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<aside class=\"home-results-column space-y-6 lg:col-span-5\">",
+          "html": "<aside class=\"home-results-column\">",
           "target": [
             "aside"
           ]
@@ -4263,7 +4619,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -4284,54 +4640,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<footer class=\"home-footer\">\n    <div class=\"page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8\">\n      <p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>\n    </div>\n  </footer>",
+          "html": "<footer class=\"home-footer\">",
           "target": [
             "footer"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "link-in-text-block",
-      "impact": null,
-      "tags": [
-        "cat.color",
-        "wcag2a",
-        "wcag141",
-        "TTv5",
-        "TT13.a",
-        "EN-301-549",
-        "EN-9.1.4.1",
-        "RGAAv4",
-        "RGAA-10.6.1"
-      ],
-      "description": "Ensure links are distinguished from surrounding text in a way that does not rely on color",
-      "help": "Links must be distinguishable without relying on color",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/link-in-text-block?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "link-in-text-block-style",
-              "data": null,
-              "relatedNodes": [
-                {
-                  "html": "<p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>",
-                  "target": [
-                    ".pb-8 > p"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Links can be distinguished from surrounding text by visual styling"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<a href=\"README.md\" class=\"underline\">Documentation</a>",
-          "target": [
-            "a[href$=\"README.md\"]"
           ]
         }
       ]
@@ -4380,9 +4691,61 @@
             }
           ],
           "impact": null,
-          "html": "<a href=\"README.md\" class=\"underline\">Documentation</a>",
+          "html": "<a class=\"btn-ghost header-link\" href=\"README.md\">Documentation</a>",
           "target": [
-            "a[href$=\"README.md\"]"
+            ".header-link"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a href=\"https://github.com/J-Tynan/OneNote-HTML-Cleaner\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>",
+          "target": [
+            ".home-footer__links > a[target=\"_blank\"][rel=\"noopener noreferrer\"]:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is not in tab order or has accessible text"
+            }
+          ],
+          "impact": null,
+          "html": "<a href=\"https://github.com/J-Tynan/OneNote-HTML-Cleaner/issues\" target=\"_blank\" rel=\"noopener noreferrer\">Report an issue</a>",
+          "target": [
+            "a[target=\"_blank\"][rel=\"noopener noreferrer\"]:nth-child(2)"
           ]
         }
       ]
@@ -4486,7 +4849,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -4504,7 +4867,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
           ]
@@ -4540,9 +4903,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
+          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
-            "#convertButton"
+            ".advanced-options-summary"
           ]
         },
         {
@@ -4558,9 +4921,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
           "target": [
-            ".advanced-options-summary"
+            "#convertButton"
           ]
         },
         {
@@ -4707,7 +5070,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-header__inner flex flex-wrap items-start justify-between gap-4 md:flex-nowrap md:items-center\">",
+          "html": "<div class=\"home-header__inner flex flex-wrap items-start justify-between gap-4 md:items-center\">",
           "target": [
             ".home-header__inner"
           ]
@@ -4767,7 +5130,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-2 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
+          "html": "<p class=\"mt-1 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
           "target": [
             ".text-help"
           ]
@@ -4807,7 +5170,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<a class=\"btn-ghost header-link\" href=\"README.md\">Documentation</a>",
+          "target": [
+            ".header-link"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ]
@@ -4827,7 +5210,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"sr-only\">Help: show usage and GitHub link</span>",
+          "html": "<span class=\"sr-only\">: show usage and GitHub link</span>",
           "target": [
             "#helpButton > .sr-only"
           ]
@@ -4847,9 +5230,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">\n            <span id=\"themeToggleIcon\" aria-hidden=\"true\">🌙</span>\n            <span class=\"sr-only\">Toggle theme</span>\n          </button>",
+          "html": "<button id=\"themeToggle\" type=\"button\" class=\"btn-ghost header-icon-button header-icon-button--theme\" aria-pressed=\"true\" aria-label=\"Switch to light theme\">",
           "target": [
             "#themeToggle"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"header-theme-label\">Theme</span>",
+          "target": [
+            ".header-theme-label"
           ]
         },
         {
@@ -4927,7 +5330,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-layout grid gap-6 md:gap-8 lg:grid-cols-12\">",
+          "html": "<div class=\"home-layout grid gap-6 md:gap-8\">",
           "target": [
             ".home-layout"
           ]
@@ -4947,7 +5350,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-layout__primary space-y-6 lg:col-span-7\">",
+          "html": "<div class=\"home-layout__primary space-y-6\">",
           "target": [
             ".home-layout__primary"
           ]
@@ -5007,7 +5410,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>",
+          "html": "<div>\n              <h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>\n              <p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>\n            </div>",
           "target": [
             ".space-y-3 > div:nth-child(1)"
           ]
@@ -5027,7 +5430,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ]
@@ -5187,7 +5590,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"homepage-action-row flex flex-col gap-3 sm:flex-row sm:items-stretch\">",
+          "html": "<div class=\"homepage-action-row\">\n              <button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>\n            </div>",
           "target": [
             ".homepage-action-row"
           ]
@@ -5227,67 +5630,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
-          "target": [
-            ".convert-button-wrapper"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-secondary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                  Convert queued files\n                </button>",
-          "target": [
-            "#convertButton"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                  Auto-convert is enabled — manual Convert is disabled\n                </div>",
-          "target": [
-            "#convertTooltip"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<section id=\"controls\" class=\"home-dropzone-card card-panel\" aria-labelledby=\"dropzoneHeading\">",
+          "html": "<div id=\"controls\" class=\"home-dropzone-card\" aria-labelledby=\"dropzoneHeading\">",
           "target": [
             "#controls"
           ]
@@ -5347,7 +5690,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h2>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -5367,7 +5710,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                Drop exported OneNote pages here to start conversion.\n              </p>",
+          "html": "<p class=\"text-sm text-secondary\">\n                  Drop exported OneNote pages here to start conversion.\n                </p>",
           "target": [
             ".max-w-sm > .text-secondary.text-sm"
           ]
@@ -5387,7 +5730,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                Local browser processing only.\n              </p>",
+          "html": "<p class=\"text-xs text-muted\">\n                  Local browser processing only.\n                </p>",
           "target": [
             ".max-w-sm > .text-muted.text-xs"
           ]
@@ -5447,7 +5790,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<details id=\"advancedOptions\" class=\"card-section\">",
+          "html": "<details id=\"advancedOptions\">",
           "target": [
             "#advancedOptions"
           ]
@@ -5567,7 +5910,107 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<aside class=\"home-results-column space-y-6 lg:col-span-5\">",
+          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"queue-action-strip__status text-xs text-muted\">Convert queued files when automatic conversion is disabled.</p>",
+          "target": [
+            ".queue-action-strip__status"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
+          "target": [
+            ".convert-button-wrapper"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "target": [
+            "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
+          "target": [
+            "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<aside class=\"home-results-column\">",
           "target": [
             "aside"
           ]
@@ -5587,7 +6030,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -5687,6 +6130,26 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<div id=\"fileList\"></div>",
+          "target": [
+            "#fileList"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\">",
           "target": [
             ".results-action-row"
@@ -5747,27 +6210,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"fileList\" class=\"space-y-2\"></div>",
-          "target": [
-            "#fileList"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<footer class=\"home-footer\">\n    <div class=\"page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8\">\n      <p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>\n    </div>\n  </footer>",
+          "html": "<footer class=\"home-footer\">",
           "target": [
             "footer"
           ]
@@ -5787,7 +6230,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8\">\n      <p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>\n    </div>",
+          "html": "<div class=\"page-shell mx-auto max-w-6xl px-4 pb-8 text-xs text-muted md:px-8\">",
           "target": [
             ".pb-8"
           ]
@@ -5807,9 +6250,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>\n        Offline‑capable local processing. Files stay on your device.\n        <a href=\"README.md\" class=\"underline\">Documentation</a>\n      </p>",
+          "html": "<div class=\"home-footer__content\">",
           "target": [
-            ".pb-8 > p"
+            ".home-footer__content"
           ]
         },
         {
@@ -5827,9 +6270,109 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<a href=\"README.md\" class=\"underline\">Documentation</a>",
+          "html": "<p>Processing happens locally in your browser. Files stay on your device.</p>",
           "target": [
-            "a[href$=\"README.md\"]"
+            ".home-footer__content > p"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"home-footer__links\">",
+          "target": [
+            ".home-footer__links"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a href=\"https://github.com/J-Tynan/OneNote-HTML-Cleaner\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>",
+          "target": [
+            ".home-footer__links > a[target=\"_blank\"][rel=\"noopener noreferrer\"]:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<a href=\"https://github.com/J-Tynan/OneNote-HTML-Cleaner/issues\" target=\"_blank\" rel=\"noopener noreferrer\">Report an issue</a>",
+          "target": [
+            "a[target=\"_blank\"][rel=\"noopener noreferrer\"]:nth-child(2)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scrollable-region-focusable",
+      "impact": null,
+      "tags": [
+        "cat.keyboard",
+        "wcag2a",
+        "wcag211",
+        "wcag213",
+        "TTv5",
+        "TT4.a",
+        "EN-301-549",
+        "EN-9.2.1.1",
+        "EN-9.2.1.3",
+        "RGAAv4",
+        "RGAA-7.3.2"
+      ],
+      "description": "Ensure elements that have scrollable content are accessible by keyboard",
+      "help": "Scrollable region must have keyboard access",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/scrollable-region-focusable?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element contains focusable elements"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<html lang=\"en\" class=\"dark\">",
+          "target": [
+            "html"
           ]
         }
       ]
@@ -5896,6 +6439,24 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "target": [
+            "#dropzone"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "tabindex",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have a tabindex greater than 0"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<div class=\"convert-button-wrapper\" tabindex=\"0\" aria-describedby=\"convertTooltip\">",
           "target": [
             ".convert-button-wrapper"
@@ -5914,15 +6475,59 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
-            "#dropzone"
+            "#statusPanel"
           ]
         }
       ]
     }
   ],
   "incomplete": [
+    {
+      "id": "aria-prohibited-attr",
+      "impact": "serious",
+      "tags": [
+        "cat.aria",
+        "wcag2a",
+        "wcag412",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "RGAAv4",
+        "RGAA-7.1.1"
+      ],
+      "description": "Ensure ARIA attributes are not prohibited for an element's role",
+      "help": "Elements must only use permitted ARIA attributes",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": {
+                "role": null,
+                "nodeName": "div",
+                "messageKey": "noRoleSingular",
+                "prohibited": [
+                  "aria-labelledby"
+                ]
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute is not well supported on a div with no valid role attribute."
+            }
+          ],
+          "impact": "serious",
+          "html": "<div id=\"controls\" class=\"home-dropzone-card\" aria-labelledby=\"dropzoneHeading\">",
+          "target": [
+            "#controls"
+          ],
+          "failureSummary": "Fix all of the following:\n  aria-labelledby attribute is not well supported on a div with no valid role attribute."
+        }
+      ]
+    },
     {
       "id": "aria-valid-attr-value",
       "impact": "critical",
@@ -5955,7 +6560,7 @@
           ],
           "none": [],
           "impact": "critical",
-          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            ?\n            <span class=\"sr-only\">Help: show usage and GitHub link</span>\n          </button>",
+          "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
           ],
@@ -6008,7 +6613,7 @@
           "all": [],
           "none": [],
           "impact": "serious",
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Convert exported OneNote pages</h2>",
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
           "target": [
             "#importHeading"
           ],

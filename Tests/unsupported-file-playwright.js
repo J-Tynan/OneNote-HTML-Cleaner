@@ -31,6 +31,14 @@ import { startStaticServer } from './playwright-server-helper.js';
       throw new Error('Expected UI to mark .one file as Unsupported — got: ' + String(statusText));
     }
 
+    const menuTrigger = page.locator('[data-actions-menu-trigger]');
+    await menuTrigger.click();
+    const menuItems = await page.locator('[role="menuitem"]').count();
+    const hasDownloadAction = await page.locator('[data-download-id]').count();
+    if (menuItems !== 1 || hasDownloadAction !== 0) {
+      throw new Error(`Expected only Remove in unsupported-file actions menu, got ${JSON.stringify({ menuItems, hasDownloadAction })}`);
+    }
+
     console.log('unsupported-file-playwright: OK');
     await browser.close();
     await serverHandle.close();

@@ -44,17 +44,21 @@ async function snapshotQueue(page) {
       record('probe-ready');
     });
     await page.waitForSelector('#fileInput');
-    await page.setInputFiles('#fileInput', {
-      name: 'focus-probe.mht',
-      mimeType: 'multipart/related',
-      buffer: Buffer.from('dummy')
-    });
+    await page.setInputFiles('#fileInput', [
+      {
+        name: 'focus-probe-one.mht',
+        mimeType: 'multipart/related',
+        buffer: Buffer.from('dummy')
+      },
+      {
+        name: 'focus-probe-two.mht',
+        mimeType: 'multipart/related',
+        buffer: Buffer.from('dummy')
+      }
+    ]);
 
     await page.waitForFunction(() => {
-      return Array.from(document.querySelectorAll('.file-item')).some((row) => {
-        const text = row.textContent || '';
-        return text.includes('focus-probe.mht') && text.toLowerCase().includes('queued');
-      });
+      return document.querySelectorAll('.file-item').length === 2;
     }, { timeout: 5000 });
 
     const before = await snapshotQueue(page);
@@ -73,6 +77,40 @@ async function snapshotQueue(page) {
     const afterRows = JSON.stringify(after.rows);
     if (beforeRows !== afterRows || before.badge !== after.badge) {
       throw new Error(`Queue changed across blur/focus. before=${beforeRows} after=${afterRows} beforeBadge=${before.badge} afterBadge=${after.badge}`);
+    }
+
+    const firstTrigger = page.locator('[data-actions-menu-trigger]').first();
+    await firstTrigger.focus();
+    await page.keyboard.press('ArrowDown');
+    const keyboardMenuState = await page.evaluate(() => ({
+      expanded: document.querySelector('[data-actions-menu-trigger]')?.getAttribute('aria-expanded'),
+      menuRole: document.querySelector('[role="menu"]')?.getAttribute('role'),
+      activeRole: document.activeElement?.getAttribute('role')
+    }));
+    if (keyboardMenuState.expanded !== 'true' || keyboardMenuState.menuRole !== 'menu' || keyboardMenuState.activeRole !== 'menuitem') {
+      throw new Error(`Expected ArrowDown to open the actions menu and focus a menu item, got ${JSON.stringify(keyboardMenuState)}`);
+    }
+
+    await page.keyboard.press('Escape');
+    const focusAfterEscape = await page.evaluate(() => document.activeElement?.hasAttribute('data-actions-menu-trigger'));
+    if (!focusAfterEscape) {
+      throw new Error('Expected Escape to restore focus to the actions-menu trigger');
+    }
+
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.querySelectorAll('.file-item').length === 1, { timeout: 5000 });
+    const focusAfterFirstRemoval = await page.evaluate(() => document.activeElement?.hasAttribute('data-actions-menu-trigger'));
+    if (!focusAfterFirstRemoval) {
+      throw new Error('Expected Remove to move focus to the next row actions-menu trigger');
+    }
+
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.querySelectorAll('.file-item').length === 0, { timeout: 5000 });
+    const focusAfterFinalRemoval = await page.evaluate(() => document.activeElement?.id);
+    if (focusAfterFinalRemoval !== 'statusPanel') {
+      throw new Error(`Expected final Remove to move focus to the Results panel, got ${focusAfterFinalRemoval || 'none'}`);
     }
 
     console.log('queue-focus-preservation-playwright: OK', JSON.stringify({ before, blurred, after, lifecycleEvents }));

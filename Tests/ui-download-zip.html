@@ -124,8 +124,21 @@
       state.queue.push(entry, entryWithSidecar, entryMissingSidecar, deferredEntry);
       renderFileList();
 
+      const perFileMenu = document.querySelector('[data-actions-menu-trigger][aria-controls="file-actions-t-1"]');
+      perFileMenu?.focus();
+      perFileMenu?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
       const perFileBtn = document.querySelector('[data-download-id="t-1"]');
-      if (perFileBtn) pass('Per-file Download button rendered'); else fail('Per-file Download button not rendered');
+      if (perFileMenu && perFileBtn && perFileMenu.getAttribute('aria-expanded') === 'true' && document.activeElement === perFileBtn) pass('Per-file Download menu item rendered'); else fail('Per-file Download menu item not rendered');
+
+      document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+      const removeMenuItem = document.querySelector('[data-remove-id="t-1"]');
+      const movedToRemove = document.activeElement === removeMenuItem;
+      document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      const returnedToDownload = document.activeElement === perFileBtn;
+      document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      if (movedToRemove && returnedToDownload && document.activeElement === perFileMenu && perFileMenu.getAttribute('aria-expanded') === 'false') pass('Per-file menu keyboard navigation works'); else fail('Per-file menu keyboard navigation failed');
+
+      perFileMenu?.click();
 
       const sidecarBlockedBtn = document.querySelector('[data-download-id="t-2"]');
       if (!sidecarBlockedBtn) pass('Per-file download blocked when CSS sidecar exists');

@@ -20,7 +20,8 @@ import { startStaticServer } from './playwright-server-helper.js';
     // Ensure all PASS messages are present
     const text = await page.evaluate(() => document.body.innerText);
     const checks = [
-      'PASS: Per-file Download button rendered',
+      'PASS: Per-file Download menu item rendered',
+      'PASS: Per-file menu keyboard navigation works',
       'PASS: Per-file download blocked when CSS sidecar exists',
       'PASS: Per-file download attempted with title-derived filename',
       'PASS: Per-file download inlines bundled stylesheet for standalone HTML',

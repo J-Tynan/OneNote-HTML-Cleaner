@@ -1267,6 +1267,7 @@ export function renderFileList() {
     );
     const canDownload = hasOutput && !singleDownloadBlocked;
     const downloadLabel = outputFormat === 'markdown' ? 'Download' : 'Download';
+    const safeMenuId = escapeHtml(`file-actions-${entry.id}`);
     const detailMessage = safeMessage || (hasOutput && singleDownloadBlocked
       ? 'Single-file download disabled while external CSS is enabled. Use Download ZIP.'
       : '');
@@ -1278,21 +1279,41 @@ export function renderFileList() {
         <span class="file-item__status"><span class="status-pill status-pill--${statusTone}">${safeStatus}</span></span>
         <span class="file-item__size" aria-label="Size: ${safeSize}">${safeSize}</span>
         <div class="file-item__actions">
-          ${canDownload ? `
-            <button
-              type="button"
-              class="btn-primary file-item__download-button"
-              data-download-id="${entry.id}">
-              ${downloadLabel}
-            </button>
-          ` : ''}
           <button
             type="button"
-            class="remove-item btn-secondary secondary-action-button file-item__remove-button"
-            data-remove-id="${entry.id}"
-            aria-label="Remove ${safeName}">
-            Remove
+            class="btn-ghost file-item__menu-trigger"
+            data-actions-menu-trigger
+            aria-label="Actions for ${safeName}"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="${safeMenuId}">
+            <span aria-hidden="true">&#8942;</span>
           </button>
+          <div
+            id="${safeMenuId}"
+            class="file-item__menu"
+            role="menu"
+            aria-label="Actions for ${safeName}"
+            hidden>
+            ${canDownload ? `
+              <button
+                type="button"
+                class="file-item__menu-item"
+                data-download-id="${entry.id}"
+                role="menuitem"
+                tabindex="-1">
+                ${downloadLabel}
+              </button>
+            ` : ''}
+            <button
+              type="button"
+              class="file-item__menu-item"
+              data-remove-id="${entry.id}"
+              role="menuitem"
+              tabindex="-1">
+              Remove
+            </button>
+          </div>
         </div>
         ${detailMessage ? `<p class="file-item__detail">${detailMessage}</p>` : ''}
       </div>
@@ -1423,16 +1444,133 @@ function onPaste(event) {
   }
 }
 
+/** @param {HTMLButtonElement} trigger */
+function getFileActionsMenu(trigger) {
+  const actions = trigger.closest('.file-item__actions');
+  const menu = actions?.querySelector('[role="menu"]');
+  return menu instanceof HTMLElement ? menu : null;
+}
+
+/** @param {HTMLElement} menu */
+function getFileActionsMenuItems(menu) {
+  return Array.from(menu.querySelectorAll('[role="menuitem"]'))
+    .filter((item) => item instanceof HTMLButtonElement);
+}
+
+/** @param {HTMLButtonElement} trigger */
+function closeFileActionsMenu(trigger) {
+  const menu = getFileActionsMenu(trigger);
+  if (!menu) return;
+  trigger.setAttribute('aria-expanded', 'false');
+  menu.hidden = true;
+}
+
+/** @param {HTMLButtonElement | null} except */
+function closeFileActionsMenus(except = null) {
+  document.querySelectorAll('[data-actions-menu-trigger][aria-expanded="true"]').forEach((element) => {
+    if (element instanceof HTMLButtonElement && element !== except) {
+      closeFileActionsMenu(element);
+    }
+  });
+}
+
+/** @param {HTMLButtonElement} trigger @param {boolean} focusFirstItem */
+function openFileActionsMenu(trigger, focusFirstItem) {
+  const menu = getFileActionsMenu(trigger);
+  if (!menu) return;
+  closeFileActionsMenus(trigger);
+  trigger.setAttribute('aria-expanded', 'true');
+  menu.hidden = false;
+  if (focusFirstItem) {
+    getFileActionsMenuItems(menu)[0]?.focus();
+  }
+}
+
+/** @param {number} removedRowIndex */
+function restoreFocusAfterRemoval(removedRowIndex) {
+  const triggers = Array.from(dom.fileList?.querySelectorAll('[data-actions-menu-trigger]') || [])
+    .filter((element) => element instanceof HTMLButtonElement);
+  const nextTrigger = triggers[removedRowIndex] || triggers[removedRowIndex - 1];
+  if (nextTrigger instanceof HTMLButtonElement) {
+    nextTrigger.focus();
+    return;
+  }
+  dom.statusPanel?.focus();
+}
+
+/** @param {KeyboardEvent} event */
+function onFileListKeyDown(event) {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+
+  const trigger = target.closest('[data-actions-menu-trigger]');
+  if (trigger instanceof HTMLButtonElement) {
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      openFileActionsMenu(trigger, true);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      closeFileActionsMenu(trigger);
+    }
+    return;
+  }
+
+  const menuItem = target.closest('[role="menuitem"]');
+  if (!(menuItem instanceof HTMLButtonElement)) return;
+  const menu = menuItem.closest('[role="menu"]');
+  if (!(menu instanceof HTMLElement)) return;
+  const ownerTrigger = menu.parentElement?.querySelector('[data-actions-menu-trigger]');
+  if (!(ownerTrigger instanceof HTMLButtonElement)) return;
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    event.stopPropagation();
+    closeFileActionsMenu(ownerTrigger);
+    ownerTrigger.focus();
+    return;
+  }
+
+  if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+  event.preventDefault();
+  const menuItems = getFileActionsMenuItems(menu);
+  const currentIndex = menuItems.indexOf(menuItem);
+  const offset = event.key === 'ArrowDown' ? 1 : -1;
+  menuItems[(currentIndex + offset + menuItems.length) % menuItems.length]?.focus();
+}
+
+/** @param {MouseEvent} event */
+function onDocumentClick(event) {
+  const target = event.target;
+  if (!(target instanceof Element) || !target.closest('.file-item__actions')) {
+    closeFileActionsMenus();
+  }
+}
+
 /** @param {MouseEvent} event */
 function onFileListClick(event) {
   const target = event.target;
   if (!(target instanceof Element)) return;
 
+  const menuTrigger = target.closest('[data-actions-menu-trigger]');
+  if (menuTrigger instanceof HTMLButtonElement) {
+    if (menuTrigger.getAttribute('aria-expanded') === 'true') {
+      closeFileActionsMenu(menuTrigger);
+    } else {
+      openFileActionsMenu(menuTrigger, false);
+    }
+    return;
+  }
+
   const removeButton = target.closest('[data-remove-id]');
   if (removeButton) {
     const removeId = removeButton.getAttribute('data-remove-id');
     if (removeId) {
+      const row = removeButton.closest('.file-item');
+      const removedRowIndex = row
+        ? Array.from(dom.fileList?.querySelectorAll('.file-item') || []).indexOf(row)
+        : -1;
       removeFromQueue(removeId);
+      restoreFocusAfterRemoval(removedRowIndex);
     }
     return;
   }
@@ -1496,6 +1634,7 @@ function bindEvents() {
   dom.importButton?.addEventListener('click', onImportButtonClick);
   dom.fileInput?.addEventListener('change', onFileInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
+  dom.fileList?.addEventListener('keydown', onFileListKeyDown);
   dom.clearFilesButton?.addEventListener('click', onClearFilesClick);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
@@ -1508,6 +1647,7 @@ function bindEvents() {
   dom.markdownFlavor?.addEventListener('change', onAdvancedOptionsChange);
   dom.convertedPageThemeToggleEnabled?.addEventListener('change', onAdvancedOptionsChange);
   document.addEventListener('paste', onPaste);
+  document.addEventListener('click', onDocumentClick);
   dom.autoConvertEnabled?.addEventListener('change', onAutoConvertChange);
 
   // Help modal events
