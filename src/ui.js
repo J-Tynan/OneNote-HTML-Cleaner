@@ -1266,7 +1266,7 @@ export function renderFileList() {
       && hasExternalizedCssAsset(entry)
     );
     const canDownload = hasOutput && !singleDownloadBlocked;
-    const downloadLabel = outputFormat === 'markdown' ? 'Download Markdown' : 'Download HTML';
+    const downloadLabel = outputFormat === 'markdown' ? 'Download' : 'Download';
     const detailMessage = safeMessage || (hasOutput && singleDownloadBlocked
       ? 'Single-file download disabled while external CSS is enabled. Use Download ZIP.'
       : '');

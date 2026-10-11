@@ -652,10 +652,15 @@ summary::-webkit-details-marker {
   .file-item__remove-button {
     flex: none;
     align-self: flex-start;
+    min-height: 2rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
     white-space: nowrap;
   }
 
   .file-item__download-button {
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.75rem;
     white-space: nowrap;
   }
 
@@ -688,12 +693,12 @@ summary::-webkit-details-marker {
 
 .file-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 3.25rem 5.75rem 4rem minmax(6.5rem, auto);
+  grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem 13rem;
   grid-template-areas: "name type status size actions" "detail detail detail detail actions";
   align-items: center;
-  column-gap: 0.625rem;
-  min-height: 3.5rem;
-  padding: 0.5rem 0;
+  column-gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.375rem 0;
   border-bottom: 1px solid var(--border-muted);
   transition: background-color 120ms ease, border-color 120ms ease;
 }
@@ -704,8 +709,8 @@ summary::-webkit-details-marker {
 
 .file-list-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 3.25rem 5.75rem 4rem minmax(6.5rem, auto);
-  gap: 0.625rem;
+  grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem 13rem;
+  column-gap: 0.5rem;
   padding: 0 0 0.375rem;
   border-bottom: 1px solid var(--border-muted);
   color: var(--text-muted);
@@ -745,6 +750,12 @@ summary::-webkit-details-marker {
 .file-item__status {
   grid-area: status;
   min-width: 0;
+  white-space: nowrap;
+}
+
+.file-item__status .status-pill {
+  padding: 0.0625rem 0.375rem;
+  font-size: 0.6875rem;
 }
 
 .file-item__size {
