@@ -105,7 +105,8 @@ summary::-webkit-details-marker {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  min-height: 2.5rem;
+  min-height: 2.25rem;
+  padding-block: 0.125rem;
 }
 
 .advanced-options-summary > span:first-child {
@@ -147,17 +148,17 @@ summary::-webkit-details-marker {
 }
 
 #advancedOptions[open] > p {
-  margin-block: 0.5rem 0;
+  margin-block: 0.375rem 0;
   line-height: 1.35;
 }
 
 #advancedOptions[open] > #statusControls {
-  margin-top: 0.625rem;
+  margin-top: 0.5rem;
 }
 
 #advancedOptions[open] #statusControls > .space-y-3 {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.375rem;
 }
 
 #advancedOptions[open] #statusControls > .space-y-3 > * {
@@ -165,11 +166,11 @@ summary::-webkit-details-marker {
 }
 
 #advancedOptions[open] .checkbox-option {
-  gap: 0.5rem;
+  gap: 0.625rem;
 }
 
 #advancedOptions[open] .checkbox-option > span {
-  gap: 0.0625rem;
+  gap: 0.125rem;
   line-height: 1.25;
 }
 
@@ -180,7 +181,7 @@ summary::-webkit-details-marker {
 
 #advancedOptions[open] .option-subgroup,
 #advancedOptions[open] .option-subgroup--compact {
-  gap: 0.1875rem;
+  gap: 0.25rem;
 }
 
 #advancedOptions[open] .option-subgroup .form-control {
@@ -270,12 +271,12 @@ summary::-webkit-details-marker {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 1rem;
-  min-height: 3.75rem;
-  padding: 0.625rem 0.75rem;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.625rem;
   border: 1px solid var(--border-muted);
-  border-radius: 0.5rem;
-  background-color: var(--bg-card);
+  border-radius: 0.375rem;
+  background-color: var(--bg-soft);
 }
 
 .queue-action-strip__status {
@@ -283,9 +284,9 @@ summary::-webkit-details-marker {
 }
 
 .queue-action-strip .homepage-convert-button {
-  min-height: 2.5rem;
-  padding: 0.625rem 1rem;
-  font-size: 0.875rem;
+  min-height: 2.25rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .queue-action-strip .convert-button-wrapper .tooltip {
@@ -310,9 +311,9 @@ summary::-webkit-details-marker {
 }
 
 .homepage-primary-button {
-  min-height: var(--btn-homepage-primary-min-height);
-  padding: var(--btn-homepage-primary-padding-y) var(--btn-homepage-primary-padding-x);
-  font-size: var(--btn-homepage-primary-font-size);
+  min-height: 2.625rem;
+  padding: 0.625rem 1.125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.01em;
 }
@@ -328,7 +329,7 @@ summary::-webkit-details-marker {
 
 .import-card > .space-y-3 {
   display: grid;
-  gap: 0.625rem;
+  gap: 0.5rem;
 }
 
 .import-card > .space-y-3 > * + * {
@@ -336,7 +337,7 @@ summary::-webkit-details-marker {
 }
 
 .import-card > .space-y-3 > div:first-child > p {
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .import-card > .space-y-3 > div:nth-child(2) {
@@ -344,17 +345,19 @@ summary::-webkit-details-marker {
 }
 
 .import-card .homepage-primary-button {
-  min-height: 2.75rem;
+  min-height: 2.625rem;
   padding-block: 0.625rem;
 }
 
 #dropzone {
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 0.875rem;
+  border-width: 1px;
+  border-radius: 0.375rem;
 }
 
 #dropzone > .space-y-3 {
   display: grid;
-  gap: 0.375rem;
+  gap: 0.25rem;
 }
 
 #dropzone > .space-y-3 > * + * {
@@ -487,7 +490,7 @@ summary::-webkit-details-marker {
     display: grid;
     grid-template-columns: 1rem minmax(0, 1fr);
     align-items: start;
-    gap: 0.75rem;
+    gap: 0.625rem;
     font-size: 0.875rem;
     cursor: pointer;
     color: var(--text-primary);
@@ -496,7 +499,7 @@ summary::-webkit-details-marker {
   .checkbox-option > span {
     min-width: 0;
     display: grid;
-    gap: 0.25rem;
+    gap: 0.1875rem;
   }
 
   .checkbox-input {
@@ -571,12 +574,25 @@ summary::-webkit-details-marker {
   .btn-secondary:focus { box-shadow: 0 0 0 4px var(--btn-focus-ring); }
 
   .homepage-convert-button {
-    min-height: var(--btn-homepage-primary-min-height);
-    padding: var(--btn-homepage-primary-padding-y) var(--btn-homepage-primary-padding-x);
-    font-size: var(--btn-homepage-primary-font-size);
+    min-height: 2.25rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.01em;
     white-space: nowrap;
+    border: 1px solid var(--border-muted);
+    background-color: var(--bg-card);
+    color: var(--text-help);
+    box-shadow: none;
+  }
+
+  .homepage-convert-button:hover:not(:disabled) {
+    background-color: var(--bg-soft);
+    color: var(--text-primary);
+  }
+
+  .homepage-convert-button:active:not(:disabled) {
+    background-color: var(--bg-soft);
   }
 
     .results-action-button {
@@ -614,7 +630,7 @@ summary::-webkit-details-marker {
   .header-icon-button {
     width: var(--btn-header-icon-size);
     height: var(--btn-header-icon-size);
-    padding: 0.375rem;
+    padding: 0.3125rem;
     border-color: var(--border-muted);
     background-color: var(--bg-card);
     color: var(--text-help);
@@ -626,14 +642,17 @@ summary::-webkit-details-marker {
   }
 
   .header-icon-button--theme {
-    gap: 0.375rem;
+    gap: 0.3125rem;
     width: auto;
-    padding: 0.375rem 0.5rem;
-    font-size: 0.875rem;
+    padding: 0.3125rem 0.4375rem;
+    font-size: 0.8125rem;
   }
 
   .header-link {
     border-color: transparent;
+    min-height: var(--btn-header-icon-size);
+    padding-inline: 0.4375rem;
+    font-size: 0.8125rem;
   }
 
   .secondary-action-button {
@@ -697,10 +716,10 @@ summary::-webkit-details-marker {
     width: 100%;
     border-radius: 0.25rem;
     border: 1px solid var(--border-muted);
-    min-height: 2.5rem;
-    padding: 0.5rem 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.4375rem 0.625rem;
     font-family: inherit;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     line-height: 1.35;
     outline: none;
     appearance: none;
@@ -1017,7 +1036,7 @@ html.dark .status-pill--error {
 
   #dropzone {
     min-height: 2rem;
-    padding: 1.25rem;
+    padding: 0.875rem;
   }
 
   .home-results-card--empty #fileList:empty::before {
@@ -1025,8 +1044,8 @@ html.dark .status-pill--error {
   }
 
   .homepage-primary-button {
-    min-height: 3.25rem;
-    padding: 0.8125rem 1.25rem;
+    min-height: 2.625rem;
+    padding: 0.625rem 1.125rem;
   }
 
   .results-action-button {
@@ -1422,11 +1441,11 @@ html.dark .header-icon-button:hover {
   background: var(--bg-card);
   color: var(--text-primary);
   border: 1px solid var(--border-muted);
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  padding: 0.4375rem 0.625rem;
   box-shadow: 0 6px 18px rgba(2,6,23,0.12);
-  font-size: 0.8125rem;
-  line-height: 1.45;
+  font-size: 0.75rem;
+  line-height: 1.35;
   transition: opacity 120ms ease, transform 120ms ease;
   opacity: 0;
   pointer-events: none;
