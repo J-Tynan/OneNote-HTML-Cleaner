@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-11T16:09:37.191Z",
-  "url": "http://127.0.0.1:50629/",
+  "timestamp": "2026-10-12T13:39:48.989Z",
+  "url": "http://127.0.0.1:57639/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -2586,7 +2586,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44.78125\" style=\"min-height: 44.7812px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"40.59375\" style=\"min-height: 40.5938px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -2826,7 +2826,7 @@
     },
     {
       "id": "color-contrast",
-      "impact": "serious",
+      "impact": null,
       "tags": [
         "cat.color",
         "wcag2aa",
@@ -2848,16 +2848,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0f172a",
+                "fgColor": "#1d252b",
                 "bgColor": "#ffffff",
-                "contrastRatio": 17.85,
+                "contrastRatio": 15.53,
                 "fontSize": "15.0pt (20px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.85"
+              "message": "Element has sufficient color contrast of 15.53"
             }
           ],
           "all": [],
@@ -2873,16 +2873,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#3d5165",
+                "fgColor": "#48545d",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.19,
-                "fontSize": "9.0pt (12px)",
+                "contrastRatio": 7.77,
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.19"
+              "message": "Element has sufficient color contrast of 7.77"
             }
           ],
           "all": [],
@@ -2898,16 +2898,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0f172a",
+                "fgColor": "#1d252b",
                 "bgColor": "#ffffff",
-                "contrastRatio": 17.85,
+                "contrastRatio": 15.53,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.85"
+              "message": "Element has sufficient color contrast of 15.53"
             }
           ],
           "all": [],
@@ -2923,16 +2923,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#3d5165",
+                "fgColor": "#48545d",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.19,
+                "contrastRatio": 7.77,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.19"
+              "message": "Element has sufficient color contrast of 7.77"
             }
           ],
           "all": [],
@@ -2948,16 +2948,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#3d5165",
+                "fgColor": "#48545d",
                 "bgColor": "#ffffff",
-                "contrastRatio": 8.19,
+                "contrastRatio": 7.77,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 8.19"
+              "message": "Element has sufficient color contrast of 7.77"
             }
           ],
           "all": [],
@@ -2966,6 +2966,156 @@
           "html": "<span class=\"header-theme-label\">Theme</span>",
           "target": [
             ".header-theme-label"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#1d252b",
+                "bgColor": "#ffffff",
+                "contrastRatio": 15.53,
+                "fontSize": "13.5pt (18px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 15.53"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
+          "target": [
+            "#importHeading"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#48545d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 7.77,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 7.77"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
+          "target": [
+            ".max-w-2xl"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p>Supported input: .mht, .mhtml</p>",
+          "target": [
+            ".space-y-1 > p:nth-child(1)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p>Files stay on your device.</p>",
+          "target": [
+            ".space-y-1 > p:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span id=\"autoConvertNoticeLead\">Files are converted automatically when added to the queue.</span>",
+          "target": [
+            "#autoConvertNoticeLead"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span id=\"autoConvertNoticeDetail\">Change this in Advanced options if you prefer manual conversion.</span>",
+          "target": [
+            "#autoConvertNoticeDetail"
           ]
         },
         {
@@ -2998,16 +3148,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0f172a",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 15.06,
+                "fgColor": "#1d252b",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 14.05,
                 "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.06"
+              "message": "Element has sufficient color contrast of 14.05"
             }
           ],
           "all": [],
@@ -3023,16 +3173,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#3d5165",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 6.91,
+                "fgColor": "#48545d",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 7.03,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.91"
+              "message": "Element has sufficient color contrast of 7.03"
             }
           ],
           "all": [],
@@ -3048,16 +3198,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 5.17,
+                "fgColor": "#5b6870",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.17"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3093,16 +3243,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0f172a",
+                "fgColor": "#1d252b",
                 "bgColor": "#ffffff",
-                "contrastRatio": 17.85,
+                "contrastRatio": 15.53,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 17.85"
+              "message": "Element has sufficient color contrast of 15.53"
             }
           ],
           "all": [],
@@ -3118,16 +3268,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
+                "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
-                "contrastRatio": 6.12,
+                "contrastRatio": 5.73,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.12"
+              "message": "Element has sufficient color contrast of 5.73"
             }
           ],
           "all": [],
@@ -3143,16 +3293,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
+                "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
-                "contrastRatio": 6.12,
+                "contrastRatio": 5.73,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.12"
+              "message": "Element has sufficient color contrast of 5.73"
             }
           ],
           "all": [],
@@ -3168,16 +3318,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
+                "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
-                "contrastRatio": 6.12,
+                "contrastRatio": 5.73,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.12"
+              "message": "Element has sufficient color contrast of 5.73"
             }
           ],
           "all": [],
@@ -3193,16 +3343,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#0f172a",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 15.06,
+                "fgColor": "#1d252b",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 14.05,
                 "fontSize": "13.5pt (18px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.06"
+              "message": "Element has sufficient color contrast of 14.05"
             }
           ],
           "all": [],
@@ -3218,16 +3368,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
+                "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
-                "contrastRatio": 6.12,
+                "contrastRatio": 5.73,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.12"
+              "message": "Element has sufficient color contrast of 5.73"
             }
           ],
           "all": [],
@@ -3243,22 +3393,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#3d5165",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 6.91,
+                "fgColor": "#48545d",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 7.03,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.91"
+              "message": "Element has sufficient color contrast of 7.03"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44.78125\" style=\"min-height: 44.7812px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"40.59375\" style=\"min-height: 40.5938px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -3268,16 +3418,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 5.17,
+                "fgColor": "#5b6870",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.17"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3293,16 +3443,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 5.17,
+                "fgColor": "#5b6870",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.17"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3318,16 +3468,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 5.17,
+                "fgColor": "#5b6870",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.17"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3343,16 +3493,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 5.17,
+                "fgColor": "#5b6870",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.17"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3368,16 +3518,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#e4edf4",
-                "contrastRatio": 5.17,
+                "fgColor": "#5b6870",
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.17"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3393,16 +3543,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#eaf1f6",
-                "contrastRatio": 5.37,
+                "fgColor": "#5b6870",
+                "bgColor": "#f7f8f6",
+                "contrastRatio": 5.38,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.37"
+              "message": "Element has sufficient color contrast of 5.38"
             }
           ],
           "all": [],
@@ -3418,16 +3568,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#eaf1f6",
-                "contrastRatio": 5.37,
+                "fgColor": "#5b6870",
+                "bgColor": "#f7f8f6",
+                "contrastRatio": 5.38,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.37"
+              "message": "Element has sufficient color contrast of 5.38"
             }
           ],
           "all": [],
@@ -3443,16 +3593,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4f6478",
-                "bgColor": "#eaf1f6",
-                "contrastRatio": 5.37,
+                "fgColor": "#5b6870",
+                "bgColor": "#f7f8f6",
+                "contrastRatio": 5.38,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.37"
+              "message": "Element has sufficient color contrast of 5.38"
             }
           ],
           "all": [],
@@ -6110,7 +6260,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44.78125\" style=\"min-height: 44.7812px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"40.59375\" style=\"min-height: 40.5938px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -6565,219 +6715,6 @@
             "#helpButton"
           ],
           "failureSummary": "Fix all of the following:\n  Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"helpModal\""
-        }
-      ]
-    },
-    {
-      "id": "color-contrast",
-      "impact": "serious",
-      "tags": [
-        "cat.color",
-        "wcag2aa",
-        "wcag143",
-        "TTv5",
-        "TT13.c",
-        "EN-301-549",
-        "EN-9.1.4.3",
-        "ACT",
-        "RGAAv4",
-        "RGAA-3.2.1"
-      ],
-      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
-      "help": "Elements must meet minimum color contrast ratio thresholds",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "contrastRatio": 0,
-                "fontSize": "13.5pt (18px)",
-                "fontWeight": "normal",
-                "messageKey": "bgGradient",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element's background color could not be determined due to a background gradient"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>",
-          "target": [
-            "#importHeading"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "contrastRatio": 0,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "messageKey": "bgGradient",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element's background color could not be determined due to a background gradient"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
-          "target": [
-            ".max-w-2xl"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "contrastRatio": 0,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "bgGradient",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element's background color could not be determined due to a background gradient"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<p>Supported input: .mht, .mhtml</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(1)"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "contrastRatio": 0,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "bgGradient",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element's background color could not be determined due to a background gradient"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<p>Files stay on your device.</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(2)"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "contrastRatio": 0,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "bgGradient",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element's background color could not be determined due to a background gradient"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span id=\"autoConvertNoticeLead\">Files are converted automatically when added to the queue.</span>",
-          "target": [
-            "#autoConvertNoticeLead"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "contrastRatio": 0,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "messageKey": "bgGradient",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element's background color could not be determined due to a background gradient"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span id=\"autoConvertNoticeDetail\">Change this in Advanced options if you prefer manual conversion.</span>",
-          "target": [
-            "#autoConvertNoticeDetail"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
         }
       ]
     }
