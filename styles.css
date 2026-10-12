@@ -371,7 +371,7 @@ summary::-webkit-details-marker {
 .home-results-card {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   min-height: 22rem;
 }
 
@@ -381,6 +381,9 @@ summary::-webkit-details-marker {
 
 #statusSummary {
   min-height: calc(0.5em);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
 }
 
 #fileList {
@@ -393,24 +396,28 @@ summary::-webkit-details-marker {
   display: block;
   border: 1px dashed var(--border-muted);
   border-radius: 0.375rem;
-  background-color: var(--bg-soft);
+  background-color: color-mix(in srgb, var(--bg-soft) 72%, var(--bg-card));
 }
 
 .home-results-card--empty #fileList:empty::before {
   content: 'Results will populate here after you add files.';
   display: block;
-  padding: 2.5rem 1rem;
+  padding: 2.25rem 1rem;
   text-align: center;
   color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.5;
 }
 
-.home-results-card--empty #downloadZip:disabled {
-  border: 1px solid var(--border-muted);
-  background-color: transparent;
+.results-action-button:disabled {
+  border-color: var(--border-muted);
+  background-color: var(--bg-soft);
   color: var(--text-muted);
   box-shadow: none;
+}
+
+.home-results-card--empty #downloadZip:disabled {
+  background-color: var(--bg-soft);
 }
 
 /* === UI SURFACE SYSTEM === */
@@ -676,39 +683,57 @@ summary::-webkit-details-marker {
     justify-content: center;
     padding: 0;
     font-size: 1.125rem;
+    color: var(--text-muted);
+  }
+
+  .file-item__menu-trigger:hover,
+  .file-item__menu-trigger[aria-expanded="true"] {
+    color: var(--text-primary);
+  }
+
+  .file-item__menu-trigger:focus-visible {
+    border-color: var(--cta-bg);
+    box-shadow: 0 0 0 2px var(--btn-focus-ring);
+    outline: none;
   }
 
   .file-item__menu {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     top: calc(100% + 0.25rem);
     right: 0;
     min-width: 7.5rem;
-    padding: 0.25rem;
+    padding: 0.3125rem;
     border: 1px solid var(--border-muted);
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     background-color: var(--bg-card);
-    box-shadow: var(--btn-shadow);
+    box-shadow: 0 0.5rem 1.25rem rgba(23, 37, 43, 0.14);
+  }
+
+  #fileList:has(> .file-item:last-child .file-item__menu:not([hidden])) {
+    padding-bottom: 2.75rem;
   }
 
   .file-item__menu-item {
     display: block;
     width: 100%;
     min-height: 2rem;
-    padding: 0.375rem 0.5rem;
+    padding: 0.375rem 0.625rem;
     border: 0;
     border-radius: 0.25rem;
     background: transparent;
     color: var(--text-primary);
     font: inherit;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     text-align: left;
   }
 
   .file-item__menu-item:hover,
   .file-item__menu-item:focus-visible {
     background-color: var(--bg-soft);
+    color: var(--text-primary);
     outline: none;
+    box-shadow: inset 0 0 0 1px var(--border-muted);
   }
 
   .form-control {
@@ -744,8 +769,8 @@ summary::-webkit-details-marker {
   grid-template-areas: "name type status size actions" "detail detail detail detail actions";
   align-items: center;
   column-gap: 0.5rem;
-  min-height: 3rem;
-  padding: 0.375rem 0;
+  min-height: 2.875rem;
+  padding: 0.3125rem 0;
   border-bottom: 1px solid var(--border-muted);
   transition: background-color 120ms ease, border-color 120ms ease;
 }
@@ -758,12 +783,12 @@ summary::-webkit-details-marker {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem 2rem;
   column-gap: 0.5rem;
-  padding: 0 0 0.375rem;
+  padding: 0 0 0.3125rem;
   border-bottom: 1px solid var(--border-muted);
   color: var(--text-muted);
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -786,7 +811,7 @@ summary::-webkit-details-marker {
 .file-item__type,
 .file-item__size {
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   line-height: 1.35;
   white-space: nowrap;
 }
@@ -802,7 +827,7 @@ summary::-webkit-details-marker {
 }
 
 .file-item__status .status-pill {
-  padding: 0.0625rem 0.375rem;
+  padding: 0.0625rem 0.3125rem;
   font-size: 0.6875rem;
 }
 
@@ -819,14 +844,16 @@ summary::-webkit-details-marker {
   grid-area: detail;
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   line-height: 1.35;
 }
 
 #appStateBadge {
   border: 1px solid var(--border-muted);
+  border-radius: 0.25rem;
   background-color: var(--bg-card);
   color: var(--text-primary);
+  letter-spacing: 0.02em;
 }
 
 #appStateBadge[data-state="empty"] {
@@ -836,49 +863,49 @@ summary::-webkit-details-marker {
 }
 
 #appStateBadge[data-state="queued"] {
-  background-color: #e0f2fe;
-  border-color: #bae6fd;
+  background-color: #f0f9ff;
+  border-color: #d4e9f5;
   color: #0c4a6e;
 }
 
 html.dark #appStateBadge[data-state="queued"] {
-  background-color: #082f49;
+  background-color: #0a283a;
   border-color: #0c4a6e;
   color: #bae6fd;
 }
 
 #appStateBadge[data-state="working"] {
-  background-color: #fef3c7;
-  border-color: #fcd34d;
+  background-color: #fffbeb;
+  border-color: #f8df9b;
   color: #92400e;
 }
 
 html.dark #appStateBadge[data-state="working"] {
-  background-color: #422006;
+  background-color: #38210a;
   border-color: #92400e;
   color: #fde68a;
 }
 
 #appStateBadge[data-state="success"] {
-  background-color: #dcfce7;
-  border-color: #86efac;
+  background-color: #f0fdf4;
+  border-color: #bbe4c7;
   color: #166534;
 }
 
 html.dark #appStateBadge[data-state="success"] {
-  background-color: #052e16;
+  background-color: #092719;
   border-color: #166534;
   color: #86efac;
 }
 
 #appStateBadge[data-state="error"] {
-  background-color: #fee2e2;
-  border-color: #fca5a5;
+  background-color: #fef2f2;
+  border-color: #f3c2c2;
   color: #991b1b;
 }
 
 html.dark #appStateBadge[data-state="error"] {
-  background-color: #450a0a;
+  background-color: #391010;
   border-color: #991b1b;
   color: #fca5a5;
 }
@@ -912,7 +939,7 @@ html.dark #appStateBadge[data-state="error"] {
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--border-muted);
-  border-radius: 9999px;
+  border-radius: 0.25rem;
   padding: 0.125rem 0.5rem;
   font-weight: 600;
   line-height: 1.2;
@@ -921,49 +948,49 @@ html.dark #appStateBadge[data-state="error"] {
 }
 
 .status-pill--queued {
-  background-color: #e0f2fe;
-  border-color: #bae6fd;
+  background-color: #f0f9ff;
+  border-color: #d4e9f5;
   color: #0c4a6e;
 }
 
 html.dark .status-pill--queued {
-  background-color: #082f49;
+  background-color: #0a283a;
   border-color: #0c4a6e;
   color: #bae6fd;
 }
 
 .status-pill--working {
-  background-color: #fef3c7;
-  border-color: #fcd34d;
+  background-color: #fffbeb;
+  border-color: #f8df9b;
   color: #92400e;
 }
 
 html.dark .status-pill--working {
-  background-color: #422006;
+  background-color: #38210a;
   border-color: #92400e;
   color: #fde68a;
 }
 
 .status-pill--success {
-  background-color: #dcfce7;
-  border-color: #86efac;
+  background-color: #f0fdf4;
+  border-color: #bbe4c7;
   color: #166534;
 }
 
 html.dark .status-pill--success {
-  background-color: #052e16;
+  background-color: #092719;
   border-color: #166534;
   color: #86efac;
 }
 
 .status-pill--error {
-  background-color: #fee2e2;
-  border-color: #fca5a5;
+  background-color: #fef2f2;
+  border-color: #f3c2c2;
   color: #991b1b;
 }
 
 html.dark .status-pill--error {
-  background-color: #450a0a;
+  background-color: #391010;
   border-color: #991b1b;
   color: #fca5a5;
 }

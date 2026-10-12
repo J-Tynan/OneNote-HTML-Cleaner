@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-12T13:39:48.989Z",
-  "url": "http://127.0.0.1:57639/",
+  "timestamp": "2026-10-12T13:57:27.940Z",
+  "url": "http://127.0.0.1:65348/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -2586,7 +2586,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"40.59375\" style=\"min-height: 40.5938px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"36.375\" style=\"min-height: 36.375px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -2901,7 +2901,7 @@
                 "fgColor": "#1d252b",
                 "bgColor": "#ffffff",
                 "contrastRatio": 15.53,
-                "fontSize": "10.5pt (14px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -2951,7 +2951,7 @@
                 "fgColor": "#48545d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 7.77,
-                "fontSize": "10.5pt (14px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3126,7 +3126,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#0b6f83",
                 "contrastRatio": 5.8,
-                "fontSize": "11.3pt (15px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3319,15 +3319,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
+                "bgColor": "#f2f4f2",
+                "contrastRatio": 5.19,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
@@ -3393,22 +3393,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#48545d",
+                "fgColor": "#5b6870",
                 "bgColor": "#f2f4f2",
-                "contrastRatio": 7.03,
-                "fontSize": "10.5pt (14px)",
+                "contrastRatio": 5.19,
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.03"
+              "message": "Element has sufficient color contrast of 5.19"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"40.59375\" style=\"min-height: 40.5938px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"36.375\" style=\"min-height: 36.375px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -6260,7 +6260,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"40.59375\" style=\"min-height: 40.5938px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"36.375\" style=\"min-height: 36.375px;\">Added files will appear here with progress, status, and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
