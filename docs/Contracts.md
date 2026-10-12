@@ -144,6 +144,40 @@ Toolbar injection is optional and controlled by config; response shapes do not c
 
 Current stable runtime behavior does not emit native `done` responses. Native `.one` / `.onepkg` inputs are surfaced as unsupported while importer work remains deferred. The response shape above is retained only as a non-shipped design/development contract for future native re-enablement.
 ---
+## Results workbench contract
+
+The redesigned Results surface is backed by a normalized workbench tree. This
+contract defines the model independently of a particular renderer.
+
+Each node has a stable ID, optional parent ID, kind, display name, relative
+path, source kind, status, size, child IDs, and derived leaf counts. Node kinds
+are `folder`, `notebook`, `section`, `page`, and `file`.
+
+- A flat MHT/MHTML queue entry becomes a `file` leaf.
+- A browser-provided relative path may create `folder` ancestors only. It must
+  not be presented as OneNote notebook or section metadata.
+- `notebook`, `section`, and `page` nodes require parser-derived native source
+  metadata. The UI must not infer those identities from arbitrary file names.
+- Parent size, leaf count, successful-leaf count, and status are derived from
+  descendants. A mixed completed/unsupported result is `partial`; errors,
+  working, and queued descendants take precedence in that order.
+- Selection stores leaf IDs only. Parent checkboxes are derived as checked,
+  mixed, or unchecked from descendant leaves.
+- Search matches name, relative path, status, and message. Matching descendants
+  keep all ancestors visible, while non-matching siblings stay hidden.
+- Per-row download/remove actions apply to the represented leaf or documented
+  descendant set. Bulk actions must not include unsupported, failed, or
+  output-less leaves.
+
+The current implementation maintains the normalized projection in parallel
+with the existing flat renderer. The tree renderer, directory intake, search,
+selection, and bulk actions are implemented in later milestones; their UI may
+not claim behavior that is not yet connected to this contract.
+
+Draft records written by the workbench-aware UI use schema version 2 and retain
+`relativePath` per queue entry. Version-1 records without this field restore by
+using the entry name as its relative path.
+
 ## Progress message
 ```json
 { "id":"string", "status":"progress", "step":"Sanitize", "percent":40 }

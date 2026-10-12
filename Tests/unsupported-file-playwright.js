@@ -31,6 +31,11 @@ import { startStaticServer } from './playwright-server-helper.js';
       throw new Error('Expected UI to mark .one file as Unsupported — got: ' + String(statusText));
     }
 
+    const detailText = await page.$eval('.file-item__detail', (el) => el.textContent || '');
+    if (!/Native \.one conversion is not enabled/i.test(detailText)) {
+      throw new Error(`Expected specific native guidance, got: ${detailText}`);
+    }
+
     const menuTrigger = page.locator('[data-actions-menu-trigger]');
     await menuTrigger.click();
     const menuItems = await page.locator('[role="menuitem"]').count();

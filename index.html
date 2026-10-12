@@ -92,6 +92,12 @@
                 class="btn-primary homepage-import-button homepage-primary-button">
                 Browse files
               </button>
+              <button
+                id="folderImportButton"
+                type="button"
+                class="btn-secondary homepage-folder-import-button">
+                Add from folder
+              </button>
             </div>
           </div>
 
@@ -124,6 +130,15 @@
                 type="file"
                 multiple
                 aria-label="Select files to import"
+                accept=".mht,.mhtml" />
+              <input
+                id="folderInput"
+                class="sr-only"
+                type="file"
+                multiple
+                webkitdirectory
+                directory
+                aria-label="Select a folder to import"
                 accept=".mht,.mhtml" />
             </div>
           </div>

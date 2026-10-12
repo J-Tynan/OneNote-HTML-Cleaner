@@ -16,11 +16,14 @@ import {
 } from './ui-output-records.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
+import { buildWorkbenchTree } from './ui-workbench-model.js';
 
 /**
  * @typedef {import('./contracts.js').OutputAsset} OutputAsset
  * @typedef {import('./contracts.js').PipelineConfigInput} PipelineConfigInput
  * @typedef {import('./contracts.js').SourceKind} SourceKind
+ * @typedef {import('./contracts.js').WorkbenchNode} WorkbenchNode
+ * @typedef {import('./contracts.js').WorkbenchUiState} WorkbenchUiState
  * @typedef {import('./contracts.js').WorkerQueuedPayload} WorkerQueuedPayload
  * @typedef {ReturnType<typeof buildAdvancedOptionsState>} AdvancedOptionsState
  * @typedef {ReturnType<typeof createDownloadHelpers>} DownloadHelpers
@@ -30,13 +33,16 @@ import { createLogger, setEnabled as setLogEnabled } from './logging.js';
  * @typedef {string | { content?: string, html?: string, format?: string, assets?: OutputAsset[], config?: PipelineConfigInput | null }} UiSuccessfulOutputValue
  * @typedef {{ path: string, type: string, content: string, bytes?: number[] }} SerializedDraftAsset
  * @typedef {OutputAsset & { path?: string, type?: string, content?: string, bytes?: Uint8Array | ArrayBuffer }} QueueOutputAsset
- * @typedef {{ id?: string, name?: string, size?: number, status?: QueueStatus | string, file?: File | null, fileType?: string, fileText?: string, sourceKind?: SourceKind | string, message?: string, outputHtml?: string, outputText?: string, outputFormat?: QueueOutputFormat | string, outputAssets?: OutputAsset[], conversionConfig?: PipelineConfigInput | null, downloadFileName?: string }} QueueEntry
- * @typedef {{ id: string, name: string, size: number, status: QueueStatus | string, file: File | null, fileType: string, fileText: string, sourceKind: SourceKind | string, message: string, outputHtml: string, outputText: string, outputFormat: QueueOutputFormat, outputAssets: SerializedDraftAsset[], conversionConfig: PipelineConfigInput | null, downloadFileName: string }} StoredQueueEntry
- * @typedef {{ id: string, updatedAt: number, autoConvertEnabled: boolean, queue: StoredQueueEntry[] }} DraftRecord
+ * @typedef {{ id?: string, name?: string, relativePath?: string, size?: number, status?: QueueStatus | string, file?: File | null, fileType?: string, fileText?: string, sourceKind?: SourceKind | string, message?: string, outputHtml?: string, outputText?: string, outputFormat?: QueueOutputFormat | string, outputAssets?: OutputAsset[], conversionConfig?: PipelineConfigInput | null, downloadFileName?: string }} QueueEntry
+ * @typedef {{ id: string, name: string, relativePath: string, size: number, status: QueueStatus | string, file: File | null, fileType: string, fileText: string, sourceKind: SourceKind | string, message: string, outputHtml: string, outputText: string, outputFormat: QueueOutputFormat, outputAssets: SerializedDraftAsset[], conversionConfig: PipelineConfigInput | null, downloadFileName: string }} StoredQueueEntry
+ * @typedef {{ nodes: WorkbenchNode[], rootIds: string[] }} WorkbenchTree
+ * @typedef {{ id: string, updatedAt: number, autoConvertEnabled: boolean, schemaVersion?: number, queue: StoredQueueEntry[] }} DraftRecord
  * @typedef {{
  *   dropzone: HTMLElement | null,
  *   importButton: HTMLButtonElement | null,
  *   fileInput: HTMLInputElement | null,
+ *   folderImportButton: HTMLButtonElement | null,
+ *   folderInput: HTMLInputElement | null,
  *   fileList: HTMLElement | null,
  *   statusPanel: HTMLElement | null,
  *   appStateBadge: HTMLElement | null,
@@ -87,7 +93,6 @@ const logger = createLogger('ui');
 
 const STATUS_EMPTY = 'Empty';
 const STATUS_UNSUPPORTED = 'Unsupported';
-const UNSUPPORTED_MESSAGE = 'This file type is not supported in the current release.';
 const AUTO_CONVERT_NOTICE_COPY = {
   enabled: {
     lead: 'Files are converted automatically when added to the queue.',
@@ -112,6 +117,8 @@ const dom = {
   dropzone: null,
   importButton: null,
   fileInput: null,
+  folderImportButton: null,
+  folderInput: null,
   fileList: null,
   statusPanel: null,
   appStateBadge: null,
@@ -161,9 +168,15 @@ const runtime = {
   _diagnosticsPoll: null
 };
 
-/** @type {{ queue: QueueEntry[] }} */
+/** @type {{ queue: QueueEntry[], workbench: WorkbenchTree, workbenchUi: WorkbenchUiState }} */
 export const state = {
-  queue: []
+  queue: [],
+  workbench: { nodes: [], rootIds: [] },
+  workbenchUi: {
+    expandedIds: [],
+    selectedLeafIds: [],
+    query: ''
+  }
 };
 
 /** @returns {string} */
@@ -264,6 +277,7 @@ function serializeQueueEntry(entry) {
   return {
     id: typeof entry.id === 'string' ? entry.id : createDraftInstanceId(),
     name: entry.name || 'unnamed',
+    relativePath: typeof entry.relativePath === 'string' && entry.relativePath ? entry.relativePath : (entry.name || 'unnamed'),
     size: typeof entry.size === 'number' && Number.isFinite(entry.size) ? entry.size : 0,
     status: normalizedStatus,
     file: entry.file instanceof File ? entry.file : null,
@@ -308,6 +322,7 @@ function deserializeQueueEntry(entry) {
   const restored = {
     id: entry.id || createDraftInstanceId(),
     name: entry.name || 'unnamed',
+    relativePath: typeof entry.relativePath === 'string' && entry.relativePath ? entry.relativePath : (entry.name || 'unnamed'),
     size: typeof entry.size === 'number' && Number.isFinite(entry.size) ? entry.size : 0,
     status: entry.status === 'working' ? 'queued' : (entry.status || 'queued'),
     file: restoredFile,
@@ -466,6 +481,7 @@ async function persistDraftStateNow() {
     sessionStorage.setItem(DRAFT_SESSION_SNAPSHOT_KEY, JSON.stringify({
       updatedAt: Date.now(),
       autoConvertEnabled: runtime.autoConvertEnabled,
+      schemaVersion: 2,
       queue: state.queue.map(serializeSessionQueueEntry)
     }));
   } catch (_) {
@@ -476,6 +492,7 @@ async function persistDraftStateNow() {
     id: runtime.draftInstanceId,
     updatedAt: Date.now(),
     autoConvertEnabled: runtime.autoConvertEnabled,
+    schemaVersion: 2,
     queue: state.queue.map(serializeQueueEntry)
   });
 
@@ -997,6 +1014,20 @@ function isSupportedSourceKind(sourceKind) {
   return sourceKind === 'mht';
 }
 
+/**
+ * @param {SourceKind | string | undefined} sourceKind
+ * @returns {string}
+ */
+function getUnsupportedSourceMessage(sourceKind) {
+  if (sourceKind === 'one') {
+    return 'Native .one conversion is not enabled in the current release. Export this page as .mht or .mhtml and try again.';
+  }
+  if (sourceKind === 'onepkg') {
+    return 'OneNote package conversion is not enabled in the current release. Export its pages as .mht or .mhtml and try again.';
+  }
+  return 'This file type is not supported in the current release.';
+}
+
 /** @param {unknown} value */
 function setAutoConvertEnabled(value) {
   runtime.autoConvertEnabled = Boolean(value);
@@ -1245,8 +1276,32 @@ function processEntry(entry) {
 /* === RENDERING === */
 
 /** @returns {void} */
+function refreshWorkbenchProjection() {
+  state.workbench = buildWorkbenchTree(state.queue);
+  const leafIds = new Set(state.workbench.nodes
+    .filter((node) => node.kind === 'file' || node.kind === 'page')
+    .map((node) => node.id));
+  state.workbenchUi.selectedLeafIds = state.workbenchUi.selectedLeafIds
+    .filter((nodeId) => leafIds.has(nodeId));
+  state.workbenchUi.expandedIds = state.workbenchUi.expandedIds
+    .filter((nodeId) => state.workbench.nodes.some((node) => node.id === nodeId));
+}
+
+/**
+ * @returns {{ tree: WorkbenchTree, ui: WorkbenchUiState }}
+ */
+export function getWorkbenchState() {
+  return {
+    tree: state.workbench,
+    ui: state.workbenchUi
+  };
+}
+
+/** @returns {void} */
 export function renderFileList() {
   if (!dom.fileList) return;
+
+  refreshWorkbenchProjection();
 
   const markup = state.queue.map((entry) => {
     const safeName = escapeHtml(entry.name);
@@ -1355,6 +1410,7 @@ export function addFilesToQueue(files) {
     const entry = {
       id: nextId(),
       name: file.name || 'unnamed',
+      relativePath: getRelativePath(file),
       size: Number.isFinite(file.size) ? file.size : 0,
       status: supported ? 'queued' : 'unsupported',
       file,
@@ -1362,7 +1418,7 @@ export function addFilesToQueue(files) {
     };
 
     if (!supported) {
-      entry.message = UNSUPPORTED_MESSAGE;
+      entry.message = getUnsupportedSourceMessage(sourceKind);
     } else {
       processableEntries.push(entry);
     }
@@ -1385,6 +1441,17 @@ export function addFilesToQueue(files) {
   } else {
     logger.info({ msg: 'autoConvertEnabled=false — files added to queue' });
   }
+}
+
+/**
+ * @param {File} file
+ * @returns {string}
+ */
+function getRelativePath(file) {
+  const relativePath = typeof file.webkitRelativePath === 'string'
+    ? file.webkitRelativePath
+    : '';
+  return relativePath || file.name || 'unnamed';
 }
 
 /** @param {DragEvent} event */
@@ -1428,8 +1495,22 @@ function onImportButtonClick() {
   dom.fileInput?.click();
 }
 
+/** @returns {void} */
+function onFolderImportButtonClick() {
+  dom.folderInput?.click();
+}
+
 /** @param {Event} event */
 function onFileInputChange(event) {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) return;
+  addFilesToQueue(target.files || []);
+  target.value = '';
+  dom.dropzone?.focus();
+}
+
+/** @param {Event} event */
+function onFolderInputChange(event) {
   const target = event.target;
   if (!(target instanceof HTMLInputElement)) return;
   addFilesToQueue(target.files || []);
@@ -1633,6 +1714,8 @@ function bindEvents() {
 
   dom.importButton?.addEventListener('click', onImportButtonClick);
   dom.fileInput?.addEventListener('change', onFileInputChange);
+  dom.folderImportButton?.addEventListener('click', onFolderImportButtonClick);
+  dom.folderInput?.addEventListener('change', onFolderInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
   dom.fileList?.addEventListener('keydown', onFileListKeyDown);
   dom.clearFilesButton?.addEventListener('click', onClearFilesClick);
@@ -1722,6 +1805,8 @@ export async function initUI(workerManager, options = {}) {
   dom.dropzone = /** @type {HTMLElement | null} */ (document.getElementById('dropzone'));
   dom.importButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('importButton'));
   dom.fileInput = /** @type {HTMLInputElement | null} */ (document.getElementById('fileInput'));
+  dom.folderImportButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('folderImportButton'));
+  dom.folderInput = /** @type {HTMLInputElement | null} */ (document.getElementById('folderInput'));
   dom.fileList = /** @type {HTMLElement | null} */ (document.getElementById('fileList'));
   dom.statusPanel = /** @type {HTMLElement | null} */ (document.getElementById('statusPanel'));
   dom.appStateBadge = /** @type {HTMLElement | null} */ (document.getElementById('appStateBadge'));

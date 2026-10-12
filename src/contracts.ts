@@ -1,6 +1,29 @@
 export type SourceKind = 'html' | 'mht' | 'one' | 'onepkg' | 'unknown';
 export type ActiveSourceKind = 'html' | 'mht';
 export type NativeSourceKind = 'one' | 'onepkg';
+export type WorkbenchNodeKind = 'folder' | 'notebook' | 'section' | 'page' | 'file';
+export type WorkbenchNodeStatus = 'queued' | 'working' | 'success' | 'error' | 'unsupported' | 'partial';
+
+export interface WorkbenchNode {
+  id: string;
+  parentId: string | null;
+  kind: WorkbenchNodeKind;
+  name: string;
+  relativePath: string;
+  sourceKind: SourceKind;
+  status: WorkbenchNodeStatus;
+  size: number;
+  leafCount: number;
+  successfulLeafCount: number;
+  childIds: string[];
+  message?: string;
+}
+
+export interface WorkbenchUiState {
+  expandedIds: string[];
+  selectedLeafIds: string[];
+  query: string;
+}
 
 export type PipelineProfile = 'onenote';
 export type ListRepairMode = 'smart' | 'mergeStyled' | 'renumber';
