@@ -154,8 +154,10 @@
                 accept=".mht,.mhtml" />
             </div>
           </div>
-          <!-- Advanced Options -->
-          <div class="home-advanced-card space-y-4">
+            </section>
+
+            <!-- Advanced Options -->
+            <section class="home-advanced-card card-panel space-y-4" aria-label="Advanced options and queue actions">
           <details id="advancedOptions">
             <summary class="advanced-options-summary text-sm font-medium cursor-pointer">
               <span>Advanced options</span>
@@ -310,9 +312,8 @@
 
             </div>
           </details>
-          </div>
 
-          <section class="queue-action-strip" aria-label="Queue actions">
+          <div class="queue-action-strip" aria-label="Queue actions">
             <p class="queue-action-strip__status text-xs text-muted">Convert queued files when automatic conversion is disabled.</p>
             <!-- wrapper provides focusability for the disabled button and holds aria-describedby -->
             <div class="convert-button-wrapper" tabindex="0" aria-describedby="convertTooltip">
@@ -328,7 +329,7 @@
                 Auto-convert is enabled — manual Convert is disabled
               </div>
             </div>
-          </section>
+          </div>
           </section>
 
         </div>

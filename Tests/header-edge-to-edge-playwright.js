@@ -68,8 +68,10 @@ async function assertApprovedShell(page, viewportLabel, expectsColumns) {
       before,
       after,
       dropzoneInsideImport: importCard.contains(dropzone),
+      advancedOutsideImport: !importCard.contains(advanced),
       actionsAfterList: Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING),
       ok: importCard.contains(dropzone)
+        && !importCard.contains(advanced)
         && Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING)
         && before.importTop < before.advancedTop
         && before.advancedTop < before.convertTop

@@ -1205,8 +1205,14 @@ html.dark .status-pill--error {
   padding-block-start: 0.875rem;
 }
 
-.home-advanced-card.card-panel--soft {
-  background-color: var(--bg-card);
+.home-advanced-card {
+  display: grid;
+  gap: 0.875rem;
+  padding: 1rem;
+}
+
+.home-advanced-card .queue-action-strip {
+  margin-top: 0.125rem;
 }
 
 .home-advanced-card .card-section {
@@ -1798,7 +1804,8 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
 
 @media (min-width: 1024px) {
   .home-layout { grid-template-columns: minmax(25rem, 0.86fr) minmax(0, 1.14fr); }
-  .home-start-card, .home-results-card { min-height: 36.75rem; }
+  .home-results-card { min-height: 36.75rem; }
+  .home-start-card { min-height: 0; }
 }
 
 @media (max-width: 639px) {
