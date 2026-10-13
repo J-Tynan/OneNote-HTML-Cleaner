@@ -21,7 +21,7 @@ const logger = createLogger('ui');
  * @typedef {new () => JSZipLike} JSZipConstructor
  * @typedef {{ disabled: boolean, textContent: string | null }} DownloadZipButton
  * @typedef {AdvancedOptionsControls & { downloadZipButton?: DownloadZipButton | null, successfulOutputs: Map<string, SuccessfulOutputValue>, [key: string]: unknown }} DownloadContext
- * @typedef {{ downloadBlob: (filename: string, text: string, mime?: string) => Promise<void>, downloadDebug: (name: string, text: string) => void, downloadBinary: (filename: string, blob: Blob) => void, downloadZip: () => Promise<void>, downloadNativeZip: (file: File, nativeResult: NativeImportResult) => Promise<void>, getConversionConfig: () => PipelineConfigInput }} DownloadHelpers
+ * @typedef {{ downloadBlob: (filename: string, text: string, mime?: string) => Promise<void>, downloadDebug: (name: string, text: string) => void, downloadBinary: (filename: string, blob: Blob) => void, downloadZip: (outputs?: Map<string, SuccessfulOutputValue>) => Promise<void>, downloadNativeZip: (file: File, nativeResult: NativeImportResult) => Promise<void>, getConversionConfig: () => PipelineConfigInput }} DownloadHelpers
  */
 
 /**
@@ -436,8 +436,8 @@ export function createDownloadHelpers(ctx, updateZipButton) {
   /**
    * @returns {Promise<void>}
    */
-  async function downloadZip() {
-    if (!ctx.downloadZipButton || ctx.downloadZipButton.disabled) return;
+  async function downloadZip(outputs = ctx.successfulOutputs) {
+    if (!outputs.size || (outputs === ctx.successfulOutputs && (!ctx.downloadZipButton || ctx.downloadZipButton.disabled))) return;
     const appWindow = /** @type {Window & typeof globalThis & { JSZip?: JSZipConstructor }} */ (window);
     const JSZip = appWindow.JSZip;
     if (!JSZip) {
@@ -452,7 +452,7 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     const packagedBundledStylesheets = new Set();
     const warnings = [];
 
-    for (const [name, value] of ctx.successfulOutputs.entries()) {
+    for (const [name, value] of outputs.entries()) {
       const record = getSuccessfulOutputRecord(value);
       const isMarkdown = record.format === 'markdown' || String(name || '').toLowerCase().endsWith('.md');
       let content = record.content || '';
@@ -524,15 +524,19 @@ export function createDownloadHelpers(ctx, updateZipButton) {
       ].join('\n'));
     }
 
-    ctx.downloadZipButton.disabled = true;
-    ctx.downloadZipButton.textContent = 'Building ZIP...';
+    if (outputs === ctx.successfulOutputs && ctx.downloadZipButton) {
+      ctx.downloadZipButton.disabled = true;
+      ctx.downloadZipButton.textContent = 'Building ZIP...';
+    }
 
     try {
       const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', mimeType: 'application/zip' });
       downloadBinary(getZipFilename(), blob);
     } finally {
-      ctx.downloadZipButton.textContent = 'Download ZIP';
-      updateZipButton();
+      if (outputs === ctx.successfulOutputs && ctx.downloadZipButton) {
+        ctx.downloadZipButton.textContent = 'Download all (ZIP)';
+        updateZipButton();
+      }
     }
   }
 

@@ -16,7 +16,7 @@ import {
 } from './ui-output-records.js';
 import { detectSourceKind } from './importers/sourceKind.js';
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
-import { buildWorkbenchTree } from './ui-workbench-model.js';
+import { buildWorkbenchTree, deriveSelectionStates, getLeafIdsForNode, getVisibleNodeIds } from './ui-workbench-model.js';
 
 /**
  * @typedef {import('./contracts.js').OutputAsset} OutputAsset
@@ -49,6 +49,10 @@ import { buildWorkbenchTree } from './ui-workbench-model.js';
  *   statusSummary: HTMLElement | null,
  *   clearFilesButton: HTMLButtonElement | null,
  *   downloadZip: HTMLButtonElement | null,
+ *   downloadSelected: HTMLButtonElement | null,
+ *   selectionSummary: HTMLElement | null,
+ *   workbenchSearch: HTMLInputElement | null,
+ *   workbenchFilter: HTMLSelectElement | null,
  *   convertButton: HTMLButtonElement | null,
  *   convertButtonWrapper: HTMLElement | null,
  *   toolbarEnabled: HTMLInputElement | null,
@@ -125,6 +129,10 @@ const dom = {
   statusSummary: null,
   clearFilesButton: null,
   downloadZip: null,
+  downloadSelected: null,
+  selectionSummary: null,
+  workbenchSearch: null,
+  workbenchFilter: null,
   convertButton: null,
   convertButtonWrapper: null,
   toolbarEnabled: null,
@@ -151,6 +159,8 @@ const dom = {
   helpModal: null,
   helpCloseButton: null
 };
+
+let workbenchFilter = 'all';
 
 /** @type {UiRuntimeState} */
 const runtime = {
@@ -698,7 +708,7 @@ function buildStatusSummary(counts) {
   }
 
   if (segments.length === 0) {
-    return 'Added files will appear here with progress, status, and downloads.';
+    return 'Add files to see conversion progress and downloads.';
   }
 
   return `${segments.join(', ')}.`;
@@ -845,6 +855,13 @@ function renderDiagnostics() {
 function updateZipButton() {
   if (!dom.downloadZip) return;
   dom.downloadZip.disabled = runtime.successfulOutputs.size === 0;
+}
+
+function updateSelectedDownloadButton() {
+  const selected = new Set(state.workbenchUi.selectedLeafIds);
+  const eligible = state.queue.filter((entry) => selected.has(`entry-${entry.id}`) && entry.downloadFileName && runtime.successfulOutputs.has(entry.downloadFileName));
+  if (dom.downloadSelected) dom.downloadSelected.disabled = eligible.length === 0;
+  if (dom.selectionSummary) dom.selectionSummary.textContent = selected.size ? `${selected.size} item${selected.size === 1 ? '' : 's'} selected` : 'No item selected';
 }
 
 /** @returns {void} */
@@ -1302,81 +1319,53 @@ export function renderFileList() {
   if (!dom.fileList) return;
 
   refreshWorkbenchProjection();
-
-  const markup = state.queue.map((entry) => {
-    const safeName = escapeHtml(entry.name);
-    const safeType = escapeHtml(getEntryTypeLabel(entry));
-    const displayStatus = entry.status === 'unsupported' ? STATUS_UNSUPPORTED : (entry.status || 'queued');
-    const safeStatus = escapeHtml(displayStatus);
-    const statusTone = getStatusTone(displayStatus);
-    const safeSize = escapeHtml(formatBytes(entry.size));
-    const safeMessage = entry.message ? escapeHtml(entry.message) : '';
-    const outputFormat = getEntryOutputFormat(entry);
-    const hasOutput = getEntryOutputContent(entry).length > 0;
-    const singleDownloadBlocked = Boolean(
-      outputFormat === 'html'
-      &&
-      entry.conversionConfig
-      && entry.conversionConfig.ExternalizeCssEnabled === true
-      && hasExternalizedCssAsset(entry)
-    );
-    const canDownload = hasOutput && !singleDownloadBlocked;
-    const downloadLabel = outputFormat === 'markdown' ? 'Download' : 'Download';
-    const safeMenuId = escapeHtml(`file-actions-${entry.id}`);
-    const detailMessage = safeMessage || (hasOutput && singleDownloadBlocked
-      ? 'Single-file download disabled while external CSS is enabled. Use Download ZIP.'
-      : '');
-
-    return `
-      <div class="file-item" data-id="${entry.id}" data-status="${statusTone}">
-        <span class="file-item__name" title="${safeName}">${safeName}</span>
-        <span class="file-item__type" aria-label="Type: ${safeType}">${safeType}</span>
-        <span class="file-item__status"><span class="status-pill status-pill--${statusTone}">${safeStatus}</span></span>
-        <span class="file-item__size" aria-label="Size: ${safeSize}">${safeSize}</span>
-        <div class="file-item__actions">
-          <button
-            type="button"
-            class="btn-ghost file-item__menu-trigger"
-            data-actions-menu-trigger
-            aria-label="Actions for ${safeName}"
-            aria-haspopup="menu"
-            aria-expanded="false"
-            aria-controls="${safeMenuId}">
-            <span aria-hidden="true">&#8942;</span>
-          </button>
-          <div
-            id="${safeMenuId}"
-            class="file-item__menu"
-            role="menu"
-            aria-label="Actions for ${safeName}"
-            hidden>
-            ${canDownload ? `
-              <button
-                type="button"
-                class="file-item__menu-item"
-                data-download-id="${entry.id}"
-                role="menuitem"
-                tabindex="-1">
-                ${downloadLabel}
-              </button>
-            ` : ''}
-            <button
-              type="button"
-              class="file-item__menu-item"
-              data-remove-id="${entry.id}"
-              role="menuitem"
-              tabindex="-1">
-              Remove
-            </button>
-          </div>
-        </div>
-        ${detailMessage ? `<p class="file-item__detail">${detailMessage}</p>` : ''}
-      </div>
-    `;
-  }).join('');
+  const nodesById = new Map(state.workbench.nodes.map((node) => [node.id, node]));
+  const selectionStates = deriveSelectionStates(state.workbench.nodes, state.workbenchUi.selectedLeafIds);
+  const queryIds = getVisibleNodeIds(state.workbench.nodes, state.workbenchUi.query);
+  const filterIds = new Set();
+  for (const node of state.workbench.nodes) {
+    if (workbenchFilter !== 'all' && node.status !== workbenchFilter) continue;
+    filterIds.add(node.id);
+    let parentId = node.parentId;
+    while (parentId) {
+      filterIds.add(parentId);
+      parentId = nodesById.get(parentId)?.parentId || null;
+    }
+  }
+  const visibleIds = new Set([...queryIds].filter((id) => filterIds.has(id)));
+  if (dom.workbenchFilter) {
+    const counts = new Map();
+    state.workbench.nodes.filter((node) => node.kind === 'file' || node.kind === 'page').forEach((node) => counts.set(node.status, (counts.get(node.status) || 0) + 1));
+    dom.workbenchFilter.innerHTML = ['<option value="all">All items</option>', ...[...counts.entries()].map(([status, count]) => `<option value="${status}">${status} (${count})</option>`)].join('');
+    dom.workbenchFilter.value = workbenchFilter;
+  }
+  /** @param {WorkbenchNode | undefined} node @param {number} depth @returns {string} */
+  const renderNode = (node, depth) => {
+    if (!node) return '';
+    if (!visibleIds.has(node.id)) return '';
+    const isLeaf = node.kind === 'file' || node.kind === 'page';
+    const expanded = state.workbenchUi.expandedIds.includes(node.id) || Boolean(state.workbenchUi.query || workbenchFilter !== 'all');
+    const entry = isLeaf ? getQueueEntry(node.id.slice(6)) : null;
+    const safeName = escapeHtml(node.name);
+    const status = node.status === 'unsupported' ? STATUS_UNSUPPORTED : node.status;
+    const stateLabel = selectionStates.get(node.id) || 'unchecked';
+    const menuId = entry ? `file-actions-${entry.id}` : `file-actions-${node.id}`;
+    const hasOutput = entry && getEntryOutputContent(entry).length > 0;
+    const blocked = entry && entry.conversionConfig?.ExternalizeCssEnabled === true && hasExternalizedCssAsset(entry);
+    const canDownload = Boolean(hasOutput && !blocked);
+    const row = `<div class="file-item workbench-row" role="treeitem" aria-level="${depth + 1}" ${isLeaf ? '' : `aria-expanded="${expanded}"`} data-id="${node.id}">
+      <span class="file-item__name" style="--tree-depth:${depth}" title="${safeName}">${isLeaf ? '<span class="workbench-indent" aria-hidden="true"></span>' : `<button type="button" class="workbench-expand" data-expand-id="${node.id}" aria-label="${expanded ? 'Collapse' : 'Expand'} ${safeName}" aria-expanded="${expanded}">${expanded ? '&#8964;' : '&#8250;'}</button>`}<input type="checkbox" class="workbench-select" data-select-id="${node.id}" aria-label="Select ${safeName}" ${stateLabel === 'checked' ? 'checked' : ''} ${stateLabel === 'mixed' ? 'data-mixed="true"' : ''} /><span class="workbench-node-name">${safeName}</span></span>
+      <span class="file-item__type">${isLeaf && entry ? escapeHtml(getEntryTypeLabel(entry)) : 'Folder'}</span><span class="file-item__status"><span class="status-pill status-pill--${getStatusTone(status)}">${escapeHtml(status)}</span></span><span class="file-item__size">${escapeHtml(formatBytes(node.size))}</span>
+      <div class="file-item__actions">${entry ? `<button type="button" class="btn-ghost file-item__menu-trigger" data-actions-menu-trigger aria-label="Actions for ${safeName}" aria-haspopup="menu" aria-expanded="false" aria-controls="${menuId}"><span aria-hidden="true">&#8942;</span></button><div id="${menuId}" class="file-item__menu" role="menu" hidden>${canDownload ? `<button type="button" class="file-item__menu-item" data-download-id="${entry.id}" role="menuitem">Download</button>` : ''}<button type="button" class="file-item__menu-item" data-remove-id="${entry.id}" role="menuitem">Remove</button></div>` : ''}</div>
+      ${entry?.message ? `<p class="file-item__detail">${escapeHtml(entry.message)}</p>` : ''}</div>`;
+    return row + (!isLeaf && expanded ? node.childIds.map((/** @type {string} */ id) => renderNode(nodesById.get(id), depth + 1)).join('') : '');
+  };
+  const markup = state.workbench.rootIds.map((id) => renderNode(nodesById.get(id), 0)).join('');
 
   dom.fileList.innerHTML = markup;
   rebuildSuccessfulOutputs();
+  dom.fileList.querySelectorAll('[data-mixed="true"]').forEach((element) => { if (element instanceof HTMLInputElement) element.indeterminate = true; });
+  updateSelectedDownloadButton();
   updateStatusVisibility();
   updateConvertButton();
   scheduleDraftPersist();
@@ -1642,6 +1631,20 @@ function onFileListClick(event) {
     return;
   }
 
+  const expandButton = target.closest('[data-expand-id]');
+  if (expandButton) {
+    const nodeId = expandButton.getAttribute('data-expand-id');
+    if (nodeId) toggleWorkbenchExpansion(nodeId);
+    return;
+  }
+
+  const checkbox = target.closest('[data-select-id]');
+  if (checkbox instanceof HTMLInputElement) {
+    const nodeId = checkbox.getAttribute('data-select-id');
+    if (nodeId) toggleWorkbenchSelection(nodeId, checkbox.checked);
+    return;
+  }
+
   const removeButton = target.closest('[data-remove-id]');
   if (removeButton) {
     const removeId = removeButton.getAttribute('data-remove-id');
@@ -1681,6 +1684,51 @@ async function onDownloadZipClick() {
   await runtime.downloadHelpers.downloadZip();
 }
 
+async function onDownloadSelectedClick() {
+  const selected = new Set(state.workbenchUi.selectedLeafIds);
+  const outputs = new Map();
+  state.queue.forEach((entry) => {
+    if (selected.has(`entry-${entry.id}`) && entry.downloadFileName && runtime.successfulOutputs.has(entry.downloadFileName)) outputs.set(entry.downloadFileName, runtime.successfulOutputs.get(entry.downloadFileName));
+  });
+  if (outputs.size && runtime.downloadHelpers) await runtime.downloadHelpers.downloadZip(outputs);
+}
+
+/** @param {string} nodeId */
+function toggleWorkbenchExpansion(nodeId) {
+  const expanded = new Set(state.workbenchUi.expandedIds);
+  if (expanded.has(nodeId)) expanded.delete(nodeId); else expanded.add(nodeId);
+  state.workbenchUi.expandedIds = [...expanded];
+  renderFileList();
+  const control = dom.fileList?.querySelector(`[data-expand-id="${nodeId}"]`);
+  if (control instanceof HTMLElement) control.focus();
+}
+
+/** @param {string} nodeId @param {boolean} checked */
+function toggleWorkbenchSelection(nodeId, checked) {
+  const selected = new Set(state.workbenchUi.selectedLeafIds);
+  getLeafIdsForNode(state.workbench.nodes, nodeId).forEach((leafId) => checked ? selected.add(leafId) : selected.delete(leafId));
+  state.workbenchUi.selectedLeafIds = [...selected];
+  renderFileList();
+  const control = dom.fileList?.querySelector(`[data-select-id="${nodeId}"]`);
+  if (control instanceof HTMLElement) control.focus();
+}
+
+/** @param {Event} event */
+function onWorkbenchSearchChange(event) {
+  if (!(event.target instanceof HTMLInputElement)) return;
+  state.workbenchUi.query = event.target.value;
+  renderFileList();
+  event.target.focus();
+}
+
+/** @param {Event} event */
+function onWorkbenchFilterChange(event) {
+  if (!(event.target instanceof HTMLSelectElement)) return;
+  workbenchFilter = event.target.value;
+  renderFileList();
+  event.target.focus();
+}
+
 /** @returns {void} */
 function onClearFilesClick() {
   clearQueue();
@@ -1718,8 +1766,11 @@ function bindEvents() {
   dom.folderInput?.addEventListener('change', onFolderInputChange);
   dom.fileList?.addEventListener('click', onFileListClick);
   dom.fileList?.addEventListener('keydown', onFileListKeyDown);
+  dom.workbenchSearch?.addEventListener('input', onWorkbenchSearchChange);
+  dom.workbenchFilter?.addEventListener('change', onWorkbenchFilterChange);
   dom.clearFilesButton?.addEventListener('click', onClearFilesClick);
   dom.downloadZip?.addEventListener('click', onDownloadZipClick);
+  dom.downloadSelected?.addEventListener('click', onDownloadSelectedClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.toolbarStyle?.addEventListener('change', onAdvancedOptionsChange);
@@ -1813,6 +1864,10 @@ export async function initUI(workerManager, options = {}) {
   dom.statusSummary = /** @type {HTMLElement | null} */ (document.getElementById('statusSummary'));
   dom.clearFilesButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('clearFilesButton'));
   dom.downloadZip = /** @type {HTMLButtonElement | null} */ (document.getElementById('downloadZip'));
+  dom.downloadSelected = /** @type {HTMLButtonElement | null} */ (document.getElementById('downloadSelected'));
+  dom.selectionSummary = /** @type {HTMLElement | null} */ (document.getElementById('selectionSummary'));
+  dom.workbenchSearch = /** @type {HTMLInputElement | null} */ (document.getElementById('workbenchSearch'));
+  dom.workbenchFilter = /** @type {HTMLSelectElement | null} */ (document.getElementById('workbenchFilter'));
   dom.convertButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('convertButton'));
   dom.convertButtonWrapper = /** @type {HTMLElement | null} */ (document.querySelector('.convert-button-wrapper'));
   dom.toolbarEnabled = /** @type {HTMLInputElement | null} */ (document.getElementById('toolbarEnabled'));

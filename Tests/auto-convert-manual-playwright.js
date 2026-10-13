@@ -78,10 +78,10 @@ import { startStaticServer } from './playwright-server-helper.js';
     const hasDownloadBefore = await page.$('[data-download-id]');
     if (hasDownloadBefore) throw new Error('Expected no Download HTML button before manual Convert');
 
-    // Click Convert and wait for processing to complete (download button appears)
+    // Click Convert and wait for processing to complete (download action is added to the row menu)
     await page.click('#convertButton');
 
-    await page.waitForSelector('[data-download-id]', { timeout: 8000 });
+    await page.waitForSelector('[data-download-id]', { state: 'attached', timeout: 8000 });
 
     // Confirm the queued file is now processed (status -> success) and Convert button is disabled
     await page.waitForFunction(() => {

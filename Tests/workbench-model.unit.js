@@ -54,6 +54,10 @@ const selectionStates = deriveSelectionStates(workbench.nodes, ['entry-welcome']
 assert.equal(selectionStates.get('entry-welcome'), 'checked');
 assert.equal(selectionStates.get('entry-notes'), 'unchecked');
 assert.equal(selectionStates.get(section.id), 'mixed');
+assert.equal(selectionStates.get(notebook.id), 'mixed');
+
+const fullSelectionStates = deriveSelectionStates(workbench.nodes, getLeafIdsForNode(workbench.nodes, notebook.id));
+assert.equal(fullSelectionStates.get(notebook.id), 'checked');
 
 const visibleNodeIds = getVisibleNodeIds(workbench.nodes, 'notes');
 assert.deepEqual([...visibleNodeIds].sort(), [

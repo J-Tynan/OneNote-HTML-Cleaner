@@ -24,7 +24,7 @@
               <span class="product-version">v0.2</span>
             </div>
             <p class="mt-1 text-sm text-help">
-              Clean and convert OneNote .mht, .mhtml, and .onepkg files into modern HTML locally in your browser.
+              Clean and convert OneNote .mht and .mhtml files into modern HTML locally in your browser.
             </p>
           </div>
         </div>
@@ -360,29 +360,40 @@
             Added files will appear here with progress, status, and downloads.
           </p>
 
-          <div class="file-list-header" aria-hidden="true">
-            <span>Name</span>
-            <span>Type</span>
-            <span>Status</span>
-            <span>Size</span>
-            <span>Actions</span>
+          <div class="results-workbench-toolbar" role="search">
+            <label class="sr-only" for="workbenchSearch">Search files and folders</label>
+            <input id="workbenchSearch" class="workbench-search" type="search" placeholder="Search files and folders" />
+            <label class="sr-only" for="workbenchFilter">Filter items</label>
+            <select id="workbenchFilter" class="workbench-filter"><option value="all">All items</option></select>
           </div>
 
-          <div id="fileList"></div>
+          <div class="results-workbench-table">
+            <div class="file-list-header" aria-hidden="true">
+              <span>Name</span>
+              <span>Type</span>
+              <span>Status</span>
+              <span>Size</span>
+              <span>Actions</span>
+            </div>
 
-          <details
-            id="diagnosticsPanel"
-            class="surface-soft border-default hidden rounded-lg border p-3">
-            <summary class="cursor-pointer text-sm font-medium">
-              Diagnostics and conversion details
-              <span id="diagnosticsCount" class="text-xs text-muted">(0)</span>
-            </summary>
-            <ul
-              id="diagnosticsList"
-              class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
-          </details>
+            <div id="fileList" role="tree" aria-label="Files and results"></div>
+
+            <details
+              id="diagnosticsPanel"
+              class="surface-soft border-default hidden rounded-lg border p-3">
+              <summary class="cursor-pointer text-sm font-medium">
+                Diagnostics and conversion details
+                <span id="diagnosticsCount" class="text-xs text-muted">(0)</span>
+              </summary>
+              <ul
+                id="diagnosticsList"
+                class="mt-2 list-disc pl-5 text-sm text-secondary"></ul>
+            </details>
+          </div>
 
           <div class="results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start">
+            <div id="selectionSummary" class="results-selection-summary">No item selected</div>
+            <button id="downloadSelected" type="button" class="btn-secondary results-action-button" disabled>Download selected</button>
             <button
               id="clearFilesButton"
               type="button"
@@ -395,7 +406,7 @@
               type="button"
               class="btn-primary results-action-button"
               disabled>
-              Download ZIP
+              Download all (ZIP)
             </button>
           </div>
 

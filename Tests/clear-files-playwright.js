@@ -101,7 +101,7 @@ import { startStaticServer } from './playwright-server-helper.js';
     if (Math.abs((clearedState.clearHeight ?? 0) - (clearedState.zipHeight ?? 0)) > 1) {
       throw new Error(`Expected results action buttons to return to matching heights after clearing, got ${JSON.stringify({ clearHeight: clearedState.clearHeight, zipHeight: clearedState.zipHeight })}`);
     }
-    if (clearedState.summary !== 'Added files will appear here with progress, status, and downloads.') {
+    if (clearedState.summary !== 'Add files to see conversion progress and downloads.') {
       throw new Error(`Expected default summary after clearing, got ${clearedState.summary}`);
     }
     if (Math.abs((clearedState.clearTop ?? 0) - (initialState.clearTop ?? 0)) > 1 || Math.abs((clearedState.zipTop ?? 0) - (initialState.zipTop ?? 0)) > 1) {
@@ -118,8 +118,13 @@ import { startStaticServer } from './playwright-server-helper.js';
       const rowRect = row ? row.getBoundingClientRect() : null;
       const clearRect = clearButton ? clearButton.getBoundingClientRect() : null;
       const zipRect = zipButton ? zipButton.getBoundingClientRect() : null;
+      const rowStyles = row ? window.getComputedStyle(row) : null;
+      const contentWidth = rowRect && rowStyles
+        ? rowRect.width - parseFloat(rowStyles.paddingLeft) - parseFloat(rowStyles.paddingRight)
+        : 0;
       return {
         rowWidth: rowRect ? rowRect.width : 0,
+        contentWidth,
         clearWidth: clearRect ? clearRect.width : 0,
         zipWidth: zipRect ? zipRect.width : 0,
         clearTop: clearRect ? clearRect.top : 0,
@@ -133,8 +138,8 @@ import { startStaticServer } from './playwright-server-helper.js';
     if (Math.abs(mobileLayout.clearWidth - mobileLayout.zipWidth) > 1) {
       throw new Error(`Expected mobile results actions to share width, got ${JSON.stringify(mobileLayout)}`);
     }
-    if (mobileLayout.clearWidth < mobileLayout.rowWidth - 2 || mobileLayout.zipWidth < mobileLayout.rowWidth - 2) {
-      throw new Error(`Expected mobile results actions to fill the action row width, got ${JSON.stringify(mobileLayout)}`);
+    if (mobileLayout.clearWidth < mobileLayout.contentWidth - 2 || mobileLayout.zipWidth < mobileLayout.contentWidth - 2) {
+      throw new Error(`Expected mobile results actions to fill the padded action footer, got ${JSON.stringify(mobileLayout)}`);
     }
 
     console.log('clear-files-playwright: OK');
