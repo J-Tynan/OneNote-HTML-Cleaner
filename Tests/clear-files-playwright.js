@@ -26,8 +26,8 @@ import { startStaticServer } from './playwright-server-helper.js';
       badge: document.getElementById('appStateBadge')?.textContent?.trim() ?? '',
       summary: document.getElementById('statusSummary')?.textContent?.trim() ?? '',
       rows: document.querySelectorAll('.file-item').length,
-      clearTop: document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? null,
-      zipTop: document.getElementById('downloadZip')?.getBoundingClientRect().top ?? null,
+      clearTop: (document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? 0) + window.scrollY,
+      zipTop: (document.getElementById('downloadZip')?.getBoundingClientRect().top ?? 0) + window.scrollY,
       clearHeight: document.getElementById('clearFilesButton')?.getBoundingClientRect().height ?? null,
       zipHeight: document.getElementById('downloadZip')?.getBoundingClientRect().height ?? null
     }));
@@ -56,8 +56,8 @@ import { startStaticServer } from './playwright-server-helper.js';
       convertDisabled: document.getElementById('convertButton')?.disabled ?? null,
       badge: document.getElementById('appStateBadge')?.textContent?.trim() ?? '',
       rows: document.querySelectorAll('.file-item').length,
-      clearTop: document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? null,
-      zipTop: document.getElementById('downloadZip')?.getBoundingClientRect().top ?? null,
+      clearTop: (document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? 0) + window.scrollY,
+      zipTop: (document.getElementById('downloadZip')?.getBoundingClientRect().top ?? 0) + window.scrollY,
       clearHeight: document.getElementById('clearFilesButton')?.getBoundingClientRect().height ?? null,
       zipHeight: document.getElementById('downloadZip')?.getBoundingClientRect().height ?? null
     }));
@@ -86,8 +86,8 @@ import { startStaticServer } from './playwright-server-helper.js';
       badge: document.getElementById('appStateBadge')?.textContent?.trim() ?? '',
       summary: document.getElementById('statusSummary')?.textContent?.trim() ?? '',
       rows: document.querySelectorAll('.file-item').length,
-      clearTop: document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? null,
-      zipTop: document.getElementById('downloadZip')?.getBoundingClientRect().top ?? null,
+      clearTop: (document.getElementById('clearFilesButton')?.getBoundingClientRect().top ?? 0) + window.scrollY,
+      zipTop: (document.getElementById('downloadZip')?.getBoundingClientRect().top ?? 0) + window.scrollY,
       clearHeight: document.getElementById('clearFilesButton')?.getBoundingClientRect().height ?? null,
       zipHeight: document.getElementById('downloadZip')?.getBoundingClientRect().height ?? null
     }));
