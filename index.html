@@ -14,13 +14,19 @@
 
   <!-- Header -->
   <header class="home-header border-b">
-    <div class="page-shell mx-auto max-w-6xl px-4 py-3 md:px-8">
+    <div class="page-shell mx-auto max-w-7xl px-4 py-3 md:px-8">
       <div class="home-header__inner flex flex-wrap items-start justify-between gap-4 md:items-center">
         <div class="home-header__identity max-w-3xl">
-          <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
-          <p class="mt-1 text-sm text-help">
-            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.
-          </p>
+          <span class="product-mark" aria-hidden="true">ON</span>
+          <div>
+            <div class="product-title-row">
+              <h1 class="text-2xl font-semibold">OneNote HTML Cleaner</h1>
+              <span class="product-version">v0.2</span>
+            </div>
+            <p class="mt-1 text-sm text-help">
+              Clean and convert OneNote .mht, .mhtml, and .onepkg files into modern HTML locally in your browser.
+            </p>
+          </div>
         </div>
 
         <div class="home-header__actions flex items-center gap-3">
@@ -67,9 +73,15 @@
 
           <!-- Import -->
           <section class="home-start-card card-panel import-card space-y-5" aria-labelledby="importHeading">
-          <div class="space-y-3">
+          <div class="import-stage space-y-3">
+            <div class="workflow-heading">
+              <span class="workflow-step" aria-hidden="true">1</span>
+              <div>
+                <h2 id="importHeading" class="text-lg font-medium">Add OneNote files</h2>
+                <p class="workflow-support">Supported: .mht, .mhtml</p>
+              </div>
+            </div>
             <div>
-              <h2 id="importHeading" class="text-lg font-medium">Add OneNote files</h2>
               <p class="mt-1 max-w-2xl text-sm leading-6 text-secondary">
                 Add one or more exported MHT or MHTML files to clean and export locally.
               </p>
@@ -142,10 +154,8 @@
                 accept=".mht,.mhtml" />
             </div>
           </div>
-          </section>
-
           <!-- Advanced Options -->
-          <section class="home-advanced-card card-panel card-panel--soft space-y-4">
+          <div class="home-advanced-card space-y-4">
           <details id="advancedOptions">
             <summary class="advanced-options-summary text-sm font-medium cursor-pointer">
               <span>Advanced options</span>
@@ -300,7 +310,7 @@
 
             </div>
           </details>
-          </section>
+          </div>
 
           <section class="queue-action-strip" aria-label="Queue actions">
             <p class="queue-action-strip__status text-xs text-muted">Convert queued files when automatic conversion is disabled.</p>
@@ -319,6 +329,7 @@
               </div>
             </div>
           </section>
+          </section>
 
         </div>
 
@@ -332,8 +343,12 @@
           aria-label="Processing status"
           tabindex="-1">
 
-          <div class="flex items-center justify-between gap-3">
-            <h2 class="text-lg font-medium">Conversion results</h2>
+          <div class="results-heading">
+            <span class="workflow-step" aria-hidden="true">2</span>
+            <div>
+              <h2 class="text-lg font-medium">Files and results</h2>
+              <p class="results-heading__support">Conversion activity appears here.</p>
+            </div>
             <span
               id="appStateBadge"
               class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase">
