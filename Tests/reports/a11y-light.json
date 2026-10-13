@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-12T13:57:27.940Z",
-  "url": "http://127.0.0.1:65348/",
+  "timestamp": "2026-10-13T10:58:45.931Z",
+  "url": "http://127.0.0.1:53062/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -154,23 +154,6 @@
       "description": "Ensure every ARIA progressbar node has an accessible name",
       "help": "ARIA progressbar nodes must have an accessible name",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
-      "nodes": []
-    },
-    {
-      "id": "aria-required-children",
-      "impact": null,
-      "tags": [
-        "cat.aria",
-        "wcag2a",
-        "wcag131",
-        "EN-301-549",
-        "EN-9.1.3.1",
-        "RGAAv4",
-        "RGAA-9.3.1"
-      ],
-      "description": "Ensure elements with an ARIA role that require child roles contain them",
-      "help": "Certain ARIA roles must contain particular children",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-required-children?application=axeAPI",
       "nodes": []
     },
     {
@@ -648,28 +631,6 @@
       "nodes": []
     },
     {
-      "id": "select-name",
-      "impact": null,
-      "tags": [
-        "cat.forms",
-        "wcag2a",
-        "wcag412",
-        "section508",
-        "section508.22.n",
-        "TTv5",
-        "TT5.c",
-        "EN-301-549",
-        "EN-9.4.1.2",
-        "ACT",
-        "RGAAv4",
-        "RGAA-11.1.1"
-      ],
-      "description": "Ensure select element has an accessible name",
-      "help": "Select element must have an accessible name",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/select-name?application=axeAPI",
-      "nodes": []
-    },
-    {
       "id": "server-side-image-map",
       "impact": null,
       "tags": [
@@ -1038,6 +999,32 @@
             }
           ],
           "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
           "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
@@ -1146,6 +1133,32 @@
           "target": [
             "#statusPanel"
           ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
+          ]
         }
       ]
     },
@@ -1194,6 +1207,42 @@
           "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
             "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-allowed-role",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is allowed for given element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "target": [
+            ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-allowed-role",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is allowed for given element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
           ]
         }
       ]
@@ -1335,6 +1384,24 @@
           ],
           "none": [],
           "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
           "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
@@ -1411,6 +1478,24 @@
           "target": [
             "#statusPanel"
           ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
+          ]
         }
       ]
     },
@@ -1464,6 +1549,42 @@
           "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
             "#convertTooltip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "target": [
+            ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
           ]
         }
       ]
@@ -1551,6 +1672,38 @@
           ],
           "none": [],
           "impact": null,
+          "html": "<span class=\"product-mark\" aria-hidden=\"true\">ON</span>",
+          "target": [
+            ".product-mark"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
           "html": "<span id=\"themeToggleIcon\" aria-hidden=\"true\">🔆</span>",
           "target": [
             "#themeToggleIcon"
@@ -1583,7 +1736,71 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<div class=\"file-list-header\" aria-hidden=\"true\">\n            <span>Name</span>\n            <span>Type</span>\n            <span>Status</span>\n            <span>Size</span>\n            <span>Actions</span>\n          </div>",
+          "html": "<span class=\"workflow-step\" aria-hidden=\"true\">1</span>",
+          "target": [
+            ".workflow-heading > .workflow-step[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"workflow-step\" aria-hidden=\"true\">2</span>",
+          "target": [
+            ".results-heading > .workflow-step[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"file-list-header\" aria-hidden=\"true\">\n              <span>Name</span>\n              <span>Type</span>\n              <span>Status</span>\n              <span>Size</span>\n              <span>Actions</span>\n            </div>",
           "target": [
             ".file-list-header"
           ]
@@ -1709,6 +1926,24 @@
             }
           ],
           "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
           "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
@@ -1785,6 +2020,24 @@
           "target": [
             "#statusPanel"
           ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
+          ]
         }
       ]
     },
@@ -1838,6 +2091,42 @@
           "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
             "#convertTooltip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "target": [
+            ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
           ]
         }
       ]
@@ -1920,6 +2209,70 @@
           "html": "<div id=\"convertTooltip\" role=\"tooltip\" class=\"tooltip\" aria-hidden=\"false\">\n                Auto-convert is enabled — manual Convert is disabled\n              </div>",
           "target": [
             "#convertTooltip"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "target": [
+            ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
           ]
         }
       ]
@@ -2161,6 +2514,38 @@
           ],
           "none": [],
           "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
           "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
@@ -2292,6 +2677,38 @@
           "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
           ]
         }
       ]
@@ -2433,6 +2850,24 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
@@ -2508,6 +2943,24 @@
           "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
           ]
         }
       ]
@@ -2586,7 +3039,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"36.375\" style=\"min-height: 36.375px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"38\" style=\"min-height: 38px;\">Add files to see conversion progress and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -2690,6 +3143,24 @@
               "relatedNodes": [],
               "impact": "critical",
               "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "target": [
+            "#folderImportButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
             },
             {
               "id": "aria-label",
@@ -2705,6 +3176,24 @@
           "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
           "target": [
             "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "button-has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has inner text that is visible to screen readers"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">Download selected</button>",
+          "target": [
+            "#downloadSelected"
           ]
         },
         {
@@ -2738,7 +3227,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download all (ZIP)\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -2790,9 +3279,9 @@
                   ]
                 },
                 {
-                  "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
+                  "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
                   "target": [
-                    ".items-center.justify-between.gap-3 > h2"
+                    ".results-heading > div > h2"
                   ]
                 }
               ],
@@ -2826,7 +3315,7 @@
     },
     {
       "id": "color-contrast",
-      "impact": null,
+      "impact": "serious",
       "tags": [
         "cat.color",
         "wcag2aa",
@@ -2848,16 +3337,41 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d252b",
+                "fgColor": "#08758d",
                 "bgColor": "#ffffff",
-                "contrastRatio": 15.53,
-                "fontSize": "15.0pt (20px)",
+                "contrastRatio": 5.33,
+                "fontSize": "6.8pt (9px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.33"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"product-mark\" aria-hidden=\"true\">ON</span>",
+          "target": [
+            ".product-mark"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#172b4d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 14.1,
+                "fontSize": "12.8pt (17px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.53"
+              "message": "Element has sufficient color contrast of 14.1"
             }
           ],
           "all": [],
@@ -2873,22 +3387,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#48545d",
+                "fgColor": "#607391",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.77,
+                "contrastRatio": 4.81,
                 "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.77"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-1 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
+          "html": "<p class=\"mt-1 text-sm text-help\">\n              Clean and convert OneNote .mht and .mhtml files into modern HTML locally in your browser.\n            </p>",
           "target": [
             ".text-help"
           ]
@@ -2898,16 +3412,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d252b",
+                "fgColor": "#355477",
                 "bgColor": "#ffffff",
-                "contrastRatio": 15.53,
-                "fontSize": "9.8pt (13px)",
+                "contrastRatio": 7.81,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.53"
+              "message": "Element has sufficient color contrast of 7.81"
             }
           ],
           "all": [],
@@ -2923,16 +3437,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#48545d",
+                "fgColor": "#355477",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.77,
-                "fontSize": "10.5pt (14px)",
+                "contrastRatio": 7.81,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.77"
+              "message": "Element has sufficient color contrast of 7.81"
             }
           ],
           "all": [],
@@ -2948,16 +3462,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#48545d",
+                "fgColor": "#355477",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.77,
-                "fontSize": "9.8pt (13px)",
+                "contrastRatio": 7.81,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.77"
+              "message": "Element has sufficient color contrast of 7.81"
             }
           ],
           "all": [],
@@ -2973,16 +3487,41 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d252b",
-                "bgColor": "#ffffff",
-                "contrastRatio": 15.53,
-                "fontSize": "13.5pt (18px)",
-                "fontWeight": "normal",
+                "fgColor": "#ffffff",
+                "bgColor": "#102c57",
+                "contrastRatio": 13.81,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.53"
+              "message": "Element has sufficient color contrast of 13.81"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"workflow-step\" aria-hidden=\"true\">1</span>",
+          "target": [
+            ".workflow-heading > .workflow-step[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#172b4d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 14.1,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 14.1"
             }
           ],
           "all": [],
@@ -2998,41 +3537,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#48545d",
+                "fgColor": "#607391",
                 "bgColor": "#ffffff",
-                "contrastRatio": 7.77,
-                "fontSize": "10.5pt (14px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.77"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
-          "target": [
-            ".max-w-2xl"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
+                "contrastRatio": 4.81,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3048,16 +3562,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
+                "fgColor": "#607391",
                 "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
+                "contrastRatio": 4.81,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3073,16 +3587,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
+                "fgColor": "#607391",
                 "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
+                "contrastRatio": 4.81,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3098,16 +3612,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
+                "fgColor": "#607391",
                 "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
+                "contrastRatio": 4.81,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3124,15 +3638,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#ffffff",
-                "bgColor": "#0b6f83",
-                "contrastRatio": 5.8,
-                "fontSize": "10.5pt (14px)",
+                "bgColor": "#006fe6",
+                "contrastRatio": 4.75,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.8"
+              "message": "Element has sufficient color contrast of 4.75"
             }
           ],
           "all": [],
@@ -3148,16 +3662,41 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d252b",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 14.05,
-                "fontSize": "12.0pt (16px)",
+                "fgColor": "#48545d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 7.77,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.05"
+              "message": "Element has sufficient color contrast of 7.77"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "target": [
+            "#folderImportButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#173865",
+                "bgColor": "#f8fbff",
+                "contrastRatio": 11.3,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.3"
             }
           ],
           "all": [],
@@ -3174,15 +3713,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#48545d",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 7.03,
+                "bgColor": "#f8fbff",
+                "contrastRatio": 7.48,
                 "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.03"
+              "message": "Element has sufficient color contrast of 7.48"
             }
           ],
           "all": [],
@@ -3199,15 +3738,15 @@
               "id": "color-contrast",
               "data": {
                 "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
+                "bgColor": "#f8fbff",
+                "contrastRatio": 5.53,
                 "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 5.53"
             }
           ],
           "all": [],
@@ -3243,16 +3782,36 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d252b",
+                "messageKey": "hidden"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is hidden"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#172b4d",
                 "bgColor": "#ffffff",
-                "contrastRatio": 15.53,
-                "fontSize": "10.5pt (14px)",
+                "contrastRatio": 14.1,
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 15.53"
+              "message": "Element has sufficient color contrast of 14.1"
             }
           ],
           "all": [],
@@ -3318,16 +3877,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "9.0pt (12px)",
+                "fgColor": "#607391",
+                "bgColor": "#f8fbff",
+                "contrastRatio": 4.64,
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 4.64"
             }
           ],
           "all": [],
@@ -3343,24 +3902,49 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#1d252b",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 14.05,
-                "fontSize": "13.5pt (18px)",
-                "fontWeight": "normal",
+                "fgColor": "#ffffff",
+                "bgColor": "#102c57",
+                "contrastRatio": 13.81,
+                "fontSize": "8.3pt (11px)",
+                "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 14.05"
+              "message": "Element has sufficient color contrast of 13.81"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
+          "html": "<span class=\"workflow-step\" aria-hidden=\"true\">2</span>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-heading > .workflow-step[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#172b4d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 14.1,
+                "fontSize": "11.3pt (15px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 14.1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+          "target": [
+            ".results-heading > div > h2"
           ]
         },
         {
@@ -3371,8 +3955,8 @@
                 "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
+                "fontSize": "6.8pt (9px)",
+                "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
@@ -3393,22 +3977,22 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "9.8pt (13px)",
+                "fgColor": "#607391",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.81,
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"36.375\" style=\"min-height: 36.375px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"38\" style=\"min-height: 38px;\">Add files to see conversion progress and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -3418,16 +4002,66 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "8.3pt (11px)",
+                "fgColor": "#172b4d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 14.1,
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 14.1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
+          "target": [
+            "#workbenchSearch"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#172b4d",
+                "bgColor": "#ffffff",
+                "contrastRatio": 14.1,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 14.1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"workbenchFilter\" class=\"workbench-filter\"><option value=\"all\">All items</option></select>",
+          "target": [
+            "#workbenchFilter"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#607391",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.81,
+                "fontSize": "6.8pt (9px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3443,16 +4077,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "8.3pt (11px)",
+                "fgColor": "#607391",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.81,
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3468,16 +4102,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "8.3pt (11px)",
+                "fgColor": "#607391",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.81,
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3493,16 +4127,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "8.3pt (11px)",
+                "fgColor": "#607391",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.81,
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3518,16 +4152,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f2f4f2",
-                "contrastRatio": 5.19,
-                "fontSize": "8.3pt (11px)",
+                "fgColor": "#607391",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.81,
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.19"
+              "message": "Element has sufficient color contrast of 4.81"
             }
           ],
           "all": [],
@@ -3543,16 +4177,41 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f7f8f6",
-                "contrastRatio": 5.38,
-                "fontSize": "9.0pt (12px)",
+                "fgColor": "#607391",
+                "bgColor": "#fbfdff",
+                "contrastRatio": 4.72,
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.38"
+              "message": "Element has sufficient color contrast of 4.72"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"selectionSummary\" class=\"results-selection-summary\">No item selected</div>",
+          "target": [
+            "#selectionSummary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#607391",
+                "bgColor": "#f5f8fc",
+                "contrastRatio": 4.52,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 4.52"
             }
           ],
           "all": [],
@@ -3568,16 +4227,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f7f8f6",
-                "contrastRatio": 5.38,
-                "fontSize": "9.0pt (12px)",
+                "fgColor": "#607391",
+                "bgColor": "#f5f8fc",
+                "contrastRatio": 4.52,
+                "fontSize": "7.5pt (10px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.38"
+              "message": "Element has sufficient color contrast of 4.52"
             }
           ],
           "all": [],
@@ -3593,16 +4252,16 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f7f8f6",
-                "contrastRatio": 5.38,
-                "fontSize": "9.0pt (12px)",
+                "fgColor": "#607391",
+                "bgColor": "#f5f8fc",
+                "contrastRatio": 4.52,
+                "fontSize": "7.5pt (10px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.38"
+              "message": "Element has sufficient color contrast of 4.52"
             }
           ],
           "all": [],
@@ -3926,6 +4585,42 @@
           "any": [
             {
               "id": "duplicate-id-aria",
+              "data": "workbenchSearch",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
+          "target": [
+            "#workbenchSearch"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
+              "data": "workbenchFilter",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"workbenchFilter\" class=\"workbench-filter\"><option value=\"all\">All items</option></select>",
+          "target": [
+            "#workbenchFilter"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
               "data": "helpModal",
               "relatedNodes": [],
               "impact": "critical",
@@ -4038,9 +4733,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
+          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-heading > div > h2"
           ]
         }
       ]
@@ -4080,6 +4775,74 @@
           "target": [
             "#fileInput"
           ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"sr-only\" for=\"workbenchSearch\">Search files and folders</label>",
+                  "target": [
+                    "label[for=\"workbenchSearch\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
+          "target": [
+            "#workbenchSearch"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"sr-only\" for=\"workbenchFilter\">Filter items</label>",
+                  "target": [
+                    "label[for=\"workbenchFilter\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"workbenchFilter\" class=\"workbench-filter\"><option value=\"all\">All items</option></select>",
+          "target": [
+            "#workbenchFilter"
+          ]
         }
       ]
     },
@@ -4102,25 +4865,25 @@
                 "headingOrder": [
                   {
                     "ancestry": [
-                      "html > body > header:nth-child(1) > div > div > div:nth-child(1) > h1:nth-child(1)"
+                      "html > body > header:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > h1:nth-child(1)"
                     ],
                     "level": 1
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(1) > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(1)"
                     ],
                     "level": 2
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(1)"
                     ],
                     "level": 3
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > aside:nth-child(2) > section > div:nth-child(1) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > aside:nth-child(2) > section > div:nth-child(1) > div:nth-child(2) > h2:nth-child(1)"
                     ],
                     "level": 2
                   }
@@ -4188,9 +4951,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
+          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-heading > div > h2"
           ]
         }
       ]
@@ -4301,6 +5064,60 @@
           "target": [
             "#fileInput"
           ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
+          "target": [
+            "#workbenchSearch"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"workbenchFilter\" class=\"workbench-filter\"><option value=\"all\">All items</option></select>",
+          "target": [
+            "#workbenchFilter"
+          ]
         }
       ]
     },
@@ -4349,6 +5166,72 @@
           "html": "<input id=\"fileInput\" class=\"sr-only\" type=\"file\" multiple=\"\" aria-label=\"Select files to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#fileInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-label attribute exists and is not empty"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "explicit-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"sr-only\" for=\"workbenchSearch\">Search files and folders</label>",
+                  "target": [
+                    "label[for=\"workbenchSearch\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            },
+            {
+              "id": "non-empty-placeholder",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a placeholder attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
+          "target": [
+            "#workbenchSearch"
           ]
         }
       ]
@@ -4779,6 +5662,27 @@
             {
               "id": "landmark-is-unique",
               "data": {
+                "role": "search",
+                "accessibleText": null
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "target": [
+            ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
                 "role": "contentinfo",
                 "accessibleText": null
               },
@@ -5053,6 +5957,24 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "target": [
+            "#folderImportButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
             ".advanced-options-summary"
@@ -5089,6 +6011,42 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<option value=\"all\">All items</option>",
+          "target": [
+            "option[value=\"all\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">Download selected</button>",
+          "target": [
+            "#downloadSelected"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
           "target": [
             "#clearFilesButton"
@@ -5107,7 +6065,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download all (ZIP)\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -5200,9 +6158,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"page-shell mx-auto max-w-6xl px-4 py-3 md:px-8\">",
+          "html": "<div class=\"page-shell mx-auto max-w-7xl px-4 py-3 md:px-8\">",
           "target": [
-            ".py-3"
+            ".max-w-7xl"
           ]
         },
         {
@@ -5260,6 +6218,46 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<div>",
+          "target": [
+            ".home-header__identity > div"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"product-title-row\">\n              <h1 class=\"text-2xl font-semibold\">OneNote HTML Cleaner</h1>\n              <span class=\"product-version\">v0.2</span>\n            </div>",
+          "target": [
+            ".product-title-row"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<h1 class=\"text-2xl font-semibold\">OneNote HTML Cleaner</h1>",
           "target": [
             "h1"
@@ -5280,7 +6278,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-1 text-sm text-help\">\n            Convert exported OneNote pages into cleaner HTML locally in your browser, with optional Markdown when you need it.\n          </p>",
+          "html": "<span class=\"product-version\">v0.2</span>",
+          "target": [
+            ".product-version"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"mt-1 text-sm text-help\">\n              Clean and convert OneNote .mht and .mhtml files into modern HTML locally in your browser.\n            </p>",
           "target": [
             ".text-help"
           ]
@@ -5540,9 +6558,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"space-y-3\">",
+          "html": "<div class=\"import-stage space-y-3\">",
           "target": [
-            ".home-start-card > .space-y-3"
+            ".import-stage"
           ]
         },
         {
@@ -5560,9 +6578,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n              <h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>\n              <p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>\n            </div>",
+          "html": "<div class=\"workflow-heading\">",
           "target": [
-            ".space-y-3 > div:nth-child(1)"
+            ".workflow-heading"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div>\n                <h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>\n                <p class=\"workflow-support\">Supported: .mht, .mhtml</p>\n              </div>",
+          "target": [
+            ".workflow-heading > div"
           ]
         },
         {
@@ -5600,9 +6638,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>",
+          "html": "<p class=\"workflow-support\">Supported: .mht, .mhtml</p>",
           "target": [
-            ".max-w-2xl"
+            ".workflow-support"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div>\n              <p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>\n            </div>",
+          "target": [
+            ".import-stage > div:nth-child(2)"
           ]
         },
         {
@@ -5740,7 +6798,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"homepage-action-row\">\n              <button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>\n            </div>",
+          "html": "<div class=\"homepage-action-row\">",
           "target": [
             ".homepage-action-row"
           ]
@@ -5763,6 +6821,26 @@
           "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
           "target": [
             "#importButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "target": [
+            "#folderImportButton"
           ]
         },
         {
@@ -5920,7 +6998,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"home-advanced-card card-panel card-panel--soft space-y-4\">",
+          "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
+          "target": [
+            "#folderInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"home-advanced-card space-y-4\">",
           "target": [
             ".home-advanced-card"
           ]
@@ -6200,9 +7298,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"flex items-center justify-between gap-3\">\n            <h2 class=\"text-lg font-medium\">Conversion results</h2>\n            <span id=\"appStateBadge\" class=\"inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase\" data-state=\"empty\">Empty</span>\n          </div>",
+          "html": "<div class=\"results-heading\">",
           "target": [
-            ".items-center.justify-between.gap-3"
+            ".results-heading"
           ]
         },
         {
@@ -6220,9 +7318,49 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Conversion results</h2>",
+          "html": "<div>\n              <h2 class=\"text-lg font-medium\">Files and results</h2>\n              <p class=\"results-heading__support\">Conversion activity appears here.</p>\n            </div>",
           "target": [
-            ".items-center.justify-between.gap-3 > h2"
+            ".results-heading > div"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+          "target": [
+            ".results-heading > div > h2"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"results-heading__support\">Conversion activity appears here.</p>",
+          "target": [
+            ".results-heading__support"
           ]
         },
         {
@@ -6260,7 +7398,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"36.375\" style=\"min-height: 36.375px;\">Added files will appear here with progress, status, and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"38\" style=\"min-height: 38px;\">Add files to see conversion progress and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -6280,7 +7418,147 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div id=\"fileList\"></div>",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "target": [
+            ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"sr-only\" for=\"workbenchSearch\">Search files and folders</label>",
+          "target": [
+            "label[for=\"workbenchSearch\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
+          "target": [
+            "#workbenchSearch"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"sr-only\" for=\"workbenchFilter\">Filter items</label>",
+          "target": [
+            "label[for=\"workbenchFilter\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"workbenchFilter\" class=\"workbench-filter\"><option value=\"all\">All items</option></select>",
+          "target": [
+            "#workbenchFilter"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"all\">All items</option>",
+          "target": [
+            "option[value=\"all\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-table\">",
+          "target": [
+            ".results-workbench-table"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
           ]
@@ -6320,6 +7598,46 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<div id=\"selectionSummary\" class=\"results-selection-summary\">No item selected</div>",
+          "target": [
+            "#selectionSummary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">Download selected</button>",
+          "target": [
+            "#downloadSelected"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
           "target": [
             "#clearFilesButton"
@@ -6340,7 +7658,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download ZIP\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download all (ZIP)\n            </button>",
           "target": [
             "#downloadZip"
           ]
@@ -6528,6 +7846,62 @@
       ]
     },
     {
+      "id": "select-name",
+      "impact": null,
+      "tags": [
+        "cat.forms",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.n",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT",
+        "RGAAv4",
+        "RGAA-11.1.1"
+      ],
+      "description": "Ensure select element has an accessible name",
+      "help": "Select element must have an accessible name",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/select-name?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "explicit-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"sr-only\" for=\"workbenchFilter\">Filter items</label>",
+                  "target": [
+                    "label[for=\"workbenchFilter\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"workbenchFilter\" class=\"workbench-filter\"><option value=\"all\">All items</option></select>",
+          "target": [
+            "#workbenchFilter"
+          ]
+        }
+      ]
+    },
+    {
       "id": "summary-name",
       "impact": null,
       "tags": [
@@ -6679,6 +8053,46 @@
       ]
     },
     {
+      "id": "aria-required-children",
+      "impact": "critical",
+      "tags": [
+        "cat.aria",
+        "wcag2a",
+        "wcag131",
+        "EN-301-549",
+        "EN-9.1.3.1",
+        "RGAAv4",
+        "RGAA-9.3.1"
+      ],
+      "description": "Ensure elements with an ARIA role that require child roles contain them",
+      "help": "Certain ARIA roles must contain particular children",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-required-children?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "aria-required-children",
+              "data": [
+                "group",
+                "treeitem"
+              ],
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Expecting ARIA children role to be added: group, treeitem"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
+          "target": [
+            "#fileList"
+          ],
+          "failureSummary": "Fix any of the following:\n  Expecting ARIA children role to be added: group, treeitem"
+        }
+      ]
+    },
+    {
       "id": "aria-valid-attr-value",
       "impact": "critical",
       "tags": [
@@ -6719,5 +8133,129 @@
       ]
     }
   ],
-  "violations": []
+  "violations": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT",
+        "RGAAv4",
+        "RGAA-3.2.1"
+      ],
+      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#006fe6",
+                "bgColor": "#e8f2ff",
+                "contrastRatio": 4.2,
+                "fontSize": "6.8pt (9px)",
+                "fontWeight": "bold",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<span class=\"product-version\">v0.2</span>",
+                  "target": [
+                    ".product-version"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 4.2 (foreground color: #006fe6, background color: #e8f2ff, font size: 6.8pt (9px), font weight: bold). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"product-version\">v0.2</span>",
+          "target": [
+            ".product-version"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.2 (foreground color: #006fe6, background color: #e8f2ff, font size: 6.8pt (9px), font weight: bold). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#6680aa",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.01,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
+                  "target": [
+                    ".home-start-card"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<p class=\"workflow-support\">Supported: .mht, .mhtml</p>",
+          "target": [
+            ".workflow-support"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#6680aa",
+                "bgColor": "#ffffff",
+                "contrastRatio": 4.01,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+                  "target": [
+                    "#statusPanel"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<p class=\"results-heading__support\">Conversion activity appears here.</p>",
+          "target": [
+            ".results-heading__support"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+        }
+      ]
+    }
+  ]
 }
