@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-14T12:45:05.283Z",
-  "url": "http://127.0.0.1:57865/",
+  "timestamp": "2026-10-14T13:19:20.266Z",
+  "url": "http://127.0.0.1:65453/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -843,6 +843,32 @@
             }
           ],
           "impact": null,
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
+          "target": [
+            ".home-header__actions"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
           "html": "<button id=\"helpButton\" type=\"button\" class=\"btn-ghost header-icon-button\" aria-haspopup=\"dialog\" aria-controls=\"helpModal\" aria-expanded=\"false\" title=\"Help\">\n            Help\n            <span class=\"sr-only\">: show usage and GitHub link</span>\n          </button>",
           "target": [
             "#helpButton"
@@ -1129,7 +1155,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -1181,9 +1207,35 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
+          "target": [
+            ".results-workbench-toolbar"
           ]
         },
         {
@@ -1210,6 +1262,58 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
+          "target": [
+            ".home-footer__links"
           ]
         }
       ]
@@ -1274,7 +1378,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
           "target": [
             ".results-workbench-toolbar"
           ]
@@ -1296,6 +1400,24 @@
           "target": [
             "#fileList"
           ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-allowed-role",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is allowed for given element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
+          ]
         }
       ]
     },
@@ -1315,6 +1437,24 @@
       "help": "ARIA attributes must be used as specified for the element's role",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-conditional-attr?application=axeAPI",
       "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
+          "target": [
+            ".home-header__actions"
+          ]
+        },
         {
           "any": [],
           "all": [
@@ -1526,7 +1666,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -1562,9 +1702,27 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
+          "target": [
+            ".results-workbench-toolbar"
           ]
         },
         {
@@ -1583,6 +1741,42 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
+          "target": [
+            ".home-footer__links"
           ]
         }
       ]
@@ -1652,7 +1846,7 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
           "target": [
             ".results-workbench-toolbar"
           ]
@@ -1673,6 +1867,24 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
           ]
         }
       ]
@@ -1856,9 +2068,201 @@
           ],
           "none": [],
           "impact": null,
+          "html": "<span class=\"homepage-action-icon\" aria-hidden=\"true\">",
+          "target": [
+            "#importButton > .homepage-action-icon[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"homepage-action-icon\" aria-hidden=\"true\">",
+          "target": [
+            "#folderImportButton > .homepage-action-icon[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"dropzone-icon\" aria-hidden=\"true\">",
+          "target": [
+            ".dropzone-icon"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"advanced-options-icon\" aria-hidden=\"true\">",
+          "target": [
+            ".advanced-options-icon"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"homepage-action-icon\" aria-hidden=\"true\">",
+          "target": [
+            "#convertButton > .homepage-action-icon[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
           "html": "<span class=\"workflow-step\" aria-hidden=\"true\">2</span>",
           "target": [
             ".results-heading > .workflow-step[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"results-search-icon\" aria-hidden=\"true\">",
+          "target": [
+            ".results-search-icon"
           ]
         },
         {
@@ -1892,6 +2296,134 @@
           "target": [
             ".file-list-header"
           ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"results-action-icon\" aria-hidden=\"true\">",
+          "target": [
+            "#downloadSelected > .results-action-icon[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"results-action-icon\" aria-hidden=\"true\">",
+          "target": [
+            "#clearFilesButton > .results-action-icon[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"results-action-icon\" aria-hidden=\"true\">",
+          "target": [
+            "#downloadZip > .results-action-icon[aria-hidden=\"true\"]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"home-footer__trust-icon\" aria-hidden=\"true\">",
+          "target": [
+            ".home-footer__trust-icon"
+          ]
         }
       ]
     },
@@ -1911,6 +2443,24 @@
       "help": "Elements must only use permitted ARIA attributes",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
       "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
+          "target": [
+            ".home-header__actions"
+          ]
+        },
         {
           "any": [],
           "all": [],
@@ -2086,7 +2636,7 @@
             }
           ],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -2122,9 +2672,27 @@
             }
           ],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
+          "target": [
+            ".results-workbench-toolbar"
           ]
         },
         {
@@ -2143,6 +2711,42 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
+          "target": [
+            ".home-footer__links"
           ]
         }
       ]
@@ -2212,7 +2816,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
           "target": [
             ".results-workbench-toolbar"
           ]
@@ -2233,6 +2837,24 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
           ]
         }
       ]
@@ -2344,7 +2966,7 @@
             }
           ],
           "impact": null,
-          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
           "target": [
             ".results-workbench-toolbar"
           ]
@@ -2379,6 +3001,38 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
           ]
         }
       ]
@@ -2433,6 +3087,38 @@
       "help": "ARIA attributes must conform to valid values",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-valid-attr-value?application=axeAPI",
       "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
+          "target": [
+            ".home-header__actions"
+          ]
+        },
         {
           "any": [],
           "all": [
@@ -2780,7 +3466,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -2844,9 +3530,41 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
+          "target": [
+            ".results-workbench-toolbar"
           ]
         },
         {
@@ -2880,6 +3598,70 @@
           "target": [
             "#fileList"
           ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
+          "target": [
+            ".home-footer__links"
+          ]
         }
       ]
     },
@@ -2899,6 +3681,24 @@
       "help": "ARIA attributes must conform to valid names",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-valid-attr?application=axeAPI",
       "nodes": [
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
+          "target": [
+            ".home-header__actions"
+          ]
+        },
         {
           "any": [
             {
@@ -3110,7 +3910,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -3146,9 +3946,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
+          "target": [
+            ".results-workbench-toolbar"
           ]
         },
         {
@@ -3167,6 +3985,42 @@
           "html": "<div id=\"fileList\" role=\"tree\" aria-label=\"Files and results\"></div>",
           "target": [
             "#fileList"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
+          "target": [
+            ".results-action-row"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
+          "target": [
+            ".home-footer__links"
           ]
         }
       ]
@@ -3245,7 +4099,7 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"38\" style=\"min-height: 38px;\">Add files to see conversion progress and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44\" style=\"min-height: 44px;\">Add files to see conversion progress and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -3336,7 +4190,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">",
           "target": [
             "#importButton"
           ]
@@ -3354,7 +4208,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">",
           "target": [
             "#folderImportButton"
           ]
@@ -3379,7 +4233,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -3397,7 +4251,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">Download selected</button>",
+          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">",
           "target": [
             "#downloadSelected"
           ]
@@ -3415,7 +4269,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">",
           "target": [
             "#clearFilesButton"
           ]
@@ -3433,7 +4287,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download all (ZIP)\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">",
           "target": [
             "#downloadZip"
           ]
@@ -3485,9 +4339,9 @@
                   ]
                 },
                 {
-                  "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+                  "html": "<h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>",
                   "target": [
-                    ".results-heading > div > h2"
+                    "#resultsHeading"
                   ]
                 }
               ],
@@ -3521,7 +4375,7 @@
     },
     {
       "id": "color-contrast",
-      "impact": "serious",
+      "impact": null,
       "tags": [
         "cat.color",
         "wcag2aa",
@@ -3543,10 +4397,35 @@
             {
               "id": "color-contrast",
               "data": {
+                "fgColor": "#a7e5ef",
+                "bgColor": "#1c1f1d",
+                "contrastRatio": 11.95,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.95"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"product-mark\" aria-hidden=\"true\">ON</span>",
+          "target": [
+            ".product-mark"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "13.5pt (18px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3561,6 +4440,31 @@
           "html": "<h1 class=\"text-2xl font-semibold\">OneNote HTML Cleaner</h1>",
           "target": [
             "h1"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#0056ad",
+                "bgColor": "#e8f2ff",
+                "contrastRatio": 6.33,
+                "fontSize": "6.8pt (9px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.33"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"product-version\">v0.2</span>",
+          "target": [
+            ".product-version"
           ]
         },
         {
@@ -3596,7 +4500,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3621,7 +4525,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3646,7 +4550,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3671,7 +4575,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#102c57",
                 "contrastRatio": 13.81,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3696,7 +4600,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "13.5pt (18px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3721,7 +4625,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3858,9 +4762,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<span>Browse files</span>",
           "target": [
-            "#importButton"
+            "#importButton > span:nth-child(2)"
           ]
         },
         {
@@ -3883,9 +4787,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "html": "<span>Add from folder</span>",
           "target": [
-            "#folderImportButton"
+            "#folderImportButton > span:nth-child(2)"
           ]
         },
         {
@@ -3896,7 +4800,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#181b19",
                 "contrastRatio": 13.82,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4011,7 +4915,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "12.0pt (16px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4025,7 +4929,7 @@
           "impact": null,
           "html": "<span>Advanced options</span>",
           "target": [
-            ".advanced-options-summary > span:nth-child(1)"
+            ".advanced-options-summary__label > span:nth-child(2)"
           ]
         },
         {
@@ -4111,7 +5015,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4136,7 +5040,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4161,7 +5065,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4186,7 +5090,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4211,7 +5115,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4236,7 +5140,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4261,7 +5165,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4286,7 +5190,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4311,7 +5215,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4336,7 +5240,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4361,7 +5265,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4386,7 +5290,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4411,7 +5315,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 10.49,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4436,7 +5340,7 @@
                 "fgColor": "#c9cfca",
                 "bgColor": "#181b19",
                 "contrastRatio": 10.96,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4461,7 +5365,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#102c57",
                 "contrastRatio": 13.81,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4486,7 +5390,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "12.0pt (16px)",
+                "fontSize": "13.5pt (18px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4498,9 +5402,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+          "html": "<h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
-            ".results-heading > div > h2"
+            "#resultsHeading"
           ]
         },
         {
@@ -4511,7 +5415,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4536,7 +5440,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "7.5pt (10px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4561,7 +5465,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4573,7 +5477,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"38\" style=\"min-height: 38px;\">Add files to see conversion progress and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44\" style=\"min-height: 44px;\">Add files to see conversion progress and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -4586,7 +5490,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4611,7 +5515,7 @@
                 "fgColor": "#e4e6e3",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 13.24,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "10.5pt (14px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4636,7 +5540,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4661,7 +5565,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4686,7 +5590,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4711,7 +5615,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4736,7 +5640,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#1c1f1d",
                 "contrastRatio": 7,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4761,7 +5665,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#181b19",
                 "contrastRatio": 7.31,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4786,7 +5690,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#151716",
                 "contrastRatio": 7.59,
-                "fontSize": "7.5pt (10px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4798,9 +5702,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>Processing happens locally in your browser. Files stay on your device.</p>",
+          "html": "<span>Processing happens locally in your browser. Files stay on your device.</span>",
           "target": [
-            ".home-footer__content > p"
+            ".home-footer__trust > span:nth-child(2)"
           ]
         },
         {
@@ -4811,7 +5715,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#151716",
                 "contrastRatio": 7.59,
-                "fontSize": "7.5pt (10px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -4836,7 +5740,7 @@
                 "fgColor": "#a3aaa5",
                 "bgColor": "#151716",
                 "contrastRatio": 7.59,
-                "fontSize": "7.5pt (10px)",
+                "fontSize": "9.0pt (12px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -5166,6 +6070,24 @@
           "any": [
             {
               "id": "duplicate-id-aria",
+              "data": "resultsHeading",
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Document has no elements referenced with ARIA or labels that share the same id attribute"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>",
+          "target": [
+            "#resultsHeading"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "duplicate-id-aria",
               "data": "workbenchSearch",
               "relatedNodes": [],
               "impact": "critical",
@@ -5314,9 +6236,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+          "html": "<h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
-            ".results-heading > div > h2"
+            "#resultsHeading"
           ]
         }
       ]
@@ -5608,7 +6530,7 @@
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(2)"
                     ],
                     "level": 3
                   },
@@ -5682,9 +6604,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+          "html": "<h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
-            ".results-heading > div > h2"
+            "#resultsHeading"
           ]
         }
       ]
@@ -6637,6 +7559,27 @@
             {
               "id": "landmark-is-unique",
               "data": {
+                "role": "navigation",
+                "accessibleText": "product actions"
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
+          "target": [
+            ".home-header__actions"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
                 "role": "main",
                 "accessibleText": null
               },
@@ -6743,7 +7686,7 @@
               "id": "landmark-is-unique",
               "data": {
                 "role": "region",
-                "accessibleText": "processing status"
+                "accessibleText": "files and results"
               },
               "relatedNodes": [],
               "impact": "moderate",
@@ -6753,7 +7696,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -6764,7 +7707,7 @@
               "id": "landmark-is-unique",
               "data": {
                 "role": "search",
-                "accessibleText": null
+                "accessibleText": "search and filter results"
               },
               "relatedNodes": [],
               "impact": "moderate",
@@ -6774,7 +7717,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
           "target": [
             ".results-workbench-toolbar"
           ]
@@ -6798,6 +7741,27 @@
           "html": "<footer class=\"home-footer\">",
           "target": [
             "footer"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
+                "role": "navigation",
+                "accessibleText": "project links"
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Landmarks must have a unique role or role/label/title (i.e. accessible name) combination"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
+          "target": [
+            ".home-footer__links"
           ]
         }
       ]
@@ -7040,7 +8004,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">",
           "target": [
             "#importButton"
           ]
@@ -7058,7 +8022,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">",
           "target": [
             "#folderImportButton"
           ]
@@ -7220,7 +8184,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
           ]
@@ -7256,7 +8220,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">Download selected</button>",
+          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">",
           "target": [
             "#downloadSelected"
           ]
@@ -7274,7 +8238,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">",
           "target": [
             "#clearFilesButton"
           ]
@@ -7292,7 +8256,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download all (ZIP)\n            </button>",
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">",
           "target": [
             "#downloadZip"
           ]
@@ -7545,7 +8509,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-header__actions flex items-center gap-3\">",
+          "html": "<nav class=\"home-header__actions flex items-center gap-3\" aria-label=\"Product actions\">",
           "target": [
             ".home-header__actions"
           ]
@@ -8045,7 +9009,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">\n                Browse files\n              </button>",
+          "html": "<button id=\"importButton\" type=\"button\" class=\"btn-primary homepage-import-button homepage-primary-button\">",
           "target": [
             "#importButton"
           ]
@@ -8065,9 +9029,49 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">\n                Add from folder\n              </button>",
+          "html": "<span>Browse files</span>",
+          "target": [
+            "#importButton > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"folderImportButton\" type=\"button\" class=\"btn-secondary homepage-folder-import-button\">",
           "target": [
             "#folderImportButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Add from folder</span>",
+          "target": [
+            "#folderImportButton > span:nth-child(2)"
           ]
         },
         {
@@ -8305,9 +9309,29 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<span class=\"advanced-options-summary__label\">",
+          "target": [
+            ".advanced-options-summary__label"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<span>Advanced options</span>",
           "target": [
-            ".advanced-options-summary > span:nth-child(1)"
+            ".advanced-options-summary__label > span:nth-child(2)"
           ]
         },
         {
@@ -9125,9 +10149,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">\n                Convert queued files\n              </button>",
+          "html": "<button id=\"convertButton\" type=\"button\" class=\"btn-primary homepage-convert-button\" aria-label=\"Convert queued files\" disabled=\"\">",
           "target": [
             "#convertButton"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Convert queued files</span>",
+          "target": [
+            "#convertButton > span:nth-child(2)"
           ]
         },
         {
@@ -9185,7 +10229,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -9225,7 +10269,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n              <h2 class=\"text-lg font-medium\">Files and results</h2>\n              <p class=\"results-heading__support\">Conversion activity appears here.</p>\n            </div>",
+          "html": "<div>\n              <h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>\n              <p class=\"results-heading__support\">Conversion activity appears here.</p>\n            </div>",
           "target": [
             ".results-heading > div"
           ]
@@ -9245,9 +10289,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
+          "html": "<h2 id=\"resultsHeading\" class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
-            ".results-heading > div > h2"
+            "#resultsHeading"
           ]
         },
         {
@@ -9305,7 +10349,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"38\" style=\"min-height: 38px;\">Add files to see conversion progress and downloads.</p>",
+          "html": "<p id=\"statusSummary\" class=\"status-summary text-sm text-secondary\" data-preserved-min-height=\"44\" style=\"min-height: 44px;\">Add files to see conversion progress and downloads.</p>",
           "target": [
             "#statusSummary"
           ]
@@ -9325,9 +10369,29 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"results-workbench-toolbar\" role=\"search\">",
+          "html": "<div class=\"results-workbench-toolbar\" role=\"search\" aria-label=\"Search and filter results\">",
           "target": [
             ".results-workbench-toolbar"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"workbench-search-group\">",
+          "target": [
+            ".workbench-search-group"
           ]
         },
         {
@@ -9485,7 +10549,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\">",
+          "html": "<div class=\"results-action-row flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-start\" role=\"group\" aria-label=\"Result actions\">",
           "target": [
             ".results-action-row"
           ]
@@ -9525,7 +10589,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">Download selected</button>",
+          "html": "<button id=\"downloadSelected\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">",
           "target": [
             "#downloadSelected"
           ]
@@ -9545,7 +10609,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">\n              Clear files\n            </button>",
+          "html": "<span>Download selected</span>",
+          "target": [
+            "#downloadSelected > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"clearFilesButton\" type=\"button\" class=\"btn-secondary results-action-button\" disabled=\"\">",
           "target": [
             "#clearFilesButton"
           ]
@@ -9565,9 +10649,49 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">\n              Download all (ZIP)\n            </button>",
+          "html": "<span>Clear files</span>",
+          "target": [
+            "#clearFilesButton > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button id=\"downloadZip\" type=\"button\" class=\"btn-primary results-action-button\" disabled=\"\">",
           "target": [
             "#downloadZip"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>Download all (ZIP)</span>",
+          "target": [
+            "#downloadZip > span:nth-child(2)"
           ]
         },
         {
@@ -9645,9 +10769,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>Processing happens locally in your browser. Files stay on your device.</p>",
+          "html": "<p class=\"home-footer__trust\">",
           "target": [
-            ".home-footer__content > p"
+            ".home-footer__trust"
           ]
         },
         {
@@ -9665,7 +10789,27 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-footer__links\">",
+          "html": "<span>Processing happens locally in your browser. Files stay on your device.</span>",
+          "target": [
+            ".home-footer__trust > span:nth-child(2)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<nav class=\"home-footer__links\" aria-label=\"Project links\">",
           "target": [
             ".home-footer__links"
           ]
@@ -9948,7 +11092,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
+          "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-labelledby=\"resultsHeading\" tabindex=\"-1\">",
           "target": [
             "#statusPanel"
           ]
@@ -10108,95 +11252,5 @@
       ]
     }
   ],
-  "violations": [
-    {
-      "id": "color-contrast",
-      "impact": "serious",
-      "tags": [
-        "cat.color",
-        "wcag2aa",
-        "wcag143",
-        "TTv5",
-        "TT13.c",
-        "EN-301-549",
-        "EN-9.1.4.3",
-        "ACT",
-        "RGAAv4",
-        "RGAA-3.2.1"
-      ],
-      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
-      "help": "Elements must meet minimum color contrast ratio thresholds",
-      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
-      "nodes": [
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#08758d",
-                "bgColor": "#1c1f1d",
-                "contrastRatio": 3.11,
-                "fontSize": "5.3pt (7px)",
-                "fontWeight": "bold",
-                "messageKey": null,
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<header class=\"home-header border-b\">",
-                  "target": [
-                    "header"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element has insufficient color contrast of 3.11 (foreground color: #08758d, background color: #1c1f1d, font size: 5.3pt (7px), font weight: bold). Expected contrast ratio of 4.5:1"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span class=\"product-mark\" aria-hidden=\"true\">ON</span>",
-          "target": [
-            ".product-mark"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.11 (foreground color: #08758d, background color: #1c1f1d, font size: 5.3pt (7px), font weight: bold). Expected contrast ratio of 4.5:1"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#4ba3ff",
-                "bgColor": "#e8f2ff",
-                "contrastRatio": 2.32,
-                "fontSize": "5.3pt (7px)",
-                "fontWeight": "bold",
-                "messageKey": null,
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<span class=\"product-version\">v0.2</span>",
-                  "target": [
-                    ".product-version"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element has insufficient color contrast of 2.32 (foreground color: #4ba3ff, background color: #e8f2ff, font size: 5.3pt (7px), font weight: bold). Expected contrast ratio of 4.5:1"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<span class=\"product-version\">v0.2</span>",
-          "target": [
-            ".product-version"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.32 (foreground color: #4ba3ff, background color: #e8f2ff, font size: 5.3pt (7px), font weight: bold). Expected contrast ratio of 4.5:1"
-        }
-      ]
-    }
-  ]
+  "violations": []
 }
