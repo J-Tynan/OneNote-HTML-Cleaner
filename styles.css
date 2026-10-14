@@ -1831,7 +1831,9 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
   .home-layout { grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 0.75rem; }
   .home-results-card { min-height: 36.75rem; }
   .home-start-card { min-height: 0; }
-  .results-action-row { grid-template-columns: minmax(0, 1fr) repeat(3, minmax(0, auto)); }
+  .results-action-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .results-selection-summary { grid-column: 1 / -1; min-width: 8rem; }
+  .results-action-row > .results-action-button { min-width: 0; }
   .home-header .page-shell { padding-block: 0.1875rem; }
   .product-mark { width: 1.5rem; height: 1.5rem; }
   .home-header__identity h1 { font-size: 0.9375rem; }
@@ -1846,19 +1848,43 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
   .home-dropzone-card { padding: 0 0.875rem 0.75rem; }
   #dropzone { min-height: 5.5rem; }
   .home-advanced-card { padding: 0.75rem 0.875rem; }
+  .home-advanced-card > * + * { margin-top: 0.5rem; }
   .advanced-options-summary { min-height: 1.75rem; font-size: 0.875rem; }
-  .checkbox-option { font-size: 0.8125rem; }
-  .option-subgroup .form-control { min-height: 2rem; font-size: 0.75rem; }
-  .queue-action-strip { min-height: 3.125rem; padding: 0.4375rem 0.625rem; }
-  .queue-action-strip .homepage-convert-button { min-height: 2.25rem; font-size: 0.8125rem; }
+  .advanced-options-summary__meta { font-size: 0.625rem; line-height: 1.15; }
+  .advanced-options-icon svg { width: 0.875rem; height: 0.875rem; }
+  #advancedOptions > p { margin-top: 0.5rem; font-size: 0.6875rem; line-height: 1.25; }
+  #advancedOptions[open] > #statusControls { margin-top: 0.5rem; }
+  #advancedOptions[open] #statusControls > .space-y-3 { gap: 0.375rem; }
+  .checkbox-option { gap: 0.375rem; font-size: 0.75rem; }
+  .checkbox-input { width: 0.875rem; height: 0.875rem; }
+  #advancedOptions[open] .checkbox-option > span { gap: 0.0625rem; }
+  #advancedOptions[open] .checkbox-option > span > .text-muted,
+  #advancedOptions[open] .option-subgroup p { font-size: 0.6875rem; line-height: 1.2; }
+  .option-subgroup { gap: 0.1875rem; }
+  .option-subgroup .form-control { min-height: 2rem; padding-block: 0.25rem; font-size: 0.75rem; }
+  .option-subgroup .form-control:disabled { background: #f2f5f9; color: #71819a; }
+  .queue-action-strip { min-height: 2.875rem; padding: 0.375rem 0.5rem; }
+  .queue-action-strip__status { font-size: 0.6875rem; line-height: 1.2; }
+  .queue-action-strip .homepage-convert-button { min-height: 2.125rem; font-size: 0.75rem; }
   .results-heading { padding: 0.75rem 0.875rem 0.5rem; }
   #statusSummary { min-height: 2.375rem; padding: 0.625rem 0.875rem; font-size: 0.75rem; }
   .results-workbench-toolbar { min-height: 3.25rem; padding: 0.5rem 0.875rem; }
   .results-search-icon { left: 1.375rem; }
   .workbench-search, .workbench-filter { font-size: 0.8125rem; }
-  .file-list-header { padding: 0.625rem 0.875rem; }
+  .file-list-header {
+    grid-template-columns: minmax(0, 1fr) 5rem 2rem;
+    padding: 0.625rem 0.875rem;
+  }
+  .file-list-header > :nth-child(2),
+  .file-list-header > :nth-child(4) { display: none; }
   #fileList { min-height: 12rem; padding-inline: 0.875rem; }
-  .file-item { min-height: 2.75rem; }
+  .file-item {
+    grid-template-columns: minmax(0, 1fr) 5rem 2rem;
+    grid-template-areas: "name status actions" "detail detail actions";
+    min-height: 2.75rem;
+  }
+  .file-item__type,
+  .file-item__size { display: none; }
   .file-item__name { font-size: 0.8125rem; }
   .results-action-row { gap: 0.5rem; padding: 0.75rem 0.875rem; }
   .results-action-row > .results-action-button { min-height: 2.25rem; font-size: 0.75rem; }

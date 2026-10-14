@@ -39,7 +39,78 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
   }
 }
 
-async function assertApprovedShell(page, viewportLabel, { expectsColumns, expectsStackedActions = false }) {
+async function seedSelectedWorkbenchRow(page) {
+  await page.evaluate(async () => {
+    const module = await import('/src/ui.js');
+    module.addFilesToQueue([
+      new File(
+        ['Queued result fixture'],
+        'Quarterly-planning-notes-with-a-long-descriptive-file-name.mht',
+        { type: 'multipart/related' }
+      )
+    ]);
+  });
+  await page.waitForSelector('.file-item.workbench-row');
+  await page.locator('.workbench-select').check();
+}
+
+async function assertWorkbenchContentFits(page, viewportLabel) {
+  const result = await page.evaluate(() => {
+    const card = document.getElementById('statusPanel');
+    const actionRow = document.querySelector('.results-action-row');
+    const row = document.querySelector('.file-item.workbench-row');
+    if (!card || !actionRow || !row) return { ok: false, reason: 'populated workbench elements missing' };
+
+    const cardRect = card.getBoundingClientRect();
+    const actionChildren = [...actionRow.children];
+    const visibleElements = [
+      ...row.querySelectorAll('.file-item__name, .file-item__type, .file-item__status, .file-item__size, .file-item__actions, button, input'),
+      ...actionChildren,
+      ...actionRow.querySelectorAll('button')
+    ].filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    });
+    const contained = visibleElements.every((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.left >= cardRect.left - 1
+        && rect.right <= cardRect.right + 1
+        && rect.top >= cardRect.top - 1
+        && rect.bottom <= cardRect.bottom + 1;
+    });
+    const actionRects = actionChildren.map((element) => {
+      const rect = element.getBoundingClientRect();
+      return { text: element.textContent?.replace(/\s+/g, ' ').trim(), left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+    });
+    const selectionSummary = document.getElementById('selectionSummary');
+    const selectionSummaryRect = selectionSummary?.getBoundingClientRect();
+    const selectionSummaryUsable = Boolean(selectionSummaryRect && selectionSummaryRect.width >= 128);
+    const actionOverlap = actionRects.some((rect, index) => actionRects.slice(index + 1).some((other) => (
+      rect.left < other.right && rect.right > other.left && rect.top < other.bottom && rect.bottom > other.top
+    )));
+    const documentHasHorizontalOverflow = document.documentElement.scrollWidth > window.innerWidth + 1;
+
+    return {
+      ok: contained && selectionSummaryUsable && !actionOverlap && !documentHasHorizontalOverflow,
+      contained,
+      selectionSummaryUsable,
+      actionOverlap,
+      documentHasHorizontalOverflow,
+      card: { left: cardRect.left, right: cardRect.right, top: cardRect.top, bottom: cardRect.bottom },
+      actionRects
+    };
+  });
+
+  if (!result.ok) {
+    throw new Error(`${viewportLabel}: populated results workbench does not fit. details=${JSON.stringify(result)}`);
+  }
+}
+
+async function assertApprovedShell(page, viewportLabel, {
+  expectsColumns,
+  expectsStackedActions = false,
+  expectsCompactAdvanced = false
+}) {
   const result = await page.evaluate(() => {
     const importCard = document.querySelector('.home-start-card');
     const dropzone = document.getElementById('controls');
@@ -50,7 +121,9 @@ async function assertApprovedShell(page, viewportLabel, { expectsColumns, expect
     const results = document.getElementById('statusPanel');
     const fileList = document.getElementById('fileList');
     const resultsActions = document.querySelector('.results-action-row');
-    if (!importCard || !dropzone || !advanced || !importButton || !folderImportButton || !convertButton || !results || !fileList || !resultsActions) {
+    const advancedCard = advanced?.closest('.home-advanced-card');
+    const queueActionStrip = advancedCard?.querySelector('.queue-action-strip');
+    if (!importCard || !dropzone || !advanced || !advancedCard || !queueActionStrip || !importButton || !folderImportButton || !convertButton || !results || !fileList || !resultsActions) {
       return { ok: false, reason: 'required homepage elements missing' };
     }
 
@@ -79,6 +152,26 @@ async function assertApprovedShell(page, viewportLabel, { expectsColumns, expect
         const rect = button.getBoundingClientRect();
         return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
       }),
+      advanced: (() => {
+        const cardRect = advancedCard.getBoundingClientRect();
+        const statusControlsRect = document.getElementById('statusControls').getBoundingClientRect();
+        const queueRect = queueActionStrip.getBoundingClientRect();
+        const visibleControlsFit = [...advancedCard.querySelectorAll('input, select, button')]
+          .filter((control) => {
+            const rect = control.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0;
+          })
+          .every((control) => {
+            const rect = control.getBoundingClientRect();
+            return rect.left >= cardRect.left - 1 && rect.right <= cardRect.right + 1;
+          });
+        return {
+          open: advanced.open,
+          visibleControlsFit,
+          queueFollowsOptions: queueRect.top >= statusControlsRect.bottom,
+          convertInsideQueue: queueActionStrip.contains(convertButton)
+        };
+      })(),
       ok: importCard.contains(dropzone)
         && !importCard.contains(advanced)
         && Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING)
@@ -125,6 +218,12 @@ async function assertApprovedShell(page, viewportLabel, { expectsColumns, expect
     result.ok = result.ok && importButtonsStacked && resultButtonsStacked;
   }
 
+  if (expectsCompactAdvanced) {
+    const { advanced } = result;
+    result.ok = result.ok && advanced.open && advanced.visibleControlsFit
+      && advanced.queueFollowsOptions && advanced.convertInsideQueue;
+  }
+
   if (!result.ok) {
     throw new Error(`${viewportLabel}: unexpected approved shell. details=${JSON.stringify(result)}`);
   }
@@ -145,12 +244,29 @@ async function assertApprovedShell(page, viewportLabel, { expectsColumns, expect
     await assertApprovedShell(desktopPage, 'desktop', { expectsColumns: true });
     await desktopContext.close();
 
-    const tabletContext = await browser.newContext({ viewport: { width: 780, height: 768 } });
+    const tabletContext = await browser.newContext({ viewport: { width: 768, height: 768 } });
     const tabletPage = await tabletContext.newPage();
     await tabletPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(tabletPage, 'compact-workbench');
-    await assertApprovedShell(tabletPage, 'compact-workbench', { expectsColumns: true });
+    await assertApprovedShell(tabletPage, 'compact-workbench', {
+      expectsColumns: true,
+      expectsCompactAdvanced: true
+    });
+    await seedSelectedWorkbenchRow(tabletPage);
+    await assertWorkbenchContentFits(tabletPage, 'compact-workbench');
     await tabletContext.close();
+
+    const approvedTabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
+    const approvedTabletPage = await approvedTabletContext.newPage();
+    await approvedTabletPage.goto(url, { waitUntil: 'networkidle' });
+    await assertHeaderEdgeToEdge(approvedTabletPage, 'approved-tablet');
+    await assertApprovedShell(approvedTabletPage, 'approved-tablet', {
+      expectsColumns: true,
+      expectsCompactAdvanced: true
+    });
+    await seedSelectedWorkbenchRow(approvedTabletPage);
+    await assertWorkbenchContentFits(approvedTabletPage, 'approved-tablet');
+    await approvedTabletContext.close();
 
     const narrowContext = await browser.newContext({ viewport: { width: 700, height: 900 } });
     const narrowPage = await narrowContext.newPage();
