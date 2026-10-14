@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-13T10:58:45.931Z",
-  "url": "http://127.0.0.1:53062/",
+  "timestamp": "2026-10-14T09:00:16.433Z",
+  "url": "http://127.0.0.1:50211/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -1025,7 +1025,59 @@
             }
           ],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
+          "target": [
+            ".home-advanced-card"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-allowed-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attributes are used correctly for the defined role"
+            }
+          ],
+          "none": [
+            {
+              "id": "aria-unsupported-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<div class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
           ]
@@ -1173,6 +1225,24 @@
       "help": "ARIA role should be appropriate for the element",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-allowed-role?application=axeAPI",
       "nodes": [
+        {
+          "any": [
+            {
+              "id": "aria-allowed-role",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is allowed for given element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"autoConvertNotice\" class=\"auto-convert-notice sr-only\" role=\"status\" data-mode=\"auto\">",
+          "target": [
+            "#autoConvertNotice"
+          ]
+        },
         {
           "any": [
             {
@@ -1402,7 +1472,43 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
+          "target": [
+            ".home-advanced-card"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-conditional-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
           ]
@@ -1515,6 +1621,24 @@
       "help": "Deprecated ARIA roles must not be used",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-deprecated-role?application=axeAPI",
       "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "deprecatedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role is not deprecated"
+            }
+          ],
+          "impact": null,
+          "html": "<p id=\"autoConvertNotice\" class=\"auto-convert-notice sr-only\" role=\"status\" data-mode=\"auto\">",
+          "target": [
+            "#autoConvertNotice"
+          ]
+        },
         {
           "any": [],
           "all": [],
@@ -1768,6 +1892,38 @@
           ],
           "none": [],
           "impact": null,
+          "html": "<span class=\"import-card__dropzone-icon\" aria-hidden=\"true\">↑</span>",
+          "target": [
+            ".import-card__dropzone-icon"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "focusable-modal-open",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements while a modal is open"
+            },
+            {
+              "id": "focusable-disabled",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            },
+            {
+              "id": "focusable-not-tabbable",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "No focusable elements contained within element"
+            }
+          ],
+          "none": [],
+          "impact": null,
           "html": "<span class=\"workflow-step\" aria-hidden=\"true\">2</span>",
           "target": [
             ".results-heading > .workflow-step[aria-hidden=\"true\"]"
@@ -1944,9 +2100,27 @@
             }
           ],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
           "target": [
-            ".queue-action-strip"
+            ".home-advanced-card"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "ARIA attribute is allowed"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
           ]
         },
         {
@@ -2070,6 +2244,24 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<p id=\"autoConvertNotice\" class=\"auto-convert-notice sr-only\" role=\"status\" data-mode=\"auto\">",
+          "target": [
+            "#autoConvertNotice"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-required-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "All required ARIA attributes are present"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<div id=\"dropzone\" class=\"surface-soft border-default rounded-2xl border-2 border-dashed p-4 transition-colors\" role=\"region\" aria-label=\"Add files to conversion queue\" tabindex=\"0\" style=\"transition: none;\">",
           "target": [
             "#dropzone"
@@ -2147,6 +2339,38 @@
       "help": "ARIA roles used must conform to valid values",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-roles?application=axeAPI",
       "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "invalidrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is valid"
+            },
+            {
+              "id": "abstractrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Abstract roles are not used"
+            },
+            {
+              "id": "unsupportedrole",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA role is supported"
+            }
+          ],
+          "impact": null,
+          "html": "<p id=\"autoConvertNotice\" class=\"auto-convert-notice sr-only\" role=\"status\" data-mode=\"auto\">",
+          "target": [
+            "#autoConvertNotice"
+          ]
+        },
         {
           "any": [],
           "all": [],
@@ -2546,7 +2770,71 @@
           ],
           "none": [],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
+          "target": [
+            ".home-advanced-card"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "aria-valid-attr-value",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute values are valid"
+            },
+            {
+              "id": "aria-errormessage",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-errormessage exists and references elements visible to screen readers that use a supported aria-errormessage technique"
+            },
+            {
+              "id": "aria-level",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-level values are valid"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
           ]
@@ -2868,7 +3156,43 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
+          "target": [
+            ".home-advanced-card"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "aria-valid-attr",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "ARIA attribute name is valid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
           ]
@@ -3273,7 +3597,7 @@
                   ]
                 },
                 {
-                  "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
+                  "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files here</h3>",
                   "target": [
                     "#dropzoneHeading"
                   ]
@@ -3340,7 +3664,7 @@
                 "fgColor": "#08758d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.33,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "5.3pt (7px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3365,7 +3689,7 @@
                 "fgColor": "#172b4d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 14.1,
-                "fontSize": "12.8pt (17px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3390,7 +3714,7 @@
                 "fgColor": "#607391",
                 "bgColor": "#ffffff",
                 "contrastRatio": 4.81,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "6.0pt (8px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3415,7 +3739,7 @@
                 "fgColor": "#355477",
                 "bgColor": "#ffffff",
                 "contrastRatio": 7.81,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3440,7 +3764,7 @@
                 "fgColor": "#355477",
                 "bgColor": "#ffffff",
                 "contrastRatio": 7.81,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3465,7 +3789,7 @@
                 "fgColor": "#355477",
                 "bgColor": "#ffffff",
                 "contrastRatio": 7.81,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3490,7 +3814,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#102c57",
                 "contrastRatio": 13.81,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3515,7 +3839,7 @@
                 "fgColor": "#172b4d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 14.1,
-                "fontSize": "11.3pt (15px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3537,99 +3861,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#607391",
+                "fgColor": "#526d96",
                 "bgColor": "#ffffff",
-                "contrastRatio": 4.81,
-                "fontSize": "9.0pt (12px)",
+                "contrastRatio": 5.26,
+                "fontSize": "6.0pt (8px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.81"
+              "message": "Element has sufficient color contrast of 5.26"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p>Supported input: .mht, .mhtml</p>",
+          "html": "<p class=\"workflow-support import-card__formats\">Supported: .mht, .mhtml</p>",
           "target": [
-            ".space-y-1 > p:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#607391",
-                "bgColor": "#ffffff",
-                "contrastRatio": 4.81,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.81"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Files stay on your device.</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#607391",
-                "bgColor": "#ffffff",
-                "contrastRatio": 4.81,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.81"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span id=\"autoConvertNoticeLead\">Files are converted automatically when added to the queue.</span>",
-          "target": [
-            "#autoConvertNoticeLead"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#607391",
-                "bgColor": "#ffffff",
-                "contrastRatio": 4.81,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 4.81"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span id=\"autoConvertNoticeDetail\">Change this in Advanced options if you prefer manual conversion.</span>",
-          "target": [
-            "#autoConvertNoticeDetail"
+            ".workflow-support"
           ]
         },
         {
@@ -3640,7 +3889,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#006fe6",
                 "contrastRatio": 4.75,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3665,7 +3914,7 @@
                 "fgColor": "#48545d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 7.77,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3690,7 +3939,7 @@
                 "fgColor": "#173865",
                 "bgColor": "#f8fbff",
                 "contrastRatio": 11.3,
-                "fontSize": "10.5pt (14px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3702,7 +3951,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files here</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -3712,49 +3961,24 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#48545d",
+                "fgColor": "#526d96",
                 "bgColor": "#f8fbff",
-                "contrastRatio": 7.48,
-                "fontSize": "10.5pt (14px)",
+                "contrastRatio": 5.07,
+                "fontSize": "7.5pt (10px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
               "relatedNodes": [],
               "impact": "serious",
-              "message": "Element has sufficient color contrast of 7.48"
+              "message": "Element has sufficient color contrast of 5.07"
             }
           ],
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                  Drop exported OneNote pages here to start conversion.\n                </p>",
+          "html": "<p class=\"text-sm text-secondary\">\n                  or click \"Browse files\" to get started.\n                </p>",
           "target": [
-            ".max-w-sm > .text-secondary.text-sm"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#f8fbff",
-                "contrastRatio": 5.53,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.53"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                  Local browser processing only.\n                </p>",
-          "target": [
-            ".max-w-sm > .text-muted.text-xs"
+            ".import-card__dropzone-content > .text-secondary.text-sm"
           ]
         },
         {
@@ -3805,7 +4029,7 @@
                 "fgColor": "#172b4d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 14.1,
-                "fontSize": "9.8pt (13px)",
+                "fontSize": "7.5pt (10px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3867,9 +4091,359 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--closed\">Click to expand</span>",
+          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--open\">Click to collapse</span>",
           "target": [
-            ".advanced-options-summary__state--closed"
+            ".advanced-options-summary__state--open"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"mt-3 text-xs text-muted\">\n              Fine‑tune how OneNote content is cleaned and exported.\n            </p>",
+          "target": [
+            ".mt-3"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#1e3965",
+                "bgColor": "#ffffff",
+                "contrastRatio": 11.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            "label[for=\"autoConvertEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        When disabled, files will wait in the queue until you start conversion manually.\n                      </span>",
+          "target": [
+            "label[for=\"autoConvertEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#1e3965",
+                "bgColor": "#ffffff",
+                "contrastRatio": 11.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            "label[for=\"externalizeCssEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        Moves converted-page styling into CSS assets for ZIP export. Best when the HTML and CSS files will stay together.\n                      </span>",
+          "target": [
+            "label[for=\"externalizeCssEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"externalizeCssModeHelp\" class=\"text-xs text-muted\">\n                      Shared mode writes one ZIP-root stylesheet. Per-page mode writes one stylesheet per exported HTML page. If a sidecar is produced, use Download ZIP so the links stay intact.\n                    </p>",
+          "target": [
+            "#externalizeCssModeHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#1e3965",
+                "bgColor": "#ffffff",
+                "contrastRatio": 11.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>\n                      Enable experimental export formats\n                      <span class=\"block text-xs text-muted\">\n                        OFF by default. HTML remains the stable fallback path.\n                      </span>\n                    </span>",
+          "target": [
+            "label[for=\"experimentalExportEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        OFF by default. HTML remains the stable fallback path.\n                      </span>",
+          "target": [
+            "label[for=\"experimentalExportEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"exportFormatHelp\" class=\"text-xs text-muted\">Enable experimental export formats to choose HTML or Markdown output when you need it.</p>",
+          "target": [
+            "#exportFormatHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#1e3965",
+                "bgColor": "#ffffff",
+                "contrastRatio": 11.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            ".checkbox-option:nth-child(7) > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        HTML-only. Adds a symbol-based toggle in exported pages (default Light) and increases each HTML file's size.\n                      </span>",
+          "target": [
+            ".checkbox-option:nth-child(7) > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"convertedPageThemeHelp\" class=\"text-xs text-muted\">Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file's size.</p>",
+          "target": [
+            "#convertedPageThemeHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#1e3965",
+                "bgColor": "#ffffff",
+                "contrastRatio": 11.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 11.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            "label[for=\"toolbarEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#5b6870",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.73,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.73"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        Available for HTML export only. Adds inline toolbar assets and increases each HTML file's size. The toolbar opens with editing enabled and includes metadata, save, and hide controls.\n                      </span>",
+          "target": [
+            "label[for=\"toolbarEnabled\"] > span > .block.text-muted.text-xs"
           ]
         },
         {
@@ -3880,7 +4454,7 @@
                 "fgColor": "#607391",
                 "bgColor": "#f8fbff",
                 "contrastRatio": 4.64,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "6.0pt (8px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3905,7 +4479,7 @@
                 "fgColor": "#ffffff",
                 "bgColor": "#102c57",
                 "contrastRatio": 13.81,
-                "fontSize": "8.3pt (11px)",
+                "fontSize": "6.8pt (9px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3930,7 +4504,7 @@
                 "fgColor": "#172b4d",
                 "bgColor": "#ffffff",
                 "contrastRatio": 14.1,
-                "fontSize": "11.3pt (15px)",
+                "fontSize": "9.8pt (13px)",
                 "fontWeight": "bold",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -3945,6 +4519,31 @@
           "html": "<h2 class=\"text-lg font-medium\">Files and results</h2>",
           "target": [
             ".results-heading > div > h2"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#526d96",
+                "bgColor": "#ffffff",
+                "contrastRatio": 5.26,
+                "fontSize": "6.0pt (8px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.26"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"results-heading__support\">Conversion activity appears here.</p>",
+          "target": [
+            ".results-heading__support"
           ]
         },
         {
@@ -4360,7 +4959,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files here</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -4715,7 +5314,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files here</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -4803,6 +5402,156 @@
               "data": null,
               "relatedNodes": [
                 {
+                  "html": "<label class=\"checkbox-option\" for=\"autoConvertEnabled\">",
+                  "target": [
+                    "label[for=\"autoConvertEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"autoConvertEnabled\" type=\"checkbox\" checked=\"\" class=\"checkbox-input\">",
+          "target": [
+            "#autoConvertEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"externalizeCssEnabled\">",
+                  "target": [
+                    "label[for=\"externalizeCssEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"externalizeCssEnabled\" type=\"checkbox\" title=\"Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together.\" class=\"checkbox-input\">",
+          "target": [
+            "#externalizeCssEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label for=\"externalizeCssMode\" class=\"block text-xs text-muted\">External CSS mode</label>",
+                  "target": [
+                    "label[for=\"externalizeCssMode\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"experimentalExportEnabled\">",
+                  "target": [
+                    "label[for=\"experimentalExportEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"convertedPageThemeToggleEnabled\">",
+                  "target": [
+                    ".checkbox-option:nth-child(7)"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#convertedPageThemeToggleEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"toolbarEnabled\">",
+                  "target": [
+                    "label[for=\"toolbarEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"toolbarEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#toolbarEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
                   "html": "<label class=\"sr-only\" for=\"workbenchSearch\">Search files and folders</label>",
                   "target": [
                     "label[for=\"workbenchSearch\"]"
@@ -4871,13 +5620,13 @@
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(1) > div:nth-child(1) > h2:nth-child(2)"
                     ],
                     "level": 2
                   },
                   {
                     "ancestry": [
-                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(1)"
+                      "html > body > main:nth-child(2) > div > div > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div > div:nth-child(1) > h3:nth-child(2)"
                     ],
                     "level": 3
                   },
@@ -4933,7 +5682,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files here</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -5096,6 +5845,114 @@
             }
           ],
           "impact": null,
+          "html": "<input id=\"autoConvertEnabled\" type=\"checkbox\" checked=\"\" class=\"checkbox-input\">",
+          "target": [
+            "#autoConvertEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"externalizeCssEnabled\" type=\"checkbox\" title=\"Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together.\" class=\"checkbox-input\">",
+          "target": [
+            "#externalizeCssEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#convertedPageThemeToggleEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"toolbarEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#toolbarEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
           "html": "<input id=\"workbenchSearch\" class=\"workbench-search\" type=\"search\" placeholder=\"Search files and folders\">",
           "target": [
             "#workbenchSearch"
@@ -5192,6 +6049,268 @@
           "html": "<input id=\"folderInput\" class=\"sr-only\" type=\"file\" multiple=\"\" webkitdirectory=\"\" directory=\"\" aria-label=\"Select a folder to import\" accept=\".mht,.mhtml\">",
           "target": [
             "#folderInput"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": {
+                "implicitLabel": "Automatically convert files when added to the queue When disabled, files will wait in the queue until you start conversion manually."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"autoConvertEnabled\">",
+                  "target": [
+                    "label[for=\"autoConvertEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an implicit (wrapped) <label>"
+            },
+            {
+              "id": "explicit-label",
+              "data": {
+                "explicitLabel": "Automatically convert files when added to the queue When disabled, files will wait in the queue until you start conversion manually."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"autoConvertEnabled\">",
+                  "target": [
+                    "label[for=\"autoConvertEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"autoConvertEnabled\" type=\"checkbox\" checked=\"\" class=\"checkbox-input\">",
+          "target": [
+            "#autoConvertEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": {
+                "implicitLabel": "Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together. Externalize CSS in separate file Moves converted-page styling into CSS assets for ZIP export. Best when the HTML and CSS files will stay together."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"externalizeCssEnabled\">",
+                  "target": [
+                    "label[for=\"externalizeCssEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an implicit (wrapped) <label>"
+            },
+            {
+              "id": "explicit-label",
+              "data": {
+                "explicitLabel": "Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together. Externalize CSS in separate file Moves converted-page styling into CSS assets for ZIP export. Best when the HTML and CSS files will stay together."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"externalizeCssEnabled\">",
+                  "target": [
+                    "label[for=\"externalizeCssEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            },
+            {
+              "id": "non-empty-title",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"externalizeCssEnabled\" type=\"checkbox\" title=\"Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together.\" class=\"checkbox-input\">",
+          "target": [
+            "#externalizeCssEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": {
+                "implicitLabel": "Enable experimental export formats OFF by default. HTML remains the stable fallback path."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"experimentalExportEnabled\">",
+                  "target": [
+                    "label[for=\"experimentalExportEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an implicit (wrapped) <label>"
+            },
+            {
+              "id": "explicit-label",
+              "data": {
+                "explicitLabel": "Enable experimental export formats OFF by default. HTML remains the stable fallback path."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"experimentalExportEnabled\">",
+                  "target": [
+                    "label[for=\"experimentalExportEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": {
+                "implicitLabel": "Add theme toggle (Light/Black) to converted pages HTML-only. Adds a symbol-based toggle in exported pages (default Light) and increases each HTML file's size."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"convertedPageThemeToggleEnabled\">",
+                  "target": [
+                    ".checkbox-option:nth-child(7)"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an implicit (wrapped) <label>"
+            },
+            {
+              "id": "explicit-label",
+              "data": {
+                "explicitLabel": "Add theme toggle (Light/Black) to converted pages HTML-only. Adds a symbol-based toggle in exported pages (default Light) and increases each HTML file's size."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"convertedPageThemeToggleEnabled\">",
+                  "target": [
+                    ".checkbox-option:nth-child(7)"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#convertedPageThemeToggleEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": {
+                "implicitLabel": "Add toolbar to exported pages Available for HTML export only. Adds inline toolbar assets and increases each HTML file's size. The toolbar opens with editing enabled and includes metadata, save, and hide controls."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"toolbarEnabled\">",
+                  "target": [
+                    "label[for=\"toolbarEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an implicit (wrapped) <label>"
+            },
+            {
+              "id": "explicit-label",
+              "data": {
+                "explicitLabel": "Add toolbar to exported pages Available for HTML export only. Adds inline toolbar assets and increases each HTML file's size. The toolbar opens with editing enabled and includes metadata, save, and hide controls."
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label class=\"checkbox-option\" for=\"toolbarEnabled\">",
+                  "target": [
+                    "label[for=\"toolbarEnabled\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<input id=\"toolbarEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#toolbarEnabled"
           ]
         },
         {
@@ -5600,7 +6719,7 @@
               "id": "landmark-is-unique",
               "data": {
                 "role": "region",
-                "accessibleText": "queue actions"
+                "accessibleText": "advanced options and queue actions"
               },
               "relatedNodes": [],
               "impact": "moderate",
@@ -5610,9 +6729,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
           "target": [
-            ".queue-action-strip"
+            ".home-advanced-card"
           ]
         },
         {
@@ -5978,6 +7097,132 @@
           "html": "<summary class=\"advanced-options-summary text-sm font-medium cursor-pointer\">",
           "target": [
             ".advanced-options-summary"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"autoConvertEnabled\" type=\"checkbox\" checked=\"\" class=\"checkbox-input\">",
+          "target": [
+            "#autoConvertEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"externalizeCssEnabled\" type=\"checkbox\" title=\"Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together.\" class=\"checkbox-input\">",
+          "target": [
+            "#externalizeCssEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"shared\" selected=\"\">Shared stylesheet for all converted pages</option>",
+          "target": [
+            "option[value=\"shared\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"per-page\">One stylesheet per converted page</option>",
+          "target": [
+            "option[value=\"per-page\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#convertedPageThemeToggleEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"toolbarEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#toolbarEnabled"
           ]
         },
         {
@@ -6578,29 +7823,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"workflow-heading\">",
+          "html": "<div class=\"workflow-heading import-card__heading\">",
           "target": [
             ".workflow-heading"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div>\n                <h2 id=\"importHeading\" class=\"text-lg font-medium\">Add OneNote files</h2>\n                <p class=\"workflow-support\">Supported: .mht, .mhtml</p>\n              </div>",
-          "target": [
-            ".workflow-heading > div"
           ]
         },
         {
@@ -6638,7 +7863,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"workflow-support\">Supported: .mht, .mhtml</p>",
+          "html": "<p class=\"workflow-support import-card__formats\">Supported: .mht, .mhtml</p>",
           "target": [
             ".workflow-support"
           ]
@@ -6658,87 +7883,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n              <p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>\n            </div>",
-          "target": [
-            ".import-stage > div:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<div class=\"space-y-1 text-xs text-muted\">",
-          "target": [
-            ".space-y-1"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Supported input: .mht, .mhtml</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Files stay on your device.</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p id=\"autoConvertNotice\" class=\"auto-convert-notice\" data-mode=\"auto\">",
+          "html": "<p id=\"autoConvertNotice\" class=\"auto-convert-notice sr-only\" role=\"status\" data-mode=\"auto\">",
           "target": [
             "#autoConvertNotice"
           ]
@@ -6898,9 +8043,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"mx-auto max-w-sm text-center space-y-3\">",
+          "html": "<div class=\"import-card__dropzone-content mx-auto max-w-sm text-center space-y-3\">",
           "target": [
-            ".max-w-sm"
+            ".import-card__dropzone-content"
           ]
         },
         {
@@ -6918,7 +8063,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files</h3>",
+          "html": "<h3 id=\"dropzoneHeading\" class=\"text-base font-medium\">Drag and drop files here</h3>",
           "target": [
             "#dropzoneHeading"
           ]
@@ -6938,29 +8083,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p class=\"text-sm text-secondary\">\n                  Drop exported OneNote pages here to start conversion.\n                </p>",
+          "html": "<p class=\"text-sm text-secondary\">\n                  or click \"Browse files\" to get started.\n                </p>",
           "target": [
-            ".max-w-sm > .text-secondary.text-sm"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p class=\"text-xs text-muted\">\n                  Local browser processing only.\n                </p>",
-          "target": [
-            ".max-w-sm > .text-muted.text-xs"
+            ".import-card__dropzone-content > .text-secondary.text-sm"
           ]
         },
         {
@@ -7018,7 +8143,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div class=\"home-advanced-card space-y-4\">",
+          "html": "<section class=\"home-advanced-card card-panel space-y-4\" aria-label=\"Advanced options and queue actions\">",
           "target": [
             ".home-advanced-card"
           ]
@@ -7038,7 +8163,7 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<details id=\"advancedOptions\">",
+          "html": "<details id=\"advancedOptions\" open=\"\">",
           "target": [
             "#advancedOptions"
           ]
@@ -7138,9 +8263,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--closed\">Click to expand</span>",
+          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--open\">Click to collapse</span>",
           "target": [
-            ".advanced-options-summary__state--closed"
+            ".advanced-options-summary__state--open"
           ]
         },
         {
@@ -7158,7 +8283,687 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<section class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "html": "<p class=\"mt-3 text-xs text-muted\">\n              Fine‑tune how OneNote content is cleaned and exported.\n            </p>",
+          "target": [
+            ".mt-3"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div id=\"statusControls\" class=\"mt-4 space-y-4\">",
+          "target": [
+            "#statusControls"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"space-y-3\">",
+          "target": [
+            "#statusControls > .space-y-3"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"checkbox-option\" for=\"autoConvertEnabled\">",
+          "target": [
+            "label[for=\"autoConvertEnabled\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"autoConvertEnabled\" type=\"checkbox\" checked=\"\" class=\"checkbox-input\">",
+          "target": [
+            "#autoConvertEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            "label[for=\"autoConvertEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        When disabled, files will wait in the queue until you start conversion manually.\n                      </span>",
+          "target": [
+            "label[for=\"autoConvertEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"checkbox-option\" for=\"externalizeCssEnabled\">",
+          "target": [
+            "label[for=\"externalizeCssEnabled\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"externalizeCssEnabled\" type=\"checkbox\" title=\"Writes converted-page styles to CSS sidecar files for ZIP export. Keep the HTML and CSS assets together.\" class=\"checkbox-input\">",
+          "target": [
+            "#externalizeCssEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            "label[for=\"externalizeCssEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        Moves converted-page styling into CSS assets for ZIP export. Best when the HTML and CSS files will stay together.\n                      </span>",
+          "target": [
+            "label[for=\"externalizeCssEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"option-subgroup\">",
+          "target": [
+            ".option-subgroup:nth-child(3)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label for=\"externalizeCssMode\" class=\"block text-xs text-muted\">External CSS mode</label>",
+          "target": [
+            "label[for=\"externalizeCssMode\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"shared\" selected=\"\">Shared stylesheet for all converted pages</option>",
+          "target": [
+            "option[value=\"shared\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"per-page\">One stylesheet per converted page</option>",
+          "target": [
+            "option[value=\"per-page\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"externalizeCssModeHelp\" class=\"text-xs text-muted\">\n                      Shared mode writes one ZIP-root stylesheet. Per-page mode writes one stylesheet per exported HTML page. If a sidecar is produced, use Download ZIP so the links stay intact.\n                    </p>",
+          "target": [
+            "#externalizeCssModeHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"checkbox-option\" for=\"experimentalExportEnabled\">",
+          "target": [
+            "label[for=\"experimentalExportEnabled\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>\n                      Enable experimental export formats\n                      <span class=\"block text-xs text-muted\">\n                        OFF by default. HTML remains the stable fallback path.\n                      </span>\n                    </span>",
+          "target": [
+            "label[for=\"experimentalExportEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        OFF by default. HTML remains the stable fallback path.\n                      </span>",
+          "target": [
+            "label[for=\"experimentalExportEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"option-subgroup option-subgroup--compact\">",
+          "target": [
+            ".option-subgroup--compact.option-subgroup:nth-child(5)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label for=\"exportFormat\" class=\"block text-xs text-muted\">Export format</label>",
+          "target": [
+            "label[for=\"exportFormat\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"exportFormatHelp\" class=\"text-xs text-muted\">Enable experimental export formats to choose HTML or Markdown output when you need it.</p>",
+          "target": [
+            "#exportFormatHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"checkbox-option\" for=\"convertedPageThemeToggleEnabled\">",
+          "target": [
+            ".checkbox-option:nth-child(7)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#convertedPageThemeToggleEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            ".checkbox-option:nth-child(7) > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        HTML-only. Adds a symbol-based toggle in exported pages (default Light) and increases each HTML file's size.\n                      </span>",
+          "target": [
+            ".checkbox-option:nth-child(7) > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"option-subgroup option-subgroup--compact\">\n                    <p id=\"convertedPageThemeHelp\" class=\"text-xs text-muted\">Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file's size.</p>\n                  </div>",
+          "target": [
+            ".option-subgroup--compact.option-subgroup:nth-child(8)"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p id=\"convertedPageThemeHelp\" class=\"text-xs text-muted\">Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file's size.</p>",
+          "target": [
+            "#convertedPageThemeHelp"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"checkbox-option\" for=\"toolbarEnabled\">",
+          "target": [
+            "label[for=\"toolbarEnabled\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input id=\"toolbarEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
+          "target": [
+            "#toolbarEnabled"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span>",
+          "target": [
+            "label[for=\"toolbarEnabled\"] > span"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"block text-xs text-muted\">\n                        Available for HTML export only. Adds inline toolbar assets and increases each HTML file's size. The toolbar opens with editing enabled and includes metadata, save, and hide controls.\n                      </span>",
+          "target": [
+            "label[for=\"toolbarEnabled\"] > span > .block.text-muted.text-xs"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"queue-action-strip\" aria-label=\"Queue actions\">",
           "target": [
             ".queue-action-strip"
           ]
@@ -7870,6 +9675,48 @@
           "any": [
             {
               "id": "explicit-label",
+              "data": {
+                "explicitLabel": "External CSS mode"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label for=\"externalizeCssMode\" class=\"block text-xs text-muted\">External CSS mode</label>",
+                  "target": [
+                    "label[for=\"externalizeCssMode\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            },
+            {
+              "id": "non-empty-title",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has a title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
+          "target": [
+            "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "explicit-label",
               "data": null,
               "relatedNodes": [
                 {
@@ -8049,6 +9896,32 @@
             "#controls"
           ],
           "failureSummary": "Fix all of the following:\n  aria-labelledby attribute is not well supported on a div with no valid role attribute."
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "aria-prohibited-attr",
+              "data": {
+                "role": null,
+                "nodeName": "div",
+                "messageKey": "noRoleSingular",
+                "prohibited": [
+                  "aria-label"
+                ]
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute is not well supported on a div with no valid role attribute."
+            }
+          ],
+          "impact": "serious",
+          "html": "<div class=\"queue-action-strip\" aria-label=\"Queue actions\">",
+          "target": [
+            ".queue-action-strip"
+          ],
+          "failureSummary": "Fix all of the following:\n  aria-label attribute is not well supported on a div with no valid role attribute."
         }
       ]
     },
@@ -8131,6 +10004,48 @@
           "failureSummary": "Fix all of the following:\n  Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"helpModal\""
         }
       ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT",
+        "RGAAv4",
+        "RGAA-3.2.1"
+      ],
+      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "messageKey": "nonBmp"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element content contains only non-text characters"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"import-card__dropzone-icon\" aria-hidden=\"true\">↑</span>",
+          "target": [
+            ".import-card__dropzone-icon"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element content contains only non-text characters"
+        }
+      ]
     }
   ],
   "violations": [
@@ -8161,7 +10076,7 @@
                 "fgColor": "#006fe6",
                 "bgColor": "#e8f2ff",
                 "contrastRatio": 4.2,
-                "fontSize": "6.8pt (9px)",
+                "fontSize": "5.3pt (7px)",
                 "fontWeight": "bold",
                 "messageKey": null,
                 "expectedContrastRatio": "4.5:1"
@@ -8175,7 +10090,7 @@
                 }
               ],
               "impact": "serious",
-              "message": "Element has insufficient color contrast of 4.2 (foreground color: #006fe6, background color: #e8f2ff, font size: 6.8pt (9px), font weight: bold). Expected contrast ratio of 4.5:1"
+              "message": "Element has insufficient color contrast of 4.2 (foreground color: #006fe6, background color: #e8f2ff, font size: 5.3pt (7px), font weight: bold). Expected contrast ratio of 4.5:1"
             }
           ],
           "all": [],
@@ -8185,75 +10100,7 @@
           "target": [
             ".product-version"
           ],
-          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.2 (foreground color: #006fe6, background color: #e8f2ff, font size: 6.8pt (9px), font weight: bold). Expected contrast ratio of 4.5:1"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#6680aa",
-                "bgColor": "#ffffff",
-                "contrastRatio": 4.01,
-                "fontSize": "7.5pt (10px)",
-                "fontWeight": "normal",
-                "messageKey": null,
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section class=\"home-start-card card-panel import-card space-y-5\" aria-labelledby=\"importHeading\">",
-                  "target": [
-                    ".home-start-card"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<p class=\"workflow-support\">Supported: .mht, .mhtml</p>",
-          "target": [
-            ".workflow-support"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#6680aa",
-                "bgColor": "#ffffff",
-                "contrastRatio": 4.01,
-                "fontSize": "7.5pt (10px)",
-                "fontWeight": "normal",
-                "messageKey": null,
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [
-                {
-                  "html": "<section id=\"statusPanel\" class=\"home-results-card card-panel card-panel--soft home-results-card--empty\" aria-live=\"polite\" aria-label=\"Processing status\" tabindex=\"-1\">",
-                  "target": [
-                    "#statusPanel"
-                  ]
-                }
-              ],
-              "impact": "serious",
-              "message": "Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": "serious",
-          "html": "<p class=\"results-heading__support\">Conversion activity appears here.</p>",
-          "target": [
-            ".results-heading__support"
-          ],
-          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.01 (foreground color: #6680aa, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.2 (foreground color: #006fe6, background color: #e8f2ff, font size: 5.3pt (7px), font weight: bold). Expected contrast ratio of 4.5:1"
         }
       ]
     }
