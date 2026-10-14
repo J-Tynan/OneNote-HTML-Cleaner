@@ -1823,6 +1823,7 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
   .workflow-heading, .results-heading { align-items: flex-start; }
   .home-start-card, .home-results-card { min-height: 0; }
   .queue-action-strip { gap: 0.5rem; }
-  .results-action-row, .results-workbench-toolbar { grid-template-columns: 1fr; }
+  .results-action-row { grid-template-columns: 1fr; }
+  .results-workbench-toolbar { grid-template-columns: minmax(0, 1fr) 8.5rem; }
 }
 

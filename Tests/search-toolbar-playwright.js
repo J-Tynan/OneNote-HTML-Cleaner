@@ -67,11 +67,11 @@ import { startStaticServer } from './playwright-server-helper.js';
       };
     });
 
-    if (mobileLayout.groupTop >= mobileLayout.filterTop) {
-      throw new Error(`Expected the search group above the filter on mobile, got ${JSON.stringify(mobileLayout)}`);
+    if (Math.abs(mobileLayout.groupTop - mobileLayout.filterTop) > 2) {
+      throw new Error(`Expected the search group and filter on one mobile row, got ${JSON.stringify(mobileLayout)}`);
     }
-    if (mobileLayout.searchWidth <= 0 || mobileLayout.groupWidth < mobileLayout.contentWidth - 2 || mobileLayout.filterWidth < mobileLayout.contentWidth - 2) {
-      throw new Error(`Expected both mobile controls to fit the padded toolbar, got ${JSON.stringify(mobileLayout)}`);
+    if (mobileLayout.searchWidth <= 0 || mobileLayout.groupWidth + mobileLayout.filterWidth > mobileLayout.contentWidth) {
+      throw new Error(`Expected both mobile controls to fit the toolbar row, got ${JSON.stringify(mobileLayout)}`);
     }
 
     console.log('search-toolbar-playwright: OK');
