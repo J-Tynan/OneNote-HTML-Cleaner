@@ -39,17 +39,18 @@ async function assertHeaderEdgeToEdge(page, viewportLabel) {
   }
 }
 
-async function assertApprovedShell(page, viewportLabel, expectsColumns) {
+async function assertApprovedShell(page, viewportLabel, { expectsColumns, expectsStackedActions = false }) {
   const result = await page.evaluate(() => {
     const importCard = document.querySelector('.home-start-card');
     const dropzone = document.getElementById('controls');
     const advanced = document.getElementById('advancedOptions');
     const importButton = document.getElementById('importButton');
+    const folderImportButton = document.getElementById('folderImportButton');
     const convertButton = document.getElementById('convertButton');
     const results = document.getElementById('statusPanel');
     const fileList = document.getElementById('fileList');
     const resultsActions = document.querySelector('.results-action-row');
-    if (!importCard || !dropzone || !advanced || !importButton || !convertButton || !results || !fileList || !resultsActions) {
+    if (!importCard || !dropzone || !advanced || !importButton || !folderImportButton || !convertButton || !results || !fileList || !resultsActions) {
       return { ok: false, reason: 'required homepage elements missing' };
     }
 
@@ -70,6 +71,14 @@ async function assertApprovedShell(page, viewportLabel, expectsColumns) {
       dropzoneInsideImport: importCard.contains(dropzone),
       advancedOutsideImport: !importCard.contains(advanced),
       actionsAfterList: Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING),
+      importButtons: [importButton, folderImportButton].map((button) => {
+        const rect = button.getBoundingClientRect();
+        return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
+      }),
+      resultButtons: [...resultsActions.querySelectorAll('button')].map((button) => {
+        const rect = button.getBoundingClientRect();
+        return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
+      }),
       ok: importCard.contains(dropzone)
         && !importCard.contains(advanced)
         && Boolean(fileList.compareDocumentPosition(resultsActions) & Node.DOCUMENT_POSITION_FOLLOWING)
@@ -95,6 +104,14 @@ async function assertApprovedShell(page, viewportLabel, expectsColumns) {
     result.ok = result.ok && alignment.ok;
   }
 
+  if (expectsStackedActions) {
+    const importButtonsStacked = result.importButtons[1].top > result.importButtons[0].top
+      && result.importButtons.every((button) => button.height >= 44);
+    const resultButtonsStacked = result.resultButtons.every((button, index, buttons) => index === 0 || button.top > buttons[index - 1].top);
+    result.stackedActions = { importButtonsStacked, resultButtonsStacked };
+    result.ok = result.ok && importButtonsStacked && resultButtonsStacked;
+  }
+
   if (!result.ok) {
     throw new Error(`${viewportLabel}: unexpected approved shell. details=${JSON.stringify(result)}`);
   }
@@ -112,21 +129,21 @@ async function assertApprovedShell(page, viewportLabel, expectsColumns) {
     const desktopPage = await desktopContext.newPage();
     await desktopPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(desktopPage, 'desktop');
-    await assertApprovedShell(desktopPage, 'desktop', true);
+    await assertApprovedShell(desktopPage, 'desktop', { expectsColumns: true });
     await desktopContext.close();
 
     const tabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
     const tabletPage = await tabletContext.newPage();
     await tabletPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(tabletPage, 'tablet-layout-b');
-    await assertApprovedShell(tabletPage, 'tablet-layout-b', false);
+    await assertApprovedShell(tabletPage, 'tablet-layout-b', { expectsColumns: false });
     await tabletContext.close();
 
     const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const mobilePage = await mobileContext.newPage();
     await mobilePage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(mobilePage, 'mobile');
-    await assertApprovedShell(mobilePage, 'mobile', false);
+    await assertApprovedShell(mobilePage, 'mobile', { expectsColumns: false, expectsStackedActions: true });
     await mobileContext.close();
 
     console.log('header-edge-to-edge-playwright: OK');
