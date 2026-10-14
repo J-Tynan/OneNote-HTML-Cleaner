@@ -91,17 +91,30 @@ async function assertApprovedShell(page, viewportLabel, { expectsColumns, expect
 
   if (expectsColumns) {
     const alignment = await page.evaluate(() => {
+      const layout = document.querySelector('.home-layout');
       const importCard = document.querySelector('.home-start-card');
       const results = document.getElementById('statusPanel');
-      if (!importCard || !results) return { ok: false, reason: 'column panels missing' };
+      if (!layout || !importCard || !results) return { ok: false, reason: 'column panels missing' };
+      const columns = getComputedStyle(layout).gridTemplateColumns.split(' ').filter(Boolean);
       return {
         importTop: importCard.getBoundingClientRect().top,
         resultsTop: results.getBoundingClientRect().top,
-        ok: Math.abs(importCard.getBoundingClientRect().top - results.getBoundingClientRect().top) <= 1
+        columns,
+        ok: columns.length === 2
+          && Math.abs(importCard.getBoundingClientRect().top - results.getBoundingClientRect().top) <= 1
       };
     });
     result.columnAlignment = alignment;
     result.ok = result.ok && alignment.ok;
+  } else {
+    const stacking = await page.evaluate(() => {
+      const layout = document.querySelector('.home-layout');
+      if (!layout) return { ok: false, reason: 'homepage layout missing' };
+      const columns = getComputedStyle(layout).gridTemplateColumns.split(' ').filter(Boolean);
+      return { columns, ok: columns.length === 1 };
+    });
+    result.stackedLayout = stacking;
+    result.ok = result.ok && stacking.ok;
   }
 
   if (expectsStackedActions) {
@@ -132,12 +145,19 @@ async function assertApprovedShell(page, viewportLabel, { expectsColumns, expect
     await assertApprovedShell(desktopPage, 'desktop', { expectsColumns: true });
     await desktopContext.close();
 
-    const tabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
+    const tabletContext = await browser.newContext({ viewport: { width: 780, height: 768 } });
     const tabletPage = await tabletContext.newPage();
     await tabletPage.goto(url, { waitUntil: 'networkidle' });
-    await assertHeaderEdgeToEdge(tabletPage, 'tablet-layout-b');
-    await assertApprovedShell(tabletPage, 'tablet-layout-b', { expectsColumns: false });
+    await assertHeaderEdgeToEdge(tabletPage, 'compact-workbench');
+    await assertApprovedShell(tabletPage, 'compact-workbench', { expectsColumns: true });
     await tabletContext.close();
+
+    const narrowContext = await browser.newContext({ viewport: { width: 700, height: 900 } });
+    const narrowPage = await narrowContext.newPage();
+    await narrowPage.goto(url, { waitUntil: 'networkidle' });
+    await assertHeaderEdgeToEdge(narrowPage, 'narrow-tablet');
+    await assertApprovedShell(narrowPage, 'narrow-tablet', { expectsColumns: false });
+    await narrowContext.close();
 
     const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const mobilePage = await mobileContext.newPage();

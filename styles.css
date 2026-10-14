@@ -1826,7 +1826,46 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
   .home-start-card { min-height: 0; }
 }
 
-@media (min-width: 640px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-main > .page-shell { padding-inline: 1rem; }
+  .home-layout { grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 0.75rem; }
+  .home-results-card { min-height: 36.75rem; }
+  .home-start-card { min-height: 0; }
+  .results-action-row { grid-template-columns: minmax(0, 1fr) repeat(3, minmax(0, auto)); }
+  .home-header .page-shell { padding-block: 0.1875rem; }
+  .product-mark { width: 1.5rem; height: 1.5rem; }
+  .home-header__identity h1 { font-size: 0.9375rem; }
+  .home-header__identity p, .product-version { font-size: 0.625rem; }
+  .home-header__actions .header-icon-button, .home-header__actions .header-link { min-height: 1.875rem; height: 1.875rem; font-size: 0.75rem; }
+  .home-main > .page-shell { padding-block: 0.375rem; }
+  .import-stage { gap: 0.5rem; padding: 0.75rem 0.875rem 0.625rem; }
+  .workflow-heading, .results-heading { gap: 0.5rem; }
+  .workflow-heading h2, .results-heading h2 { font-size: 1rem; }
+  .workflow-support, .results-heading__support { font-size: 0.6875rem; }
+  .homepage-primary-button, .homepage-folder-import-button { min-height: 2.25rem; font-size: 0.8125rem; }
+  .home-dropzone-card { padding: 0 0.875rem 0.75rem; }
+  #dropzone { min-height: 5.5rem; }
+  .home-advanced-card { padding: 0.75rem 0.875rem; }
+  .advanced-options-summary { min-height: 1.75rem; font-size: 0.875rem; }
+  .checkbox-option { font-size: 0.8125rem; }
+  .option-subgroup .form-control { min-height: 2rem; font-size: 0.75rem; }
+  .queue-action-strip { min-height: 3.125rem; padding: 0.4375rem 0.625rem; }
+  .queue-action-strip .homepage-convert-button { min-height: 2.25rem; font-size: 0.8125rem; }
+  .results-heading { padding: 0.75rem 0.875rem 0.5rem; }
+  #statusSummary { min-height: 2.375rem; padding: 0.625rem 0.875rem; font-size: 0.75rem; }
+  .results-workbench-toolbar { min-height: 3.25rem; padding: 0.5rem 0.875rem; }
+  .results-search-icon { left: 1.375rem; }
+  .workbench-search, .workbench-filter { font-size: 0.8125rem; }
+  .file-list-header { padding: 0.625rem 0.875rem; }
+  #fileList { min-height: 12rem; padding-inline: 0.875rem; }
+  .file-item { min-height: 2.75rem; }
+  .file-item__name { font-size: 0.8125rem; }
+  .results-action-row { gap: 0.5rem; padding: 0.75rem 0.875rem; }
+  .results-action-row > .results-action-button { min-height: 2.25rem; font-size: 0.75rem; }
+  .home-footer__content { font-size: 0.6875rem; }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
   .home-layout { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
   .home-results-card { min-height: 0; }
   .results-action-row { grid-template-columns: minmax(8rem, 1fr) repeat(3, minmax(0, auto)); }
