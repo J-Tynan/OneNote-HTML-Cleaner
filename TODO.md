@@ -351,6 +351,15 @@ First-pass tasks:
 - [x] [P2] Fix PWA header bar right-edge gap so the header background extends flush to the full viewport width. (2026-03-06)
 - [x] [P2] Add responsive Playwright coverage to assert header bar edge-to-edge rendering on desktop and mobile viewports. (2026-03-02)
 
+### UI Redesign Milestones
+
+- [x] Restructure the homepage markup and styling for the approved responsive redesign, including edge-to-edge header behavior. (2026-10-07)
+- [x] Complete the first visual styling refinement pass for the redesigned homepage. (2026-10-08)
+- [x] Complete the expanded visual refinement pass for the redesigned homepage. (2026-10-08)
+- [x] Rework the conversion results card and related results/download interactions. (2026-10-13)
+- [x] Complete the homepage alignment pass, including header edge-to-edge styling corrections. (2026-10-13)
+- [x] Complete UI Redesign Step 1 acceptance across visual states, responsive layout, themes, import behavior, unsupported-file handling, and accessibility; the final audit reported zero serious or critical violations. (2026-10-15, documented in `docs/UI-Redesign-Step-1-Acceptance-Matrix.md`)
+
 ### Outstanding Visual Tasks
 
 - [x] Tune left-margin for handwriting-heavy pages (`Test Handwriting.html`) with follow-on content baseline normalization and regression coverage. (2026-03-06)
