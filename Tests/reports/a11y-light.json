@@ -13,8 +13,8 @@
     "orientationAngle": 0,
     "orientationType": "landscape-primary"
   },
-  "timestamp": "2026-10-14T14:03:33.914Z",
-  "url": "http://127.0.0.1:53139/",
+  "timestamp": "2026-10-15T10:12:35.925Z",
+  "url": "http://127.0.0.1:58214/",
   "toolOptions": {
     "reporter": "v1"
   },
@@ -4647,106 +4647,6 @@
             {
               "id": "color-contrast",
               "data": {
-                "fgColor": "#4d6485",
-                "bgColor": "#ffffff",
-                "contrastRatio": 6.03,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.03"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Supported input: .mht, .mhtml</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#4d6485",
-                "bgColor": "#ffffff",
-                "contrastRatio": 6.03,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.03"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Files stay on your device.</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#4d6485",
-                "bgColor": "#ffffff",
-                "contrastRatio": 6.03,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.03"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span id=\"autoConvertNoticeLead\">Files are converted automatically when added to the queue.</span>",
-          "target": [
-            "#autoConvertNoticeLead"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#4d6485",
-                "bgColor": "#ffffff",
-                "contrastRatio": 6.03,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 6.03"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span id=\"autoConvertNoticeDetail\">Change this in Advanced options if you prefer manual conversion.</span>",
-          "target": [
-            "#autoConvertNoticeDetail"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
                 "fgColor": "#ffffff",
                 "bgColor": "#006fe6",
                 "contrastRatio": 4.75,
@@ -4952,56 +4852,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span>Optional settings</span>",
-          "target": [
-            ".advanced-options-summary__meta > span:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--open\">Click to collapse</span>",
-          "target": [
-            ".advanced-options-summary__state--open"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<p class=\"mt-3 text-xs text-muted\">\n              Fine‑tune how OneNote content is cleaned and exported.\n            </p>",
           "target": [
             ".mt-3"
@@ -5040,7 +4890,7 @@
                 "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -5090,7 +4940,7 @@
                 "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -5105,31 +4955,6 @@
           "html": "<span class=\"block text-xs text-muted\">\n                        Moves converted-page styling into CSS assets for ZIP export. Best when the HTML and CSS files will stay together.\n                      </span>",
           "target": [
             "label[for=\"externalizeCssEnabled\"] > span > .block.text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p id=\"externalizeCssModeHelp\" class=\"text-xs text-muted\">\n                      Shared mode writes one ZIP-root stylesheet. Per-page mode writes one stylesheet per exported HTML page. If a sidecar is produced, use Download ZIP so the links stay intact.\n                    </p>",
-          "target": [
-            "#externalizeCssModeHelp"
           ]
         },
         {
@@ -5165,7 +4990,7 @@
                 "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -5180,31 +5005,6 @@
           "html": "<span class=\"block text-xs text-muted\">\n                        OFF by default. HTML remains the stable fallback path.\n                      </span>",
           "target": [
             "label[for=\"experimentalExportEnabled\"] > span > .block.text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p id=\"exportFormatHelp\" class=\"text-xs text-muted\">Enable experimental export formats to choose HTML or Markdown output when you need it.</p>",
-          "target": [
-            "#exportFormatHelp"
           ]
         },
         {
@@ -5240,7 +5040,7 @@
                 "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -5255,31 +5055,6 @@
           "html": "<span class=\"block text-xs text-muted\">\n                        HTML-only. Adds a symbol-based toggle in exported pages (default Light) and increases each HTML file's size.\n                      </span>",
           "target": [
             ".checkbox-option:nth-child(7) > span > .block.text-muted.text-xs"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "color-contrast",
-              "data": {
-                "fgColor": "#5b6870",
-                "bgColor": "#ffffff",
-                "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
-                "fontWeight": "normal",
-                "expectedContrastRatio": "4.5:1"
-              },
-              "relatedNodes": [],
-              "impact": "serious",
-              "message": "Element has sufficient color contrast of 5.73"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p id=\"convertedPageThemeHelp\" class=\"text-xs text-muted\">Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file's size.</p>",
-          "target": [
-            "#convertedPageThemeHelp"
           ]
         },
         {
@@ -5315,7 +5090,7 @@
                 "fgColor": "#5b6870",
                 "bgColor": "#ffffff",
                 "contrastRatio": 5.73,
-                "fontSize": "9.0pt (12px)",
+                "fontSize": "8.3pt (11px)",
                 "fontWeight": "normal",
                 "expectedContrastRatio": "4.5:1"
               },
@@ -6406,6 +6181,31 @@
               "data": null,
               "relatedNodes": [
                 {
+                  "html": "<label for=\"exportFormat\" class=\"block text-xs text-muted\">Export format</label>",
+                  "target": [
+                    "label[for=\"exportFormat\"]"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "Form field does not have multiple label elements"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"exportFormat\" disabled=\"\" class=\"form-control hidden mt-1\">\n                      <option value=\"html\" selected=\"\">HTML (.html)</option>\n                      <option value=\"markdown\">Markdown (.md)</option>\n                    </select>",
+          "target": [
+            "#exportFormat"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "multiple-label",
+              "data": null,
+              "relatedNodes": [
+                {
                   "html": "<label class=\"checkbox-option\" for=\"convertedPageThemeToggleEnabled\">",
                   "target": [
                     ".checkbox-option:nth-child(7)"
@@ -6806,6 +6606,24 @@
           "html": "<input id=\"experimentalExportEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
           "target": [
             "#experimentalExportEnabled"
+          ]
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "title-only",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Form element does not solely use title attribute for its label"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"exportFormat\" disabled=\"\" class=\"form-control hidden mt-1\">\n                      <option value=\"html\" selected=\"\">HTML (.html)</option>\n                      <option value=\"markdown\">Markdown (.md)</option>\n                    </select>",
+          "target": [
+            "#exportFormat"
           ]
         },
         {
@@ -8148,6 +7966,42 @@
           "all": [],
           "none": [],
           "impact": null,
+          "html": "<option value=\"html\" selected=\"\">HTML (.html)</option>",
+          "target": [
+            "option[value=\"html\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"markdown\">Markdown (.md)</option>",
+          "target": [
+            "option[value=\"markdown\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "no-focusable-content",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have focusable descendants"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
           "html": "<input id=\"convertedPageThemeToggleEnabled\" type=\"checkbox\" class=\"checkbox-input\">",
           "target": [
             "#convertedPageThemeToggleEnabled"
@@ -8849,69 +8703,9 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<div>\n              <p class=\"mt-1 max-w-2xl text-sm leading-6 text-secondary\">\n                Add one or more exported MHT or MHTML files to clean and export locally.\n              </p>\n            </div>",
-          "target": [
-            ".import-stage > div:nth-child(2)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<div class=\"space-y-1 text-xs text-muted\">",
           "target": [
             ".space-y-1"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Supported input: .mht, .mhtml</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p>Files stay on your device.</p>",
-          "target": [
-            ".space-y-1 > p:nth-child(2)"
           ]
         },
         {
@@ -9349,66 +9143,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<span class=\"advanced-options-summary__meta text-xs text-muted\">",
-          "target": [
-            ".advanced-options-summary__meta"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span>Optional settings</span>",
-          "target": [
-            ".advanced-options-summary__meta > span:nth-child(1)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<span class=\"advanced-options-summary__state advanced-options-summary__state--open\">Click to collapse</span>",
-          "target": [
-            ".advanced-options-summary__state--open"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<p class=\"mt-3 text-xs text-muted\">\n              Fine‑tune how OneNote content is cleaned and exported.\n            </p>",
           "target": [
             ".mt-3"
@@ -9729,26 +9463,6 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"externalizeCssModeHelp\" class=\"text-xs text-muted\">\n                      Shared mode writes one ZIP-root stylesheet. Per-page mode writes one stylesheet per exported HTML page. If a sidecar is produced, use Download ZIP so the links stay intact.\n                    </p>",
-          "target": [
-            "#externalizeCssModeHelp"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
           "html": "<label class=\"checkbox-option\" for=\"experimentalExportEnabled\">",
           "target": [
             "label[for=\"experimentalExportEnabled\"]"
@@ -9869,9 +9583,49 @@
           "all": [],
           "none": [],
           "impact": null,
-          "html": "<p id=\"exportFormatHelp\" class=\"text-xs text-muted\">Enable experimental export formats to choose HTML or Markdown output when you need it.</p>",
+          "html": "<select id=\"exportFormat\" disabled=\"\" class=\"form-control hidden mt-1\">\n                      <option value=\"html\" selected=\"\">HTML (.html)</option>\n                      <option value=\"markdown\">Markdown (.md)</option>\n                    </select>",
           "target": [
-            "#exportFormatHelp"
+            "#exportFormat"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"html\" selected=\"\">HTML (.html)</option>",
+          "target": [
+            "option[value=\"html\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "All page content is contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<option value=\"markdown\">Markdown (.md)</option>",
+          "target": [
+            "option[value=\"markdown\"]"
           ]
         },
         {
@@ -9972,26 +9726,6 @@
           "html": "<div class=\"option-subgroup option-subgroup--compact\">\n                    <p id=\"convertedPageThemeHelp\" class=\"text-xs text-muted\">Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file's size.</p>\n                  </div>",
           "target": [
             ".option-subgroup--compact.option-subgroup:nth-child(8)"
-          ]
-        },
-        {
-          "any": [
-            {
-              "id": "region",
-              "data": {
-                "isIframe": false
-              },
-              "relatedNodes": [],
-              "impact": "moderate",
-              "message": "All page content is contained by landmarks"
-            }
-          ],
-          "all": [],
-          "none": [],
-          "impact": null,
-          "html": "<p id=\"convertedPageThemeHelp\" class=\"text-xs text-muted\">Enable a symbol-based Light or Black toggle in converted HTML pages. Its inline assets increase each HTML file's size.</p>",
-          "target": [
-            "#convertedPageThemeHelp"
           ]
         },
         {
@@ -10957,6 +10691,41 @@
           "html": "<select id=\"externalizeCssMode\" disabled=\"\" title=\"Shared mode writes one stylesheet for the ZIP. Per-page mode writes one stylesheet per exported HTML file.\" class=\"form-control mt-1\" aria-describedby=\"externalizeCssModeHelp\">",
           "target": [
             "#externalizeCssMode"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "explicit-label",
+              "data": {
+                "explicitLabel": "Export format"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<label for=\"exportFormat\" class=\"block text-xs text-muted\">Export format</label>",
+                  "target": [
+                    "label[for=\"exportFormat\"]"
+                  ]
+                }
+              ],
+              "impact": "critical",
+              "message": "Element has an explicit <label>"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "hidden-explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Form element has a visible explicit <label>"
+            }
+          ],
+          "impact": null,
+          "html": "<select id=\"exportFormat\" disabled=\"\" class=\"form-control hidden mt-1\">\n                      <option value=\"html\" selected=\"\">HTML (.html)</option>\n                      <option value=\"markdown\">Markdown (.md)</option>\n                    </select>",
+          "target": [
+            "#exportFormat"
           ]
         },
         {

@@ -247,13 +247,13 @@ async function assertApprovedShell(page, viewportLabel, {
     const tabletContext = await browser.newContext({ viewport: { width: 768, height: 768 } });
     const tabletPage = await tabletContext.newPage();
     await tabletPage.goto(url, { waitUntil: 'networkidle' });
-    await assertHeaderEdgeToEdge(tabletPage, 'compact-workbench');
-    await assertApprovedShell(tabletPage, 'compact-workbench', {
-      expectsColumns: true,
+    await assertHeaderEdgeToEdge(tabletPage, 'tablet');
+    await assertApprovedShell(tabletPage, 'tablet', {
+      expectsColumns: false,
       expectsCompactAdvanced: true
     });
     await seedSelectedWorkbenchRow(tabletPage);
-    await assertWorkbenchContentFits(tabletPage, 'compact-workbench');
+    await assertWorkbenchContentFits(tabletPage, 'tablet');
     await tabletContext.close();
 
     const approvedTabletContext = await browser.newContext({ viewport: { width: 820, height: 1180 } });
@@ -261,7 +261,7 @@ async function assertApprovedShell(page, viewportLabel, {
     await approvedTabletPage.goto(url, { waitUntil: 'networkidle' });
     await assertHeaderEdgeToEdge(approvedTabletPage, 'approved-tablet');
     await assertApprovedShell(approvedTabletPage, 'approved-tablet', {
-      expectsColumns: true,
+      expectsColumns: false,
       expectsCompactAdvanced: true
     });
     await seedSelectedWorkbenchRow(approvedTabletPage);

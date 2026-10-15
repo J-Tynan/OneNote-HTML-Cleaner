@@ -79,6 +79,7 @@ Capture each viewport in light theme. Capture desktop and mobile again in dark t
 | --- | --- | --- |
 | Structural shell | `npm run test:header-edge` | Header is edge-to-edge; expected panel structure works at desktop, tablet, and mobile. |
 | Layout stability | `npm run test:layout-shift` | Advanced options start open; status text changes do not introduce width or action-position shifts. |
+| Visual state evidence | `npm run test:homepage-visual` | Generates nonempty desktop captures for empty, queued, completed, selected, and unsupported states, plus empty tablet and mobile captures. |
 | MHT/MHTML-only input contract | `npm run test:folder-import` | Folder input keeps `.mht,.mhtml` acceptance and relative-path hierarchy behavior. |
 | Native `.one` exclusion | `npm run test:unsupported-file` | `.one` remains unsupported with no download action. |
 | Accessibility baseline | `npm run test:playwright:a11y` | No serious or critical issues in light or dark themes. |
@@ -87,6 +88,7 @@ Capture each viewport in light theme. Capture desktop and mobile again in dark t
 
 - The approved screenshot takes precedence over older layout documentation where they conflict.
 - Advanced options remains open by default; the current implementation and layout test already follow that decision.
+- Desktop uses two top-aligned panes with a wider results pane. Tablet at 820px and mobile use the stacked document order: import, Advanced options, then results.
 - The target's notebook hierarchy is not a functional requirement for native OneNote files.
 - Future redesign work must preserve MHT/MHTML browse, folder import, drag/drop, conversion, downloads, clear, draft restore, search/filter, and option gating.
 
@@ -104,3 +106,10 @@ Observed accessibility follow-up:
 - `npm run test:playwright:a11y` reports one serious `color-contrast` rule violation in both themes.
 - Light-theme instances are `.product-version` (4.2:1), `.workflow-support` (4.01:1), and `.results-heading__support` (4.01:1), each below the 4.5:1 threshold for their text size.
 - The redesign styling step must correct these token/component colors and rerun the audit. This is a recorded baseline defect, not authorization to change the UI during Step 1.
+
+## Implementation Run: 2026-10-15
+
+- The homepage now uses the approved stacked tablet layout at `820 x 1180`; desktop remains a two-pane workbench with the results pane wider than import.
+- `npm run test:homepage-visual` writes review artifacts to `test-results/homepage-visual/` for empty, queued, completed, selected, unsupported, tablet, and mobile states.
+- Passed: `npm run test:homepage-visual`, `npm run test:layout-shift`, `npm run test:header-edge`, `npm run test:folder-import`, `npm run test:unsupported-file`, `npm run test:theme`, and `npm run test:playwright:a11y`.
+- The final accessibility audit reports zero serious or critical violations in both light and dark themes.

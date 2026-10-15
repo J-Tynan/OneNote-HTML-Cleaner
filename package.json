@@ -28,6 +28,7 @@
     "test:export-format-controls": "node ./Tests/export-format-controls-playwright.js",
     "test:converted-page-theme-toggle": "node ./Tests/converted-page-theme-toggle-playwright.js",
     "test:header-edge": "node ./Tests/header-edge-to-edge-playwright.js",
+    "test:homepage-visual": "node ./Tests/homepage-workbench-visual-playwright.js",
     "test:sw-update": "node ./Tests/service-worker-update-playwright.js",
     "test:sw-bump": "node ./Tests/sw-bump.js",
     "bump-sw-cache": "node ./scripts/bump-sw-cache.cjs",

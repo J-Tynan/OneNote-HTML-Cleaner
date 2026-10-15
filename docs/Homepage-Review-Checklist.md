@@ -39,7 +39,7 @@ Baseline references:
 
 ## Advanced Options
 
-- [x] Advanced options remain collapsed by default.
+- [x] Advanced options remain open by default.
 - [x] The advanced section is available but not visually dominant.
 - [x] The option groups do not distract from the primary Browse flow.
 - [x] The advanced controls still look discoverable when expanded.
