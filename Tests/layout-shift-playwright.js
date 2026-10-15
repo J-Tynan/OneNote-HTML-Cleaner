@@ -25,8 +25,8 @@ import { startStaticServer } from './playwright-server-helper.js';
     };
   });
 
-  if (!approvedWorkbench.advancedOpen) {
-    throw new Error('Expected Advanced options to be expanded by default.');
+  if (approvedWorkbench.advancedOpen) {
+    throw new Error('Expected Advanced options to be collapsed by default.');
   }
   if (approvedWorkbench.headerHeight > 60) {
     throw new Error(`Expected compact header no taller than 60px, got ${approvedWorkbench.headerHeight}px.`);
