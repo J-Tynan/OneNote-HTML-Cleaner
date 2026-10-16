@@ -13,6 +13,10 @@
 /** @type {{ one: Record<string, string>, onepkg: Record<string, string> }} */
 export const WARNING_CODES = {
   one: {
+    invalidExtension: 'ONE_INVALID_EXTENSION',
+    missingBytes: 'ONE_MISSING_BYTES',
+    sizeLimitExceeded: 'ONE_SIZE_LIMIT_EXCEEDED',
+    invalidSignature: 'ONE_INVALID_SIGNATURE',
     signatureValidated: 'ONE_SIGNATURE_VALIDATED',
     structuredModelsSummary: 'ONE_STRUCTURED_MODELS_SUMMARY',
     fallbackSemanticSummary: 'ONE_FALLBACK_SEMANTIC_SUMMARY',

@@ -1,0 +1,19 @@
+{
+  "name": "native-one-fixtures",
+  "fixtures": [
+    {
+      "id": "one-existing-smoke-001",
+      "fileName": "Test Section.one",
+      "sourceKind": "one",
+      "evidenceLevel": "heuristic",
+      "expectedState": "partial",
+      "minPageCount": 1,
+      "shouldCreateZip": true,
+      "expectedWarningCodes": [
+        "ONE_FALLBACK_SEMANTIC_SUMMARY",
+        "ONE_METADATA_CANONICALIZATION_SUMMARY"
+      ],
+      "notes": "Transitional smoke coverage only; it is not a fixture-backed native-structure support claim."
+    }
+  ]
+}

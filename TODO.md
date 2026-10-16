@@ -277,6 +277,7 @@ First-pass tasks:
    - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
    - [x] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract. (2026-08-28, decided ZIP/export-sidecar only; standalone cleaned HTML should remain dependency-free.)
 7. Completed 2026-08-28: confirmed the shipped HTML path keeps both toolbar injection and the converted-page theme toggle explicitly opt-in, tightened release-facing/docs contract wording, and added focused default-off regression coverage for the UI and injector paths.
+
 ## Version 1.0 — Native `.one` And `.onepkg` Release
 
 Use this track for the first stable native OneNote-file release, with scope defined by a narrow support contract rather than by every deferred feature that could attach itself to native import.
@@ -293,23 +294,71 @@ Success criteria:
 
 First-pass tasks:
 
-1. [ ] Update the `v1.0` native support contract to list supported `.one` and `.onepkg` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness. Use `Tests/Test section.one` and `Tests/Test notebook.onepkg` as the initial acceptance fixtures. (The `.one`-only contract was locked on 2026-09-01 in `docs/Native-OneNote-v1.0-Support-Contract.md`; supporting facts are in `docs/OneNote-Native-Format-Facts-For-GPT-5.5.md`.)
-2. Build representative `.one` and `.onepkg` fixtures and acceptance checks around the scoped workflows before widening implementation breadth, using `Tests/Test section.one`, `Tests/Test notebook.onepkg`, and `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` as the baseline.
-3. Implement the minimal release-quality native pipeline so representative `.one` and `.onepkg` fixtures convert reliably and clear failure modes are surfaced to the UI.
-4. Ship acceptance UX for native import with clear warnings when `.one` or `.onepkg` features are unsupported and actionable next steps for the user.
-5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
-6. Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
-7. Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance for release docs and UI copy.
-8. [x] In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle. (2026-10-03, completed in PR #12.)
-9. Create documentation and in-app instructions for how to activate the toolbar and theme toggle later by adding `onc-styles.css` after conversion.
-10. Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
-11. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` or `.onepkg` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
-12. Reassess adjacent work such as `.docx`, tag tooling, and richer toolbar variants only after the core `.one` and `.onepkg` contract is stable.
-13. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
-14. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
-15. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
-16. [x] TypeScript migration is currently complete for the production JS runtime surface; revisit incremental `.ts` conversion only if later `v1.0` development benefits from it. (2026-09-01)
-17. Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
+<!-- markdownlint-disable MD007 MD029 MD032 -->
+
+1. [ ] Define the direct-parser and browser-only package support boundary.
+  - [ ] Update `docs/Native-OneNote-v1.0-Support-Contract.md` from `.onepkg` inventory-only to the approved browser-only conversion promotion model, with named supported compression modes and per-section outcomes.
+  - [ ] Update `docs/Native-OneNote-v1.0-Parser-Evidence-Index.md` for every supported `.one` feature with the MS-ONE source section, verified byte traversal, positive/negative fixture, expected state, and warning code.
+  - [ ] Set explicit `.one` and `.onepkg` input, decompressed-byte, entry-count, resource-size, and ZIP-size limits from browser benchmarks.
+  - [ ] Keep positioned/overlapping layout, RTL, conflict/history data, sidecars, attachments/media, vector ink/OCR, and unproven hierarchy/order out of the v1.0 claim.
+2. [ ] Build and lock the native fixture corpus before promoting parser features.
+  - [ ] Classify `Tests/Test Section.one` and `Tests/Test Notebook.onepkg` as transitional heuristic fixtures until direct traversal proves their contents.
+  - [ ] Add valid and negative `.one` fixtures for one normal page, multipage sections, single-level lists, basic tables, and page-owned raster images.
+  - [ ] Add valid and negative `.onepkg` fixtures for inventory, each supported compression mode, corrupt headers/tables, invalid paths, size limits, partial section failure, and filename collisions.
+  - [ ] Expand `Tests/expected/native-one-fixtures.json` and `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` with expected state, output count, warnings, and test owner for each fixture.
+3. [ ] Implement bounded direct `.one` section parsing; do not promote printable-string recovery or global binary signature scans as parser output.
+  - [ ] Add `src/importers/one/binary-reader.js` with bounds-checked integer, GUID, UTF-16, and slice readers plus traversal/allocation budgets.
+  - [ ] Add `src/importers/one/section-header.js` and extend `src/importers/onePreflight.js` with fixture-proven header/schema/range validation and stable hard-failure versus unsupported classifications.
+  - [ ] Add `src/importers/one/file-node-list.js` with visited-offset, recursion-depth, node-count, and byte limits.
+  - [ ] Add `src/importers/one/object-space.js` to resolve required normal-page structures and reject conflict/history or unimplemented required records.
+  - [ ] Expand `Tests/native-one-preflight.unit.js` for malformed headers, ranges, schemas, limits, and no-output guarantees.
+4. [ ] Parse direct pages and render the minimal v1.0 `.one` content subset.
+  - [ ] Add `src/importers/one/page-reader.js` for direct normal-page discovery, title fields, stable page IDs, and collision-safe paths.
+  - [ ] Add `src/importers/one/outline-reader.js` for directly associated paragraph text; reject unknown required outline/property variants rather than guessing ownership.
+  - [ ] Add `src/importers/one/render.js` to create semantic HTML through existing output/sanitization conventions.
+  - [ ] Promote paragraphs, explicit single-level lists, rectangular tables, and page-associated raster images one fixture-backed feature at a time.
+  - [ ] Replace the release path in `src/importers/one.js` while preserving `importOneSection()` as the worker-facing entry point; isolate or remove heuristic fallback from any successful result.
+  - [ ] Extend `src/contracts.ts` with stable page/section IDs, per-unit result state, and warning references while retaining the native hierarchy consumed by the workbench tree.
+  - [ ] Add direct-parser tests for exact output, warnings, no silent loss, malformed input, and deterministic repeated conversion.
+5. [ ] Add strict browser-only `.onepkg` preflight and deterministic CAB inventory.
+  - [ ] Add `src/importers/onepkg-preflight.js` for `MSCF`, table bounds, single-volume policy, compression policy, entry names, and configured limits.
+  - [ ] Harden `src/importers/onepkg.js` to reject malformed tables instead of silently stopping, and reject absolute/traversal/control-character/colliding entry paths.
+  - [ ] Add `Tests/native-onepkg-preflight.unit.js` for invalid signatures, truncated headers, out-of-range tables, invalid names, duplicate paths, and limits.
+  - [ ] Assert rejected packages never reach decompression or produce page output.
+6. [ ] Implement bounded browser-only `.onepkg` extraction by compression mode.
+  - [ ] Add `src/importers/onepkg-extract.js` with explicit compression mode, cumulative decompressed-byte budget, cancellation, and structured extraction results.
+  - [ ] Promote uncompressed CAB extraction only after CFDATA block, aggregate-size, and entry-range validation passes byte-exact fixtures.
+  - [ ] Promote MSZIP only after `CK` signature, declared block length, inflate failure, and deterministic byte-output coverage passes.
+  - [ ] Evaluate LZX through bundled browser WASM using `tools/Build-LibmspackWasm.ps1` or another reviewed in-browser decoder; keep it unsupported until integrity, malformed-input, cancellation, memory-limit, and determinism tests pass.
+  - [ ] Do not use an opaque `libarchive.js` fallback as a release-support claim or generate placeholder pages when extraction fails.
+  - [ ] Add `Tests/native-onepkg-extraction.unit.js` for byte-exact outputs, compression policy, budgets, collision safety, and deterministic results.
+7. [ ] Compose extracted sections, enable worker routing, and prove native acceptance UX.
+  - [ ] Run every extracted `.one` through `preflightOneSection()` and the direct `importOneSection()` parser.
+  - [ ] Build the notebook -> section-group -> section -> page hierarchy from safe package paths; defer `.onetoc2` ordering/hierarchy claims until directly parsed and fixture-backed.
+  - [ ] Aggregate package state as success only when all eligible sections succeed; otherwise surface partial, hard-failure, or unsupported status with section-scoped warnings.
+  - [ ] Enable lazy `.onepkg` conversion in `src/worker.js` only after parser/extraction gates pass, preserving diagnostics and the MHTML path.
+  - [x] Project native notebook/section/page results into the workbench tree, with cascading page selection and page-specific ZIP actions. (2026-10-16)
+  - [ ] Add Playwright coverage for native tree expansion, selection, selected-page ZIP contents, partial section visibility, responsive layout, keyboard interaction, and accessible warning text.
+  - [ ] Run a locked manual pass for `.one` success/partial and `.onepkg` success/partial/unsupported-compression cases.
+8. [ ] Add native release gates and document only proven behavior.
+  - [ ] Add focused parser, package preflight/extraction, UI, and aggregate native-release commands to `package.json`.
+  - [ ] Require `npm run typecheck`, the native release gate, and existing `npm run test:gate:native` MHTML coverage before native promotion.
+  - [ ] Update README, release notes, architecture, contracts, UI copy, and the release checklist with proven parser features, named compression modes, limits, result states, and known limitations.
+9. [ ] Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
+10. [ ] Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
+11. [ ] Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance for release docs and UI copy.
+12. [x] In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle. (2026-10-03, completed in PR #12.)
+13. [ ] Create documentation and in-app instructions for how to activate the toolbar and theme toggle later by adding `onc-styles.css` after conversion.
+14. [ ] Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
+15. [ ] Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` or `.onepkg` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
+16. [ ] Reassess adjacent work such as `.docx`, tag tooling, and richer toolbar variants only after the core `.one` and `.onepkg` contract is stable.
+17. [ ] Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
+18. [ ] Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
+19. [ ] Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
+20. [x] TypeScript migration is currently complete for the production JS runtime surface; revisit incremental `.ts` conversion only if later `v1.0` development benefits from it. (2026-09-01)
+21. [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
+
+<!-- markdownlint-enable MD007 MD029 MD032 -->
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 

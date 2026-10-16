@@ -35,6 +35,16 @@ async function main() {
   const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
   const result = mod.importOneSection(arrayBuffer, { fileName: 'Test Section.one' });
 
+  if (result.state !== 'partial') {
+    fail(`Expected heuristic native conversion state "partial", got ${String(result.state)}`);
+  }
+  if (typeof result.fallbackPageCount !== 'number' || result.fallbackPageCount < 0) {
+    fail('Expected numeric fallbackPageCount on native conversion result');
+  }
+  if (typeof result.filteredOutLineCount !== 'number' || result.filteredOutLineCount < 0) {
+    fail('Expected numeric filteredOutLineCount on native conversion result');
+  }
+
   const pages = Array.isArray(result && result.pages) ? result.pages : [];
   if (pages.length < 1) {
     fail('Expected at least one parsed page from Test Section.one');
@@ -75,6 +85,16 @@ async function main() {
   const warningCodes = new Set(warningDetails.map((item) => String(item && item.code ? item.code : '')).filter(Boolean));
   if (!warningCodes.has(WARNING_CODES.one.fallbackSemanticSummary)) {
     fail(`Expected structured warning code ${WARNING_CODES.one.fallbackSemanticSummary}`);
+  }
+  const fallbackWarning = warningDetails.find((item) => item && item.code === WARNING_CODES.one.fallbackSemanticSummary);
+  if (!fallbackWarning || fallbackWarning.severity !== 'warning') {
+    fail('Expected fallback semantic warning to have warning severity');
+  }
+  if (Number(fallbackWarning.context?.fallbackPageCount) !== result.fallbackPageCount) {
+    fail('Expected fallback warning page count to match native conversion result');
+  }
+  if (Number(fallbackWarning.context?.filteredOutLineCount) !== result.filteredOutLineCount) {
+    fail('Expected fallback warning filtered-line count to match native conversion result');
   }
   if (!warningCodes.has(WARNING_CODES.one.metadataCanonicalizationSummary)) {
     fail(`Expected structured warning code ${WARNING_CODES.one.metadataCanonicalizationSummary}`);

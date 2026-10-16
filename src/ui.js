@@ -20,6 +20,7 @@ import { buildWorkbenchTree, deriveSelectionStates, getLeafIdsForNode, getVisibl
 
 /**
  * @typedef {import('./contracts.js').OutputAsset} OutputAsset
+ * @typedef {import('./contracts.js').NativeImportResult} NativeImportResult
  * @typedef {import('./contracts.js').PipelineConfigInput} PipelineConfigInput
  * @typedef {import('./contracts.js').SourceKind} SourceKind
  * @typedef {import('./contracts.js').WorkbenchNode} WorkbenchNode
@@ -33,7 +34,7 @@ import { buildWorkbenchTree, deriveSelectionStates, getLeafIdsForNode, getVisibl
  * @typedef {string | { content?: string, html?: string, format?: string, assets?: OutputAsset[], config?: PipelineConfigInput | null }} UiSuccessfulOutputValue
  * @typedef {{ path: string, type: string, content: string, bytes?: number[] }} SerializedDraftAsset
  * @typedef {OutputAsset & { path?: string, type?: string, content?: string, bytes?: Uint8Array | ArrayBuffer }} QueueOutputAsset
- * @typedef {{ id?: string, name?: string, relativePath?: string, size?: number, status?: QueueStatus | string, file?: File | null, fileType?: string, fileText?: string, sourceKind?: SourceKind | string, message?: string, outputHtml?: string, outputText?: string, outputFormat?: QueueOutputFormat | string, outputAssets?: OutputAsset[], conversionConfig?: PipelineConfigInput | null, downloadFileName?: string }} QueueEntry
+ * @typedef {{ id?: string, name?: string, relativePath?: string, size?: number, status?: QueueStatus | string, file?: File | null, fileType?: string, fileText?: string, sourceKind?: SourceKind | string, message?: string, outputHtml?: string, outputText?: string, outputFormat?: QueueOutputFormat | string, outputAssets?: OutputAsset[], nativeResult?: NativeImportResult | null, conversionConfig?: PipelineConfigInput | null, downloadFileName?: string }} QueueEntry
  * @typedef {{ id: string, name: string, relativePath: string, size: number, status: QueueStatus | string, file: File | null, fileType: string, fileText: string, sourceKind: SourceKind | string, message: string, outputHtml: string, outputText: string, outputFormat: QueueOutputFormat, outputAssets: SerializedDraftAsset[], conversionConfig: PipelineConfigInput | null, downloadFileName: string }} StoredQueueEntry
  * @typedef {{ nodes: WorkbenchNode[], rootIds: string[] }} WorkbenchTree
  * @typedef {{ id: string, updatedAt: number, autoConvertEnabled: boolean, schemaVersion?: number, queue: StoredQueueEntry[] }} DraftRecord
@@ -82,7 +83,7 @@ import { buildWorkbenchTree, deriveSelectionStates, getLeafIdsForNode, getVisibl
  * @typedef {{ label: string, tone: StatusTone | 'empty' }} StatusBadgeState
  * @typedef {{ type?: string, [key: string]: unknown }} UiDiagnosticPayload
  * @typedef {{ timestamp?: number | string, kind?: string, id?: string, preview?: string, payload?: UiDiagnosticPayload | null }} UiDiagnosticEntry
- * @typedef {{ status?: string, outputHtml?: string, outputText?: string, outputFormat?: string, outputAssets?: OutputAsset[], error?: string }} WorkerUiResult
+ * @typedef {{ status?: string, outputHtml?: string, outputText?: string, outputFormat?: string, outputAssets?: OutputAsset[], resultType?: string, nativeResult?: NativeImportResult, error?: string, reason?: string }} WorkerUiResult
  * @typedef {{ enqueue: (payload: WorkerQueuedPayload, onprogress?: ((message: unknown) => void) | null, transferList?: Transferable[]) => Promise<WorkerUiResult>, getDiagnostics: () => UiDiagnosticEntry[] }} WorkerManagerLike
  * @typedef {(file: File | null | undefined, ondone: (result: WorkerUiResult | null | undefined) => void, config: PipelineConfigInput) => void} LegacyProcessFileEntryFn
  * @typedef {Window & typeof globalThis & { LOGGING_ENABLED?: boolean, JSZip?: unknown, processFileEntry?: LegacyProcessFileEntryFn, __ONC_DEV_HOOKS?: UiDevHooks, __getRuntime?: () => UiRuntimeState, __getWorkerManagerDiagnostics?: () => UiDiagnosticEntry[] }} UiWindow
@@ -853,8 +854,12 @@ function updateZipButton() {
 
 function updateSelectedDownloadButton() {
   const selected = new Set(state.workbenchUi.selectedLeafIds);
+  const selectedNativePages = state.workbench.nodes.filter((node) => node.kind === 'page'
+    && selected.has(node.id)
+    && node.queueEntryId
+    && node.nativePagePath);
   const eligible = state.queue.filter((entry) => selected.has(`entry-${entry.id}`) && entry.downloadFileName && runtime.successfulOutputs.has(entry.downloadFileName));
-  if (dom.downloadSelected) dom.downloadSelected.disabled = eligible.length === 0;
+  if (dom.downloadSelected) dom.downloadSelected.disabled = eligible.length === 0 && selectedNativePages.length === 0;
   if (dom.selectionSummary) dom.selectionSummary.textContent = selected.size ? `${selected.size} item${selected.size === 1 ? '' : 's'} selected` : 'No item selected';
 }
 
@@ -989,7 +994,7 @@ function onConvertClick(event) {
  * @returns {boolean}
  */
 function isSupportedSourceKind(sourceKind) {
-  return sourceKind === 'mht';
+  return sourceKind === 'mht' || sourceKind === 'one';
 }
 
 /**
@@ -998,7 +1003,7 @@ function isSupportedSourceKind(sourceKind) {
  */
 function getUnsupportedSourceMessage(sourceKind) {
   if (sourceKind === 'one') {
-    return 'Native .one conversion is not enabled in the current release. Export this page as .mht or .mhtml and try again.';
+    return 'This .one file could not be converted. Export this page as .mht or .mhtml and try again.';
   }
   if (sourceKind === 'onepkg') {
     return 'OneNote package conversion is not enabled in the current release. Export its pages as .mht or .mhtml and try again.';
@@ -1173,6 +1178,20 @@ async function processEntryWithWorker(entry) {
 
     logger.info({ id: entry.id, msg: 'Worker returned for entry', meta: { status: (result && result.status) ? result.status : 'unknown' } });
 
+    if (result && result.resultType === 'native' && result.nativeResult) {
+      entry.nativeResult = result.nativeResult;
+      entry.outputHtml = '';
+      entry.outputText = '';
+      entry.outputAssets = [];
+      const pageCount = Array.isArray(result.nativeResult.pages) ? result.nativeResult.pages.length : 0;
+      const fallbackPageCount = Number(result.nativeResult.fallbackPageCount) || 0;
+      entry.message = result.nativeResult.state === 'partial'
+        ? `Converted ${pageCount} native page${pageCount === 1 ? '' : 's'} with heuristic recovery${fallbackPageCount > 0 ? ` on ${fallbackPageCount} page${fallbackPageCount === 1 ? '' : 's'}` : ''}. Review the output before use, then download the complete ZIP export.`
+        : `Converted ${pageCount} native page${pageCount === 1 ? '' : 's'}. Download the complete ZIP export.`;
+      updateEntryStatus(entry.id, 'success');
+      return;
+    }
+
     if (result && typeof result.outputHtml === 'string') {
       entry.outputHtml = result.outputHtml;
       entry.outputText = '';
@@ -1197,10 +1216,19 @@ async function processEntryWithWorker(entry) {
 
     updateEntryStatus(entry.id, 'error');
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
+    const workerFailure = err && typeof err === 'object'
+      ? /** @type {{ status?: unknown, error?: unknown, reason?: unknown }} */ (err)
+      : null;
+    const errorMessage = err instanceof Error
+      ? err.message
+      : workerFailure && typeof workerFailure.error === 'string'
+        ? workerFailure.error
+        : workerFailure && typeof workerFailure.reason === 'string'
+          ? workerFailure.reason
+          : String(err);
     logger.error({ id: entry.id, msg: 'worker processing error', meta: { error: errorMessage } });
     entry.message = errorMessage;
-    updateEntryStatus(entry.id, 'error');
+    updateEntryStatus(entry.id, workerFailure?.status === 'unsupported' ? 'unsupported' : 'error');
   }
 }
 
@@ -1300,24 +1328,33 @@ export function renderFileList() {
     dom.workbenchFilter.innerHTML = ['<option value="all">All items</option>', ...[...counts.entries()].map(([status, count]) => `<option value="${status}">${status} (${count})</option>`)].join('');
     dom.workbenchFilter.value = workbenchFilter;
   }
+  /** @param {WorkbenchNode} node @param {QueueEntry | null} entry */
+  const getNodeTypeLabel = (node, entry) => {
+    if (node.kind === 'notebook') return 'Notebook';
+    if (node.kind === 'section-group') return 'Section group';
+    if (node.kind === 'section') return 'Section';
+    if (node.kind === 'page' && node.queueEntryId) return 'Page';
+    return entry ? getEntryTypeLabel(entry) : 'Folder';
+  };
   /** @param {WorkbenchNode | undefined} node @param {number} depth @returns {string} */
   const renderNode = (node, depth) => {
     if (!node) return '';
     if (!visibleIds.has(node.id)) return '';
     const isLeaf = node.kind === 'file' || node.kind === 'page';
     const expanded = state.workbenchUi.expandedIds.includes(node.id) || Boolean(state.workbenchUi.query || workbenchFilter !== 'all');
-    const entry = isLeaf ? getQueueEntry(node.id.slice(6)) : null;
+    const entry = isLeaf ? getQueueEntry(node.queueEntryId || node.id.slice(6)) : null;
     const safeName = escapeHtml(node.name);
     const status = node.status === 'unsupported' ? STATUS_UNSUPPORTED : node.status;
     const stateLabel = selectionStates.get(node.id) || 'unchecked';
     const menuId = entry ? `file-actions-${entry.id}` : `file-actions-${node.id}`;
     const hasOutput = entry && getEntryOutputContent(entry).length > 0;
+    const hasNativeOutput = Boolean(entry && entry.nativeResult && Array.isArray(entry.nativeResult.pages));
     const blocked = entry && entry.conversionConfig?.ExternalizeCssEnabled === true && hasExternalizedCssAsset(entry);
-    const canDownload = Boolean(hasOutput && !blocked);
+    const canDownload = Boolean(hasNativeOutput || (hasOutput && !blocked));
     const row = `<div class="file-item workbench-row" role="treeitem" aria-level="${depth + 1}" ${isLeaf ? '' : `aria-expanded="${expanded}"`} data-id="${node.id}">
       <span class="file-item__name" style="--tree-depth:${depth}" title="${safeName}">${isLeaf ? '<span class="workbench-indent" aria-hidden="true"></span>' : `<button type="button" class="workbench-expand" data-expand-id="${node.id}" aria-label="${expanded ? 'Collapse' : 'Expand'} ${safeName}" aria-expanded="${expanded}">${expanded ? '&#8964;' : '&#8250;'}</button>`}<input type="checkbox" class="workbench-select" data-select-id="${node.id}" aria-label="Select ${safeName}" ${stateLabel === 'checked' ? 'checked' : ''} ${stateLabel === 'mixed' ? 'data-mixed="true"' : ''} /><span class="workbench-node-name">${safeName}</span></span>
-      <span class="file-item__type">${isLeaf && entry ? escapeHtml(getEntryTypeLabel(entry)) : 'Folder'}</span><span class="file-item__status"><span class="status-pill status-pill--${getStatusTone(status)}">${escapeHtml(status)}</span></span><span class="file-item__size">${escapeHtml(formatBytes(node.size))}</span>
-      <div class="file-item__actions">${entry ? `<button type="button" class="btn-ghost file-item__menu-trigger" data-actions-menu-trigger aria-label="Actions for ${safeName}" aria-haspopup="menu" aria-expanded="false" aria-controls="${menuId}"><span aria-hidden="true">&#8942;</span></button><div id="${menuId}" class="file-item__menu" role="menu" hidden>${canDownload ? `<button type="button" class="file-item__menu-item" data-download-id="${entry.id}" role="menuitem">Download</button>` : ''}<button type="button" class="file-item__menu-item" data-remove-id="${entry.id}" role="menuitem">Remove</button></div>` : ''}</div>
+      <span class="file-item__type">${escapeHtml(getNodeTypeLabel(node, entry))}</span><span class="file-item__status"><span class="status-pill status-pill--${getStatusTone(status)}">${escapeHtml(status)}</span></span><span class="file-item__size">${escapeHtml(formatBytes(node.size))}</span>
+      <div class="file-item__actions">${entry ? `<button type="button" class="btn-ghost file-item__menu-trigger" data-actions-menu-trigger aria-label="Actions for ${safeName}" aria-haspopup="menu" aria-expanded="false" aria-controls="${menuId}"><span aria-hidden="true">&#8942;</span></button><div id="${menuId}" class="file-item__menu" role="menu" hidden>${canDownload ? `<button type="button" class="file-item__menu-item" data-download-id="${entry.id}"${node.nativePagePath ? ` data-native-page-path="${escapeHtml(node.nativePagePath)}"` : ''} role="menuitem">${node.nativePagePath ? 'Download page ZIP' : (hasNativeOutput ? 'Download ZIP' : 'Download')}</button>` : ''}<button type="button" class="file-item__menu-item" data-remove-id="${entry.id}" role="menuitem">Remove</button></div>` : ''}</div>
       ${entry?.message ? `<p class="file-item__detail">${escapeHtml(entry.message)}</p>` : ''}</div>`;
     return row + (!isLeaf && expanded ? node.childIds.map((/** @type {string} */ id) => renderNode(nodesById.get(id), depth + 1)).join('') : '');
   };
@@ -1626,6 +1663,11 @@ function onFileListClick(event) {
     if (!id) return;
     const entry = getQueueEntry(id);
     if (!entry) return;
+    if (entry.nativeResult && entry.file instanceof File && runtime.downloadHelpers && typeof runtime.downloadHelpers.downloadNativeZip === 'function') {
+      const pagePath = downloadButton.getAttribute('data-native-page-path');
+      void runtime.downloadHelpers.downloadNativeZip(entry.file, entry.nativeResult, pagePath ? [pagePath] : undefined);
+      return;
+    }
     const content = getEntryOutputContent(entry);
     if (!content) return;
     if (getEntryOutputFormat(entry) === 'html' && entry.conversionConfig && entry.conversionConfig.ExternalizeCssEnabled === true && hasExternalizedCssAsset(entry)) return;
@@ -1652,6 +1694,20 @@ async function onDownloadSelectedClick() {
     if (selected.has(`entry-${entry.id}`) && entry.downloadFileName && runtime.successfulOutputs.has(entry.downloadFileName)) outputs.set(entry.downloadFileName, runtime.successfulOutputs.get(entry.downloadFileName));
   });
   if (outputs.size && runtime.downloadHelpers) await runtime.downloadHelpers.downloadZip(outputs);
+
+  const selectedNativePages = new Map();
+  state.workbench.nodes.forEach((node) => {
+    if (node.kind !== 'page' || !selected.has(node.id) || !node.queueEntryId || !node.nativePagePath) return;
+    const pagePaths = selectedNativePages.get(node.queueEntryId) || [];
+    pagePaths.push(node.nativePagePath);
+    selectedNativePages.set(node.queueEntryId, pagePaths);
+  });
+  for (const [entryId, pagePaths] of selectedNativePages) {
+    const entry = getQueueEntry(entryId);
+    if (entry?.nativeResult && entry.file instanceof File && runtime.downloadHelpers?.downloadNativeZip) {
+      await runtime.downloadHelpers.downloadNativeZip(entry.file, entry.nativeResult, pagePaths);
+    }
+  }
 }
 
 /** @param {string} nodeId */

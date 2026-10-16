@@ -69,4 +69,55 @@ assert.deepEqual([...visibleNodeIds].sort(), [
 const errorNodeIds = getVisibleNodeIds(workbench.nodes, 'failed');
 assert.deepEqual([...errorNodeIds], ['entry-error']);
 
+const nativeWorkbench = buildWorkbenchTree([{
+  id: 'native-notebook',
+  name: 'Test Notebook.onepkg',
+  sourceKind: 'onepkg',
+  status: 'success',
+  nativeResult: {
+    sourceKind: 'onepkg',
+    state: 'partial',
+    pages: [
+      { name: 'Welcome', path: 'Test Notebook/Section 1/Welcome.html', html: '<main>Welcome</main>' },
+      { name: 'Project Plan', path: 'Test Notebook/Section 1/Project Plan.html', html: '<main>Plan</main>' }
+    ],
+    hierarchy: {
+      kind: 'notebook',
+      name: 'Test Notebook',
+      path: 'Test Notebook/',
+      children: [{
+        kind: 'section',
+        name: 'Section 1',
+        path: 'Test Notebook/Section 1/',
+        children: [
+          { kind: 'page', name: 'Welcome', path: 'Test Notebook/Section 1/Welcome.html' },
+          { kind: 'page', name: 'Project Plan', path: 'Test Notebook/Section 1/Project Plan.html' }
+        ]
+      }]
+    },
+    warnings: ['One page needs review.']
+  }
+}]);
+
+const nativeById = new Map(nativeWorkbench.nodes.map((node) => [node.id, node]));
+const nativeNotebook = nativeWorkbench.nodes.find((node) => node.kind === 'notebook');
+const nativeSection = nativeWorkbench.nodes.find((node) => node.kind === 'section');
+const nativeWelcome = nativeWorkbench.nodes.find((node) => node.name === 'Welcome');
+
+assert.ok(nativeNotebook);
+assert.ok(nativeSection);
+assert.ok(nativeWelcome);
+assert.equal(nativeNotebook.status, 'partial');
+assert.equal(nativeNotebook.leafCount, 2);
+assert.equal(nativeSection.successfulLeafCount, 0);
+assert.equal(nativeWelcome.queueEntryId, 'native-notebook');
+assert.equal(nativeWelcome.nativePagePath, 'Test Notebook/Section 1/Welcome.html');
+assert.equal(nativeWelcome.size, '<main>Welcome</main>'.length);
+assert.deepEqual(getLeafIdsForNode(nativeWorkbench.nodes, nativeNotebook.id), nativeSection.childIds);
+assert.deepEqual([...getVisibleNodeIds(nativeWorkbench.nodes, 'project').values()].sort(), [
+  nativeNotebook.id,
+  nativeSection.id,
+  nativeById.get(nativeSection.childIds[1]).id
+].sort());
+
 console.log('workbench-model.unit: OK');

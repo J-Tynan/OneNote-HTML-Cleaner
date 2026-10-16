@@ -1,0 +1,48 @@
+# Native OneNote v1.0 Parser Evidence Index
+
+## Purpose
+
+This index records which native `.one` concepts are supported by the local
+Microsoft format source and which implementation claims remain unproven. It
+keeps the native importer from treating string recovery or guessed byte
+patterns as format parsing.
+
+Primary source: [OneNote File Format.docx](OneNote%20File%20Format.docx).
+Supporting summary: [OneNote-Native-Format-Facts-For-GPT-5.5.md](OneNote-Native-Format-Facts-For-GPT-5.5.md).
+
+## Evidence Status
+
+| Native concept | Source evidence | Implementation status | v1.0 treatment |
+| --- | --- | --- | --- |
+| Schema revisions | Sections 2.3.69 and 2.3.97 define `SchemaRevisionInOrderToRead` and `SchemaRevisionInOrderToWrite`. | The reviewed source establishes the fields and supported revision policy, but this repository has not verified their byte locations. | Do not parse or enforce a schema value until a fixture-backed field layout is recorded. |
+| Page object spaces | The source names `PageObjectSpace` and `ConflictPageObjectSpace`. | No object-space traversal is implemented. | Do not claim page discovery or conflict exclusion from the current importer. |
+| Outlines and outline elements | The source identifies pages, outlines, and outline elements as native content structures. | No outline record layout is implemented. | Do not claim structural paragraph, list, or table fidelity from recovered strings. |
+| Properties and property sets | The source models content through properties and property sets. | No property-set parser is implemented. | Treat metadata recovery as heuristic. |
+| File data objects | The source allows picture, embedded-file, and audio/video binary data. | The importer scans binary signatures only. | Report detected resources as heuristic candidates; do not claim native object association or media support. |
+| External `onefiles` storage | The source permits file data outside the section in a sibling `onefiles` folder. | Browser imports receive only the selected file. | Do not resolve sidecars; later support needs explicit directory/sidecar fixtures. |
+| Conflict and version-history data | The source includes conflict objects/pages and version-history object spaces. Version-history page role is `0x1`. | No detection or exclusion parser is implemented. | Do not claim all pages are normal user pages. |
+| Right-to-left layout | `EditRootRTL` specifies right-to-left page layout. | No property parser is implemented. | Do not claim RTL detection or support. |
+
+## Parser Rules
+
+- A feature is `directly evidenced` only after this repository records its
+  field layout, fixture, and assertions.
+- A feature is `heuristic` when it comes from printable-string recovery or
+  binary signature scanning without native object association.
+- A feature is `excluded` when the format supports it but the importer cannot
+  identify and handle it reliably.
+- Native fixture manifests must name the evidence level for every expected
+  output claim.
+
+## Next Direct-Parsing Prerequisites
+
+Before adding binary record detection, record all of the following for one
+fixture-backed feature:
+
+1. The source section and field/record definition.
+2. The verified byte layout or traversal path used by the implementation.
+3. A fixture containing the feature and a negative or unsupported case.
+4. Expected output and warning behavior.
+
+Until those prerequisites exist, the importer must continue to report
+heuristic recovery as partial output.

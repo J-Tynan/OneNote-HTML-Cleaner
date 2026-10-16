@@ -7,6 +7,7 @@
 // surface for the current release.
 
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
+import { preflightOneSection } from './onePreflight.js';
 import { WARNING_CODES, makeWarning, toWarningMessages } from './warnings.js';
 import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/toolbarInjector.js';
 
@@ -37,17 +38,6 @@ import { injectOutputToolbar, summarizeWarningsBySeverity } from '../pipeline/to
  */
 
 const BUFFER_API = /** @type {{ Buffer?: BufferLike }} */ (globalThis).Buffer;
-
-const ONE_SIGNATURE = [0xE4, 0x52, 0x5C, 0x7B, 0x8C, 0xD8, 0xA7, 0x4D, 0xAE, 0xB1, 0x53, 0x78, 0xD0, 0x29, 0x96, 0xD3];
-
-/** @param {Uint8Array | null | undefined} bytes */
-function hasOneSignature(bytes) {
-  if (!bytes || bytes.length < ONE_SIGNATURE.length) return false;
-  for (let i = 0; i < ONE_SIGNATURE.length; i += 1) {
-    if (bytes[i] !== ONE_SIGNATURE[i]) return false;
-  }
-  return true;
-}
 
 /** @param {unknown} [value=''] */
 function escapeHtml(value = '') {
@@ -1358,11 +1348,15 @@ export function importOneSection(arrayBuffer, options = {}) {
     throw new Error('Expected binary .one payload as ArrayBuffer');
   }
 
-  const bytes = new Uint8Array(arrayBuffer);
-  if (!hasOneSignature(bytes)) {
-    throw new Error('Invalid .one signature: file does not match expected OneNote section header');
+  const preflight = preflightOneSection(arrayBuffer, {
+    ...options,
+    sourceKind: 'one'
+  });
+  if (!preflight.canConvert) {
+    throw new Error(preflight.warnings[0] || 'Native .one preflight failed');
   }
 
+  const bytes = new Uint8Array(arrayBuffer);
   const sectionName = baseNameFromFile(options.fileName || 'Section.one');
   const sectionFolder = toFolderSafeName(sectionName);
   const extractedRecords = extractWideStringRecords(bytes);
@@ -1434,7 +1428,16 @@ export function importOneSection(arrayBuffer, options = {}) {
   const warningDetails = /** @type {WarningDetail[]} */ ([
     makeWarning(WARNING_CODES.one.signatureValidated, 'Section file signature validated.'),
     makeWarning(WARNING_CODES.one.structuredModelsSummary, `Structured parser generated ${pages.length} page model(s) from ${pageDescriptors.length} title descriptor(s).`),
-    makeWarning(WARNING_CODES.one.fallbackSemanticSummary, `Fallback semantic line pool size: ${semanticPages.fallbackPoolSize}; filtered out ${semanticPages.filteredOutCount} low-confidence line(s); fallback used on ${semanticPages.fallbackPageCount} page(s).`),
+    makeWarning(
+      WARNING_CODES.one.fallbackSemanticSummary,
+      `Fallback semantic line pool size: ${semanticPages.fallbackPoolSize}; filtered out ${semanticPages.filteredOutCount} low-confidence line(s); fallback used on ${semanticPages.fallbackPageCount} page(s).`,
+      'warning',
+      {
+        fallbackPageCount: semanticPages.fallbackPageCount,
+        filteredOutLineCount: semanticPages.filteredOutCount,
+        extraction: 'heuristic'
+      }
+    ),
     makeWarning(WARNING_CODES.one.metadataCanonicalizationSummary, `Metadata canonicalization produced ${pages.length} page metadata object(s) with ${metadataConflictCount} conflict(s); ${metadataPriorityReplacementCount} replaced via source-priority rules.`),
     makeWarning(WARNING_CODES.one.embeddedResourceScanSummary, `Detected ${mediaResources.length} embedded image candidate(s) and ${attachmentResources.length} attachment candidate(s) via binary signature scan.`),
     makeWarning(WARNING_CODES.one.placeholderHintsSummary, `Detected ${placeholderHints.length} object-placeholder hint(s) from native text records.`)
@@ -1466,6 +1469,9 @@ export function importOneSection(arrayBuffer, options = {}) {
 
   return {
     sourceKind: 'one',
+    state: 'partial',
+    fallbackPageCount: semanticPages.fallbackPageCount,
+    filteredOutLineCount: semanticPages.filteredOutCount,
     hierarchy: {
       kind: 'section',
       name: sectionName,

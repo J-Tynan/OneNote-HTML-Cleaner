@@ -1,7 +1,7 @@
 export type SourceKind = 'html' | 'mht' | 'one' | 'onepkg' | 'unknown';
 export type ActiveSourceKind = 'html' | 'mht';
 export type NativeSourceKind = 'one' | 'onepkg';
-export type WorkbenchNodeKind = 'folder' | 'notebook' | 'section' | 'page' | 'file';
+export type WorkbenchNodeKind = 'folder' | 'notebook' | 'section-group' | 'section' | 'page' | 'file';
 export type WorkbenchNodeStatus = 'queued' | 'working' | 'success' | 'error' | 'unsupported' | 'partial';
 
 export interface WorkbenchNode {
@@ -17,6 +17,8 @@ export interface WorkbenchNode {
   successfulLeafCount: number;
   childIds: string[];
   message?: string;
+  queueEntryId?: string;
+  nativePagePath?: string;
 }
 
 export interface WorkbenchUiState {
@@ -96,6 +98,7 @@ export interface PipelineConfigInput {
   ToolbarBundleMode?: ToolbarBundleMode | string;
   imageMap?: ImageMap;
   ParseWarnings?: PipelineLogEntry[];
+  NativeMaxBytes?: number;
   SourceName?: string;
   SourceKind?: SourceKind;
   defaultLang?: string;
@@ -262,7 +265,7 @@ export interface WorkerErrorResponse {
   originalId?: string | null;
 }
 
-export type UnsupportedCode = 'native-disabled' | 'worker-dom-unavailable';
+export type UnsupportedCode = 'native-disabled' | 'native-onepkg-disabled' | 'worker-dom-unavailable';
 
 export interface WorkerUnsupportedResponse {
   id: string;
@@ -351,6 +354,9 @@ export interface NativeImportResult {
   sourceKind: NativeSourceKind;
   hierarchy: NativeHierarchyNode;
   pages: NativePage[];
+  state?: 'success' | 'partial';
+  fallbackPageCount?: number;
+  filteredOutLineCount?: number;
   warningDetails?: WarningDetail[];
   warnings: string[];
 }

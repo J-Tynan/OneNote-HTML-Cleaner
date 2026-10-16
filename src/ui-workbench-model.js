@@ -5,7 +5,9 @@
  * @typedef {import('./contracts.js').WorkbenchNode} WorkbenchNode
  * @typedef {import('./contracts.js').WorkbenchNodeKind} WorkbenchNodeKind
  * @typedef {import('./contracts.js').WorkbenchNodeStatus} WorkbenchNodeStatus
- * @typedef {{ id?: string, name?: string, relativePath?: string, size?: number, sourceKind?: SourceKind | string, status?: string, message?: string, workbenchKind?: WorkbenchNodeKind }} WorkbenchEntry
+ * @typedef {import('./contracts.js').NativeHierarchyNode} NativeHierarchyNode
+ * @typedef {import('./contracts.js').NativeImportResult} NativeImportResult
+ * @typedef {{ id?: string, name?: string, relativePath?: string, size?: number, sourceKind?: SourceKind | string, status?: string, message?: string, workbenchKind?: WorkbenchNodeKind, nativeResult?: NativeImportResult | null }} WorkbenchEntry
  */
 
 const LEAF_KINDS = new Set(['page', 'file']);
@@ -56,6 +58,39 @@ function toSafeId(value) {
 }
 
 /**
+ * @param {WorkbenchEntry} entry
+ * @returns {entry is WorkbenchEntry & { nativeResult: NativeImportResult }}
+ */
+function hasNativeHierarchy(entry) {
+  return Boolean(entry?.nativeResult
+    && entry.nativeResult.hierarchy
+    && typeof entry.nativeResult.hierarchy.name === 'string');
+}
+
+/**
+ * @param {NativeHierarchyNode['kind']} kind
+ * @returns {WorkbenchNodeKind}
+ */
+function normalizeNativeNodeKind(kind) {
+  if (kind === 'notebook' || kind === 'section-group' || kind === 'section' || kind === 'page' || kind === 'folder') {
+    return kind;
+  }
+  return 'folder';
+}
+
+/**
+ * @param {NativeImportResult} nativeResult
+ * @param {string} pagePath
+ * @returns {number}
+ */
+function nativePageSize(nativeResult, pagePath) {
+  const page = Array.isArray(nativeResult.pages)
+    ? nativeResult.pages.find((candidate) => candidate && candidate.path === pagePath)
+    : null;
+  return page && typeof page.html === 'string' ? page.html.length : 0;
+}
+
+/**
  * @param {WorkbenchNodeStatus[]} statuses
  * @returns {WorkbenchNodeStatus}
  */
@@ -93,6 +128,48 @@ export function buildWorkbenchTree(entries) {
   entries.forEach((entry, index) => {
     const name = String(entry?.name || 'unnamed');
     const entryId = toSafeId(entry?.id) || `entry-${index + 1}`;
+
+    if (hasNativeHierarchy(entry)) {
+      const nativeStatus = entry.nativeResult.state === 'partial' && normalizeStatus(entry.status) === 'success'
+        ? 'partial'
+        : normalizeStatus(entry.status);
+
+      /**
+       * @param {NativeHierarchyNode} hierarchyNode
+       * @param {string | null} parentId
+       * @param {string} parentPath
+       * @param {number} siblingIndex
+       */
+      const addNativeNode = (hierarchyNode, parentId, parentPath, siblingIndex) => {
+        const nodeName = String(hierarchyNode?.name || 'unnamed');
+        const nodePath = String(hierarchyNode?.path || `${parentPath}/${nodeName}`);
+        const nodeId = `native-${entryId}-${toSafeId(nodePath) || siblingIndex}`;
+        const kind = normalizeNativeNodeKind(hierarchyNode?.kind);
+        addNode({
+          id: nodeId,
+          parentId,
+          kind,
+          name: nodeName,
+          relativePath: nodePath,
+          sourceKind: normalizeSourceKind(entry.sourceKind),
+          status: nativeStatus,
+          size: kind === 'page' ? nativePageSize(entry.nativeResult, nodePath) : 0,
+          leafCount: kind === 'page' ? 1 : 0,
+          successfulLeafCount: kind === 'page' && nativeStatus === 'success' ? 1 : 0,
+          childIds: [],
+          message: kind === 'page' ? (typeof entry.message === 'string' && entry.message ? entry.message : undefined) : undefined,
+          queueEntryId: String(entry.id || ''),
+          nativePagePath: kind === 'page' ? nodePath : undefined
+        });
+
+        const children = Array.isArray(hierarchyNode?.children) ? hierarchyNode.children : [];
+        children.forEach((child, childIndex) => addNativeNode(child, nodeId, nodePath, childIndex));
+      };
+
+      addNativeNode(entry.nativeResult.hierarchy, null, '', 0);
+      return;
+    }
+
     const relativePath = normalizeRelativePath(entry?.relativePath) || name;
     const pathSegments = relativePath.split('/').filter(Boolean);
     const folderSegments = pathSegments.slice(0, -1);

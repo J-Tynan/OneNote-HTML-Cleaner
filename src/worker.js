@@ -2,6 +2,7 @@
 // src/worker.js
 import { postDiagnostic } from './worker-globals.js';
 import { detectSourceKind } from './importers/sourceKind.js';
+import { preflightOneSection } from './importers/onePreflight.js';
 import { preparePipelineInputFromPayload } from './pipeline/mhtPayloadPreparation.js';
 // logging helper allows consistent formatting across UI, wrapper, and worker
 import { createLogger, setEnabled as setLogEnabled } from './logging.js';
@@ -14,10 +15,12 @@ const logger = createLogger('worker');
  * @typedef {import('./contracts.js').PipelineResult} PipelineResult
  * @typedef {import('./contracts.js').SourceKind} SourceKind
  * @typedef {import('./contracts.js').UnsupportedCode} UnsupportedCode
+ * @typedef {import('./contracts.js').NativeImportResult} NativeImportResult
  * @typedef {import('./contracts.js').WorkerErrorResponse} WorkerErrorResponse
  * @typedef {import('./contracts.js').WorkerHtmlDoneResponse} WorkerHtmlDoneResponse
  * @typedef {import('./contracts.js').WorkerInitRequest} WorkerInitRequest
  * @typedef {import('./contracts.js').WorkerMarkdownDoneResponse} WorkerMarkdownDoneResponse
+ * @typedef {import('./contracts.js').WorkerNativeDoneResponse} WorkerNativeDoneResponse
  * @typedef {import('./contracts.js').WorkerProgressMessage} WorkerProgressMessage
  * @typedef {import('./contracts.js').WorkerReadyMessage} WorkerReadyMessage
  * @typedef {import('./contracts.js').WorkerUnsupportedResponse} WorkerUnsupportedResponse
@@ -26,6 +29,7 @@ const logger = createLogger('worker');
  * @typedef {(rawText: string, options?: PipelineConfigInput) => MhtParseResult} ParseMhtFn
  * @typedef {(htmlString: string, config?: PipelineConfigInput) => Promise<PipelineResult>} RunPipelineFn
  * @typedef {(options: { id: string, payload: WorkerRuntimePayload, result: PipelineResult }) => WorkerHtmlDoneResponse | WorkerMarkdownDoneResponse} FinalizePipelineOutputFn
+ * @typedef {(arrayBuffer: ArrayBuffer, options?: PipelineConfigInput) => NativeImportResult} ImportOneSectionFn
  * @typedef {{ id?: string, type?: string, fileName?: string, relativePath?: string, mimetype?: string, sourceKind?: SourceKind, html?: string, bytes?: ArrayBuffer, config?: PipelineConfigInput, debug?: { mhtCharsetLogging?: boolean } }} WorkerRuntimePayload
  * @typedef {Partial<WorkerInitRequest> & WorkerRuntimePayload} WorkerIncomingPayload
  * @typedef {(options: { payload: WorkerRuntimePayload, parseMht: ParseMhtFn | null, enableCharsetLogging?: () => void }) => { fileName: string, sourceKind: SourceKind, htmlInput: string, imageMap: ImageMap, parseWarnings: PipelineLogEntry[], mhtPreparation: MhtPreparation }} PreparePipelineInputFromPayloadFn
@@ -64,12 +68,14 @@ let _runPipeline = null;
 let _parseMht = null;
 /** @type {FinalizePipelineOutputFn | null} */
 let _finalizePipelineOutput = null;
+/** @type {ImportOneSectionFn | null} */
 let _importOneSection = null;
 let _importOnePackage = null;
 
 /** @satisfies {Record<string, UnsupportedCode>} */
 const UNSUPPORTED_CODES = {
   NATIVE_DISABLED: 'native-disabled',
+  NATIVE_ONEPKG_DISABLED: 'native-onepkg-disabled',
   WORKER_DOM_UNAVAILABLE: 'worker-dom-unavailable'
 };
 
@@ -170,16 +176,75 @@ self.onmessage = async (e) => {
   logger.info({ id, msg: 'received job', meta: { fileName } });
 
   try {
-    // Native `.one` / `.onepkg` flows are out of scope for the current
-    // (MHT-only) release — explicitly mark them unsupported so the UI can
-    // surface the correct message and we avoid loading native importers.
-    if (sourceKind === 'one' || sourceKind === 'onepkg') {
-      logger.warn({ id, msg: 'native importers disabled', meta: { sourceKind } });
+    if (sourceKind === 'onepkg') {
+      logger.warn({ id, msg: 'native package import unsupported', meta: { sourceKind } });
       self.postMessage(/** @type {WorkerUnsupportedResponse} */ ({
         id,
         status: 'unsupported',
-        code: UNSUPPORTED_CODES.NATIVE_DISABLED,
-        reason: 'native importers disabled in this release'
+        code: UNSUPPORTED_CODES.NATIVE_ONEPKG_DISABLED,
+        reason: 'native .onepkg package conversion is not supported in this release'
+      }));
+      return;
+    }
+
+    if (sourceKind === 'one') {
+      if (!(jobPayload.bytes instanceof ArrayBuffer)) {
+        self.postMessage(/** @type {WorkerErrorResponse} */ ({
+          id,
+          status: 'error',
+          error: 'Native .one conversion requires a binary file payload.'
+        }));
+        return;
+      }
+
+      const preflight = preflightOneSection(jobPayload.bytes, {
+        sourceKind: 'one',
+        maxBytes: config.NativeMaxBytes
+      });
+      if (!preflight.canConvert) {
+        const detail = preflight.warningDetails[0];
+        if (preflight.state === 'unsupported') {
+          self.postMessage(/** @type {WorkerUnsupportedResponse} */ ({
+            id,
+            status: 'unsupported',
+            code: detail?.code,
+            reason: detail?.message || 'Native .one input is unsupported.'
+          }));
+        } else {
+          self.postMessage(/** @type {WorkerErrorResponse} */ ({
+            id,
+            status: 'error',
+            error: detail?.message || 'Native .one preflight failed.'
+          }));
+        }
+        return;
+      }
+
+      if (!_importOneSection) {
+        const nativeModule = await import('./importers/one.js');
+        _importOneSection = /** @type {ImportOneSectionFn} */ (nativeModule.importOneSection);
+      }
+
+      if (typeof _importOneSection !== 'function') {
+        self.postMessage(/** @type {WorkerErrorResponse} */ ({
+          id,
+          status: 'error',
+          error: 'Native .one importer is not available in this build.'
+        }));
+        return;
+      }
+
+      const nativeResult = _importOneSection(jobPayload.bytes, Object.assign({}, config, {
+        fileName,
+        SourceName: fileName,
+        SourceKind: 'one'
+      }));
+      self.postMessage(/** @type {WorkerNativeDoneResponse} */ ({
+        id,
+        status: 'done',
+        resultType: 'native',
+        nativeResult,
+        logs: []
       }));
       return;
     }

@@ -542,10 +542,11 @@ export function createDownloadHelpers(ctx, updateZipButton) {
 
   /**
    * @param {File} file
-   * @param {NativeImportResult} nativeResult
-   * @returns {Promise<void>}
-   */
-  async function downloadNativeZip(file, nativeResult) {
+  * @param {NativeImportResult} nativeResult
+  * @param {Iterable<string>} [selectedPagePaths]
+  * @returns {Promise<void>}
+  */
+  async function downloadNativeZip(file, nativeResult, selectedPagePaths) {
     const appWindow = /** @type {Window & typeof globalThis & { JSZip?: JSZipConstructor }} */ (window);
     const JSZip = appWindow.JSZip;
     if (!JSZip) {
@@ -554,7 +555,9 @@ export function createDownloadHelpers(ctx, updateZipButton) {
     }
 
     const zip = new JSZip();
-    const pages = Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [];
+    const selectedPaths = selectedPagePaths ? new Set(selectedPagePaths) : null;
+    const pages = (Array.isArray(nativeResult && nativeResult.pages) ? nativeResult.pages : [])
+      .filter((page) => !selectedPaths || selectedPaths.has(page.path));
     const writtenResources = new Set();
 
     for (const page of pages) {

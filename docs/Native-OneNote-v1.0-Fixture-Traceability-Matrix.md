@@ -23,12 +23,16 @@ Current native-oriented automated tests already present in the repo:
 - [Tests/semantic-native-parser.js](Tests/semantic-native-parser.js)
 - [Tests/metadata-onepkg-parser.js](Tests/metadata-onepkg-parser.js)
 - [Tests/warning-code-contract.js](Tests/warning-code-contract.js)
+- [Tests/native-one-fixture-manifest.unit.js](Tests/native-one-fixture-manifest.unit.js)
+- [Tests/native-one-conversion.unit.js](Tests/native-one-conversion.unit.js)
 
 Current package scripts already relevant to native work:
 
 - [package.json](package.json): `test:semantic:native`
 - [package.json](package.json): `test:metadata:onepkg`
 - [package.json](package.json): `test:warnings:contract`
+- [package.json](package.json): `test:native-one-fixtures`
+- [package.json](package.json): `test:native-one-conversion`
 
 Current gap:
 
@@ -108,7 +112,7 @@ Implement Step 2 in this order:
 | `one-basic-lists-001` | `one-basic-lists-001.one` | Explicit single-level ordered/unordered lists | `success` | HTML output contains semantic `ul`/`ol` structure | Native list structure mapped without glyph fallback; warnings absent for supported list blocks | New `Tests/native-one-conversion.unit.js` | Missing fixture |
 | `one-basic-table-001` | `one-basic-table-001.one` | Explicit basic rectangular table | `success` | HTML output contains one semantic table | Row/column counts preserved; cell text present; no guessed structure warning | New `Tests/native-one-conversion.unit.js` | Missing fixture |
 | `one-raster-image-001` | `one-raster-image-001.one` | Resolvable embedded raster images | `success` | HTML output contains image element or embedded resource reference | Resolved image bytes; stable count; no silent image omission | New `Tests/native-one-resources.unit.js` | Missing fixture |
-| `one-existing-smoke-001` | [Tests/Test Section.one](Tests/Test%20Section.one) | Existing parser smoke fixture | `success` for current direct importer test only | Existing semantic HTML output | Keep as transitional smoke coverage while dedicated contract fixtures are added | [Tests/semantic-native-parser.js](Tests/semantic-native-parser.js); [Tests/warning-code-contract.js](Tests/warning-code-contract.js) | Existing fixture |
+| `one-existing-smoke-001` | [Tests/Test Section.one](Tests/Test%20Section.one) | Existing parser smoke fixture | `partial` heuristic recovery | Existing semantic HTML inside a native ZIP export | Keep as transitional coverage only; its manifest requires heuristic warnings and cannot establish a default release claim | [Tests/native-one-fixture-manifest.unit.js](Tests/native-one-fixture-manifest.unit.js); [Tests/native-one-conversion.unit.js](Tests/native-one-conversion.unit.js); [Tests/semantic-native-parser.js](Tests/semantic-native-parser.js) | Existing fixture; manifest-backed |
 
 ## B. Default `.one` unsupported and partial-result proof
 
@@ -229,8 +233,8 @@ Step 2 is complete only when all of the following are true:
 
 ## Recommended immediate next actions
 
-1. Create a small machine-readable manifest for native fixtures, even if it starts with only the two existing files.
-2. Add `default-one` and `default-onepkg` rows to that manifest before collecting more fixtures.
-3. Implement `Tests/native-one-preflight.unit.js` first because it is the cheapest fail-closed proof surface.
-4. Implement `Tests/native-onepkg-preflight.unit.js` and `Tests/native-onepkg-inventory.unit.js` before any package-conversion work.
-5. Treat all conditional-promotion rows as out of scope until the default rows are green.
+1. Expand [Tests/expected/native-one-fixtures.json](Tests/expected/native-one-fixtures.json) beyond the existing transitional heuristic fixture as representative files are collected.
+2. Add `default-one` rows to that manifest before making any release-support claim.
+3. Keep [Tests/native-one-preflight.unit.js](Tests/native-one-preflight.unit.js) as the cheapest fail-closed proof surface.
+4. Do not add `.onepkg` fixtures or behavior while package conversion remains out of scope.
+5. Treat all conditional-promotion rows as out of scope until the default `.one` rows are green.

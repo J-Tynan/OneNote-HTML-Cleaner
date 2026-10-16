@@ -16,24 +16,24 @@ import { startStaticServer } from './playwright-server-helper.js';
 
     await page.goto(url, { waitUntil: 'networkidle' });
 
-    // Stable-release behavior: `.one` is recognized at intake, but the UI must
-    // surface it as Unsupported rather than routing it through conversion.
+    // A malformed native section must fail during worker preflight and expose
+    // the specific reason without offering a download.
     await page.setInputFiles('#fileInput', {
       name: 'test.one',
       mimeType: 'application/octet-stream',
       buffer: Buffer.from('dummy')
     });
 
-    // Wait for the file list entry to render and assert it contains 'Unsupported'
+    // Wait for the file list entry to render and assert it contains 'error'.
     await page.waitForSelector('.file-item');
     const statusText = await page.$eval('.file-item__status', (el) => el.textContent);
-    if (!/Unsupported/i.test(statusText || '')) {
-      throw new Error('Expected UI to mark .one file as Unsupported — got: ' + String(statusText));
+    if (!/error/i.test(statusText || '')) {
+      throw new Error('Expected UI to mark malformed .one input as an error — got: ' + String(statusText));
     }
 
     const detailText = await page.$eval('.file-item__detail', (el) => el.textContent || '');
-    if (!/Native \.one conversion is not enabled/i.test(detailText)) {
-      throw new Error(`Expected specific native guidance, got: ${detailText}`);
+    if (!/does not have a supported OneNote section signature/i.test(detailText)) {
+      throw new Error(`Expected native signature failure guidance, got: ${detailText}`);
     }
 
     const menuTrigger = page.locator('[data-actions-menu-trigger]');
@@ -41,7 +41,7 @@ import { startStaticServer } from './playwright-server-helper.js';
     const menuItems = await page.locator('[role="menuitem"]').count();
     const hasDownloadAction = await page.locator('[data-download-id]').count();
     if (menuItems !== 1 || hasDownloadAction !== 0) {
-      throw new Error(`Expected only Remove in unsupported-file actions menu, got ${JSON.stringify({ menuItems, hasDownloadAction })}`);
+      throw new Error(`Expected only Remove in malformed-file actions menu, got ${JSON.stringify({ menuItems, hasDownloadAction })}`);
     }
 
     console.log('unsupported-file-playwright: OK');
