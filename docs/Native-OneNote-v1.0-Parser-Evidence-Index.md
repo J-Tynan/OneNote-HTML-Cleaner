@@ -14,6 +14,7 @@ Supporting summary: [OneNote-Native-Format-Facts-For-GPT-5.5.md](OneNote-Native-
 
 | Native concept | Source evidence | Implementation status | v1.0 treatment |
 | --- | --- | --- | --- |
+| Section signature | The documented OneNote section signature occupies the first 16 bytes of a `.one` file. | `src/importers/one/section-header.js` reads exactly those 16 bytes through the bounded `BinaryReader`; `Tests/native-one-binary-reader.unit.js` and `Tests/native-one-preflight.unit.js` cover valid, invalid, and truncated signatures. | Direct preflight evidence only. A valid signature permits later parsing but does not itself establish a supported page/content claim. |
 | Schema revisions | Sections 2.3.69 and 2.3.97 define `SchemaRevisionInOrderToRead` and `SchemaRevisionInOrderToWrite`. | The reviewed source establishes the fields and supported revision policy, but this repository has not verified their byte locations. | Do not parse or enforce a schema value until a fixture-backed field layout is recorded. |
 | Page object spaces | The source names `PageObjectSpace` and `ConflictPageObjectSpace`. | No object-space traversal is implemented. | Do not claim page discovery or conflict exclusion from the current importer. |
 | Outlines and outline elements | The source identifies pages, outlines, and outline elements as native content structures. | No outline record layout is implemented. | Do not claim structural paragraph, list, or table fidelity from recovered strings. |
@@ -59,3 +60,11 @@ fixture-backed feature:
 
 Until those prerequisites exist, the importer must continue to report
 heuristic recovery as partial output.
+
+## Implemented Header Boundary
+
+`src/importers/one/binary-reader.js` provides bounded little-endian integer,
+GUID, UTF-16LE, and slice reads with typed range and read-budget failures.
+`src/importers/one/section-header.js` currently validates only the documented
+signature at byte offset zero. It does not parse schema revisions, fragment
+offsets, or any other header field until the required direct evidence exists.

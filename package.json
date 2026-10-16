@@ -17,6 +17,7 @@
     "test:smoke:native": "node ./Tests/smoke-native.js",
     "test:toolbar": "node ./Tests/toolbar-injector.js",
     "test:semantic:native": "node ./Tests/semantic-native-parser.js",
+    "test:native-one-binary-reader": "node ./Tests/native-one-binary-reader.unit.js",
     "test:native-one-preflight": "node ./Tests/native-one-preflight.unit.js",
     "test:native-one-fixtures": "node ./Tests/native-one-fixture-manifest.unit.js",
     "test:native-one-conversion": "node ./Tests/native-one-conversion.unit.js",

@@ -1,15 +1,9 @@
 // @ts-check
 
 import { makeWarning, toWarningMessages, WARNING_CODES } from './warnings.js';
+import { ONE_SIGNATURE, parseOneSectionHeader } from './one/section-header.js';
 
-/**
- * The documented OneNote section-file signature.
- * @type {readonly number[]}
- */
-export const ONE_SIGNATURE = Object.freeze([
-  0xE4, 0x52, 0x5C, 0x7B, 0x8C, 0xD8, 0xA7, 0x4D,
-  0xAE, 0xB1, 0x53, 0x78, 0xD0, 0x29, 0x96, 0xD3
-]);
+export { ONE_SIGNATURE };
 
 /**
  * @typedef {import('../contracts.js').WarningDetail} WarningDetail
@@ -22,8 +16,7 @@ export const ONE_SIGNATURE = Object.freeze([
  * @returns {boolean}
  */
 export function hasOneSignature(bytes) {
-  if (!bytes || bytes.length < ONE_SIGNATURE.length) return false;
-  return ONE_SIGNATURE.every((value, index) => bytes[index] === value);
+  return Boolean(bytes && parseOneSectionHeader(bytes).valid);
 }
 
 /**
@@ -83,7 +76,8 @@ export function preflightOneSection(input, options = {}) {
     ));
   }
 
-  if (!hasOneSignature(bytes)) {
+  const header = parseOneSectionHeader(bytes);
+  if (!header.valid) {
     return result('hard-failure', makeWarning(
       WARNING_CODES.one.invalidSignature,
       'This .one file does not have a supported OneNote section signature. No output was created.',
