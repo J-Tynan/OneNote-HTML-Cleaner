@@ -25,6 +25,17 @@ export const WARNING_CODES = {
     placeholderHintsSummary: 'ONE_PLACEHOLDER_HINTS_SUMMARY'
   },
   onepkg: {
+    invalidExtension: 'ONEPKG_INVALID_EXTENSION',
+    missingBytes: 'ONEPKG_MISSING_BYTES',
+    sizeLimitExceeded: 'ONEPKG_SIZE_LIMIT_EXCEEDED',
+    invalidSignature: 'ONEPKG_INVALID_SIGNATURE',
+    malformedCab: 'ONEPKG_MALFORMED_CAB',
+    policyLimitExceeded: 'ONEPKG_POLICY_LIMIT_EXCEEDED',
+    invalidFolderReference: 'ONEPKG_INVALID_FOLDER_REFERENCE',
+    unsafePath: 'ONEPKG_UNSAFE_PATH',
+    duplicatePath: 'ONEPKG_DUPLICATE_PATH',
+    unsupportedCompression: 'ONEPKG_UNSUPPORTED_COMPRESSION',
+    inventoryValidated: 'ONEPKG_INVENTORY_VALIDATED',
     cabParsedSummary: 'ONEPKG_CAB_PARSED_SUMMARY',
     sectionsGeneratedSummary: 'ONEPKG_SECTIONS_GENERATED_SUMMARY',
     deepExtractionSummary: 'ONEPKG_DEEP_EXTRACTION_SUMMARY',
