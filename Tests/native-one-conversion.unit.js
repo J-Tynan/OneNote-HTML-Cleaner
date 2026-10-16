@@ -37,6 +37,7 @@ function resultSummary(result) {
 }
 
 for (const fixture of manifest.fixtures) {
+  if (fixture.sourceKind !== 'one' || fixture.expectedState === 'hard-failure' || fixture.expectedState === 'unsupported') continue;
   const fixturePath = path.resolve(process.cwd(), 'Tests', fixture.fileName);
   const firstInput = readArrayBuffer(fixturePath);
   const preflight = preflightOneSection(firstInput, { sourceKind: fixture.sourceKind });
@@ -45,7 +46,7 @@ for (const fixture of manifest.fixtures) {
   const first = importOneSection(firstInput, { fileName: fixture.fileName });
   const second = importOneSection(readArrayBuffer(fixturePath), { fileName: fixture.fileName });
   assert.equal(first.state, fixture.expectedState, `${fixture.id}: unexpected conversion state`);
-  assert(first.pages.length >= fixture.minPageCount, `${fixture.id}: expected at least ${fixture.minPageCount} pages`);
+  assert(first.pages.length >= fixture.expectedMinPageCount, `${fixture.id}: expected at least ${fixture.expectedMinPageCount} pages`);
   if (fixture.shouldCreateZip) {
     assert(first.pages.length > 0, `${fixture.id}: ZIP export requires at least one native page`);
   }

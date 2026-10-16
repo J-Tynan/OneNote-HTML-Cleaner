@@ -42,4 +42,12 @@ assert.deepEqual(tooLarge.warningDetails[0].context, {
   maxBytes: fixture.byteLength - 1
 });
 
+const invalidFixturePath = path.resolve(process.cwd(), 'Tests', 'one-invalid-signature-001.one');
+const invalidFixture = fs.readFileSync(invalidFixturePath);
+const invalidFixtureBytes = invalidFixture.buffer.slice(invalidFixture.byteOffset, invalidFixture.byteOffset + invalidFixture.byteLength);
+const invalidFixtureResult = preflightOneSection(invalidFixtureBytes, { sourceKind: 'one' });
+assert.equal(invalidFixtureResult.state, 'hard-failure');
+assert.equal(invalidFixtureResult.canConvert, false);
+assert.equal(invalidFixtureResult.warningDetails[0].code, WARNING_CODES.one.invalidSignature);
+
 console.log('native-one-preflight.unit: PASS');

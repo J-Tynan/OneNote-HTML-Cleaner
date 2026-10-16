@@ -1,19 +1,76 @@
 {
   "name": "native-one-fixtures",
+  "schemaVersion": 2,
   "fixtures": [
     {
       "id": "one-existing-smoke-001",
-      "fileName": "Test Section.one",
+      "fileName": "Test section.one",
       "sourceKind": "one",
+      "supportBucket": "transitional",
       "evidenceLevel": "heuristic",
+      "releaseEligible": false,
       "expectedState": "partial",
-      "minPageCount": 1,
+      "shouldCreateHtml": true,
       "shouldCreateZip": true,
+      "expectedMinPageCount": 1,
+      "expectedSectionCount": 1,
       "expectedWarningCodes": [
         "ONE_FALLBACK_SEMANTIC_SUMMARY",
         "ONE_METADATA_CANONICALIZATION_SUMMARY"
       ],
-      "notes": "Transitional smoke coverage only; it is not a fixture-backed native-structure support claim."
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-manifest.unit.js",
+        "Tests/native-one-conversion.unit.js",
+        "Tests/semantic-native-parser.js"
+      ],
+      "notes": "Transitional heuristic smoke coverage only; it cannot establish a direct native-structure support claim."
+    },
+    {
+      "id": "onepkg-existing-smoke-001",
+      "fileName": "Test notebook.onepkg",
+      "sourceKind": "onepkg",
+      "supportBucket": "transitional",
+      "evidenceLevel": "heuristic",
+      "releaseEligible": false,
+      "expectedState": "partial",
+      "shouldCreateHtml": true,
+      "shouldCreateZip": true,
+      "expectedMinPageCount": 1,
+      "expectedSectionCount": 1,
+      "expectedWarningCodes": [
+        "ONEPKG_CAB_PARSED_SUMMARY",
+        "ONEPKG_SECTIONS_GENERATED_SUMMARY"
+      ],
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-manifest.unit.js",
+        "Tests/metadata-onepkg-parser.js",
+        "Tests/warning-code-contract.js"
+      ],
+      "notes": "Transitional package smoke coverage only; current extraction and contained-section recovery cannot establish browser-only package conversion support."
+    },
+    {
+      "id": "one-invalid-signature-001",
+      "fileName": "one-invalid-signature-001.one",
+      "sourceKind": "one",
+      "supportBucket": "default-one",
+      "evidenceLevel": "direct",
+      "releaseEligible": false,
+      "expectedState": "hard-failure",
+      "shouldCreateHtml": false,
+      "shouldCreateZip": false,
+      "expectedMinPageCount": 0,
+      "expectedSectionCount": 0,
+      "expectedWarningCodes": [
+        "ONE_INVALID_SIGNATURE"
+      ],
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-manifest.unit.js",
+        "Tests/native-one-preflight.unit.js"
+      ],
+      "notes": "File-backed negative preflight fixture; it must fail before parser traversal or output generation."
     }
   ]
 }

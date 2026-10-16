@@ -34,6 +34,19 @@ Supporting summary: [OneNote-Native-Format-Facts-For-GPT-5.5.md](OneNote-Native-
 - Native fixture manifests must name the evidence level for every expected
   output claim.
 
+## Transitional Fixture Classification
+
+| Fixture | Evidence level | Release eligibility | Required treatment |
+| --- | --- | --- | --- |
+| [Tests/Test section.one](Tests/Test%20section.one) | Heuristic printable-string and binary-signature recovery | No | Keep its result `partial`, require heuristic warnings, and use it only for development regression coverage. |
+| [Tests/Test notebook.onepkg](Tests/Test%20notebook.onepkg) | Heuristic package extraction plus contained-section recovery | No | Keep package conversion disabled in the worker and use this file only for inventory/extraction research coverage. |
+| [Tests/one-invalid-signature-001.one](Tests/one-invalid-signature-001.one) | Direct signature preflight rejection | No output claim | Require a `hard-failure` before parser traversal, with `ONE_INVALID_SIGNATURE`. |
+
+The fixture manifest enforces that heuristic fixtures are `transitional` and
+`releaseEligible: false`. A fixture may become release eligible only after its
+direct field layout, positive and negative fixture pair, expected output, and
+warning assertions are recorded.
+
 ## Next Direct-Parsing Prerequisites
 
 Before adding binary record detection, record all of the following for one
