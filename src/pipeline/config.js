@@ -12,11 +12,10 @@ import { normalizeMarkdownFlavor } from '../convert/markdownFlavors.js';
  * @typedef {import('../contracts.js').OutputDecorationConfig} OutputDecorationConfig
  * @typedef {import('../contracts.js').PipelineConfigInput} PipelineConfigInput
  * @typedef {import('../contracts.js').ToolbarBundleMode} ToolbarBundleMode
- * @typedef {import('../contracts.js').ToolbarStyle} ToolbarStyle
  * @typedef {import('../contracts.js').UnitStrategy} UnitStrategy
  * @typedef {Pick<OutputDecorationConfig, 'ConvertedPageThemeToggleEnabled'>} ConvertedPageThemeConfig
  * @typedef {Pick<NormalizedPipelineConfig, 'ExternalizeCssEnabled' | 'ExternalizeCssMode'>} ExternalCssConfig
- * @typedef {Pick<OutputDecorationConfig, 'ToolbarEnabled' | 'ToolbarEditToggleEnabled' | 'ToolbarMetadataToggleEnabled' | 'ToolbarBundleMode' | 'ToolbarStyle'>} ToolbarConfig
+ * @typedef {Pick<OutputDecorationConfig, 'ToolbarEnabled' | 'ToolbarEditToggleEnabled' | 'ToolbarMetadataToggleEnabled' | 'ToolbarBundleMode'>} ToolbarConfig
  */
 
 export const pipelineConfig = {
@@ -45,17 +44,6 @@ function toBoolean(value, defaultValue = false) {
 function normalizeToolbarBundleMode(value) {
   const normalized = String(value || '').trim().toLowerCase();
   return normalized === 'inline' ? 'inline' : 'inline';
-}
-
-/**
- * @param {unknown} value
- * @returns {ToolbarStyle}
- */
-function normalizeToolbarStyle(value) {
-  const normalized = String(value || '').trim().toLowerCase();
-  if (normalized === 'classic' || normalized === 'office-97' || normalized === 'office') return 'office';
-  if (normalized === 'ribbon') return 'ribbon';
-  return 'compact';
 }
 
 /**
@@ -131,8 +119,7 @@ const DEFAULT_PIPELINE_CONFIG = {
   ExperimentalExportEnabled: false,
   ExportFormat: 'html',
   MarkdownFlavor: 'obsidian',
-  ConvertedPageThemeToggleEnabled: false,
-  ToolbarStyle: 'compact'
+  ConvertedPageThemeToggleEnabled: false
 };
 
 const SUPPORTED_EXPORT_FORMATS = new Set(['html', 'markdown']);
@@ -207,8 +194,7 @@ function normalizeToolbarConfig(rawConfig = {}) {
     ToolbarEnabled: toolbarEnabled,
     ToolbarEditToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarEditToggleEnabled, false),
     ToolbarMetadataToggleEnabled: toolbarEnabled ? true : toBoolean(rawConfig.ToolbarMetadataToggleEnabled, false),
-    ToolbarBundleMode: normalizeToolbarBundleMode(rawConfig.ToolbarBundleMode),
-    ToolbarStyle: normalizeToolbarStyle(rawConfig.ToolbarStyle)
+    ToolbarBundleMode: normalizeToolbarBundleMode(rawConfig.ToolbarBundleMode)
   };
 }
 
@@ -239,6 +225,7 @@ export function buildOutputDecorationConfig(rawConfig = {}) {
  * @returns {NormalizedPipelineConfig}
  */
 export function normalizePipelineConfig(rawConfig = {}) {
+  const { ToolbarStyle: _retiredToolbarStyle, ...supportedRawConfig } = /** @type {PipelineConfigInput & { ToolbarStyle?: unknown }} */ (rawConfig);
   const useTableSemantics = Object.prototype.hasOwnProperty.call(rawConfig, 'UseTableSemantics')
     ? toBoolean(rawConfig.UseTableSemantics, true)
     : true;
@@ -265,9 +252,9 @@ export function normalizePipelineConfig(rawConfig = {}) {
       : DEFAULT_PIPELINE_CONFIG.NormalizeTopLevelPageWidths,
     defaultNormalizeTopLevelPageWidths
   );
-  return {
+  const normalized = {
     ...DEFAULT_PIPELINE_CONFIG,
-    ...rawConfig,
+    ...supportedRawConfig,
     ...normalizedToolbarConfig,
     ...normalizedExternalCssConfig,
     ...normalizedExportConfig,
@@ -281,4 +268,5 @@ export function normalizePipelineConfig(rawConfig = {}) {
     NormalizeDirectionLayout: normalizeDirectionLayout,
     NormalizeTopLevelPageWidths: normalizeTopLevelPageWidths
   };
+  return normalized;
 }

@@ -6,7 +6,6 @@ import { normalizeExportConfig } from './config.js';
  * @typedef {import('../contracts.js').ExportConfig} ExportConfig
  * @typedef {import('../contracts.js').ExportFormat} ExportFormat
  * @typedef {import('../contracts.js').PipelineConfigInput} PipelineConfigInput
- * @typedef {import('../contracts.js').ToolbarStyle} ToolbarStyle
  * @typedef {import('../contracts.js').WarningDetail} WarningDetail
  * @typedef {'html' | 'mht' | 'one' | 'onepkg'} NormalizedSourceKind
  * @typedef {{ total?: number, info?: number, warning?: number, error?: number }} WarningSummaryInput
@@ -287,17 +286,6 @@ function hasConvertedThemeToggleRoot(html = '') {
 
 /**
  * @param {ToolbarInjectorOptions} [options={}]
- * @returns {ToolbarStyle}
- */
-function resolveToolbarStyle(options = {}) {
-  const normalized = String(options.ToolbarStyle || '').trim().toLowerCase();
-  if (normalized === 'classic' || normalized === 'office-97' || normalized === 'office') return 'office';
-  if (normalized === 'ribbon') return 'ribbon';
-  return 'compact';
-}
-
-/**
- * @param {ToolbarInjectorOptions} [options={}]
  * @returns {boolean}
  */
 function usesDeferredExportStyles(options = {}) {
@@ -330,6 +318,11 @@ function buildBaseStyleCss() {
   return '#onenote-cleaner-toolbar{position:sticky;top:0;z-index:9999;background:var(--onc-toolbar-bg,#fff);color:var(--onc-toolbar-fg,#1f2a37);border-bottom:1px solid var(--onc-toolbar-border,#d7dce2);padding:var(--onc-toolbar-padding,.45rem .65rem);font:var(--onc-toolbar-font,13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}' +
     '#onenote-cleaner-toolbar .onc-toolbar-row{display:flex;flex-wrap:wrap;gap:var(--onc-toolbar-gap,.4rem);align-items:center;}' +
     '#onenote-cleaner-toolbar .onc-edit-tools{margin-top:.35rem;}' +
+    '#onenote-cleaner-toolbar .onc-more-tools{position:relative;}' +
+    '#onenote-cleaner-toolbar .onc-more-tools>summary{display:inline-flex;align-items:center;list-style:none;}' +
+    '#onenote-cleaner-toolbar .onc-more-tools>summary::-webkit-details-marker{display:none;}' +
+    '#onenote-cleaner-toolbar .onc-more-tools[open]>summary{background:var(--onc-toolbar-active-bg,#eef5ff);border-color:var(--onc-toolbar-active-border,#7ea5e0);}' +
+    '#onenote-cleaner-toolbar .onc-more-menu{position:absolute;right:0;z-index:1;display:flex;flex-wrap:wrap;gap:var(--onc-toolbar-gap,.4rem);min-width:max-content;margin-top:.25rem;padding:.4rem;border:1px solid var(--onc-toolbar-panel-border,#d7dce2);border-radius:var(--onc-toolbar-radius,.35rem);background:var(--onc-toolbar-panel-bg,#f8fafc);box-shadow:0 2px 6px rgba(15,23,42,.12);}' +
     '#onenote-cleaner-toolbar [data-onc-role="edit-tools"][hidden]{display:none !important;}' +
     '#onenote-cleaner-toolbar .onc-title{font-weight:600;margin-right:.25rem;}' +
     '#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{border:1px solid var(--onc-toolbar-btn-border,#b7c0cc);background:var(--onc-toolbar-btn-bg,#fff);color:inherit;border-radius:var(--onc-toolbar-radius,.35rem);padding:var(--onc-toolbar-btn-padding,.24rem .48rem);cursor:pointer;font:inherit;box-shadow:var(--onc-toolbar-btn-shadow,none);}' +
@@ -344,7 +337,8 @@ function buildBaseStyleCss() {
     '#onenote-cleaner-toolbar .onc-panel dt{font-weight:600;}' +
     '#onenote-cleaner-toolbar .onc-panel dd{margin:0;word-break:break-word;}' +
     '#onc-toolbar-show{position:fixed;right:3.35rem;top:var(--onc-floating-top,.75rem);bottom:auto;z-index:10000;font-size:11px;padding:var(--onc-toolbar-show-padding,.18rem .42rem);}' +
-    '@media (max-width: 640px){#onenote-cleaner-toolbar{padding:var(--onc-toolbar-mobile-padding,.375rem .5rem);font:var(--onc-toolbar-mobile-font,12px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}#onenote-cleaner-toolbar .onc-toolbar-row{gap:var(--onc-toolbar-mobile-gap,.3rem);}#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{padding:var(--onc-toolbar-mobile-btn-padding,.18rem .34rem);}#onenote-cleaner-toolbar .onc-select{min-width:7.25rem;}}' +
+    '@media (max-width: 640px){#onenote-cleaner-toolbar{padding:var(--onc-toolbar-mobile-padding,.375rem .5rem);font:var(--onc-toolbar-mobile-font,12px/1.25 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif);}#onenote-cleaner-toolbar .onc-toolbar-row{gap:var(--onc-toolbar-mobile-gap,.3rem);}#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{padding:var(--onc-toolbar-mobile-btn-padding,.18rem .34rem);}#onenote-cleaner-toolbar .onc-select{min-width:7.25rem;}#onenote-cleaner-toolbar .onc-more-menu{right:auto;left:0;min-width:min(16rem,calc(100vw - 1rem));}}' +
+    '@media (pointer:coarse){#onenote-cleaner-toolbar .onc-btn,#onc-toolbar-show{min-height:44px;}#onenote-cleaner-toolbar .onc-select{min-height:44px;}}' +
     'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar{background:var(--onc-converted-bg,#000);color:var(--onc-converted-fg,#d6d6cf);border-bottom-color:rgba(148,163,184,.35);}' +
     'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn,html[data-onc-converted-theme="black"] #onc-toolbar-show{background:rgba(15,23,42,.38);color:var(--onc-converted-fg,#d6d6cf);border-color:rgba(148,163,184,.45);box-shadow:none;}' +
     'html[data-onc-converted-theme="black"] #onenote-cleaner-toolbar .onc-btn[aria-pressed="true"]{background:rgba(59,130,246,.22);border-color:rgba(125,177,255,.7);}' +
@@ -353,35 +347,13 @@ function buildBaseStyleCss() {
     '[data-onc-editing="true"] [data-onc-editable="1"]{outline:1px dashed #7ea5e0;outline-offset:2px;}';
 }
 
-/**
- * @param {ToolbarStyle} toolbarStyle
- * @returns {string}
- */
-function buildToolbarSkinCss(toolbarStyle) {
-  if (toolbarStyle === 'office') {
-    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"]{--onc-toolbar-bg:#d4d0c8;--onc-toolbar-fg:#1f1f1f;--onc-toolbar-border:#808080;--onc-toolbar-padding:.35rem .5rem;--onc-toolbar-mobile-padding:.35rem .5rem;--onc-toolbar-gap:.3rem;--onc-toolbar-mobile-gap:.3rem;--onc-toolbar-btn-bg:#ece9d8;--onc-toolbar-btn-border:#7a7a70;--onc-toolbar-radius:.15rem;--onc-toolbar-btn-padding:.18rem .4rem;--onc-toolbar-btn-shadow:inset 1px 1px 0 rgba(255,255,255,.75);--onc-toolbar-panel-bg:#ece9d8;--onc-toolbar-panel-border:#808080;--onc-toolbar-show-padding:.14rem .32rem;--onc-toolbar-mobile-btn-padding:.14rem .28rem;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-title{font-size:11px;letter-spacing:.02em;text-transform:uppercase;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn[data-onc-active="true"]{background:#d6def4;border-color:#51607a;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] .onc-btn:hover,#onenote-cleaner-toolbar[data-onc-toolbar-preset="office"] #onc-toolbar-show:hover{filter:brightness(.98);}';
-  }
-
-  if (toolbarStyle === 'ribbon') {
-    return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"]{--onc-toolbar-bg:linear-gradient(180deg,#f7fbff,#e6eef8);--onc-toolbar-fg:#12324a;--onc-toolbar-border:#b8cce0;--onc-toolbar-padding:.5rem .75rem;--onc-toolbar-mobile-padding:.4rem .55rem;--onc-toolbar-gap:.45rem;--onc-toolbar-mobile-gap:.32rem;--onc-toolbar-btn-bg:#ffffff;--onc-toolbar-btn-border:#aac0d6;--onc-toolbar-radius:.5rem;--onc-toolbar-btn-padding:.24rem .55rem;--onc-toolbar-btn-shadow:0 1px 0 rgba(255,255,255,.9), inset 0 1px 0 rgba(255,255,255,.7);--onc-toolbar-panel-bg:#ffffff;--onc-toolbar-panel-border:#c8d7e6;--onc-toolbar-show-padding:.18rem .42rem;--onc-toolbar-mobile-btn-padding:.18rem .34rem;--onc-toolbar-select-width:9.5rem;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-title{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#36526b;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-btn[aria-pressed="true"],#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-btn[data-onc-active="true"]{background:#dcecff;border-color:#7aa6d1;}' +
-      '#onenote-cleaner-toolbar[data-onc-toolbar-preset="ribbon"] .onc-panel{box-shadow:0 1px 2px rgba(15,23,42,.06);}';
-  }
-
-  return '#onenote-cleaner-toolbar[data-onc-toolbar-preset="compact"]{--onc-toolbar-bg:#fff;--onc-toolbar-fg:#1f2a37;--onc-toolbar-border:#d7dce2;--onc-toolbar-padding:.3rem .45rem;--onc-toolbar-mobile-padding:.24rem .36rem;--onc-toolbar-gap:.25rem;--onc-toolbar-mobile-gap:.2rem;--onc-toolbar-font:12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-mobile-font:11px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-btn-bg:#fff;--onc-toolbar-btn-border:#b7c0cc;--onc-toolbar-radius:.3rem;--onc-toolbar-btn-padding:.16rem .34rem;--onc-toolbar-panel-bg:#f8fafc;--onc-toolbar-panel-border:#d7dce2;--onc-toolbar-show-padding:.12rem .28rem;--onc-toolbar-mobile-btn-padding:.12rem .24rem;--onc-toolbar-select-width:8rem;}';
+function buildToolbarSkinCss() {
+  return '#onenote-cleaner-toolbar{--onc-toolbar-bg:#fff;--onc-toolbar-fg:#1f2a37;--onc-toolbar-border:#d7dce2;--onc-toolbar-padding:.3rem .45rem;--onc-toolbar-mobile-padding:.24rem .36rem;--onc-toolbar-gap:.25rem;--onc-toolbar-mobile-gap:.2rem;--onc-toolbar-font:12px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-mobile-font:11px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;--onc-toolbar-btn-bg:#fff;--onc-toolbar-btn-border:#b7c0cc;--onc-toolbar-radius:.3rem;--onc-toolbar-btn-padding:.16rem .34rem;--onc-toolbar-panel-bg:#f8fafc;--onc-toolbar-panel-border:#d7dce2;--onc-toolbar-show-padding:.12rem .28rem;--onc-toolbar-mobile-btn-padding:.12rem .24rem;--onc-toolbar-select-width:8rem;}';
 }
 
-/**
- * @param {ToolbarStyle} [toolbarStyle='compact']
- * @returns {string}
- */
-function buildStyleTag(toolbarStyle = 'compact') {
-  const css = `${buildBaseStyleCss()}${buildToolbarSkinCss(toolbarStyle)}`;
-  return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}">` +
+function buildStyleTag() {
+  const css = `${buildBaseStyleCss()}${buildToolbarSkinCss()}`;
+  return `<style id="${TOOLBAR_STYLE_ID}" data-onc-toolbar-style="${TOOLBAR_VERSION}">` +
     css +
     '</style>';
 }
@@ -405,6 +377,7 @@ function buildScriptTag() {
   const metadataToggle = root.querySelector('[data-onc-action="metadata-toggle"]');
   const hideButton = root.querySelector('[data-onc-action="hide-toolbar"]');
   const saveButton = root.querySelector('[data-onc-action="save"]');
+  const moreTools = root.querySelector('[data-onc-role="more-tools"]');
   const styleSelect = root.querySelector('[data-onc-role="style-select"]');
   const colorInput = root.querySelector('[data-onc-role="color-input"]');
   const metadataScript = document.getElementById('${TOOLBAR_METADATA_ID}');
@@ -862,6 +835,15 @@ function buildScriptTag() {
     applyEditCommand(button.getAttribute('data-onc-edit-command'));
   });
 
+  if (moreTools) {
+    moreTools.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      moreTools.open = false;
+      const summary = moreTools.querySelector('summary');
+      if (summary && summary.focus) summary.focus();
+    });
+  }
+
   document.addEventListener('selectionchange', () => {
     if (root.dataset.oncEditing === 'true') {
       syncEditCommandState();
@@ -917,13 +899,12 @@ function buildToolbarMarkup(metadata, options = {}) {
   const toolbarEnabled = options.ToolbarEnabled === true;
   const editEnabled = toolbarEnabled || options.ToolbarEditToggleEnabled === true;
   const metadataEnabled = toolbarEnabled || options.ToolbarMetadataToggleEnabled === true;
-  const toolbarStyle = resolveToolbarStyle(options);
   const styleOptionsMarkup = EDIT_STYLE_OPTIONS
     .map((style) => `<option value="${escapeHtml(style.key)}">${escapeHtml(style.label)}</option>`)
     .join('');
 
   return [
-    `<div id="${TOOLBAR_ROOT_ID}" data-onc-toolbar="${TOOLBAR_VERSION}" data-onc-toolbar-preset="${toolbarStyle}" data-onc-edit-enabled="${editEnabled}" data-onc-metadata-enabled="${metadataEnabled}" tabindex="-1" aria-label="OneNote Cleaner toolbar" hidden>`,
+    `<div id="${TOOLBAR_ROOT_ID}" data-onc-toolbar="${TOOLBAR_VERSION}" data-onc-edit-enabled="${editEnabled}" data-onc-metadata-enabled="${metadataEnabled}" tabindex="-1" aria-label="OneNote Cleaner toolbar" hidden>`,
     '<div class="onc-toolbar-row">',
     '<span class="onc-title">Tools</span>',
     `<button type="button" class="onc-btn" data-onc-action="edit-toggle" aria-pressed="false" title="Enable edit"${editEnabled ? '' : ' hidden'}>Enable edit</button>`,
@@ -936,14 +917,19 @@ function buildToolbarMarkup(metadata, options = {}) {
     `<select class="onc-btn onc-select" data-onc-role="style-select" title="Styles" aria-label="Styles" disabled>${styleOptionsMarkup}</select>`,
     '<button type="button" class="onc-btn" data-onc-edit-command="bold" data-onc-active="false" aria-pressed="false" title="Bold">B</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="italic" data-onc-active="false" aria-pressed="false" title="Italic">I</button>',
+    '<button type="button" class="onc-btn" data-onc-edit-command="bullet" data-onc-active="false" aria-pressed="false" title="Bullet list">Bullet List</button>',
+    '<button type="button" class="onc-btn" data-onc-edit-command="number" data-onc-active="false" aria-pressed="false" title="Numbered list">Numbered List</button>',
+    '<details class="onc-more-tools" data-onc-role="more-tools">',
+    '<summary class="onc-btn" title="More formatting">More</summary>',
+    '<div class="onc-more-menu">',
     '<button type="button" class="onc-btn" data-onc-edit-command="color" data-onc-active="false" aria-pressed="false" title="Text color">Color</button>',
     '<input type="color" class="onc-color-input" data-onc-role="color-input" value="#2563eb" aria-label="Pick text color">',
     '<button type="button" class="onc-btn" data-onc-edit-command="size" data-onc-active="false" aria-pressed="false" title="Text size">Size</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="sub" data-onc-active="false" aria-pressed="false" title="Subscript">Sub</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="super" data-onc-active="false" aria-pressed="false" title="Superscript">Super</button>',
-    '<button type="button" class="onc-btn" data-onc-edit-command="bullet" data-onc-active="false" aria-pressed="false" title="Bullet list">Bullet List</button>',
-    '<button type="button" class="onc-btn" data-onc-edit-command="number" data-onc-active="false" aria-pressed="false" title="Numbered list">Numbered List</button>',
     '<button type="button" class="onc-btn" data-onc-edit-command="link" data-onc-active="false" aria-pressed="false" title="Insert link">Link</button>',
+    '</div>',
+    '</details>',
     '</div>',
     `<aside class="onc-panel" data-onc-role="metadata-panel"${metadataEnabled ? ' hidden' : ' hidden'}>`,
     '<dl>',
@@ -1002,7 +988,6 @@ export function injectOutputToolbar(html, options = {}) {
   const input = String(html || '');
   if (!input) return input;
   const exportState = resolveExportState(options);
-  const toolbarStyle = resolveToolbarStyle(options);
 
   const toolbarEnabled = options.ToolbarEnabled === true;
   const toolbarBundleMode = String(options.ToolbarBundleMode || 'inline').toLowerCase();
@@ -1015,8 +1000,8 @@ export function injectOutputToolbar(html, options = {}) {
   }
 
   const metadata = buildMetadata(options, exportState);
-  const headInsert = `${buildStyleTag(toolbarStyle)}${buildMetadataTag(metadata)}${buildScriptTag()}`;
-  const bodyInsert = buildToolbarMarkup(metadata, { ...options, ToolbarStyle: toolbarStyle });
+  const headInsert = `${buildStyleTag()}${buildMetadataTag(metadata)}${buildScriptTag()}`;
+  const bodyInsert = buildToolbarMarkup(metadata, options);
 
   const withHead = injectIntoHead(input, headInsert);
   return injectIntoBody(withHead, bodyInsert);

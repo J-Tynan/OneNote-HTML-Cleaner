@@ -33,33 +33,30 @@ async function main() {
 
   const baseHtml = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Sample</title></head><body><main><h1>Hello</h1><p>Body</p></main></body></html>';
 
-  function assertSharedToolbarMarkup(html, preset) {
-    if (!new RegExp(`id="onenote-cleaner-toolbar"[^>]*data-onc-toolbar-preset="${preset}"`, 'i').test(html)) {
-      fail(`Expected ${preset} toolbar preset marker on injected toolbar`);
-    }
-    if (!new RegExp(`id="onc-toolbar-style"[^>]*data-onc-toolbar-preset="${preset}"`, 'i').test(html)) {
-      fail(`Expected ${preset} toolbar preset marker on injected toolbar style tag`);
+  function assertSharedToolbarMarkup(html) {
+    if (/data-onc-toolbar-preset/i.test(html)) {
+      fail('Did not expect a toolbar preset marker on fixed toolbar output');
     }
     if (!/data-onc-action="edit-toggle"/i.test(html)) {
-      fail(`Expected edit toggle control on ${preset} toolbar`);
+      fail('Expected edit toggle control on fixed toolbar');
     }
     if (!/data-onc-action="metadata-toggle"/i.test(html)) {
-      fail(`Expected metadata toggle control on ${preset} toolbar`);
+      fail('Expected metadata toggle control on fixed toolbar');
     }
     if (!/data-onc-action="hide-toolbar"/i.test(html)) {
-      fail(`Expected hide control on ${preset} toolbar`);
+      fail('Expected hide control on fixed toolbar');
     }
     if (!/data-onc-action="save"/i.test(html)) {
-      fail(`Expected save control on ${preset} toolbar`);
+      fail('Expected save control on fixed toolbar');
     }
     if (!/data-onc-edit-command="bold"[^>]*data-onc-active="false"[^>]*aria-pressed="false"/i.test(html)) {
-      fail(`Expected inactive edit command attributes on ${preset} toolbar buttons`);
+      fail('Expected inactive edit command attributes on fixed toolbar buttons');
     }
     if (!/data-onc-role="style-select"/i.test(html) || !/data-onc-role="color-input"/i.test(html)) {
-      fail(`Expected style and color edit controls on ${preset} toolbar`);
+      fail('Expected style and color edit controls on fixed toolbar');
     }
     if (!/data-onc-field="page-title"/i.test(html) || !/data-onc-field="export-format"/i.test(html)) {
-      fail(`Expected page-title and export-format metadata fields on ${preset} toolbar`);
+      fail('Expected page-title and export-format metadata fields on fixed toolbar');
     }
     if (/data-onc-action="save-as"/i.test(html)) {
       fail(`Did not expect save-as control on ${preset} toolbar`);
@@ -83,13 +80,7 @@ async function main() {
   if (!/id="onenote-cleaner-toolbar"/i.test(injected)) {
     fail('Expected toolbar root to be injected once');
   }
-  if (!/id="onenote-cleaner-toolbar"[^>]*data-onc-toolbar-preset="compact"/i.test(injected)) {
-    fail('Expected compact toolbar preset marker on default injected toolbar');
-  }
-  if (!/id="onc-toolbar-style"[^>]*data-onc-toolbar-preset="compact"/i.test(injected)) {
-    fail('Expected compact toolbar preset marker on injected toolbar style tag');
-  }
-  assertSharedToolbarMarkup(injected, 'compact');
+  assertSharedToolbarMarkup(injected);
   if (!/>Tools<\/span>/i.test(injected)) {
     fail('Expected toolbar title text to be Tools');
   }
@@ -127,6 +118,9 @@ async function main() {
     || !/data-onc-edit-command="number"/i.test(injected)
     || !/data-onc-edit-command="link"/i.test(injected)) {
     fail('Expected edit-mode formatting controls to be injected');
+  }
+  if (!/data-onc-role="more-tools"/i.test(injected) || !/<summary class="onc-btn" title="More formatting">More<\/summary>/i.test(injected)) {
+    fail('Expected secondary edit commands to be grouped in the More formatting disclosure');
   }
   if (!/data-onc-edit-command="bold"[^>]*data-onc-active="false"[^>]*aria-pressed="false"/i.test(injected)) {
     fail('Expected edit command buttons to include inactive active-state attributes');
@@ -170,47 +164,6 @@ async function main() {
   if (rootCount !== 1 || styleCount !== 1 || scriptCount !== 1) {
     fail(`Expected idempotent injection (root/style/script exactly once), got root=${rootCount}, style=${styleCount}, script=${scriptCount}`);
   }
-
-  const officeInjected = mod.injectOutputToolbar(baseHtml, {
-    ToolbarEnabled: true,
-    ToolbarEditToggleEnabled: true,
-    ToolbarMetadataToggleEnabled: true,
-    ToolbarBundleMode: 'inline',
-    ToolbarStyle: 'office'
-  });
-  assertSharedToolbarMarkup(officeInjected, 'office');
-
-  const classicAliasInjected = mod.injectOutputToolbar(baseHtml, {
-    ToolbarEnabled: true,
-    ToolbarEditToggleEnabled: true,
-    ToolbarMetadataToggleEnabled: true,
-    ToolbarBundleMode: 'inline',
-    ToolbarStyle: 'classic'
-  });
-  assertSharedToolbarMarkup(classicAliasInjected, 'office');
-
-  for (const preset of ['ribbon']) {
-    const injectedPreset = mod.injectOutputToolbar(baseHtml, {
-      ToolbarEnabled: true,
-      ToolbarEditToggleEnabled: true,
-      ToolbarMetadataToggleEnabled: true,
-      ToolbarBundleMode: 'inline',
-      ToolbarStyle: preset
-    });
-    assertSharedToolbarMarkup(injectedPreset, preset);
-  }
-
-  const fallbackPreset = mod.injectOutputToolbar(baseHtml, {
-    ToolbarEnabled: true,
-    ToolbarEditToggleEnabled: true,
-    ToolbarMetadataToggleEnabled: true,
-    ToolbarBundleMode: 'inline',
-    ToolbarStyle: 'retro-office'
-  });
-  if (!/id="onenote-cleaner-toolbar"[^>]*data-onc-toolbar-preset="compact"/i.test(fallbackPreset)) {
-    fail('Expected invalid toolbar preset values to fallback to compact');
-  }
-  assertSharedToolbarMarkup(fallbackPreset, 'compact');
 
   const disabled = mod.injectOutputToolbar(baseHtml, {
     ToolbarEnabled: false,
@@ -269,7 +222,6 @@ async function main() {
     ToolbarEditToggleEnabled: true,
     ToolbarMetadataToggleEnabled: true,
     ToolbarBundleMode: 'inline',
-    ToolbarStyle: 'compact',
     ExportStylesMode: 'deferred',
     SourceName: 'Sample.mht',
     SourceKind: 'mht'

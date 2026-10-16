@@ -103,11 +103,8 @@ async function main() {
   assert(normalizedExport.ExportFormat === 'html', 'Expected normalizeExportConfig ExportFormat to fall back to html for unsupported formats');
   assert(normalizedExport.MarkdownFlavor === 'commonmark', 'Expected normalizeExportConfig MarkdownFlavor to normalize to commonmark');
 
-  const toolbarStyleAliases = mod.normalizePipelineConfig({ ToolbarStyle: 'classic' });
-  assert(toolbarStyleAliases.ToolbarStyle === 'office', 'Expected legacy classic toolbar style to normalize to office');
-
-  const toolbarStyleVariants = mod.normalizePipelineConfig({ ToolbarStyle: 'OFFICE-97' });
-  assert(toolbarStyleVariants.ToolbarStyle === 'office', 'Expected ToolbarStyle to normalize office aliases to office');
+  const toolbarConfig = mod.normalizePipelineConfig({ ToolbarStyle: 'office-97' });
+  assert(!Object.hasOwn(toolbarConfig, 'ToolbarStyle'), 'Expected ToolbarStyle to be absent from normalized configuration');
 
   const outputDecorationConfig = mod.buildOutputDecorationConfig({
     ToolbarEnabled: 'true',

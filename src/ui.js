@@ -56,8 +56,6 @@ import { buildWorkbenchTree, deriveSelectionStates, getLeafIdsForNode, getVisibl
  *   convertButton: HTMLButtonElement | null,
  *   convertButtonWrapper: HTMLElement | null,
  *   toolbarEnabled: HTMLInputElement | null,
- *   toolbarStyleContainer: HTMLElement | null,
- *   toolbarStyle: HTMLSelectElement | null,
  *   autoConvertEnabled: HTMLInputElement | null,
  *   externalizeCssEnabled: HTMLInputElement | null,
  *   externalizeCssMode: HTMLSelectElement | null,
@@ -66,7 +64,6 @@ import { buildWorkbenchTree, deriveSelectionStates, getLeafIdsForNode, getVisibl
  *   markdownFlavor: HTMLSelectElement | null,
  *   markdownFlavorContainer: HTMLElement | null,
  *   exportFormatHelp: HTMLElement | null,
- *   toolbarStyleHelp: HTMLElement | null,
  *   convertedPageThemeToggleEnabled: HTMLInputElement | null,
  *   convertedPageThemeHelp: HTMLElement | null,
  *   autoConvertNotice: HTMLElement | null,
@@ -136,8 +133,6 @@ const dom = {
   convertButton: null,
   convertButtonWrapper: null,
   toolbarEnabled: null,
-  toolbarStyleContainer: null,
-  toolbarStyle: null,
   autoConvertEnabled: null,
   externalizeCssEnabled: null,
   externalizeCssMode: null,
@@ -146,7 +141,6 @@ const dom = {
   markdownFlavor: null,
   markdownFlavorContainer: null,
   exportFormatHelp: null,
-  toolbarStyleHelp: null,
   convertedPageThemeToggleEnabled: null,
   convertedPageThemeHelp: null,
   autoConvertNotice: null,
@@ -877,39 +871,6 @@ function updateExternalCssControls() {
   dom.externalizeCssMode.disabled = !enabled;
 }
 
-/**
- * @param {AdvancedOptionsState} [advancedOptionsState=buildAdvancedOptionsState(dom)]
- * @returns {void}
- */
-function updateToolbarStyleControls(advancedOptionsState = buildAdvancedOptionsState(dom)) {
-  if (!dom.toolbarStyle) return;
-  const htmlSelected = advancedOptionsState.htmlSelected;
-  const toolbarChecked = advancedOptionsState.toolbarEnabledChecked;
-  const styleVisible = htmlSelected && toolbarChecked;
-
-  if (dom.toolbarEnabled) {
-    dom.toolbarEnabled.disabled = !htmlSelected;
-  }
-
-  if (dom.toolbarStyleContainer) {
-    dom.toolbarStyleContainer.classList.toggle('hidden', !styleVisible);
-  }
-
-  if (dom.toolbarStyle) {
-    dom.toolbarStyle.disabled = !styleVisible;
-  }
-
-  if (dom.toolbarStyleHelp) {
-    if (!htmlSelected) {
-      dom.toolbarStyleHelp.textContent = 'Toolbar presets are available only for HTML export.';
-    } else if (!toolbarChecked) {
-      dom.toolbarStyleHelp.textContent = 'Enable toolbar injection to choose a toolbar chrome preset before conversion. Inline toolbar assets increase each HTML file\'s size.';
-    } else {
-      dom.toolbarStyleHelp.textContent = 'Compact keeps controls small for narrow screens. Office uses an Office 97-inspired chrome, and Ribbon uses a larger modern Office-style chrome. Inline toolbar assets increase each HTML file\'s size.';
-    }
-  }
-}
-
 /** @returns {void} */
 function updateExportFormatControls() {
   const advancedOptionsState = buildAdvancedOptionsState(dom);
@@ -935,7 +896,7 @@ function updateExportFormatControls() {
   }
 
   updateConvertedPageThemeControls(advancedOptionsState);
-  updateToolbarStyleControls(advancedOptionsState);
+  if (dom.toolbarEnabled) dom.toolbarEnabled.disabled = !advancedOptionsState.htmlSelected;
 }
 
 /**
@@ -1736,7 +1697,6 @@ function onClearFilesClick() {
 
 /** @returns {void} */
 function onAdvancedOptionsChange() {
-  updateToolbarStyleControls();
   updateExternalCssControls();
   updateExportFormatControls();
   rebuildSuccessfulOutputs();
@@ -1773,7 +1733,6 @@ function bindEvents() {
   dom.downloadSelected?.addEventListener('click', onDownloadSelectedClick);
   dom.convertButton?.addEventListener('click', onConvertClick);
   dom.toolbarEnabled?.addEventListener('change', onAdvancedOptionsChange);
-  dom.toolbarStyle?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssEnabled?.addEventListener('change', onAdvancedOptionsChange);
   dom.externalizeCssMode?.addEventListener('change', onAdvancedOptionsChange);
   dom.experimentalExportEnabled?.addEventListener('change', onAdvancedOptionsChange);
@@ -1871,8 +1830,6 @@ export async function initUI(workerManager, options = {}) {
   dom.convertButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('convertButton'));
   dom.convertButtonWrapper = /** @type {HTMLElement | null} */ (document.querySelector('.convert-button-wrapper'));
   dom.toolbarEnabled = /** @type {HTMLInputElement | null} */ (document.getElementById('toolbarEnabled'));
-  dom.toolbarStyleContainer = /** @type {HTMLElement | null} */ (document.getElementById('toolbarStyleContainer'));
-  dom.toolbarStyle = /** @type {HTMLSelectElement | null} */ (document.getElementById('toolbarStyle'));
   dom.autoConvertEnabled = /** @type {HTMLInputElement | null} */ (document.getElementById('autoConvertEnabled'));
   dom.externalizeCssEnabled = /** @type {HTMLInputElement | null} */ (document.getElementById('externalizeCssEnabled'));
   dom.externalizeCssMode = /** @type {HTMLSelectElement | null} */ (document.getElementById('externalizeCssMode'));
@@ -1881,7 +1838,6 @@ export async function initUI(workerManager, options = {}) {
   dom.markdownFlavor = /** @type {HTMLSelectElement | null} */ (document.getElementById('markdownFlavor'));
   dom.markdownFlavorContainer = /** @type {HTMLElement | null} */ (document.getElementById('markdownFlavorContainer'));
   dom.exportFormatHelp = /** @type {HTMLElement | null} */ (document.getElementById('exportFormatHelp'));
-  dom.toolbarStyleHelp = /** @type {HTMLElement | null} */ (document.getElementById('toolbarStyleHelp'));
   dom.convertedPageThemeToggleEnabled = /** @type {HTMLInputElement | null} */ (document.getElementById('convertedPageThemeToggleEnabled'));
   dom.convertedPageThemeHelp = /** @type {HTMLElement | null} */ (document.getElementById('convertedPageThemeHelp'));
   dom.autoConvertNotice = /** @type {HTMLElement | null} */ (document.getElementById('autoConvertNotice'));
@@ -1927,7 +1883,6 @@ export async function initUI(workerManager, options = {}) {
     successfulOutputs: runtime.successfulOutputs,
     downloadZipButton: dom.downloadZip,
     toolbarEnabled: dom.toolbarEnabled,
-    toolbarStyle: dom.toolbarStyle,
     externalizeCssEnabled: dom.externalizeCssEnabled,
     externalizeCssMode: dom.externalizeCssMode,
     experimentalExportEnabled: dom.experimentalExportEnabled,
@@ -1944,7 +1899,6 @@ export async function initUI(workerManager, options = {}) {
 
   runtime.dragCounter = 0;
   setDropzoneActive(false);
-  updateToolbarStyleControls();
   updateExternalCssControls();
   updateExportFormatControls();
 

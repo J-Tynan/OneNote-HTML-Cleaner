@@ -28,7 +28,6 @@ export interface WorkbenchUiState {
 export type PipelineProfile = 'onenote';
 export type ListRepairMode = 'smart' | 'mergeStyled' | 'renumber';
 export type ToolbarBundleMode = 'inline';
-export type ToolbarStyle = 'compact' | 'office' | 'ribbon';
 export type ExportStylesMode = 'tailwind' | 'deferred';
 export type OutputCleanupMode = 'off' | 'safe';
 export type UnitStrategy = 'preserve' | 'normalize-safe';
@@ -95,7 +94,6 @@ export interface PipelineConfigInput {
   ToolbarEditToggleEnabled?: BooleanConfigValue;
   ToolbarMetadataToggleEnabled?: BooleanConfigValue;
   ToolbarBundleMode?: ToolbarBundleMode | string;
-  ToolbarStyle?: ToolbarStyle | string;
   imageMap?: ImageMap;
   ParseWarnings?: PipelineLogEntry[];
   SourceName?: string;
@@ -117,7 +115,6 @@ export interface OutputDecorationConfig extends ExportConfig {
   ToolbarEditToggleEnabled: boolean;
   ToolbarMetadataToggleEnabled: boolean;
   ToolbarBundleMode: ToolbarBundleMode;
-  ToolbarStyle: ToolbarStyle;
   ConvertedPageThemeToggleEnabled: boolean;
 }
 

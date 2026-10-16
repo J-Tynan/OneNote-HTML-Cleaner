@@ -23,30 +23,22 @@ Toolbar config keys (passed in worker request `config`):
 - `ToolbarEditToggleEnabled: boolean` (default `false`)
 - `ToolbarMetadataToggleEnabled: boolean` (default `false`)
 - `ToolbarBundleMode: "inline"` (default `"inline"`; only supported value in this phase)
-- `ToolbarStyle: "compact" | "office-97" | "ribbon" | "macos" | "linux"` (default `"compact"`; invalid values fall back to `"compact"`)
-- Legacy compatibility: `"classic"` is accepted as an alias for `"office-97"`.
 
-## Toolbar preset contract (Slice A)
+## Toolbar presentation contract
 
-- Toolbar styling is preset-based, but toolbar markup and script behavior remain shared.
-- Slice A ships five HTML-only presets:
-  - `compact` — default fallback and smallest general-purpose toolbar skin.
-  - `office-97` — denser Office-97-inspired toolbar chrome.
-  - `ribbon` — brighter ribbon-like chrome with larger grouped controls.
-  - `macos` — rounded, lighter native-app-inspired chrome.
-  - `linux` — flatter dark desktop chrome.
-- Only the selected preset's CSS may be embedded in converted output.
-- Additional presets beyond the list above remain out of scope for this slice.
+- Converted output has one fixed adaptive toolbar presentation.
+- The main action row and high-frequency edit commands remain directly available at every viewport.
+- Secondary formatting commands are grouped in an accessible More formatting disclosure.
+- Toolbar controls use larger targets on coarse-pointer devices and must not introduce horizontal overflow.
 
 ## DOM contract
 
 - Inject exactly one toolbar root element at top of `<body>`:
   - `id="onenote-cleaner-toolbar"`
   - `data-onc-toolbar="v1"`
-  - `data-onc-toolbar-preset="compact|office-97|ribbon|macos|linux"`
 - Toolbar must reserve space and avoid overlapping converted content.
 - Toolbar markup and script must be namespaced under `onc-` prefixed classes/data attributes.
-- Inject exactly one inline toolbar style block carrying both the toolbar version marker and the selected preset marker.
+- Inject exactly one inline toolbar style block carrying the toolbar version marker.
 
 ## Idempotency rule
 
@@ -123,4 +115,4 @@ Initial fields:
 - Advanced accessibility auditing overlays.
 - Multi-theme/view switching UI.
 - Persistent cross-file toolbar preferences.
-- Additional toolbar skins beyond `compact`, `office-97`, `ribbon`, `macos`, and `linux`.
+- Toolbar skin selection or alternate toolbar presentations.

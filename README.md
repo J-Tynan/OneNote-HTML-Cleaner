@@ -226,7 +226,7 @@ Disable auto-convert if you want to queue files first and trigger conversion man
 
 ### Converted-Page Edit Toolbar
 
-For HTML exports, Advanced options can inject an Edit Mode toolbar into converted pages when you explicitly enable it. The current shipped presets are Compact, Office, and Ribbon.
+For HTML exports, Advanced options can inject one responsive Edit Mode toolbar into converted pages when you explicitly enable it. It keeps primary editing actions available across phone, tablet, and desktop widths, with secondary formatting actions under More formatting.
 
 ## Roadmap
 

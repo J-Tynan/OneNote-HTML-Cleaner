@@ -7,8 +7,8 @@ import { buildOutputDecorationConfig } from './pipeline/config.js';
  * @typedef {import('./contracts.js').PipelineConfigInput} PipelineConfigInput
  * @typedef {Pick<HTMLInputElement, 'checked'>} CheckableControl
  * @typedef {Pick<HTMLInputElement | HTMLSelectElement, 'value'>} ValueControl
- * @typedef {{ toolbarEnabled?: CheckableControl | null, toolbarStyle?: ValueControl | null, externalizeCssEnabled?: CheckableControl | null, externalizeCssMode?: ValueControl | null, experimentalExportEnabled?: CheckableControl | null, exportFormat?: ValueControl | null, markdownFlavor?: ValueControl | null, convertedPageThemeToggleEnabled?: CheckableControl | null }} AdvancedOptionsControls
- * @typedef {PipelineConfigInput & { ToolbarEnabled: boolean, ToolbarEditToggleEnabled: boolean, ToolbarMetadataToggleEnabled: boolean, ToolbarStyle: string, ExternalizeCssEnabled: boolean, ExternalizeCssMode: string, ExperimentalExportEnabled: boolean, ExportFormat: string, MarkdownFlavor: string, ConvertedPageThemeToggleEnabled: boolean }} AdvancedOptionsRawConfig
+ * @typedef {{ toolbarEnabled?: CheckableControl | null, externalizeCssEnabled?: CheckableControl | null, externalizeCssMode?: ValueControl | null, experimentalExportEnabled?: CheckableControl | null, exportFormat?: ValueControl | null, markdownFlavor?: ValueControl | null, convertedPageThemeToggleEnabled?: CheckableControl | null }} AdvancedOptionsControls
+ * @typedef {PipelineConfigInput & { ToolbarEnabled: boolean, ToolbarEditToggleEnabled: boolean, ToolbarMetadataToggleEnabled: boolean, ExternalizeCssEnabled: boolean, ExternalizeCssMode: string, ExperimentalExportEnabled: boolean, ExportFormat: string, MarkdownFlavor: string, ConvertedPageThemeToggleEnabled: boolean }} AdvancedOptionsRawConfig
  * @typedef {{ rawConfig: AdvancedOptionsRawConfig, outputDecorationConfig: OutputDecorationConfig, experimentalEnabled: boolean, selectedExportFormat: string, effectiveExportFormat: ExportFormat, toolbarEnabledChecked: boolean, markdownSelected: boolean, htmlSelected: boolean, convertedPageThemeToggleChecked: boolean }} AdvancedOptionsState
  */
 
@@ -47,7 +47,6 @@ export function readAdvancedOptions(dom = {}) {
     ToolbarEnabled: isChecked(dom.toolbarEnabled),
     ToolbarEditToggleEnabled: isChecked(dom.toolbarEnabled),
     ToolbarMetadataToggleEnabled: isChecked(dom.toolbarEnabled),
-    ToolbarStyle: getValue(dom.toolbarStyle, 'compact'),
     ExternalizeCssEnabled: isChecked(dom.externalizeCssEnabled),
     ExternalizeCssMode: getValue(dom.externalizeCssMode, 'shared'),
     ExperimentalExportEnabled: isChecked(dom.experimentalExportEnabled),
@@ -93,7 +92,6 @@ export function buildUiConversionConfig(dom = {}) {
     ToolbarEnabled: outputDecorationConfig.ToolbarEnabled,
     ToolbarEditToggleEnabled: outputDecorationConfig.ToolbarEditToggleEnabled,
     ToolbarMetadataToggleEnabled: outputDecorationConfig.ToolbarMetadataToggleEnabled,
-    ToolbarStyle: outputDecorationConfig.ToolbarStyle,
     ExternalizeCssEnabled: rawConfig.ExternalizeCssEnabled,
     ExternalizeCssMode: rawConfig.ExternalizeCssMode,
     ExperimentalExportEnabled: outputDecorationConfig.ExperimentalExportEnabled,

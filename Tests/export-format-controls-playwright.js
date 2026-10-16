@@ -19,13 +19,9 @@ import { startStaticServer } from './playwright-server-helper.js';
 
     const text = await page.evaluate(() => document.body.innerText || '');
     const checks = [
-      'PASS: Toolbar style dropdown exposes all supported presets in order',
       'PASS: Toolbar toggle starts unchecked for explicit opt-in HTML enhancement',
-      'PASS: Toolbar style hidden/disabled by default when toolbar is OFF',
       'PASS: Converted-page theme toggle starts unchecked for explicit opt-in HTML enhancement',
       'PASS: Default HTML conversion config keeps toolbar and converted-page theme toggle OFF',
-      'PASS: Toolbar style shown/enabled when toolbar injection is ON',
-      'PASS: Toolbar style presets round-trip through the UI config while HTML export is active',
       'PASS: Export format hidden/disabled by default',
       'PASS: Markdown flavor hidden/disabled by default',
       'PASS: Converted-page theme toggle stays available for HTML output while remaining opt-in',
@@ -33,17 +29,13 @@ import { startStaticServer } from './playwright-server-helper.js';
       'PASS: Markdown flavor shown/enabled when Markdown format selected',
       'PASS: Markdown flavor hidden/disabled for non-Markdown format',
       'PASS: Toolbar toggle disabled for non-HTML export format',
-      'PASS: Toolbar style hidden/disabled for non-HTML export format',
-      'PASS: Toolbar style HTML-only help text shown for non-HTML formats',
       'PASS: Converted-page theme toggle disabled for non-HTML export format',
       'PASS: Converted-page theme toggle HTML-only help text shown for non-HTML formats',
-      'PASS: Toolbar style selection is preserved while toolbar controls are gated for non-HTML export',
       'PASS: Toolbar toggle re-enabled when export falls back to HTML',
-      'PASS: Toolbar style selection is restored when export falls back to HTML',
       'PASS: Homepage help text reflects HTML and Markdown experimental choices',
       'PASS: Converted-page theme helper text remains stable when toggles are changed',
       'PASS: Export format falls back to HTML when experimental is OFF',
-      'PASS: Toolbar style is passed in conversion config when toolbar is enabled',
+      'PASS: Conversion config does not expose toolbar style selection',
       'PASS: Converted-page theme toggle is passed in conversion config for HTML output'
     ];
 
