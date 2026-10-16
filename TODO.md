@@ -277,34 +277,34 @@ First-pass tasks:
    - [x] Prototype one additional size-reduction slice on a single representative fixture, then compare it against the known-good output before widening scope. (2026-07-13, prototyped an extra compaction slice, compared regenerated outputs, and reverted the candidate when real file size did not improve.)
    - [x] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract. (2026-08-28, decided ZIP/export-sidecar only; standalone cleaned HTML should remain dependency-free.)
 7. Completed 2026-08-28: confirmed the shipped HTML path keeps both toolbar injection and the converted-page theme toggle explicitly opt-in, tightened release-facing/docs contract wording, and added focused default-off regression coverage for the UI and injector paths.
-## Version 1.0 — Native `.one` Release
+## Version 1.0 — Native `.one` And `.onepkg` Release
 
 Use this track for the first stable native OneNote-file release, with scope defined by a narrow support contract rather than by every deferred feature that could attach itself to native import.
 
 Release goal:
 
-- Ship `.one` processing as a credible product capability, not just a parser milestone.
+- Ship `.one` and `.onepkg` processing as credible product capabilities, not just parser milestones.
 
 Success criteria:
 
-- Supported `.one` scenarios are explicitly documented and backed by representative fixtures.
+- Supported `.one` and `.onepkg` scenarios are explicitly documented and backed by representative fixtures.
 - Failure modes are understandable in the UI and do not leave users guessing whether a file, feature, or workflow is unsupported.
 - Native import behavior is stable enough that release notes can describe known limitations clearly without apologizing for the core workflow.
 
 First-pass tasks:
 
-1. [x] Define the `v1.0` native support contract as a written release document listing supported `.one` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness. (2026-09-01, locked in `docs/Native-OneNote-v1.0-Support-Contract.md`; supporting facts captured in `docs/OneNote-Native-Format-Facts-For-GPT-5.5.md`.)
-2. Build representative `.one` fixtures and acceptance checks around the scoped workflows before widening implementation breadth, using `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` as the contract-to-test baseline.
-3. Implement the minimal release-quality native pipeline so representative `.one` fixtures convert reliably and clear failure modes are surfaced to the UI.
-4. Ship acceptance UX for native import with clear warnings when `.one` features are unsupported and actionable next steps for the user.
+1. [ ] Update the `v1.0` native support contract to list supported `.one` and `.onepkg` scenarios, explicit exclusions, representative fixtures, and the quality bar for release readiness. Use `Tests/Test section.one` and `Tests/Test notebook.onepkg` as the initial acceptance fixtures. (The `.one`-only contract was locked on 2026-09-01 in `docs/Native-OneNote-v1.0-Support-Contract.md`; supporting facts are in `docs/OneNote-Native-Format-Facts-For-GPT-5.5.md`.)
+2. Build representative `.one` and `.onepkg` fixtures and acceptance checks around the scoped workflows before widening implementation breadth, using `Tests/Test section.one`, `Tests/Test notebook.onepkg`, and `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` as the baseline.
+3. Implement the minimal release-quality native pipeline so representative `.one` and `.onepkg` fixtures convert reliably and clear failure modes are surfaced to the UI.
+4. Ship acceptance UX for native import with clear warnings when `.one` or `.onepkg` features are unsupported and actionable next steps for the user.
 5. Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
 6. Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
 7. Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance for release docs and UI copy.
 8. [x] In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle. (2026-10-03, completed in PR #12.)
 9. Create documentation and in-app instructions for how to activate the toolbar and theme toggle later by adding `onc-styles.css` after conversion.
 10. Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
-11. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
-12. Reassess adjacent work such as `.onepkg`, `.docx`, tag tooling, and richer toolbar variants only after the core `.one` contract is stable.
+11. Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` or `.onepkg` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
+12. Reassess adjacent work such as `.docx`, tag tooling, and richer toolbar variants only after the core `.one` and `.onepkg` contract is stable.
 13. Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
 14. Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
 15. Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
@@ -313,7 +313,7 @@ First-pass tasks:
 
 ## Version 1.1 — Native Support Hardening And Launch Assets
 
-Use this track for the first post-`v1.0` hardening release: absorb real-world feedback from native `.one` usage, improve compatibility, and package the product more clearly for wider adoption.
+Use this track for the first post-`v1.0` hardening release: absorb real-world feedback from native `.one` and `.onepkg` usage, improve compatibility, and package the product more clearly for wider adoption.
 
 Release goal:
 
@@ -321,13 +321,13 @@ Release goal:
 
 Success criteria:
 
-- Early `.one` bugs and compatibility gaps are reduced based on real post-release evidence.
+- Early `.one` and `.onepkg` bugs and compatibility gaps are reduced based on real post-release evidence.
 - Release assets are strong enough to explain the product quickly to new users without improvising from scratch.
 - Marketing and release-prep work becomes a maintained asset library rather than a one-off scramble.
 
 First-pass tasks:
 
-1. Prioritize and fix the first wave of `.one` regressions, unsupported-content surprises, and fidelity gaps found after `v1.0` ships.
+1. Prioritize and fix the first wave of `.one` and `.onepkg` regressions, unsupported-content surprises, and fidelity gaps found after `v1.0` ships.
 2. Expand compatibility fixtures and troubleshooting documentation using real sample diversity rather than only synthetic happy paths.
 3. Produce a maintained screenshot set for homepage, import flow, converted output, native `.one` scenarios, and key options.
 4. Draft short feature descriptions, release blurbs, and a lightweight social-media/thread outline that can be reused across release notes, README updates, and launch posts.
