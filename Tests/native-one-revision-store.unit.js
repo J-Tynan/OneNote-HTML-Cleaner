@@ -4,15 +4,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BinaryReader } from '../src/importers/one/binary-reader.js';
 import {
+  EXPECTED_FILE_LENGTH_OFFSET,
   FILE_CHUNK_REFERENCE64X32_BYTE_LENGTH,
+  FILE_HEADER_BYTE_LENGTH,
+  FILE_NODE_LIST_ROOT_REFERENCE_OFFSET,
+  parseRevisionStoreHeader,
   readFileChunkReference64x32
 } from '../src/importers/one/revision-store.js';
 import { ONE_SIGNATURE, preflightOneSection } from '../src/importers/onePreflight.js';
 
 assert.equal(FILE_CHUNK_REFERENCE64X32_BYTE_LENGTH, 12);
 
-const FILE_HEADER_BYTE_LENGTH = 1024;
-const FILE_NODE_LIST_ROOT_REFERENCE_OFFSET = 0xAC;
 const HASHED_CHUNK_LIST_REFERENCE_OFFSET = 0x94;
 const TRANSACTION_LOG_REFERENCE_OFFSET = 0xA0;
 const FREE_CHUNK_LIST_REFERENCE_OFFSET = 0xB8;
@@ -46,7 +48,7 @@ assert.deepEqual(Array.from(fixtureBytes.subarray(0x30, 0x40)), [
 ]);
 assert.equal(headerReader.readUint32LE(0x40), 0x2A);
 assert.equal(headerReader.readUint32LE(0x60), 39);
-assert.equal(headerReader.readUint64LE(0xC4), BigInt(fixtureBytes.byteLength));
+assert.equal(headerReader.readUint64LE(EXPECTED_FILE_LENGTH_OFFSET), BigInt(fixtureBytes.byteLength));
 
 const hashedChunkListReference = readFileChunkReference64x32(headerReader, HASHED_CHUNK_LIST_REFERENCE_OFFSET);
 assert.deepEqual(hashedChunkListReference, { stp: 22672n, cb: 1024 });
@@ -59,6 +61,12 @@ assert(transactionLogReference.stp + BigInt(transactionLogReference.cb) <= BigIn
 const rootFileNodeListReference = readFileChunkReference64x32(headerReader, FILE_NODE_LIST_ROOT_REFERENCE_OFFSET);
 assert.deepEqual(rootFileNodeListReference, { stp: 1024n, cb: 1024 });
 assert(rootFileNodeListReference.stp + BigInt(rootFileNodeListReference.cb) <= BigInt(fixtureBytes.byteLength));
+assert.deepEqual(parseRevisionStoreHeader(new BinaryReader(fixtureBytes)), {
+  expectedFileLength: BigInt(fixtureBytes.byteLength),
+  transactionCount: 39,
+  transactionLog: transactionLogReference,
+  rootFileNodeList: rootFileNodeListReference
+});
 
 const freeChunkListReference = readFileChunkReference64x32(headerReader, FREE_CHUNK_LIST_REFERENCE_OFFSET);
 assert.deepEqual(freeChunkListReference, { stp: 0xFFFFFFFFFFFFFFFFn, cb: 0 });

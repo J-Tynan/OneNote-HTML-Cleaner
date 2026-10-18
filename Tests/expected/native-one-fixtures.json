@@ -71,6 +71,103 @@
         "Tests/native-one-preflight.unit.js"
       ],
       "notes": "File-backed negative preflight fixture; it must fail before parser traversal or output generation."
+    },
+    {
+      "id": "one-basic-title-paragraph-001",
+      "fileName": "onenote-fixtures/Fixture-1.one",
+      "sourceKind": "one",
+      "supportBucket": "default-one",
+      "evidenceLevel": "direct",
+      "releaseEligible": false,
+      "expectedState": "success",
+      "shouldCreateHtml": true,
+      "shouldCreateZip": false,
+      "expectedMinPageCount": 1,
+      "expectedSectionCount": 1,
+      "expectedWarningCodes": [],
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-intake.unit.js",
+        "Tests/native-one-conversion.unit.js"
+      ],
+      "fingerprint": {
+        "byteLength": 14072,
+        "sha256": "48c6eface403b4a4fd9cc97f8ba441f2173d12ff43317b17fa4e08b52a50c20d"
+      },
+      "notes": "One titled page with two known paragraphs. Direct parser fixture intake is proven; page/content traversal remains pending."
+    },
+    {
+      "id": "one-multipage-basic-001",
+      "fileName": "onenote-fixtures/Fixture-2.one",
+      "sourceKind": "one",
+      "supportBucket": "default-one",
+      "evidenceLevel": "direct",
+      "releaseEligible": false,
+      "expectedState": "success",
+      "shouldCreateHtml": true,
+      "shouldCreateZip": true,
+      "expectedMinPageCount": 2,
+      "expectedSectionCount": 1,
+      "expectedWarningCodes": [],
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-intake.unit.js",
+        "Tests/native-one-conversion.unit.js"
+      ],
+      "fingerprint": {
+        "byteLength": 20544,
+        "sha256": "64b41f71417a3473a92710cf98dca92e39bcf6ea80e046d696634c80085f71b9"
+      },
+      "notes": "Two known normal pages. Direct parser fixture intake is proven; page order/title traversal remains pending."
+    },
+    {
+      "id": "one-basic-list-table-image-001",
+      "fileName": "onenote-fixtures/Fixture-3.one",
+      "sourceKind": "one",
+      "supportBucket": "default-one",
+      "evidenceLevel": "direct",
+      "releaseEligible": false,
+      "expectedState": "success",
+      "shouldCreateHtml": true,
+      "shouldCreateZip": false,
+      "expectedMinPageCount": 1,
+      "expectedSectionCount": 1,
+      "expectedWarningCodes": [],
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-intake.unit.js",
+        "Tests/native-one-conversion.unit.js",
+        "Tests/native-one-render.unit.js"
+      ],
+      "fingerprint": {
+        "byteLength": 28064,
+        "sha256": "6eece3ebf69c54ae53cbb8c2b63c37ddaa9b288264ec3ccc492e2d29cb9ea663"
+      },
+      "notes": "One known page with a numbered list, empty 4x4 table, and Xbox.gif. Reserved for later direct semantic parsing."
+    },
+    {
+      "id": "one-corrupt-truncated-001",
+      "fileName": "onenote-fixtures/Fixture-4.one",
+      "sourceKind": "one",
+      "supportBucket": "default-one",
+      "evidenceLevel": "direct",
+      "releaseEligible": false,
+      "expectedState": "hard-failure",
+      "shouldCreateHtml": false,
+      "shouldCreateZip": false,
+      "expectedMinPageCount": 0,
+      "expectedSectionCount": 0,
+      "expectedWarningCodes": [],
+      "expectedManualCheck": false,
+      "automationTargets": [
+        "Tests/native-one-fixture-intake.unit.js",
+        "Tests/native-one-preflight.unit.js"
+      ],
+      "fingerprint": {
+        "byteLength": 12829,
+        "sha256": "b354a9993639427169cd217b53465e749548c2b63c858339707323e1e88be7e8"
+      },
+      "notes": "Truncated copy of Fixture-1. Its signature and root reference remain readable, but Header.cbExpectedFileLength declares 14072 bytes."
     }
   ]
 }

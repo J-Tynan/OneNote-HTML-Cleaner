@@ -299,32 +299,38 @@ First-pass tasks:
 1. [ ] Define the direct-parser and browser-only package support boundary.
   - [ ] Update `docs/Native-OneNote-v1.0-Support-Contract.md` from `.onepkg` inventory-only to the approved browser-only conversion promotion model, with named supported compression modes and per-section outcomes.
   - [ ] Update `docs/Native-OneNote-v1.0-Parser-Evidence-Index.md` for every supported `.one` feature with the MS-ONE source section, verified byte traversal, positive/negative fixture, expected state, and warning code.
+  - [x] Correct the physical-header source boundary: record the MS-ONESTORE 2.3.1 `Header` layout, fixture-prove `fcrFileNodeListRoot` at `0x0AC`, and retain traversal as blocked pending fragment/transaction-log evidence. (2026-10-18)
   - [ ] Set explicit `.one` and `.onepkg` input, decompressed-byte, entry-count, resource-size, and ZIP-size limits from browser benchmarks.
   - [ ] Keep positioned/overlapping layout, RTL, conflict/history data, sidecars, attachments/media, vector ink/OCR, and unproven hierarchy/order out of the v1.0 claim.
 2. [ ] Build and lock the native fixture corpus before promoting parser features.
-  - [ ] Classify `Tests/Test Section.one` and `Tests/Test Notebook.onepkg` as transitional heuristic fixtures until direct traversal proves their contents.
+  - [x] Classify `Tests/Test section.one` and `Tests/Test notebook.onepkg` as transitional heuristic fixtures until direct traversal proves their contents. (2026-10-16)
+  - [x] Add the manifest-backed `one-invalid-signature-001` negative fixture and record the transitional fixtures in the evidence index and traceability matrix. (2026-10-16)
   - [ ] Add valid and negative `.one` fixtures for one normal page, multipage sections, single-level lists, basic tables, and page-owned raster images.
   - [ ] Add valid and negative `.onepkg` fixtures for inventory, each supported compression mode, corrupt headers/tables, invalid paths, size limits, partial section failure, and filename collisions.
   - [ ] Expand `Tests/expected/native-one-fixtures.json` and `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` with expected state, output count, warnings, and test owner for each fixture.
 3. [ ] Implement bounded direct `.one` section parsing; do not promote printable-string recovery or global binary signature scans as parser output.
-  - [ ] Add `src/importers/one/binary-reader.js` with bounds-checked integer, GUID, UTF-16, and slice readers plus traversal/allocation budgets.
-  - [ ] Add `src/importers/one/section-header.js` and extend `src/importers/onePreflight.js` with fixture-proven header/schema/range validation and stable hard-failure versus unsupported classifications.
-  - [ ] Add `src/importers/one/file-node-list.js` with visited-offset, recursion-depth, node-count, and byte limits.
+  - [x] Add `src/importers/one/binary-reader.js` with bounds-checked integer, GUID, UTF-16, and slice readers plus a read budget. (2026-10-16)
+  - [x] Add signature-only `src/importers/one/section-header.js` and bounded `src/importers/onePreflight.js` coverage for missing, oversized, invalid-signature, and invalid-source inputs. (2026-10-16)
+  - [x] Add the generic `FileChunkReference64x32` reader and fixture-backed MS-ONESTORE header field/range assertions, including a truncated-root-reference rejection. (2026-10-18)
+  - [x] Add bounded transaction-log intake and a single root `FileNodeListFragment` structural reader; derive the exact node count from the latest transaction, reject malformed structural records, and stop before continuation/payload traversal. (2026-10-18)
+  - [ ] Extend the header/preflight gate with directly evidenced schema and structural-range checks, plus traversal/allocation budgets.
+  - [ ] Extend `src/importers/one/file-node-list.js` with documented continuation traversal, visited-offset, recursion-depth, aggregate-node, and byte limits.
   - [ ] Add `src/importers/one/object-space.js` to resolve required normal-page structures and reject conflict/history or unimplemented required records.
   - [ ] Expand `Tests/native-one-preflight.unit.js` for malformed headers, ranges, schemas, limits, and no-output guarantees.
 4. [ ] Parse direct pages and render the minimal v1.0 `.one` content subset.
   - [ ] Add `src/importers/one/page-reader.js` for direct normal-page discovery, title fields, stable page IDs, and collision-safe paths.
   - [ ] Add `src/importers/one/outline-reader.js` for directly associated paragraph text; reject unknown required outline/property variants rather than guessing ownership.
   - [ ] Add `src/importers/one/render.js` to create semantic HTML through existing output/sanitization conventions.
+  - [x] Add typed native-renderer infrastructure with escaping, semantic block validation, safe resource paths, and `runPipeline()` integration; it is not yet connected to direct native parsing. (2026-10-16)
   - [ ] Promote paragraphs, explicit single-level lists, rectangular tables, and page-associated raster images one fixture-backed feature at a time.
   - [ ] Replace the release path in `src/importers/one.js` while preserving `importOneSection()` as the worker-facing entry point; isolate or remove heuristic fallback from any successful result.
   - [ ] Extend `src/contracts.ts` with stable page/section IDs, per-unit result state, and warning references while retaining the native hierarchy consumed by the workbench tree.
   - [ ] Add direct-parser tests for exact output, warnings, no silent loss, malformed input, and deterministic repeated conversion.
 5. [ ] Add strict browser-only `.onepkg` preflight and deterministic CAB inventory.
-  - [ ] Add `src/importers/onepkg-preflight.js` for `MSCF`, table bounds, single-volume policy, compression policy, entry names, and configured limits.
+  - [x] Add `src/importers/onepkg-preflight.js` for `MSCF`, table bounds, single-volume policy, compression policy, entry names, configured limits, deterministic safe inventory, and no conversion output. (2026-10-17)
   - [ ] Harden `src/importers/onepkg.js` to reject malformed tables instead of silently stopping, and reject absolute/traversal/control-character/colliding entry paths.
-  - [ ] Add `Tests/native-onepkg-preflight.unit.js` for invalid signatures, truncated headers, out-of-range tables, invalid names, duplicate paths, and limits.
-  - [ ] Assert rejected packages never reach decompression or produce page output.
+  - [x] Add `Tests/native-onepkg-preflight.unit.js` for invalid signatures, truncated headers, out-of-range tables, invalid names, duplicate paths, folder references, compression policy, and limits. (2026-10-17)
+  - [x] Assert rejected packages produce no inventory, pages, ZIP, or decompression route. (2026-10-17)
 6. [ ] Implement bounded browser-only `.onepkg` extraction by compression mode.
   - [ ] Add `src/importers/onepkg-extract.js` with explicit compression mode, cumulative decompressed-byte budget, cancellation, and structured extraction results.
   - [ ] Promote uncompressed CAB extraction only after CFDATA block, aggregate-size, and entry-range validation passes byte-exact fixtures.

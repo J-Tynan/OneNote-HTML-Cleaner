@@ -15,6 +15,21 @@ const sourceKinds = new Set(['one', 'onepkg']);
 const evidenceLevels = new Set(['direct', 'heuristic']);
 const resultStates = new Set(['success', 'partial', 'hard-failure', 'unsupported']);
 
+/** @param {string} directoryPath @param {string} [relativePath=''] */
+function discoverNativeFixtureFiles(directoryPath, relativePath = '') {
+  const fileNames = [];
+  for (const entry of fs.readdirSync(directoryPath, { withFileTypes: true })) {
+    const entryRelativePath = path.posix.join(relativePath, entry.name);
+    const entryPath = path.join(directoryPath, entry.name);
+    if (entry.isDirectory()) {
+      fileNames.push(...discoverNativeFixtureFiles(entryPath, entryRelativePath));
+    } else if (detectSourceKind(entry.name) === 'one' || detectSourceKind(entry.name) === 'onepkg') {
+      fileNames.push(entryRelativePath);
+    }
+  }
+  return fileNames;
+}
+
 assert.equal(manifest.name, 'native-one-fixtures', 'expected native fixture manifest name');
 assert.equal(manifest.schemaVersion, 2, 'expected native fixture manifest schema version');
 assert(Array.isArray(manifest.fixtures) && manifest.fixtures.length > 0, 'expected at least one native fixture');
@@ -62,8 +77,7 @@ for (const fixture of manifest.fixtures) {
   }
 }
 
-const fixtureFiles = fs.readdirSync(path.resolve(process.cwd(), 'Tests'))
-  .filter((fileName) => detectSourceKind(fileName) === 'one' || detectSourceKind(fileName) === 'onepkg');
+const fixtureFiles = discoverNativeFixtureFiles(path.resolve(process.cwd(), 'Tests'));
 assert.deepEqual([...manifestFileNames].sort(), fixtureFiles.sort(), 'every native binary fixture must have one manifest record');
 
 console.log('native-one-fixture-manifest.unit: PASS');

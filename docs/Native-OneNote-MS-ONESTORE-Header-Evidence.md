@@ -74,4 +74,7 @@ The table ends at `0x400`, matching the 1024-byte header size. `fcrFileNodeListR
 
 ## Scope Boundary
 
-This proves the header field location and fixture value only. It does not implement `parseRevisionStoreHeader()`, decode transaction-log activity, parse a `FileNodeListFragment`, or establish page discovery. The next parser gate requires a bounded fragment reader and transaction-log-aware traversal evidence.
+This proves the header field location and fixture value only. The bounded
+transaction-log and root-fragment reader is separately documented in
+[MS-ONESTORE Transaction Log And File-Node Fragment Evidence](Native-OneNote-MS-ONESTORE-FileNodeList-Evidence.md).
+It does not establish continuation traversal or page discovery.
