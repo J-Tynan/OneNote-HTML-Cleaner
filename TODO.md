@@ -6,19 +6,30 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ---
 
+## Project status:
+
+Native .one/.onepkg support was investigated and remains research-only. 
+Current production scope is browser-first .mht / .mhtml conversion.
+
+---
+
 ## Release Roadmap
 
-- `v0.1` Stable release: shipped the browser-first `.mht` / `.mhtml` conversion path with polished UI, release screenshots, release notes, and a recorded acceptance pass. Tagged as `v0.1.0` on 2026-05-15.
-- `v0.2` Stabilization and polish release: focus on real-world bug fixes, release hardening, UI consistency, deferred test-harness cleanup, and early launch/messaging assets that sharpen the current product story.
-- `v1.0` Native `.one` release: add clearly scoped, documented `.one` processing with representative fixture coverage, understandable failure modes, and release-quality UX.
-- `v1.1` Native-support hardening and launch-assets release: fix early `.one` issues, expand compatibility coverage, and finish richer screenshots, short feature descriptions, and shareable launch material.
+- `v0.1.0` Stable browser-first release: shipped `.mht` / `.mhtml` conversion with release screenshots, notes, and recorded acceptance on 2026-05-15.
+- `v0.2` Browser-first stabilization: the planned bug-fix, test-harness, UI, documentation, and launch-asset work is substantially complete. Remaining optional P3 work does not block shipping.
+- `v1.0.0` Production release of the supported browser-first workflow: `.mht` / `.mhtml` input with HTML, Markdown, ZIP, optional externalized CSS, accessibility coverage, and clear unsupported-format messaging. Native `.one` / `.onepkg` support is explicitly out of scope.
+- `v1.0.x` Post-release maintenance: address verified regressions, security issues, browser compatibility, and support/documentation gaps without expanding the input-format promise by default.
+- Future native-format investigation: `.one` / `.onepkg` research remains preserved but unscheduled. Revisit only when time, budget, fixtures, and a narrow support contract are available; assign a version only after that decision.
 
-With `v0.1.0` tagged, new work should center on `v0.2` stabilization while defining a strict support contract for `v1.0` native `.one` processing before broader feature expansion.
+The next release path is to complete the browser-first `v1.0.0` acceptance gate below. Native parsing is not a production-release blocker.
 
 ---
 
 ## Recent Success
 
+- [x] Complete the production JavaScript runtime TypeScript migration. (2026-09-01)
+- [x] Add explicit file-size messaging for optional toolbar and theme-toggle output. (2026-10-03, PR #12.)
+- [x] Complete bounded native `.one` header, transaction-log, and root-fragment structural research with fixture-backed tests; no page or conversion support is claimed. (2026-10-18)
 - [x] README comparison copy: added a concise raw OneNote/MHTML vs cleaned modern HTML summary to the before/after section. (2026-07-14)
 - [x] Homepage polish pass: aligned the Start/Results cards, normalized Advanced options helper text, and improved Help popup readability and scanability. (2026-05-10)
 - [x] Preserve same-tab queue state across unexpected reload/discard and add focused regression coverage in `Tests/queue-reload-restore-playwright.js`. (2026-05-10)
@@ -62,10 +73,9 @@ With `v0.1.0` tagged, new work should center on `v0.2` stabilization while defin
 
 ---
 
-## Version 0.1 Stable Release Checklist (active)
+## Version 0.1 Stable Release Checklist (historical)
 
-Use this section as the real go/no-go list for `v0.1`.
-Items below should reach zero before tagging the first stable build.
+This checklist records the completed `v0.1.0` release and is retained as historical evidence. Use the `v1.0.0` browser-first release gate below for the next production release.
 
 - [x] [P1] Lock first stable release scope to `.mht` / `.mhtml` input only, and reject unsupported file types clearly in the UI. (2026-03-10)
 - [x] [P1] Run one clean release-candidate verification pass on `main`: `npm ci`, `npm run test:gate:native`, all Playwright smoke scripts, and the accessibility audits. (2026-03-26)
@@ -154,7 +164,7 @@ This audit pass is complete. Keep this section as historical context for what wa
 
 ### Post-triage next task
 
-- Current next release task is to build representative native fixtures and acceptance checks around the locked `v1.0` support contract, using `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` as the planning baseline.
+- Current next release task is to complete the browser-first `v1.0.0` acceptance gate. Native fixtures and the traceability matrix remain research assets, not release prerequisites.
 
 ### Version 0.1 Close-Out Order (historical)
 
@@ -170,20 +180,20 @@ This close-out sequence was completed for `v0.1.0` and remains here as release-p
 
 - Treat broad worker-diagnostics simplification as post-release unless it fixes a verified release-path bug.
 - Treat broad test-harness deduplication as post-release unless it blocks accurate RC verification.
-- Treat `.docx` implementation work as post-release; only quarantine or document its dormant runtime branches before stable.
+- Keep `.docx` implementation deferred unless it receives a separate scope and release decision; the browser-first `v1.0.0` release does not depend on it.
 - Treat further externalized-CSS review follow-up as post-release unless fidelity evidence says otherwise.
 
 ---
 
 ## Project Scope (release policy)
 
-These are scope guardrails for the first stable release, not day-to-day completion tasks.
+These are scope guardrails for the next production release, not day-to-day completion tasks.
 
-- [P1] Keep scope centered on browser‑first parsing + conversion of MHTML to clean modern HTML.
-- [P1] Prioritize extraction fidelity and HTML structure before UI polish or advanced features.
-- [P1] Defer `.one` and `.onepkg` structural parsing until after the first stable release.
+- [P1] Ship the supported browser-first `.mht` / `.mhtml` workflow and its documented HTML, Markdown, and ZIP export options.
+- [P1] Preserve extraction fidelity, deterministic output, accessibility, and clear failure behavior as release criteria.
+- [P1] Keep native `.one` and `.onepkg` unsupported in the production claim; preserve their research separately without blocking release.
 
-Note: MHTML → modern HTML pipeline is nearing completion (core transforms and formatting largely implemented).
+Note: The browser-first workflow is implemented and has substantial regression, accessibility, UI, and documentation coverage. The remaining release work is verification and release readiness, not native parsing.
 
 ---
 
@@ -245,7 +255,7 @@ All items in this section must be satisfied before tagging the first stable rele
 
 ## Version 0.2 — Bug Fixes And Polish (post-`v0.1`)
 
-Use this track to make the shipped browser-first MHTML workflow calmer, more reliable, and easier to present before native-file support expands the scope.
+This track records the browser-first stabilization and polish work after `v0.1`. The planned work is substantially complete; remaining optional improvements do not gate the `v1.0.0` production release, and native-file support is not assumed to follow.
 
 Release goal:
 
@@ -278,36 +288,49 @@ First-pass tasks:
    - [x] Decide explicitly whether future size-reduction work should target ZIP/export-sidecar output only, or whether standalone cleaned HTML can safely adopt a shipped stylesheet contract. (2026-08-28, decided ZIP/export-sidecar only; standalone cleaned HTML should remain dependency-free.)
 7. Completed 2026-08-28: confirmed the shipped HTML path keeps both toolbar injection and the converted-page theme toggle explicitly opt-in, tightened release-facing/docs contract wording, and added focused default-off regression coverage for the UI and injector paths.
 
-## Version 1.0 — Native `.one` And `.onepkg` Release
-
-Use this track for the first stable native OneNote-file release, with scope defined by a narrow support contract rather than by every deferred feature that could attach itself to native import.
+## Version 1.0 — Browser-First Production Release
 
 Release goal:
 
-- Ship `.one` and `.onepkg` processing as credible product capabilities, not just parser milestones.
+- Ship the mature `.mht` / `.mhtml` workflow as a clearly scoped production release, with HTML, Markdown, ZIP, optional externalized CSS, and accessible failure handling.
 
 Success criteria:
 
-- Supported `.one` and `.onepkg` scenarios are explicitly documented and backed by representative fixtures.
-- Failure modes are understandable in the UI and do not leave users guessing whether a file, feature, or workflow is unsupported.
-- Native import behavior is stable enough that release notes can describe known limitations clearly without apologizing for the core workflow.
+- Supported inputs, exports, browser expectations, and known limitations are accurate in the UI and documentation.
+- The release gate passes for the existing MHTML pipeline, UI, exports, and accessibility behavior.
+- Native `.one` / `.onepkg` files remain clearly unsupported and are not represented as a release capability.
 
-First-pass tasks:
+First-pass release tasks:
+
+- [x] [P1] Confirm README, in-app messaging, architecture/contracts, and release notes consistently define `.mht` / `.mhtml` as the supported inputs and `.one` / `.onepkg` as unsupported. (2026-11-15)
+- [ ] [P1] Run the release verification pass: `npm ci`, `npm run typecheck`, `npm run test:gate:native`, relevant Playwright smoke tests, and accessibility audits; record results in the release checklist.
+- [ ] [P1] Perform clean-profile manual acceptance of MHTML import, HTML and Markdown output, ZIP contents, optional externalized CSS, unsupported-format messaging, and responsive/accessibility-critical UI states.
+- [x] [P1] Verify release notes and support documentation represent the current browser-first product and do not imply native parsing. (2026-11-15)
+- [ ] [P3] Capture or refresh release screenshots when ready; screenshot updates are optional and do not gate `v1.0.0`.
+- [ ] [P1] Tag `v1.0.0` only after CI, the release verification pass, and manual acceptance are complete.
+
+## Native OneNote Research (Deferred, Unscheduled)
+
+This section preserves native `.one` / `.onepkg` research, fixtures, parser contracts, traceability, and acceptance criteria. It is not part of the `v1.0.0` production release gate. Treat every unchecked item here as `[P3]`, including older checklist entries without an inline priority label. Do not assign a shipping version until resources, budget, fixture coverage, and a narrow support contract are approved.
+
+Revisit `docs/research/native-onenote/Native-OneNote-Research-Scope-Record.md`, `docs/research/native-onenote/Native-OneNote-Research-Evidence-Index.md`, and `docs/research/native-onenote/Native-OneNote-Research-Fixture-Traceability.md` only when native investigation is explicitly resumed. Keep their research value and historical claims intact; do not imply support in the meantime.
+
+### Native Parser And Package Investigation
 
 <!-- markdownlint-disable MD007 MD029 MD032 -->
 
 1. [ ] Define the direct-parser and browser-only package support boundary.
-  - [ ] Update `docs/Native-OneNote-v1.0-Support-Contract.md` from `.onepkg` inventory-only to the approved browser-only conversion promotion model, with named supported compression modes and per-section outcomes.
-  - [ ] Update `docs/Native-OneNote-v1.0-Parser-Evidence-Index.md` for every supported `.one` feature with the MS-ONE source section, verified byte traversal, positive/negative fixture, expected state, and warning code.
-  - [x] Correct the physical-header source boundary: record the MS-ONESTORE 2.3.1 `Header` layout, fixture-prove `fcrFileNodeListRoot` at `0x0AC`, and retain traversal as blocked pending fragment/transaction-log evidence. (2026-10-18)
+  - [ ] When investigation resumes, update `docs/research/native-onenote/Native-OneNote-Research-Scope-Record.md` only after an explicitly approved browser-only conversion scope, named compression modes, and per-section outcome policy exist.
+  - [ ] When investigation resumes, update `docs/research/native-onenote/Native-OneNote-Research-Evidence-Index.md` for each proposed `.one` feature with its MS-ONE source section, verified byte traversal, positive/negative fixture, expected state, and warning code.
+  - [x] Record the MS-ONESTORE 2.3.1 `Header` layout and fixture-prove `fcrFileNodeListRoot` at `0x0AC`; root-fragment structure and transaction-log node counts are now evidenced, while continuation traversal and page discovery remain blocked. (2026-10-18)
   - [ ] Set explicit `.one` and `.onepkg` input, decompressed-byte, entry-count, resource-size, and ZIP-size limits from browser benchmarks.
-  - [ ] Keep positioned/overlapping layout, RTL, conflict/history data, sidecars, attachments/media, vector ink/OCR, and unproven hierarchy/order out of the v1.0 claim.
+  - [ ] Keep positioned/overlapping layout, RTL, conflict/history data, sidecars, attachments/media, vector ink/OCR, and unproven hierarchy/order outside any future support claim until directly evidenced.
 2. [ ] Build and lock the native fixture corpus before promoting parser features.
   - [x] Classify `Tests/Test section.one` and `Tests/Test notebook.onepkg` as transitional heuristic fixtures until direct traversal proves their contents. (2026-10-16)
   - [x] Add the manifest-backed `one-invalid-signature-001` negative fixture and record the transitional fixtures in the evidence index and traceability matrix. (2026-10-16)
   - [ ] Add valid and negative `.one` fixtures for one normal page, multipage sections, single-level lists, basic tables, and page-owned raster images.
   - [ ] Add valid and negative `.onepkg` fixtures for inventory, each supported compression mode, corrupt headers/tables, invalid paths, size limits, partial section failure, and filename collisions.
-  - [ ] Expand `Tests/expected/native-one-fixtures.json` and `docs/Native-OneNote-v1.0-Fixture-Traceability-Matrix.md` with expected state, output count, warnings, and test owner for each fixture.
+  - [ ] Expand `Tests/expected/native-one-fixtures.json` and `docs/research/native-onenote/Native-OneNote-Research-Fixture-Traceability.md` with expected state, output count, warnings, and test owner for each fixture.
 3. [ ] Implement bounded direct `.one` section parsing; do not promote printable-string recovery or global binary signature scans as parser output.
   - [x] Add `src/importers/one/binary-reader.js` with bounds-checked integer, GUID, UTF-16, and slice readers plus a read budget. (2026-10-16)
   - [x] Add signature-only `src/importers/one/section-header.js` and bounded `src/importers/onePreflight.js` coverage for missing, oversized, invalid-signature, and invalid-source inputs. (2026-10-16)
@@ -350,43 +373,38 @@ First-pass tasks:
   - [ ] Add focused parser, package preflight/extraction, UI, and aggregate native-release commands to `package.json`.
   - [ ] Require `npm run typecheck`, the native release gate, and existing `npm run test:gate:native` MHTML coverage before native promotion.
   - [ ] Update README, release notes, architecture, contracts, UI copy, and the release checklist with proven parser features, named compression modes, limits, result states, and known limitations.
-9. [ ] Add an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
-10. [ ] Add a tiny activation hook plus a short code comment so a converted note can pick up `onc-styles.css` later when the user places that file beside their exported notes.
-11. [ ] Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance for release docs and UI copy.
-12. [x] In the Advanced options card, show explicit on-screen file-size increase messaging when the user chooses to include a toolbar and when the user chooses to include a theme toggle. (2026-10-03, completed in PR #12.)
-13. [ ] Create documentation and in-app instructions for how to activate the toolbar and theme toggle later by adding `onc-styles.css` after conversion.
-14. [ ] Finalize `v1.0` docs and release notes so supported scenarios, native limitations, and later-activation instructions for toolbar/theme features are explicit.
-15. [ ] Refresh `assets/release/release-converted-output.png` for the `v1.0` launch using a representative native `.one` or `.onepkg` fixture that clearly shows headings, lists, tables, and preserved note content at screenshot scale.
-16. [ ] Reassess adjacent work such as `.docx`, tag tooling, and richer toolbar variants only after the core `.one` and `.onepkg` contract is stable.
-17. [ ] Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, and related accessibility/performance patterns to identify low-risk opportunities to replace custom workarounds with modern native web-platform features while keeping browser support and fallback behavior explicit.
-18. [ ] Research embedded multimedia support in OneNote notes (for example audio recordings, video files, and any other OneNote-embedded media types OneNote supports), identify supported formats/behaviors, and collect representative sample fixtures for validation.
-19. [ ] Implement support for embedded multimedia files in notes so converted HTML preserves only supported media where possible and handles unsupported embedded content gracefully, using the research findings and sample fixtures above.
-20. [x] TypeScript migration is currently complete for the production JS runtime surface; revisit incremental `.ts` conversion only if later `v1.0` development benefits from it. (2026-09-01)
-21. [ ] Keep improving the optional externalized-CSS/export sidecar path first, where shared readable classes can reduce repetition without weakening standalone HTML output.
+9. [ ] [P3] Refresh `assets/release/release-converted-output.png` for a future native-support launch only after representative `.one` or `.onepkg` conversion is supported and fixture-verified; show headings, lists, tables, and preserved note content.
 
 <!-- markdownlint-enable MD007 MD029 MD032 -->
 
-## Version 1.1 — Native Support Hardening And Launch Assets
+### Native Support Hardening (Only If Investigation Resumes)
 
-Use this track for the first post-`v1.0` hardening release: absorb real-world feedback from native `.one` and `.onepkg` usage, improve compatibility, and package the product more clearly for wider adoption.
+These are future acceptance ideas, not a scheduled `v1.1` release. Reprioritize them only after a supported native workflow ships and real usage evidence exists.
 
-Release goal:
+- [ ] [P3] Prioritize native regressions, unsupported-content surprises, and fidelity gaps using real post-release evidence.
+- [ ] [P3] Expand native compatibility fixtures and troubleshooting documentation using diverse real samples, not only synthetic happy paths.
+- [ ] [P3] Maintain screenshots for the homepage, import flow, converted output, supported native scenarios, and key options after those scenarios pass their support and fixture gates.
+- [ ] [P3] Draft feature descriptions, release blurbs, and reusable social-media/thread copy for an approved native release.
+- [ ] [P3] Review additional packaging or launch materials if a native release is approved.
 
-- Make the native-file story dependable in practice and easier to communicate externally.
+## Optional Export Enhancements (Unscheduled)
 
-Success criteria:
+These ideas improve optional output features but are not required for the browser-first production release. Reprioritize based on user demand and measured benefit.
 
-- Early `.one` and `.onepkg` bugs and compatibility gaps are reduced based on real post-release evidence.
-- Release assets are strong enough to explain the product quickly to new users without improvising from scratch.
-- Marketing and release-prep work becomes a maintained asset library rather than a one-off scramble.
+- [ ] [P3] Explore an external `onc-styles.css` architecture so converted notes can opt into toolbar and theme-toggle support without bundling those assets by default.
+- [ ] [P3] If the external stylesheet architecture is adopted, add a small activation hook so a converted note can use `onc-styles.css` placed beside exported notes.
+- [ ] [P3] Measure and document the file-size impact of toolbar and theme-toggle support, including per-file cost guidance.
+- [ ] [P3] Document how to activate toolbar and theme-toggle support after conversion if the external stylesheet option is implemented.
+- [ ] [P3] Continue improving the optional externalized-CSS/export sidecar path where shared readable classes reduce repetition without weakening standalone HTML output.
 
-First-pass tasks:
+## Future Product Explorations (Unscheduled)
 
-1. Prioritize and fix the first wave of `.one` and `.onepkg` regressions, unsupported-content surprises, and fidelity gaps found after `v1.0` ships.
-2. Expand compatibility fixtures and troubleshooting documentation using real sample diversity rather than only synthetic happy paths.
-3. Produce a maintained screenshot set for homepage, import flow, converted output, native `.one` scenarios, and key options.
-4. Draft short feature descriptions, release blurbs, and a lightweight social-media/thread outline that can be reused across release notes, README updates, and launch posts.
-5. Review whether additional downstream packaging work is needed for broader promotion, such as clearer comparison tables, known-limitation summaries, or demo-ready sample files.
+These ideas are separate from the release gate and should be selected only when they address a clear user need.
+
+- [ ] [P3] Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, accessibility, and performance patterns; adopt only low-risk changes with explicit browser support and fallback behavior.
+- [ ] [P3] Research embedded multimedia support in OneNote exports, identify supported formats and behaviors, and collect representative fixtures before proposing implementation.
+- [ ] [P3] Implement preservation for supported embedded multimedia in converted HTML only after research, sample fixtures, and a bounded support contract exist; handle unsupported media explicitly.
+- [ ] [P3] Reassess `.docx` export, OneNote tag tooling, and richer toolbar variants independently of native `.one` / `.onepkg` support.
 
 ---
 
@@ -513,7 +531,7 @@ First-pass tasks:
 
 #### Current Release Focus
 
-- **Stabilize the shipped MHTML path for `v0.2` while defining the narrow `v1.0` `.one` support contract and collecting reusable launch assets along the way.**
+- **Complete the browser-first `v1.0.0` production release gate. Keep `.one` / `.onepkg` work in the deferred research section, and select optional enhancements only when they address a clear user need.**
 
 Completed follow-up work from this milestone:
 

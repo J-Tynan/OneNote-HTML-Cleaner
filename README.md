@@ -1,6 +1,6 @@
 # OneNote HTML Cleaner
 
-Convert OneNote MHTML exports into cleaner, portable HTML and optional Markdown entirely in your browser.
+Convert OneNote MHTML exports into cleaner, portable HTML, optional Markdown, and ZIP exports entirely in your browser.
 
 OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path stays focused on exported MHTML input and a straightforward conversion flow that works well for first-time use as well as repeat batch work.
 
@@ -22,12 +22,13 @@ The section below is prepared for a side-by-side example using the same note in 
 
 This comparison is intended to show a real exported note with a clean, reasonable before-and-after example rather than a dramatized marketing comparison.
 
-## v0.2 Release Highlights
+## v1.0.0 Release Scope
 
+- Convert exported OneNote `.mht` and `.mhtml` files locally in the browser, with cleaned HTML, optional Markdown, and ZIP export for batches.
 - Hardened MHTML-to-HTML conversion against edge-case layout, list, table, whitespace, and inline-resource regressions while keeping deterministic browser-first output.
 - Optional advanced features stay opt-in: Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection.
 - Homepage, Help, queue recovery, and batch export flows are polished for steadier desktop and mobile use.
-- Native `.one` and `.onepkg` files remain clearly detected as unsupported instead of being partially processed.
+- Native `.one` and `.onepkg` support is deferred research, unscheduled, and outside the v1.0.0 release; these formats remain unsupported.
 
 ## Screenshots
 
@@ -84,7 +85,7 @@ This is the fastest path for someone using the app once.
 
 1. Open the app in your browser.
 2. Drag in your exported OneNote `.mht` or `.mhtml` files, or use the file picker.
-3. Leave Advanced options collapsed unless you specifically need Markdown export, manual conversion, or externalized CSS.
+3. Use Advanced options for Markdown export, manual conversion, or externalized CSS; otherwise, the default HTML settings are sufficient.
 4. Let the app convert automatically, or click `Convert` if you have disabled auto-convert.
 5. Download a single converted file or use `Download ZIP` for multi-file exports.
 
@@ -127,7 +128,7 @@ You can process one file or multiple files in the same session. Batch exports ar
 
 ### Simple Default Flow, Advanced Controls When Needed
 
-Advanced options stay collapsed by default so first-time users are not forced through configuration before converting a file. When needed, advanced settings can enable optional behaviors such as:
+Advanced options group optional settings so the default conversion path does not require configuration. They can enable:
 
 - manual convert mode
 - Markdown export
@@ -162,6 +163,7 @@ The conversion path preserves important note structures such as headings, lists,
 
 - HTML
 - Markdown through the advanced export controls
+- ZIP export for batch downloads
 
 ### Built-In User Controls
 
@@ -199,10 +201,10 @@ The app supports a small set of explicit keyboard shortcuts and a broader set of
 
 ## Release Scope
 
-The current shipped release remains intentionally narrow.
+The v1.0.0 production scope remains intentionally narrow.
 
 - Supported production conversion path: OneNote MHTML exports only
-- Native OneNote files such as `.one` and `.onepkg` are not supported in this release
+- Native OneNote files such as `.one` and `.onepkg` are unsupported and remain deferred, unscheduled research outside this release
 - `.docx` export is not part of this release
 - Other input formats are intentionally outside the current shipped conversion contract
 
@@ -214,7 +216,7 @@ These features are available for users who need more control, but they are not r
 
 ### Markdown Export
 
-Enable experimental export formats in Advanced options to export Markdown instead of HTML.
+Select Markdown in Advanced options to export Markdown instead of HTML. Markdown is a supported optional output; HTML remains the default.
 
 ### Externalized CSS
 
@@ -240,9 +242,9 @@ The roadmap is focused on expanding the product carefully without weakening the 
 
 ### Planned Product Expansion
 
-- broader export capabilities after the stable MHTML release is established
+- Future output formats, if considered, require a separate scope decision; v1.0.0 supports HTML, Markdown, and ZIP export.
 - future investigation of richer converted-page editing workflows beyond the current optional toolbar presets
-- future investigation of richer support for native OneNote formats such as `.one` and `.onepkg`
+- Native `.one` and `.onepkg` work remains deferred research, unscheduled, and outside v1.0.0.
 
 ### Planned Tag Features
 
@@ -342,5 +344,5 @@ npm run fixtures:rebaseline
 
 - The shipped release path is MHTML-first.
 - Tailwind CSS v4 is used for utilities and layout through the CSS-first `src/styles/tailwind-app.css` entry, while converted-page utilities use `src/styles/tailwind-export.css`; shared component styling lives in `styles.css`, the project does not use a third-party Tailwind UI library, preflight stays disabled, and Tailwind sources are registered explicitly to avoid scanning markdown docs.
-- Native OneNote importer work remains deferred beyond the first stable release.
+- Native `.one` and `.onepkg` work remains deferred research, unscheduled, and outside v1.0.0.
 - The repository still contains deeper technical notes for pipeline, export, and worker behavior in the `docs/` folder.

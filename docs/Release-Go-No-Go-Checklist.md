@@ -1,30 +1,30 @@
-# v0.2 Release Go / No-Go Checklist
+# v1.0.0 Release Go / No-Go Checklist
 
-Use this document as the release-facing sign-off sheet for `0.2.0`.
+Use this document as the release-facing sign-off sheet for `1.0.0`.
 
-The goal is to confirm that the shipped contract, current screenshot assets, and public-facing copy all describe the same `v0.2` stabilization release.
+The goal is to confirm that the production contract and public-facing copy describe the same browser-first `v1.0.0` release. Screenshot updates are optional and are not a release gate.
 
 ## Canonical Release Contract
 
-- Version: `0.2.0`
+- Version: `1.0.0`
 - Stable input scope: exported OneNote `.mht` and `.mhtml` only
-- Stable output scope: cleaned HTML by default, optional Markdown through advanced export controls
-- Optional HTML-only extras: converted-page theme toggle, toolbar injection, and externalized CSS when the workflow keeps related assets together
-- Unsupported native formats: `.one` and `.onepkg` are detected for messaging but are not converted in the shipped runtime
+- Supported output scope: cleaned HTML by default, optional Markdown through advanced export controls, and ZIP export for batches
+- Optional features: externalized CSS for ZIP workflows, converted-page theme toggle, toolbar injection, and UI theme support
+- Unsupported native formats: `.one` and `.onepkg` remain unsupported, deferred research and are not part of the `v1.0.0` release gate
 - Out of scope for this release: `.docx` export and native OneNote conversion
-- Accessibility baseline: exported HTML should include one page-level `h1` and a `<main>` landmark
+- Accessibility baseline: accessibility audits are required; exported HTML should include one page-level `h1` and a `<main>` landmark
 
 ## Release Sign-Off Checklist
 
-- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same current shipped scope.
+- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same browser-first `v1.0.0` scope.
 - [x] Public docs describe Markdown export, toolbar injection, converted-page theme toggles, and externalized CSS as optional advanced features rather than the default workflow.
-- [x] Public docs describe native `.one` and `.onepkg` files as unsupported in the shipped runtime.
+- [x] Public docs describe native `.one` and `.onepkg` files as unsupported deferred research outside the release gate.
 - [x] Public docs avoid broader browser-compatibility claims than the recorded verification supports.
 - [x] Service-worker update guidance is present: reload first, then unregister and reload only if stale assets persist.
 - [x] Screenshot asset filenames in `assets/release/` match the active release docs.
 - [x] Screenshot captions and alt text are aligned across the README, screenshot inventory, and this checklist.
-- [ ] Final `v0.2` RC verification results are recorded after the release-facing docs are locked.
-- [ ] Create the `v0.2.0` tag only after `main` is green.
+- [ ] Final `v1.0.0` RC verification results are recorded after the release-facing docs are locked.
+- [ ] Create the `v1.0.0` tag only after `main` is green and all release checks are complete.
 
 ## Browser And Runtime Verification Notes
 
@@ -35,6 +35,8 @@ The goal is to confirm that the shipped contract, current screenshot assets, and
 - Re-check that opt-in converted-page features remain off by default in the shipped HTML path.
 
 ## Screenshot Inventory
+
+Screenshot capture or refresh is optional release collateral and may be completed when ready; it is not required for `v1.0.0`.
 
 Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, scene descriptions, caption text, and alt-text wording.
 
@@ -70,17 +72,19 @@ Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, scene descri
 
 ## Final RC Verification Record
 
-Complete this section only after the release-facing docs are locked and the final `v0.2` validation pass has run.
+Complete this section only after the release-facing docs are locked and the final `v1.0.0` validation pass has run.
 
 - [ ] `npm ci`
-- [ ] `npm run test:gate:native`
-- [ ] Focused Playwright smoke coverage for the shipped flow and any changed release-facing UI
+- [ ] `npm run typecheck`
+- [ ] `npm run test:gate:native` (existing MHTML regression gate; this does not establish native support)
+- [ ] Focused Playwright smoke coverage for MHTML import, output options, ZIP export, unsupported-format messaging, and responsive UI
 - [ ] Accessibility audits
-- [ ] Manual acceptance recorded for the locked core `.mht` fixtures
+- [ ] Manual acceptance recorded for `.mht` / `.mhtml` import, HTML and Markdown output, ZIP contents, externalized CSS links, unsupported native messaging, and responsive/accessibility-critical UI states
+- [ ] Confirm CI is green on `main`
 
 Recorded on `TBD`.
 
 ## Release Decision
 
 - Go if every checklist item above is complete and `main` is green.
-- No-go if scope wording drifts, the screenshot assets become stale or misleading, or the final RC pass finds a release-path regression.
+- No-go if scope wording drifts or the final RC pass finds a release-path regression.

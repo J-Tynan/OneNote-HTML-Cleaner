@@ -1,8 +1,10 @@
-# Native OneNote v1.0 Fixture Traceability Matrix
+<!-- Deferred, unscheduled research traceability. The v1.0 claims and acceptance plan below are historical proposal material, not part of the v1.0.0 production release. See [TODO.md](../../../TODO.md) for current release scope. -->
 
-This document is Step 2 for the locked native-support contract in [docs/Native-OneNote-v1.0-Support-Contract.md](docs/Native-OneNote-v1.0-Support-Contract.md). Its job is to translate contract language into concrete fixtures, expected outcomes, and test targets.
+# Native OneNote Research Fixture Traceability
 
-This is not the implementation plan for native parsing. It is the evidence plan for proving or disproving the current `v1.0` support claim.
+This document records historical fixture traceability for the proposed native-support contract in [Native-OneNote-Research-Scope-Record.md](Native-OneNote-Research-Scope-Record.md). Its job is to preserve fixture mappings, expected outcomes, and test targets for any separately approved future research.
+
+This is not an active release acceptance plan. It preserves evidence and open questions for a historical `v1.0` native-support proposal.
 
 ## Purpose
 
@@ -15,30 +17,30 @@ This is not the implementation plan for native parsing. It is the evidence plan 
 
 Current native fixtures already present in the repo:
 
-- [Tests/Test section.one](Tests/Test%20section.one)
-- [Tests/Test notebook.onepkg](Tests/Test%20notebook.onepkg)
+- [Tests/Test section.one](../../../Tests/Test%20section.one)
+- [Tests/Test notebook.onepkg](../../../Tests/Test%20notebook.onepkg)
 
 Current native-oriented automated tests already present in the repo:
 
-- [Tests/semantic-native-parser.js](Tests/semantic-native-parser.js)
-- [Tests/metadata-onepkg-parser.js](Tests/metadata-onepkg-parser.js)
-- [Tests/warning-code-contract.js](Tests/warning-code-contract.js)
-- [Tests/native-one-fixture-manifest.unit.js](Tests/native-one-fixture-manifest.unit.js)
-- [Tests/native-one-conversion.unit.js](Tests/native-one-conversion.unit.js)
+- [Tests/semantic-native-parser.js](../../../Tests/semantic-native-parser.js)
+- [Tests/metadata-onepkg-parser.js](../../../Tests/metadata-onepkg-parser.js)
+- [Tests/warning-code-contract.js](../../../Tests/warning-code-contract.js)
+- [Tests/native-one-fixture-manifest.unit.js](../../../Tests/native-one-fixture-manifest.unit.js)
+- [Tests/native-one-conversion.unit.js](../../../Tests/native-one-conversion.unit.js)
 
 Current package scripts already relevant to native work:
 
-- [package.json](package.json): `test:semantic:native`
-- [package.json](package.json): `test:metadata:onepkg`
-- [package.json](package.json): `test:warnings:contract`
-- [package.json](package.json): `test:native-one-fixtures`
-- [package.json](package.json): `test:native-one-conversion`
+- [package.json](../../../package.json): `test:semantic:native`
+- [package.json](../../../package.json): `test:metadata:onepkg`
+- [package.json](../../../package.json): `test:warnings:contract`
+- [package.json](../../../package.json): `test:native-one-fixtures`
+- [package.json](../../../package.json): `test:native-one-conversion`
 
 Current gap:
 
 - The repo does not yet have the fixture breadth required by the locked contract.
 - Step 2 therefore needs both a traceability matrix and a fixture-acquisition backlog.
-- The two existing native binaries are explicitly transitional, heuristic fixtures. They are recorded in [Tests/expected/native-one-fixtures.json](Tests/expected/native-one-fixtures.json) with `releaseEligible: false` and cannot establish a v1.0 support claim.
+- The two existing native binaries are explicitly transitional, heuristic fixtures. They are recorded in [Tests/expected/native-one-fixtures.json](../../../Tests/expected/native-one-fixtures.json) with `releaseEligible: false` and cannot establish a v1.0 support claim.
 
 ## Conventions
 
@@ -109,19 +111,19 @@ Implement Step 2 in this order:
 
 | Fixture ID | Source file to collect/create | Contract slice | Expected state | Output expectation | Required assertions | Initial automation target | Current status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `one-basic-title-paragraph-001` | [Tests/onenote-fixtures/Fixture-1.one](../Tests/onenote-fixtures/Fixture-1.one) | Valid section, title, paragraphs | `success` | 1+ HTML pages, no ZIP required unless multi-page packaging chooses ZIP | Valid `.one` signature; preflight pass; page title present; paragraph text present; no unsupported-state message | [Tests/native-one-fixture-intake.unit.js](../Tests/native-one-fixture-intake.unit.js); expand [Tests/semantic-native-parser.js](../Tests/semantic-native-parser.js) or add `Tests/native-one-conversion.unit.js` | Present; fingerprinted direct-fixture intake only |
-| `one-multipage-basic-001` | [Tests/onenote-fixtures/Fixture-2.one](../Tests/onenote-fixtures/Fixture-2.one) | Valid section with multiple normal pages | `success` | Multiple HTML page outputs or deterministic grouped output, per contract | Page count stable; each page has title or deterministic fallback; no hidden dropped page | [Tests/native-one-fixture-intake.unit.js](../Tests/native-one-fixture-intake.unit.js); new `Tests/native-one-conversion.unit.js` | Present; fingerprinted direct-fixture intake only |
-| `one-basic-lists-001` | [Tests/onenote-fixtures/Fixture-3.one](../Tests/onenote-fixtures/Fixture-3.one) | Explicit single-level ordered/unordered lists | `success` | HTML output contains semantic `ul`/`ol` structure | Native list structure mapped without glyph fallback; warnings absent for supported list blocks | [Tests/native-one-fixture-intake.unit.js](../Tests/native-one-fixture-intake.unit.js); new `Tests/native-one-conversion.unit.js` | Present; reserved for semantic-parser evidence |
+| `one-basic-title-paragraph-001` | [Tests/onenote-fixtures/Fixture-1.one](../../../Tests/onenote-fixtures/Fixture-1.one) | Valid section, title, paragraphs | `success` | 1+ HTML pages, no ZIP required unless multi-page packaging chooses ZIP | Valid `.one` signature; preflight pass; page title present; paragraph text present; no unsupported-state message | [Tests/native-one-fixture-intake.unit.js](../../../Tests/native-one-fixture-intake.unit.js); expand [Tests/semantic-native-parser.js](../../../Tests/semantic-native-parser.js) or add `Tests/native-one-conversion.unit.js` | Present; fingerprinted direct-fixture intake only |
+| `one-multipage-basic-001` | [Tests/onenote-fixtures/Fixture-2.one](../../../Tests/onenote-fixtures/Fixture-2.one) | Valid section with multiple normal pages | `success` | Multiple HTML page outputs or deterministic grouped output, per contract | Page count stable; each page has title or deterministic fallback; no hidden dropped page | [Tests/native-one-fixture-intake.unit.js](../../../Tests/native-one-fixture-intake.unit.js); new `Tests/native-one-conversion.unit.js` | Present; fingerprinted direct-fixture intake only |
+| `one-basic-lists-001` | [Tests/onenote-fixtures/Fixture-3.one](../../../Tests/onenote-fixtures/Fixture-3.one) | Explicit single-level ordered/unordered lists | `success` | HTML output contains semantic `ul`/`ol` structure | Native list structure mapped without glyph fallback; warnings absent for supported list blocks | [Tests/native-one-fixture-intake.unit.js](../../../Tests/native-one-fixture-intake.unit.js); new `Tests/native-one-conversion.unit.js` | Present; reserved for semantic-parser evidence |
 | `one-basic-table-001` | `one-basic-table-001.one` | Explicit basic rectangular table | `success` | HTML output contains one semantic table | Row/column counts preserved; cell text present; no guessed structure warning | New `Tests/native-one-conversion.unit.js` | Missing fixture |
 | `one-raster-image-001` | `one-raster-image-001.one` | Resolvable embedded raster images | `success` | HTML output contains image element or embedded resource reference | Resolved image bytes; stable count; no silent image omission | New `Tests/native-one-resources.unit.js` | Missing fixture |
-| `one-existing-smoke-001` | [Tests/Test section.one](Tests/Test%20section.one) | Existing parser smoke fixture | `partial` heuristic recovery | Existing development-only semantic HTML inside a native ZIP export | Manifested as `transitional`, `heuristic`, and `releaseEligible: false`; it cannot establish a default release claim | [Tests/native-one-fixture-manifest.unit.js](Tests/native-one-fixture-manifest.unit.js); [Tests/native-one-conversion.unit.js](Tests/native-one-conversion.unit.js); [Tests/semantic-native-parser.js](Tests/semantic-native-parser.js) | Existing fixture; manifest-backed, non-gating |
+| `one-existing-smoke-001` | [Tests/Test section.one](../../../Tests/Test%20section.one) | Existing parser smoke fixture | `partial` heuristic recovery | Existing development-only semantic HTML inside a native ZIP export | Manifested as `transitional`, `heuristic`, and `releaseEligible: false`; it cannot establish a default release claim | [Tests/native-one-fixture-manifest.unit.js](../../../Tests/native-one-fixture-manifest.unit.js); [Tests/native-one-conversion.unit.js](../../../Tests/native-one-conversion.unit.js); [Tests/semantic-native-parser.js](../../../Tests/semantic-native-parser.js) | Existing fixture; manifest-backed, non-gating |
 
 ## B. Default `.one` unsupported and partial-result proof
 
 | Fixture ID | Source file to collect/create | Contract slice | Expected state | Output expectation | Required assertions | Initial automation target | Current status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `one-invalid-signature-001` | [Tests/one-invalid-signature-001.one](Tests/one-invalid-signature-001.one) | Wrong signature / non-OneNote content with `.one` extension | `hard-failure` | No HTML, no ZIP | Signature rejection; specific invalid-file message; parser traversal must not start | [Tests/native-one-preflight.unit.js](Tests/native-one-preflight.unit.js); [Tests/native-one-fixture-manifest.unit.js](Tests/native-one-fixture-manifest.unit.js) | Present fixture; manifest-backed |
-| `one-corrupt-truncated-001` | [Tests/onenote-fixtures/Fixture-4.one](../Tests/onenote-fixtures/Fixture-4.one) | Truncated/corrupted section | `hard-failure` | No output | Corrupt-file message; no partial output leak | [Tests/native-one-fixture-intake.unit.js](../Tests/native-one-fixture-intake.unit.js); expand `Tests/native-one-preflight.unit.js` | Present; fingerprinted header-length mismatch, structural preflight pending |
+| `one-invalid-signature-001` | [Tests/one-invalid-signature-001.one](../../../Tests/one-invalid-signature-001.one) | Wrong signature / non-OneNote content with `.one` extension | `hard-failure` | No HTML, no ZIP | Signature rejection; specific invalid-file message; parser traversal must not start | [Tests/native-one-preflight.unit.js](../../../Tests/native-one-preflight.unit.js); [Tests/native-one-fixture-manifest.unit.js](../../../Tests/native-one-fixture-manifest.unit.js) | Present fixture; manifest-backed |
+| `one-corrupt-truncated-001` | [Tests/onenote-fixtures/Fixture-4.one](../../../Tests/onenote-fixtures/Fixture-4.one) | Truncated/corrupted section | `hard-failure` | No output | Corrupt-file message; no partial output leak | [Tests/native-one-fixture-intake.unit.js](../../../Tests/native-one-fixture-intake.unit.js); expand `Tests/native-one-preflight.unit.js` | Present; fingerprinted header-length mismatch, structural preflight pending |
 | `one-unsupported-schema-001` | `one-unsupported-schema-001.one` | Unsupported schema / missing required parser structure | `unsupported` or `hard-failure` | No output | Stable unsupported-schema classification; exact warning/error code | New `Tests/native-one-preflight.unit.js` | Missing fixture |
 | `one-conflict-or-history-001` | `one-conflict-or-history-001.one` | Conflict or version-history content | `unsupported` or `partial` only if isolated away from supported pages | Output only if supported normal pages remain | No claim of supported conversion; conflict/history detected and messaged | New `Tests/native-one-unsupported.unit.js` | Missing fixture |
 | `one-rtl-001` | `one-rtl-001.one` | Right-to-left page exclusion | `unsupported` | No output | Exact unsupported RTL message | New `Tests/native-one-unsupported.unit.js` | Missing fixture |
@@ -142,7 +144,7 @@ Implement Step 2 in this order:
 | `onepkg-unsupported-compression-001` | `onepkg-unsupported-compression-001.onepkg` | Unsupported compression | `unsupported` | No output | Specific unsupported-compression message | New `Tests/native-onepkg-preflight.unit.js` | Missing fixture |
 | `onepkg-corrupt-table-001` | `onepkg-corrupt-table-001.onepkg` | Corrupted package tables | `hard-failure` | No output | Corrupt package message | New `Tests/native-onepkg-preflight.unit.js` | Missing fixture |
 | `onepkg-size-limit-001` | Oversized `.onepkg` fixture or synthetic size harness | Explicit package size-limit gate | `unsupported` or `hard-failure` per preflight policy | No output | Size-limit message; no extraction attempt beyond policy | New `Tests/native-onepkg-preflight.unit.js` | Missing harness |
-| `onepkg-existing-smoke-001` | [Tests/Test notebook.onepkg](Tests/Test%20notebook.onepkg) | Existing deferred parser smoke fixture | `partial` heuristic recovery | Existing development-only importer output | Manifested as `transitional`, `heuristic`, and `releaseEligible: false`; it cannot establish browser-only package conversion support | [Tests/native-one-fixture-manifest.unit.js](Tests/native-one-fixture-manifest.unit.js); [Tests/metadata-onepkg-parser.js](Tests/metadata-onepkg-parser.js); [Tests/warning-code-contract.js](Tests/warning-code-contract.js) | Existing fixture; manifest-backed, non-gating |
+| `onepkg-existing-smoke-001` | [Tests/Test notebook.onepkg](../../../Tests/Test%20notebook.onepkg) | Existing deferred parser smoke fixture | `partial` heuristic recovery | Existing development-only importer output | Manifested as `transitional`, `heuristic`, and `releaseEligible: false`; it cannot establish browser-only package conversion support | [Tests/native-one-fixture-manifest.unit.js](../../../Tests/native-one-fixture-manifest.unit.js); [Tests/metadata-onepkg-parser.js](../../../Tests/metadata-onepkg-parser.js); [Tests/warning-code-contract.js](../../../Tests/warning-code-contract.js) | Existing fixture; manifest-backed, non-gating |
 
 ## D. Conditional `.one` promotion matrix
 
@@ -177,7 +179,7 @@ Do not attempt this until default `.onepkg` recognition/inventory coverage is co
 | `one-duplicate-title-001` | `one-duplicate-title-001.one` | Duplicate title naming and collision behavior | `success` | Stable per-page naming; no overwrite/collision | New `Tests/native-one-downloads.unit.js` | Missing fixture |
 | `one-unicode-filename-001` | Any supported `.one` with spaces and Unicode file name | Filename safety and export naming | `success` | Download naming remains readable and deterministic | New `Tests/native-one-downloads.unit.js` | Missing fixture |
 | `one-large-image-001` | `.one` with large but supported raster image | Resource-size boundary | `success` or `partial` | No silent image drop; size behavior remains deterministic | New `Tests/native-one-resources.unit.js` | Missing fixture |
-| `native-warning-contract-001` | Reuse existing fixtures plus new warning cases | Structured warning code/message parity | `success` for test harness | `warningDetails` parity; known-code enforcement; message presence | [Tests/warning-code-contract.js](Tests/warning-code-contract.js) plus expansion | Partial coverage exists |
+| `native-warning-contract-001` | Reuse existing fixtures plus new warning cases | Structured warning code/message parity | `success` for test harness | `warningDetails` parity; known-code enforcement; message presence | [Tests/warning-code-contract.js](../../../Tests/warning-code-contract.js) plus expansion | Partial coverage exists |
 
 ## Suggested test-file rollout
 
@@ -235,8 +237,8 @@ Step 2 is complete only when all of the following are true:
 
 ## Recommended immediate next actions
 
-1. Keep every native binary fixture listed in [Tests/expected/native-one-fixtures.json](Tests/expected/native-one-fixtures.json), including transitional files with `releaseEligible: false`.
+1. Keep every native binary fixture listed in [Tests/expected/native-one-fixtures.json](../../../Tests/expected/native-one-fixtures.json), including transitional files with `releaseEligible: false`.
 2. Add `default-one` or `default-onepkg` rows only when direct parser/extraction evidence and positive plus negative fixtures exist.
-3. Keep [Tests/native-one-preflight.unit.js](Tests/native-one-preflight.unit.js) as the cheapest fail-closed proof surface.
+3. Keep [Tests/native-one-preflight.unit.js](../../../Tests/native-one-preflight.unit.js) as the cheapest fail-closed proof surface.
 4. Do not add `.onepkg` fixtures or behavior while package conversion remains out of scope.
 5. Treat all conditional-promotion rows as out of scope until the default `.one` rows are green.

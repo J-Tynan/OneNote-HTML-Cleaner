@@ -1,6 +1,6 @@
-# Title
+<!-- Deferred, unscheduled research. The v1.0 support assumptions and gates below are historical proposal material, not part of the v1.0.0 production release. See [TODO.md](../../../TODO.md) for current release scope. -->
 
-v1.0 Native OneNote Support Contract
+# Native OneNote Research Scope Record
 
 ## Purpose
 

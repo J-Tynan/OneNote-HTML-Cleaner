@@ -1,4 +1,6 @@
-# Native OneNote v1.0 Parser Evidence Index
+<!-- Deferred, unscheduled research evidence. Any v1.0 treatment below refers to a historical proposal, not the v1.0.0 production release. See [TODO.md](../../../TODO.md) for current release scope. -->
+
+# Native OneNote Research Evidence Index
 
 ## Purpose
 
@@ -7,16 +9,16 @@ Microsoft format source and which implementation claims remain unproven. It
 keeps the native importer from treating string recovery or guessed byte
 patterns as format parsing.
 
-Physical-file source: [MS-ONESTORE Header Evidence](Native-OneNote-MS-ONESTORE-Header-Evidence.md).
-Content-model source: [OneNote File Format.docx](OneNote%20File%20Format.docx).
-Supporting summary: [OneNote-Native-Format-Facts-For-GPT-5.5.md](OneNote-Native-Format-Facts-For-GPT-5.5.md).
+Physical-file source: [MS-ONESTORE Header Evidence](../../Native-OneNote-MS-ONESTORE-Header-Evidence.md).
+Content-model source: [OneNote File Format.docx](../../OneNote%20File%20Format.docx).
+Supporting summary: [OneNote-Native-Format-Facts-For-GPT-5.5.md](../../OneNote-Native-Format-Facts-For-GPT-5.5.md).
 
 ## Evidence Status
 
 | Native concept | Source evidence | Implementation status | v1.0 treatment |
 | --- | --- | --- | --- |
 | Section signature | The documented OneNote section signature occupies the first 16 bytes of a `.one` file. | `src/importers/one/section-header.js` reads exactly those 16 bytes through the bounded `BinaryReader`; `Tests/native-one-binary-reader.unit.js` and `Tests/native-one-preflight.unit.js` cover valid, invalid, and truncated signatures. | Direct preflight evidence only. A valid signature permits later parsing but does not itself establish a supported page/content claim. |
-| Root file-node reference | MS-ONESTORE section 2.3.1 defines `fcrFileNodeListRoot` as a `FileChunkReference64x32` at documented header offset `0x0AC`; [MS-ONESTORE Header Evidence](Native-OneNote-MS-ONESTORE-Header-Evidence.md) preserves the source fingerprint, complete fixed header layout, and fixture comparison. The prior `0x30` claim is withdrawn: that offset begins `guidFileFormat`. | `src/importers/one/revision-store.js` reads the bounded reference; `src/importers/one/transaction-log.js` reads the completed transaction entries that supply its node count; `src/importers/one/file-node-list.js` validates one root fragment. [Transaction Log And File-Node Fragment Evidence](Native-OneNote-MS-ONESTORE-FileNodeList-Evidence.md) records the source path and fixture results. | Direct structural root-fragment evidence only. Do not interpret node payloads, follow continuations, or claim pages. |
+| Root file-node reference | MS-ONESTORE section 2.3.1 defines `fcrFileNodeListRoot` as a `FileChunkReference64x32` at documented header offset `0x0AC`; [MS-ONESTORE Header Evidence](../../Native-OneNote-MS-ONESTORE-Header-Evidence.md) preserves the source fingerprint, complete fixed header layout, and fixture comparison. The prior `0x30` claim is withdrawn: that offset begins `guidFileFormat`. | `src/importers/one/revision-store.js` reads the bounded reference; `src/importers/one/transaction-log.js` reads the completed transaction entries that supply its node count; `src/importers/one/file-node-list.js` validates one root fragment. [Transaction Log And File-Node Fragment Evidence](../../Native-OneNote-MS-ONESTORE-FileNodeList-Evidence.md) records the source path and fixture results. | Direct structural root-fragment evidence only. Do not interpret node payloads, follow continuations, or claim pages. |
 | Transaction-log node count | MS-ONESTORE sections 2.3.1 and 2.3.3 define `cTransactionsInLog`, `fcrTransactionLog`, completed transaction entries, and their source/value pairing. | `src/importers/one/transaction-log.js` reads exactly the declared completed transactions under transaction and entry policies, then selects the latest count for the root list ID. `Tests/native-one-transaction-log.unit.js` proves counts `3`, `4`, and `4` for supplied Fixtures 1–3 and rejects count/range/missing-list failures. | Direct physical-layout evidence only. It establishes where a fragment's nodes stop; it does not establish revision activity or traversal beyond the root fragment. |
 | Header declared file length | MS-ONESTORE section 2.3.1 defines `cbExpectedFileLength` at header offset `0x0C4`. | `Tests/native-one-fixture-intake.unit.js` fingerprints the new fixtures. `Fixture-1.one`, `Fixture-2.one`, and `Fixture-3.one` match their declared length; `Fixture-4.one` is 12,829 bytes but declares 14,072 bytes, proving structural truncation after the header while its root and transaction-log reference ranges remain readable. | Direct fixture-intake evidence only. A later structural preflight must reject this length mismatch before parsing fragments or producing output. |
 | Typed native HTML rendering | The HTML output standard requires one `main`, one page-level `h1`, semantic list/table/image markup, escaped content, and sanitization. This is an output contract, not evidence of a native record traversal. | `src/importers/one/render.js` accepts only explicit typed blocks and routes its HTML through `runPipeline()`; `Tests/native-one-render.unit.js` covers semantic output, pipeline processing, and invalid-model rejection. | Rendering infrastructure only. It does not promote paragraphs, lists, tables, or images until their native source records and fixtures are directly evidenced. |
@@ -45,9 +47,9 @@ Supporting summary: [OneNote-Native-Format-Facts-For-GPT-5.5.md](OneNote-Native-
 
 | Fixture | Evidence level | Release eligibility | Required treatment |
 | --- | --- | --- | --- |
-| [Tests/Test section.one](Tests/Test%20section.one) | Heuristic printable-string and binary-signature recovery | No | Keep its result `partial`, require heuristic warnings, and use it only for development regression coverage. |
-| [Tests/Test notebook.onepkg](Tests/Test%20notebook.onepkg) | Heuristic package extraction plus contained-section recovery | No | Keep package conversion disabled in the worker and use this file only for inventory/extraction research coverage. |
-| [Tests/one-invalid-signature-001.one](Tests/one-invalid-signature-001.one) | Direct signature preflight rejection | No output claim | Require a `hard-failure` before parser traversal, with `ONE_INVALID_SIGNATURE`. |
+| [Tests/Test section.one](../../../Tests/Test%20section.one) | Heuristic printable-string and binary-signature recovery | No | Keep its result `partial`, require heuristic warnings, and use it only for development regression coverage. |
+| [Tests/Test notebook.onepkg](../../../Tests/Test%20notebook.onepkg) | Heuristic package extraction plus contained-section recovery | No | Keep package conversion disabled in the worker and use this file only for inventory/extraction research coverage. |
+| [Tests/one-invalid-signature-001.one](../../../Tests/one-invalid-signature-001.one) | Direct signature preflight rejection | No output claim | Require a `hard-failure` before parser traversal, with `ONE_INVALID_SIGNATURE`. |
 
 The fixture manifest enforces that heuristic fixtures are `transitional` and
 `releaseEligible: false`. A fixture may become release eligible only after its

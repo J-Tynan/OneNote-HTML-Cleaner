@@ -2,9 +2,9 @@
 
 <!-- markdownlint-disable MD024 -->
 
-## 0.2.0 - Unreleased
+## 1.0.0 - Unreleased
 
-Stabilization and polish release for the browser-first OneNote MHTML cleanup workflow.
+Browser-first production release for the supported OneNote MHTML cleanup workflow.
 
 ### Highlights
 
@@ -13,18 +13,19 @@ Stabilization and polish release for the browser-first OneNote MHTML cleanup wor
 - Polished high-visibility homepage and results controls for steadier desktop and mobile presentation.
 - Tightened release-facing copy, screenshot wording, and reusable launch notes so the current shipped workflow is described consistently.
 - Kept Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection explicitly optional advanced features.
+- Includes accessibility coverage and clear unsupported-format messaging in the release scope.
 
 ### Supported In This Release
 
 - Input: `.mht`, `.mhtml`
-- Output: cleaned HTML by default, optional Markdown through the advanced export controls
+- Output: cleaned HTML by default, optional Markdown through the advanced export controls, and ZIP export for batches
 - Workflow: drag and drop or file picker import, auto-convert or manual convert, single-file download or ZIP download
 - Optional HTML-only extras: converted-page theme toggle, toolbar injection, and externalized CSS when the workflow keeps related assets together
 
 ### Known Limitations
 
-- Native OneNote `.one` and `.onepkg` files are detected for clearer messaging but are not converted in the shipped runtime.
-- `.docx` export remains out of scope for `0.2.0`.
+- Native OneNote `.one` and `.onepkg` files are unsupported and are not converted; native work remains deferred, unscheduled research outside this release.
+- `.docx` export remains out of scope for `1.0.0`.
 - Handwriting from exported MHTML is preserved as raster content rather than editable vector ink.
 - Externalized CSS, toolbar injection, and converted-page theme toggle remain opt-in and are best suited to workflows that keep related assets together.
 
@@ -33,7 +34,7 @@ Stabilization and polish release for the browser-first OneNote MHTML cleanup wor
 - The shipped production path remains browser-first OneNote MHTML cleaning.
 - Advanced export and converted-page features remain optional and do not change the default HTML workflow.
 - If the app appears to be running stale assets after an update, reload the page first. If the older worker still persists, unregister the service worker and reload.
-- Keep browser-support wording scoped to the browsers actually exercised during the final `v0.2` verification pass.
+- Keep browser-support wording scoped to the browsers actually exercised during the final `v1.0.0` verification pass.
 
 ## 0.1.0 - 2026-05-12
 
