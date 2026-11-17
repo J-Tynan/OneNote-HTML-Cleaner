@@ -305,6 +305,10 @@ First-pass release tasks:
 - [x] [P1] Confirm README, in-app messaging, architecture/contracts, and release notes consistently define `.mht` / `.mhtml` as the supported inputs and `.one` / `.onepkg` as unsupported. (2026-11-15)
 - [ ] [P1] Run the release verification pass: `npm ci`, `npm run typecheck`, `npm run test:gate:native`, relevant Playwright smoke tests, and accessibility audits; record results in the release checklist.
 - [ ] [P1] Perform clean-profile manual acceptance of MHTML import, HTML and Markdown output, ZIP contents, optional externalized CSS, unsupported-format messaging, and responsive/accessibility-critical UI states.
+- [ ] [P1] Test a representative OneNote MHTML page with embedded media end to end; define expected handling for each media type (preserved, clearly reported unsupported, or intentionally omitted), and add fixture assertions without claiming unverified support.
+- [ ] [P1] Test representative OneNote tags in MHTML-to-HTML conversion; verify their visible content is not silently lost, decide/document whether semantic tag conversion is in scope for `v1.0.0`, and add fixture assertions for the agreed behavior.
+- [ ] [P1] Test representative OneNote internal and external links, including relative/resource-based targets, after MHTML-to-HTML conversion and in ZIP output; verify destinations remain usable or failures are clearly reported.
+- [ ] [P1] Test a representative complex OneNote export combining layout, text, lists/tables, handwriting, and images; review content order, clipping, overflow, and visual fidelity, then add regression assertions for observed high-value behavior.
 - [x] [P1] Verify release notes and support documentation represent the current browser-first product and do not imply native parsing. (2026-11-15)
 - [ ] [P3] Capture or refresh release screenshots when ready; screenshot updates are optional and do not gate `v1.0.0`.
 - [ ] [P1] Tag `v1.0.0` only after CI, the release verification pass, and manual acceptance are complete.
