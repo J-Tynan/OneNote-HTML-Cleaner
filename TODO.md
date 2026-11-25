@@ -403,8 +403,28 @@ These ideas are separate from the release gate and should be selected only when 
 
 - [ ] [P3] Evaluate Google Chrome `Modern Web Guidance` against the PWA UI, exported HTML, accessibility, and performance patterns; adopt only low-risk changes with explicit browser support and fallback behavior.
 - [ ] [P3] Research embedded multimedia support in OneNote exports, identify supported formats and behaviors, and collect representative fixtures before proposing implementation.
-- [ ] [P3] Implement preservation for supported embedded multimedia in converted HTML only after research, sample fixtures, and a bounded support contract exist; handle unsupported media explicitly.
 - [ ] [P3] Reassess `.docx` export, OneNote tag tooling, and richer toolbar variants independently of native `.one` / `.onepkg` support.
+
+### Research embedded multimedia support in OneNote exports
+
+Recent fixture testing used OneNote pages containing embedded audio, embedded video, attached media files, and embedded online content. The same page was exported as `.mht`, `.docx`, `.pdf`, `.xps`, and `.one`.
+
+Observed limitation:
+
+- Native `.one` retained the embedded media in the tested fixture.
+- The tested MHT/MHTML exports did not contain the original media payloads. Audio/video references appeared as filenames or placeholders instead.
+- Browser-first conversion can preserve only content that is present in the exported MHT/MHTML source file. It cannot restore media that OneNote omitted during export.
+- This currently appears to be a OneNote export limitation rather than a defect in the browser-first conversion pipeline.
+
+This finding is separate from native `.one` / `.onepkg` research. It does not add native-parser requirements, change the native research scope, or imply native support in the browser-first roadmap.
+
+Future investigation is research-only, non-release-gating, and remains P3:
+
+- [ ] [P3] Determine which OneNote export formats preserve embedded audio, video, attachments, and online content across representative fixtures; record results without changing the supported input contract.
+- [ ] [P3] Catalogue supported embedded-content behaviors, including payload preservation, filename-only references, placeholders, and omitted content.
+- [ ] [P3] Identify attachment and media placeholders, filenames, and related markers in exported MHTML files.
+- [ ] [P3] Evaluate whether user-facing warnings about export-level media omission could reduce confusion, without committing to implementation.
+- [ ] [P3] Document known OneNote export limitations in `README.md` or help content if the findings are stable enough to publish.
 
 ---
 
