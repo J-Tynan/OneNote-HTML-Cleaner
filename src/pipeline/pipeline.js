@@ -214,6 +214,7 @@ export async function runPipeline(htmlString, config = {}) {
     const listMode = /** @type {ListRepairMode} */ (
       rawListMode === 'mergeStyled' || rawListMode === 'renumber' ? rawListMode : 'smart'
     );
+    logs.push(...ensureArray(sanitize.ensureListStructure(doc)));
     logs.push(...ensureArray(fixLists(doc, listMode, {
       listMarginLeft: resolvedConfig.ListMarginLeft || '0.35em',
       listPaddingLeft: resolvedConfig.ListPaddingLeft || '1.2em',
@@ -221,6 +222,9 @@ export async function runPipeline(htmlString, config = {}) {
     })));
     // repair any malformed list structure left over
     logs.push(...ensureArray(sanitize.ensureListStructure(doc)));
+    if (resolvedConfig.NormalizeTables !== false) {
+      logs.push(...ensureArray(sanitize.normalizeTableCellParagraphMargins(doc)));
+    }
     // defensive deduplication pass to remove any accidental clone/duplicate
     logs.push(...ensureArray(sanitize.dedupeLists(doc)));
     logs.push(...ensureArray(sanitize.ensureCreatedWithOneNoteFooterGap(doc)));

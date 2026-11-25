@@ -41,10 +41,10 @@ function isInFileReference(reference, fileLength) {
  * @param {TransactionLogOptions} [options={}]
  */
 export function readTransactionLog(reader, reference, transactionCount, options = {}) {
-  const maxTransactions = Number.isSafeInteger(options.maxTransactions) && options.maxTransactions >= 0
+  const maxTransactions = typeof options.maxTransactions === 'number' && Number.isSafeInteger(options.maxTransactions) && options.maxTransactions >= 0
     ? options.maxTransactions
     : DEFAULT_MAX_TRANSACTIONS;
-  const maxEntriesPerTransaction = Number.isSafeInteger(options.maxEntriesPerTransaction) && options.maxEntriesPerTransaction >= 0
+  const maxEntriesPerTransaction = typeof options.maxEntriesPerTransaction === 'number' && Number.isSafeInteger(options.maxEntriesPerTransaction) && options.maxEntriesPerTransaction >= 0
     ? options.maxEntriesPerTransaction
     : DEFAULT_MAX_ENTRIES_PER_TRANSACTION;
   if (!Number.isSafeInteger(transactionCount) || transactionCount < 0 || transactionCount > maxTransactions) {

@@ -96,4 +96,11 @@ function assertNoAttr(el, attr) {
   console.log('case5 pass');
 })();
 
+(() => {
+  const input = '<html><head><style data-onc-compact-typography="1">.onc-copy{margin:0;font-size:11pt;}</style></head><body><table><tr><td><p class="onc-copy">Compact</p><p class="missing-rule">Unstyled</p></td></tr></table></body></html>';
+  const { doc } = apply(input);
+  assert.equal(doc.querySelector('.onc-copy').getAttribute('style'), null);
+  assert.equal(doc.querySelector('.missing-rule').getAttribute('style'), 'margin: 0');
+})();
+
 console.log('table-attribute-normalization: PASS');

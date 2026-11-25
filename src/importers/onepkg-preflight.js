@@ -129,7 +129,7 @@ function readCabName(reader, bytes, start, cabinetBytes, maxNameBytes) {
   return { name, nextOffset: end + 1 };
 }
 
-/** @param {'success' | 'hard-failure' | 'unsupported'} state @param {WarningDetail} warning @param {CabInventoryEntry[]} [entries=[]] @param {CabCompressionKind[]} [compressionKinds=[]] */
+/** @param {'success' | 'hard-failure' | 'unsupported'} state @param {WarningDetail} warning @param {CabInventoryEntry[]} [entries=[]] @param {CabCompressionKind[]} [compressionKinds=[]] @returns {OnePkgPreflightResult} */
 function result(state, warning, entries = [], compressionKinds = []) {
   const warningDetails = [warning];
   return {

@@ -1,6 +1,7 @@
 // @ts-check
 
 import {
+  getCompactStyleDeclarations,
   parseStyleDeclarationEntries,
   serializeStyleDeclarationEntries
 } from './styleUtils.js';
@@ -493,14 +494,17 @@ function normalizeRootDocumentMarginStyle(styleText) {
 /**
  * @param {DomElement | null | undefined} el
  * @param {StyleDefaultsMap} [declarations={}]
+ * @param {string} [compactCss='']
  * @returns {boolean}
  */
-function setStyleDefaults(el, declarations = {}) {
+function setStyleDefaults(el, declarations = {}, compactCss = '') {
   if (!el || !el.getAttribute) return false;
   const styleMap = styleEntriesToMap(el.getAttribute('style') || '');
   const before = styleMapToString(styleMap);
+  const compactProperties = getCompactStyleDeclarations(compactCss, el.getAttribute('class') || '');
 
   Object.entries(declarations).forEach(([prop, value]) => {
+    if (!styleMap.has(prop) && compactProperties.has(prop)) return;
     styleMap.set(prop, value);
   });
 
@@ -822,6 +826,7 @@ export function enforceHeaderDateTimeStyles(doc) {
   const logs = /** @type {HeaderDateTimeStyleLogEntry[]} */ ([]);
   const main = doc.querySelector('main');
   if (!main) return logs;
+  const compactCss = doc.querySelector('style[data-onc-compact-typography]')?.textContent || '';
 
   let titleStyled = 0;
   let dateStyled = 0;
@@ -840,7 +845,7 @@ export function enforceHeaderDateTimeStyles(doc) {
       'padding-right': '1in',
       'padding-bottom': '0.08em',
       'border-bottom': '1px solid #b7b7b7'
-    });
+    }, compactCss);
     addClass(title, 'converted-page-title');
     if (titleChanged) titleStyled += 1;
   }
@@ -855,7 +860,7 @@ export function enforceHeaderDateTimeStyles(doc) {
         'font-size': '10pt',
         color: '#666666',
         margin: '0'
-      });
+      }, compactCss);
       addClass(dateParagraph, 'converted-page-date');
       if (dateChanged) dateStyled += 1;
 
@@ -865,7 +870,7 @@ export function enforceHeaderDateTimeStyles(doc) {
           'font-family': 'Calibri, Arial, sans-serif',
           'font-size': '10pt',
           color: '#666666'
-        });
+        }, compactCss);
         addClass(createdTime, 'converted-page-time');
         if (timeChanged) timeStyled += 1;
       } else if (paragraphs[1]) {
@@ -875,7 +880,7 @@ export function enforceHeaderDateTimeStyles(doc) {
           'font-size': '10pt',
           color: '#666666',
           margin: '0'
-        });
+        }, compactCss);
         addClass(timeParagraph, 'converted-page-time');
         if (timeParagraphChanged) timeStyled += 1;
       }

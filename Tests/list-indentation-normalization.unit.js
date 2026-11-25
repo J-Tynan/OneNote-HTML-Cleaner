@@ -35,5 +35,12 @@ import { normalizeListIndentation } from '../src/pipeline/listRepair.js';
   assert(ul.classList.contains('list-disc'), 'unordered list should include list-disc class');
   assert(ul.classList.contains('list-outside'), 'unordered list should include list-outside class');
 
+  const compactDoc = new JSDOM('<html><head><style data-onc-compact-typography="1">.onc-bullet-list{margin-left:0.35em;padding-left:1.2em;padding-inline-start:1.2em;}</style></head><body><ul class="onc-bullet-list"><li>Bullet</li></ul></body></html>').window.document;
+  const compactList = compactDoc.querySelector('ul');
+  normalizeListIndentation(compactDoc, { normalizeAllListIndent: true });
+  assert.equal(compactList.getAttribute('style'), null);
+  normalizeListIndentation(compactDoc, { normalizeAllListIndent: true, listPaddingLeft: '2em' });
+  assert.match(compactList.getAttribute('style'), /padding-left:\s*2em/);
+
   console.log('list-indentation-normalization: PASS');
 })();

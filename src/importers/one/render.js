@@ -71,6 +71,7 @@ function renderBlock(block) {
   if (!block || typeof block !== 'object') {
     throw new NativeRenderError('invalid-model', 'Page blocks must be objects.');
   }
+  const kind = block.kind;
 
   if (block.kind === 'paragraph') {
     return `<p>${escapeHtml(requireText(block.text, 'paragraph text'))}</p>`;
@@ -117,7 +118,7 @@ function renderBlock(block) {
     return `<figure>${imageHtml}<figcaption>${escapeHtml(requireText(block.caption, 'image caption'))}</figcaption></figure>`;
   }
 
-  throw new NativeRenderError('unsupported-block', `Unsupported native page block kind: ${String(block.kind)}.`);
+  throw new NativeRenderError('unsupported-block', `Unsupported native page block kind: ${String(kind)}.`);
 }
 
 /**
@@ -143,7 +144,7 @@ export function renderNativePageHtml(page) {
 /**
  * @param {NativePageRenderModel} page
  * @param {PipelineConfigInput} [config={}]
- * @returns {Promise<{ html: string, logs: PipelineLogEntry[], assets: OutputAsset[] }>}
+ * @returns {Promise<{ html: string, logs: PipelineLogEntry[], assets: OutputAsset[] | undefined }>}
  */
 export async function renderNativePageWithPipeline(page, config = {}) {
   const rawHtml = renderNativePageHtml(page);

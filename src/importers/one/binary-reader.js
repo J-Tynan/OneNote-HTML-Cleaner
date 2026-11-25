@@ -99,6 +99,7 @@ export class BinaryReader {
   /** @param {number} offset */
   readGuid(offset) {
     const bytes = this.readSlice(offset, 16);
+    /** @param {number} start @param {number} end */
     const toHex = (start, end) => Array.from(bytes.slice(start, end), (value) => value.toString(16).padStart(2, '0')).join('');
     return `${toHex(3, 4)}${toHex(2, 3)}${toHex(1, 2)}${toHex(0, 1)}-${toHex(5, 6)}${toHex(4, 5)}-${toHex(7, 8)}${toHex(6, 7)}-${toHex(8, 10)}-${toHex(10, 16)}`;
   }

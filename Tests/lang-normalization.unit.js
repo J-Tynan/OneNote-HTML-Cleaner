@@ -44,5 +44,15 @@ function getHtmlLang(doc) {
     assert.equal(getHtmlLang(doc), 'en');
   }
 
+  {
+    const doc = createDoc('<html lang="x-none"><head></head><body lang="X-NONE"><p lang="x-none">Unknown <span lang="fr-CA">French</span><span lang="x-private">Private</span></p></body></html>');
+    ensureHead(doc, { defaultLang: 'en-GB' });
+    assert.equal(getHtmlLang(doc), 'en-GB');
+    assert.equal(doc.body.getAttribute('lang'), null);
+    assert.equal(doc.querySelector('p').getAttribute('lang'), null);
+    assert.equal(doc.querySelector('span').getAttribute('lang'), 'fr-CA');
+    assert.equal(doc.querySelectorAll('span')[1].getAttribute('lang'), 'x-private');
+  }
+
   console.log('lang-normalization: PASS');
 })();

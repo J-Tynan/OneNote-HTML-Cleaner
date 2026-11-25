@@ -6,6 +6,7 @@
 
 import {
   cssLengthToPx,
+  getCompactStyleDeclarations,
   parseStyleDeclarationEntries,
   serializeStyleDeclarationEntries
 } from './styleUtils.js';
@@ -29,7 +30,7 @@ import {
  *   appendChild: (child: DomElement) => void,
  *   remove: () => void
  * }} DomElement
- * @typedef {{ querySelectorAll: (selector: string) => ArrayLike<DomElement>, createElement: (tagName: string) => DomElement }} DomDocument
+ * @typedef {{ querySelector: (selector: string) => { textContent?: string | null } | null, querySelectorAll: (selector: string) => ArrayLike<DomElement>, createElement: (tagName: string) => DomElement }} DomDocument
  * @typedef {{ listPaddingLeft?: string, listMarginLeft?: string, normalizeAllListIndent?: boolean }} NormalizeListIndentationOptions
  * @typedef {'mergeStyled' | 'renumber' | 'smart'} ListRepairMode
  * @typedef {{ step: 'removeEmptyListItems', removed: number }} RemoveEmptyListItemsLogEntry
@@ -241,9 +242,12 @@ function normalizeCueColumnLists(doc) {
   const cueLists = Array.from(doc.querySelectorAll(
     'td[data-onc-col-role="leading"] ol, td[data-onc-col-role="leading"] ul, td.cues ol, td.cues ul'
   ));
+  const compactCss = doc.querySelector('style[data-onc-compact-typography]')?.textContent || '';
   let updated = 0;
 
   cueLists.forEach(list => {
+    const compactStyles = getCompactStyleDeclarations(compactCss, list.getAttribute('class') || '');
+    if (compactStyles.has('margin-left') && compactStyles.has('padding-left') && compactStyles.has('padding-inline-start')) return;
     if (list.tagName.toLowerCase() === 'ol') {
       addClasses(list, ['list-decimal', 'list-outside', 'pl-5']);
     } else {
@@ -268,10 +272,17 @@ export function normalizeListIndentation(doc, options = {}) {
   const paddingLeft = options.listPaddingLeft || DEFAULT_LIST_PADDING_LEFT;
   const marginLeft = options.listMarginLeft || DEFAULT_LIST_MARGIN_LEFT;
   const normalizeAll = options.normalizeAllListIndent === true;
+  const compactCss = doc.querySelector('style[data-onc-compact-typography]')?.textContent || '';
 
   lists.forEach(list => {
     const ownStyle = list.getAttribute('style') || '';
     const liNodes = Array.from(list.querySelectorAll(':scope > li'));
+    const compactStyles = getCompactStyleDeclarations(compactCss, list.getAttribute('class') || '');
+    const indentKeys = LIST_INDENT_STYLE_KEYS.concat(ONE_NOTE_STYLE_HINT_KEYS);
+    const hasInlineIndent = [ownStyle, ...liNodes.map((li) => li.getAttribute('style') || '')]
+      .some((style) => parseStyleDeclarationEntries(style).some(({ prop }) => indentKeys.includes(prop)));
+    if (!hasInlineIndent && compactStyles.get('margin-left') === marginLeft
+      && compactStyles.get('padding-left') === paddingLeft && compactStyles.get('padding-inline-start') === paddingLeft) return;
     const hasLiIndent = liNodes.some(li => hasOneNoteOrExcessiveIndent(li.getAttribute('style') || ''));
     const shouldNormalize = normalizeAll || hasOneNoteOrExcessiveIndent(ownStyle) || hasLiIndent;
     if (!shouldNormalize) return;

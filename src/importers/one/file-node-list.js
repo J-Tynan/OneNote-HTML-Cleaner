@@ -34,7 +34,7 @@ function isInFileReference(reference, fileLength) {
     && BigInt(reference.cb) <= BigInt(fileLength) - reference.stp;
 }
 
-/** @param {number} value @param {string} label */
+/** @param {bigint} value @param {string} label */
 function toSafeOffset(value, label) {
   if (value > BigInt(Number.MAX_SAFE_INTEGER)) {
     throw new FileNodeListError('invalid-fragment-range', `${label} is too large to address safely.`);
@@ -43,7 +43,7 @@ function toSafeOffset(value, label) {
 }
 
 /**
- * @typedef {{ expectedNodeCount: number, maxNodeCount?: number }} FileNodeListOptions
+ * @typedef {{ expectedNodeCount?: number, maxNodeCount?: number }} FileNodeListOptions
  */
 
 /**
@@ -56,10 +56,10 @@ function toSafeOffset(value, label) {
  * @param {FileNodeListOptions} [options={}]
  */
 export function readFileNodeListFragment(reader, reference, options = {}) {
-  if (!Number.isSafeInteger(options.expectedNodeCount) || options.expectedNodeCount < 0) {
+  if (typeof options.expectedNodeCount !== 'number' || !Number.isSafeInteger(options.expectedNodeCount) || options.expectedNodeCount < 0) {
     throw new FileNodeListError('missing-node-count', 'File-node-list fragment requires a transaction-log node count.');
   }
-  const maxNodeCount = Number.isSafeInteger(options.maxNodeCount) && options.maxNodeCount >= 0
+  const maxNodeCount = typeof options.maxNodeCount === 'number' && Number.isSafeInteger(options.maxNodeCount) && options.maxNodeCount >= 0
     ? options.maxNodeCount
     : DEFAULT_MAX_FILE_NODE_COUNT;
   if (reference.cb < FILE_NODE_LIST_FRAGMENT_MINIMUM_BYTE_LENGTH || !isInFileReference(reference, reader.length)) {

@@ -59,9 +59,11 @@ import { startStaticServer } from './playwright-server-helper.js';
     const enabledAfter = await page.$eval('#convertButton', el => !el.disabled);
     if (!enabledAfter) throw new Error('Expected Convert button enabled after queuing file');
 
-    // click convert and wait for download link
+    // click convert and wait for the download action
     await page.click('#convertButton');
-    await page.waitForSelector('[data-download-id]', { timeout: 8000 });
+    await page.waitForSelector('[data-download-id]', { state: 'attached', timeout: 8000 });
+    await page.locator('.file-item').filter({ hasText: 'smoke-probe.mht' }).locator('[data-actions-menu-trigger]').click();
+    await page.waitForSelector('[data-download-id]', { state: 'visible', timeout: 8000 });
 
     // ensure status shows success
     await page.waitForFunction(() => {

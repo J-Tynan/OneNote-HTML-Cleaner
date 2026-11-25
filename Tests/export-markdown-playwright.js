@@ -6,7 +6,8 @@ import {
   getConversionConfig,
   getLastMarkdownDownload,
   installMarkdownDownloadCapture,
-  installRuntimeHarness
+  installRuntimeHarness,
+  waitForWorkerManager
 } from './playwright-runtime-harness.js';
 
 const SUPPORTED_FLAVORS = ['obsidian', 'commonmark', 'gfm', 'markdown-extra'];
@@ -87,6 +88,7 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
 
         await page.goto(baseUrl, { waitUntil: 'networkidle' });
         await page.waitForSelector('#convertButton');
+        await waitForWorkerManager(page);
 
         await page.evaluate((activeFlavor) => {
           const experimental = document.getElementById('experimentalExportEnabled');
@@ -144,14 +146,9 @@ function toOutputPath(root, testsRoot, markdownRoot, flavor, fixturePath, downlo
           });
         }, fixtureName, { timeout: 20000 });
 
-        await page.waitForSelector('[data-download-id]');
-
-        const label = await page.textContent('[data-download-id]');
-        if (!/download markdown/i.test(String(label || ''))) {
-          throw new Error(`Expected markdown download button label for ${fixtureName}, got: ${String(label || '').trim()}`);
-        }
-
-        await page.click('[data-download-id]');
+        const row = page.locator('.file-item').filter({ hasText: fixtureName });
+        await row.locator('[data-actions-menu-trigger]').click();
+        await row.locator('[data-download-id]').click();
 
         const download = await getLastMarkdownDownload(page);
 

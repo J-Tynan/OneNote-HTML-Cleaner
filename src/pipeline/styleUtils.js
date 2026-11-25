@@ -57,6 +57,21 @@ export function parseStyleDeclarations(styleText) {
 }
 
 /**
+ * @param {string} compactCss
+ * @param {string} classNames
+ * @returns {Map<string, string>}
+ */
+export function getCompactStyleDeclarations(compactCss, classNames) {
+  const classes = new Set(classNames.split(/\s+/));
+  const declarations = new Map();
+  for (const match of compactCss.matchAll(/\.([\w-]+)\s*\{([^}]*)\}/g)) {
+    if (!classes.has(match[1])) continue;
+    for (const { prop, value } of parseStyleDeclarationEntries(match[2])) declarations.set(prop, value);
+  }
+  return declarations;
+}
+
+/**
  * @param {unknown} value
  * @returns {ParsedCssLength | null}
  */

@@ -309,6 +309,8 @@ First-pass release tasks:
 - [ ] [P3] Capture or refresh release screenshots when ready; screenshot updates are optional and do not gate `v1.0.0`.
 - [ ] [P1] Tag `v1.0.0` only after CI, the release verification pass, and manual acceptance are complete.
 
+Verification follow-up (2026-11-25): corrected type errors, sanitizer rerun drift, Markdown smoke-test menu handling, and OneNote `x-none` language markers. Updated vulnerable dependencies and refreshed locked fixtures after confirming their only drift was the existing deferred-style loader change. The automated browser-first checks passed on the working tree; the maintainer subsequently ran `npm ci` in the checkout and reported zero vulnerabilities. Manual acceptance and final CI sign-off remain open.
+
 ## Native OneNote Research (Deferred, Unscheduled)
 
 This section preserves native `.one` / `.onepkg` research, fixtures, parser contracts, traceability, and acceptance criteria. It is not part of the `v1.0.0` production release gate. Treat every unchecked item here as `[P3]`, including older checklist entries without an inline priority label. Do not assign a shipping version until resources, budget, fixture coverage, and a narrow support contract are approved.
@@ -316,6 +318,8 @@ This section preserves native `.one` / `.onepkg` research, fixtures, parser cont
 Revisit `docs/research/native-onenote/Native-OneNote-Research-Scope-Record.md`, `docs/research/native-onenote/Native-OneNote-Research-Evidence-Index.md`, and `docs/research/native-onenote/Native-OneNote-Research-Fixture-Traceability.md` only when native investigation is explicitly resumed. Keep their research value and historical claims intact; do not imply support in the meantime.
 
 ### Native Parser And Package Investigation
+
+- [ ] [P3] When native research resumes, reconcile `test:native-one-conversion` and its fixture expectations with the current heuristic importer: `one-basic-title-paragraph-001` expects `success`, but `importOneSection()` currently reports `partial`. Do not treat this test as evidence of supported native conversion.
 
 <!-- markdownlint-disable MD007 MD029 MD032 -->
 

@@ -94,7 +94,7 @@
     "build:libmspack:wasm:smoke": "npm run build:libmspack:wasm && node ./tools/check-libmspack-wasm.js"
   },
   "dependencies": {
-    "fflate": "^0.8.2",
+    "fflate": "^0.8.3",
     "jszip": "^3.10.1",
     "libarchive.js": "^2.0.2"
   },
@@ -108,7 +108,7 @@
     "typescript": "^7.0.2"
   },
   "overrides": {
-    "undici": "^7.24.0"
+    "undici": "^7.30.2"
   },
   "allowScripts": {
     "typescript@7.0.2": true

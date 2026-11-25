@@ -21,7 +21,7 @@ const logger = createLogger('ui');
  * @typedef {new () => JSZipLike} JSZipConstructor
  * @typedef {{ disabled: boolean, textContent: string | null }} DownloadZipButton
  * @typedef {AdvancedOptionsControls & { downloadZipButton?: DownloadZipButton | null, successfulOutputs: Map<string, SuccessfulOutputValue>, [key: string]: unknown }} DownloadContext
- * @typedef {{ downloadBlob: (filename: string, text: string, mime?: string) => Promise<void>, downloadDebug: (name: string, text: string) => void, downloadBinary: (filename: string, blob: Blob) => void, downloadZip: (outputs?: Map<string, SuccessfulOutputValue>) => Promise<void>, downloadNativeZip: (file: File, nativeResult: NativeImportResult) => Promise<void>, getConversionConfig: () => PipelineConfigInput }} DownloadHelpers
+ * @typedef {{ downloadBlob: (filename: string, text: string, mime?: string) => Promise<void>, downloadDebug: (name: string, text: string) => void, downloadBinary: (filename: string, blob: Blob) => void, downloadZip: (outputs?: Map<string, SuccessfulOutputValue>) => Promise<void>, downloadNativeZip: (file: File, nativeResult: NativeImportResult, selectedPagePaths?: Iterable<string>) => Promise<void>, getConversionConfig: () => PipelineConfigInput }} DownloadHelpers
  */
 
 /**

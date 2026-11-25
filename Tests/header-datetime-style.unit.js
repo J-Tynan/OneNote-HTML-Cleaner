@@ -48,5 +48,19 @@ function createDoc(html) {
     assert(/color\s*:\s*#666666/i.test(timeStyle));
   }
 
+  {
+    const doc = createDoc('<html><head><style data-onc-compact-typography="1">.onc-title{margin:0;font-family:"Calibri Light";font-size:20pt;font-weight:400;}.onc-page-title{display:inline-block;padding-right:1in;padding-bottom:0.08em;border-bottom:1px solid #b7b7b7;}.onc-meta{margin:0;font-family:Calibri,Arial,sans-serif;font-size:10pt;}.onc-page-date-tone{color:#666666;}.onc-page-time{color:#666666;margin-left:0.75em;}</style></head><body><main><div><h1 class="converted-page-title onc-title onc-page-title">Title</h1></div><div><p class="converted-page-date onc-meta onc-page-date-tone">Thursday, April 25, 2024<span class="created-time converted-page-time onc-meta onc-page-time">4:27 PM</span></p></div></main></body></html>');
+    enforceHeaderDateTimeStyles(doc);
+    assert.equal(doc.querySelector('h1').getAttribute('style'), null);
+    assert.equal(doc.querySelector('p').getAttribute('style'), null);
+    assert.equal(doc.querySelector('span').getAttribute('style'), null);
+  }
+
+  {
+    const doc = createDoc('<html><body><main><h1 class="onc-title onc-page-title">Title</h1></main></body></html>');
+    enforceHeaderDateTimeStyles(doc);
+    assert.match(doc.querySelector('h1').getAttribute('style'), /font-size:\s*20pt/);
+  }
+
   console.log('header-datetime-style: PASS');
 })();

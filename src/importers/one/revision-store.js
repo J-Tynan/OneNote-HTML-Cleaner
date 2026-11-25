@@ -74,10 +74,12 @@ export function parseRevisionStoreHeader(reader) {
   const transactionLog = readFileChunkReference64x32(reader, TRANSACTION_LOG_REFERENCE_OFFSET);
   const rootFileNodeList = readFileChunkReference64x32(reader, FILE_NODE_LIST_ROOT_REFERENCE_OFFSET);
   const transactionCount = reader.readUint32LE(TRANSACTION_COUNT_OFFSET);
-  for (const [name, reference] of [
+  /** @type {Array<[string, FileChunkReference64x32]>} */
+  const requiredReferences = [
     ['transaction log', transactionLog],
     ['root file-node list', rootFileNodeList]
-  ]) {
+  ];
+  for (const [name, reference] of requiredReferences) {
     if (!isRequiredInFileReference(reference, reader.length)) {
       throw new RevisionStoreHeaderError(
         'invalid-required-reference',

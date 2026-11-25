@@ -9,6 +9,7 @@ import {
   parseStyle
 } from './inlineStyleMigration.js';
 import {
+  getCompactStyleDeclarations,
   parseStyleDeclarationEntries,
   serializeStyleDeclarationEntries
 } from './styleUtils.js';
@@ -611,6 +612,16 @@ export function ensureHead(doc, options = {}) {
     }
   }
 
+  let removedUnknownLang = 0;
+  Array.from(doc.querySelectorAll('[lang]')).forEach((node) => {
+    if (String(node.getAttribute('lang') || '').trim().toLowerCase() !== 'x-none') return;
+    node.removeAttribute('lang');
+    removedUnknownLang += 1;
+  });
+  if (removedUnknownLang) {
+    logs.push({ step: 'EnsureLang', details: 'Removed OneNote unknown-language markers', removedUnknownLang });
+  }
+
   // Ensure charset
   if (!head.querySelector('meta[charset]')) {
     const m = doc.createElement('meta');
@@ -806,6 +817,7 @@ export function normalizeTableAttributes(doc, options = {}) {
 export function normalizeTableCellParagraphMargins(doc) {
   const logs = /** @type {SanitizeLogEntry[]} */ ([]);
   const paragraphs = Array.from(doc.querySelectorAll('table td > p, table th > p'));
+  const compactCss = doc.querySelector('style[data-onc-compact-typography]')?.textContent || '';
   let updated = 0;
 
   paragraphs.forEach((paragraph) => {
@@ -815,6 +827,8 @@ export function normalizeTableCellParagraphMargins(doc) {
     const hasMarginTop = entries.some(({ prop }) => prop === 'margin-top');
     const hasMarginBottom = entries.some(({ prop }) => prop === 'margin-bottom');
     if (hasMargin || hasMarginTop || hasMarginBottom) return;
+    const compactStyles = getCompactStyleDeclarations(compactCss, paragraph.getAttribute('class') || '');
+    if (compactStyles.has('margin') || compactStyles.has('margin-top') || compactStyles.has('margin-bottom')) return;
 
     entries.push({ prop: 'margin', value: '0' });
     const nextStyle = serializeInlineStyle(entries);
@@ -1942,7 +1956,9 @@ export function compactRepeatedTypographyClasses(doc) {
   let prunedUtilityClasses = 0;
   let strippedStyleDeclarations = 0;
 
-  const firstPass = applyCompactPatterns(nodes, [...COMPACT_TYPOGRAPHY_PATTERNS, ...COMPACT_LAYOUT_PATTERNS], usedPatternClassNames);
+  const compactCss = doc.querySelector('style[data-onc-compact-typography]')?.textContent || '';
+  const uncompactedNodes = nodes.filter((node) => !getCompactStyleDeclarations(compactCss, node.getAttribute('class') || '').size);
+  const firstPass = applyCompactPatterns(uncompactedNodes, [...COMPACT_TYPOGRAPHY_PATTERNS, ...COMPACT_LAYOUT_PATTERNS], usedPatternClassNames);
   replacements += firstPass.replacements;
   strippedStyleDeclarations += firstPass.strippedStyleDeclarations;
 
