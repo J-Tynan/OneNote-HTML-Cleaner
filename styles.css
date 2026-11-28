@@ -761,7 +761,7 @@ summary::-webkit-details-marker {
 
 .file-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem 2rem;
+  grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem var(--workbench-actions-column);
   grid-template-areas: "name type status size actions" "detail detail detail detail actions";
   align-items: center;
   column-gap: 0.5rem;
@@ -777,7 +777,7 @@ summary::-webkit-details-marker {
 
 .file-list-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem 2rem;
+  grid-template-columns: minmax(0, 1fr) 2.75rem 5.75rem 3.5rem var(--workbench-actions-column);
   column-gap: 0.5rem;
   padding: 0 0 0.3125rem;
   border-bottom: 1px solid var(--border-muted);
@@ -1700,6 +1700,7 @@ html.dark .help-section[open] > .help-section__summary {
   --workbench-radius: 0.5rem;
   --workbench-control-radius: 0.3125rem;
   --workbench-panel-shadow: 0 1px 3px rgba(31, 75, 127, 0.08);
+  --workbench-actions-column: 3.25rem;
 }
 
 body { background: var(--workbench-canvas); color: var(--workbench-ink); }
@@ -1847,6 +1848,11 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
   .home-start-card { min-height: 0; }
 }
 
+@media (min-width: 1024px) and (max-width: 1249px) {
+  .results-action-row { grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr); }
+  .results-selection-summary { grid-column: 1 / -1; }
+}
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .home-main > .page-shell { padding-inline: 1rem; }
   .home-layout { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
@@ -1893,14 +1899,14 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
   .results-search-icon { left: 1.375rem; }
   .workbench-search, .workbench-filter { font-size: 0.8125rem; }
   .file-list-header {
-    grid-template-columns: minmax(0, 1fr) 5rem 2rem;
+    grid-template-columns: minmax(0, 1fr) 5rem var(--workbench-actions-column);
     padding: 0.625rem 0.875rem;
   }
   .file-list-header > :nth-child(2),
   .file-list-header > :nth-child(4) { display: none; }
   #fileList { min-height: 12rem; padding-inline: 0.875rem; }
   .file-item {
-    grid-template-columns: minmax(0, 1fr) 5rem 2rem;
+    grid-template-columns: minmax(0, 1fr) 5rem var(--workbench-actions-column);
     grid-template-areas: "name status actions" "detail detail actions";
     min-height: 2.75rem;
   }
@@ -1915,7 +1921,8 @@ html.dark .results-action-button:disabled, html.dark .queue-action-strip .homepa
 @media (min-width: 640px) and (max-width: 767px) {
   .home-layout { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
   .home-results-card { min-height: 0; }
-  .results-action-row { grid-template-columns: minmax(8rem, 1fr) repeat(3, minmax(0, auto)); }
+  .results-action-row { grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1fr); }
+  .results-selection-summary { grid-column: 1 / -1; }
 }
 
 @media (max-width: 639px) {

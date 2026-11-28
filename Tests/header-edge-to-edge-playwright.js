@@ -106,6 +106,118 @@ async function assertWorkbenchContentFits(page, viewportLabel) {
   }
 }
 
+async function assertResponsiveResults(page, width, populated) {
+  const result = await page.evaluate(({ width, populated }) => {
+    const card = document.getElementById('statusPanel');
+    const header = document.querySelector('.file-list-header');
+    const actionRow = document.querySelector('.results-action-row');
+    const row = document.querySelector('.file-item.workbench-row');
+    if (!card || !header || !actionRow || (populated && !row)) {
+      return { ok: false, reason: 'results elements missing' };
+    }
+
+    const cardRect = card.getBoundingClientRect();
+    const within = (inner, outer) => inner.left >= outer.left - 1
+      && inner.right <= outer.right + 1
+      && inner.top >= outer.top - 1
+      && inner.bottom <= outer.bottom + 1;
+    const headerVisible = getComputedStyle(header).display !== 'none';
+    const headers = [...header.children];
+    const visibleHeaders = headers.filter((element) => getComputedStyle(element).display !== 'none');
+    const expectedHeaders = width < 640 ? []
+      : width < 768 || width >= 1024 ? ['Name', 'Type', 'Status', 'Size', 'Actions']
+        : ['Name', 'Status', 'Actions'];
+    const headerNames = headerVisible ? visibleHeaders.map((element) => element.textContent.trim()) : [];
+    const headerTextFits = !headerVisible || visibleHeaders.every((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      return within(range.getBoundingClientRect(), element.getBoundingClientRect())
+        && within(range.getBoundingClientRect(), cardRect);
+    });
+    const tracksAligned = !populated || !headerVisible || [
+      [headers[0], row.querySelector('.file-item__name')],
+      [headers[1], row.querySelector('.file-item__type')],
+      [headers[2], row.querySelector('.file-item__status')],
+      [headers[3], row.querySelector('.file-item__size')],
+      [headers[4], row.querySelector('.file-item__actions')]
+    ].filter(([heading]) => getComputedStyle(heading).display !== 'none').every(([heading, cell]) => {
+      if (!cell) return false;
+      const headingRect = heading.getBoundingClientRect();
+      const cellRect = cell.getBoundingClientRect();
+      return Math.abs(headingRect.left - cellRect.left) <= 1
+        && Math.abs(headingRect.right - cellRect.right) <= 1;
+    });
+    const actionRects = [...actionRow.children].map((element) => element.getBoundingClientRect());
+    const actionsFit = actionRects.every((rect) => within(rect, cardRect))
+      && !actionRects.some((rect, index) => actionRects.slice(index + 1).some((other) => (
+        rect.left < other.right && rect.right > other.left && rect.top < other.bottom && rect.bottom > other.top
+      )));
+    const labelsFit = [...actionRow.querySelectorAll('button')].every((button) => {
+      const label = button.lastElementChild;
+      if (!label) return false;
+      const range = document.createRange();
+      range.selectNodeContents(label);
+      const lines = [...range.getClientRects()].filter((rect) => rect.width > 0 && rect.height > 0);
+      return lines.length === 1 && within(lines[0], button.getBoundingClientRect());
+    });
+    return {
+      ok: headerNames.join('|') === expectedHeaders.join('|')
+        && headerTextFits && tracksAligned && actionsFit && labelsFit,
+      headerNames, expectedHeaders, headerTextFits, tracksAligned, actionsFit, labelsFit
+    };
+  }, { width, populated });
+
+  if (!result.ok) {
+    throw new Error(`${width}px ${populated ? 'populated' : 'empty'}: responsive results do not fit. details=${JSON.stringify(result)}`);
+  }
+}
+
+async function assertResponsiveResize(browser, url) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 900 } });
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(() => localStorage.setItem('autoConvertEnabled', 'false'));
+    await page.goto(url, { waitUntil: 'networkidle' });
+    const widths = [320, 390, 639, 640, 700, 767, 768, 820, 1023, 1024, 1100, 1249, 1250, 1366];
+    for (const width of widths) {
+      await page.setViewportSize({ width, height: 900 });
+      await assertResponsiveResults(page, width, false);
+    }
+
+    await seedSelectedWorkbenchRow(page);
+    for (const theme of ['light', 'dark']) {
+      if (theme === 'dark') await page.locator('#themeToggle').click();
+      if (await page.locator('#themeToggle').getAttribute('aria-pressed') !== String(theme === 'dark')) {
+        throw new Error(`Expected ${theme} theme`);
+      }
+      for (const width of widths) {
+        await page.setViewportSize({ width, height: 900 });
+        await assertResponsiveResults(page, width, true);
+        await assertWorkbenchContentFits(page, `${theme}-${width}`);
+        if ([640, 768, 1024, 1366].includes(width)) {
+          const trigger = page.locator('.file-item__menu-trigger').first();
+          await trigger.focus();
+          await page.keyboard.press('Enter');
+          const menuItem = page.locator('.file-item__menu [role="menuitem"]').first();
+          if (!await menuItem.isVisible() || !await menuItem.evaluate((item) => {
+            const card = document.getElementById('statusPanel').getBoundingClientRect();
+            const rect = item.getBoundingClientRect();
+            return rect.left >= card.left && rect.right <= card.right && rect.bottom <= card.bottom;
+          })) {
+            throw new Error(`${theme}-${width}: row actions menu is clipped or unavailable`);
+          }
+          await page.keyboard.press('Escape');
+          if (await trigger.getAttribute('aria-expanded') !== 'false') {
+            throw new Error(`${theme}-${width}: row actions menu did not close`);
+          }
+        }
+      }
+    }
+  } finally {
+    await context.close();
+  }
+}
+
 async function assertApprovedShell(page, viewportLabel, {
   expectsColumns,
   expectsStackedActions = false,
@@ -281,6 +393,8 @@ async function assertApprovedShell(page, viewportLabel, {
     await assertHeaderEdgeToEdge(mobilePage, 'mobile');
     await assertApprovedShell(mobilePage, 'mobile', { expectsColumns: false, expectsStackedActions: true });
     await mobileContext.close();
+
+    await assertResponsiveResize(browser, url);
 
     console.log('header-edge-to-edge-playwright: OK');
     await browser.close();
