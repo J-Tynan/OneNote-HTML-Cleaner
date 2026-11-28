@@ -12,19 +12,19 @@ Browser-first production release for the supported OneNote MHTML cleanup workflo
 - Consolidated release-path browser-test helpers so the shipped workflow is faster to verify and maintain.
 - Polished high-visibility homepage and results controls for steadier desktop and mobile presentation.
 - Tightened release-facing copy, screenshot wording, and reusable launch notes so the current shipped workflow is described consistently.
-- Kept Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection explicitly optional advanced features.
+- Kept experimental Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection explicitly optional advanced features.
 - Includes accessibility coverage and clear unsupported-format messaging in the release scope.
 
 ### Supported In This Release
 
 - Input: `.mht`, `.mhtml`
-- Output: cleaned HTML by default, optional Markdown through the advanced export controls, and ZIP export for batches
+- Output: cleaned HTML by default, experimental Markdown through the advanced export controls, and ZIP export for batches
 - Workflow: drag and drop or file picker import, auto-convert or manual convert, single-file download or ZIP download
 - Optional HTML-only extras: converted-page theme toggle, toolbar injection, and externalized CSS when the workflow keeps related assets together
 
 ### Known Limitations
 
-- Native OneNote `.one` and `.onepkg` files are unsupported and are not converted; native work remains deferred, unscheduled research outside this release.
+- Native `.one` sections use experimental heuristic recovery and may produce incomplete or inaccurate output; review it before use. Native `.onepkg` notebooks are unsupported.
 - `.docx` export remains out of scope for `1.0.0`.
 - Handwriting from exported MHTML is preserved as raster content rather than editable vector ink.
 - Externalized CSS, toolbar injection, and converted-page theme toggle remain opt-in and are best suited to workflows that keep related assets together.
@@ -36,14 +36,24 @@ Browser-first production release for the supported OneNote MHTML cleanup workflo
 - If the app appears to be running stale assets after an update, reload the page first. If the older worker still persists, unregister the service worker and reload.
 - Keep browser-support wording scoped to the browsers actually exercised during the final `v1.0.0` verification pass.
 
-## 0.1.0 - 2026-05-12
+## 0.2 - 2026-08-29
 
-First stable release of the browser-first MHTML to clean HTML workflow.
+Browser-first stabilization release for exported OneNote MHTML, with optional Markdown and ZIP export.
+
+- Hardened MHTML conversion and improved homepage, Help, queue recovery, and batch export flows.
+- Kept Markdown, externalized CSS, converted-page theme toggles, and toolbar injection optional.
+- Native `.one` and `.onepkg` conversion was outside the published v0.2 scope.
+
+[Published v0.2 release](https://github.com/J-Tynan/OneNote-HTML-Cleaner/releases/tag/v0.2)
+
+## 0.1.0 - 2026-05-15
+
+First stable release of the browser-first MHTML to clean HTML workflow. These notes were drafted on 2026-05-12; the release was tagged on 2026-05-15.
 
 ### Highlights
 
 - Stable conversion path for exported OneNote `.mht` and `.mhtml` files.
-- Browser-first PWA workflow with offline availability after the first load.
+- Included service-worker code, but the original release did not automatically register it; offline availability was not ensured.
 - Batch conversion with ZIP export and deterministic, readable exported filenames.
 - Optional Markdown export, with Obsidian as the default Markdown flavor.
 - Improved first-run usability with a clearer homepage layout, in-app Help, keyboard-operable controls, and persisted theme preference.
@@ -57,7 +67,7 @@ First stable release of the browser-first MHTML to clean HTML workflow.
 
 ### Known Limitations
 
-- Native OneNote `.one` and `.onepkg` files are detected for clearer messaging but are not converted in the shipped runtime.
+- Native OneNote `.one` and `.onepkg` files were detected for clearer messaging but not converted in the v0.1.0 runtime.
 - `.docx` export is out of scope for `0.1.0`.
 - Handwriting from exported MHTML is preserved as raster content rather than editable vector ink.
 - Externalized CSS is intended for ZIP-style export workflows where the HTML and CSS assets stay together.

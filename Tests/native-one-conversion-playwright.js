@@ -3,7 +3,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import { startStaticServer } from './playwright-server-helper.js';
 
-const fixturePath = path.resolve(process.cwd(), 'Tests', 'Test Section.one');
+const fixturePath = path.resolve(process.cwd(), 'Tests', 'Test section.one');
 const fixture = fs.readFileSync(fixturePath);
 
 (async () => {

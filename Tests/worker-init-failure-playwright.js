@@ -11,7 +11,7 @@ import { getWorkerDiagnostics, installRuntimeHarness } from './playwright-runtim
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    const ctx = await browser.newContext();
+    const ctx = await browser.newContext({ serviceWorkers: 'block' });
     await installRuntimeHarness(ctx);
     const page = await ctx.newPage();
 

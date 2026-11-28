@@ -1731,7 +1731,7 @@ body { background: var(--workbench-canvas); color: var(--workbench-ink); }
 .workflow-heading .workflow-support { margin: 0; white-space: nowrap; }
 .import-stage > div:nth-child(2) { display: none; }
 .import-stage > .space-y-1 { display: contents; }
-.import-stage > .space-y-1 > p:not(.auto-convert-notice) { display: none; }
+.import-stage > .space-y-1 > p:not(.auto-convert-notice):not(.native-warning) { display: none; }
 .import-stage .auto-convert-notice {
   position: absolute;
   width: 1px;

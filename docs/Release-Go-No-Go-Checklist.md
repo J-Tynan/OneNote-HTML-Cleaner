@@ -8,21 +8,21 @@ The goal is to confirm that the production contract and public-facing copy descr
 
 - Version: `1.0.0`
 - Stable input scope: exported OneNote `.mht` and `.mhtml` only
-- Supported output scope: cleaned HTML by default, optional Markdown through advanced export controls, and ZIP export for batches
+- Output scope: cleaned HTML by default, experimental Markdown through advanced export controls, and ZIP export for batches
 - Optional features: externalized CSS for ZIP workflows, converted-page theme toggle, toolbar injection, and UI theme support
-- Unsupported native formats: `.one` and `.onepkg` remain unsupported, deferred research and are not part of the `v1.0.0` release gate
-- Out of scope for this release: `.docx` export and native OneNote conversion
+- Native formats: `.one` section recovery is experimental and may be incomplete; `.onepkg` conversion remains unsupported
+- Out of scope for this release: `.docx` export and a stable native OneNote fidelity guarantee
 - Accessibility baseline: accessibility audits are required; exported HTML should include one page-level `h1` and a `<main>` landmark
 
 ## Release Sign-Off Checklist
 
-- [x] `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same browser-first `v1.0.0` scope.
-- [x] Public docs describe Markdown export, toolbar injection, converted-page theme toggles, and externalized CSS as optional advanced features rather than the default workflow.
-- [x] Public docs describe native `.one` and `.onepkg` files as unsupported deferred research outside the release gate.
+- [ ] Confirm `README.md`, `RELEASE_NOTES.md`, and `TODO.md` describe the same browser-first `v1.0.0` scope.
+- [ ] Confirm public docs describe Markdown as experimental and toolbar injection, converted-page theme toggles, and externalized CSS as optional.
+- [ ] Confirm public docs distinguish experimental `.one` recovery from unsupported `.onepkg` conversion.
 - [x] Public docs avoid broader browser-compatibility claims than the recorded verification supports.
 - [x] Service-worker update guidance is present: reload first, then unregister and reload only if stale assets persist.
 - [x] Screenshot asset filenames in `assets/release/` match the active release docs.
-- [x] Screenshot captions and alt text are aligned across the README, screenshot inventory, and this checklist.
+- [ ] Confirm historical screenshot captions and alt text remain accurate.
 - [ ] Final `v1.0.0` RC verification results are recorded after the release-facing docs are locked.
 - [ ] Create the `v1.0.0` tag only after `main` is green and all release checks are complete.
 
@@ -30,13 +30,13 @@ The goal is to confirm that the production contract and public-facing copy descr
 
 - Record the exact browser/version combinations exercised in the final RC pass.
 - Do not broaden support wording beyond the browsers actually exercised during final validation.
-- Confirm the offline-capable PWA flow still works after the first load.
+- Confirm offline reopening and conversion after an online load and successful service-worker installation.
 - Confirm that a fresh reload picks up the current service-worker-managed assets.
 - Re-check that opt-in converted-page features remain off by default in the shipped HTML path.
 
 ## Screenshot Inventory
 
-Screenshot capture or refresh is optional release collateral and may be completed when ready; it is not required for `v1.0.0`.
+These historical v0.2 screenshots predate the current UI. Capture or refresh is optional release collateral and is not required for `v1.0.0`.
 
 Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, scene descriptions, caption text, and alt-text wording.
 
@@ -48,9 +48,9 @@ Use `docs/Release-Screenshot-Shot-List.md` for the exact filenames, scene descri
 
 ### 2. Converted page output
 
-- Scene: converted page showing headings, lists, a table, and a handwriting raster
+- Scene: converted page showing headings, a table, and a handwriting raster
 - Caption: Converted output preserves document structure, tables, and handwriting as raster content.
-- Alt text: Converted page showing headings, lists, a table, and preserved handwriting as a raster image.
+- Alt text: Converted page showing headings, a table, and preserved handwriting as a raster image.
 
 ### 3. Advanced options
 
@@ -79,7 +79,7 @@ Complete this section only after the release-facing docs are locked and the fina
 - [ ] `npm run test:gate:native` (existing MHTML regression gate; this does not establish native support)
 - [ ] Focused Playwright smoke coverage for MHTML import, output options, ZIP export, unsupported-format messaging, and responsive UI
 - [ ] Accessibility audits
-- [ ] Manual acceptance recorded for `.mht` / `.mhtml` import, HTML and Markdown output, ZIP contents, externalized CSS links, unsupported native messaging, and responsive/accessibility-critical UI states
+- [ ] Manual acceptance recorded for `.mht` / `.mhtml` import, experimental `.one` recovery and unsupported `.onepkg` messaging, HTML and experimental Markdown output, ZIP contents, externalized CSS links, offline reopen and conversion, and responsive/accessibility-critical UI states
 - [ ] Confirm CI is green on `main`
 
 Recorded on `TBD`.

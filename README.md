@@ -1,6 +1,6 @@
 # OneNote HTML Cleaner
 
-Convert OneNote MHTML exports into cleaner, portable HTML, optional Markdown, and ZIP exports entirely in your browser.
+Convert OneNote MHTML exports into cleaner, portable HTML and ZIP exports entirely in your browser. Markdown and native `.one` conversion are experimental.
 
 OneNote HTML Cleaner is a progressive web app for people who need a practical way to turn exported OneNote pages into cleaner, easier-to-share output without installing a desktop toolchain. The stable release path stays focused on exported MHTML input and a straightforward conversion flow that works well for first-time use as well as repeat batch work.
 
@@ -22,15 +22,17 @@ The section below is prepared for a side-by-side example using the same note in 
 
 This comparison is intended to show a real exported note with a clean, reasonable before-and-after example rather than a dramatized marketing comparison.
 
-## v1.0.0 Release Scope
+## Upcoming v1.0.0 Release Scope
 
-- Convert exported OneNote `.mht` and `.mhtml` files locally in the browser, with cleaned HTML, optional Markdown, and ZIP export for batches.
+- Convert exported OneNote `.mht` and `.mhtml` files locally in the browser, with cleaned HTML, experimental Markdown, and ZIP export for batches.
 - Hardened MHTML-to-HTML conversion against edge-case layout, list, table, whitespace, and inline-resource regressions while keeping deterministic browser-first output.
-- Optional advanced features stay opt-in: Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection.
+- Optional advanced features stay opt-in: experimental Markdown export, externalized CSS, converted-page theme toggles, and toolbar injection.
 - Homepage, Help, queue recovery, and batch export flows are polished for steadier desktop and mobile use.
-- Native `.one` and `.onepkg` support is deferred research, unscheduled, and outside the v1.0.0 release; these formats remain unsupported.
+- Native `.one` sections can be processed experimentally using heuristic recovery; inspect the results before use. Native `.onepkg` notebooks remain unsupported.
 
 ## Screenshots
+
+These are historical v0.2 screenshots; the current homepage and controls have since changed.
 
 <!-- markdownlint-disable MD033 MD010 -->
 
@@ -40,7 +42,7 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 			<img src="assets/release/release-import-workflow.png" alt="Homepage showing the import panel, one queued MHTML file, and the convert action.">
 		</td>
 		<td width="50%">
-			<img src="assets/release/release-converted-output.png" alt="Converted page showing headings, lists, a table, and preserved handwriting as a raster image.">
+			<img src="assets/release/release-converted-output.png" alt="Converted page showing headings, a table, and preserved handwriting as a raster image.">
 		</td>
 	</tr>
 	<tr>
@@ -71,7 +73,7 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 
 ## Why Use It
 
-- **Reliable browser-first conversion:** Convert exported OneNote MHTML files locally in the browser with a workflow designed for steady results, offline use after the first load, and clear status from import through download.
+- **Reliable browser-first conversion:** Convert exported OneNote MHTML files locally in the browser with a workflow designed for steady results, offline use after a successful initial cache installation, and clear status from import through download.
 
 - **Readable output by default:** The cleaned HTML strips away OneNote authoring noise and restores clearer structure, so headings, lists, tables, and images are easier to inspect, reuse, and share.
 
@@ -83,11 +85,11 @@ This comparison is intended to show a real exported note with a clean, reasonabl
 
 This is the fastest path for someone using the app once.
 
-1. Open the app in your browser.
-2. Drag in your exported OneNote `.mht` or `.mhtml` files, or use the file picker.
-3. Use Advanced options for Markdown export, manual conversion, or externalized CSS; otherwise, the default HTML settings are sufficient.
-4. Let the app convert automatically, or click `Convert` if you have disabled auto-convert.
-5. Download a single converted file or use `Download ZIP` for multi-file exports.
+1. [Open the app](https://j-tynan.github.io/OneNote-HTML-Cleaner/) in your browser.
+2. Drag in your exported OneNote `.mht` or `.mhtml` files, or use `Browse files` or `Add from folder`.
+3. Use Advanced options for manual conversion or externalized CSS. For experimental Markdown, enable `Enable experimental export formats` and select Markdown.
+4. Let the app convert automatically, or click `Convert queued files` if you have disabled auto-convert.
+5. Use a file's actions menu to download it, or use `Download all (ZIP)` for a batch.
 
 If your goal is simply to clean and save an exported OneNote page, the default settings are intended to be enough.
 
@@ -96,14 +98,14 @@ If your goal is simply to clean and save an exported OneNote page, the default s
 The app's privacy model is intentionally simple: files are processed locally in your browser and are not uploaded by this app.
 
 - Conversion runs in the browser using the shipped app code rather than a server-side upload workflow.
-- After the first load, the PWA can keep working offline using cached app assets.
+- After the first online load and successful service-worker installation, the app can work offline using cached app assets.
 - Because offline support depends on browser-managed caching, your browser may keep local app assets until that site data is refreshed or cleared.
 - This section describes the app's local-processing model, not a broader promise about browser-vendor security features, encryption, or secure deletion on your device.
 
 ## First-Time User Notes
 
-- The stable release supports OneNote MHTML exports only: `.mht` and `.mhtml`.
-- Unsupported files such as `.one` and `.onepkg` are detected and labeled clearly instead of being partially processed.
+- The stable conversion path supports OneNote MHTML exports: `.mht` and `.mhtml`.
+- `.one` section conversion is experimental and may produce incomplete or inaccurate results; `.onepkg` notebooks are unsupported.
 - The app includes a Light / Dark UI theme toggle and remembers your choice in the browser.
 - In-app help is available from the Help button, and keyboard support covers Help, import, conversion, and the main controls.
 - Exported HTML targets one page-level `h1` and a `<main>` landmark for a cleaner accessibility baseline.
@@ -114,7 +116,7 @@ The app's privacy model is intentionally simple: files are processed locally in 
 
 ### Offline-Capable PWA
 
-The app runs as a progressive web app so the conversion workflow remains available in the browser without requiring a desktop installation. After the first load, the app can continue working offline using cached app assets.
+After an online load and successful service-worker installation, the app can reopen and convert files offline using cached app assets. Browser settings or cleared site data can prevent or remove the offline cache.
 
 If a newly deployed build appears stale, reload first. If the older service worker still persists, unregister it and reload.
 
@@ -138,7 +140,7 @@ Advanced options group optional settings so the default conversion path does not
 
 ### Optional Markdown Export
 
-The app can also export Markdown through the advanced export controls. Obsidian-compatible output is the default Markdown flavor, with additional supported flavors available when you need a different target.
+The app can also export experimental Markdown through the advanced export controls. Enable experimental export formats and select Markdown. Obsidian-compatible output is the default flavor, with additional flavors available.
 
 ### Optional Externalized CSS For ZIP Exports
 
@@ -159,10 +161,12 @@ The conversion path preserves important note structures such as headings, lists,
 - `.mht`
 - `.mhtml`
 
+Experimental: `.one` section files use heuristic recovery and require output review. `.onepkg` notebooks are unsupported.
+
 ### Supported Output
 
 - HTML
-- Markdown through the advanced export controls
+- Experimental Markdown through the advanced export controls
 - ZIP export for batch downloads
 
 ### Built-In User Controls
@@ -178,7 +182,7 @@ The conversion path preserves important note structures such as headings, lists,
 
 This project is intentionally narrow in the current stable release. It is useful because it stays focused on one validated conversion path rather than promising every OneNote-related workflow.
 
-- It is not a native `.one` or `.onepkg` converter in the shipped runtime.
+- It does not provide verified native OneNote fidelity: experimental `.one` recovery can be incomplete, and `.onepkg` conversion is unsupported.
 - It is not a general-purpose document conversion tool for arbitrary input formats.
 - It is not a `.docx` export workflow in the current stable release.
 - It is not a promise that every converted page will match the source export perfectly across every browser; the goal is cleaner, more reusable output from exported OneNote MHTML.
@@ -201,10 +205,10 @@ The app supports a small set of explicit keyboard shortcuts and a broader set of
 
 ## Release Scope
 
-The v1.0.0 production scope remains intentionally narrow.
+The upcoming v1.0.0 production scope remains intentionally narrow.
 
-- Supported production conversion path: OneNote MHTML exports only
-- Native OneNote files such as `.one` and `.onepkg` are unsupported and remain deferred, unscheduled research outside this release
+- Supported production conversion path: OneNote MHTML exports
+- Experimental `.one` section recovery is available with no fidelity guarantee; `.onepkg` remains unsupported
 - `.docx` export is not part of this release
 - Other input formats are intentionally outside the current shipped conversion contract
 
@@ -216,7 +220,7 @@ These features are available for users who need more control, but they are not r
 
 ### Markdown Export
 
-Select Markdown in Advanced options to export Markdown instead of HTML. Markdown is a supported optional output; HTML remains the default.
+In Advanced options, enable experimental export formats and select Markdown instead of HTML. Markdown is experimental; HTML remains the default.
 
 ### Externalized CSS
 
@@ -242,9 +246,9 @@ The roadmap is focused on expanding the product carefully without weakening the 
 
 ### Planned Product Expansion
 
-- Future output formats, if considered, require a separate scope decision; v1.0.0 supports HTML, Markdown, and ZIP export.
+- Future output formats, if considered, require a separate scope decision; the planned v1.0.0 outputs are HTML, experimental Markdown, and ZIP.
 - future investigation of richer converted-page editing workflows beyond the current optional toolbar presets
-- Native `.one` and `.onepkg` work remains deferred research, unscheduled, and outside v1.0.0.
+- Improved native `.one` and `.onepkg` parsing remains deferred research; the existing `.one` heuristic path is experimental.
 
 ### Planned Tag Features
 
@@ -256,9 +260,9 @@ The roadmap should be read as direction, not as a delivery promise.
 
 ## Known Limitations
 
-- The stable release supports only `.mht` and `.mhtml` input files. If a converted page does not match the source note closely enough, see [Report Fidelity Problems](#report-fidelity-problems).
-- Native `.one` and `.onepkg` files may be detected, but they are not converted in the shipped runtime.
-- Markdown export is available through advanced export controls rather than the default path.
+- The stable path supports `.mht` and `.mhtml` input files. If a converted page does not match the source note closely enough, see [Report Fidelity Problems](#report-fidelity-problems).
+- Experimental `.one` recovery may be incomplete or inaccurate and should be reviewed; `.onepkg` files are not converted.
+- Experimental Markdown export is available through advanced export controls rather than the default path.
 - Handwriting from MHTML exports is preserved as raster content rather than editable vector ink.
 - Externalized CSS is intended for ZIP workflows where the HTML and CSS assets remain together.
 
@@ -272,9 +276,9 @@ OneNote's exported MHTML can already contain browser-specific layout quirks, and
 
 If the result is not close enough to the source note, treat it as a fidelity issue and include the source file type, browser version, expected result, actual result, and screenshots when you report it.
 
-### Why does the ZIP button appear only after conversion?
+### Why is the ZIP button disabled?
 
-`Download ZIP` packages converted output, so it becomes useful only after at least one file has finished converting. If you have imported files but do not see ZIP output yet, wait for conversion to complete or click `Convert` if you have disabled auto-convert.
+`Download all (ZIP)` packages converted output and becomes available after conversion completes. If you have disabled auto-convert, click `Convert queued files`.
 
 ### Why does the service worker show an old version?
 
@@ -292,7 +296,7 @@ The current docs do not publish a fixed maximum file size. Practical limits depe
 
 ### Does it work offline?
 
-Yes, after the first load. The app is a PWA, so the browser can cache the app assets needed to reopen it offline. Offline support means the app shell can remain available without a network connection; it does not imply identical performance on every device or browser state.
+Yes, after an online load and successful service-worker installation. The app caches its runtime assets locally; clearing site data or disabling service workers removes or prevents offline availability.
 
 ### Does it use memory proportional to file size?
 
@@ -344,5 +348,5 @@ npm run fixtures:rebaseline
 
 - The shipped release path is MHTML-first.
 - Tailwind CSS v4 is used for utilities and layout through the CSS-first `src/styles/tailwind-app.css` entry, while converted-page utilities use `src/styles/tailwind-export.css`; shared component styling lives in `styles.css`, the project does not use a third-party Tailwind UI library, preflight stays disabled, and Tailwind sources are registered explicitly to avoid scanning markdown docs.
-- Native `.one` and `.onepkg` work remains deferred research, unscheduled, and outside v1.0.0.
+- Native `.one` recovery is experimental; full native parsing and `.onepkg` conversion remain deferred research.
 - The repository still contains deeper technical notes for pipeline, export, and worker behavior in the `docs/` folder.

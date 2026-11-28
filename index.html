@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>OneNote HTML Cleaner</title>
+  <link rel="manifest" href="manifest.json" />
 
   <!-- Tailwind (compiled) -->
   <link rel="stylesheet" href="assets/tailwind-app.css" />
@@ -30,7 +31,7 @@
         </div>
 
         <nav class="home-header__actions flex items-center gap-3" aria-label="Product actions">
-          <a class="btn-ghost header-link" href="README.md">Documentation</a>
+          <a class="btn-ghost header-link" href="https://github.com/J-Tynan/OneNote-HTML-Cleaner#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
 
           <!-- Help button: opens small usage popup -->
           <button
@@ -75,7 +76,7 @@
               <span class="workflow-step" aria-hidden="true">1</span>
               <div>
                 <h2 id="importHeading" class="text-lg font-medium">Add OneNote files</h2>
-                <p class="workflow-support">Supported: .mht, .mhtml</p>
+                <p class="workflow-support">Supported: .mht, .mhtml. Experimental: .one.</p>
               </div>
             </div>
             <div>
@@ -85,7 +86,7 @@
             </div>
 
             <div class="space-y-1 text-xs text-muted">
-              <p>Supported input: .mht, .mhtml</p>
+              <p class="native-warning">Experimental .one recovery may be incomplete; review the output. .onepkg is unsupported.</p>
               <!-- Convert button: triggers processing when auto-convert is OFF -->
               <p>Files stay on your device.</p>
               <p id="autoConvertNotice" class="auto-convert-notice">
@@ -148,7 +149,7 @@
                 type="file"
                 multiple
                 aria-label="Select files to import"
-                accept=".mht,.mhtml" />
+                accept=".mht,.mhtml,.one" />
               <input
                 id="folderInput"
                 class="sr-only"
@@ -157,7 +158,7 @@
                 webkitdirectory
                 directory
                 aria-label="Select a folder to import"
-                accept=".mht,.mhtml" />
+                accept=".mht,.mhtml,.one" />
             </div>
           </div>
             </section>
@@ -451,8 +452,7 @@
   </footer>
 
   <!-- UI logic -->
-  <!-- Load JSZip from CDN in production (avoid /node_modules root-relative path on GitHub Pages) -->
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
+  <script src="assets/vendor/jszip.min.js" defer></script>
   <script type="module" src="src/ui.js"></script>
   <script type="module" src="src/app.js"></script>
 
@@ -484,6 +484,9 @@
             <p class="text-sm text-secondary">
               Handwriting from OneNote exports is preserved as raster imagery. Appearance can vary with the theme used when the page was exported, and vector ink editing is not available in this workflow.
             </p>
+            <p class="text-sm text-secondary">
+              Native .one section conversion is experimental and uses heuristic recovery. Review its output before use. Native .onepkg notebooks are not supported.
+            </p>
           </div>
         </details>
 
@@ -503,7 +506,7 @@
           <summary class="help-section__summary text-sm font-medium">Export formats</summary>
           <div class="help-section__body space-y-3">
             <p class="text-sm text-secondary">
-              Advanced options can enable Markdown export. HTML remains the default stable path, and Markdown is available as an optional export with selectable flavor.
+              In Advanced options, enable experimental export formats and select Markdown. HTML remains the default stable path.
             </p>
             <p class="text-sm text-secondary">
               Markdown export follows a structure-first approach rather than layout preservation, with Obsidian-compatible output as the default flavor.
@@ -515,10 +518,10 @@
           <summary class="help-section__summary text-sm font-medium">Converted-page options</summary>
           <div class="help-section__body space-y-3">
             <p class="text-sm text-secondary">
-              Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light or Dark symbol toggle, with an optional OLED-black dark variant for page and main-content surfaces.
+              Converted-page theme toggle is available for HTML exports. When enabled, exported pages include a Light or Black symbol toggle.
             </p>
             <p class="text-sm text-secondary">
-              If toolbar injection is enabled, the converted-page toolbar starts hidden by default. Use the small Toolbar button beside the page theme toggle to reveal it.
+              If toolbar injection is enabled, the converted-page toolbar opens with editing enabled and includes controls to save or hide it.
             </p>
           </div>
         </details>

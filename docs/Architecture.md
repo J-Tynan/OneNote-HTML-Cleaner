@@ -4,8 +4,8 @@
 - Processing performed in a module Web Worker
 - Pipeline modules under `src/pipeline/`
 - UI communicates with worker via `postMessage` using Contracts.md shapes
-- Output: per-file cleaned HTML and optional ZIP export (JSZip later)
-- Import flow: file picker and drag/drop may receive `.mht`, `.mhtml`, `.html`, `.htm`, `.one`, `.onepkg`, but the stable runtime only processes the MHTML path. Native `.one` / `.onepkg` detection is retained only so unsupported files can be surfaced clearly in the UI.
+- Output: per-file cleaned HTML, experimental Markdown, and ZIP export using the locally shipped JSZip distribution.
+- Import flow: `.mht` and `.mhtml` are the stable path. `.one` sections use experimental heuristic recovery; `.onepkg` and other formats are surfaced as unsupported.
 - Styling stack: Tailwind CSS v4 is retained for utility classes and layout through the CSS-first `src/styles/tailwind-app.css` entry, while converted-page utilities use `src/styles/tailwind-export.css`; shared component styling is owned by the app in `styles.css`, and no third-party Tailwind UI library is part of the current architecture.
 - Tailwind contract: preflight remains disabled, dark mode is driven by the `html.dark` class through a custom variant in `src/styles/tailwind-app.css`, and each entry registers only its explicit sources so markdown docs do not pollute generated CSS.
 
@@ -27,11 +27,10 @@
 
 Reference: `docs/OneNote Tag Parsing Research.md`
 
-## Native OneNote import flow (deferred)
-1. UI still detects source kind (`html`, `mht`, `one`, `onepkg`) so unsupported native files can be identified clearly.
-2. Stable runtime behavior stops at that intake boundary: `.one` and `.onepkg` are marked unsupported and are not routed through the shipped worker pipeline.
-3. Importer modules under `src/importers/` remain deferred implementation assets for a future native-enabled release; they are not part of the active stable-runtime architecture.
-4. Full page-content extraction for compressed CAB folders (for example LZX) remains planned work, not active architecture in the stable release.
+## Native OneNote import flow
+1. The UI detects source kind (`html`, `mht`, `one`, `onepkg`); `.onepkg` is rejected as unsupported.
+2. The worker preflights `.one` bytes and lazily loads the experimental heuristic section importer. Its output can be incomplete or inaccurate and requires review.
+3. Full direct page-content parsing and compressed CAB extraction remain deferred research, not a stable native support guarantee.
 
 ## Windows companion extraction
 - `tools/Extract-OnePkg.ps1` uses `expand.exe` to unpack compressed `.onepkg` files into section files (`*.one`).

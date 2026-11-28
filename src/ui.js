@@ -1187,7 +1187,7 @@ async function processEntryWithWorker(entry) {
       const fallbackPageCount = Number(result.nativeResult.fallbackPageCount) || 0;
       entry.message = result.nativeResult.state === 'partial'
         ? `Converted ${pageCount} native page${pageCount === 1 ? '' : 's'} with heuristic recovery${fallbackPageCount > 0 ? ` on ${fallbackPageCount} page${fallbackPageCount === 1 ? '' : 's'}` : ''}. Review the output before use, then download the complete ZIP export.`
-        : `Converted ${pageCount} native page${pageCount === 1 ? '' : 's'}. Download the complete ZIP export.`;
+        : `Converted ${pageCount} native page${pageCount === 1 ? '' : 's'} using experimental heuristic recovery. Review the output before use, then download the complete ZIP export.`;
       updateEntryStatus(entry.id, 'success');
       return;
     }

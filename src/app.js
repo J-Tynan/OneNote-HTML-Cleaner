@@ -47,6 +47,14 @@ async function initializeApplication() {
     autoConvertEnabled
   };
   await initUI(wm, initOptions);
+
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register(new URL('../service-worker.js', import.meta.url));
+    } catch (error) {
+      logger.warn({ msg: 'Offline cache registration failed', meta: { error: String(error) } });
+    }
+  }
 }
 
 /** @returns {void} */

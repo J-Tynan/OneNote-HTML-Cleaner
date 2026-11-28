@@ -63,14 +63,13 @@ No tag-specific worker config keys are part of the stable shipped contract yet.
 }
 ```
 
-## Worker request (native OneNote, deferred design contract)
+## Worker request (experimental native section)
 ```json
 {
   "id": "string",
-  "type": "process-native-file",
   "fileName": "Test Section.one",
   "relativePath": "Test Section.one",
-  "sourceKind": "one|onepkg",
+  "sourceKind": "one",
   "bytes": "ArrayBuffer",
   "config": {
     "Profile": "onenote",
@@ -82,11 +81,7 @@ No tag-specific worker config keys are part of the stable shipped contract yet.
 }
 ```
 
-`process-native-file` is a deferred design contract for future native OneNote support. It is retained for planning and development reference only and is not used by the current stable app runtime:
-- `one`: OneNote section (`*.one`)
-- `onepkg`: OneNote notebook package (`*.onepkg`, CAB container)
-
-Current stable-release behavior stops before this contract is reached: native `.one` / `.onepkg` files are surfaced as unsupported and are not sent through the shipped worker conversion path.
+The UI sends `.one` section bytes to the worker for preflight and experimental heuristic recovery. The result requires review and does not establish stable native fidelity. `.onepkg` notebook packages are unsupported.
 
 `Profile` is preferred for new integrations:
 - `onenote`: enables the default OneNote semantic and layout helpers.
@@ -111,15 +106,14 @@ Converted-page theme flags are additive and optional:
 }
 ```
 
-## Worker response (done, native, deferred design contract)
+## Worker response (done, experimental native section)
 ```json
 {
   "id": "string",
   "status": "done",
   "resultType": "native",
-  "relativePath": "Test Section.one",
   "nativeResult": {
-    "sourceKind": "one|onepkg",
+    "sourceKind": "one",
     "hierarchy": {
       "kind": "section|notebook|folder|entry",
       "name": "string",
@@ -142,7 +136,7 @@ Converted-page theme flags are additive and optional:
 
 Toolbar injection is optional and controlled by config; response shapes do not change when toolbar is enabled.
 
-Current stable runtime behavior does not emit native `done` responses. Native `.one` / `.onepkg` inputs are surfaced as unsupported while importer work remains deferred. The response shape above is retained only as a non-shipped design/development contract for future native re-enablement.
+The current `.one` importer can emit this response after preflight. Its heuristic output is experimental; `.onepkg` conversion is not enabled.
 ---
 ## Results workbench contract
 

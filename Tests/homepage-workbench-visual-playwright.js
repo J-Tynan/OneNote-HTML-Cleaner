@@ -71,7 +71,7 @@ async function captureUnsupportedState(browser, url) {
   try {
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.setInputFiles('#fileInput', {
-      name: 'native-note.one',
+      name: 'native-notebook.onepkg',
       mimeType: 'application/octet-stream',
       buffer: Buffer.from('Native OneNote fixture for unsupported-state review')
     });

@@ -1,10 +1,6 @@
 // @ts-check
 
-// DEFERRED: Phase 2 native importer work.
-// The first stable release is MHT/MHTML-only. The worker rejects `.one`
-// inputs before native importers are loaded, so this module is kept in-repo
-// for planned post-release work and should not be treated as active runtime
-// surface for the current release.
+// Experimental heuristic recovery; successful preflight does not guarantee fidelity.
 
 import { baseNameFromFile, toFolderSafeName } from './sourceKind.js';
 import { preflightOneSection } from './onePreflight.js';

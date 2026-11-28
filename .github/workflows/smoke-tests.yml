@@ -9,7 +9,7 @@ on:
 jobs:
   smoke:
     name: Playwright smoke tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,8 +26,8 @@ jobs:
       - name: Build Tailwind (if present)
         run: npm run build:tailwind --if-present
 
-      - name: Install Playwright browsers (best-effort)
-        run: npx playwright install --with-deps || true
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Run charset regression tests
         run: node Tests/check-charset-regressions.js

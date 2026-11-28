@@ -8,18 +8,17 @@ This file was merged with `TODOs.md` to keep a single canonical task list for th
 
 ## Project status:
 
-Native .one/.onepkg support was investigated and remains research-only. 
-Current production scope is browser-first .mht / .mhtml conversion.
+The stable production path is browser-first .mht / .mhtml conversion. Native .one section recovery is experimental and heuristic; .onepkg conversion remains unsupported.
 
 ---
 
 ## Release Roadmap
 
 - `v0.1.0` Stable browser-first release: shipped `.mht` / `.mhtml` conversion with release screenshots, notes, and recorded acceptance on 2026-05-15.
-- `v0.2` Browser-first stabilization: the planned bug-fix, test-harness, UI, documentation, and launch-asset work is substantially complete. Remaining optional P3 work does not block shipping.
-- `v1.0.0` Production release of the supported browser-first workflow: `.mht` / `.mhtml` input with HTML, Markdown, ZIP, optional externalized CSS, accessibility coverage, and clear unsupported-format messaging. Native `.one` / `.onepkg` support is explicitly out of scope.
+- `v0.2` Browser-first stabilization: published 2026-08-29.
+- `v1.0.0` Upcoming production release: stable `.mht` / `.mhtml` input and HTML/ZIP output, experimental Markdown and heuristic `.one` recovery, optional externalized CSS, and accessibility coverage. `.onepkg` remains unsupported.
 - `v1.0.x` Post-release maintenance: address verified regressions, security issues, browser compatibility, and support/documentation gaps without expanding the input-format promise by default.
-- Future native-format investigation: `.one` / `.onepkg` research remains preserved but unscheduled. Revisit only when time, budget, fixtures, and a narrow support contract are available; assign a version only after that decision.
+- Future native-format investigation: improved `.one` parsing and `.onepkg` conversion remain unscheduled research. Revisit when time, budget, fixtures, and a narrow support contract are available.
 
 The next release path is to complete the browser-first `v1.0.0` acceptance gate below. Native parsing is not a production-release blocker.
 
@@ -189,9 +188,9 @@ This close-out sequence was completed for `v0.1.0` and remains here as release-p
 
 These are scope guardrails for the next production release, not day-to-day completion tasks.
 
-- [P1] Ship the supported browser-first `.mht` / `.mhtml` workflow and its documented HTML, Markdown, and ZIP export options.
+- [P1] Ship the browser-first `.mht` / `.mhtml` workflow and its HTML, experimental Markdown, and ZIP export options.
 - [P1] Preserve extraction fidelity, deterministic output, accessibility, and clear failure behavior as release criteria.
-- [P1] Keep native `.one` and `.onepkg` unsupported in the production claim; preserve their research separately without blocking release.
+- [P1] Describe `.one` recovery as experimental and heuristic, with output review required; keep `.onepkg` unsupported and avoid a stable native fidelity claim.
 
 Note: The browser-first workflow is implemented and has substantial regression, accessibility, UI, and documentation coverage. The remaining release work is verification and release readiness, not native parsing.
 
@@ -292,20 +291,20 @@ First-pass tasks:
 
 Release goal:
 
-- Ship the mature `.mht` / `.mhtml` workflow as a clearly scoped production release, with HTML, Markdown, ZIP, optional externalized CSS, and accessible failure handling.
+- Ship the mature `.mht` / `.mhtml` workflow as a clearly scoped production release, with HTML, experimental Markdown, ZIP, optional externalized CSS, and accessible failure handling.
 
 Success criteria:
 
 - Supported inputs, exports, browser expectations, and known limitations are accurate in the UI and documentation.
 - The release gate passes for the existing MHTML pipeline, UI, exports, and accessibility behavior.
-- Native `.one` / `.onepkg` files remain clearly unsupported and are not represented as a release capability.
+- Experimental `.one` recovery and its limitations are clearly identified; `.onepkg` remains unsupported.
 
 First-pass release tasks:
 
-- [x] [P1] Confirm README, in-app messaging, architecture/contracts, and release notes consistently define `.mht` / `.mhtml` as the supported inputs and `.one` / `.onepkg` as unsupported. (2026-11-15)
+- [ ] [P1] Confirm README, in-app messaging, architecture/contracts, and release notes consistently describe experimental `.one` recovery and unsupported `.onepkg` conversion.
 - [ ] [P1] Run the release verification pass: `npm ci`, `npm run typecheck`, `npm run test:gate:native`, relevant Playwright smoke tests, and accessibility audits; record results in the release checklist.
-- [ ] [P1] Perform clean-profile manual acceptance of MHTML import, HTML and Markdown output, ZIP contents, optional externalized CSS, unsupported-format messaging, and responsive/accessibility-critical UI states.
-- [x] [P1] Verify release notes and support documentation represent the current browser-first product and do not imply native parsing. (2026-11-15)
+- [ ] [P1] Perform clean-profile manual acceptance of MHTML import, experimental `.one` recovery, HTML and Markdown output, ZIP contents, offline use, optional externalized CSS, unsupported `.onepkg` messaging, and responsive/accessibility-critical UI states.
+- [ ] [P1] Verify release notes and support documentation represent the current browser-first product and the limitations of experimental native recovery.
 - [ ] [P3] Capture or refresh release screenshots when ready; screenshot updates are optional and do not gate `v1.0.0`.
 - [ ] [P1] Tag `v1.0.0` only after CI, the release verification pass, and manual acceptance are complete.
 
@@ -313,7 +312,7 @@ Verification follow-up (2026-11-25): corrected type errors, sanitizer rerun drif
 
 ## Native OneNote Research (Deferred, Unscheduled)
 
-This section preserves native `.one` / `.onepkg` research, fixtures, parser contracts, traceability, and acceptance criteria. It is not part of the `v1.0.0` production release gate. Treat every unchecked item here as `[P3]`, including older checklist entries without an inline priority label. Do not assign a shipping version until resources, budget, fixture coverage, and a narrow support contract are approved.
+This section preserves research for improved native `.one` / `.onepkg` parsing, fixtures, parser contracts, traceability, and acceptance criteria. The existing `.one` heuristic path is experimental, not a stable native fidelity claim. Treat every unchecked research item here as `[P3]`, including older checklist entries without an inline priority label.
 
 Revisit `docs/research/native-onenote/Native-OneNote-Research-Scope-Record.md`, `docs/research/native-onenote/Native-OneNote-Research-Evidence-Index.md`, and `docs/research/native-onenote/Native-OneNote-Research-Fixture-Traceability.md` only when native investigation is explicitly resumed. Keep their research value and historical claims intact; do not imply support in the meantime.
 
@@ -555,7 +554,7 @@ Future investigation is research-only, non-release-gating, and remains P3:
 
 #### Current Release Focus
 
-- **Complete the browser-first `v1.0.0` production release gate. Keep `.one` / `.onepkg` work in the deferred research section, and select optional enhancements only when they address a clear user need.**
+- **Complete the browser-first `v1.0.0` production release gate. Document experimental `.one` recovery; keep improved native parsing and `.onepkg` work in deferred research.**
 
 Completed follow-up work from this milestone:
 

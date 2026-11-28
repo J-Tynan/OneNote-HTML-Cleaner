@@ -18,7 +18,7 @@ import { startStaticServer } from './playwright-server-helper.js';
       accepts: input.getAttribute('accept'),
       directory: input.hasAttribute('webkitdirectory') && input.hasAttribute('directory')
     }));
-    if (!inputContract.multiple || inputContract.accepts !== '.mht,.mhtml' || !inputContract.directory) {
+    if (!inputContract.multiple || inputContract.accepts !== '.mht,.mhtml,.one' || !inputContract.directory) {
       throw new Error(`Unexpected folder input contract: ${JSON.stringify(inputContract)}`);
     }
 

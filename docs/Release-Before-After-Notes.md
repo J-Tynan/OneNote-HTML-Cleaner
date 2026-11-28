@@ -14,7 +14,7 @@ Keep the comparison factual. The goal is to show the difference in readability a
 
 - Reuse this note set only for comparisons backed by the existing before/after screenshots in `assets/release/`.
 - Keep references to dark-mode-friendly viewing optional, not default, because the converted-page theme toggle remains opt-in.
-- Do not broaden the claim into native `.one` support, `.docx` export, or a general browser-compatibility guarantee.
+- Do not imply stable native `.one` fidelity, `.docx` export, or a general browser-compatibility guarantee. Current `.one` recovery is experimental; `.onepkg` remains unsupported.
 
 ## Source Of Truth
 

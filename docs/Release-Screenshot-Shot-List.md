@@ -2,7 +2,7 @@
 
 Use this document as the filename, scene, caption, and alt-text source of truth for `0.2.0`.
 
-The current `v0.2` screenshot set is already captured under `assets/release/`. This document keeps the public wording aligned across `README.md`, `RELEASE_NOTES.md`, and the release checklist.
+The historical `v0.2` screenshot set is captured under `assets/release/`. The homepage and controls have since changed; do not present these images as current UI.
 
 ## Asset Status
 
@@ -23,9 +23,9 @@ The current `v0.2` screenshot set is already captured under `assets/release/`. T
 ### 2. Converted page output
 
 - Filename: `assets/release/release-converted-output.png`
-- Scene: converted page showing headings, lists, a table, and a handwriting raster
+- Scene: converted page showing headings, a table, and a handwriting raster
 - Caption: Converted output preserves document structure, tables, and handwriting as raster content.
-- Alt text: Converted page showing headings, lists, a table, and preserved handwriting as a raster image.
+- Alt text: Converted page showing headings, a table, and preserved handwriting as a raster image.
 - Notes: choose a converted page that reads clearly at screenshot scale and includes the handwriting raster in-frame.
 
 ### 3. Advanced options
@@ -34,7 +34,7 @@ The current `v0.2` screenshot set is already captured under `assets/release/`. T
 - Scene: Advanced options expanded with optional output controls visible, including externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection
 - Caption: Advanced options expose optional output controls such as externalized CSS, Markdown export, converted-page theme toggles, and toolbar injection without changing the default HTML workflow.
 - Alt text: Advanced options expanded with externalized CSS, Markdown export, converted-page theme toggle, and toolbar injection controls visible.
-- Notes: this asset is not Markdown-only anymore; keep the wording aligned to the current captured image while preserving that these features are optional.
+- Notes: the historical image shows a Light/Dark toggle with a separate OLED option; the current UI offers a Light/Black toggle instead.
 
 ### 4. ZIP export
 
@@ -56,4 +56,4 @@ The current `v0.2` screenshot set is already captured under `assets/release/`. T
 
 - The caption and alt-text strings for these five assets should match exactly in `README.md` and `docs/Release-Go-No-Go-Checklist.md`.
 - `RELEASE_NOTES.md` should describe the same feature set and release scope without needing to repeat every caption verbatim.
-- Keep the release copy narrow: browser-first MHTML cleaning, optional advanced features, unsupported native `.one` and `.onepkg`, and no broader browser-support claims than the recorded verification supports.
+- Keep the release copy narrow: browser-first MHTML cleaning, experimental `.one` recovery and Markdown, unsupported `.onepkg`, and no broader browser-support claims than the recorded verification supports.
