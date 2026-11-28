@@ -264,6 +264,7 @@ The roadmap should be read as direction, not as a delivery promise.
 - Experimental `.one` recovery may be incomplete or inaccurate and should be reviewed; `.onepkg` files are not converted.
 - Experimental Markdown export is available through advanced export controls rather than the default path.
 - Handwriting from MHTML exports is preserved as raster content rather than editable vector ink.
+- OneNote's MHTML export may flatten overlapping text, handwriting, and shapes into an image. Text in that image is not selectable, and the cleaner cannot restore it as text.
 - Externalized CSS is intended for ZIP workflows where the HTML and CSS assets remain together.
 
 ## Troubleshooting
